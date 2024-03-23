@@ -17,7 +17,7 @@ Ignite doesn't try to convert SwiftUI code to HTML, or simply map HTML tags to S
 
 ## Getting started
 
-Ignite uses Swift Package Manager, so you canuse Xcode to add a package dependency for <https://github.com/twostraws/Ignite>.
+Ignite uses Swift Package Manager, so you can use Xcode to add a package dependency for <https://github.com/twostraws/Ignite>.
 
 Once that completes, import Ignite into your Swift code wherever needed:
 
