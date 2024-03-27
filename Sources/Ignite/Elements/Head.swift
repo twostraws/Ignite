@@ -58,6 +58,10 @@ public struct Head: HTMLRootElement {
             }
 
             MetaLink(href: page.url, rel: "canonical")
+            
+            if let favicon = context.site.favicon {
+                MetaLink(href: favicon, rel: .icon)
+            }
         }
 
         items += MetaTag.socialSharingTags(for: page, context: context)

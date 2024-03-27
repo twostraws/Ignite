@@ -303,6 +303,7 @@ public class PublishingContext {
             title: staticPage.title,
             description: staticPage.description,
             url: site.url.appending(path: path),
+            image: staticPage.image,
             body: body
         )
 

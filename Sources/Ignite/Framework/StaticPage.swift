@@ -16,6 +16,9 @@ public protocol StaticPage: ThemedPage {
 
     /// The title for this page.
     var title: String { get }
+    
+    /// The image for sharing the page
+    var image: URL? { get }
 
     /// A plain-text description for this page. Defaults to an empty string.
     var description: String { get }
@@ -44,4 +47,7 @@ public extension StaticPage {
             "/\(title.lowercased().replacing(" ", with: "-"))"
         }
     }
+    
+    /// Defaults to no sharing image
+    var image: URL? { nil }
 }

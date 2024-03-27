@@ -74,6 +74,9 @@ public protocol Site {
     /// The theme to apply to your site. This is used to render all pages that don't
     /// explicitly override the theme with something custom.
     var theme: ThemeType { get }
+    
+    /// The path to the favicon
+    var favicon: URL? { get }
 
     /// An array of all the static pages you want to include in your site.
     @StaticPageBuilder var pages: [any StaticPage] { get }
@@ -129,6 +132,9 @@ extension Site {
 
     /// An empty tag page by default, which triggers no tag pages being made.
     public var tagPage: EmptyTagPage { EmptyTagPage() }
+    
+    /// The default favicon being nil
+    public var favicon: URL? { nil }
 
     /// Performs the entire publishing flow from a file in user space, e.g. main.swift
     /// or Site.swift.
