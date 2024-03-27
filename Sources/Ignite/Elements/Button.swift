@@ -40,7 +40,7 @@ public struct Button: InlineElement {
     /// How large this button should be drawn. Defaults to `.medium`.
     var size = ButtonSize.medium
 
-    /// How this button should be styled on the screen. Defaults to `.defaut`.
+    /// How this button should be styled on the screen. Defaults to `.default`.
     var role = Role.default
 
     /// Elements to render inside this button.
