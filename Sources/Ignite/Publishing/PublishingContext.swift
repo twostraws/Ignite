@@ -47,14 +47,16 @@ public class PublishingContext {
     ///   - site: The site we're currently publishing.
     ///   - rootURL: The URL of the root directory, where other key
     ///   folders are located.
-    init(for site: any Site, rootURL: URL) throws {
+    ///   - buildDirectoryPath: The path where the artifacts are generated.
+    ///   The default is "Build".
+    init(for site: any Site, rootURL: URL, buildDirectoryPath: String = "Build") throws {
         self.site = site
 
         self.rootDirectory = rootURL
         assetsDirectory = rootDirectory.appending(path: "Assets")
         contentDirectory = rootDirectory.appending(path: "Content")
         includesDirectory = rootDirectory.appending(path: "Includes")
-        buildDirectory = rootDirectory.appending(path: "Build")
+        buildDirectory = rootDirectory.appending(path: buildDirectoryPath)
 
         try parseContent()
     }
@@ -64,14 +66,16 @@ public class PublishingContext {
     /// - Parameters:
     ///   - site: The site we're currently publishing.
     ///   - file: One file from the user's package.
-    init(for site: any Site, from file: StaticString) throws {
+    ///   - buildDirectoryPath: The path where the artifacts are generated.
+    ///   The default is "Build".
+    init(for site: any Site, from file: StaticString, buildDirectoryPath: String = "Build") throws {
         self.site = site
 
         rootDirectory = try URL.packageDirectory(from: file)
         assetsDirectory = rootDirectory.appending(path: "Assets")
         contentDirectory = rootDirectory.appending(path: "Content")
         includesDirectory = rootDirectory.appending(path: "Includes")
-        buildDirectory = rootDirectory.appending(path: "Build")
+        buildDirectory = rootDirectory.appending(path: buildDirectoryPath)
 
         try parseContent()
     }

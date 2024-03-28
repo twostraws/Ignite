@@ -85,7 +85,7 @@ public protocol Site {
     @ContentPageBuilder var layouts: [any ContentPage] { get }
 
     /// Publishes this entire site from user space.
-    func publish(from file: StaticString) throws
+    func publish(from file: StaticString, buildDirectoryPath: String) throws
 }
 
 extension Site {
@@ -138,10 +138,13 @@ extension Site {
 
     /// Performs the entire publishing flow from a file in user space, e.g. main.swift
     /// or Site.swift.
-    /// - Parameter file: The file that triggered the build. This is used to
-    /// locate the base directory for their project, so we can location key folders.
-    public func publish(from file: StaticString = #file) throws {
-        let context = try PublishingContext(for: self, from: file)
+    /// - Parameters:
+    ///   - file: The file that triggered the build. This is used to
+    ///   locate the base directory for their project, so we can location key folders.
+    ///   - buildDirectoryPath: This path will generate the necessary artifacts for the web page. Please modify as needed.
+    ///   The default is "Build".
+    public func publish(from file: StaticString = #file, buildDirectoryPath: String = "Build") throws {
+        let context = try PublishingContext(for: self, from: file, buildDirectoryPath: buildDirectoryPath)
         try context.publish()
 
         if context.warnings.isEmpty == false {
