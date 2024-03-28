@@ -12,7 +12,7 @@ public enum ButtonSize: String, CaseIterable {
     case small, medium, large
 }
 
-/// A clickable button with a title and styling.
+/// A clickable button with a label and styling.
 public struct Button: InlineElement {
     /// Whether this button is just clickable, or whether its submits a form.
     public enum ButtonType {
@@ -44,25 +44,43 @@ public struct Button: InlineElement {
     var role = Role.default
 
     /// Elements to render inside this button.
-    var content: [InlineElement]
+    var label: [InlineElement]
 
-    /// Creates a button with no title. Used in some situations where
+    /// Creates a button with no label. Used in some situations where
     /// exact styling is performed by Bootstrap, e.g. in Carousel.
     public init() {
-        self.content = []
+        self.label = []
     }
 
-    /// Creates a button with a title.
-    /// - Parameter title: The title text to display on this button.
-    public init(_ title: InlineElement) {
-        self.content = [title]
+    /// Creates a button with a label.
+    /// - Parameter label: The label text to display on this button.
+    public init(_ label: InlineElement) {
+        self.label = [label]
     }
 
     /// Creates a button from a more complex piece of HTML.
-    /// - Parameter content: An inline element builder of all the content
+    /// - Parameter label: An inline element builder of all the content
     /// for this button.
-    public init(@InlineElementBuilder content: () -> [InlineElement]) {
-        self.content = content()
+    public init(@InlineElementBuilder label: () -> [InlineElement]) {
+        self.label = label()
+    }
+
+    /// Creates a button with a label and actions to run when it's pressed.
+    /// - Parameters:
+    ///   - label: The label text to display on this button.
+    ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
+    public init(_ label: any InlineElement, @ElementBuilder<Action> actions: () -> [Action]) {
+        self.label = [label]
+        self.addEvent(name: "onclick", actions: actions())
+    }
+
+    /// Creates a button with a label and actions to run when it's pressed.
+    /// - Parameters:
+    ///   - label: The label text to display on this button.
+    ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
+    public init(@ElementBuilder<Action> actions: () -> [Action], @InlineElementBuilder label: () -> [InlineElement]) {
+        self.label = label()
+        self.addEvent(name: "onclick", actions: actions())
     }
 
     /// Adjusts the size of this button.
@@ -118,7 +136,7 @@ public struct Button: InlineElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         let buttonAttributes = attributes.appending(classes: Button.classes(forRole: role, size: size))
-        let output = content.map { $0.render(context: context) }.joined()
+        let output = label.map { $0.render(context: context) }.joined()
         return "<button type=\"\(type.htmlName)\"\(buttonAttributes.description)>\(output)</button>"
     }
 }

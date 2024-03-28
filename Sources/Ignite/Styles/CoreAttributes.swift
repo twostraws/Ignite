@@ -26,12 +26,15 @@ public struct CoreAttributes {
     /// data- attributes.
     var data = [AttributeValue]()
 
+    /// JavaScript events, such as onclick.
+    var events = [Event]()
+
     /// Custom attributes not covered by the above, e.g. loading="lazy"
     var customAttributes = [AttributeValue]()
 
     /// All core attributes collapsed down to a single string for easy application.
     var description: String {
-        "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)"
+        "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
     }
 
     /// The ID of this element, if set.
@@ -90,6 +93,21 @@ public struct CoreAttributes {
 
             return output
         }
+    }
+
+    /// All events for this element, collapsed to down to a string.
+    var eventString: String {
+        var result = ""
+
+        for event in events {
+            if event.actions.isEmpty == false {
+                let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
+
+                result += " \(event.name)=\"\(actions)\""
+            }
+        }
+
+        return result
     }
 
     /// All custom attributes for this element collapsed down to a string.

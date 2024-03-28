@@ -90,6 +90,18 @@ extension PageElement {
         return copy
     }
 
+    public mutating func addEvent(name: String, actions: [Action]) {
+        guard actions.isEmpty == false else { return }
+        let event = Event(name: name, actions: actions)
+        self.attributes.events.append(event)
+    }
+
+    public func addingEvent(name: String, actions: [any Action]) -> Self {
+        var copy = self
+        copy.addEvent(name: name, actions: actions)
+        return copy
+    }
+
     /// Adds a custom attribute to this element, e.g. loading="lazy".
     /// - Parameters:
     ///   - name: The name of the custom attribute to add.
