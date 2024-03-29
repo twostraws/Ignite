@@ -154,6 +154,7 @@ public class PublishingContext {
         try generateSiteMap()
         try generateFeed()
         try generateRobots()
+        try serveLocalSite(on: site.testingPort)
     }
 
     /// Removes all content from the Build folder, so we're okay to recreate it.
@@ -440,5 +441,20 @@ public class PublishingContext {
         } else {
             throw PublishingError.missingDefaultLayout
         }
+    }
+
+    /// Serves the site stored in the `buildDirectory` over HTTP on the specified port.
+    ///
+    /// This function initialises a `Server` with the given port and the path to the build directory
+    /// where the site's static files are located. It then attempts to start the server to serve
+    /// the site locally. If the server is already running on the specified port, or if there's
+    /// an issue starting the server, it throws an error.
+    ///
+    /// - Parameter port: The port number on which to serve the site.
+    /// - Throws: An error if the server cannot start. This could be due to the specified port
+    /// being in use, insufficient permissions, or other issues related to server startup.
+    func serveLocalSite(on port: Int) throws {
+        let server = Server(port: port, directoryPath: buildDirectory)
+        try server.start()
     }
 }

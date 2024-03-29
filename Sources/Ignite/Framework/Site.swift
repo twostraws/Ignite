@@ -78,6 +78,9 @@ public protocol Site {
     /// The path to the favicon
     var favicon: URL? { get }
 
+    /// The port to run local server of the site
+    var testingPort: Int { get }
+
     /// An array of all the static pages you want to include in your site.
     @StaticPageBuilder var pages: [any StaticPage] { get }
 
@@ -135,6 +138,9 @@ extension Site {
     
     /// The default favicon being nil
     public var favicon: URL? { nil }
+
+    /// The default testing port set to `8000`. Site will open on `http://localhost:8000`
+    public var testingPort: Int { 8000 }
 
     /// Performs the entire publishing flow from a file in user space, e.g. main.swift
     /// or Site.swift.
