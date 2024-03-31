@@ -323,11 +323,20 @@ public class PublishingContext {
     func render(_ content: Content) throws {
         let layout = try layout(for: content)
         let body = Group(items: layout.body(content: content, context: self), context: self)
+        
+        let image: URL?
+        
+        if let imagePath = content.image {
+            image = URL(string: imagePath)
+        } else {
+            image = nil
+        }
 
         let page = Page(
             title: content.title,
             description: content.description,
             url: site.url.appending(path: content.path),
+            image: image,
             body: body
         )
 
