@@ -61,6 +61,7 @@ public struct Head: HTMLRootElement {
             
             if let favicon = context.site.favicon {
                 MetaLink(href: favicon, rel: .icon)
+                MetaLink(href: favicon, rel: "apple-touch-icon")
             }
         }
 
