@@ -11,13 +11,13 @@ import Foundation
 /// a stylesheet.
 public struct MetaLink: HeadElement {
     /// The standard CSS you should include on all Ignite pages.
-    public static let standardCSS = MetaLink(href: "/css/bootstrap.min.css", rel: "stylesheet")
+    public static let standardCSS = MetaLink(href: "css/bootstrap.min.css", rel: "stylesheet")
 
     /// The CSS you should include for Ignite pages that use system icons.
-    public static let iconCSS = MetaLink(href: "/css/bootstrap-icons.min.css", rel: "stylesheet")
+    public static let iconCSS = MetaLink(href: "css/bootstrap-icons.min.css", rel: "stylesheet")
 
     /// The standard CSS you should include on all pages that use syntax highlighting.
-    public static let syntaxHighlightingCSS = MetaLink(href: "/css/prism-default-dark.css", rel: "stylesheet")
+    public static let syntaxHighlightingCSS = MetaLink(href: "css/prism-default-dark.css", rel: "stylesheet")
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
