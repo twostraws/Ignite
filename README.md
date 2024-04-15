@@ -17,17 +17,31 @@ Ignite doesn't try to convert SwiftUI code to HTML, or simply map HTML tags to S
 
 ## Getting started
 
-Ignite uses Swift Package Manager, so you can use Xcode to add a package dependency for <https://github.com/twostraws/Ignite>.
+The easiest way to get started is to use the Ignite command-line tool included with this package:
+
+1. Run `git clone https://github.com/twostraws/Ignite` to clone this repository to your computer.
+2. Change into the new directory, e.g. `cd Ignite`.
+3. Now run `make install` to build and install the Ignite command-line tool.
+4. If that command fails because of permissions issues, you should run `sudo make install` instead.
+
+Once that command-line tool is installed, you can run the following command to create a new site called ExampleSite:
+
+```shell
+ignite new ExampleSite
+```
+
+Once installed, the command-line tool is helpful for running a local web server for testing and for building your project.
+
+> [!Tip]
+> Using the Ignite tool to run a local web server is the best way to preview your site.
+
+Alternatively, you can bring Ignite into an existing project using Swift Package Manager by adding a package dependency for <https://github.com/twostraws/Ignite>.
 
 Once that completes, import Ignite into your Swift code wherever needed:
 
 ```swift
 import Ignite
 ```
-
-However, the easiest way to get started is to clone the [Ignite Starter Template](https://github.com/twostraws/IgniteStarter) repository here on GitHub. It comes preconfigured to build a simple site, which you can then adapt for your own needs.
-
-Seriously, if you want to get started quickly, clone the starter template and use that – it's much easier than starting from scratch!
 
 
 ## See it in action
@@ -121,6 +135,46 @@ Ignite sites are just Swift package, but they use a specific folder structure to
 - **Sources:** This is where you'll place all your Swift code for your site, using any subfolder structure that suits you.
 
 This folder structure is already in place in the [Ignite Starter Template](https://github.com/twostraws/IgniteStarter) repository, and I recommend you start with that.
+
+
+## Using the command-line tool
+
+Once you have installed the Ignite command-line tool from this repository, you can use it in various ways.
+
+First, you can create new site like this:
+
+```shell
+ignite new YourSite
+```
+
+When that completes, it will tell you the commands to use to open your new site for editing in Xcode:
+
+```shell
+cd YourSite
+open Package.swift
+```
+
+> [!Tip]
+> If you want to build with Xcode, go to the Product menu and choose Destination > My Mac.
+
+Back in your terminal window, once you have run that `cd` command the current working directory of your terminal is your website's directory. This means you can run the following command to build your site, rather than using Xcode:
+
+```shell
+ignite build
+```
+
+That will convert all your Swift code to HTML in your **Build** folder. 
+
+You can also run this command:
+
+```shell
+ignite run --preview
+```
+
+That will launch a local web server you should use to preview your site, and also open it in your browser. If you're working in Xcode, you can continue performing builds as normal then refresh your browser to see your changes.
+
+> [!Tip]
+> The Ignite command-line tool has various configuration options available. Run `ignite help` to get general help, or add `help` before a subcommand to get further details, e.g. `ignite help run`.
 
 
 ## Contributing

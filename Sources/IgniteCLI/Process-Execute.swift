@@ -49,7 +49,14 @@ extension Process {
         // is important for previewing a local server:
         // it triggers the functionality below!
         if subsequentCommand.isEmpty == false {
-            try Process.execute(command: subsequentCommand)
+            Task {
+                // Add a tiny pause to make sure the first command
+                // is up and running before we launch the next
+                // command.
+
+                try await Task.sleep(for: .seconds(0.5))
+                try Process.execute(command: subsequentCommand)
+            }
 
             _ = readLine()
             process.terminate()
