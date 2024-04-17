@@ -40,21 +40,6 @@ public struct HTML: PageElement {
         output += "<html lang=\"\(context.site.language.rawValue)\" data-bs-theme=\"light\"\(attributes.description)>"
         output += head?.render(context: context) ?? ""
         output += body?.render(context: context) ?? ""
-
-        output += Script(file: "/js/bootstrap.bundle.min.js").render(context: context)
-
-        if context.site.syntaxHighlighters.isEmpty == false {
-            output += Script(file: "/js/syntax-highlighting.js").render(context: context)
-        }
-
-        // Activate tooltips if there are any.
-        if output.contains(#"data-bs-toggle="tooltip""#) {
-            output += Script(code: """
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-            """).render(context: context)
-        }
-
         output += "</html>"
 
         return output
