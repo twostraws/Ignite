@@ -8,6 +8,7 @@
 import Foundation
 
 public struct EnvironmentValues {
+    static public var shared = EnvironmentValues()
     private var everyValue: [ObjectIdentifier: Any] = [:]
 
     public init() {}

@@ -7,8 +7,6 @@
 
 import Foundation
 
-var environmentValues = EnvironmentValues()
-
 @propertyWrapper public struct Environment<Value> {
     var keyPath: KeyPath<EnvironmentValues, Value>
 
@@ -17,7 +15,7 @@ var environmentValues = EnvironmentValues()
     }
 
     public var wrappedValue: Value {
-        get { environmentValues[keyPath: keyPath] }
+        get { EnvironmentValues.shared[keyPath: keyPath] }
         set { }
     }
 }
