@@ -145,6 +145,8 @@ extension Site {
     ///   The default is "Build".
     public func publish(from file: StaticString = #file, buildDirectoryPath: String = "Build") throws {
         let context = try PublishingContext(for: self, from: file, buildDirectoryPath: buildDirectoryPath)
+        environmentValues[PublishingContextKey.self] = context
+
         try context.publish()
 
         if context.warnings.isEmpty == false {
