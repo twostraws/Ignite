@@ -17,8 +17,6 @@ public struct EnvironmentValues {
             guard let value = everyValue[ObjectIdentifier(key)] as? K.Value else { return key.defaultValue }
             return value
         }
-        set { 
-            everyValue[ObjectIdentifier(key)] = newValue
-        }
+        set {  everyValue[ObjectIdentifier(key)] = newValue }
     }
 }

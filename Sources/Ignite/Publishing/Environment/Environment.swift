@@ -7,21 +7,17 @@
 
 import Foundation
 
-fileprivate var values = EnvironmentValues()
+var environmentValues = EnvironmentValues()
 
 @propertyWrapper public struct Environment<Value> {
-    var keyPath: WritableKeyPath<EnvironmentValues, Value>
+    var keyPath: KeyPath<EnvironmentValues, Value>
 
-    public init(_ keyPath: WritableKeyPath<EnvironmentValues, Value>) {
+    public init(_ keyPath: KeyPath<EnvironmentValues, Value>) {
         self.keyPath = keyPath
     }
 
     public var wrappedValue: Value {
-        get {
-            values[keyPath: keyPath]
-        }
-        set {
-            values[keyPath: keyPath] = newValue
-        }
+        get { environmentValues[keyPath: keyPath] }
+        set { }
     }
 }
