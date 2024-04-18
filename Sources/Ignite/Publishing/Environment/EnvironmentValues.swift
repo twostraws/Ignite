@@ -8,7 +8,7 @@
 import Foundation
 
 public struct EnvironmentValues {
-    static public var shared = EnvironmentValues()
+    static var shared = EnvironmentValues()
     private var everyValue: [ObjectIdentifier: Any] = [:]
 
     public init() {}
@@ -18,6 +18,6 @@ public struct EnvironmentValues {
             guard let value = everyValue[ObjectIdentifier(key)] as? K.Value else { return key.defaultValue }
             return value
         }
-        set {  everyValue[ObjectIdentifier(key)] = newValue }
+        set { everyValue[ObjectIdentifier(key)] = newValue }
     }
 }

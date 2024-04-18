@@ -18,7 +18,7 @@ extension EnvironmentValues {
     }
 }
 
-extension  PublishingContext {
+fileprivate extension  PublishingContext {
     struct EmptySite: Site {
         var name = ""
         var titleSuffix = ""
@@ -39,5 +39,5 @@ extension  PublishingContext {
         }
     }
 
-    fileprivate static var empty = try! PublishingContext(for: EmptySite(), from: "")
+    static var empty = try! PublishingContext(for: EmptySite(), from: "")
 }

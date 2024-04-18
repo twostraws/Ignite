@@ -8,7 +8,7 @@
 import Foundation
 
 @propertyWrapper public struct Environment<Value> {
-    var keyPath: KeyPath<EnvironmentValues, Value>
+    private var keyPath: KeyPath<EnvironmentValues, Value>
 
     public init(_ keyPath: KeyPath<EnvironmentValues, Value>) {
         self.keyPath = keyPath
