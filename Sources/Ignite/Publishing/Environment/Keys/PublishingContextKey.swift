@@ -17,3 +17,27 @@ extension EnvironmentValues {
         set { self[PublishingContextKey.self] = newValue }
     }
 }
+
+extension  PublishingContext {
+    struct EmptySite: Site {
+        var name = ""
+        var titleSuffix = ""
+        var url = URL("http://example.com")
+
+        var builtInIconsEnabled = false
+        var syntaxHighlighters: [SyntaxHighlighter] = []
+
+        var homePage = EmptyPage()
+        var theme = EmptyTheme()
+    }
+
+    struct EmptyPage: StaticPage {
+        var title: String = ""
+
+        func body(context: PublishingContext) -> [any BlockElement] {
+            Text("")
+        }
+    }
+
+    fileprivate static var empty = try! PublishingContext(for: EmptySite(), from: "")
+}
