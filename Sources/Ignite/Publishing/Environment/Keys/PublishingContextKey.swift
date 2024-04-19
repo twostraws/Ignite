@@ -29,7 +29,7 @@ fileprivate extension  PublishingContext {
     struct EmptySite: Site {
         var name = ""
         var titleSuffix = ""
-        var url = URL("")
+        var url = URL("https://example.com")
 
         var builtInIconsEnabled = false
         var syntaxHighlighters: [SyntaxHighlighter] = []
@@ -46,5 +46,5 @@ fileprivate extension  PublishingContext {
         }
     }
 
-    static var empty = try! PublishingContext(for: EmptySite(), from: "")
+    static var empty = try! PublishingContext(for: EmptySite(), rootURL: URL.documentsDirectory)
 }
