@@ -64,6 +64,29 @@ public struct Embed: BlockElement, LazyLoadable {
             fatalError("Failed to create YouTube URL from video ID: \(youTubeID).")
         }
     }
+    
+    /// Controls what happens when a section is opened.
+    public enum SpotifyContentType: String {
+        /// Creates interactive item for a single Spotify track
+        case track
+        /// Creates interactive  item for a Spotify playlist
+        case playlist
+    }
+    
+    /// Creates a new `Embed` instance from the title and Spotify ID provided.
+    /// - Parameters:
+    ///   - title: A title suitable for screen readers.
+    ///   - url: The Spotify ID to use.
+    ///   - type: The SpotifyContentType to use.
+    ///   - theme: Either 0 or 1, each representing one of the two theme options offered by Spotify, which can be found in the code they provide.
+    public init(spotifyID: String, title: String, type: SpotifyContentType = .track, theme: Int = 0) {
+        if let test = URL(string: "https://open.spotify.com/embed/\(type.rawValue)/\(spotifyID)?utm_source=generator&theme=\(theme)") {
+            self.url = test.absoluteString
+            self.title = title
+        } else {
+            fatalError("Failed to create Spotify URL from ID: \(spotifyID).")
+        }
+    }
 
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
