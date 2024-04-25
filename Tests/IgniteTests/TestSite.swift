@@ -9,7 +9,7 @@ import Foundation
 import Ignite
 
 /// An example site used in tests.
-struct TestSite: Site {
+struct TestSite<HomePageType>: Site where HomePageType: StaticPage {
     var name = "My Test Site"
     var titleSuffix = " - My Test Site"
     var url = URL("https://www.yoursite.com")
@@ -17,8 +17,12 @@ struct TestSite: Site {
     var builtInIconsEnabled = true
     var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
 
-    var homePage = TestPage()
     var theme = EmptyTheme()
+    var homePage: HomePageType
+    
+    init(homePage: HomePageType) {
+        self.homePage = homePage
+    }
 }
 
 /// An example page  used in tests.
@@ -27,5 +31,15 @@ struct TestPage: StaticPage {
 
     func body(context: PublishingContext) -> [any BlockElement] {
         Text("Example text")
+    }
+}
+
+/// An example page with `@Environment` context used in tests.
+struct EnvironmentTestPage: StaticPage {
+    var title: String = "Environment Test"
+    @Environment(\.context) private var environmentContext
+
+    func body(context: PublishingContext) -> [any BlockElement] {
+        Text(environmentContext.site.name)
     }
 }
