@@ -20,7 +20,7 @@ public struct Slide: BlockElement {
     var background: String?
 
     /// Other items to display inside this slide.
-    var items: [BlockElement]
+    var items: [PageElement]
 
     /// How opaque the background image should be. Use values lower than 1.0
     /// to progressively dim the background image.
@@ -35,15 +35,15 @@ public struct Slide: BlockElement {
         self.items = []
     }
 
-    /// Creates a new `Slide` object using a background image and a block
-    /// element builder that returns an array of `BlockElement` objects to use
+    /// Creates a new `Slide` object using a background image and a page
+    /// element builder that returns an array of `PageElement` objects to use
     /// inside the slide.
     /// - Parameter background: An optional background image to use for
     /// this slide. This should be specified relative to the root of your
     /// site, e.g. /images/dog.jpg.
     /// - Parameter items: Other items to place inside this slide, which will
     /// be placed on top of the background image.
-    public init(background: String? = nil, @BlockElementBuilder items: () -> [BlockElement]) {
+    public init(background: String? = nil, @PageElementBuilder items: () -> [PageElement]) {
         self.background = background
         self.items = items()
     }
