@@ -196,7 +196,10 @@ public struct Content {
     /// content, and also link to the tag pages.
     public func tagLinks(in context: PublishingContext) -> [Link] {
         /// If this site has not defined a tag page, send back no links.
-        if context.site.tagPage is EmptyTagPage { return [] }
+        if context.site.tagPage is EmptyTagPage {
+            context.addWarning("tagLinks(in:) returned an empty array because your site has no tagPage defined.")
+            return []
+        }
 
         if let tags = metadata["tags"] as? String {
             return tags.splitAndTrim().map { tag in
