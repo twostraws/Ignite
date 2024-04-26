@@ -85,7 +85,7 @@ public protocol Site {
     @ContentPageBuilder var layouts: [any ContentPage] { get }
 
     /// Publishes this entire site from user space.
-    func publish(from file: StaticString, buildDirectoryPath: String) throws
+    func publish(from file: StaticString, buildDirectoryPath: String) async throws
 }
 
 extension Site {
@@ -143,9 +143,9 @@ extension Site {
     ///   locate the base directory for their project, so we can location key folders.
     ///   - buildDirectoryPath: This path will generate the necessary artifacts for the web page. Please modify as needed.
     ///   The default is "Build".
-    public func publish(from file: StaticString = #file, buildDirectoryPath: String = "Build") throws {
+    public func publish(from file: StaticString = #file, buildDirectoryPath: String = "Build") async throws {
         let context = try PublishingContext(for: self, from: file, buildDirectoryPath: buildDirectoryPath)
-        try context.publish()
+        try await context.publish()
 
         if context.warnings.isEmpty == false {
             print("Publish completed with warnings:")

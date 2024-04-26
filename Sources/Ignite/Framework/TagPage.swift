@@ -11,5 +11,5 @@ import Foundation
 /// or all articles period if `tag` is nil. You get to decide what is shown
 /// on those pages by making a custom type that conforms to this protocol.
 public protocol TagPage: ThemedPage {
-    @BlockElementBuilder func body(tag: String?, context: PublishingContext) -> [BlockElement]
+    @BlockElementBuilder func body(tag: String?, context: PublishingContext) async -> [BlockElement]
 }

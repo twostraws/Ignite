@@ -19,7 +19,7 @@ public protocol ContentPage: ThemedPage {
     ///   - context: The current publishing context.
     /// - Returns: An array of `BlockElement` objects that should be used
     /// for the content.
-    @BlockElementBuilder func body(content: Content, context: PublishingContext) -> [BlockElement]
+    @BlockElementBuilder func body(content: Content, context: PublishingContext) async -> [BlockElement]
 }
 
 public extension ThemedPage {

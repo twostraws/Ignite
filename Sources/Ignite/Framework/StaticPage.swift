@@ -27,7 +27,7 @@ public protocol StaticPage: ThemedPage {
     /// returns an array of the elements on this page.
     /// - Parameter context: The current publishing context.
     /// - Returns: An array of the elements on this page.
-    @BlockElementBuilder func body(context: PublishingContext) -> [BlockElement]
+    @BlockElementBuilder func body(context: PublishingContext) async -> [BlockElement]
 }
 
 public extension StaticPage {

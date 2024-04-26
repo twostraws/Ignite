@@ -146,10 +146,10 @@ public class PublishingContext {
     }
 
     /// Performs all steps required to publish a site.
-    func publish() throws {
+    func publish() async throws {
         try clearBuildFolder()
         try copyResources()
-        try generateContent()
+        try await generateContent()
         try generateTagPages()
         try generateSiteMap()
         try generateFeed()
@@ -235,15 +235,15 @@ public class PublishingContext {
     }
 
     /// Renders static pages and content pages, including the homepage.
-    func generateContent() throws {
-        try render(site.homePage, isHomePage: true)
+    func generateContent() async throws {
+        try await render(site.homePage, isHomePage: true)
 
         for page in site.pages {
-            try render(page)
+            try await render(page)
         }
 
         for content in allContent {
-            try render(content)
+            try await render(content)
         }
     }
 
@@ -298,8 +298,8 @@ public class PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render(_ staticPage: any StaticPage, isHomePage: Bool = false) throws {
-        let body = Group(items: staticPage.body(context: self), context: self)
+    func render(_ staticPage: any StaticPage, isHomePage: Bool = false) async throws {
+        let body = await Group(items: staticPage.body(context: self), context: self)
 
         let path = isHomePage ? "" : staticPage.path
 
@@ -320,10 +320,10 @@ public class PublishingContext {
 
     /// Renders one piece of Markdown content.
     /// - Parameter content: The content to render.
-    func render(_ content: Content) throws {
+    func render(_ content: Content) async throws {
         let layout = try layout(for: content)
-        let body = Group(items: layout.body(content: content, context: self), context: self)
-        
+        let body = await Group(items: layout.body(content: content, context: self), context: self)
+
         let image: URL?
         
         if let imagePath = content.image {
