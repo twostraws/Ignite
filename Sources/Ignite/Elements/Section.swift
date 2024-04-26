@@ -50,8 +50,15 @@ public struct Section: BlockElement {
     public func render(context: PublishingContext) -> String {
         var sectionAttributes = attributes.appending(classes: ["row"])
 
+        // If a column count is set, we want to use that for all
+        // page sizes that are medium and above. Below that we
+        // should drop down to width 1 to avoid squeezing things
+        // into oblivion.
         if let columnCount {
-            sectionAttributes.append(classes: ["row-cols-\(columnCount)"])
+            sectionAttributes.append(classes: [
+                "row-cols-1",
+                "row-cols-md-\(columnCount)"
+            ])
         }
 
         return Group {
