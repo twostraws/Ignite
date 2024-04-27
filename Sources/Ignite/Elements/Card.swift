@@ -22,24 +22,31 @@ public struct Card: BlockElement {
     }
 
     /// Where to position the content of the card relative to it image.
-    public enum ContentPosition: String, CaseIterable {
+    public enum ContentPosition: CaseIterable {
         /// Positions content below the image.
-        case bottom = "card-img-top"
+        case bottom
 
         /// Positions content above the image.
-        case top = "card-img-bottom"
+        case top
 
         /// Positions content over the image.
-        case overlay = "card-img-overlay"
+        case overlay
 
         public static let `default` = Self.bottom
 
         var imageClass: String {
-            self == .overlay ? "card-img" : rawValue
+            switch self {
+            case .bottom:
+                "card-img-bottom"
+            case .top:
+                "card-img-top"
+            case .overlay:
+                "card-img"
+            }
         }
 
         var bodyClass: String {
-            self == .overlay ? rawValue : "card-body"
+            self == .overlay ? "card-img-overlay" : "card-body"
         }
     }
 
