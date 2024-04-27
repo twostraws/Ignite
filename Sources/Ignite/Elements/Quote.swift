@@ -16,20 +16,20 @@ public struct Quote: BlockElement {
     public var columnWidth = ColumnWidth.automatic
 
     /// The content of this quote.
-    var contents: [BlockElement]
+    var contents: [PageElement]
 
     /// Provide details about this quote, e.g. a source name.
     var caption: [InlineElement]
 
-    /// Create a new quote from a block element builder that returns an array
+    /// Create a new quote from a page element builder that returns an array
     /// of elements to display in the quote.
     /// - Parameter contents: The elements to display inside the quote.
-    public init(@BlockElementBuilder contents: () -> [BlockElement]) {
+    public init(@PageElementBuilder contents: () -> [PageElement]) {
         self.contents = contents()
         self.caption = []
     }
 
-    /// Create a new quote from a block element builder that returns an array
+    /// Create a new quote from a page element builder that returns an array
     /// of elements to display in the quote, and also an inline element builder
     /// that specifics the caption to use. This is useful when you want to add
     /// the source of the quote, e.g. who said it or where it was said.
@@ -37,7 +37,7 @@ public struct Quote: BlockElement {
     /// - contents: The elements to display inside the quote.
     /// - contents: Additional details about the quote, e.g. its source.
     public init(
-        @BlockElementBuilder contents: () -> [BlockElement],
+        @PageElementBuilder contents: () -> [PageElement],
         @InlineElementBuilder caption: () -> [InlineElement]
     ) {
         self.contents = contents()
