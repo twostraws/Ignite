@@ -36,6 +36,55 @@ public struct Text: BlockElement, DropdownElement {
         self.content = [string]
     }
 
+    /// Creates a new `Text` instance using "lorem ipsum" placeholder text.
+    /// - Parameter placeholderLength: How many placeholder words to generate.
+    public init(placeholderLength: Int) {
+        precondition(placeholderLength > 0, "placeholderLength must be at least 1.")
+
+        let baseWords = ["Lorem", "ipsum", "dolor", "sit", "amet,", "consectetur", "adipiscing", "elit."]
+
+        var finalWords: [String]
+
+        if placeholderLength < baseWords.count {
+            finalWords = Array(baseWords.prefix(placeholderLength))
+        } else {
+            let otherWords = [
+                "ad", "aliqua", "aliquip", "anim", "aute", "cillum", "commodo", "consequat", "culpa", "cupidatat",
+                "deserunt", "do", "dolor", "dolore", "duis", "ea", "eiusmod", "enim", "esse", "est", "et",
+                "eu", "ex", "excepteur", "exercitation", "fugiat", "id", "in", "incididunt", "irure",
+                "labore", "laboris", "laborum", "magna", "minim", "mollit", "nisi", "non", "nostrud", "nulla",
+                "occaecat", "officia", "pariatur", "proident", "qui", "quis", "reprehenderit", "sed", "sint", "sunt",
+                "tempor", "ullamco", "ut", "velit", "veniam", "voluptate"
+            ]
+
+            var isStartOfSentence = false
+            finalWords = baseWords
+
+            for _ in baseWords.count..<placeholderLength {
+                let randomWord = otherWords.randomElement() ?? "ad"
+                var formattedWord = isStartOfSentence ? randomWord.capitalized : randomWord
+                isStartOfSentence = false
+
+                // Randomly add punctuation – 10% chance of adding
+                // a comma, and 10% of adding a full stop instead.
+                let punctuationProbability = Int.random(in: 1...10)
+                if punctuationProbability == 1 {
+                    formattedWord.append(",")
+                } else if punctuationProbability == 2 {
+                    formattedWord.append(".")
+                    isStartOfSentence = true
+                }
+
+                finalWords.append(formattedWord)
+            }
+        }
+
+        var result = finalWords.joined(separator: " ").trimmingCharacters(in: .punctuationCharacters)
+        result += "."
+
+        content = [result]
+    }
+
     /// Creates a new Text struct from a Markdown string.
     /// - Parameter markdown: The Markdown text to parse.
     public init(markdown: String) {
