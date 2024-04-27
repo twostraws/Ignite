@@ -39,7 +39,7 @@ extension PageElement {
         // to retain any styling applied elsewhere, e.g.
         // the `font()` modifier.
         let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
-        
+
         return self
             .data("bs-toggle", "tooltip")
             .data("bs-title", cleanedHTML)

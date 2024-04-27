@@ -325,7 +325,7 @@ public class PublishingContext {
         let body = await Group(items: layout.body(content: content, context: self), context: self)
 
         let image: URL?
-        
+
         if let imagePath = content.image {
             image = URL(string: imagePath)
         } else {

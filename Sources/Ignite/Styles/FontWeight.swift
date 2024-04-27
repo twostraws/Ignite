@@ -22,4 +22,3 @@ public enum FontWeight: Int, CaseIterable {
     case heavy = 800
     case black = 900
 }
-
