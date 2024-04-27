@@ -62,6 +62,13 @@ public struct Text: BlockElement, DropdownElement {
         }
     }
 
+    /// Adjusts the font weight (boldness) of this font.
+    /// - Parameter newWeight: The new font weight.
+    /// - Returns: A new `Text` instance with the updated weight.
+    public func fontWeight(_ newWeight: FontWeight) -> Self {
+        self.style("font-weight: \(newWeight.rawValue)")
+    }
+
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
