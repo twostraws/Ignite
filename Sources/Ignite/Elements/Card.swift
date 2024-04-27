@@ -24,10 +24,23 @@ public struct Card: BlockElement {
     /// Where to position the content of the card relative to it image.
     public enum ContentPosition: String, CaseIterable {
         /// Positions content below the image.
-        case `default` = "card-body"
+        case bottom = "card-img-top"
 
         /// Positions content above the image.
+        case top = "card-img-bottom"
+
+        /// Positions content over the image.
         case overlay = "card-img-overlay"
+
+        public static let `default` = Self.bottom
+
+        var imageClass: String {
+            self == .overlay ? "card-img" : rawValue
+        }
+
+        var bodyClass: String {
+            self == .overlay ? rawValue : "card-body"
+        }
     }
 
     /// The standard set of control attributes for HTML elements.
@@ -117,14 +130,14 @@ public struct Card: BlockElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         Group {
-            if let image {
+            if let image, contentPosition != .top {
                 if imageOpacity != 1 {
                     image
-                        .class("card-img-top")
+                        .class(contentPosition.imageClass)
                         .style("opacity: \(imageOpacity)")
                 } else {
                     image
-                        .class("card-img-top")
+                        .class(contentPosition.imageClass)
                 }
             }
 
@@ -156,7 +169,18 @@ public struct Card: BlockElement {
                     }
                 }
             }
-            .class(contentPosition.rawValue)
+            .class(contentPosition.bodyClass)
+
+            if let image, contentPosition == .top {
+                if imageOpacity != 1 {
+                    image
+                        .class(contentPosition.imageClass)
+                        .style("opacity: \(imageOpacity)")
+                } else {
+                    image
+                        .class(contentPosition.imageClass)
+                }
+            }
 
             if footer.isEmpty == false {
                 Group {
