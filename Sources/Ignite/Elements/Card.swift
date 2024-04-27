@@ -149,6 +149,8 @@ public struct Card: BlockElement {
                         }
                     case is Link:
                         item.class("card-link")
+                    case is Image:
+                        item.class("card-img")
                     default:
                         item
                     }
