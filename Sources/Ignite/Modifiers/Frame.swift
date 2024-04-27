@@ -18,6 +18,7 @@ extension BlockElement {
     ///   - height: An exact height for this element.
     ///   - minHeight: A minimum height for this element.
     ///   - maxHeight: A maximum height for this element.
+    ///   - alignment: How to align this element inside its frame.
     /// - Returns: A copy of the current element with the new frame applied.
     public func frame(
         width: String? = nil,
@@ -25,7 +26,8 @@ extension BlockElement {
         maxWidth: String? = nil,
         height: String? = nil,
         minHeight: String? = nil,
-        maxHeight: String? = nil
+        maxHeight: String? = nil,
+        alignment: HorizontalAlignment = .center
     ) -> Self {
         var copy = self
 
@@ -53,6 +55,14 @@ extension BlockElement {
             copy = copy.style("max-height: \(maxHeight)")
         }
 
+        if alignment == .center {
+            copy = copy.class("mx-auto")
+        } else if alignment == .leading {
+            copy = copy.style("margin-right: auto")
+        } else {
+            copy = copy.style("margin-left: auto")
+        }
+
         return copy
     }
 
@@ -65,6 +75,7 @@ extension BlockElement {
     ///   - height: An exact height for this element.
     ///   - minHeight: A minimum height for this element.
     ///   - maxHeight: A maximum height for this element.
+    ///   - alignment: How to align this element inside its frame.
     /// - Returns: A copy of the current element with the new frame applied.
     public func frame(
         width: Int? = nil,
@@ -72,7 +83,8 @@ extension BlockElement {
         maxWidth: Int? = nil,
         height: Int? = nil,
         minHeight: Int? = nil,
-        maxHeight: Int? = nil
+        maxHeight: Int? = nil,
+        alignment: HorizontalAlignment = .center
     ) -> Self {
         self.frame(
             width: width.map { "\($0)px" },
@@ -80,7 +92,8 @@ extension BlockElement {
             maxWidth: maxWidth.map { "\($0)px" },
             height: height.map { "\($0)px" },
             minHeight: minHeight.map { "\($0)px" },
-            maxHeight: maxHeight.map { "\($0)px" }
+            maxHeight: maxHeight.map { "\($0)px" },
+            alignment: alignment
         )
     }
 }
