@@ -9,6 +9,14 @@ import Foundation
 
 /// Embeds a custom URL, such as YouTube or Vimeo.
 public struct Embed: BlockElement, LazyLoadable {
+    /// Determines what kind of Spotify embed we have.
+    public enum SpotifyContentType: String {
+        /// Creates interactive item for a single Spotify track
+        case track
+        /// Creates interactive  item for a Spotify playlist
+        case playlist
+    }
+
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -64,15 +72,7 @@ public struct Embed: BlockElement, LazyLoadable {
             fatalError("Failed to create YouTube URL from video ID: \(youTubeID).")
         }
     }
-    
-    /// Controls what happens when a section is opened.
-    public enum SpotifyContentType: String {
-        /// Creates interactive item for a single Spotify track
-        case track
-        /// Creates interactive  item for a Spotify playlist
-        case playlist
-    }
-    
+
     /// Creates a new `Embed` instance from the title and Spotify ID provided.
     /// - Parameters:
     ///   - title: A title suitable for screen readers.
