@@ -9,8 +9,25 @@ import Foundation
 
 /// A group of information placed inside a gently rounded
 public struct Card: BlockElement {
+    /// Styling for this card.
     public enum CardStyle: CaseIterable {
-        case `default`, `solid`, `bordered`
+        /// Default styling.
+        case `default`
+
+        /// Solid background color.
+        case solid
+
+        /// Solid border color.
+        case bordered
+    }
+
+    /// Where to position the content of the card relative to it image.
+    public enum ContentPosition: String, CaseIterable {
+        /// Positions content below the image.
+        case `default` = "card-body"
+
+        /// Positions content above the image.
+        case overlay = "card-img-overlay"
     }
 
     /// The standard set of control attributes for HTML elements.
@@ -21,6 +38,9 @@ public struct Card: BlockElement {
 
     var role = Role.default
     var style = CardStyle.default
+
+    var contentPosition = ContentPosition.default
+    var imageOpacity = 1.0
 
     var image: Image?
     var header = [any PageElement]()
@@ -73,14 +93,39 @@ public struct Card: BlockElement {
         return copy
     }
 
+    /// Adjusts the position of this card's content relative to its image.
+    /// - Parameter newPosition: The new content positio for this card.
+    /// - Returns: A new `Card` instance with the updated content position.
+    public func contentPosition(_ newPosition: ContentPosition) -> Self {
+        var copy = self
+        copy.contentPosition = newPosition
+        return copy
+    }
+
+    /// Adjusts the opacity of the image for this card. Use values
+    /// lower than 1.0 to progressively dim the image.
+    /// - Parameter opacity: The new opacity for this card.
+    /// - Returns: A new `Card` instance with the updated image opacity.
+    public func imageOpacity(_ opacity: Double) -> Self {
+        var copy = self
+        copy.imageOpacity = opacity
+        return copy
+    }
+
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         Group {
             if let image {
-                image
-                    .class("card-img-top")
+                if imageOpacity != 1 {
+                    image
+                        .class("card-img-top")
+                        .style("opacity: \(imageOpacity)")
+                } else {
+                    image
+                        .class("card-img-top")
+                }
             }
 
             if header.isEmpty == false {
@@ -109,7 +154,7 @@ public struct Card: BlockElement {
                     }
                 }
             }
-            .class("card-body")
+            .class(contentPosition.rawValue)
 
             if footer.isEmpty == false {
                 Group {
