@@ -12,8 +12,7 @@ struct FeedGenerator {
     var content: [Content]
 
     func generateFeed() -> String {
-        let contentXML = 
-        content
+        let contentXML = content
             .prefix(site.feedConfiguration.contentCount)
             .map { item in
                 var itemXML = """
