@@ -57,6 +57,16 @@ public struct NavigationBar: BlockElement {
     /// How items in this navigation bar should be aligned
     var itemAlignment = ItemAlignment.default
 
+    /// Creates a new `NavigationBar` instance from the `logo`, without any items.
+    /// - Parameters:
+    ///   - logo: The logo to use in the top-left edge of your bar.
+    public init(
+        logo: (any InlineElement)? = nil
+    ) {
+        self.logo = logo
+        self.items = []
+    }
+
     /// Creates a new `NavigationBar` instance from the `logo` and
     /// `items` provided.
     /// - Parameters:
