@@ -32,6 +32,9 @@ public struct Card: BlockElement {
         /// Positions content over the image.
         case overlay
 
+        /// Positions content in the center over the image.
+        case overlayCenter
+
         public static let `default` = Self.bottom
 
         var imageClass: String {
@@ -40,13 +43,18 @@ public struct Card: BlockElement {
                 "card-img-bottom"
             case .top:
                 "card-img-top"
-            case .overlay:
+            case .overlay, .overlayCenter:
                 "card-img"
             }
         }
 
         var bodyClass: String {
-            self == .overlay ? "card-img-overlay" : "card-body"
+            switch self {
+            case .overlay, .overlayCenter:
+                "card-img-overlay"
+            default:
+                "card-body"
+            }
         }
     }
 
@@ -136,7 +144,18 @@ public struct Card: BlockElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        Group {
+        var bodyClasses = [contentPosition.bodyClass]
+        var width: String?
+        var height: String?
+
+        if contentPosition == .overlayCenter {
+            bodyClasses.append("text-center")
+            bodyClasses.append("align-content-center")
+            width = "100%"
+            height = "100%"
+        }
+
+        return Group {
             if let image, contentPosition != .top {
                 if imageOpacity != 1 {
                     image
@@ -176,7 +195,8 @@ public struct Card: BlockElement {
                     }
                 }
             }
-            .class(contentPosition.bodyClass)
+            .frame(width: width, height: height)
+            .class(bodyClasses)
 
             if let image, contentPosition == .top {
                 if imageOpacity != 1 {
