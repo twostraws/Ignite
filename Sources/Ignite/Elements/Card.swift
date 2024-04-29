@@ -40,9 +40,9 @@ public struct Card: BlockElement {
         var imageClass: String {
             switch self {
             case .bottom:
-                "card-img-bottom"
-            case .top:
                 "card-img-top"
+            case .top:
+                "card-img-bottom"
             case .overlay, .overlayCenter:
                 "card-img"
             }
