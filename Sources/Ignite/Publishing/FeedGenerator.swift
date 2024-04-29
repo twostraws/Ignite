@@ -36,7 +36,9 @@ struct FeedGenerator {
 
                 if site.feedConfiguration.mode == .full {
                     itemXML += """
-                    <content:encoded><![CDATA[\(item.body.makingAbsoluteLinks(relativeTo: site.url))]]></content:encoded>
+                    <content:encoded>\
+                    <![CDATA[\(item.body.makingAbsoluteLinks(relativeTo: site.url))]]>\
+                    </content:encoded>
                     """
                 }
 

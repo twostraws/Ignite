@@ -78,7 +78,8 @@ public struct Embed: BlockElement, LazyLoadable {
     ///   - title: A title suitable for screen readers.
     ///   - url: The Spotify ID to use.
     ///   - type: The SpotifyContentType to use.
-    ///   - theme: Either 0 or 1, each representing one of the two theme options offered by Spotify, which can be found in the code they provide.
+    ///   - theme: Either 0 or 1, each representing one of the two theme
+    ///   options offered by Spotify, which can be found in the code they provide.
     public init(spotifyID: String, title: String, type: SpotifyContentType = .track, theme: Int = 0) {
         if let test = URL(string: "https://open.spotify.com/embed/\(type.rawValue)/\(spotifyID)?utm_source=generator&theme=\(theme)") {
             self.url = test.absoluteString

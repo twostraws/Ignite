@@ -125,7 +125,6 @@ extension Site {
         MarkdownToHTML.self
     }
 
-
     /// A default feed configuration allows 20 items of content, showing just
     /// their descriptions.
     public var feedConfiguration: FeedConfiguration { .default }
