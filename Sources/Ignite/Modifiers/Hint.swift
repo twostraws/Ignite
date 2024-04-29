@@ -32,7 +32,7 @@ extension PageElement {
     /// - Returns: A copy of the current element with the tooltip attached.
 
     public func hint(markdown: String) -> Self {
-        let parser = MarkdownToHTML(markdown: markdown)
+        let parser = MarkdownToHTML(markdown: markdown, removeTitleFromBody: true)
 
         // Remove any <p></p> tags, because these will be
         // added automatically in render(). This allows us

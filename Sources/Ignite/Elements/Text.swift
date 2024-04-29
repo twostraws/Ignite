@@ -88,7 +88,7 @@ public struct Text: BlockElement, DropdownElement {
     /// Creates a new Text struct from a Markdown string.
     /// - Parameter markdown: The Markdown text to parse.
     public init(markdown: String) {
-        let parser = MarkdownToHTML(markdown: markdown)
+        let parser = MarkdownToHTML(markdown: markdown, removeTitleFromBody: true)
 
         // Remove any <p></p> tags, because these will be
         // added automatically in render(). This allows us
