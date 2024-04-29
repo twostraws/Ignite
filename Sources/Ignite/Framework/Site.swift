@@ -159,6 +159,11 @@ extension Site {
     ///   The default is "Build".
     public func publish(from file: StaticString = #file, buildDirectoryPath: String = "Build") async throws {
         let context = try PublishingContext(for: self, from: file, buildDirectoryPath: buildDirectoryPath)
+
+        if buildDirectoryPath.contains("/") {
+            context.addWarning("in \"\(#function)\" buildDirectoryPath is heirarchical (\"\(buildDirectoryPath)\")")
+        }
+
         try await context.publish()
 
         if context.warnings.isEmpty == false {

@@ -167,7 +167,7 @@ public class PublishingContext {
         }
 
         do {
-            try FileManager.default.createDirectory(at: buildDirectory, withIntermediateDirectories: false)
+            try FileManager.default.createDirectory(at: buildDirectory, withIntermediateDirectories: true)
         } catch {
             throw PublishingError.failedToCreateBuildDirectory(buildDirectory)
         }
@@ -179,7 +179,8 @@ public class PublishingContext {
     func copyResources() throws {
         let assets = try FileManager.default.contentsOfDirectory(
             at: assetsDirectory,
-            includingPropertiesForKeys: nil
+            includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles]
         )
 
         for asset in assets {
