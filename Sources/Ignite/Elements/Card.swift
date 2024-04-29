@@ -58,16 +58,20 @@ public struct Card: BlockElement {
         }
     }
 
-    enum TextAlignment: String, CaseIterable {
-        case start = "text-start"
-        case center = "text-center"
-        case end = "text-end"
+    enum ContentJustify: String, CaseIterable {
+        case start = "justify-content-start"
+        case center = "justify-content-center"
+        case end = "justify-content-end"
+
+        // ... there would be more options in Bootstrap
     }
 
-    enum VerticalAlignment: String, CaseIterable {
-        case start = "align-content-start"
-        case center = "align-content-center"
-        case end = "align-content-end"
+    enum ItemAlignment: String, CaseIterable {
+        case start = "align-items-start"
+        case center = "align-items-center"
+        case end = "align-items-end"
+
+        // ... there would be more options in Bootstrap
     }
 
     public enum ContentAlignment: CaseIterable {
@@ -81,7 +85,7 @@ public struct Card: BlockElement {
         case bottom
         case bottomTrailing
 
-        var textAlignment: TextAlignment {
+        var contentJustify: ContentJustify {
             switch self {
             case .topLeading, .leading, .bottomLeading:
                     .start
@@ -92,7 +96,7 @@ public struct Card: BlockElement {
             }
         }
 
-        var verticalAlignment: VerticalAlignment {
+        var itemAlignment: ItemAlignment {
             switch self {
             case .topLeading, .top, .topTrailing:
                     .start
@@ -212,10 +216,9 @@ public struct Card: BlockElement {
             width = "100%"
             height = "100%"
         } else if contentPosition == .overlay {
-            if contentAlignment != .default {
-                bodyClasses.append(contentAlignment.textAlignment.rawValue)
-                bodyClasses.append(contentAlignment.verticalAlignment.rawValue)
-            }
+            bodyClasses.append(contentAlignment.contentJustify.rawValue)
+            bodyClasses.append(contentAlignment.itemAlignment.rawValue)
+            bodyClasses.append("d-flex")
         }
 
         return Group {
