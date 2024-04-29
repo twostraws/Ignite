@@ -43,6 +43,17 @@ Once that completes, import Ignite into your Swift code wherever needed:
 import Ignite
 ```
 
+## Important: Previewing your site
+
+Once you've built your site and are ready to see how it looks, do *not* just double-click one of the files in Finder. This will open the file directly in your browser, which means it won't know how to locate the rest of your site – the stylesheets, JavaScript code, etc – so it will not display correctly.
+
+Instead, the best way to preview your site is using the Ignite CLI tool, which you installed in Getting Started above:
+
+- Run `ignite run --preview` to preview your site and open it in your web browser.
+- If Ignite tells you there is already a web server running on that port, run `ignite run --preview --force`.
+
+That will open your web browser straight to your site. You can then return to Xcode and make changes to your site freely – every time you press Cmd+R to build your site, you can refresh your browser to see the changes.
+
 
 ## See it in action
 
