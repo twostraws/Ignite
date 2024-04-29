@@ -58,6 +58,54 @@ public struct Card: BlockElement {
         }
     }
 
+    enum TextAlignment: String, CaseIterable {
+        case start = "text-start"
+        case center = "text-center"
+        case end = "text-end"
+    }
+
+    enum VerticalAlignment: String, CaseIterable {
+        case start = "align-content-start"
+        case center = "align-content-center"
+        case end = "align-content-end"
+    }
+
+    public enum ContentAlignment: CaseIterable {
+        case topLeading
+        case top
+        case topTrailing
+        case leading
+        case center
+        case trailing
+        case bottomLeading
+        case bottom
+        case bottomTrailing
+
+        var textAlignment: TextAlignment {
+            switch self {
+            case .topLeading, .leading, .bottomLeading:
+                    .start
+            case .top, .center, .bottom:
+                    .center
+            case .topTrailing, .trailing, .bottomTrailing:
+                    .end
+            }
+        }
+
+        var verticalAlignment: VerticalAlignment {
+            switch self {
+            case .topLeading, .top, .topTrailing:
+                    .start
+            case .leading, .center, .trailing:
+                    .center
+            case .bottomLeading, .bottom, .bottomTrailing:
+                    .end
+            }
+        }
+
+        public static let `default` = Self.topLeading
+    }
+
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -68,6 +116,7 @@ public struct Card: BlockElement {
     var style = CardStyle.default
 
     var contentPosition = ContentPosition.default
+    var contentAlignment = ContentAlignment.default
     var imageOpacity = 1.0
 
     var image: Image?
@@ -130,6 +179,15 @@ public struct Card: BlockElement {
         return copy
     }
 
+    /// Adjusts the position of this card's content relative to its image.
+    /// - Parameter newPosition: The new content positio for this card.
+    /// - Returns: A new `Card` instance with the updated content position.
+    public func contentAlignment(_ newAlignment: ContentAlignment) -> Self {
+        var copy = self
+        copy.contentAlignment = newAlignment
+        return copy
+    }
+
     /// Adjusts the opacity of the image for this card. Use values
     /// lower than 1.0 to progressively dim the image.
     /// - Parameter opacity: The new opacity for this card.
@@ -153,6 +211,11 @@ public struct Card: BlockElement {
             bodyClasses.append("align-content-center")
             width = "100%"
             height = "100%"
+        } else if contentPosition == .overlay {
+            if contentAlignment != .default {
+                bodyClasses.append(contentAlignment.textAlignment.rawValue)
+                bodyClasses.append(contentAlignment.verticalAlignment.rawValue)
+            }
         }
 
         return Group {
