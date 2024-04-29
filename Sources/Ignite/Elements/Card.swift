@@ -96,7 +96,7 @@ public struct Card: BlockElement {
                 for item in items {
                     switch item {
                     case let textItem as Text:
-                        switch textItem.font {
+                        switch textItem.resolvedFont {
                         case .body, .lead:
                             item.class("card-text")
                         default:

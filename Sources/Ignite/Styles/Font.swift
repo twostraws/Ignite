@@ -17,4 +17,13 @@ public enum Font: String, CaseIterable {
     case title6 = "h6"
     case body = "p"
     case lead
+
+    /// CSS classes that belong to this font type.
+    var classes: [String] {
+        if self == .lead {
+            ["lead"]
+        } else {
+            [""]
+        }
+    }
 }

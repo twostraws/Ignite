@@ -16,15 +16,15 @@ public struct Group: BlockElement {
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
-    var items: [BaseElement]
+    var items: [PageElement]
     var isTransparent: Bool
 
-    public init(isTransparent: Bool = false, @ElementBuilder<BaseElement> _ items: () -> [BaseElement]) {
+    public init(isTransparent: Bool = false, @ElementBuilder<PageElement> _ items: () -> [PageElement]) {
         self.items = items()
         self.isTransparent = isTransparent
     }
 
-    init(items: [BaseElement], context: PublishingContext) {
+    init(items: [PageElement], context: PublishingContext) {
         self.items = items
         self.isTransparent = true
     }
@@ -34,9 +34,9 @@ public struct Group: BlockElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         if isTransparent {
-            items.render(context: context)
+            items.render(into: self, context: context)
         } else {
-            "<div\(attributes.description)>\(items.render(context: context))</div>"
+            "<div\(attributes.description)>\(items.render(into: self, context: context))</div>"
         }
     }
 }

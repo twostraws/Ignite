@@ -120,15 +120,19 @@ public struct Table: BlockElement {
         }
 
         if let header {
-            let headerHTML = header.map {
-                "<th>\($0.render(context: context))</th>"
-            }.joined()
+            let headerHTML = header.render(into: self, context: context)
 
             output += "<thead><tr>\(headerHTML)</tr></thead>"
         }
 
         output += "<tbody>"
-        output += rows.render(context: context)
+        
+        for row in rows {
+            output += row
+                .mergingEnvironment(from: self)
+                .render(context: context)
+        }
+
         output += "</tbody>"
         output += "</table>"
         return output

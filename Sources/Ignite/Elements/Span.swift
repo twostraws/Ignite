@@ -40,6 +40,6 @@ public struct Span: InlineElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<span\(attributes.description)>\(contents.render(context: context))</span>"
+        "<span\(attributes.description)>\(contents.render(into: self, context: context))</span>"
     }
 }

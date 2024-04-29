@@ -58,6 +58,7 @@ public struct Section: BlockElement {
             for item in items {
                 Group {
                     item
+                        .mergingEnvironment(from: self)
                 }
                 .class(item.columnWidth.className)
             }

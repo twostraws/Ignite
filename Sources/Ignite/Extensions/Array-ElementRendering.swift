@@ -10,8 +10,8 @@ import Foundation
 extension Array where Element == any PageElement {
     /// An extension that makes it easier to render arrays of `PageElement`
     /// objects to a HTML string.
-    func render(context: PublishingContext) -> String {
-        map { $0.render(context: context) }.joined()
+    func render(into parent: PageElement, context: PublishingContext) -> String {
+        map { $0.mergingEnvironment(from: parent).render(context: context) }.joined()
     }
 }
 
@@ -26,16 +26,16 @@ extension Array where Element == any HeadElement {
 extension Array where Element == any BlockElement {
     /// An extension that makes it easier to render arrays of `BlockElement`
     /// objects to a HTML string.
-    public func render(context: PublishingContext) -> String {
-        map { $0.render(context: context) }.joined()
+    public func render(into parent: PageElement, context: PublishingContext) -> String {
+        map { $0.mergingEnvironment(from: parent).render(context: context) }.joined()
     }
 }
 
 extension Array where Element == any InlineElement {
     /// An extension that makes it easier to render arrays of `InlineElement`
     /// objects to a HTML string.
-    func render(context: PublishingContext) -> String {
-        map { $0.render(context: context) }.joined()
+    func render(into parent: PageElement, context: PublishingContext) -> String {
+        map { $0.mergingEnvironment(from: parent).render(context: context) }.joined()
     }
 }
 

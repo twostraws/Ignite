@@ -41,7 +41,7 @@ public struct ButtonGroup: BlockElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         Group {
-            content.map { $0.render(context: context) }.joined()
+            content.map { $0.mergingEnvironment(from: self).render(context: context) }.joined()
         }
         .class("btn-group")
         .aria("label", accessibilityLabel)

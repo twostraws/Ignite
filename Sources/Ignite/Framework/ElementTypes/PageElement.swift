@@ -81,6 +81,18 @@ extension PageElement {
         return copy
     }
 
+
+    /// Adds a new environment key and value pair to this view. This is propagated downwards automatically.
+    /// - Parameters:
+    ///   - key: The key to set
+    ///   - value: A value to associate with that key.
+    /// - Returns: A copy of the current element with the new environment key applied.
+    func environment<Value>(_ keyPath: WritableKeyPath<EnvironmentValues, Value>, _ value: Value) -> Self {
+        var copy = self
+        copy.attributes.environment[keyPath] = value
+        return copy
+    }
+
     /// Sets the "id" attribute for this element.
     /// - Parameter string: The unique identifier for this attribute.
     /// - Returns: A copy of the current element with the new ID applied.
@@ -121,5 +133,24 @@ extension PageElement {
         var copy = self
         copy.attributes = attributes
         return copy
+    }
+
+    func mergingEnvironment(from parent: any PageElement) -> Self {
+        var copy = self
+
+        for (key, value) in parent.attributes.environment.values {
+            if copy.attributes.environment.values[key] == nil {
+                copy.attributes.environment.values[key] = value
+            }
+        }
+
+        return copy
+    }
+
+    /// Adjusts the font of this text.
+    /// - Parameter newFont: The new font.
+    /// - Returns: A new `Text` instance with the updated font.
+    public func font(_ newFont: Font) -> Self {
+        self.environment(\.font, newFont)
     }
 }

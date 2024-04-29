@@ -48,8 +48,8 @@ public struct Quote: BlockElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        let renderedContents = contents.render(context: context)
-        let renderedCaption = caption.render(context: context)
+        let renderedContents = contents.render(into: self, context: context)
+        let renderedCaption = caption.render(into: self, context: context)
 
         let blockQuoteAttributes = attributes.appending(classes: ["blockquote"])
 

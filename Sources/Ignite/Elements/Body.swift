@@ -11,9 +11,9 @@ import Foundation
 public struct Body: PageElement, HTMLRootElement {
     public var attributes = CoreAttributes()
 
-    var items: [BaseElement]
+    var items: [PageElement]
 
-    public init(@ElementBuilder<BaseElement> _ items: () -> [BaseElement]) {
+    public init(@ElementBuilder<PageElement> _ items: () -> [PageElement]) {
         self.items = items()
     }
 
@@ -30,6 +30,7 @@ public struct Body: PageElement, HTMLRootElement {
                 item
             }
         }
+        .mergingEnvironment(from: self)
         .class("col-sm-\(context.site.pageWidth)", "mx-auto")
         .render(context: context)
 

@@ -86,12 +86,14 @@ public struct Dropdown: BlockElement, NavigationItem {
         Group(isTransparent: isNavigationItem) {
             if isNavigationItem {
                 Link(title, target: "#")
+                    .mergingEnvironment(from: self)
                     .addCustomAttribute(name: "role", value: "button")
                     .class("dropdown-toggle", "nav-link")
                     .data("bs-toggle", "dropdown")
                     .aria("expanded", "false")
             } else {
                 Button(title)
+                    .mergingEnvironment(from: self)
                     .class(Button.classes(forRole: role, size: size))
                     .class("dropdown-toggle")
                     .data("bs-toggle", "dropdown")
@@ -102,13 +104,18 @@ public struct Dropdown: BlockElement, NavigationItem {
                 for item in items {
                     ListItem {
                         if item is Link {
-                            item.class("dropdown-item")
+                            item
+                                .mergingEnvironment(from: self)
+                                .class("dropdown-item")
                         } else {
-                            item.class("dropdown-header")
+                            item
+                                .mergingEnvironment(from: self)
+                                .class("dropdown-header")
                         }
                     }
                 }
             }
+            .mergingEnvironment(from: self)
             .listStyle(.unordered(.default))
             .class("dropdown-menu")
         }

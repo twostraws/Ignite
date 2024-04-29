@@ -104,9 +104,11 @@ public struct List: BlockElement {
 
         for item in items {
             if item is ListItem {
-                output += item.render(context: context)
+                output += item
+                    .mergingEnvironment(from: self)
+                    .render(context: context)
             } else {
-                output += "<li>\(item.render(context: context))</li>"
+                output += "<li>\(item.mergingEnvironment(from: self).render(context: context))</li>"
             }
 
         }

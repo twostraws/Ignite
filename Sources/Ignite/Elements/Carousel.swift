@@ -69,7 +69,9 @@ public struct Carousel: BlockElement {
 
             Group {
                 for (index, item) in items.enumerated() {
-                    item.assigned(at: index, in: context)
+                    item
+                        .mergingEnvironment(from: self)
+                        .assigned(at: index, in: context)
                 }
             }
             .class("carousel-inner")
@@ -83,6 +85,7 @@ public struct Carousel: BlockElement {
                 Span("Previous")
                     .class("visually-hidden")
             }
+            .mergingEnvironment(from: self)
             .class("carousel-control-prev")
             .data("bs-target", "#\(carouselID)")
             .data("bs-slide", "prev")
@@ -96,6 +99,7 @@ public struct Carousel: BlockElement {
                 Span("Next")
                     .class("visually-hidden")
             }
+            .mergingEnvironment(from: self)
             .class("carousel-control-next")
             .data("bs-target", "#\(carouselID)")
             .data("bs-slide", "next")

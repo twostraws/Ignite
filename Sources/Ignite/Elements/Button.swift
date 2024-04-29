@@ -136,7 +136,7 @@ public struct Button: InlineElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         let buttonAttributes = attributes.appending(classes: Button.classes(forRole: role, size: size))
-        let output = label.map { $0.render(context: context) }.joined()
+        let output = label.render(into: self, context: context)
         return "<button type=\"\(type.htmlName)\"\(buttonAttributes.description)>\(output)</button>"
     }
 }

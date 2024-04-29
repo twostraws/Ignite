@@ -37,7 +37,10 @@ public struct ContentPreview: BlockElement {
 
             if tagLinks.isEmpty == false {
                 Group {
-                    tagLinks
+                    for link in tagLinks {
+                        link
+                            .mergingEnvironment(from: self)
+                    }
                 }
                 .style("margin-top: -5px")
             }

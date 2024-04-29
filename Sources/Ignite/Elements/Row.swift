@@ -28,9 +28,9 @@ public struct Row: PageElement {
     public func render(context: PublishingContext) -> String {
         let output = columns.map { column in
             if column is Column {
-                column.render(context: context)
+                column.mergingEnvironment(from: self).render(context: context)
             } else {
-                "<td>\(column.render(context: context))</td>"
+                "<td>\(column.mergingEnvironment(from: self).render(context: context))</td>"
             }
         }.joined()
 

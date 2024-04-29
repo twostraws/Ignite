@@ -32,6 +32,9 @@ public struct CoreAttributes {
     /// Custom attributes not covered by the above, e.g. loading="lazy"
     var customAttributes = [AttributeValue]()
 
+    /// Any values inherited from the environment.
+    var environment = EnvironmentValues()
+
     /// All core attributes collapsed down to a single string for easy application.
     var description: String {
         "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"

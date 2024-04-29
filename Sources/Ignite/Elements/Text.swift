@@ -18,11 +18,13 @@ public struct Text: BlockElement, DropdownElement {
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
-    /// The font to use for this text.
-    var font = Font.body
-
     /// The content to place inside the text.
     var content: [InlineElement]
+
+    /// The font to use for this text.
+    var resolvedFont: Font {
+        attributes.environment[\.font]
+    }
 
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
@@ -49,23 +51,12 @@ public struct Text: BlockElement, DropdownElement {
         self.content = [cleanedHTML]
     }
 
-    /// Adjusts the font of this text.
-    /// - Parameter newFont: The new font.
-    /// - Returns: A new `Text` instance with the updated font.
-    public func font(_ newFont: Font) -> Self {
-        if newFont == .lead {
-            return self.class("lead")
-        } else {
-            var copy = self
-            copy.font = newFont
-            return copy
-        }
-    }
-
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<\(font.rawValue)\(attributes.description)>" + content.render(context: context) + "</\(font.rawValue)>"
+        let textAttributes = attributes.appending(classes: resolvedFont.classes)
+
+        return "<\(resolvedFont.rawValue)\(textAttributes.description)>" + content.render(into: self, context: context) + "</\(resolvedFont.rawValue)>"
     }
 }

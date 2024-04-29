@@ -80,7 +80,7 @@ public struct Item: PageElement {
 
             Group {
                 Group {
-                    contents.render(context: context)
+                    contents.render(into: self, context: context)
                 }
                 .class("accordion-body")
             }
