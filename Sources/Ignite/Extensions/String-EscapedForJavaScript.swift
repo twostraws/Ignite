@@ -1,8 +1,8 @@
 //
-//  File.swift
-//  
-//
-//  Created by Paul Hudson on 28/03/2024.
+// String-EscapedForJavaScript.swift
+// IgniteSamples
+// https://www.github.com/twostraws/Ignite
+// See LICENSE for license information.
 //
 
 import Foundation
