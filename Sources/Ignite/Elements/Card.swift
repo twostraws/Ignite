@@ -22,12 +22,40 @@ public struct Card: BlockElement {
     }
 
     /// Where to position the content of the card relative to it image.
-    public enum ContentPosition: String, CaseIterable {
+    public enum ContentPosition: CaseIterable {
         /// Positions content below the image.
-        case `default` = "card-body"
+        case bottom
 
         /// Positions content above the image.
-        case overlay = "card-img-overlay"
+        case top
+
+        /// Positions content over the image.
+        case overlay
+
+        /// Positions content in the center over the image.
+        case overlayCenter
+
+        public static let `default` = Self.bottom
+
+        var imageClass: String {
+            switch self {
+            case .bottom:
+                "card-img-bottom"
+            case .top:
+                "card-img-top"
+            case .overlay, .overlayCenter:
+                "card-img"
+            }
+        }
+
+        var bodyClass: String {
+            switch self {
+            case .overlay, .overlayCenter:
+                "card-img-overlay"
+            default:
+                "card-body"
+            }
+        }
     }
 
     /// The standard set of control attributes for HTML elements.
@@ -116,15 +144,26 @@ public struct Card: BlockElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        Group {
-            if let image {
+        var bodyClasses = [contentPosition.bodyClass]
+        var width: String?
+        var height: String?
+
+        if contentPosition == .overlayCenter {
+            bodyClasses.append("text-center")
+            bodyClasses.append("align-content-center")
+            width = "100%"
+            height = "100%"
+        }
+
+        return Group {
+            if let image, contentPosition != .top {
                 if imageOpacity != 1 {
                     image
-                        .class("card-img-top")
+                        .class(contentPosition.imageClass)
                         .style("opacity: \(imageOpacity)")
                 } else {
                     image
-                        .class("card-img-top")
+                        .class(contentPosition.imageClass)
                 }
             }
 
@@ -149,12 +188,26 @@ public struct Card: BlockElement {
                         }
                     case is Link:
                         item.class("card-link")
+                    case is Image:
+                        item.class("card-img")
                     default:
                         item
                     }
                 }
             }
-            .class(contentPosition.rawValue)
+            .frame(width: width, height: height)
+            .class(bodyClasses)
+
+            if let image, contentPosition == .top {
+                if imageOpacity != 1 {
+                    image
+                        .class(contentPosition.imageClass)
+                        .style("opacity: \(imageOpacity)")
+                } else {
+                    image
+                        .class(contentPosition.imageClass)
+                }
+            }
 
             if footer.isEmpty == false {
                 Group {
