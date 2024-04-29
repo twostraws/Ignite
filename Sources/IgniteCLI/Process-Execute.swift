@@ -54,7 +54,7 @@ extension Process {
                 // is up and running before we launch the next
                 // command.
 
-                try await Task.sleep(for: .seconds(0.5))
+                try await Task.sleep(for: .seconds(1))
                 try Process.execute(command: subsequentCommand)
             }
 
