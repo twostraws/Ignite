@@ -55,7 +55,7 @@ struct FeedGenerator {
         <title>\(site.name)</title>\
         <description>\(site.description ?? "")</description>\
         <link>\(site.url.absoluteString)</link>\
-        <atom:link href="\(site.url.absoluteString)/feed.rss" rel="self" type="application/rss+xml" />\
+        <atom:link href="\(site.url.appending(path: site.feedConfiguration.path).absoluteString)" rel="self" type="application/rss+xml" />\
         <language>\(site.language.rawValue)</language>\
         <generator>\(Ignite.version)</generator>
         """

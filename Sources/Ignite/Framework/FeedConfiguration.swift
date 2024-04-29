@@ -55,23 +55,28 @@ public struct FeedConfiguration {
     /// How many items of contentshould be returned.
     var contentCount: Int
 
+    /// The path to where the generated rss xml file for the feed endpoint should be.
+    var path: String
+
     /// An optional image used to customize your feed's appearance in
     /// feed readers.
     var image: FeedImage?
 
-    /// A safe default feed configuration: 20 items, description only.
-    static let `default` = FeedConfiguration(mode: .descriptionOnly, contentCount: 20)
+    /// A safe default feed configuration: 20 items, description only, path at /feed.rss.
+    static let `default` = FeedConfiguration(mode: .descriptionOnly, contentCount: 20, path: "/feed.rss")
 
     /// Creates a custom feed configuration from the options provided.
     /// - Parameters:
     ///   - mode: Whether to descriptions or full article text, or to disable the
     ///   feed entirely.
     ///   - contentCount: How many pieces of content to return.
+    ///   - path: The path where the RSS feed should be accessible, default to /feed.rss
     ///   - image: An optional image used to customize your feed's
     ///   appearance in feed readers.
-    public init(mode: ContentMode, contentCount: Int, image: FeedImage? = nil) {
+    public init(mode: ContentMode, contentCount: Int, path: String = "/feed.rss", image: FeedImage? = nil) {
         self.mode = mode
         self.contentCount = contentCount
+        self.path = path
         self.image = image
     }
 }

@@ -373,7 +373,7 @@ public class PublishingContext {
         let result = generator.generateFeed()
 
         do {
-            let destinationURL = buildDirectory.appending(path: "feed.rss")
+            let destinationURL = buildDirectory.appending(path: site.feedConfiguration.path)
             try result.write(to: destinationURL, atomically: true, encoding: .utf8)
         } catch {
             throw PublishingError.failedToWriteFeed
