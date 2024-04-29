@@ -20,7 +20,7 @@ struct FeedLink: Component {
                         .margin(.trailing, 10)
                 }
 
-                Link("RSS Feed", target: "/feed.rss")
+                Link("RSS Feed", target: context.site.feedConfiguration.path)
             }
             .horizontalAlignment(.center)
         }
