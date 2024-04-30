@@ -40,6 +40,7 @@ public struct Card: BlockElement {
         public static let `default` = Self.bottom
         public static let overlay = Self.overlay(alignment: .topLeading)
 
+        // MARK: Helpers for `render`
         var imageClass: String {
             switch self {
             case .bottom:
@@ -51,12 +52,21 @@ public struct Card: BlockElement {
             }
         }
 
-        var bodyClass: String {
+        var bodyClasses: [String] {
             switch self {
-            case .overlay:
-                "card-img-overlay"
+            case .overlay(let alignment):
+                ["card-img-overlay", alignment.textAlignment.rawValue, alignment.verticalAlignment.rawValue]
             default:
-                "card-body"
+                ["card-body"]
+            }
+        }
+
+        var addImageFirst: Bool {
+            switch self {
+            case .bottom, .overlay:
+                true
+            case .top:
+                false
             }
         }
     }
@@ -195,22 +205,8 @@ public struct Card: BlockElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        var bodyClasses = [contentPosition.bodyClass]
-        var addImageFirst: Bool
-
-        switch contentPosition {
-        case .bottom:
-            addImageFirst = true
-        case .top:
-            addImageFirst = false
-        case .overlay(let alignment):
-            addImageFirst = true
-            bodyClasses.append(alignment.textAlignment.rawValue)
-            bodyClasses.append(alignment.verticalAlignment.rawValue)
-        }
-
-        return Group {
-            if let image, addImageFirst {
+        Group {
+            if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
@@ -249,9 +245,9 @@ public struct Card: BlockElement {
                     }
                 }
             }
-            .class(bodyClasses)
+            .class(contentPosition.bodyClasses)
 
-            if let image, !addImageFirst {
+            if let image, !contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
