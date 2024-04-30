@@ -58,20 +58,16 @@ public struct Card: BlockElement {
         }
     }
 
-    enum ContentJustify: String, CaseIterable {
-        case start = "justify-content-start"
-        case center = "justify-content-center"
-        case end = "justify-content-end"
-
-        // ... there would be more options in Bootstrap
+    enum TextAlignment: String, CaseIterable {
+        case start = "text-start"
+        case center = "text-center"
+        case end = "text-end"
     }
 
-    enum ItemAlignment: String, CaseIterable {
-        case start = "align-items-start"
-        case center = "align-items-center"
-        case end = "align-items-end"
-
-        // ... there would be more options in Bootstrap
+    enum VerticalAlignment: String, CaseIterable {
+        case start = "align-content-start"
+        case center = "align-content-center"
+        case end = "align-content-end"
     }
 
     public enum ContentAlignment: CaseIterable {
@@ -85,7 +81,7 @@ public struct Card: BlockElement {
         case bottom
         case bottomTrailing
 
-        var contentJustify: ContentJustify {
+        var textAlignment: TextAlignment {
             switch self {
             case .topLeading, .leading, .bottomLeading:
                     .start
@@ -96,7 +92,7 @@ public struct Card: BlockElement {
             }
         }
 
-        var itemAlignment: ItemAlignment {
+        var verticalAlignment: VerticalAlignment {
             switch self {
             case .topLeading, .top, .topTrailing:
                     .start
@@ -216,9 +212,10 @@ public struct Card: BlockElement {
             width = "100%"
             height = "100%"
         } else if contentPosition == .overlay {
-            bodyClasses.append(contentAlignment.contentJustify.rawValue)
-            bodyClasses.append(contentAlignment.itemAlignment.rawValue)
-            bodyClasses.append("d-flex")
+            if contentAlignment != .default {
+                bodyClasses.append(contentAlignment.textAlignment.rawValue)
+                bodyClasses.append(contentAlignment.verticalAlignment.rawValue)
+            }
         }
 
         return Group {
