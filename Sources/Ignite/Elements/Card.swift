@@ -34,7 +34,7 @@ public struct Card: BlockElement {
         case top
 
         /// Positions content over the image.
-        case overlay(alignment: ContentAlignment = .center)
+        case overlay(alignment: ContentAlignment)
 
         // Static entries for backward compatibilty
         public static let `default` = Self.bottom
