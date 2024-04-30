@@ -179,8 +179,7 @@ public class PublishingContext {
     func copyResources() throws {
         let assets = try FileManager.default.contentsOfDirectory(
             at: assetsDirectory,
-            includingPropertiesForKeys: nil,
-            options: [.skipsHiddenFiles]
+            includingPropertiesForKeys: nil
         )
 
         for asset in assets {
