@@ -23,6 +23,10 @@ public struct Card: BlockElement {
 
     /// Where to position the content of the card relative to it image.
     public enum ContentPosition: CaseIterable {
+        public static var allCases: [Card.ContentPosition] = [
+            .bottom, .top, .overlay(alignment: .topLeading)
+        ]
+
         /// Positions content below the image.
         case bottom
 
@@ -30,12 +34,11 @@ public struct Card: BlockElement {
         case top
 
         /// Positions content over the image.
-        case overlay
+        case overlay(alignment: ContentAlignment = .center)
 
-        /// Positions content in the center over the image.
-        case overlayCenter
-
+        // Static entries for backward compatibilty
         public static let `default` = Self.bottom
+        public static let overlay = Self.overlay(alignment: .topLeading)
 
         var imageClass: String {
             switch self {
@@ -43,14 +46,14 @@ public struct Card: BlockElement {
                 "card-img-bottom"
             case .top:
                 "card-img-top"
-            case .overlay, .overlayCenter:
+            case .overlay:
                 "card-img"
             }
         }
 
         var bodyClass: String {
             switch self {
-            case .overlay, .overlayCenter:
+            case .overlay:
                 "card-img-overlay"
             default:
                 "card-body"
@@ -116,7 +119,6 @@ public struct Card: BlockElement {
     var style = CardStyle.default
 
     var contentPosition = ContentPosition.default
-    var contentAlignment = ContentAlignment.default
     var imageOpacity = 1.0
 
     var image: Image?
@@ -179,15 +181,6 @@ public struct Card: BlockElement {
         return copy
     }
 
-    /// Adjusts the position of this card's content relative to its image.
-    /// - Parameter newPosition: The new content positio for this card.
-    /// - Returns: A new `Card` instance with the updated content position.
-    public func contentAlignment(_ newAlignment: ContentAlignment) -> Self {
-        var copy = self
-        copy.contentAlignment = newAlignment
-        return copy
-    }
-
     /// Adjusts the opacity of the image for this card. Use values
     /// lower than 1.0 to progressively dim the image.
     /// - Parameter opacity: The new opacity for this card.
@@ -203,23 +196,21 @@ public struct Card: BlockElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         var bodyClasses = [contentPosition.bodyClass]
-        var width: String?
-        var height: String?
+        var addImageFirst: Bool
 
-        if contentPosition == .overlayCenter {
-            bodyClasses.append("text-center")
-            bodyClasses.append("align-content-center")
-            width = "100%"
-            height = "100%"
-        } else if contentPosition == .overlay {
-            if contentAlignment != .default {
-                bodyClasses.append(contentAlignment.textAlignment.rawValue)
-                bodyClasses.append(contentAlignment.verticalAlignment.rawValue)
-            }
+        switch contentPosition {
+        case .bottom:
+            addImageFirst = true
+        case .top:
+            addImageFirst = false
+        case .overlay(let alignment):
+            addImageFirst = true
+            bodyClasses.append(alignment.textAlignment.rawValue)
+            bodyClasses.append(alignment.verticalAlignment.rawValue)
         }
 
         return Group {
-            if let image, contentPosition != .top {
+            if let image, addImageFirst {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
@@ -258,10 +249,9 @@ public struct Card: BlockElement {
                     }
                 }
             }
-            .frame(width: width, height: height)
             .class(bodyClasses)
 
-            if let image, contentPosition == .top {
+            if let image, !addImageFirst {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
