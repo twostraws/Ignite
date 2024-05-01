@@ -44,7 +44,7 @@ public struct Script: BlockElement & HeadElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         if let file {
-            return "<script src=\"\(file)\"></script>"
+            return "<script src=\"\(context.site.url.path)\(file)\"></script>"
         } else if let code {
             return "<script>\(code)</script>"
         } else {

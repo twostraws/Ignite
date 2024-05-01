@@ -319,6 +319,7 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
     public func render(context: PublishingContext) -> String {
         let linkAttributes = attributes.appending(classes: linkClasses)
 
-        return "<a href=\"\(url)\"\(linkAttributes.description)>" + content.render(context: context) + "</a>"
+        return "<a href=\"\(context.site.url.path)\(url)\"\(linkAttributes.description)>" +
+                                                            content.render(context: context) + "</a>"
     }
 }
