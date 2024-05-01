@@ -23,6 +23,10 @@ public struct Card: BlockElement {
 
     /// Where to position the content of the card relative to it image.
     public enum ContentPosition: CaseIterable {
+        public static var allCases: [Card.ContentPosition] = [
+            .bottom, .top, .overlay(alignment: .topLeading)
+        ]
+
         /// Positions content below the image.
         case bottom
 
@@ -30,32 +34,89 @@ public struct Card: BlockElement {
         case top
 
         /// Positions content over the image.
-        case overlay
+        case overlay(alignment: ContentAlignment)
 
-        /// Positions content in the center over the image.
-        case overlayCenter
-
+        // Static entries for backward compatibilty
         public static let `default` = Self.bottom
+        public static let overlay = Self.overlay(alignment: .topLeading)
 
+        // MARK: Helpers for `render`
         var imageClass: String {
             switch self {
             case .bottom:
                 "card-img-top"
             case .top:
                 "card-img-bottom"
-            case .overlay, .overlayCenter:
+            case .overlay:
                 "card-img"
             }
         }
 
-        var bodyClass: String {
+        var bodyClasses: [String] {
             switch self {
-            case .overlay, .overlayCenter:
-                "card-img-overlay"
+            case .overlay(let alignment):
+                ["card-img-overlay", alignment.textAlignment.rawValue, alignment.verticalAlignment.rawValue]
             default:
-                "card-body"
+                ["card-body"]
             }
         }
+
+        var addImageFirst: Bool {
+            switch self {
+            case .bottom, .overlay:
+                true
+            case .top:
+                false
+            }
+        }
+    }
+
+    enum TextAlignment: String, CaseIterable {
+        case start = "text-start"
+        case center = "text-center"
+        case end = "text-end"
+    }
+
+    enum VerticalAlignment: String, CaseIterable {
+        case start = "align-content-start"
+        case center = "align-content-center"
+        case end = "align-content-end"
+    }
+
+    public enum ContentAlignment: CaseIterable {
+        case topLeading
+        case top
+        case topTrailing
+        case leading
+        case center
+        case trailing
+        case bottomLeading
+        case bottom
+        case bottomTrailing
+
+        var textAlignment: TextAlignment {
+            switch self {
+            case .topLeading, .leading, .bottomLeading:
+                    .start
+            case .top, .center, .bottom:
+                    .center
+            case .topTrailing, .trailing, .bottomTrailing:
+                    .end
+            }
+        }
+
+        var verticalAlignment: VerticalAlignment {
+            switch self {
+            case .topLeading, .top, .topTrailing:
+                    .start
+            case .leading, .center, .trailing:
+                    .center
+            case .bottomLeading, .bottom, .bottomTrailing:
+                    .end
+            }
+        }
+
+        public static let `default` = Self.topLeading
     }
 
     /// The standard set of control attributes for HTML elements.
@@ -144,19 +205,8 @@ public struct Card: BlockElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        var bodyClasses = [contentPosition.bodyClass]
-        var width: String?
-        var height: String?
-
-        if contentPosition == .overlayCenter {
-            bodyClasses.append("text-center")
-            bodyClasses.append("align-content-center")
-            width = "100%"
-            height = "100%"
-        }
-
-        return Group {
-            if let image, contentPosition != .top {
+        Group {
+            if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
@@ -195,10 +245,9 @@ public struct Card: BlockElement {
                     }
                 }
             }
-            .frame(width: width, height: height)
-            .class(bodyClasses)
+            .class(contentPosition.bodyClasses)
 
-            if let image, contentPosition == .top {
+            if let image, !contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
