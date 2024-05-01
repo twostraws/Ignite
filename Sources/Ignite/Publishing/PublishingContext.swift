@@ -167,7 +167,7 @@ public class PublishingContext {
         }
 
         do {
-            try FileManager.default.createDirectory(at: buildDirectory, withIntermediateDirectories: false)
+            try FileManager.default.createDirectory(at: buildDirectory, withIntermediateDirectories: true)
         } catch {
             throw PublishingError.failedToCreateBuildDirectory(buildDirectory)
         }
