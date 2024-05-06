@@ -150,7 +150,7 @@ public class PublishingContext {
         try clearBuildFolder()
         try copyResources()
         try await generateContent()
-        try generateTagPages()
+        try await generateTagPages()
         try generateSiteMap()
         try generateFeed()
         try generateRobots()
@@ -249,18 +249,18 @@ public class PublishingContext {
 
     /// Renders one page using the correct theme, which is taken either from the
     /// provided them or from the main site theme.
-    func render(_ page: Page, using theme: any Theme) -> String {
+    func render(_ page: Page, using theme: any Theme) async -> String {
         var theme = theme
 
         if theme is MissingTheme {
             theme = site.theme
         }
 
-        return theme.render(page: page, context: self).render(context: self)
+        return await theme.render(page: page, context: self).render(context: self)
     }
 
     /// Generates all tags pages, including the "all tags" page.
-    func generateTagPages() throws {
+    func generateTagPages() async throws {
         if site.tagPage is EmptyTagPage { return }
 
         /// Creates a unique list of sorted tags from across the site, starting
@@ -278,7 +278,7 @@ public class PublishingContext {
 
             let outputDirectory = buildDirectory.appending(path: path)
 
-            let body = Group(items: site.tagPage.body(tag: tag, context: self), context: self)
+            let body = await Group(items: site.tagPage.body(tag: tag, context: self), context: self)
 
             let page = Page(
                 title: "Tags",
@@ -287,7 +287,7 @@ public class PublishingContext {
                 body: body
             )
 
-            let outputString = render(page, using: site.tagPage.theme)
+            let outputString = await render(page, using: site.tagPage.theme)
 
             try write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }
@@ -311,7 +311,7 @@ public class PublishingContext {
             body: body
         )
 
-        let outputString = render(page, using: staticPage.theme)
+        let outputString = await render(page, using: staticPage.theme)
 
         let outputDirectory = buildDirectory.appending(path: path)
 
@@ -340,7 +340,7 @@ public class PublishingContext {
             body: body
         )
 
-        let outputString = render(page, using: layout.theme)
+        let outputString = await render(page, using: layout.theme)
 
         let outputDirectory = buildDirectory.appending(path: content.path)
         try write(outputString, to: outputDirectory, priority: 0.8)
