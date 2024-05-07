@@ -11,5 +11,5 @@ import Foundation
 public struct EmptyTagPage: TagPage {
     public init() { }
 
-    public func body(tag: String?, context: PublishingContext) -> [any BlockElement] { }
+    public func body(tag: String?, context: PublishingContext) async -> [any BlockElement] { }
 }
