@@ -3,7 +3,6 @@
 //  Ignite
 //  https://www.github.com/twostraws/Ignite
 //  See LICENSE for license information.
-//  Created by Henrik Christensen on 2024-05-03.
 //
 
 import Foundation
