@@ -1,5 +1,5 @@
 //
-// TestSubsite.swift                                (Created by Gavin Eadie on 2024-04-30)
+// TestSubsite.swift                                
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
