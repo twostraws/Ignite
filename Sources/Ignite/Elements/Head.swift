@@ -30,6 +30,7 @@ public struct Head: HTMLRootElement {
     ///   - page: The `Page` you want to create headers for.
     ///   - context: The active `PublishingContext`, which includes
     ///   information about the site being rendered and more.
+    ///   - additionalItems: Additional items to enhance the set of standard headers.
     public init(for page: Page, in context: PublishingContext, @HeadElementBuilder additionalItems: () -> [HeadElement] = {[]}) {
         items = Head.standardHeaders(for: page, in: context)
 
@@ -44,6 +45,12 @@ public struct Head: HTMLRootElement {
         "<head>\(items.render(context: context))</head>"
     }
 
+    /// A static function, returning the standard set of headers used for a `Page` instance.
+    ///
+    /// This function can be used when defining a custom header based on the standard set of headers.
+    /// - Parameters:
+    ///   - page: The `Page` you want to create headers for.
+    ///   - context: The active `PublishingContext`, which includes
     @HeadElementBuilder
     public static func standardHeaders(for page: Page, in context: PublishingContext) -> [HeadElement] {
         MetaTag.utf8
