@@ -31,38 +31,7 @@ public struct Head: HTMLRootElement {
     ///   - context: The active `PublishingContext`, which includes
     ///   information about the site being rendered and more.
     public init(for page: Page, in context: PublishingContext, @HeadElementBuilder additionalItems: () -> [HeadElement] = {[]}) {
-        self.init {
-            MetaTag.utf8
-            MetaTag.flexibleViewport
-
-            if page.description.isEmpty == false {
-                MetaTag(name: "description", content: page.description)
-            }
-
-            if context.site.author.isEmpty == false {
-                MetaTag(name: "author", content: context.site.author)
-            }
-
-            MetaTag.generator
-
-            Title(page.title)
-
-            MetaLink.standardCSS
-
-            if context.site.syntaxHighlighters.isEmpty == false {
-                MetaLink.syntaxHighlightingCSS
-            }
-
-            if context.site.builtInIconsEnabled {
-                MetaLink.iconCSS
-            }
-
-            MetaLink(href: page.url, rel: "canonical")
-
-            if let favicon = context.site.favicon {
-                MetaLink(href: favicon, rel: .icon)
-            }
-        }
+        items = Head.standardHeaders(for: page, in: context)
 
         items += MetaTag.socialSharingTags(for: page, context: context)
         items += additionalItems()
@@ -73,5 +42,39 @@ public struct Head: HTMLRootElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         "<head>\(items.render(context: context))</head>"
+    }
+
+    @HeadElementBuilder
+    public static func standardHeaders(for page: Page, in context: PublishingContext) -> [HeadElement] {
+        MetaTag.utf8
+        MetaTag.flexibleViewport
+
+        if page.description.isEmpty == false {
+            MetaTag(name: "description", content: page.description)
+        }
+
+        if context.site.author.isEmpty == false {
+            MetaTag(name: "author", content: context.site.author)
+        }
+
+        MetaTag.generator
+
+        Title(page.title)
+
+        MetaLink.standardCSS
+
+        if context.site.syntaxHighlighters.isEmpty == false {
+            MetaLink.syntaxHighlightingCSS
+        }
+
+        if context.site.builtInIconsEnabled {
+            MetaLink.iconCSS
+        }
+
+        MetaLink(href: page.url, rel: "canonical")
+
+        if let favicon = context.site.favicon {
+            MetaLink(href: favicon, rel: .icon)
+        }
     }
 }
