@@ -30,7 +30,7 @@ public struct Head: HTMLRootElement {
     ///   - page: The `Page` you want to create headers for.
     ///   - context: The active `PublishingContext`, which includes
     ///   information about the site being rendered and more.
-    public init(for page: Page, in context: PublishingContext) {
+    public init(for page: Page, in context: PublishingContext, @HeadElementBuilder additionalItems: () -> [HeadElement] = {[]}) {
         self.init {
             MetaTag.utf8
             MetaTag.flexibleViewport
@@ -65,6 +65,7 @@ public struct Head: HTMLRootElement {
         }
 
         items += MetaTag.socialSharingTags(for: page, context: context)
+        items += additionalItems()
     }
 
     /// Renders this element using publishing context passed in.
