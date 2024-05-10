@@ -3,7 +3,6 @@
 //  Ignite
 //  https://www.github.com/twostraws/Ignite
 //  See LICENSE for license information.
-//  Created by Henrik Christensen on 2024-05-03.
 //
 
 import Foundation
@@ -24,6 +23,26 @@ public struct Abbreviation: InlineElement {
         
         self.attributes.customAttributes.append(customAttribute)
         self.contents = [abbreviation]
+    }
+    
+    /// Creates a new `Abbreviation` instance.
+    /// - Parameter singleElement: The element you want to place
+    /// - Parameter description: The description of the abbreviation.
+    public init(_ singleElement: any InlineElement, description: String) {
+        let customAttribute = AttributeValue(name: "title", value: description)
+        
+        self.attributes.customAttributes.append(customAttribute)
+        self.contents = [singleElement]
+    }
+
+    /// Creates a new `Abbreviation` instance using an inline element builder
+    /// that returns an array of content to place inside.
+    /// - Parameter description: The description of the abbreviation.
+    public init(_ description: String, @InlineElementBuilder content: () -> [InlineElement]) {
+        let customAttribute = AttributeValue(name: "title", value: description)
+        
+        self.attributes.customAttributes.append(customAttribute)
+        self.contents = content()
     }
 
     /// Renders this element using publishing context passed in.
