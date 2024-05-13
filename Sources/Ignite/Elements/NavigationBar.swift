@@ -143,6 +143,7 @@ public struct NavigationBar: BlockElement {
                                     ListItem {
                                         item
                                             .class("nav-link", context.currentRenderingPath == (item as? Link)?.url ? "active" : nil)
+                                            .aria("current", context.currentRenderingPath == (item as? Link)?.url ? "page" : nil)
                                     }
                                     .class("nav-item")
                                 }

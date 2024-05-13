@@ -107,6 +107,7 @@ public struct Dropdown: BlockElement, NavigationItem {
                         if let link = item as? Link {
                             item.class("dropdown-item")
                                 .class(context.currentRenderingPath == link.url ? "active" : nil)
+                                .aria("current", context.currentRenderingPath == link.url ? "page" : nil)
                         } else {
                             item.class("dropdown-header")
                         }
