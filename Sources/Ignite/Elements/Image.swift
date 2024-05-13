@@ -94,7 +94,11 @@ public struct Image: BlockElement, InlineElement, LazyLoadable {
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
     private func render(image: String, description: String, into context: PublishingContext) -> String {
-        "<img src=\"\(image)\"\(attributes.description) alt=\"\(description)\"/>"
+        """
+            <img src=\"\(context.site.url.path)\(image)\" \
+            \(attributes.description)\
+            alt=\"\(description)\"/>
+            """
     }
 
     /// Renders this element using publishing context passed in.
