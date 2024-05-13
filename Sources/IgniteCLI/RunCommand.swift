@@ -55,6 +55,15 @@ struct RunCommand: ParsableCommand {
             return
         }
 
+        // Check for a subsite by not finding «href="/css/» in index.html.
+        if let indexData = FileManager.default.contents(atPath: "\(directory)/index.html") {
+            let indexString = String(decoding: indexData, as: UTF8.self)
+            guard indexString.contains("<link href=\"/css") else {
+                print("❌ This site specifies a custom subfolder, so it can't be previewed locally.")
+                return
+            }
+        }
+
         print("✅ Starting local web server on http://localhost:\(port)")
         print("Press ↵ Return to exit.")
 
