@@ -139,13 +139,16 @@ public struct NavigationBar: BlockElement {
                                     }
                                     .class("nav-item", "dropdown")
                                     .data("bs-theme", "light")
-                                } else {
+                                } else if let link = item as? Link {
                                     ListItem {
+                                        let isActive = context.currentRenderingPath == link.url
                                         item
-                                            .class("nav-link", context.currentRenderingPath == (item as? Link)?.url ? "active" : nil)
-                                            .aria("current", context.currentRenderingPath == (item as? Link)?.url ? "page" : nil)
+                                            .class("nav-link", isActive ? "active" : nil)
+                                            .aria("current", isActive ? "page" : nil)
                                     }
                                     .class("nav-item")
+                                } else {
+                                    item
                                 }
                             }
                         }
