@@ -157,12 +157,12 @@ public struct NavigationBar: BlockElement {
                                 }
                             }
                         }
-                        .class("navbar-nav", "mb-2", "mb-md-0", columnWidth.className, itemAlignment.rawValue)
+                        .class("navbar-nav", "mb-2", "mb-md-0", "col", itemAlignment.rawValue)
                     }
                     .class("collapse", "navbar-collapse")
                     .id("navbarCollapse")
                 }
-                .class("container-fluid")
+                .class("container-fluid", columnWidth.className)
             }
             .attributes(attributes)
             .class("navbar", "navbar-expand-md")

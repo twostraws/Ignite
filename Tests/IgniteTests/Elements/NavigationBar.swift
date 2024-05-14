@@ -15,13 +15,13 @@ final class NavigationBarTests: ElementTest {
         let element = NavigationBar()
         let output = element.render(context: publishingContext)
         
-        XCTAssertTrue(output.contains("navbar-nav mb-2 mb-md-0 col"))
+        XCTAssertTrue(output.contains("container-fluid col"))
     }
     
     func test_columnWidthValueSet() {
         let element = NavigationBar().navigationBarColumnWidth(.count(10))
         let output = element.render(context: publishingContext)
         
-        XCTAssertTrue(output.contains("navbar-nav mb-2 mb-md-0 col-md-10"))
+        XCTAssertTrue(output.contains("container-fluid col-md-10"))
     }
 }
