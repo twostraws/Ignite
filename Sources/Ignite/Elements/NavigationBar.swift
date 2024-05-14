@@ -98,6 +98,15 @@ public struct NavigationBar: BlockElement {
         copy.itemAlignment = alignment
         return copy
     }
+    
+    /// Adjust the width of the navigation bar
+    /// - Parameter columnWidth: How many columns this should occupy when placed in a section.
+    /// - Returns: A new `NavigationBar` instance with the updated column width
+    public func navigationBarColumnWidth(_ columnWidth: ColumnWidth) -> Self {
+        var copy = self
+        copy.columnWidth = columnWidth
+        return copy
+    }
 
     func theme(for style: NavigationBarStyle) -> String? {
         switch style {
@@ -148,7 +157,7 @@ public struct NavigationBar: BlockElement {
                                 }
                             }
                         }
-                        .class("navbar-nav", "mb-2", "mb-md-0", "col", itemAlignment.rawValue)
+                        .class("navbar-nav", "mb-2", "mb-md-0", columnWidth.className, itemAlignment.rawValue)
                     }
                     .class("collapse", "navbar-collapse")
                     .id("navbarCollapse")
