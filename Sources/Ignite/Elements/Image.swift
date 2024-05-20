@@ -142,7 +142,7 @@ public struct Image: BlockElement, InlineElement, LazyLoadable {
         // dictionary where the key is the file extension of the each image.
         let availableFormats = alternativeFormats.reduce(into: [String: String]()) { dict, format in
             guard let lastDotIndex = format.lastIndex(of: ".") else { return }
-            let fileExtension = String(format[format.index(after: lastDotIndex)...])
+            let fileExtension = String(format[format.index(after: lastDotIndex)...]).lowercased()
             dict[fileExtension] = format
         }
         
