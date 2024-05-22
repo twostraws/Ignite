@@ -98,7 +98,7 @@ public struct NavigationBar: BlockElement {
         copy.itemAlignment = alignment
         return copy
     }
-    
+
     func theme(for style: NavigationBarStyle) -> String? {
         switch style {
         case .default: nil
