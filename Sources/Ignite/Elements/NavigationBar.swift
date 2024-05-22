@@ -99,15 +99,6 @@ public struct NavigationBar: BlockElement {
         return copy
     }
     
-    /// Adjust the width of the navigation bar
-    /// - Parameter columnWidth: How many columns this should occupy when placed in a section.
-    /// - Returns: A new `NavigationBar` instance with the updated column width
-    public func navigationBarColumnWidth(_ columnWidth: ColumnWidth) -> Self {
-        var copy = self
-        copy.columnWidth = columnWidth
-        return copy
-    }
-
     func theme(for style: NavigationBarStyle) -> String? {
         switch style {
         case .default: nil
