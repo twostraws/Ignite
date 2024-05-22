@@ -90,6 +90,15 @@ public struct NavigationBar: BlockElement {
         return copy
     }
 
+    /// Adjusts the number of columns assigned to the items in the navigation bar. It does not have an effect on the navigation bar itself.
+    /// - Parameter width: The new number of columns to use.
+    /// - Returns: A new `NavigationBar` instance with the adjusted column width.
+    public func width(_ width: Int) -> Self {
+        var copy = self
+        copy.columnWidth = .count(width)
+        return copy
+    }
+
     /// Adjusts the item alignment for this navigation bar.
     /// - Parameter alignment: The new alignment.
     /// - Returns: A new `NavigationBar` instance with the updated item alignment.
