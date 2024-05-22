@@ -85,9 +85,7 @@ public struct Dropdown: BlockElement, NavigationItem {
     public func render(context: PublishingContext) -> String {
         Group(isTransparent: isNavigationItem) {
             if isNavigationItem {
-                let hasActiveItem = items.reduce(false) { partialResult, item in
-                    partialResult || context.currentRenderingPath == (item as? Link)?.url
-                }
+                let hasActiveItem = items.contains { context.currentRenderingPath == ($0 as? Link)?.url  }
                 Link(title, target: "#")
                     .addCustomAttribute(name: "role", value: "button")
                     .class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
