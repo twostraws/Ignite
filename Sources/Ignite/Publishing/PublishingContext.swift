@@ -234,6 +234,8 @@ public class PublishingContext {
         }
     }
 
+    public var currentRenderingPath: String?
+
     /// Renders static pages and content pages, including the homepage.
     func generateContent() async throws {
         try await render(site.homePage, isHomePage: true)
@@ -245,6 +247,7 @@ public class PublishingContext {
         for content in allContent {
             try await render(content)
         }
+        currentRenderingPath = nil
     }
 
     /// Renders one page using the correct theme, which is taken either from the
@@ -301,6 +304,8 @@ public class PublishingContext {
     func render(_ staticPage: any StaticPage, isHomePage: Bool = false) async throws {
         let body = await Group(items: staticPage.body(context: self), context: self)
 
+        currentRenderingPath = isHomePage ? "/" : staticPage.path
+
         let path = isHomePage ? "" : staticPage.path
 
         let page = Page(
@@ -323,6 +328,8 @@ public class PublishingContext {
     func render(_ content: Content) async throws {
         let layout = try layout(for: content)
         let body = await Group(items: layout.body(content: content, context: self), context: self)
+
+        currentRenderingPath = content.path
 
         let image: URL?
 

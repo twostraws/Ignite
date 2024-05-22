@@ -85,9 +85,10 @@ public struct Dropdown: BlockElement, NavigationItem {
     public func render(context: PublishingContext) -> String {
         Group(isTransparent: isNavigationItem) {
             if isNavigationItem {
+                let hasActiveItem = items.contains { context.currentRenderingPath == ($0 as? Link)?.url  }
                 Link(title, target: "#")
                     .addCustomAttribute(name: "role", value: "button")
-                    .class("dropdown-toggle", "nav-link")
+                    .class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
                     .data("bs-toggle", "dropdown")
                     .aria("expanded", "false")
             } else {
@@ -101,8 +102,10 @@ public struct Dropdown: BlockElement, NavigationItem {
             List {
                 for item in items {
                     ListItem {
-                        if item is Link {
+                        if let link = item as? Link {
                             item.class("dropdown-item")
+                                .class(context.currentRenderingPath == link.url ? "active" : nil)
+                                .aria("current", context.currentRenderingPath == link.url ? "page" : nil)
                         } else {
                             item.class("dropdown-header")
                         }
