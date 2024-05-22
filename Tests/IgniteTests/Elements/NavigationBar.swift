@@ -19,7 +19,7 @@ final class NavigationBarTests: ElementTest {
     }
     
     func test_columnWidthValueSet() {
-        let element = NavigationBar().navigationBarColumnWidth(.count(10))
+        let element = NavigationBar().width(10)
         let output = element.render(context: publishingContext)
         
         XCTAssertTrue(output.contains("container-fluid col-md-10"))
