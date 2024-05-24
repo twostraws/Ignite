@@ -21,6 +21,8 @@ public struct Time: InlineElement {
     public var dateTime: Date?
 
     /// Creates a time element with no content.
+    /// - Parameter dateTime: The time and/or date of the element
+    /// inside the time element.
     public init(dateTime: Date? = nil) {
         self.contents = []
         self.dateTime = dateTime
@@ -28,6 +30,7 @@ public struct Time: InlineElement {
 
     /// Creates a time element from one `InlineElement`.
     /// - Parameter singleElement: The element you want to place
+    /// - Parameter dateTime: The time and/or date of the element
     /// inside the time element.
     public init(_ singleElement: any InlineElement, dateTime: Date? = nil) {
         self.contents = [singleElement]
@@ -36,6 +39,7 @@ public struct Time: InlineElement {
 
     /// Creates a time element from an inline element builder that returns an array of
     /// elements to place inside the time element.
+    /// - Parameter dateTime: The time and/or date of the element
     /// - Parameter contents: The elements to place inside the time element.
     public init(dateTime: Date? = nil, @InlineElementBuilder contents: () -> [InlineElement]) {
         self.dateTime = dateTime
