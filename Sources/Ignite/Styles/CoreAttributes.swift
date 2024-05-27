@@ -99,12 +99,10 @@ public struct CoreAttributes {
     var eventString: String {
         var result = ""
 
-        for event in events {
-            if event.actions.isEmpty == false {
-                let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
+        for event in events where event.actions.isEmpty == false {
+            let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
 
-                result += " \(event.name)=\"\(actions)\""
-            }
+            result += " \(event.name)=\"\(actions)\""
         }
 
         return result

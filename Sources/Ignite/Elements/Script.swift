@@ -44,9 +44,9 @@ public struct Script: BlockElement & HeadElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         if let file {
-            return "<script src=\"\(file)\"></script>"
+            return "<script\(attributes.description) src=\"\(context.site.url.path)\(file)\"></script>"
         } else if let code {
-            return "<script>\(code)</script>"
+            return "<script\(attributes.description)>\(code)</script>"
         } else {
             context.addWarning("""
             Creating a script with no source or code should not be possible. \

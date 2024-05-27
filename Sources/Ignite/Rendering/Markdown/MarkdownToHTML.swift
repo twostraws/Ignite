@@ -9,7 +9,7 @@ import Foundation
 import Markdown
 
 /// A simple Markdown to HTML parser powered by Apple's swift-markdown.
-public struct MarkdownToHTML: MarkupVisitor {
+public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     /// The title of this document.
     public var title = ""
 
@@ -32,7 +32,7 @@ public struct MarkdownToHTML: MarkupVisitor {
     ///   - markdown: The Markdown to parse.
     ///   - removeTitleFromBody: True if the first title should be removed
     ///   from the final `body` property.
-    public init(markdown: String, removeTitleFromBody: Bool = false) {
+    public init(markdown: String, removeTitleFromBody: Bool) {
         self.removeTitleFromBody = removeTitleFromBody
         let processed = processMetadata(for: markdown)
         let document = Document(parsing: processed)
@@ -44,7 +44,7 @@ public struct MarkdownToHTML: MarkupVisitor {
     ///   - url: The filesystem URL to load.
     ///   - removeTitleFromBody: True if the first title should be removed
     ///   from the final `body` property.
-    public init(url: URL, removeTitleFromBody: Bool = false) throws {
+    public init(url: URL, removeTitleFromBody: Bool) throws {
         do {
             self.removeTitleFromBody = removeTitleFromBody
             let markdown = try String(contentsOf: url)

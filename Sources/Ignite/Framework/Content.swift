@@ -125,10 +125,12 @@ public struct Content {
     ///   last modification date for this content.
     init(
         from url: URL,
-        relativeTo baseURL: URL,
+        in context: PublishingContext,
         resourceValues: URLResourceValues
     ) throws {
-        let parser = try MarkdownToHTML(url: url, removeTitleFromBody: true)
+        // Use whatever Markdown renderer was configured
+        // for the site we're publishing.
+        let parser = try context.site.markdownRenderer.init(url: url, removeTitleFromBody: true)
 
         body = parser.body
         metadata = parser.metadata
@@ -138,14 +140,14 @@ public struct Content {
         if let customPath = metadata["path"] as? String {
             path = customPath
         } else {
-            let basePath = baseURL.path()
+            let basePath = context.contentDirectory.path()
             let thisPath = url.deletingPathExtension().path()
             path = String(thisPath.trimmingPrefix(basePath))
         }
 
         // Save the article's type as being the first subfolder
         // of this article inside the Content folder.
-        let distinctComponents = url.pathComponents.dropFirst(baseURL.pathComponents.count)
+        let distinctComponents = url.pathComponents.dropFirst(context.contentDirectory.pathComponents.count)
 
         if let firstSubdirectory = distinctComponents.first {
             metadata["type"] = firstSubdirectory

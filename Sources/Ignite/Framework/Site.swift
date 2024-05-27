@@ -19,6 +19,9 @@ public protocol Site {
     /// The theme for your site. Required.
     associatedtype ThemeType: Theme
 
+    /// The Markdown parser to use for Content pages.
+    associatedtype MarkdownRendererType: MarkdownRenderer
+
     /// A robots.txt configuration for your site. A default is provided that means
     /// all robots can index all pages.
     associatedtype RobotsType: RobotsConfiguration
@@ -55,6 +58,12 @@ public protocol Site {
 
     /// An array of syntax highlighters you want to enable for your site.
     var syntaxHighlighters: [SyntaxHighlighter] { get }
+
+    /// The Markdown renderer to use for content in this site. Note: This
+    /// only applies to content pages rendered from the Content folder;
+    /// the standard MarkdownToHTML parser is used for `Text` and
+    /// other built-in elements regardless of the setting here.
+    var markdownRenderer: MarkdownRendererType.Type { get }
 
     /// Controls how the RSS feed for your site should be generated. The default
     /// configuration sends back content description only for 20 items.
@@ -110,6 +119,11 @@ extension Site {
 
     /// Include no syntax highlighters by default.
     public var syntaxHighlighters: [SyntaxHighlighter] { [] }
+
+    /// Use the standard MarkdownToHTML renderer by default.
+    public var markdownRenderer: MarkdownToHTML.Type {
+        MarkdownToHTML.self
+    }
 
     /// A default feed configuration allows 20 items of content, showing just
     /// their descriptions.

@@ -67,7 +67,12 @@ public struct MetaLink: HeadElement {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
+    ///
+    /// If the link `href` starts with a `\` it is an asset and requires any `subsite` prepended;
+    /// otherwise the `href` is a URL and  doesn't get `subsite` prepended
     public func render(context: PublishingContext) -> String {
-        "<link href=\"\(href)\" rel=\"\(rel)\">"
+        // char[0] of the link 'href' is '/' for an asset; not for a site URL
+        let basePath = href.starts(with: "/") ? context.site.url.path : ""
+        return "<link href=\"\(basePath)\(href)\" rel=\"\(rel)\">"
     }
 }

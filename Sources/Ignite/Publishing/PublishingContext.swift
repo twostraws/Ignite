@@ -136,7 +136,7 @@ public class PublishingContext {
             if objectURL.pathExtension == "md" {
                 let values = try objectURL.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey])
 
-                let article = try Content(from: objectURL, relativeTo: contentDirectory, resourceValues: values)
+                let article = try Content(from: objectURL, in: self, resourceValues: values)
 
                 if article.isPublished {
                     allContent.append(article)
@@ -150,7 +150,7 @@ public class PublishingContext {
         try clearBuildFolder()
         try copyResources()
         try await generateContent()
-        try generateTagPages()
+        try await generateTagPages()
         try generateSiteMap()
         try generateFeed()
         try generateRobots()
@@ -167,7 +167,7 @@ public class PublishingContext {
         }
 
         do {
-            try FileManager.default.createDirectory(at: buildDirectory, withIntermediateDirectories: false)
+            try FileManager.default.createDirectory(at: buildDirectory, withIntermediateDirectories: true)
         } catch {
             throw PublishingError.failedToCreateBuildDirectory(buildDirectory)
         }
@@ -234,6 +234,8 @@ public class PublishingContext {
         }
     }
 
+    public var currentRenderingPath: String?
+
     /// Renders static pages and content pages, including the homepage.
     func generateContent() async throws {
         try await render(site.homePage, isHomePage: true)
@@ -245,22 +247,23 @@ public class PublishingContext {
         for content in allContent {
             try await render(content)
         }
+        currentRenderingPath = nil
     }
 
     /// Renders one page using the correct theme, which is taken either from the
     /// provided them or from the main site theme.
-    func render(_ page: Page, using theme: any Theme) -> String {
+    func render(_ page: Page, using theme: any Theme) async -> String {
         var theme = theme
 
         if theme is MissingTheme {
             theme = site.theme
         }
 
-        return theme.render(page: page, context: self).render(context: self)
+        return await theme.render(page: page, context: self).render(context: self)
     }
 
     /// Generates all tags pages, including the "all tags" page.
-    func generateTagPages() throws {
+    func generateTagPages() async throws {
         if site.tagPage is EmptyTagPage { return }
 
         /// Creates a unique list of sorted tags from across the site, starting
@@ -278,7 +281,7 @@ public class PublishingContext {
 
             let outputDirectory = buildDirectory.appending(path: path)
 
-            let body = Group(items: site.tagPage.body(tag: tag, context: self), context: self)
+            let body = await Group(items: site.tagPage.body(tag: tag, context: self), context: self)
 
             let page = Page(
                 title: "Tags",
@@ -287,7 +290,7 @@ public class PublishingContext {
                 body: body
             )
 
-            let outputString = render(page, using: site.tagPage.theme)
+            let outputString = await render(page, using: site.tagPage.theme)
 
             try write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }
@@ -301,6 +304,8 @@ public class PublishingContext {
     func render(_ staticPage: any StaticPage, isHomePage: Bool = false) async throws {
         let body = await Group(items: staticPage.body(context: self), context: self)
 
+        currentRenderingPath = isHomePage ? "/" : staticPage.path
+
         let path = isHomePage ? "" : staticPage.path
 
         let page = Page(
@@ -311,7 +316,7 @@ public class PublishingContext {
             body: body
         )
 
-        let outputString = render(page, using: staticPage.theme)
+        let outputString = await render(page, using: staticPage.theme)
 
         let outputDirectory = buildDirectory.appending(path: path)
 
@@ -323,6 +328,8 @@ public class PublishingContext {
     func render(_ content: Content) async throws {
         let layout = try layout(for: content)
         let body = await Group(items: layout.body(content: content, context: self), context: self)
+
+        currentRenderingPath = content.path
 
         let image: URL?
 
@@ -340,7 +347,7 @@ public class PublishingContext {
             body: body
         )
 
-        let outputString = render(page, using: layout.theme)
+        let outputString = await render(page, using: layout.theme)
 
         let outputDirectory = buildDirectory.appending(path: content.path)
         try write(outputString, to: outputDirectory, priority: 0.8)
@@ -449,77 +456,5 @@ public class PublishingContext {
         } else {
             throw PublishingError.missingDefaultLayout
         }
-    }
-
-    /// Returns the full path to a file in your Resources folder, if it exists.
-    /// - Parameter resource: The file to look for, e.g. "quotes.json"
-    /// - Returns: The URL, if the file can be found.
-    public func url(forResource resource: String) -> URL? {
-        let fullURL = rootDirectory.appending(path: "Resources/\(resource)")
-
-        if FileManager.default.fileExists(atPath: fullURL.path()) {
-            return fullURL
-        } else {
-            return nil
-        }
-    }
-
-    /// Returns the contents of a file in your Resources folder, if it exists.
-    /// - Parameter resource: The file to look for, e.g. "quotes.json"
-    /// - Returns: A `Data` instance of the file's contents, if it can be found.
-    public func data(forResource resource: String) -> Data? {
-        if let url = url(forResource: resource) {
-            try? Data(contentsOf: url)
-        } else {
-            nil
-        }
-    }
-
-    /// Locates, loads, and decodes a JSON file in your Resources folder.
-    /// - Parameters:
-    ///   - resource: The file to look for, e.g. "quotes.json".
-    ///   - as: The type to decode to, e.g. `[String].self`.
-    ///   - dateDecodingStrategy: How to decode dates. Defaults to `.deferredToDate`.
-    ///   - keyDecodingStrategy: How to decode keys. Defaults to `.useDefaultKeys`.
-    /// - Returns: The decoded type, if the file exists, can be loaded, and decodes
-    /// correctly, otherwise nil.
-    public func decode<T: Decodable>(
-        resource: String,
-        as: T.Type = T.self,
-        dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
-        keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys
-    ) -> T? {
-        if let url = url(forResource: resource) {
-            if let data = try? Data(contentsOf: url) {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = dateDecodingStrategy
-                decoder.keyDecodingStrategy = keyDecodingStrategy
-
-                do {
-                    return try decoder.decode(T.self, from: data)
-                } catch DecodingError.keyNotFound(let key, let context) {
-                    // swiftlint:disable:next line_length
-                    print("Failed to decode \(resource) due to missing key '\(key.stringValue)' – \(context.debugDescription)")
-                } catch DecodingError.typeMismatch(_, let context) {
-                    print("Failed to decode \(resource) due to type mismatch – \(context.debugDescription)")
-                } catch DecodingError.valueNotFound(let type, let context) {
-                    // swiftlint:disable:next line_length
-                    print("Failed to decode \(resource) due to missing \(type) value – \(context.debugDescription)")
-                } catch DecodingError.dataCorrupted(_) {
-                    print("Failed to decode \(resource) because it appears to be invalid JSON.")
-                } catch {
-                    print("Failed to decode \(resource): \(error.localizedDescription)")
-                }
-            } else {
-                print("Failed to load \(resource)")
-            }
-        } else {
-            print("Failed to locate \(resource) in Resources folder.")
-        }
-
-        // If we're still here it means something failed, and
-        // an appropriate message has already been printed. So,
-        // we can safely send back `nil`, meaning "not decoded."
-        return nil
     }
 }
