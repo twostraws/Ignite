@@ -37,7 +37,7 @@ public struct HTML: PageElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         var output = "<!doctype html>"
-        output += "<html lang=\"\(context.site.language.rawValue)\" data-bs-theme=\"light\"\(attributes.description)>"
+        output += "<html lang=\"\(context.site.language.rawValue)\" data-bs-theme=\"\(context.site.colorMode.rawValue)\"\(attributes.description)>"
         output += head?.render(context: context) ?? ""
         output += body?.render(context: context) ?? ""
         output += "</html>"

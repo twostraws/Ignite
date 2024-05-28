@@ -84,6 +84,9 @@ public protocol Site {
     /// explicitly override the theme with something custom.
     var theme: ThemeType { get }
 
+    /// The color mode to apply to the site, default is light mode
+    var colorMode: SiteColorMode { get }
+
     /// The path to the favicon
     var favicon: URL? { get }
 
@@ -146,6 +149,9 @@ extension Site {
 
     /// An empty tag page by default, which triggers no tag pages being made.
     public var tagPage: EmptyTagPage { EmptyTagPage() }
+
+    /// The default color mode being light
+    public var colorMode: SiteColorMode { .light }
 
     /// The default favicon being nil
     public var favicon: URL? { nil }
