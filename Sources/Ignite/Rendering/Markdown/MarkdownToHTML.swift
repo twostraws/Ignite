@@ -56,6 +56,8 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
                 // Assign a title that's better than the default empty string.
                 title = url.deletingPathExtension().lastPathComponent
             }
+        } catch let error as NSError {
+            throw error
         } catch {
             throw PublishingError.badMarkdown(url)
         }
