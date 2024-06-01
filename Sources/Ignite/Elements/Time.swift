@@ -16,7 +16,7 @@ public struct Time: InlineElement {
 
     /// The contents of this time tag.
     public var contents: [InlineElement]
-    
+
     /// This attribute indicates the time and/or date of the element.
     public var dateTime: Date?
 
@@ -53,6 +53,10 @@ public struct Time: InlineElement {
         guard let dateTime else {
             return "<time\(attributes.description)>\(contents.render(context: context))</time>"
         }
-        return "<time datetime=\"\(dateTime.asISO8601)\"\(attributes.description)>\(contents.render(context: context))</time>"
+        return """
+        <time datetime=\"\(dateTime.asISO8601)\"\(attributes.description)>\
+        \(contents.render(context: context))\
+        </time>
+        """
     }
 }

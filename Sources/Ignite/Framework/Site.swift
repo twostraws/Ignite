@@ -154,8 +154,10 @@ extension Site {
     /// or Site.swift.
     /// - Parameters:
     ///   - file: The file that triggered the build. This is used to
-    ///   locate the base directory for their project, so we can location key folders.
-    ///   - buildDirectoryPath: This path will generate the necessary artifacts for the web page. Please modify as needed.
+    ///   locate the base directory for their project, so we can find
+    ///   key folders.
+    ///   - buildDirectoryPath: This path will generate the necessary
+    ///   artifacts for the web page. Please modify as needed.
     ///   The default is "Build".
     public func publish(from file: StaticString = #file, buildDirectoryPath: String = "Build") async throws {
         let context = try PublishingContext(for: self, from: file, buildDirectoryPath: buildDirectoryPath)

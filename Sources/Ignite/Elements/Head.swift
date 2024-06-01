@@ -31,9 +31,12 @@ public struct Head: HTMLRootElement {
     ///   - context: The active `PublishingContext`, which includes
     ///   information about the site being rendered and more.
     ///   - additionalItems: Additional items to enhance the set of standard headers.
-    public init(for page: Page, in context: PublishingContext, @HeadElementBuilder additionalItems: () -> [HeadElement] = {[]}) {
+    public init(
+        for page: Page,
+        in context: PublishingContext,
+        @HeadElementBuilder additionalItems: () -> [HeadElement] = {[]}
+    ) {
         items = Head.standardHeaders(for: page, in: context)
-
         items += MetaTag.socialSharingTags(for: page, context: context)
         items += additionalItems()
     }

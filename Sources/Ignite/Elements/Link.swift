@@ -321,7 +321,10 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
 
         // char[0] of the 'url' is '/' for an asset; not for a site URL
         let basePath = url.starts(with: "/") ? context.site.url.path : ""
-        return "<a href=\"\(basePath)\(url)\"\(linkAttributes.description)>" + 
-                                               content.render(context: context) + "</a>"
+        return """
+        <a href=\"\(basePath)\(url)\"\(linkAttributes.description)>\
+        \(content.render(context: context))\
+        </a>
+        """
     }
 }
