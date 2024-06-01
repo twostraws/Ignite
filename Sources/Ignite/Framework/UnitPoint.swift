@@ -9,9 +9,8 @@ import Foundation
 
 // An x/y coordinate in the ranges 0 through 1.
 public struct UnitPoint {
-    var x: Double
-    var y: Double
-
+    var x: Double // swiftlint:disable:this identifier_name
+    var y: Double // swiftlint:disable:this identifier_name
 
     /// Calculates the angle from this `UnitPoint` to another,
     /// measured in radians.

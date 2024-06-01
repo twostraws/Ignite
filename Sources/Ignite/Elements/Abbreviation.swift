@@ -14,23 +14,23 @@ public struct Abbreviation: InlineElement {
 
     /// The contents of this abbreviation.
     public var contents: [InlineElement]
-    
+
     /// Creates a new `Abbreviation` instance.
     /// - Parameter abbreviation: The abbreviation.
     /// - Parameter description: The description of the abbreviation.
     public init(_ abbreviation: String, description: String) {
         let customAttribute = AttributeValue(name: "title", value: description)
-        
+
         self.attributes.customAttributes.append(customAttribute)
         self.contents = [abbreviation]
     }
-    
+
     /// Creates a new `Abbreviation` instance.
     /// - Parameter singleElement: The element you want to place
     /// - Parameter description: The description of the abbreviation.
     public init(_ singleElement: any InlineElement, description: String) {
         let customAttribute = AttributeValue(name: "title", value: description)
-        
+
         self.attributes.customAttributes.append(customAttribute)
         self.contents = [singleElement]
     }
@@ -40,7 +40,7 @@ public struct Abbreviation: InlineElement {
     /// - Parameter description: The description of the abbreviation.
     public init(_ description: String, @InlineElementBuilder content: () -> [InlineElement]) {
         let customAttribute = AttributeValue(name: "title", value: description)
-        
+
         self.attributes.customAttributes.append(customAttribute)
         self.contents = content()
     }
