@@ -211,7 +211,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 Ignite was originally created by [Paul Hudson](https://twitter.com/twostraws), who writes [free Swift tutorials over at Hacking with Swift](https://www.hackingwithswift.com). It’s available under the MIT license, which permits commercial use, modification, distribution, and private use.
 
-Other contributors to Ignite include Henrik Christensen and Michael Freiwald – thank you!
+Other contributors to Ignite include Henrik Christensen, Michael Freiwald, and Jobert Sá – thank you!
 
 
 <p align="center">

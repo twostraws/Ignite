@@ -1,8 +1,8 @@
 //
-//  Date-ISO8601.swift
-//  
-//
-//  Created by Jobert Sá on 24/05/2024.
+// Date-ISO8601.swift
+// Ignite
+// https://www.github.com/twostraws/Ignite
+// See LICENSE for license information.
 //
 
 import Foundation

@@ -1,8 +1,8 @@
 //
-//  Time.swift
-//  
-//
-//  Created by Jobert on 23/05/2024.
+// Time.swift
+// Ignite
+// https://www.github.com/twostraws/Ignite
+// See LICENSE for license information.
 //
 
 import Foundation
