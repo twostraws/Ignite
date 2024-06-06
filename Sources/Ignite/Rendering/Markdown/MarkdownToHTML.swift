@@ -45,9 +45,14 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     ///   - removeTitleFromBody: True if the first title should be removed
     ///   from the final `body` property.
     public init(url: URL, removeTitleFromBody: Bool) throws {
+        self.removeTitleFromBody = removeTitleFromBody
+        var markdown: String
         do {
-            self.removeTitleFromBody = removeTitleFromBody
-            let markdown = try String(contentsOf: url)
+            markdown = try String(contentsOf: url)
+        } catch {
+            throw PublishingError.unopenableFile(error.localizedDescription)
+        }
+        do {
             let processed = processMetadata(for: markdown)
             let document = Document(parsing: processed)
             body = visit(document)

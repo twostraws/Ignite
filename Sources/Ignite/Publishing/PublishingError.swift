@@ -17,6 +17,9 @@ public enum PublishingError: LocalizedError {
     /// Invalid Markdown was found at the specific URL.
     case badMarkdown(URL)
 
+    /// A file cannot be opened (bad encoding, etc).
+    case unopenableFile(String)
+
     /// Publishing attempted to remove the build directory, but failed.
     case failedToRemoveBuildDirectory(URL)
 
@@ -65,6 +68,8 @@ public enum PublishingError: LocalizedError {
             "Unable to locate Package.swift."
         case .badMarkdown(let url):
             "Markdown could not be parsed: \(url.absoluteString)."
+        case .unopenableFile(let reason):
+            "Failed to open file: \(reason)."
         case .failedToRemoveBuildDirectory(let url):
             "Failed to clear the build folder: \(url.absoluteString)."
         case .failedToCreateBuildDirectory(let url):
