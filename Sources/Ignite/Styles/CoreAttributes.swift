@@ -139,6 +139,19 @@ public struct CoreAttributes {
         return copy
     }
 
+    /// Returns a new set of attributs with an extra aria appended
+    /// - Parameter aria: The aria to append
+    /// - Returns: A copy of the previous `CoreAttributes` object with
+    /// the extra aria applied.
+    func appending(aria: AttributeValue?) -> CoreAttributes {
+        guard let aria else {
+            return self
+        }
+        var copy = self
+        copy.aria.append(aria)
+        return copy
+    }
+
     /// Returns a new set of attributes with extra inline CSS styles appended.
     /// - Parameter classes: The inline CSS styles to append.
     /// - Returns: A copy of the previous `CoreAttributes` object with

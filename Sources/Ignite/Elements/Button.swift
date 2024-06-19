@@ -123,7 +123,6 @@ public struct Button: InlineElement {
         switch role {
         case .default:
             break
-
         default:
             outputClasses.append("btn-\(role.rawValue)")
         }
@@ -131,11 +130,22 @@ public struct Button: InlineElement {
         return outputClasses
     }
 
+    public static func aria(forRole role: Role) -> AttributeValue? {
+        switch role {
+        case .close:
+            AttributeValue(name: "label", value: "Close")
+        default:
+            nil
+        }
+    }
+
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        let buttonAttributes = attributes.appending(classes: Button.classes(forRole: role, size: size))
+        let buttonAttributes = attributes
+            .appending(classes: Button.classes(forRole: role, size: size))
+            .appending(aria: Button.aria(forRole: role))
         let output = label.map { $0.render(context: context) }.joined()
         return "<button type=\"\(type.htmlName)\"\(buttonAttributes.description)>\(output)</button>"
     }

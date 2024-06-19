@@ -20,6 +20,9 @@ public enum Role: String, CaseIterable {
     /// A secondary element.
     case secondary
 
+    /// Represents a close element
+    case close
+
     /// This element represents the successful result of something, or otherwise
     /// positive information.
     case success
