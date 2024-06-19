@@ -127,12 +127,15 @@ public struct Modal: PageElement {
         Group {
             Group {
                 Group {
-                    Group {
-                        for item in header {
-                            item
+
+                    if header.isEmpty == false {
+                        Group {
+                            for item in header {
+                                item
+                            }
                         }
+                        .class("modal-header")
                     }
-                    .class("modal-header")
 
                     Group {
                         for item in items {
@@ -141,12 +144,14 @@ public struct Modal: PageElement {
                     }
                     .class("modal-body")
                     
-                    Group {
-                        for item in footer {
-                            item
+                    if footer.isEmpty == false {
+                        Group {
+                            for item in footer {
+                                item
+                            }
                         }
+                        .class("modal-footer")
                     }
-                    .class("modal-footer")
                 }
                 .class("modal-content")
             }
