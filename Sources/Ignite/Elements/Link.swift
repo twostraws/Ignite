@@ -123,6 +123,9 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
         /// The page should be opened in a new window.
         case blank
 
+        /// The page should be opened in a new window. (same as `.blank`)`
+        case newWindow
+
         /// The page should be opened in the parent window.
         case parent
 
@@ -139,6 +142,8 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
             case .default:
                 nil
             case .blank:
+                "_blank"
+            case .newWindow:
                 "_blank"
             case .parent:
                 "_parent"
