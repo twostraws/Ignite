@@ -122,4 +122,8 @@ extension PageElement {
         copy.attributes = attributes
         return copy
     }
+
+    public func tabFocus(_ tabFocus: TabFocus) -> Self {
+        addCustomAttribute(name: tabFocus.htmlName, value: tabFocus.value)
+    }
 }
