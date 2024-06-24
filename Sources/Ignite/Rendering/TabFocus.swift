@@ -31,7 +31,7 @@ public enum TabFocus {
         }
     }
 
-    /// The html tabindex key-value pair representing the `TabFocus` case
+    /// The html name for this attribute
     var htmlName: String {
         "tabindex"
     }
