@@ -161,6 +161,7 @@ public struct Modal: PageElement {
             .class(scrollable ? "modal-dialog-scrollable" : nil)
         }
         .class(animated ? "modal fade" : "modal")
+        .tabFocus(.focusable)
         .id(id)
         .aria("labelledby", "modalLabel")
         .aria("hidden", "true")

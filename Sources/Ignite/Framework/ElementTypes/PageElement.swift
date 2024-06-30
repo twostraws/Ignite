@@ -122,4 +122,12 @@ extension PageElement {
         copy.attributes = attributes
         return copy
     }
+
+    /// Sets the tab focus (a.k.a tabindex) of this element.
+    /// **Important:** Use this with caution as it is easy to make mistakes and cause problems with screen readers.
+    /// - Parameter tabFocus: The desired `TabFocus` enum value
+    /// - Returns: A copy of the current element with the tap focus applied.
+    public func tabFocus(_ tabFocus: TabFocus) -> Self {
+        addCustomAttribute(name: tabFocus.htmlName, value: tabFocus.value)
+    }
 }
