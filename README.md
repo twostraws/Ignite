@@ -21,8 +21,9 @@ The easiest way to get started is to use the Ignite command-line tool included w
 
 1. Run `git clone https://github.com/twostraws/Ignite` to clone this repository to your computer.
 2. Change into the new directory, e.g. `cd Ignite`.
-3. Now run `make install` to build and install the Ignite command-line tool.
-4. If that command fails because of permissions issues, you should run `sudo make install` instead.
+3. Now run `make` to build the Ignite command-line tool.
+4. Then run `make install` to install the Ignite command-line tool.
+5. If that command fails because of permissions issues, you should run `sudo make install` instead.
 
 Once that command-line tool is installed, you can run the following command to create a new site called ExampleSite:
 
