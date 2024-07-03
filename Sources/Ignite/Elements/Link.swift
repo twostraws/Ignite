@@ -157,7 +157,7 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
 
     /// Allows you to style links as buttons if needed.
     public enum LinkStyle: String, CaseIterable {
-        case `default`, button
+        case `default`, hover, button
     }
 
     /// The standard set of control attributes for HTML elements.
@@ -183,12 +183,18 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
     var linkClasses: [String] {
         var outputClasses = [String]()
 
-        if style == .default {
+        if style == .button {
+            outputClasses.append(contentsOf: Button.classes(forRole: role, size: size))
+        } else {
             if role != .default {
                 outputClasses.append("link-\(role.rawValue)")
             }
-        } else {
-            outputClasses.append(contentsOf: Button.classes(forRole: role, size: size))
+            if style == .hover {
+                outputClasses.append(contentsOf: [
+                    "link-underline-opacity-0",
+                    "link-underline-opacity-100-hover"
+                ])
+            }
         }
 
         return outputClasses
