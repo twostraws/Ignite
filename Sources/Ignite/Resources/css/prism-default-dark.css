@@ -1,11 +1,16 @@
+@font-face {
+    font-family: "Code";
+    src: url(/fonts/SourceCodePro-Regular.ttf);
+}
+
 /* PrismJS 1.29.0 */
 code[class*="language-"],
 pre[class*="language-"] {
-    color: #f8f8f2;
+    display: block;
+    color: #d9e4e4;
     background: none;
-    text-shadow: 0 1px rgba(0, 0, 0, 0.3);
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Monaco, 'Andale Mono', 'Ubuntu Mono', Courier, monospace;
-    font-size: 1.1em;
+    font-family: "Code", monospace;
+    font-size: 1em;
     text-align: left;
     white-space: pre;
     word-spacing: normal;
@@ -24,10 +29,10 @@ pre[class*="language-"] {
 
 /* Code blocks */
 pre[class*="language-"] {
-    padding: 1em;
-    margin: .5em 0;
+    padding: 1em 1.5em;
+    margin: 2em 0;
     overflow: auto;
-    border-radius: 0.3em;
+    border-radius: 12px;
 }
 
 :not(pre) > code[class*="language-"],
@@ -100,20 +105,19 @@ pre[class*="language-"] {
 
 .token.atrule,
 .token.attr-value {
-    color: #e6db74;
+    color: #e8de80;
 }
 
 .token.class-name {
-    color: #76E6FF;
+    color: #55e0ff;
 }
 
 .token.function {
-    color: #54dcfc
+    color: #55e0ff
 }
 
 .token.keyword {
-    color: #F2248C;
-    font-weight: bold;
+    color: #ff409d;
 }
 
 .token.regex,

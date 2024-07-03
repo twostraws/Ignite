@@ -196,6 +196,7 @@ public class PublishingContext {
             try copy(resource: "css/bootstrap-icons.min.css")
             try copy(resource: "fonts/bootstrap-icons.woff")
             try copy(resource: "fonts/bootstrap-icons.woff2")
+            try copy(resource: "fonts/SourceCodePro-Regular.ttf")
         }
 
         if site.syntaxHighlighters.isEmpty == false {
