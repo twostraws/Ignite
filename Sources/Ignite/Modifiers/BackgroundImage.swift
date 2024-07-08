@@ -199,7 +199,8 @@ public struct BackgroundPosition: CSSRepresentable {
 
 private extension PageElement {
     func style(_ value: String, replace: Bool) -> Self {
-        if let existingIndex = attributes.styles.firstIndex(where: { $0.hasPrefix(value) }) {
+        let key = String(value.prefix(while: { $0 != ":" }))
+        if let existingIndex = attributes.styles.firstIndex(where: { $0.hasPrefix(key) }) {
             guard replace == true else {
                 return self
             }
