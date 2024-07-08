@@ -6,18 +6,13 @@ public extension PageElement {
         style(
             "background-image: url('\(name)')",
             "background-size: \(contentMode.css)",
-            "background-position: \(BackgroundPosition().css)",
             "background-repeat: \(repeats ? "repeat" : "no-repeat")"
         )
+        .style("background-position: \(BackgroundPosition().css)", replace: false)
     }
 
     func backgroundImagePosition(_ position: BackgroundPosition) -> Self {
-        let key = "background-position"
-        guard attributes.styles.contains(where: { $0.hasPrefix("\(key)") }) else {
-            // No background position here means no background image has been set
-            return self
-        }
-        return updatedStyle(position.css, forKey: key)
+        style("background-position: \(position.css)", replace: true)
     }
 }
 
@@ -203,13 +198,16 @@ public struct BackgroundPosition: CSSRepresentable {
 }
 
 private extension PageElement {
-    func updatedStyle(_ newStyle: String, forKey key: String) -> Self {
-        if let existingIndex = attributes.styles.firstIndex(where: { $0.hasPrefix(key) }) {
+    func style(_ value: String, replace: Bool) -> Self {
+        if let existingIndex = attributes.styles.firstIndex(where: { $0.hasPrefix(value) }) {
+            guard replace == true else {
+                return self
+            }
             var copy = self
-            copy.attributes.styles[existingIndex] = "\(key): \(newStyle)"
+            copy.attributes.styles[existingIndex] = value
             return copy
         } else {
-            return style(newStyle)
+            return style(value)
         }
     }
 }
