@@ -2,10 +2,10 @@ import Foundation
 import Ignite
 
 public extension PageElement {
-    func backgroundImage(_ name: String, size: BackgroundSize, repeats: Bool = false) -> Self {
+    func backgroundImage(_ name: String, contentMode: BackgroundImageContentMode, repeats: Bool = false) -> Self {
         style(
             "background-image: url('\(name)')",
-            "background-size: \(size.css)",
+            "background-size: \(contentMode.css)",
             "background-position: \(BackgroundPosition().css)",
             "background-repeat: \(repeats ? "repeat" : "no-repeat")"
         )
@@ -26,7 +26,7 @@ private protocol CSSRepresentable {
 }
 
 /// The possible background sizes
-public enum BackgroundSize: CSSRepresentable {
+public enum BackgroundImageContentMode: CSSRepresentable {
     /// This is the default value. The background image is displayed at its original size.
     case original
 
