@@ -47,6 +47,20 @@ public struct Embed: BlockElement, LazyLoadable {
         self.title = title
     }
 
+    /// Creates a new `Embed` instance from the title and Map ID provided by https://developer.apple.com/maps/create-a-map .
+    /// - Parameters:
+    ///   - title: A title suitable for screen readers.
+    ///   - mapPlaceID: The Place ID to use.
+    ///   - token: The token ID to use.
+    public init(mapPlaceID: String, token: String, title: String) {
+        if let test = URL(string: "https://embed.apple-mapkit.com/v1/place?place=\(mapPlaceID)&token=\(token)") {
+            self.url = test.absoluteString
+            self.title = String(title)
+        } else {
+            fatalError("Failed to create map URL from place ID: \(mapPlaceID).")
+        }
+    }
+
     /// Creates a new `Embed` instance from the title and Vimeo ID provided.
     /// - Parameters:
     ///   - title: A title suitable for screen readers.
