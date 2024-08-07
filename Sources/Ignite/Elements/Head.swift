@@ -70,8 +70,10 @@ public struct Head: HTMLRootElement {
         MetaTag.generator
 
         Title(page.title)
-
-        MetaLink.standardCSS
+        
+        if context.site.useDefaultBootstrapURLS {
+            MetaLink.standardCSS
+        }
 
         if context.site.syntaxHighlighters.isEmpty == false {
             MetaLink.syntaxHighlightingCSS
