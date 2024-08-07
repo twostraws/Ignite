@@ -52,6 +52,10 @@ public protocol Site {
     /// which allows a little margin on either side.
     var pageWidth: Int { get }
 
+    /// Set to false if you would like to provide all your own Bootstrap (or other CSS/JS links
+    /// instead of using the default generated ones
+    var useDefaultBootstrapURLS: Bool { get }
+    
     /// Set to true if you want to use the Bootstrap icon collection on your site.
     /// Visit https://icons.getbootstrap.com for the full list.
     var builtInIconsEnabled: Bool { get }
@@ -113,6 +117,9 @@ extension Site {
     /// Use 10 of the 12 available columns by default. Only applies to
     /// desktop browsers where horizontal space is plentiful.
     public var pageWidth: Int { 10 }
+    
+    /// Enable Boostrap files by default
+    public var useDefaultBootstrapURLS: Bool { true }
 
     /// Disable Bootstrap icons by default.
     public var builtInIconsEnabled: Bool { false }
