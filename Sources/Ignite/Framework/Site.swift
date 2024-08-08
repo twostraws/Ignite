@@ -52,13 +52,15 @@ public protocol Site {
     /// which allows a little margin on either side.
     var pageWidth: Int { get }
 
-    /// Set to false if you would like to provide all your own Bootstrap (or other CSS/JS links
-    /// instead of using the default generated ones
-    var useDefaultBootstrapURLS: Bool { get }
+    /// Choose whether to use a local version of Boostrap, a remote version,
+    /// or none at all
+    var useDefaultBootstrapURLs: BootstrapOptions { get }
     
-    /// Set to true if you want to use the Bootstrap icon collection on your site.
+    /// Set to `localBootstrap` if you want to use the Bootstrap icon collection on your site.
+    /// and use a local copy of the files or `remoteBootstrap` if you want to use the icon
+    /// collection and load the files from a CDN
     /// Visit https://icons.getbootstrap.com for the full list.
-    var builtInIconsEnabled: Bool { get }
+    var builtInIconsEnabled: BootstrapOptions { get }
 
     /// An array of syntax highlighters you want to enable for your site.
     var syntaxHighlighters: [SyntaxHighlighter] { get }
@@ -118,11 +120,11 @@ extension Site {
     /// desktop browsers where horizontal space is plentiful.
     public var pageWidth: Int { 10 }
     
-    /// Enable Boostrap files by default
-    public var useDefaultBootstrapURLS: Bool { true }
+    /// Enable local Boostrap files by default
+    public var useDefaultBootstrapURLs: BootstrapOptions { .localBootstrap }
 
     /// Disable Bootstrap icons by default.
-    public var builtInIconsEnabled: Bool { false }
+    public var builtInIconsEnabled: BootstrapOptions { .localBootstrap }
 
     /// Include no syntax highlighters by default.
     public var syntaxHighlighters: [SyntaxHighlighter] { [] }

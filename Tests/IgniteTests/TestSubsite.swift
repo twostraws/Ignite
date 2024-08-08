@@ -14,7 +14,7 @@ struct TestSubsite: Site {
     var titleSuffix = " - My Test Subsite"
     var url = URL("https://www.yoursite.com/subsite")
 
-    var builtInIconsEnabled = true
+    var builtInIconsEnabled: BootstrapOptions = .localBootstrap
     var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
 
     var homePage = TestSubsitePage()
