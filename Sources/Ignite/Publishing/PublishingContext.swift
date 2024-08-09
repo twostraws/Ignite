@@ -189,10 +189,12 @@ public class PublishingContext {
             )
         }
 
-        try copy(resource: "css/bootstrap.min.css")
-        try copy(resource: "js/bootstrap.bundle.min.js")
+        if site.useDefaultBootstrapURLs == .localBootstrap {
+            try copy(resource: "css/bootstrap.min.css")
+            try copy(resource: "js/bootstrap.bundle.min.js")
+        }
 
-        if site.builtInIconsEnabled {
+        if site.builtInIconsEnabled == .localBootstrap {
             try copy(resource: "css/bootstrap-icons.min.css")
             try copy(resource: "fonts/bootstrap-icons.woff")
             try copy(resource: "fonts/bootstrap-icons.woff2")

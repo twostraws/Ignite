@@ -70,15 +70,21 @@ public struct Head: HTMLRootElement {
         MetaTag.generator
 
         Title(page.title)
-
-        MetaLink.standardCSS
+        
+        if context.site.useDefaultBootstrapURLs == .localBootstrap {
+            MetaLink.standardCSS
+        } else if context.site.useDefaultBootstrapURLs == .remoteBootstrap {
+            MetaLink.remoteIconCSS
+        }
 
         if context.site.syntaxHighlighters.isEmpty == false {
             MetaLink.syntaxHighlightingCSS
         }
-
-        if context.site.builtInIconsEnabled {
+        
+        if context.site.builtInIconsEnabled == .localBootstrap {
             MetaLink.iconCSS
+        } else if context.site.builtInIconsEnabled == .remoteBootstrap {
+            MetaLink.remoteIconCSS
         }
 
         MetaLink(href: page.url, rel: "canonical")
