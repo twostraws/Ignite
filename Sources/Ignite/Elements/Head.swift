@@ -71,6 +71,8 @@ public struct Head: HTMLRootElement {
 
         Title(page.title)
         
+        MetaLink.manifest
+        
         if context.site.useDefaultBootstrapURLs == .localBootstrap {
             MetaLink.standardCSS
         } else if context.site.useDefaultBootstrapURLs == .remoteBootstrap {

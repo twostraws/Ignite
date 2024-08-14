@@ -188,6 +188,8 @@ public class PublishingContext {
                 to: buildDirectory.appending(path: asset.lastPathComponent)
             )
         }
+        
+        try copy(resource: "js/manifest.json")
 
         if site.useDefaultBootstrapURLs == .localBootstrap {
             try copy(resource: "css/bootstrap.min.css")
