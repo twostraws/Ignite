@@ -2,17 +2,13 @@ import Foundation
 import Ignite
 
 public extension PageElement {
-    func backgroundImage(_ name: String, contentMode: BackgroundImageContentMode, repeats: Bool = false) -> Self {
+    func backgroundImage(_ name: String, contentMode: BackgroundImageContentMode, position: BackgroundPosition = .center, repeats: Bool = false) -> Self {
         style(
             "background-image: url('\(name)')",
             "background-size: \(contentMode.css)",
-            "background-repeat: \(repeats ? "repeat" : "no-repeat")"
+            "background-repeat: \(repeats ? "repeat" : "no-repeat")",
+            "background-position: \(position.css)"
         )
-        .style("background-position: \(BackgroundPosition().css)", replace: false)
-    }
-
-    func backgroundImagePosition(_ position: BackgroundPosition) -> Self {
-        style("background-position: \(position.css)", replace: true)
     }
 }
 
@@ -194,21 +190,5 @@ public struct BackgroundPosition: CSSRepresentable {
     private init(verticalPosition: String, horizontalPosition: String) {
         self.verticalPosition = verticalPosition
         self.horizontalPosition = horizontalPosition
-    }
-}
-
-private extension PageElement {
-    func style(_ value: String, replace: Bool) -> Self {
-        let key = String(value.prefix(while: { $0 != ":" }))
-        if let existingIndex = attributes.styles.firstIndex(where: { $0.hasPrefix(key) }) {
-            guard replace == true else {
-                return self
-            }
-            var copy = self
-            copy.attributes.styles[existingIndex] = value
-            return copy
-        } else {
-            return style(value)
-        }
     }
 }
