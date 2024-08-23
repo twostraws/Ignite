@@ -2,9 +2,16 @@ import Foundation
 import Ignite
 
 public extension PageElement {
-    func backgroundImage(_ name: String, contentMode: BackgroundImageContentMode, position: BackgroundPosition = .center, repeats: Bool = false) -> Self {
+    /// Applies a background image from the image path
+    /// - Parameters:
+    ///   - image: The path to the image
+    ///   - contentMode: The content mode to use to size the image
+    ///   - position: The position of the image in the objects frame
+    ///   - repeats: Wether the image is repeated or not
+    /// - Returns: The current element with the updated background image
+    func background(image: String, contentMode: BackgroundImageContentMode, position: BackgroundPosition = .center, repeats: Bool = false) -> Self {
         style(
-            "background-image: url('\(name)')",
+            "background-image: url('\(image)')",
             "background-size: \(contentMode.css)",
             "background-repeat: \(repeats ? "repeat" : "no-repeat")",
             "background-position: \(position.css)"
