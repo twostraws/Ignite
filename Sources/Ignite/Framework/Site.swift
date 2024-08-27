@@ -85,7 +85,7 @@ public protocol Site {
     var theme: ThemeType { get }
 
     /// The color mode to apply to the site, default is light mode
-    var colorMode: SiteColorMode { get }
+    var colorScheme: ColorScheme { get }
 
     /// The path to the favicon
     var favicon: URL? { get }
@@ -151,7 +151,7 @@ extension Site {
     public var tagPage: EmptyTagPage { EmptyTagPage() }
 
     /// The default color mode being light
-    public var colorMode: SiteColorMode { .light }
+    public var colorScheme: ColorScheme { .light }
 
     /// The default favicon being nil
     public var favicon: URL? { nil }
