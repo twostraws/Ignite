@@ -1,6 +1,6 @@
 /// Configuration option including a remote or local version of Bootstrap or none at all
 public enum BootstrapOptions {
-    /// Use a local copy of Bootstrap. This will copy Bootstrap's CSS and JavasScript to the
+    /// Use a local copy of Bootstrap. This will copy Bootstrap's CSS and JavaScript to the
     /// generated code and add references in the generated pages
     case localBootstrap
     /// Use a remote copy of Bootstrap. This will add references to the Bootstrap in the
