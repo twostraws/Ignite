@@ -13,12 +13,20 @@ import Foundation
 /// Colors that can be used for backgrounds and foregrounds. Comes with all
 /// the standard HTML color names, can be created using RGB values as
 /// integer or doubles, can be created a grayscale, or using a hex string.
-public struct Color: CustomStringConvertible {
+public struct Color: CustomStringConvertible, Codable {
     /// The CSS representation of this color.
     public var description: String {
         "rgb(\(red) \(green) \(blue) / \(opacity)%)"
     }
-
+    
+    /// The hexadecimal representation of this color.
+    public var hex: String {
+        let hexRed = String(format: "%02X", red)
+        let hexGreen = String(format: "%02X", green)
+        let hexBlue = String(format: "%02X", blue)
+        return "#\(hexRed)\(hexGreen)\(hexBlue)"
+    }
+    
     /// The HTML color name "aliceblue" (#F0F8FF)
     public static let aliceBlue = Color(hex: "#F0F8FF")
 

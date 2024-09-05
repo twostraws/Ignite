@@ -38,6 +38,9 @@ public protocol Site {
 
     /// The name of your site. Required.
     var name: String { get }
+    
+    /// Optional short name of your site.
+    var shortName: String? { get }
 
     /// An optional description for your site. Defaults to nil.
     var description: String? { get }
@@ -47,15 +50,23 @@ public protocol Site {
 
     /// The base URL for your site, e.g. https://www.example.com
     var url: URL { get }
+    
+    /// The background color of your site. Defaults to black.
+    var backgroundColor: Color? { get }
+    
+    /// The theme color of your site. Defaults to firebrick.
+    var themeColor: Color? { get }
+    
+    /// The categories your site belongs to. Defaults to nil.
+    var categories: [String]? { get }
+    
+    /// The icons associated with your site. Defaults to nil.
+    var icons: [Icon]? { get }
 
     /// How wide your page should be on desktop web browsers. Defaults to 10,
     /// which allows a little margin on either side.
     var pageWidth: Int { get }
     
-    /// Choose whether to use a local Web App Manifest File, a remote version,
-    /// or none at all
-    var useDefaultManifestURL: WebAppOptions { get }
-
     /// Choose whether to use a local version of Boostrap, a remote version,
     /// or none at all
     var useDefaultBootstrapURLs: BootstrapOptions { get }
@@ -119,13 +130,22 @@ extension Site {
 
     /// English as default language.
     public var language: Language { .english }
+    
+    /// Black as default BackgroundColor.
+    public var backgroundColor: Color { .black }
+    
+    /// Firebrick as default themeColor.
+    public var themeColor: Color { .firebrick }
+    
+    /// No default categories.
+    public var categories: [String?] { [] }
+    
+    /// No default icons.
+    public var icons: [Icon?] { [] }
 
     /// Use 10 of the 12 available columns by default. Only applies to
     /// desktop browsers where horizontal space is plentiful.
     public var pageWidth: Int { 10 }
-    
-    /// Enable no Web App Capabilities by default
-    public var useDefaultManifestURL: WebAppOptions { .none }
     
     /// Enable local Boostrap files by default
     public var useDefaultBootstrapURLs: BootstrapOptions { .localBootstrap }

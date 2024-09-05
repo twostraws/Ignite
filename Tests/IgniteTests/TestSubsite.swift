@@ -12,8 +12,14 @@ import Ignite
 struct TestSubsite: Site {
     var name = "My Test Subsite"
     var titleSuffix = " - My Test Subsite"
-    var url = URL("https://www.yoursite.com/subsite")
+    var url: URL = URL("https://www.yoursite.com/subsite")
 
+    var themeColor: Color? = .firebrick
+    var backgroundColor: Color? = .black
+    var shortName: String? = "TestSite"
+    var categories: [String]? = []
+    var icons: [Icon]? = []
+    
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
     var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
 
