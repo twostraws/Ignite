@@ -18,10 +18,7 @@ final class VideoTests: ElementTest {
         
         XCTAssertEqual(output,
         """
-        <video controls>
-        <source src="/videos/example.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-        </video>
+        <video controls><source src="/videos/example.mp4" type="video/mp4">Your browser does not support the video tag.</video>
         """)
     }
     
@@ -31,7 +28,7 @@ final class VideoTests: ElementTest {
         
         XCTAssertEqual(output,
         """
-        <video controls><source src="/videos/example1.mp4" type="video/mp4"><source src="/videos/example2.mov" type="video/mov">Your browser does not support the video tag.</video>
+        <video controls><source src="/videos/example1.mp4" type="video/mp4"><source src="/videos/example2.mov" type="video/quicktime">Your browser does not support the video tag.</video>
         """)
     }
 }
