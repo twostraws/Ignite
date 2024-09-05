@@ -4,7 +4,7 @@ public enum BootstrapOptions {
     /// generated code and add references in the generated pages
     case localBootstrap
     /// Use a remote copy of Bootstrap. This will add references to the Bootstrap in the
-    /// generated pages and reference Bootstrap's CDN. Local copies of Boostrap
+    /// generated pages and reference Bootstrap's CDN. Local copies of Bootstrap
     /// will not be copied over
     case remoteBootstrap
     /// Don't add any rereferences to Bootstrap in the generated pages and don't copy any
