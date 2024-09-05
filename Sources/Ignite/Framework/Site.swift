@@ -51,6 +51,10 @@ public protocol Site {
     /// How wide your page should be on desktop web browsers. Defaults to 10,
     /// which allows a little margin on either side.
     var pageWidth: Int { get }
+    
+    /// Choose whether to use a local Web App Manifest File, a remote version,
+    /// or none at all
+    var useDefaultManifestURL: WebAppOptions { get }
 
     /// Choose whether to use a local version of Boostrap, a remote version,
     /// or none at all
@@ -119,6 +123,9 @@ extension Site {
     /// Use 10 of the 12 available columns by default. Only applies to
     /// desktop browsers where horizontal space is plentiful.
     public var pageWidth: Int { 10 }
+    
+    /// Enable no Web App Capabilities by default
+    public var useDefaultManifestURL: WebAppOptions { .none }
     
     /// Enable local Boostrap files by default
     public var useDefaultBootstrapURLs: BootstrapOptions { .localBootstrap }

@@ -189,11 +189,14 @@ public class PublishingContext {
             )
         }
         
-        try copy(resource: "js/manifest.json")
-
+        
         if site.useDefaultBootstrapURLs == .localBootstrap {
             try copy(resource: "css/bootstrap.min.css")
             try copy(resource: "js/bootstrap.bundle.min.js")
+        }
+        
+        if site.useDefaultManifestURL == .localManifest {
+            try copy(resource: "js/manifest.json")
         }
 
         if site.builtInIconsEnabled == .localBootstrap {

@@ -1,17 +1,18 @@
 {
-  "name": "Ignite Samples",
-  "short_name": "Ignite",
-  "start_url": "/index.html",
-  "display": "standalone",
-  "background_color": "#b22222",
-  "theme_color": "#ffffff",
-  "description": "An Example Ignite Site",
-  "categories": [
+    "name": "Ignite Samples",
+    "short_name": "Ignite",
+    "start_url": "/?source=pwa",
+    "display": "standalone",
+    "background_color": "#b22222",
+    "theme_color": "#f26522",
+    "description": "An Example Ignite Site",
+    "categories": [
         "development",
-        "repository",
+        "swift",
         "staticsite"
     ],
-  "lang": "en",
-  "id": "/?source=pwa",
-  "start_url": "/?source=pwa"
+    "lang": "en",
+    "id": "/?source=pwa",
+    "scope": "/",
+    "orientation": "any"
 }

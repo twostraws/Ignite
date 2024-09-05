@@ -42,6 +42,10 @@ public struct Body: PageElement, HTMLRootElement {
                                 .render(context: context)
         }
         
+        if context.site.useDefaultManifestURL == .localManifest {
+            output += Script(file: "/js/manifest.json").render(context: context)
+        }
+        
         if context.site.syntaxHighlighters.isEmpty == false {
             output += Script(file: "/js/syntax-highlighting.js").render(context: context)
         }
