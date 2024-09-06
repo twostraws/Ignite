@@ -1,16 +1,16 @@
-    //
-    // Audio.swift
-    // Ignite
-    // https://www.github.com/twostraws/Ignite
-    // See LICENSE for license information.
-    //
+//
+// Audio.swift
+// Ignite
+// https://www.github.com/twostraws/Ignite
+// See LICENSE for license information.
+//
 
 import Foundation
 
 import XCTest
 @testable import Ignite
-
-    /// Tests for the `Audio` element.
+// swiftlint:disable line_length
+/// Tests for the `Audio` element.
 final class AudioTests: ElementTest {
     func test_loneFileAudio() {
         let element = Audio("/audio/example.mp3")
@@ -31,3 +31,4 @@ final class AudioTests: ElementTest {
         """)
     }
 }
+// swiftlint:enable line_length

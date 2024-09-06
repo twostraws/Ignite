@@ -55,7 +55,7 @@ public protocol Site {
     /// Choose whether to use a local version of Boostrap, a remote version,
     /// or none at all
     var useDefaultBootstrapURLs: BootstrapOptions { get }
-    
+
     /// Set to `localBootstrap` if you want to use the Bootstrap icon collection on your site.
     /// and use a local copy of the files or `remoteBootstrap` if you want to use the icon
     /// collection and load the files from a CDN
@@ -119,7 +119,7 @@ extension Site {
     /// Use 10 of the 12 available columns by default. Only applies to
     /// desktop browsers where horizontal space is plentiful.
     public var pageWidth: Int { 10 }
-    
+
     /// Enable local Boostrap files by default
     public var useDefaultBootstrapURLs: BootstrapOptions { .localBootstrap }
 

@@ -18,7 +18,7 @@ final class AbbreviationTests: ElementTest {
 
         XCTAssertEqual(output, "<abbr title=\"abbreviation\">abbr</abbr>")
     }
-    
+
     func test_singleElement() {
         let element = Abbreviation(Strong("abbr"), description: "abbreviation")
         let output = element.render(context: publishingContext)
