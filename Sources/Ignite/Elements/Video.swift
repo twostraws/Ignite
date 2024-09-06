@@ -36,17 +36,17 @@ public struct Video: BlockElement, InlineElement, LazyLoadable {
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
     public func render(files: [String], into context: PublishingContext) -> String {
-            var output = "<video controls\(attributes.description)>"
+        var output = "<video controls\(attributes.description)>"
 
-            for filename in files {
-                if let fileType = videoType(for: filename) {
-                    output += "<source src=\"\(filename)\" type=\"\(fileType.rawValue)\">"
-                }
+        for filename in files {
+            if let fileType = videoType(for: filename) {
+                output += "<source src=\"\(filename)\" type=\"\(fileType.rawValue)\">"
             }
+        }
 
-            output += "Your browser does not support the video tag."
-            output += "</video>"
-            return output
+        output += "Your browser does not support the video tag."
+        output += "</video>"
+        return output
     }
 
     /// Renders this element using publishing context passed in.
@@ -62,6 +62,43 @@ public struct Video: BlockElement, InlineElement, LazyLoadable {
         }
         return render(files: files, into: context)
     }
+
+    // Dictionary mapping file extensions to VideoType
+    let videoTypeDictionary: [String: VideoType] = [
+        ".animaflex": .animaflex,
+        ".asfplugin": .asfPlugin,
+        ".asf": .asf,
+        ".atomic3dfeature": .atomic3dFeature,
+        ".avi": .avi,
+        ".avs": .avsVideo,
+        ".av1": .av1,
+        ".dv": .dv,
+        ".fli": .fli,
+        ".flv": .flv,
+        ".gl": .gl,
+        ".h264": .h264,
+        ".mp4": .h264,
+        ".h265": .h265,
+        ".hevc": .h265,
+        ".isvideo": .isvideo,
+        ".matroska": .matroska,
+        ".mkv": .matroska,
+        ".motionjpeg": .motionJpeg,
+        ".mpeg": .mpeg,
+        ".mp2t": .mp2t,
+        ".ogg": .ogg,
+        ".quicktime": .quicktime,
+        ".mov": .quicktime,
+        ".rnrealvideo": .rnRealvideo,
+        ".sgimovie": .sgiMovie,
+        ".scm": .scm,
+        ".vdo": .vdo,
+        ".vivo": .vivo,
+        ".vp9": .vp9,
+        ".vosaic": .vosaic,
+        ".webm": .webm
+    ]
+
 }
 
 extension Video {
@@ -127,7 +164,7 @@ extension Video {
         case isvideo = "video/x-isvideo"
 
         /// - matroska: Matroska Format
-        /// A modern container format capable of holding an unlimited 
+        /// A modern container format capable of holding an unlimited
         /// number of video, audio, picture, or subtitle tracks in one file.
         case matroska = "video/x-matroska"
 
@@ -185,76 +222,15 @@ extension Video {
         case webm = "video/webm"
     }
 
-    // swiftlint:disable function_body_length
     /// Determines the video file type based on the file extension present in the filename.
     /// - Parameter filename: The name of the file, including its extension.
     /// - Returns: An optional `VideoType` corresponding to the file extension.
     ///            Returns `nil` if the extension does not match any known video types.
     public func videoType(for filename: String) -> VideoType? {
-        switch filename {
-        case let name where name.contains(".animaflex"):
-            .animaflex
-        case let name where name.contains(".asfplugin"):
-            .asfPlugin
-        case let name where name.contains(".asf"):
-            .asf
-        case let name where name.contains(".atomic3dfeature"):
-            .atomic3dFeature
-        case let name where name.contains(".avi"):
-            .avi
-        case let name where name.contains(".avs"):
-            .avsVideo
-        case let name where name.contains(".av1"):
-            .av1
-        case let name where name.contains(".dv"):
-            .dv
-        case let name where name.contains(".fli"):
-            .fli
-        case let name where name.contains(".flv"):
-            .flv
-        case let name where name.contains(".gl"):
-            .gl
-        case let name where name.contains(".h264"),
-             let name where name.contains(".mp4"):
-            .h264
-        case let name where name.contains(".h265"),
-             let name where name.contains(".hevc"):
-            .h265
-        case let name where name.contains(".isvideo"):
-            .isvideo
-        case let name where name.contains(".matroska"),
-             let name where name.contains(".mkv"):
-            .matroska
-        case let name where name.contains(".motionjpeg"):
-            .motionJpeg
-        case let name where name.contains(".mpeg"):
-            .mpeg
-        case let name where name.contains(".mp2t"):
-            .mp2t
-        case let name where name.contains(".ogg"):
-            .ogg
-        case let name where name.contains(".quicktime"),
-             let name where name.contains(".mov"):
-            .quicktime
-        case let name where name.contains(".rnrealvideo"):
-            .rnRealvideo
-        case let name where name.contains(".sgimovie"):
-            .sgiMovie
-        case let name where name.contains(".scm"):
-            .scm
-        case let name where name.contains(".vdo"):
-            .vdo
-        case let name where name.contains(".vivo"):
-            .vivo
-        case let name where name.contains(".vp9"):
-            .vp9
-        case let name where name.contains(".vosaic"):
-            .vosaic
-        case let name where name.contains(".webm"):
-            .webm
-        default:
-            nil
+        for (fileExtension, type) in videoTypeDictionary where filename.contains(fileExtension) {
+            return type
         }
+        return nil
     }
-    // swiftlint:enable function_body_length
+
 }
