@@ -26,6 +26,9 @@ public struct MetaLink: HeadElement {
 
     /// The standard CSS you should include on all pages that use syntax highlighting.
     public static let syntaxHighlightingCSS = MetaLink(href: "/css/prism-default-dark.css", rel: "stylesheet")
+    
+    /// The manifest file for a Progressive Web App (PWA).
+    public static let manifest = MetaLink(href: "/js/manifest.json", rel: "manifest")
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

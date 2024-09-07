@@ -151,6 +151,7 @@ public class PublishingContext {
         try copyResources()
         try await generateContent()
         try await generateTagPages()
+        try generateSiteManifest()
         try generateSiteMap()
         try generateFeed()
         try generateRobots()
@@ -188,7 +189,8 @@ public class PublishingContext {
                 to: buildDirectory.appending(path: asset.lastPathComponent)
             )
         }
-
+        
+        
         if site.useDefaultBootstrapURLs == .localBootstrap {
             try copy(resource: "css/bootstrap.min.css")
             try copy(resource: "js/bootstrap.bundle.min.js")
@@ -353,6 +355,19 @@ public class PublishingContext {
 
         let outputDirectory = buildDirectory.appending(path: content.path)
         try write(outputString, to: outputDirectory, priority: 0.8)
+    }
+    
+    func generateSiteManifest() throws {
+        let generator = ManifestGenerator(site: site)
+        let siteManifest = generator.generateManifest()
+        
+        let outputURL = buildDirectory.appending(path: "manifest.json")
+        
+        do {
+            try siteManifest.write(to: outputURL, atomically: true, encoding: .utf8)
+        } catch {
+            throw PublishingError.failedToCreateBuildFile(outputURL)
+        }
     }
 
     /// Generates a sitemap.xml file for this site.

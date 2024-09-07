@@ -1,6 +1,12 @@
+//
+// ElementTest.swift
+// Ignite
+// https://www.github.com/twostraws/Ignite
+// See LICENSE for license information.
+//
+
 import XCTest
 @testable import Ignite
-
 
 /// A base class that sets up an example publishing context for testing purposes.
 class ElementTest: XCTestCase {
