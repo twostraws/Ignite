@@ -33,8 +33,15 @@ public struct Body: PageElement, HTMLRootElement {
         .class("col-sm-\(context.site.pageWidth)", "mx-auto")
         .render(context: context)
 
-        output += Script(file: "/js/bootstrap.bundle.min.js").render(context: context)
-
+        if context.site.useDefaultBootstrapURLs == .localBootstrap {
+            output += Script(file: "/js/bootstrap.bundle.min.js").render(context: context)
+        } else if context.site.useDefaultBootstrapURLs == .remoteBootstrap {
+            output += Script(file: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js")
+                                .addCustomAttribute(name: "integrity", value: "sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy")
+                                .addCustomAttribute(name: "crossorigin", value: "anonymous")
+                                .render(context: context)
+        }
+        
         if context.site.syntaxHighlighters.isEmpty == false {
             output += Script(file: "/js/syntax-highlighting.js").render(context: context)
         }

@@ -14,7 +14,7 @@ struct FeedLink: Component {
     func body(context: PublishingContext) -> [any PageElement] {
         if context.site.isFeedEnabled {
             Text {
-                if context.site.builtInIconsEnabled {
+                if context.site.builtInIconsEnabled != .none {
                     Image(systemName: "rss-fill")
                         .foregroundStyle(Color(hex: "#f26522"))
                         .margin(.trailing, 10)
