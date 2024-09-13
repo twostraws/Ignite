@@ -189,6 +189,10 @@ That will launch a local web server you should use to preview your site, and als
 > The Ignite command-line tool has various configuration options available. Run `ignite help` to get general help, or add `help` before a subcommand to get further details, e.g. `ignite help run`.
 
 
+## Websites made with Ignite
+
+[Ignite Websites](https://github.com/jcalderita/Ignite-Websites)
+
 ## Contributing
 
 I welcome all contributions, whether that's adding new tests, fixing up existing code, adding comments, or improving this README – everyone is welcome!
