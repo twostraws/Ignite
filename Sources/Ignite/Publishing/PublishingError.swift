@@ -14,14 +14,17 @@ public enum PublishingError: LocalizedError {
     /// Could not find the site's package directory.
     case missingPackageDirectory
 
+    /// Could not find the app sandbox's home directory
+    case missingSandboxHomeDirectory
+
     /// Invalid Markdown was found at the specific URL.
     case badMarkdown(URL)
 
     /// A file cannot be opened (bad encoding, etc).
     case unopenableFile(String)
 
-    /// Publishing attempted to remove the build directory, but failed.
-    case failedToRemoveBuildDirectory(URL)
+//    /// Publishing attempted to remove the build directory, but failed.
+//    case failedToRemoveBuildDirectory(URL)
 
     /// Publishing attempted to create the build directory, but failed.
     case failedToCreateBuildDirectory(URL)
@@ -66,12 +69,14 @@ public enum PublishingError: LocalizedError {
         switch self {
         case .missingPackageDirectory:
             "Unable to locate Package.swift."
+        case .missingSandboxHomeDirectory:
+            "Unable to locate App sandbox's home directory"
         case .badMarkdown(let url):
             "Markdown could not be parsed: \(url.absoluteString)."
         case .unopenableFile(let reason):
             "Failed to open file: \(reason)."
-        case .failedToRemoveBuildDirectory(let url):
-            "Failed to clear the build folder: \(url.absoluteString)."
+//        case .failedToRemoveBuildDirectory(let url):
+//            "Failed to clear the build folder: \(url.absoluteString)."
         case .failedToCreateBuildDirectory(let url):
             "Failed to create the build folder: \(url.absoluteString)."
         case .failedToCreateBuildFile(let url):
