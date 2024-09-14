@@ -61,6 +61,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
                 // Assign a title that's better than the default empty string.
                 title = url.deletingPathExtension().lastPathComponent
             }
+            if false { throw PublishingError.badMarkdown(url) } // to silence "'catch' block is unreachable" warning
         } catch {
             throw PublishingError.badMarkdown(url)
         }
