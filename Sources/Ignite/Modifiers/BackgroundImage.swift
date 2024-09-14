@@ -1,5 +1,4 @@
 import Foundation
-import Ignite
 
 public extension PageElement {
     /// Applies a background image from the image path
