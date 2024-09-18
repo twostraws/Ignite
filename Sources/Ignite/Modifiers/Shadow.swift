@@ -32,7 +32,7 @@ struct Shadow: CustomStringConvertible {
     }
 }
 
-extension HoverEffect {
+public extension PageElement {
     /// Applies an inner shadow to this element.
     /// - Parameters:
     ///   - color: The shadow's color. Defaults to black at 33% opacity.
@@ -40,7 +40,7 @@ extension HoverEffect {
     ///   - x: The X offset for the shadow, specified in pixels. Defaults to 0.
     ///   - y: The Y offset for the shadow, specified in pixels. Defaults to 0.
     /// - Returns: A copy of this element with the updated shadow applied.
-    public func innerShadow(_ color: Color = .black.opacity(0.33), radius: Int, x: Int = 0, y: Int = 0) -> Self {
+    func innerShadow(_ color: Color = .black.opacity(0.33), radius: Int, x: Int = 0, y: Int = 0) -> Self {
         let shadow = Shadow(color: color, radius: radius, x: x, y: y, inset: true)
         return style("box-shadow: \(shadow)")
     }
@@ -52,7 +52,7 @@ extension HoverEffect {
     ///   - x: The X offset for the shadow, specified in pixels. Defaults to 0.
     ///   - y: The Y offset for the shadow, specified in pixels. Defaults to 0.
     /// - Returns: A copy of this element with the updated shadow applied.
-    public func shadow(_ color: Color = .black.opacity(0.33), radius: Int, x: Int = 0, y: Int = 0) -> Self {
+    func shadow(_ color: Color = .black.opacity(0.33), radius: Int, x: Int = 0, y: Int = 0) -> Self {
         let shadow = Shadow(color: color, radius: radius, x: x, y: y, inset: false)
         return style("box-shadow: \(shadow)")
     }

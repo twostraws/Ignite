@@ -14,11 +14,11 @@ public enum TextDecoration: String {
     case underline
 }
 
-extension HoverEffect {
+public extension PageElement {
     /// Applies a text decoration style to the current element.
     /// - Parameter style: The style to apply, specified as a `TextDecoration` case.
     /// - Returns: The current element with the updated text decoration style applied.
-    public func textDecoration(_ style: TextDecoration) -> Self {
+    func textDecoration(_ style: TextDecoration) -> Self {
         switch style {
         case .none:
             self.style("text-decoration: none")

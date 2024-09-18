@@ -13,7 +13,7 @@ public extension PageElement {
     ///   The argument acts as a placeholder representing this page element.
     /// - Returns: The page element with the provided hover effect applied.
     @discardableResult
-    func hoverEffect(_ effect: @escaping (EmptyHoverEffect) -> some HoverEffect) -> Self {
+    func hoverEffect(_ effect: @escaping (EmptyHoverEffect) -> some PageElement) -> Self {
         onHover { isHovering in
             if isHovering {
                 ApplyHoverEffects(styles: effect(EmptyHoverEffect()).attributes.styles)
@@ -24,13 +24,12 @@ public extension PageElement {
     }
 }
 
-/// A protocol representing the hover effect css styles to be applied
-public protocol HoverEffect {
-    var attributes: CoreAttributes { get set }
-}
-
 /// An empty hover effect type to which styles can be added
-public struct EmptyHoverEffect: HoverEffect {
+public struct EmptyHoverEffect: PageElement {
+    public func render(context: PublishingContext) -> String {
+        ""
+    }
+    
     public var attributes = CoreAttributes()
 }
 

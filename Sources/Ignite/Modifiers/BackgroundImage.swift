@@ -1,6 +1,6 @@
 import Foundation
 
-public extension HoverEffect {
+public extension PageElement {
     /// Applies a background image from the image path
     /// - Parameters:
     ///   - image: The path to the image

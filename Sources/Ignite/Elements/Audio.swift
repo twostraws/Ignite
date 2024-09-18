@@ -108,11 +108,11 @@ public struct Audio: BlockElement, InlineElement, LazyLoadable {
 
 }
 
-extension Audio {
+public extension Audio {
     /// `AudioType` is an enumeration that defines a list of audio file types.
     /// Each case in the enum represents a different audio format, and the
     /// raw value of each case is the MIME type associated with that format.
-    public enum AudioType: String {
+    enum AudioType: String {
         /// - aac: Advanced Audio Coding
         /// Known for its efficiency and quality, often used in Apple products.
         case aac = "audio/aac"
@@ -285,7 +285,7 @@ extension Audio {
     /// - Returns: An optional `AudioType` corresponding to the file extension.
     ///            Returns `nil` if the extension does not match any known audio types.
 
-    public func audioTypes(for filename: String) -> AudioType? {
+    func audioTypes(for filename: String) -> AudioType? {
         for (fileExtension, type) in audioTypeMapping where filename.contains(fileExtension) {
             return type
         }

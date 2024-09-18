@@ -7,19 +7,19 @@
 
 import Foundation
 
-extension PageElement {
+public extension PageElement {
     /// Applies padding on all sides of this element. Defaults to 20 pixels.
     /// - Parameter length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
-    public func padding(_ length: String = "20px") -> Self {
+    func padding(_ length: String = "20px") -> Self {
         edgeAdjust(prefix: "padding", .all, length)
     }
 
     /// Applies padding on all sides of this element, specified in pixels.
     /// - Parameter length: The amount of padding to apply, specified in pixels.
     /// - Returns: A copy of the current element with the new padding applied.
-    public func padding(_ length: Int) -> Self {
+    func padding(_ length: Int) -> Self {
         edgeAdjust(prefix: "padding", .all, "\(length)px")
     }
 
@@ -27,7 +27,7 @@ extension PageElement {
     /// - Parameter amount: The amount of padding to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
-    public func padding(_ amount: SpacingAmount) -> Self {
+    func padding(_ amount: SpacingAmount) -> Self {
         edgeAdjust(prefix: "p", .all, amount)
     }
 
@@ -37,7 +37,7 @@ extension PageElement {
     ///   - length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
-    public func padding(_ edges: Edge, _ length: String = "20px") -> Self {
+    func padding(_ edges: Edge, _ length: String = "20px") -> Self {
         edgeAdjust(prefix: "padding", edges, length)
     }
 
@@ -47,7 +47,7 @@ extension PageElement {
     ///   - length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
-    public func padding(_ edges: Edge, _ length: Int) -> Self {
+    func padding(_ edges: Edge, _ length: Int) -> Self {
         edgeAdjust(prefix: "padding", edges, "\(length)px")
     }
 
@@ -57,7 +57,7 @@ extension PageElement {
     ///   - amount: The amount of padding to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
-    public func padding(_ edges: Edge, _ amount: SpacingAmount) -> Self {
+    func padding(_ edges: Edge, _ amount: SpacingAmount) -> Self {
         edgeAdjust(prefix: "p", edges, amount)
     }
 }
