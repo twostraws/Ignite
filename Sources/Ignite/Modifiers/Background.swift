@@ -29,13 +29,13 @@ public enum BackgroundStyle {
     }
 }
 
-extension BlockElement {
+public extension PageElement {
     /// Applies a background color from a string.
     /// - Parameter color: The specific color value to use, specified as a
     /// hex string such as "#FFE700".
     /// - Returns: The current element with the updated background color.
     @available(*, deprecated, renamed: "background(_:)")
-    public func backgroundColor(_ color: String) -> Self {
+    func backgroundColor(_ color: String) -> Self {
         self.style("background-color: \(color)")
     }
 
@@ -44,7 +44,7 @@ extension BlockElement {
     /// a `Color` instance.
     /// - Returns: The current element with the updated background color.
     @available(*, deprecated, renamed: "background(_:)")
-    public func backgroundColor(_ color: Color) -> Self {
+    func backgroundColor(_ color: Color) -> Self {
         self.style("background-color: \(color.description)")
     }
 
@@ -52,7 +52,7 @@ extension BlockElement {
     /// - Parameter color: The specific color value to use, specified as a
     /// hex string such as "#FFE700".
     /// - Returns: The current element with the updated background color.
-    public func background(_ color: String) -> Self {
+    func background(_ color: String) -> Self {
         self.style("background-color: \(color)")
     }
 
@@ -60,7 +60,7 @@ extension BlockElement {
     /// - Parameter color: The specific color value to use, specified as
     /// a `Color` instance.
     /// - Returns: The current element with the updated background color.
-    public func background(_ color: Color) -> Self {
+    func background(_ color: Color) -> Self {
         self.style("background-color: \(color.description)")
     }
 
@@ -69,7 +69,7 @@ extension BlockElement {
     /// one or more `BackgroundStyle` instance. Specifying multiple
     /// gradients causes them to overlap, so you should blend them with opacity.
     /// - Returns: The current element with the updated background styles.
-    public func background(_ styles: BackgroundStyle...) -> Self {
+    func background(_ styles: BackgroundStyle...) -> Self {
         guard styles.isEmpty == false else { return self }
 
         let grouped = styles.map(\.style).joined(separator: ", ")

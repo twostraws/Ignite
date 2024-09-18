@@ -65,7 +65,8 @@ final class TextTests: ElementTest {
     func test_markdown() {
         let element = Text(markdown: "Text in *italics*, text in **bold**, and text in ***bold italics***.")
         let output = element.render(context: publishingContext)
-
+        // swiftlint:disable line_length
         XCTAssertEqual(output, "<p>Text in <em>italics</em>, text in <strong>bold</strong>, and text in <em><strong>bold italics</strong></em>.</p>")
+        // swiftlint:enable line_length
     }
 }

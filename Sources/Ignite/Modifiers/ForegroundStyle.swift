@@ -30,26 +30,26 @@ public enum ForegroundStyle: String {
     case bodyEmphasis = "text-body-emphasis"
 }
 
-extension BlockElement {
+public extension PageElement {
     /// Applies a foreground style to the current element.
     /// - Parameter style: The style to apply, specified as a
     ///  `ForegroundStyle` case.
     /// - Returns: The current element with the updated color applied.
-    public func foregroundStyle(_ style: ForegroundStyle) -> Self {
+    func foregroundStyle(_ style: ForegroundStyle) -> Self {
         self.class(style.rawValue)
     }
 
     /// Applies a foreground style to the current element.
     /// - Parameter style: The style to apply, specified as a `Color`.
     /// - Returns: The current element with the updated color applied.
-    public func foregroundStyle(_ color: Color) -> Self {
+    func foregroundStyle(_ color: Color) -> Self {
         self.style("color: \(color)")
     }
 
     /// Applies a foreground style to the current element.
     /// - Parameter style: The style to apply, specified as a string.
     /// - Returns: The current element with the updated color applied.
-    public func foregroundStyle(_ color: String) -> Self {
+    func foregroundStyle(_ color: String) -> Self {
         self.style("color: \(color)")
     }
 }

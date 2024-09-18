@@ -38,6 +38,7 @@ public struct List: BlockElement {
     /// but if you need specific styling you might want to use ListItem objects.
     var items: [any PageElement]
 
+    // swiftlint:disable empty_enum_arguments
     /// Returns the correct HTML name for this list.
     private var listElementName: String {
         if case .ordered(_) = style {
@@ -46,6 +47,7 @@ public struct List: BlockElement {
             "ul"
         }
     }
+    // swiftlint:enable empty_enum_arguments
 
     /// Creates a new `List` object using a page element builder that returns
     /// an array of `PageElement` objects to display in the list.
@@ -97,7 +99,7 @@ public struct List: BlockElement {
         var listAttributes = attributes
 
         if listStyleType.isEmpty == false {
-            listAttributes.append(styles: "list-style-type: \(listStyleType)")
+            listAttributes.append(style: "list-style-type", value: listStyleType)
         }
 
         var output = "<\(listElementName)\(listAttributes.description)>"

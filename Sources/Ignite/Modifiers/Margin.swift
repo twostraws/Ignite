@@ -7,19 +7,19 @@
 
 import Foundation
 
-extension PageElement {
+public extension PageElement {
     /// Applies margins on all sides of this element. Defaults to 20 pixels.
     /// - Parameter length: The amount of margin to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
-    public func margin(_ length: String = "20px") -> Self {
+    func margin(_ length: String = "20px") -> Self {
         edgeAdjust(prefix: "margin", .all, length)
     }
 
     /// Applies margins on all sides of this element, specified in pixels.
     /// - Parameter length: The amount of margin to apply, specified in pixels.
     /// - Returns: A copy of the current element with the new margins applied.
-    public func margin(_ length: Int) -> Self {
+    func margin(_ length: Int) -> Self {
         edgeAdjust(prefix: "margin", .all, "\(length)px")
     }
 
@@ -27,7 +27,7 @@ extension PageElement {
     /// - Parameter amount: The amount of margin to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new margins applied.
-    public func margin(_ amount: SpacingAmount) -> Self {
+    func margin(_ amount: SpacingAmount) -> Self {
         edgeAdjust(prefix: "m", .all, amount)
     }
 
@@ -37,7 +37,7 @@ extension PageElement {
     ///   - length: The amount of margin to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
-    public func margin(_ edges: Edge, _ length: String = "20px") -> Self {
+    func margin(_ edges: Edge, _ length: String = "20px") -> Self {
         edgeAdjust(prefix: "margin", edges, length)
     }
 
@@ -46,7 +46,7 @@ extension PageElement {
     ///   - edges: The edges where this margin should be applied.
     ///   - length: The amount of margin to apply, specified in pixels.
     /// - Returns: A copy of the current element with the new margins applied.
-    public func margin(_ edges: Edge, _ length: Int) -> Self {
+    func margin(_ edges: Edge, _ length: Int) -> Self {
         edgeAdjust(prefix: "margin", edges, "\(length)px")
     }
 
@@ -56,7 +56,7 @@ extension PageElement {
     ///   - amount: The amount of margin to apply, specified as a
     ///   `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new margins applied.
-    public func margin(_ edges: Edge, _ amount: SpacingAmount) -> Self {
+    func margin(_ edges: Edge, _ amount: SpacingAmount) -> Self {
         edgeAdjust(prefix: "m", edges, amount)
     }
 }

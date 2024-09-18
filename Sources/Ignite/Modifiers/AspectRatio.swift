@@ -22,12 +22,12 @@ public enum AspectRatio: String {
     case r21x9 = "21x9"
 }
 
-/// The content mode of an element, e.g. an image, within it's container
+/// The content mode of an element, e.g. an image, within its container.
 public enum ContentMode {
-    /// The element is sized to fit into the container
+    /// The element is sized to fit into the container.
     case fit
 
-    /// The element is sized to fill the container, possibly cutting of parts of the element
+    /// The element is sized to fill the container, possibly cutting of parts of the element.
     case fill
 
     var htmlClass: String {
@@ -35,11 +35,11 @@ public enum ContentMode {
     }
 }
 
-extension BlockElement {
+public extension BlockElement {
     /// Applies a fixed aspect ratio to the current element.
     /// - Parameter ratio: The aspect ratio to apply.
     /// - Returns: A new instance of this element with the ratio applied.
-    public func aspectRatio(_ ratio: AspectRatio) -> Self {
+    func aspectRatio(_ ratio: AspectRatio) -> Self {
         self.class("ratio", "ratio-\(ratio.rawValue)")
     }
 
@@ -47,7 +47,7 @@ extension BlockElement {
     /// - Parameter aspectRatio: The ratio to use, relative to 1.
     /// For example, specifying 2 here will make a 2:1 aspect ratio.
     /// - Returns: A new instance of this element with the ratio applied.
-    public func aspectRatio(_ aspectRatio: Double) -> Self {
+    func aspectRatio(_ aspectRatio: Double) -> Self {
         let percentage = 100 / aspectRatio
         return self
             .class("ratio")
@@ -55,13 +55,13 @@ extension BlockElement {
     }
 }
 
-extension BlockElement where Self == Image {
+public extension BlockElement where Self == Image {
     /// Applies a fixed aspect ratio to the image element.
     /// - Parameters:
     ///   - ratio: The aspect ratio to apply.
     ///   - contentMode: The content mode to apply.
     /// - Returns: A new instance of this element with the ratio and content mode applied.
-    public func aspectRatio(_ ratio: AspectRatio, contentMode: ContentMode) -> some BlockElement {
+    func aspectRatio(_ ratio: AspectRatio, contentMode: ContentMode) -> some BlockElement {
         Group {
             self.class(contentMode.htmlClass)
         }
@@ -73,7 +73,7 @@ extension BlockElement where Self == Image {
     ///   - ratio: The ratio to use, relative to 1.
     ///   - contentMode: The content mode to apply.
     /// - Returns: A new instance of this element with the ratio and content mode applied.
-    public func aspectRatio(_ ratio: Double, contentMode: ContentMode) -> some BlockElement {
+    func aspectRatio(_ ratio: Double, contentMode: ContentMode) -> some BlockElement {
         Group {
             self.class(contentMode.htmlClass)
         }

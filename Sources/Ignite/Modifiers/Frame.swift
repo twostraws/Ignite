@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension BlockElement {
+public extension BlockElement {
     /// Creates a specific frame for this element, either using exact values or
     /// using minimum/maximum ranges. Sizes are specified in units
     /// of your choosing, e.g. "50%", "2cm", or "50vw".
@@ -20,7 +20,7 @@ extension BlockElement {
     ///   - maxHeight: A maximum height for this element.
     ///   - alignment: How to align this element inside its frame.
     /// - Returns: A copy of the current element with the new frame applied.
-    public func frame(
+    func frame(
         width: String? = nil,
         minWidth: String? = nil,
         maxWidth: String? = nil,
@@ -77,7 +77,7 @@ extension BlockElement {
     ///   - maxHeight: A maximum height for this element.
     ///   - alignment: How to align this element inside its frame.
     /// - Returns: A copy of the current element with the new frame applied.
-    public func frame(
+    func frame(
         width: Int? = nil,
         minWidth: Int? = nil,
         maxWidth: Int? = nil,

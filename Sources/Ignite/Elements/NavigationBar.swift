@@ -129,43 +129,9 @@ public struct NavigationBar: BlockElement {
                             .class("navbar-brand")
                     }
 
-                    Button {
-                        Span()
-                            .class("navbar-toggler-icon")
-                    }
-                    .class("navbar-toggler")
-                    .data("bs-toggle", "collapse")
-                    .data("bs-target", "#navbarCollapse")
-                    .aria("controls", "navbarCollapse")
-                    .aria("expanded", "false")
-                    .aria("label", "Toggle navigation")
+                    renderToggleButton()
 
-                    Group {
-                        List {
-                            for item in items {
-                                if let dropdownItem = item as? Dropdown {
-                                    ListItem {
-                                        dropdownItem.configuredAsNavigationItem()
-                                    }
-                                    .class("nav-item", "dropdown")
-                                    .data("bs-theme", "light")
-                                } else if let link = item as? Link {
-                                    ListItem {
-                                        let isActive = context.currentRenderingPath == link.url
-                                        item
-                                            .class("nav-link", isActive ? "active" : nil)
-                                            .aria("current", isActive ? "page" : nil)
-                                    }
-                                    .class("nav-item")
-                                } else {
-                                    item
-                                }
-                            }
-                        }
-                        .class("navbar-nav", "mb-2", "mb-md-0", "col", itemAlignment.rawValue)
-                    }
-                    .class("collapse", "navbar-collapse")
-                    .id("navbarCollapse")
+                    renderNavItems(context: context)
                 }
                 .class("container-fluid", columnWidth.className)
             }
@@ -174,5 +140,55 @@ public struct NavigationBar: BlockElement {
             .data("bs-theme", theme(for: style))
         }
         .render(context: context)
+    }
+
+    private func renderToggleButton() -> Button {
+        Button {
+            Span()
+                .class("navbar-toggler-icon")
+        }
+        .class("navbar-toggler")
+        .data("bs-toggle", "collapse")
+        .data("bs-target", "#navbarCollapse")
+        .aria("controls", "navbarCollapse")
+        .aria("expanded", "false")
+        .aria("label", "Toggle navigation")
+    }
+
+    private func renderNavItems(context: PublishingContext) -> Group {
+        Group {
+            List {
+                for item in items {
+                    if let dropdownItem = item as? Dropdown {
+                        renderDropdownItem(dropdownItem)
+                    } else if let link = item as? Link {
+                        renderLinkItem(link, context: context)
+                    } else {
+                        item
+                    }
+                }
+            }
+            .class("navbar-nav", "mb-2", "mb-md-0", "col", itemAlignment.rawValue)
+        }
+        .class("collapse", "navbar-collapse")
+        .id("navbarCollapse")
+    }
+
+    private func renderDropdownItem(_ dropdownItem: Dropdown) -> ListItem {
+        ListItem {
+            dropdownItem.configuredAsNavigationItem()
+        }
+        .class("nav-item", "dropdown")
+        .data("bs-theme", "light")
+    }
+
+    private func renderLinkItem(_ link: Link, context: PublishingContext) -> ListItem {
+        ListItem {
+            let isActive = context.currentRenderingPath == link.url
+            link
+                .class("nav-link", isActive ? "active" : nil)
+                .aria("current", isActive ? "page" : nil)
+        }
+        .class("nav-item")
     }
 }

@@ -22,12 +22,12 @@ public enum HorizontalAlignment: String {
 /// Determines which elements can have horizontal alignment attached,
 public protocol HorizontalAligning: PageElement { }
 
-extension HorizontalAligning {
+public extension HorizontalAligning {
     /// Aligns this element using the specific alignment.
     /// - Parameter alignment: How to align this element.
     /// - Returns: A copy of the current element with the updated
     /// horizontal alignment applied.
-    public func horizontalAlignment(_ alignment: HorizontalAlignment) -> Self {
+    func horizontalAlignment(_ alignment: HorizontalAlignment) -> Self {
         self.class(alignment.rawValue)
     }
 }
