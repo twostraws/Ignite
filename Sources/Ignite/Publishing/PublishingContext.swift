@@ -151,6 +151,7 @@ public class PublishingContext {
         try copyResources()
         try await generateContent()
         try await generateTagPages()
+        try generateMapKitJS()
         try generateSiteMap()
         try generateFeed()
         try generateRobots()
@@ -366,6 +367,22 @@ public class PublishingContext {
             try siteMap.write(to: outputURL, atomically: true, encoding: .utf8)
         } catch {
             throw PublishingError.failedToCreateBuildFile(outputURL)
+        }
+    }
+
+    func generateMapKitJS() throws {
+        guard site.mapKitToken != nil else { return }
+        guard site.mapKitLibraries != nil else { return }
+
+        let generator = MapKitJSGenerator(site: site)
+        let map = generator.generateLoadMapScript(library: site.mapKitLibraries!)
+
+        let outputURL = buildDirectory.appending(path: "mapkit.js")
+
+        do {
+            try map.write(to: outputURL, atomically: true, encoding: .utf8)
+        } catch {
+            throw PublishingError.failedToWriteFeed
         }
     }
 

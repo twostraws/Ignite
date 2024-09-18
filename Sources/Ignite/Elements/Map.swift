@@ -7,6 +7,22 @@
 
 import Foundation
 
+public struct Annotation {
+    var color: Color
+    var title: String
+    var subtitle: String
+    var glyphText: String
+    var selected: Bool
+
+    public init(color: Color, title: String, subtitle: String, glyphText: String, selected: Bool) {
+        self.color = color
+        self.title = title
+        self.subtitle = subtitle
+        self.glyphText = glyphText
+        self.selected = selected
+    }
+}
+
 /// https://developer.apple.com/documentation/mapkitjs
 /// Embeds a MapKit JS map.
 public struct Map: BlockElement, InlineElement, LazyLoadable {
@@ -16,87 +32,140 @@ public struct Map: BlockElement, InlineElement, LazyLoadable {
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
-    /// The external MapKit Library to load.
-    private var library: [MapLibrary]?
-
-    /// https://developer.apple.com/documentation/mapkitjs/creating_a_maps_token
-    /// Generate your token to access MapKit services with proper authorization.
-    private var token: String?
-
     /// Longitude as a double
     private var longitude: Double
 
     /// Latitude as a Double
     private var latitude: Double
 
-    /// Creates map on page
+    /// Map Annotation
+    /// Imports libraries annotation and services.
+    public var annotation: Annotation?
+
+    /// Creates embeded map on page
     /// - Parameters:
     ///   - longitude: Longitudinal Value
     ///   - latitude: Latitudinal Value
-    ///   - library: Loads External MapKit Library - Defaults Basic Map
-    ///   - token: Access Token - Defaults Temporary Token
+    public init(
+        longitude: Double,
+        latitude: Double
+    ) {
+        self.longitude = longitude
+        self.latitude = latitude
+    }
 
+    /// Creates annotated map on page
+    /// - Parameters:
+    ///   - longitude: Longitudinal Value
+    ///   - latitude: Latitudinal Value
+    ///   - annotation: Annotation
     public init(
         longitude: Double,
         latitude: Double,
-        library: [MapLibrary]? = [.map],
-        token: String? = exampleSiteMapKitJSToken) {
+        annotation: Annotation?
+    ) {
         self.longitude = longitude
         self.latitude = latitude
-        self.library = library
-        self.token = token
+        self.annotation = annotation
     }
 
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        let formattedLibraries = library!.map { $0.rawValue }.joined(separator: ",")
+        if context.site.mapKitToken?.isEmpty == false {
+            context.addWarning("""
+        Creating a map with no token should not be possible. \
+        Please file a bug report on the Ignite project.
+        """)
+        }
 
-        let loadMapScript = Script(file: "https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.core.js")
-            .addCustomAttribute(name: "crossorigin", value: "anonymous")
-            .addCustomAttribute(name: "async", value: "async")
-            .data("callback", "initMapKit")
-            .data("token", "\(token!)")
-            .data("libraries", "\(formattedLibraries)")
+        var mapScriptCode = setupMapScript()
 
-        let mapScriptCode = """
-                const setupMapKitJs = async() => {
-                    if (!window.mapkit || window.mapkit.loadedLibraries.length === 0) {
-                        await new Promise(resolve => { window.initMapKit = resolve });
-                        delete window.initMapKit;
-                    }
-                };
-
-                const main = async() => {
-                    await setupMapKitJs();
-
-                    const cupertino = new mapkit.CoordinateRegion(
-                        new mapkit.Coordinate(\(longitude), \(latitude)),
-                        new mapkit.CoordinateSpan(0.167647972, 0.354985255)
-                                                                  );
-                    const map = new mapkit.Map("map-container");
-                    map.region = cupertino;
-                };
-                main();
-        """
-
+        mapScriptCode += generateMapScriptCode(annotation: annotation, context: context)
         let mapScript = Script(code: mapScriptCode)
             .addCustomAttribute(name: "type", value: "module")
 
-        return Group {
-            loadMapScript
-            mapScript
+        return renderMapContainer(context: context, mapScript: mapScript)
+    }
 
-            """
-                <style>
-                    #map-container {
-                        width: 100%;
-                        height: 600px;
-                    }
-                </style>
-                <div id="map-container"></div>
-            """
+    func setupMapScript() -> String {
+        return """
+    const setupMapKitJs = async() => {
+        if (!window.mapkit || window.mapkit.loadedLibraries.length === 0) {
+            await new Promise(resolve => { window.initMapKit = resolve });
+            delete window.initMapKit;
+        }
+    };
+
+    const main = async() => {
+        await setupMapKitJs();
+    """
+    }
+
+    func generateMapScriptCode(annotation: Annotation?, context: PublishingContext) -> String {
+        var script = """
+    const coordinate = new mapkit.CoordinateRegion(
+        new mapkit.Coordinate(\(longitude), \(latitude)),
+        new mapkit.CoordinateSpan(0.167647972, 0.354985255)
+    );
+    const map = new mapkit.Map("map-container");
+    map.region = coordinate;
+    """
+
+        context.site.mapKitLibraries = [.map]
+
+        if let annotation = annotation {
+            context.site.mapKitLibraries! += [.annotations, .services]
+
+            script += """
+        const Annotation = new mapkit.MarkerAnnotation(coordinate);
+        Annotation.color = "\(annotation.color)";
+        Annotation.title = "\(annotation.title)";
+        Annotation.subtitle = "\(annotation.subtitle)";
+        Annotation.selected = "\(annotation.subtitle)";
+        Annotation.glyphText = "\(annotation.glyphText)";
+        map.showItems([Annotation]);
+
+        let clickAnnotation = null;
+        map.addEventListener("single-tap", event => {
+            if (clickAnnotation) {
+                map.removeAnnotation(clickAnnotation);
+            }
+            const point = event.pointOnPage;
+            const coordinate = map.convertPointOnPageToCoordinate(point);
+            clickAnnotation = new mapkit.MarkerAnnotation(coordinate, {
+                title: "Loading...",
+                color: "#c969e0"
+            });
+            map.addAnnotation(clickAnnotation);
+            geocoder.reverseLookup(coordinate, (error, data) => {
+                const first = (!error && data.results) ? data.results[0] : null;
+                clickAnnotation.title = (first && first.name) || "";
+            });
+        });
+        """
+        }
+
+        script += """
+    };
+    main();
+    """
+        return script
+    }
+
+    private func renderMapContainer(context: PublishingContext, mapScript: Script) -> String {
+        return Group {
+            mapScript
+        """
+        <style>
+            #map-container {
+                width: 100%;
+                height: 600px;
+            }
+        </style>
+        <div id="map-container"></div>
+        """
         }
         .id("map-container")
         .attributes(attributes)
