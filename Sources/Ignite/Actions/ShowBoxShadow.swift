@@ -6,14 +6,15 @@
 //
 
 import Foundation
-
+// swiftlint:disable identifier_name
 /// Shows a box shadow around the element it is applied e.g. onHover(true)
 public struct ShowBoxShadow: Action {
     var color: Color = .black.opacity(0.1)
     var radius: Int = 8
+
     var x: Int = 0
     var y: Int = 0
-    
+
     /// Creates a ShowBoxShadow action with the provided shadow parameters
     /// - Parameters:
     ///   - color: The shadow's color.
@@ -35,3 +36,4 @@ public struct ShowBoxShadow: Action {
         "this.style.boxShadow='\(shadow.description)'"
     }
 }
+// swiftlint:enable identifier_name

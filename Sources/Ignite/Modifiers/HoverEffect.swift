@@ -9,7 +9,8 @@ import Foundation
 
 public extension PageElement {
     /// Applies a hover effect to the page element
-    /// - Parameter effect: A closure that returns the effect to be applied. The argument acts as a placeholder representing this page element.
+    /// - Parameter effect: A closure that returns the effect to be applied.
+    ///                     The argument acts as a placeholder representing this page element.
     /// - Returns: The page element with the provided hover effect applied.
     @discardableResult
     func hoverEffect(_ effect: @escaping (EmptyHoverEffect) -> some HoverEffect) -> Self {
@@ -34,6 +35,7 @@ public struct EmptyHoverEffect: HoverEffect {
 }
 
 extension HoverEffect {
+    // swiftlint:disable identifier_name
     /// Adds a shadow hover effect
     /// - Parameters:
     ///   - color: The shadow's color. Defaults to black at 33% opacity.
@@ -41,13 +43,19 @@ extension HoverEffect {
     ///   - x: The X offset for the shadow, specified in pixels. Defaults to 0.
     ///   - y: The Y offset for the shadow, specified in pixels. Defaults to 0.
     /// - Returns: A copy of the hover effect with the shadow hover effect applied.
-    public func shadow(color: Color = .black.opacity(0.1), radius: Int = 8, x: Int = 0, y: Int = 0) -> some HoverEffect {
+    public func shadow(
+        color: Color = .black.opacity(0.1),
+        radius: Int = 8,
+        x: Int = 0,
+        y: Int = 0
+    ) -> some HoverEffect {
         addingStyle(.init(
             name: "boxShadow",
             value: "\(Shadow(color: color, radius: radius, x: x, y: y))")
         )
     }
-    
+    // swiftlint:enable identifier_name
+
     /// Adds background color hover effect
     /// - Parameter color: The color to be used for the background
     /// - Returns: A copy of the hover effect with the color hover effect applied.

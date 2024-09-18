@@ -15,7 +15,8 @@ public enum TabFocus {
     /// The element is focusable and part of the natural tab order (equivalent to `tabindex="0"`).
     case auto
 
-    /// The element is focusable and has a custom tab order specified by the associated integer value (equivalent to `tabindex` with a positive integer).
+    /// The element is focusable and has a custom tab order
+    /// specified by the associated integer value (equivalent to `tabindex` with a positive integer).
     /// - Parameter index: A positive integer specifying the custom tab order.
     case custom(Int)
 

@@ -9,7 +9,12 @@ public extension PageElement {
     ///   - position: The position of the image in the objects frame
     ///   - repeats: Wether the image is repeated or not
     /// - Returns: The current element with the updated background image
-    func background(image: String, contentMode: BackgroundImageContentMode, position: BackgroundPosition = .center, repeats: Bool = false) -> Self {
+    func background(
+        image: String,
+        contentMode: BackgroundImageContentMode,
+        position: BackgroundPosition = .center,
+        repeats: Bool = false
+    ) -> Self {
         style(
             "background-image: url('\(image)')",
             "background-size: \(contentMode.css)",
@@ -54,7 +59,7 @@ public enum BackgroundImageContentMode: CSSRepresentable {
 
 /// A type representing the background image position within the page element
 public struct BackgroundPosition: CSSRepresentable {
-    
+
     /// The possible absolute values going from left to right and top to bottom.
     /// For example an offset from the top edge of `10px` means 10 px down from the top.
     /// Likewise an offset from the top edge of 50% means down 50 % of the total height.
@@ -76,7 +81,7 @@ public struct BackgroundPosition: CSSRepresentable {
         }
 
     }
-    
+
     /// The possible horizontal alignment value
     public enum HorizontalAlignment: CSSRepresentable {
         case leading, center, trailing, absolute(Value)
@@ -94,7 +99,7 @@ public struct BackgroundPosition: CSSRepresentable {
                 value.css
             }
         }
-        
+
         /// Returns the css description of the alignment as a value
         static func value(for alignment: HorizontalAlignment) -> Value {
             switch alignment {
@@ -180,7 +185,7 @@ public struct BackgroundPosition: CSSRepresentable {
             horizontalPosition: "calc(\(HorizontalAlignment.value(for: horizontalAlignment).css) + \(horizontal.css))"
         )
     }
-    
+
     /// The css representation of the background image position
     var css: String {
         [horizontalPosition, verticalPosition].joined(separator: " ")

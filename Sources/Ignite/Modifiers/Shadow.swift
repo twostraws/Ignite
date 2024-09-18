@@ -7,11 +7,13 @@
 
 import Foundation
 
+// X and Y are correct names here.
+// swiftlint:disable identifier_name
 /// A type used to define a box-shadow
 struct Shadow: CustomStringConvertible {
     /// The shadow's color.
     let color: Color
-    
+
     /// The shadow's radius
     let radius: Int
 
@@ -30,8 +32,6 @@ struct Shadow: CustomStringConvertible {
     }
 }
 
-// X and Y are correct names here.
-// swiftlint:disable identifier_name
 extension BlockElement {
     /// Applies an inner shadow to this element.
     /// - Parameters:
