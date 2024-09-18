@@ -29,7 +29,7 @@ public enum BackgroundStyle {
     }
 }
 
-extension BlockElement {
+extension HoverEffect {
     /// Applies a background color from a string.
     /// - Parameter color: The specific color value to use, specified as a
     /// hex string such as "#FFE700".

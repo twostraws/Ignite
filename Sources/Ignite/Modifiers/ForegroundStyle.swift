@@ -30,7 +30,7 @@ public enum ForegroundStyle: String {
     case bodyEmphasis = "text-body-emphasis"
 }
 
-extension BlockElement {
+extension HoverEffect {
     /// Applies a foreground style to the current element.
     /// - Parameter style: The style to apply, specified as a
     ///  `ForegroundStyle` case.

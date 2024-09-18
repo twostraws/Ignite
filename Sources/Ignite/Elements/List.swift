@@ -99,7 +99,7 @@ public struct List: BlockElement {
         var listAttributes = attributes
 
         if listStyleType.isEmpty == false {
-            listAttributes.append(styles: "list-style-type: \(listStyleType)")
+            listAttributes.append(style: "list-style-type", value: listStyleType)
         }
 
         var output = "<\(listElementName)\(listAttributes.description)>"

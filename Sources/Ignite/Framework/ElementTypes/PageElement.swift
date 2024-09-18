@@ -8,12 +8,12 @@
 import Foundation
 
 /// A user-visible element that can appear anywhere on a page, block or otherwise.
-public protocol PageElement: BaseElement {
+public protocol PageElement: BaseElement, HoverEffect {
     /// The standard set of control attributes for HTML elements.
     var attributes: CoreAttributes { get set }
 }
 
-extension PageElement {
+extension HoverEffect {
     /// Adds new classes to this element.
     /// - Parameter newClasses: One or more classes to add to this
     /// element. Specifying nil ignores the class, which is helpful for ternary
@@ -77,7 +77,19 @@ extension PageElement {
     /// - Returns: A copy of the current element with the new styles applied.
     public func style(_ values: String...) -> Self {
         var copy = self
-        copy.attributes.styles.append(contentsOf: values)
+
+        let attributeValues: [AttributeValue] = values.compactMap { value in
+            let parts = value.split(separator: ":")
+            guard parts.count == 2 else { return nil }
+
+            return AttributeValue(
+                name: parts[0].trimmingCharacters(in: .whitespaces),
+                value: parts[1].trimmingCharacters(in: .whitespaces)
+            )
+        }
+
+        copy.attributes.styles.append(contentsOf: attributeValues)
+
         return copy
     }
 

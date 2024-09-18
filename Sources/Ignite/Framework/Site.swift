@@ -52,7 +52,7 @@ public protocol Site {
     /// which allows a little margin on either side.
     var pageWidth: Int { get }
 
-    /// Choose whether to use a local version of Boostrap, a remote version,
+    /// Choose whether to use a local version of Bootstrap, a remote version,
     /// or none at all
     var useDefaultBootstrapURLs: BootstrapOptions { get }
 
@@ -120,7 +120,7 @@ extension Site {
     /// desktop browsers where horizontal space is plentiful.
     public var pageWidth: Int { 10 }
 
-    /// Enable local Boostrap files by default
+    /// Enable local Bootstrap files by default
     public var useDefaultBootstrapURLs: BootstrapOptions { .localBootstrap }
 
     /// Disable Bootstrap icons by default.

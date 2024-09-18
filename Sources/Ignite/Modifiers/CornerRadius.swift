@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension PageElement {
+extension HoverEffect {
     /// Rounds all edges of this object by some value specified as a string.
     /// - Parameter length: A string with rounding of your choosing, such as
     /// "50%".
