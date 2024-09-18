@@ -7,11 +7,11 @@
 
 import Foundation
 
-extension PageElement {
+public extension PageElement {
     /// Creates a plain-text tooltip for this element.
     /// - Parameter text: The text to show in the tooltip.
     /// - Returns: A copy of the current element with the tooltip attached.
-    public func hint(text: String) -> Self {
+    func hint(text: String) -> Self {
         self
             .data("bs-toggle", "tooltip")
             .data("bs-title", text)
@@ -20,7 +20,7 @@ extension PageElement {
     /// Creates a HTML tooltip for this element.
     /// - Parameter text: The text to show in the tooltip.
     /// - Returns: A copy of the current element with the tooltip attached.
-    public func hint(html: String) -> Self {
+    func hint(html: String) -> Self {
         self
             .data("bs-toggle", "tooltip")
             .data("bs-title", html)
@@ -31,7 +31,7 @@ extension PageElement {
     /// - Parameter markdown: The Markdown text to parse.
     /// - Returns: A copy of the current element with the tooltip attached.
 
-    public func hint(markdown: String) -> Self {
+    func hint(markdown: String) -> Self {
         let parser = MarkdownToHTML(markdown: markdown, removeTitleFromBody: true)
 
         // Remove any <p></p> tags, because these will be

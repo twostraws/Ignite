@@ -39,13 +39,13 @@ public struct Audio: BlockElement, InlineElement, LazyLoadable {
 
         for filename in files {
             if let fileType = audioTypes(for: filename) {
-                output += "<source src=\"\(filename)\" type=\"\(fileType.rawValue)\">"
+                output += "<source src=\"\(filename)\" type=\"audio/\(fileType.rawValue)\">"
             }
         }
 
         output += "Your browser does not support the audio element."
-            output += "</audio>"
-            return output
+        output += "</audio>"
+        return output
     }
 
     /// Renders this element using publishing context passed in.
@@ -62,13 +62,57 @@ public struct Audio: BlockElement, InlineElement, LazyLoadable {
 
         return render(files: files, into: context)
     }
+
+    // Dictionary mapping file extensions to AudioType
+    let audioTypeMapping: [String: AudioType] = [
+        ".aac": .aac,
+        ".aifc": .aifc,
+        ".aif": .aif,
+        ".au": .au, ".snd": .au,
+        ".flac": .flac,
+        ".funk": .funk, ".my": .funk, ".pfunk": .funk,
+        ".gsd": .gsd, ".gsm": .gsd,
+        ".it": .it,
+        ".jam": .jam,
+        ".kar": .kar, ".mid": .kar,
+        ".la": .la, ".lma": .la,
+        ".lam": .lam,
+        ".m3u": .m3u,
+        ".mka": .mka,
+        ".mod": .mod,
+        ".mp2": .mp2, ".m2a": .mp2,
+        ".mp3": .mp3,
+        ".mp4": .m4a,
+        ".midi": .midi,
+        ".mjf": .mjf,
+        ".midX": .midX,
+        ".ogg": .ogg,
+        ".opus": .opus,
+        ".pfunkMyFunk": .pfunkMyFunk,
+        ".qcp": .qcp,
+        ".ra": .ra, ".ram": .ra, ".rm": .ra, ".rmm": .ra, ".rmp": .ra,
+        ".raPlugin": .raPlugin, ".rmpPlugin": .raPlugin, ".rpm": .raPlugin,
+        ".rmi": .rmi,
+        ".s3m": .s3m,
+        ".sid": .sid,
+        ".sndX": .sndX,
+        ".tsi": .tsi, ".tsp": .tsi,
+        ".voc": .voc,
+        ".vox": .vox,
+        ".vqe": .vqe, ".vql": .vql,
+        ".vqf": .vqf,
+        ".wav": .wav, ".wavX": .wavX,
+        "webm": .webm,
+        ".xm": .xm
+    ]
+
 }
 
-extension Audio {
+public extension Audio {
     /// `AudioType` is an enumeration that defines a list of audio file types.
     /// Each case in the enum represents a different audio format, and the
     /// raw value of each case is the MIME type associated with that format.
-    public enum AudioType: String {
+    enum AudioType: String {
         /// - aac: Advanced Audio Coding
         /// Known for its efficiency and quality, often used in Apple products.
         case aac = "audio/aac"
@@ -236,111 +280,16 @@ extension Audio {
         case xm = "audio/xm" // swiftlint:disable:this identifier_name
     }
 
-    // swiftlint:disable function_body_length
     /// Determines the audio file type based on the file extension present in the filename.
     /// - Parameter filename: The name of the file, including its extension.
     /// - Returns: An optional `AudioType` corresponding to the file extension.
     ///            Returns `nil` if the extension does not match any known audio types.
-    public func audioTypes(for filename: String) -> AudioType? {
-        switch filename {
-        case let name where name.contains(".aac"):
-            .aac
-        case let name where name.contains(".aifc"):
-            .aifc
-        case let name where name.contains(".aif"):
-            .aif
-        case let name where name.contains(".au"),
-             let name where name.contains(".snd"):
-            .au
-        case let name where name.contains(".flac"):
-            .flac
-        case let name where name.contains(".funk"),
-             let name where name.contains(".my"),
-             let name where name.contains(".pfunk"):
-            .funk
-        case let name where name.contains(".gsd"),
-             let name where name.contains(".gsm"):
-            .gsd
-        case let name where name.contains(".it"):
-            .it
-        case let name where name.contains(".jam"):
-            .jam
-        case let name where name.contains(".kar"),
-             let name where name.contains(".mid"):
-            .kar
-        case let name where name.contains(".la"),
-             let name where name.contains(".lma"):
-            .la
-        case let name where name.contains(".lam"):
-            .lam
-        case let name where name.contains(".m3u"):
-            .m3u
-        case let name where name.contains(".mka"):
-            .mka
-        case let name where name.contains(".mod"):
-            .mod
-        case let name where name.contains(".mp2"),
-             let name where name.contains(".m2a"):
-            .mp2
-        case let name where name.contains(".mp3"):
-            .mp3
-        case let name where name.contains(".mp4"):
-            .m4a
-        case let name where name.contains(".midi"):
-            .midi
-        case let name where name.contains(".mjf"):
-            .mjf
-        case let name where name.contains(".midX"):
-            .midX
-        case let name where name.contains(".ogg"):
-            .ogg
-        case let name where name.contains(".opus"):
-            .opus
-        case let name where name.contains(".pfunkMyFunk"):
-            .pfunkMyFunk
-        case let name where name.contains(".qcp"):
-            .qcp
-        case let name where name.contains(".ra"),
-             let name where name.contains(".ram"),
-             let name where name.contains(".rm"),
-             let name where name.contains(".rmm"),
-             let name where name.contains(".rmp"):
-            .ra
-        case let name where name.contains(".raPlugin"),
-             let name where name.contains(".rmpPlugin"),
-             let name where name.contains(".rpm"):
-            .raPlugin
-        case let name where name.contains(".rmi"):
-            .rmi
-        case let name where name.contains(".s3m"):
-            .s3m
-        case let name where name.contains(".sid"):
-            .sid
-        case let name where name.contains(".sndX"):
-            .sndX
-        case let name where name.contains(".tsi"),
-             let name where name.contains(".tsp"):
-            .tsi
-        case let name where name.contains(".voc"):
-            .voc
-        case let name where name.contains(".vox"):
-            .vox
-        case let name where name.contains(".vqe"),
-             let name where name.contains(".vql"):
-            .vqe
-        case let name where name.contains(".vqf"):
-            .vqf
-        case let name where name.contains(".wav"):
-            .wav
-        case let name where name.contains(".wavX"):
-            .wavX
-        case let name where name.contains(".webm"):
-            .webm
-        case let name where name.contains(".xm"):
-            .xm
-        default:
-            nil
+
+    func audioTypes(for filename: String) -> AudioType? {
+        for (fileExtension, type) in audioTypeMapping where filename.contains(fileExtension) {
+            return type
         }
+        return nil
     }
-    // swiftlint:enable function_body_length
+
 }

@@ -14,10 +14,10 @@ public protocol LazyLoadable where Self: PageElement {
     func lazy() -> Self
 }
 
-extension LazyLoadable {
+public extension LazyLoadable {
     /// Enables lazy loading for this element.
     /// - Returns: A copy of the current element with lazy loading enabled.
-    public func lazy() -> Self {
+    func lazy() -> Self {
         self.addCustomAttribute(name: "loading", value: "lazy")
     }
 }

@@ -28,4 +28,3 @@ public struct DismissModal: Action {
         """
     }
 }
-

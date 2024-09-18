@@ -7,10 +7,10 @@
 
 import Foundation
 
-extension PageElement {
+public extension PageElement {
     /// Adds a label to an arbitrary element. Specific types override this in places
     /// where accessibility labels need exact forms, e.g. alt text for images.
-    public func accessibilityLabel(_ label: String) -> Self {
+    func accessibilityLabel(_ label: String) -> Self {
         self.aria("label", label)
     }
 }

@@ -200,10 +200,6 @@ public struct Card: BlockElement {
         copy.imageOpacity = opacity
         return copy
     }
-
-    /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
-    /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         Group {
             if let image, contentPosition.addImageFirst {
@@ -217,37 +213,11 @@ public struct Card: BlockElement {
                 }
             }
 
-            if header.isEmpty == false {
-                Group {
-                    for item in header {
-                        item
-                    }
-                }
-                .class("card-header")
-            }
+            renderHeader()
 
-            Group {
-                for item in items {
-                    switch item {
-                    case let textItem as Text:
-                        switch textItem.font {
-                        case .body, .lead:
-                            item.class("card-text")
-                        default:
-                            item.class("card-title")
-                        }
-                    case is Link:
-                        item.class("card-link")
-                    case is Image:
-                        item.class("card-img")
-                    default:
-                        item
-                    }
-                }
-            }
-            .class(contentPosition.bodyClasses)
+            renderItems()
 
-            if let image, !contentPosition.addImageFirst {
+            if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
@@ -258,18 +228,58 @@ public struct Card: BlockElement {
                 }
             }
 
-            if footer.isEmpty == false {
-                Group {
-                    for item in footer {
-                        item
-                    }
-                }
-                .class("card-footer", "text-body-secondary")
-            }
+            renderFooter()
         }
         .attributes(attributes)
         .class("card")
         .class(cardClasses)
         .render(context: context)
+    }
+
+    private func renderHeader() -> Group {
+        if header.isEmpty == false {
+            return Group {
+                for item in header {
+                    item
+                }
+            }
+            .class("card-header")
+        }
+        return Group {}
+    }
+
+    private func renderItems() -> Group {
+        Group {
+            for item in items {
+                switch item {
+                case let textItem as Text:
+                    switch textItem.font {
+                    case .body, .lead:
+                        item.class("card-text")
+                    default:
+                        item.class("card-title")
+                    }
+                case is Link:
+                    item.class("card-link")
+                case is Image:
+                    item.class("card-img")
+                default:
+                    item
+                }
+            }
+        }
+        .class(contentPosition.bodyClasses)
+    }
+
+    private func renderFooter() -> Group {
+        if footer.isEmpty == false {
+            return Group {
+                for item in footer {
+                    item
+                }
+            }
+            .class("card-footer", "text-body-secondary")
+        }
+        return Group {}
     }
 }

@@ -21,7 +21,7 @@ public struct CoreAttributes {
     var classes = [String]()
 
     /// Inline CSS styles.
-    var styles = [String]()
+    var styles = [AttributeValue]()
 
     /// data- attributes.
     var data = [AttributeValue]()
@@ -74,9 +74,10 @@ public struct CoreAttributes {
     /// All inline CSS styles for this element collapsed down to a string.
     var styleString: String {
         if styles.isEmpty {
-            ""
+            return ""
         } else {
-            " style=\"\(styles.joined(separator: "; "))\""
+            let stringified = styles.map { "\($0.name): \($0.value)" }.joined(separator: "; ")
+            return "style=\"\(stringified)\""
         }
     }
 
@@ -152,11 +153,16 @@ public struct CoreAttributes {
         return copy
     }
 
-    /// Returns a new set of attributes with extra inline CSS styles appended.
+    /// Appends multiple extra inline CSS styles.
     /// - Parameter classes: The inline CSS styles to append.
-    /// - Returns: A copy of the previous `CoreAttributes` object with
-    /// the extra inline CSS styles applied.
-    mutating func append(styles: String...) {
+    mutating func append(styles: AttributeValue...) {
         self.styles.append(contentsOf: styles)
+    }
+
+    /// Appends a single extra inline CSS style.
+    ///  - Parameter style: The style name, e.g. background-color
+    ///  - Parameter value: The style value, e.g. steelblue
+    mutating func append(style: String, value: String) {
+        self.styles.append(AttributeValue(name: style, value: value))
     }
 }

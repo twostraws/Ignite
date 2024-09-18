@@ -12,7 +12,7 @@ import XCTest
 
 /// Tests for the `Image` element.
 final class SubsiteImageTests: ElementTest {
- 
+
     func test_image_named() {
         let element = Image("/images/example.jpg", description: "Example image")
         let output = element.render(context: publishingSubsiteContext)
@@ -26,5 +26,4 @@ final class SubsiteImageTests: ElementTest {
 
         XCTAssertEqual(output, "<i class=\"bi-browser-safari\"></i>")
     }
-    
 }

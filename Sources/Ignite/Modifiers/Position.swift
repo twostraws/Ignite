@@ -27,13 +27,13 @@ public enum Position: String {
     case stickyBottom = "sticky-bottom"
 }
 
-extension BlockElement {
+public extension BlockElement {
 
     /// Adjusts the rendering position for this element, using a handful of
     /// specific, known position values.
     /// - Parameter newPosition: A `Position` case to use for this element.
     /// - Returns: A copy of this element with the new position applied.
-    public func position(_ newPosition: Position) -> Self {
+    func position(_ newPosition: Position) -> Self {
         self.class(newPosition.rawValue)
     }
 }

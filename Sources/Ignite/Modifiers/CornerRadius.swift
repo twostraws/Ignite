@@ -7,12 +7,12 @@
 
 import Foundation
 
-extension PageElement {
+public extension PageElement {
     /// Rounds all edges of this object by some value specified as a string.
     /// - Parameter length: A string with rounding of your choosing, such as
     /// "50%".
     /// - Returns: The current element with the updated corner radius applied.
-    public func cornerRadius(_ length: String) -> Self {
+    func cornerRadius(_ length: String) -> Self {
         self.cornerRadius(.all, length)
     }
 
@@ -20,7 +20,7 @@ extension PageElement {
     /// - Parameter length: An integer specifying a pixel amount to
     /// round corners with.
     /// - Returns: The current element with the updated corner radius applied.
-    public func cornerRadius(_ length: Int) -> Self {
+    func cornerRadius(_ length: Int) -> Self {
         self.cornerRadius(.all, "\(length)px")
     }
 
@@ -28,7 +28,7 @@ extension PageElement {
     /// - Parameter length: A string with rounding of your choosing, such as
     /// "50%".
     /// - Returns: The current element with the updated corner radius applied.
-    public func cornerRadius(_ edges: DiagonalEdge, _ length: String) -> Self {
+    func cornerRadius(_ edges: DiagonalEdge, _ length: String) -> Self {
         if edges.contains(.all) {
             return self.style("border-radius: \(length)")
         }
@@ -58,7 +58,7 @@ extension PageElement {
     /// - Parameter length: An integer specifying a pixel amount to
     /// round corners with.
     /// - Returns: The current element with the updated corner radius applied.
-    public func cornerRadius(_ edges: DiagonalEdge, _ length: Int) -> Self {
+    func cornerRadius(_ edges: DiagonalEdge, _ length: Int) -> Self {
         self.cornerRadius(edges, "\(length)px")
     }
 }

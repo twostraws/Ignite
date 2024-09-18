@@ -70,7 +70,7 @@ public struct Head: HTMLRootElement {
         MetaTag.generator
 
         Title(page.title)
-        
+
         if context.site.useDefaultBootstrapURLs == .localBootstrap {
             MetaLink.standardCSS
         } else if context.site.useDefaultBootstrapURLs == .remoteBootstrap {
@@ -80,7 +80,7 @@ public struct Head: HTMLRootElement {
         if context.site.syntaxHighlighters.isEmpty == false {
             MetaLink.syntaxHighlightingCSS
         }
-        
+
         if context.site.builtInIconsEnabled == .localBootstrap {
             MetaLink.iconCSS
         } else if context.site.builtInIconsEnabled == .remoteBootstrap {
