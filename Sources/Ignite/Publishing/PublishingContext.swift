@@ -74,7 +74,7 @@ public class PublishingContext {
     init(for site: any Site, from file: StaticString, buildDirectoryPath: String = "Build") throws {
         self.site = site
 
-        rootDirectory = try URL.packageDirectory(from: file)
+        rootDirectory = try URL.selectSiteRootDirectory(from: file)
         assetsDirectory = rootDirectory.appending(path: "Assets")
         contentDirectory = rootDirectory.appending(path: "Content")
         includesDirectory = rootDirectory.appending(path: "Includes")
@@ -161,12 +161,11 @@ public class PublishingContext {
 
     /// Removes all content from the Build folder, so we're okay to recreate it.
     func clearBuildFolder() throws {
-        if FileManager.default.fileExists(atPath: buildDirectory.path()) {
-            do {
-                try FileManager.default.removeItem(at: buildDirectory)
-            } catch {
-                throw PublishingError.failedToRemoveBuildDirectory(buildDirectory)
-            }
+        do {
+            // Apple's docs for fileExists() recommend _not_ to check existence and then make change to file system
+            try FileManager.default.removeItem(at: buildDirectory)
+        } catch {
+            print("Could not remove buildDirectory (\(buildDirectory)), but it will be re-created anyway.")
         }
 
         do {
