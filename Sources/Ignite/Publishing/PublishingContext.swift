@@ -196,11 +196,11 @@ public class PublishingContext {
             try copy(resource: "js/bootstrap.bundle.min.js")
         }
 
-        if site.builtInIconsEnabled == .localBootstrap {
+//        if site.builtInIconsEnabled == .localBootstrap { TODO
             try copy(resource: "css/bootstrap-icons.min.css")
             try copy(resource: "fonts/bootstrap-icons.woff")
             try copy(resource: "fonts/bootstrap-icons.woff2")
-        }
+//        }
 
         if site.syntaxHighlighters.isEmpty == false {
             try copySyntaxHighlighters()
