@@ -151,6 +151,73 @@ Ignite sites are just Swift package, but they use a specific folder structure to
 
 This folder structure is already in place in the [Ignite Starter Template](https://github.com/twostraws/IgniteStarter) repository, and I recommend you start with that.
 
+## Create a layout to render your markdown files
+As metioned above, adding markdown files to **Content** will render these to html pages and include them in **Build** with their respective folder structure (minus the **Content**).
+
+Adding a new file called `apps.md` to content …
+```bash
+├── Content
+│   └── apps.md
+```
+… adds this structure to **Build**:
+```bash
+├── Build
+│   ├── …
+│   ├── apps
+│   │   └── index.html
+│   ├── …
+```
+**A precondition for this to work is to have a layout availabe.** Failing to having bound in such a layout will result in the following warning when running the package in Xcode:
+```
+Your site must provide at least one layout in order to render Markdown.
+```
+Such a layout can look like this:
+```swift
+import Foundation
+import Ignite
+
+struct Layout: ContentPage {
+    func body(content: Content, context: PublishingContext) -> [any BlockElement] {
+        Text(content.title)
+            .font(.title1)
+
+        if let image = content.image {
+            Image(image, description: content.imageDescription)
+                .resizable()
+                .cornerRadius(20)
+                .frame(maxHeight: 300)
+                .horizontalAlignment(.center)
+        }
+
+        if content.hasTags {
+            Group {
+                Text("Tagged with: \(content.tags.joined(separator: ", "))")
+
+                Text("\(content.estimatedWordCount) words; \(content.estimatedReadingMinutes) minutes to read.")
+            }
+        }
+
+        Text(content.body)
+    }
+}
+```
+What remains to be done is to include this layout into the `Site`. This can be done by adding this new layout to the `layouts` property of the site:
+```swift
+struct ExampleSite: Site {    
+  var name = "Hello World"
+  var titleSuffix = " – My Awesome Site"
+  var url: URL = URL("https://www.example.com")
+  var builtInIconsEnabled = true
+  
+  var author = "John Appleseed"
+  
+  var homePage = Home()
+  var theme = MyTheme()
+  var layouts: [any ContentPage] {
+    Layout()
+  }
+}
+```
 
 ## Using the command-line tool
 
