@@ -62,7 +62,7 @@ public struct ContentPreview: BlockElement {
         } footer: {
             let tagLinks = content.tagLinks(in: context)
 
-            if !tagLinks.isEmpty {
+            if tagLinks.isEmpty == false {
                 Group {
                     tagLinks
                 }
