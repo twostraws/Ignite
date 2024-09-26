@@ -151,15 +151,19 @@ Ignite sites are just Swift package, but they use a specific folder structure to
 
 This folder structure is already in place in the [Ignite Starter Template](https://github.com/twostraws/IgniteStarter) repository, and I recommend you start with that.
 
-## Create a layout to render your markdown files
-As metioned above, adding markdown files to **Content** will render these to html pages and include them in **Build** with their respective folder structure (minus the **Content**).
+## Create a layout to render Markdown files
 
-Adding a new file called `apps.md` to content …
+Adding Markdown files to **Content** will render these to HTML pages and include them in **Build** with their respective folder structure, minus the **Content** part.
+
+For example, adding a new file called `apps.md` to **Content** means having this folder structure:
+
 ```bash
 ├── Content
 │   └── apps.md
 ```
-… adds this structure to **Build**:
+
+And it results inn this **Build** structure:
+
 ```bash
 ├── Build
 │   ├── …
@@ -167,11 +171,11 @@ Adding a new file called `apps.md` to content …
 │   │   └── index.html
 │   ├── …
 ```
-**A precondition for this to work is to have a layout availabe.** Failing to having bound in such a layout will result in the following warning when running the package in Xcode:
-```
-Your site must provide at least one layout in order to render Markdown.
-```
-Such a layout can look like this:
+
+**A precondition for this to work is to have a layout available to render your content.** If you don't have a valid layout in place, Ignite will issue a warning saying "Your site must provide at least one layout in order to render Markdown."
+
+You can create custom layouts by making types conform to the `ContentPage` protocol. For example:
+
 ```swift
 import Foundation
 import Ignite
@@ -201,23 +205,24 @@ struct Layout: ContentPage {
     }
 }
 ```
-What remains to be done is to include this layout into the `Site`. This can be done by adding this new layout to the `layouts` property of the site:
+
+Once you've defined a custom layout, you should add it to your `Site` struct. This can be done by adding this new layout to the `layouts` property of the site, like this:
+
 ```swift
 struct ExampleSite: Site {    
-  var name = "Hello World"
-  var titleSuffix = " – My Awesome Site"
-  var url: URL = URL("https://www.example.com")
-  var builtInIconsEnabled = true
-  
-  var author = "John Appleseed"
-  
-  var homePage = Home()
-  var theme = MyTheme()
-  var layouts: [any ContentPage] {
-    Layout()
-  }
+    var name = "Hello World"
+    var url: URL = URL("https://www.example.com")
+
+    var homePage = Home()
+    var theme = MyTheme()
+
+    /* This part adds the custom layout */
+    var layouts: [any ContentPage] {
+        Layout()
+    }
 }
 ```
+
 
 ## Using the command-line tool
 
