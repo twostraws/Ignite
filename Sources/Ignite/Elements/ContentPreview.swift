@@ -18,39 +18,57 @@ public struct ContentPreview: BlockElement {
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
-    public var customBlockElement: ((Content) -> BlockElement)?
 
-    public init(for content: Content, customBlockElement: ((Content) -> BlockElement)? = nil) {
+    /// The layout block element for rendering the preview. Defaults to a card if not provided.
+    public var customLayout: ((Content) -> BlockElement)?
+
+    /// Initializes the content preview with an optional custom layout.
+    /// - Parameters:
+    ///   - content: The content to display.
+    ///   - customLayout: An optional closure for custom layout.
+    public init(for content: Content, customLayout: ((Content) -> BlockElement)? = nil) {
         self.content = content
-        self.customBlockElement = customBlockElement
+        self.customLayout = customLayout
     }
 
+    /// Renders the content preview with either a custom layout or the default card.
+    /// - Parameter context: The publishing context for rendering.
+    /// - Returns: A rendered string of HTML.
     public func render(context: PublishingContext) -> String {
-        if let customBlockElement {
-            customBlockElement(content)
+        // Rendering using either custom layout or default card layout.
+        if let customLayout {
+            return customLayout(content)
                 .attributes(attributes)
                 .render(context: context)
         } else {
-            Card(imageName: content.image) {
-                Text(content.description)
-                    .margin(.bottom, .none)
-            } header: {
-                Text {
-                    Link(content)
-                }
-                .font(.title2)
-            } footer: {
-                let tagLinks = content.tagLinks(in: context)
-
-                if tagLinks.isEmpty == false {
-                    Group {
-                        tagLinks
-                    }
-                    .style("margin-top: -5px")
-                }
-            }
-            .attributes(attributes)
-            .render(context: context)
+            return defaultCardLayout(context: context)
+                .attributes(attributes)
+                .render(context: context)
         }
     }
+
+    /// Default card layout for rendering the content preview.
+    /// - Parameter context: The publishing context for rendering tag links.
+    /// - Returns: A BlockElement representing the card layout.
+    private func defaultCardLayout(context: PublishingContext) -> BlockElement {
+        Card(imageName: content.image) {
+            Text(content.description)
+                .margin(.bottom, .none)
+        } header: {
+            Text {
+                Link(content)
+            }
+            .font(.title2)
+        } footer: {
+            let tagLinks = content.tagLinks(in: context)
+
+            if !tagLinks.isEmpty {
+                Group {
+                    tagLinks
+                }
+                .style("margin-top: -5px")
+            }
+        }
+    }
+    
 }
