@@ -12,7 +12,7 @@ extension PublishingContext {
     /// - Parameter resource: The file to look for, e.g. "quotes.json"
     /// - Returns: The URL, if the file can be found.
     public func url(forResource resource: String) -> URL? {
-        let fullURL = rootDirectory.appending(path: "Resources/\(resource)")
+        let fullURL = sourceDirectory.appending(path: "Resources/\(resource)")
 
         if FileManager.default.fileExists(atPath: fullURL.path()) {
             return fullURL
