@@ -18,31 +18,39 @@ public struct ContentPreview: BlockElement {
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
+    public var customBlockElement: ((Content) -> BlockElement)?
 
-    public init(for content: Content) {
+    public init(for content: Content, customBlockElement: ((Content) -> BlockElement)? = nil) {
         self.content = content
+        self.customBlockElement = customBlockElement
     }
 
     public func render(context: PublishingContext) -> String {
-        Card(imageName: content.image) {
-            Text(content.description)
-                .margin(.bottom, .none)
-        } header: {
-            Text {
-                Link(content)
-            }
-            .font(.title2)
-        } footer: {
-            let tagLinks = content.tagLinks(in: context)
-
-            if tagLinks.isEmpty == false {
-                Group {
-                    tagLinks
+        if let customBlockElement {
+            customBlockElement(content)
+                .attributes(attributes)
+                .render(context: context)
+        } else {
+            Card(imageName: content.image) {
+                Text(content.description)
+                    .margin(.bottom, .none)
+            } header: {
+                Text {
+                    Link(content)
                 }
-                .style("margin-top: -5px")
+                .font(.title2)
+            } footer: {
+                let tagLinks = content.tagLinks(in: context)
+
+                if tagLinks.isEmpty == false {
+                    Group {
+                        tagLinks
+                    }
+                    .style("margin-top: -5px")
+                }
             }
+            .attributes(attributes)
+            .render(context: context)
         }
-        .attributes(attributes)
-        .render(context: context)
     }
 }
