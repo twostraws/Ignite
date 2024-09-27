@@ -151,6 +151,78 @@ Ignite sites are just Swift package, but they use a specific folder structure to
 
 This folder structure is already in place in the [Ignite Starter Template](https://github.com/twostraws/IgniteStarter) repository, and I recommend you start with that.
 
+## Create a layout to render Markdown files
+
+Adding Markdown files to **Content** will render these to HTML pages and include them in **Build** with their respective folder structure, minus the **Content** part.
+
+For example, adding a new file called `apps.md` to **Content** means having this folder structure:
+
+```bash
+├── Content
+│   └── apps.md
+```
+
+And it results inn this **Build** structure:
+
+```bash
+├── Build
+│   ├── …
+│   ├── apps
+│   │   └── index.html
+│   ├── …
+```
+
+**A precondition for this to work is to have a layout available to render your content.** If you don't have a valid layout in place, Ignite will issue a warning saying "Your site must provide at least one layout in order to render Markdown."
+
+You can create custom layouts by making types conform to the `ContentPage` protocol. For example:
+
+```swift
+import Foundation
+import Ignite
+
+struct Layout: ContentPage {
+    func body(content: Content, context: PublishingContext) -> [any BlockElement] {
+        Text(content.title)
+            .font(.title1)
+
+        if let image = content.image {
+            Image(image, description: content.imageDescription)
+                .resizable()
+                .cornerRadius(20)
+                .frame(maxHeight: 300)
+                .horizontalAlignment(.center)
+        }
+
+        if content.hasTags {
+            Group {
+                Text("Tagged with: \(content.tags.joined(separator: ", "))")
+
+                Text("\(content.estimatedWordCount) words; \(content.estimatedReadingMinutes) minutes to read.")
+            }
+        }
+
+        Text(content.body)
+    }
+}
+```
+
+Once you've defined a custom layout, you should add it to your `Site` struct. This can be done by adding this new layout to the `layouts` property of the site, like this:
+
+```swift
+struct ExampleSite: Site {    
+    var name = "Hello World"
+    var url: URL = URL("https://www.example.com")
+
+    var homePage = Home()
+    var theme = MyTheme()
+
+    /* This part adds the custom layout */
+    var layouts: [any ContentPage] {
+        Layout()
+    }
+}
+```
+
 
 ## Using the command-line tool
 
@@ -197,6 +269,7 @@ That will launch a local web server you should use to preview your site, and als
 | Website                | Repository                                |
 |------------------------|-------------------------------------------|
 | [jcalderita Portfolio](https://jcalderita.com) | [GitHub](https://github.com/jcalderita/portfolio-web-ignite) |
+| [Fotogroep de Gender](http://www.vdhamer.com/fgDeGender) | [GitHub](https://github.com/vdhamer/Photo-Club-Hub-HTML) |
 
 
 ## Contributing

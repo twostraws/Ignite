@@ -15,7 +15,7 @@ public class PublishingContext {
     public var site: any Site
 
     /// The root directory for the user's website package.
-    var rootDirectory: URL
+    var sourceDirectory: URL
 
     /// The directory containing their custom assets.
     var assetsDirectory: URL
@@ -45,25 +45,6 @@ public class PublishingContext {
     /// control!)
     private(set) var siteMap = [Location]()
 
-    /// Creates a new publishing context for a specific site, setting a root URL.
-    /// - Parameters:
-    ///   - site: The site we're currently publishing.
-    ///   - rootURL: The URL of the root directory, where other key
-    ///   folders are located.
-    ///   - buildDirectoryPath: The path where the artifacts are generated.
-    ///   The default is "Build".
-    init(for site: any Site, rootURL: URL, buildDirectoryPath: String = "Build") throws {
-        self.site = site
-
-        self.rootDirectory = rootURL
-        assetsDirectory = rootDirectory.appending(path: "Assets")
-        contentDirectory = rootDirectory.appending(path: "Content")
-        includesDirectory = rootDirectory.appending(path: "Includes")
-        buildDirectory = rootDirectory.appending(path: buildDirectoryPath)
-
-        try parseContent()
-    }
-
     /// Creates a new publishing context for a specific site, providing the path to
     /// one of the user's file. This then navigates upwards to find the root directory.
     /// - Parameters:
@@ -74,11 +55,13 @@ public class PublishingContext {
     init(for site: any Site, from file: StaticString, buildDirectoryPath: String = "Build") throws {
         self.site = site
 
-        rootDirectory = try URL.selectSiteRootDirectory(from: file)
-        assetsDirectory = rootDirectory.appending(path: "Assets")
-        contentDirectory = rootDirectory.appending(path: "Content")
-        includesDirectory = rootDirectory.appending(path: "Includes")
-        buildDirectory = rootDirectory.appending(path: buildDirectoryPath)
+        let sourceBuildDirectories = try URL.selectDirectories(from: file)
+        sourceDirectory = sourceBuildDirectories.source
+        buildDirectory = sourceBuildDirectories.build.appending(path: buildDirectoryPath)
+
+        assetsDirectory = sourceDirectory.appending(path: "Assets")
+        contentDirectory = sourceDirectory.appending(path: "Content")
+        includesDirectory = sourceDirectory.appending(path: "Includes")
 
         try parseContent()
     }
@@ -179,16 +162,21 @@ public class PublishingContext {
     /// and CSS, icons CSS and fonts if enabled, and syntax highlighters
     /// if enabled.
     func copyResources() throws {
-        let assets = try FileManager.default.contentsOfDirectory(
-            at: assetsDirectory,
-            includingPropertiesForKeys: nil
-        )
-
-        for asset in assets {
-            try FileManager.default.copyItem(
-                at: assetsDirectory.appending(path: asset.lastPathComponent),
-                to: buildDirectory.appending(path: asset.lastPathComponent)
+        do {
+            let assets = try FileManager.default.contentsOfDirectory(
+                at: assetsDirectory,
+                includingPropertiesForKeys: nil
             )
+
+            for asset in assets {
+                try FileManager.default.copyItem(
+                    at: assetsDirectory.appending(path: asset.lastPathComponent),
+                    to: buildDirectory.appending(path: asset.lastPathComponent)
+                )
+            }
+        } catch {
+            print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
+            throw error
         }
 
         if site.useDefaultBootstrapURLs == .localBootstrap {
