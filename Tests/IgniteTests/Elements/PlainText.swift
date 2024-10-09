@@ -7,15 +7,19 @@
 
 import Foundation
 
-import XCTest
+import Testing
 @testable import Ignite
 
 /// Tests for plain text.
-final class PlainTextTests: ElementTest {
-    func test_singleElement() {
+@Suite("Plain Text Tests")
+struct PlainTextTests {
+    /// A publishing context with sample values for root site tests.
+    let publishingContext = try! PublishingContext(for: TestSite(), from: "Test Site")
+    @Test("Single Element")
+    func test_singleElement() async throws {
         let element = "This is a test"
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "This is a test")
+        #expect(output == "This is a test")
     }
 }

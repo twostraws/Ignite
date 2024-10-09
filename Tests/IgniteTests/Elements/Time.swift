@@ -7,19 +7,23 @@
 
 import Foundation
 
-import XCTest
+import Testing
 @testable import Ignite
 
 /// Tests for the `time` element.
-final class TimeTests: ElementTest {
-    func test_without_datetime() {
+@Suite("Time Tests")
+struct TimeTests {
+    /// A publishing context with sample values for root site tests.
+    let publishingContext = try! PublishingContext(for: TestSite(), from: "Test Site")
+    @Test("Without DateTime Test")
+    func test_without_datetime() async throws {
         let element = Time("This is a test")
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<time>This is a test</time>")
+        #expect(output == "<time>This is a test</time>")
     }
-
-    func test_builder() {
+    @Test("Builder Test")
+    func test_builder() async throws {
         guard let customTimeInterval = DateComponents(
             calendar: .current,
             timeZone: .gmt,
@@ -30,13 +34,13 @@ final class TimeTests: ElementTest {
             minute: 0,
             second: 30
         ).date?.timeIntervalSince1970 else {
-            XCTFail("Failed to create test data!")
+            Issue.record("Failed to create test data!")
             return
         }
         let dateTime = Date(timeIntervalSince1970: customTimeInterval)
         let element = Time(dateTime: dateTime) { "This is a test" }
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<time datetime=\"2024-05-22T20:00:30Z\">This is a test</time>")
+        #expect(output == "<time datetime=\"2024-05-22T20:00:30Z\">This is a test</time>")
     }
 }

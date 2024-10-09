@@ -5,28 +5,32 @@
 // See LICENSE for license information.
 //
 
-import XCTest
+import Testing
 @testable import Ignite
 
 /// Tests for the `Text` element.
-final class TextTests: ElementTest {
-    func test_simpleString() {
+@Suite("Text Tests")
+struct TextTests {
+    /// A publishing context with sample values for root site tests.
+    let publishingContext = try! PublishingContext(for: TestSite(), from: "Test Site")
+    @Test("Simple String Test")
+    func test_simpleString() async throws {
         let element = Text("Hello")
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<p>Hello</p>")
+        #expect(output == "<p>Hello</p>")
     }
-
-    func test_simpleBuilderString() {
+    @Test("Builder with Simple String Test")
+    func test_simpleBuilderString() async throws {
         let element = Text {
             "Hello"
         }
 
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<p>Hello</p>")
+        #expect(output == "<p>Hello</p>")
     }
-
+    @Test("Builder with Complex String Test")
     func test_complexBuilderString() {
         let element = Text {
             "Hello, "
@@ -45,28 +49,28 @@ final class TextTests: ElementTest {
 
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<p>Hello, <em>world</em><s> - <strong>this <u>is</u> a</strong> test!</s></p>")
+        #expect(output == "<p>Hello, <em>world</em><s> - <strong>this <u>is</u> a</strong> test!</s></p>")
     }
-
-    func test_customFont() {
+    @Test("Custom Font Test")
+    func test_customFont() async throws {
         for font in Font.allCases {
             let element = Text("Hello").font(font)
             let output = element.render(context: publishingContext)
 
             if font == .lead {
                 // This applies a paragraph class rather than a different tag.
-                XCTAssertEqual(output, "<p class=\"lead\">Hello</p>")
+                #expect(output == "<p class=\"lead\">Hello</p>")
             } else {
-                XCTAssertEqual(output, "<\(font.rawValue)>Hello</\(font.rawValue)>")
+                #expect(output == "<\(font.rawValue)>Hello</\(font.rawValue)>")
             }
         }
     }
-
-    func test_markdown() {
+    @Test("Markdown Test")
+    func test_markdown() async throws  {
         let element = Text(markdown: "Text in *italics*, text in **bold**, and text in ***bold italics***.")
         let output = element.render(context: publishingContext)
         // swiftlint:disable line_length
-        XCTAssertEqual(output, "<p>Text in <em>italics</em>, text in <strong>bold</strong>, and text in <em><strong>bold italics</strong></em>.</p>")
+        #expect(output == "<p>Text in <em>italics</em>, text in <strong>bold</strong>, and text in <em><strong>bold italics</strong></em>.</p>")
         // swiftlint:enable line_length
     }
 }

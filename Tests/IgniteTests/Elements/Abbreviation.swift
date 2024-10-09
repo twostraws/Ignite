@@ -7,26 +7,30 @@
 
 import Foundation
 
-import XCTest
+import Testing
 @testable import Ignite
 
 /// Tests for the `Abbreviation` element.
-final class AbbreviationTests: ElementTest {
-    func test_basic() {
+@Suite("Abbreviation Tests")
+struct AbbreviationTests {
+    /// A publishing context with sample values for root site tests.
+    let publishingContext = try! PublishingContext(for: TestSite(), from: "Test Site")
+    @Test("Basic Abbreviation Test")
+    func test_basic() async throws {
         let element = Abbreviation("abbr", description: "abbreviation")
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<abbr title=\"abbreviation\">abbr</abbr>")
+        #expect(output == "<abbr title=\"abbreviation\">abbr</abbr>")
     }
-
-    func test_singleElement() {
+    @Test("Single Element Abbreviation Test")
+    func test_singleElement() async throws {
         let element = Abbreviation(Strong("abbr"), description: "abbreviation")
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<abbr title=\"abbreviation\"><strong>abbr</strong></abbr>")
+        #expect(output == "<abbr title=\"abbreviation\"><strong>abbr</strong></abbr>")
     }
-
-    func test_builder() {
+    @Test("Builder Abbreviation Test")
+    func test_builder() async throws {
         let element = Abbreviation("abbreviation") {
             Strong {
                 "abbr"
@@ -35,6 +39,6 @@ final class AbbreviationTests: ElementTest {
 
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<abbr title=\"abbreviation\"><strong>abbr</strong></abbr>")
+        #expect(output == "<abbr title=\"abbreviation\"><strong>abbr</strong></abbr>")
     }
 }
