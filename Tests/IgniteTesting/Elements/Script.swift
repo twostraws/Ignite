@@ -5,31 +5,35 @@
 // See LICENSE for license information.
 //
 
-import XCTest
+import Testing
 @testable import Ignite
 
 /// Tests for the `Script` element.
-final class ScriptTests: ElementTest {
-    func test_code() {
+@Suite("Script Tests")
+struct ScriptTests {
+    /// A publishing context with sample values for root site tests.
+    let publishingContext = try! PublishingContext(for: TestSite(), from: "Test Site")
+    @Test("Code Test")
+    func test_code() async throws {
         let element = Script(code: "javascript code")
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<script>javascript code</script>")
+        #expect(output == "<script>javascript code</script>")
     }
-
-    func test_file() {
+    @Test("File Test")
+    func test_file() async throws {
         let element = Script(file: "/code.js")
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<script src=\"/code.js\"></script>")
+        #expect(output == "<script src=\"/code.js\"></script>")
     }
-
-    func test_attributes() {
+    @Test("Attributes Test")
+    func test_attributes() async throws {
         let element = Script(file: "/code.js")
             .data("key", "value")
             .addCustomAttribute(name: "custom", value: "part")
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<script custom=\"part\" data-key=\"value\" src=\"/code.js\"></script>")
+        #expect(output == "<script custom=\"part\" data-key=\"value\" src=\"/code.js\"></script>")
     }
 }

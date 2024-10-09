@@ -7,26 +7,22 @@
 
 import Foundation
 
-import Testing
+import XCTest
 @testable import Ignite
 
 /// Tests for the `title` element.
-@Suite("Title Tests")
-struct TitleTests {
-    /// A publishing context with sample values for root site tests.
-    let publishingContext = try! PublishingContext(for: TestSite(), from: "Test Site")
-    @Test("Empty Title Test")
-    func test_empty() async throws {
+final class TitleTests: ElementTest {
+    func test_empty() {
         let element = Title("")
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<title> - My Test Site</title>")
+        XCTAssertEqual(output, "<title> - My Test Site</title>")
     }
-    @Test("Builder Test")
-    func test_builder() async throws {
+
+    func test_builder() {
         let element = Title("Example Page")
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<title>Example Page - My Test Site</title>")
+        XCTAssertEqual(output, "<title>Example Page - My Test Site</title>")
     }
 }

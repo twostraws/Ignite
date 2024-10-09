@@ -7,33 +7,37 @@
 
 import Foundation
 
-import XCTest
+import Testing
 @testable import Ignite
 
 /// Tests for the `title` element.
-final class SubsiteLinkTests: ElementTest {
+@Suite("Subscribe Link Tests")
+struct SubsiteLinkTests {
+    /// A publishing context with sample values for subsite tests.
+    let publishingSubsiteContext = try! PublishingContext(for: TestSubsite(), from: "Test Subsite")
 
-    func test_string_target() {
+    @Test("String Target Test")
+    func test_string_target() async throws {
         let element = Link("Go Home", target: "/")
         let output = element.render(context: publishingSubsiteContext)
 
-        XCTAssertEqual(output, "<a href=\"/subsite/\">Go Home</a>")
+        #expect(output == "<a href=\"/subsite/\">Go Home</a>")
     }
-
-    func test_page_target () {
+    @Test("Page Target Test")
+    func test_page_target () async throws {
         let element = Link("This is a test", target: TestPage()).linkStyle(.button)
         let output = element.render(context: publishingSubsiteContext)
 
-        XCTAssertEqual(output, "<a href=\"/subsite/test-page\" class=\"btn btn-primary\">This is a test</a>")
+        #expect(output == "<a href=\"/subsite/test-page\" class=\"btn btn-primary\">This is a test</a>")
     }
-
-    func test_page_content () {
+    @Test("Page Content Test")
+    func test_page_content () async throws {
         let element = Link(target: TestPage(),
                            content: { "MORE "
             Text("CONTENT") })
         let output = element.render(context: publishingSubsiteContext)
 
-        XCTAssertEqual(output, "<a href=\"/subsite/test-page\">MORE <p>CONTENT</p></a>")
+        #expect(output == "<a href=\"/subsite/test-page\">MORE <p>CONTENT</p></a>")
     }
 
 }

@@ -7,17 +7,21 @@
 
 import Foundation
 
-import XCTest
+import Testing
 @testable import Ignite
 
 /// Tests for the `title` element.
-final class SubsiteScriptTests: ElementTest {
+@Suite("Subsite Script Tests")
+struct SubsiteScriptTests {
+    /// A publishing context with sample values for subsite tests.
+    let publishingSubsiteContext = try! PublishingContext(for: TestSubsite(), from: "Test Subsite")
 
-    func test_empty() {
+    @Test("Empty Element")
+    func test_empty() async throws {
         let element = Script(file: "/js/bootstrap.bundle.min.js").render(context: publishingSubsiteContext)
         let output = element.render(context: publishingSubsiteContext)
 
-        XCTAssertEqual(output, "<script src=\"/subsite/js/bootstrap.bundle.min.js\"></script>")
+        #expect(output == "<script src=\"/subsite/js/bootstrap.bundle.min.js\"></script>")
     }
 
 }

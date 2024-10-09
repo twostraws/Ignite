@@ -7,24 +7,27 @@
 
 import Foundation
 
-import XCTest
+import Testing
 @testable import Ignite
 
 /// Tests for the `Image` element.
-final class SubsiteImageTests: ElementTest {
- 
-    func test_image_named() {
+@Suite("Subsite Image Tests")
+struct SubsiteImageTests {
+    /// A publishing context with sample values for subsite tests.
+    let publishingSubsiteContext = try! PublishingContext(for: TestSubsite(), from: "Test Subsite")
+
+    @Test("Image Test")
+    func test_image_named() async throws {
         let element = Image("/images/example.jpg", description: "Example image")
         let output = element.render(context: publishingSubsiteContext)
 
-        XCTAssertEqual(output, "<img src=\"/subsite/images/example.jpg\" alt=\"Example image\"/>")
+        #expect(output == "<img src=\"/subsite/images/example.jpg\" alt=\"Example image\"/>")
     }
-
-    func test_image_icon() {
+    @Test("Icon Test")
+    func test_image_icon() async throws {
         let element = Image(systemName: "browser-safari", description: "Safari logo")
         let output = element.render(context: publishingSubsiteContext)
 
-        XCTAssertEqual(output, "<i class=\"bi-browser-safari\"></i>")
+        #expect(output == "<i class=\"bi-browser-safari\"></i>")
     }
-    
 }

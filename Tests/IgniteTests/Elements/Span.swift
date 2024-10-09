@@ -7,26 +7,22 @@
 
 import Foundation
 
-import Testing
+import XCTest
 @testable import Ignite
 
 /// Tests for the `Span` element.
-@Suite("Span Tests")
-struct SpanTests {
-    /// A publishing context with sample values for root site tests.
-    let publishingContext = try! PublishingContext(for: TestSite(), from: "Test Site")
-    @Test("Single Element Test")
-    func test_singleElement() async throws {
+final class SpanTests: ElementTest {
+    func test_singleElement() {
         let element = Span("This is a test")
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<span>This is a test</span>")
+        XCTAssertEqual(output, "<span>This is a test</span>")
     }
-    @Test("Builder Test")
-    func test_builder() async throws {
+
+    func test_builder() {
         let element = Span { "This is a test" }
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<span>This is a test</span>")
+        XCTAssertEqual(output, "<span>This is a test</span>")
     }
 }
