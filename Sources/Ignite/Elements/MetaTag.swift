@@ -9,7 +9,7 @@ import Foundation
 
 /// An item of metadata that helps browsers and search engines understand
 /// your page better.
-public struct MetaTag: HeadElement {
+public struct MetaTag: HeadElement, Sendable {
     /// Allows mobile browsers to scale this page appropriately for the device.
     public static let flexibleViewport = MetaTag(name: "viewport", content: "width=device-width, initial-scale=1")
 

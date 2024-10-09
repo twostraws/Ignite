@@ -8,7 +8,7 @@
 import Foundation
 
 /// A simple key-value pair of strings that is able to store custom attributes.
-public struct AttributeValue {
+public struct AttributeValue: Sendable {
     /// The attribute's name, e.g. "target" or "rel".
     var name: String
 

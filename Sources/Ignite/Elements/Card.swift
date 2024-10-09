@@ -22,8 +22,8 @@ public struct Card: BlockElement {
     }
 
     /// Where to position the content of the card relative to it image.
-    public enum ContentPosition: CaseIterable {
-        public static var allCases: [Card.ContentPosition] = [
+    public enum ContentPosition: CaseIterable, Sendable {
+        public static let allCases: [Card.ContentPosition] = [
             .bottom, .top, .overlay(alignment: .topLeading)
         ]
 
@@ -83,7 +83,7 @@ public struct Card: BlockElement {
         case end = "align-content-end"
     }
 
-    public enum ContentAlignment: CaseIterable {
+    public enum ContentAlignment: CaseIterable, Sendable {
         case topLeading
         case top
         case topTrailing

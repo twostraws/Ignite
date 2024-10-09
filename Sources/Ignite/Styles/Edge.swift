@@ -9,7 +9,7 @@ import Foundation
 
 /// Describes edges on an element, e.g. top or leading, along
 /// with groups of edges such as "horizontal" (leading *and* trailing).
-public struct Edge: OptionSet {
+public struct Edge: OptionSet, Sendable {
     /// The internal value used to represent this edge.
     public let rawValue: Int
 

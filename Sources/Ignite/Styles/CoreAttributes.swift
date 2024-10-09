@@ -9,7 +9,7 @@ import Foundation
 
 /// A handful of attributes that all HTML types must support, either for
 /// rendering or for publishing purposes.
-public struct CoreAttributes {
+public struct CoreAttributes: Sendable {
     /// A unique identifier. Can be empty.
     var id = ""
 

@@ -52,7 +52,7 @@ public class PublishingContext {
     ///   - file: One file from the user's package.
     ///   - buildDirectoryPath: The path where the artifacts are generated.
     ///   The default is "Build".
-    init(for site: any Site, from file: StaticString, buildDirectoryPath: String = "Build") throws {
+    public init(for site: any Site, from file: StaticString, buildDirectoryPath: String = "Build") throws {
         self.site = site
 
         let sourceBuildDirectories = try URL.selectDirectories(from: file)
