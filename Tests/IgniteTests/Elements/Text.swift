@@ -66,7 +66,7 @@ struct TextTests {
         }
     }
     @Test("Markdown Test")
-    func test_markdown() async throws  {
+    func test_markdown() async throws {
         let element = Text(markdown: "Text in *italics*, text in **bold**, and text in ***bold italics***.")
         let output = element.render(context: publishingContext)
         // swiftlint:disable line_length

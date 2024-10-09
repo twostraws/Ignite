@@ -15,7 +15,7 @@ import Testing
 struct SubsiteImageTests {
     /// A publishing context with sample values for subsite tests.
     let publishingSubsiteContext = try! PublishingContext(for: TestSubsite(), from: "Test Subsite")
-    
+
     @Test("Image Test")
     func test_image_named() async throws {
         let element = Image("/images/example.jpg", description: "Example image")

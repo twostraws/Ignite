@@ -15,7 +15,7 @@ import Testing
 struct SubsiteLinkTests {
     /// A publishing context with sample values for subsite tests.
     let publishingSubsiteContext = try! PublishingContext(for: TestSubsite(), from: "Test Subsite")
-    
+
     @Test("String Target Test")
     func test_string_target() async throws {
         let element = Link("Go Home", target: "/")
