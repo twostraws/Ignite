@@ -77,7 +77,7 @@ public struct CoreAttributes: Sendable {
             return ""
         } else {
             let stringified = styles.map { "\($0.name): \($0.value)" }.joined(separator: "; ")
-            return "style=\"\(stringified)\""
+            return " style=\"\(stringified)\""
         }
     }
 
