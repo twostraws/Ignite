@@ -12,5 +12,5 @@ public struct Ignite {
     public static var bundle: Bundle { Bundle.module }
 
     /// The current version. Used to write generator information.
-    public static var version = "Ignite v0.1.0"
+    public static let version = "Ignite v0.2.1"
 }
