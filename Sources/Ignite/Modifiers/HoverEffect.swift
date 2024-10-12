@@ -29,7 +29,7 @@ public struct EmptyHoverEffect: PageElement {
     public func render(context: PublishingContext) -> String {
         ""
     }
-    
+
     public var attributes = CoreAttributes()
 }
 
