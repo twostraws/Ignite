@@ -10,10 +10,10 @@ import Foundation
 public enum Cursor: String {
     /// The cursor to display based on the current context. E.g., equivalent to text when hovering text.
     case auto
-    
+
     /// Default cursor. Typically an arrow.
     case `default`
-    
+
     /// No cursor is rendered.
     case pointer
 

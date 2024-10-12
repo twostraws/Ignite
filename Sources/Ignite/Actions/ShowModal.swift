@@ -8,10 +8,10 @@
 import Foundation
 
 /// Shows a modal dialog with the content of the page element identified by ID
-public struct ShowModal: Action {
+public struct ShowModal: Action, Sendable {
 
     /// The options used to configure the modal presentation
-    public enum Option {
+    public enum Option: Sendable {
         /// Shows the modal with a backdrop optionally dismissible by clicking on the backdrop.
         /// - Parameter dismissible: Whether the modal can be dismissed by clicking on the backdrop. Default is `true`.
         case backdrop(dismissible: Bool)

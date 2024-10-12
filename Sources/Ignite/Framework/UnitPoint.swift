@@ -8,7 +8,7 @@
 import Foundation
 
 // An x/y coordinate in the ranges 0 through 1.
-public struct UnitPoint {
+public struct UnitPoint: Sendable {
     var x: Double // swiftlint:disable:this identifier_name
     var y: Double // swiftlint:disable:this identifier_name
 
