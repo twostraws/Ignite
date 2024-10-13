@@ -26,7 +26,7 @@ public class PublishingContext {
     /// The directory containing includes to use with the `Include` element.
     var includesDirectory: URL
 
-    /// The directory containing their final, built website.
+    /// The directory containing the final, built website.
     var buildDirectory: URL
 
     /// Path at which content renders. Defaults to nil.
@@ -55,9 +55,9 @@ public class PublishingContext {
     init(for site: any Site, from file: StaticString, buildDirectoryPath: String = "Build") throws {
         self.site = site
 
-        let sourceBuildDirectories = try URL.selectDirectories(from: file)
-        sourceDirectory = sourceBuildDirectories.source
-        buildDirectory = sourceBuildDirectories.build.appending(path: buildDirectoryPath)
+        let sourceAndBuildDirectories = try URL.selectDirectories(from: file)
+        sourceDirectory = sourceAndBuildDirectories.source
+        buildDirectory = sourceAndBuildDirectories.build.appending(path: buildDirectoryPath)
 
         assetsDirectory = sourceDirectory.appending(path: "Assets")
         contentDirectory = sourceDirectory.appending(path: "Content")

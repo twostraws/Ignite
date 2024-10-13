@@ -67,7 +67,9 @@ extension Process {
         let outputData = output.fileHandleForReading.readDataToEndOfFile()
         let errorData = error.fileHandleForReading.readDataToEndOfFile()
 
+        // swiftlint:disable:next optional_data_string_conversion
         let outputString = String(decoding: outputData, as: UTF8.self)
+        // swiftlint:disable:next optional_data_string_conversion
         let errorString = String(decoding: errorData, as: UTF8.self)
 
         return (outputString, errorString)
