@@ -34,7 +34,7 @@ extension URL {
         let buildDirectoryURL = URL(filePath: buildDirectoryString)
         let sourceDirectoryURL = buildDirectoryURL // has to contain any Assets/Content/Includes
 
-        guard buildDirectory.contains("/Library/Containers/") else {
+        guard buildDirectoryString.contains("/Library/Containers/") else {
             throw PublishingError.missingPackageDirectory // actually
         }
 
