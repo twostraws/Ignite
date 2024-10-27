@@ -36,8 +36,9 @@ public extension PageElement {
         _ context: PublishingContext,
         modifications: (Self) -> Self
     ) -> Self {
-        let className = "env-\(value.key)-\(value.rawValue)"
-        let modified = self.class(className)
+        let instanceClass = "\(value.key)-\(value.rawValue)-\(UUID().uuidString)"
+        var modified = self.class(instanceClass)
+        
         let modifiedElement = modifications(modified)
         
         let newStyles = modifiedElement.attributes.styles.filter { style in
@@ -48,7 +49,7 @@ public extension PageElement {
             let styleRule = newStyles.map { "\($0.name): \($0.value);" }.joined(separator: " ")
             let cssRule = """
             @media (\(value.query): \(value.rawValue)) {
-                .\(className) { \(styleRule) }
+                .\(instanceClass) { \(styleRule) }
             }
             """
             
