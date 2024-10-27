@@ -18,25 +18,34 @@ public struct Group: BlockElement {
 
     var items: [BaseElement]
     var isTransparent: Bool
+    var value: (any Environment.MediaQueryValue)?
 
     public init(isTransparent: Bool = false, @ElementBuilder<BaseElement> _ items: () -> [BaseElement]) {
         self.items = items()
         self.isTransparent = isTransparent
+        self.value = (any Environment.MediaQueryValue)?.none
+    }
+
+    /// Creates a group whose visibility is dependent on a media-query-driven environment value.
+    public init<T: Environment.MediaQueryValue>(_ type: T.Type, equals value: T, @ElementBuilder<BaseElement> _ items: () -> [BaseElement]) {
+        self.items = items()
+        self.isTransparent = false
+        self.value = value
     }
 
     init(items: [BaseElement], context: PublishingContext) {
         self.items = items
         self.isTransparent = true
+        self.value = nil
     }
 
-    /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
-    /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         if isTransparent {
-            items.render(context: context)
+            return items.render(context: context)
+        } else if let value {
+            return "<div class=\"\(value.key)-\(value.rawValue)\">\(items.render(context: context))</div>"
         } else {
-            "<div\(attributes.description)>\(items.render(context: context))</div>"
+            return "<div\(attributes.description)>\(items.render(context: context))</div>"
         }
     }
 }

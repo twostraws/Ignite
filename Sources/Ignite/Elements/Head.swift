@@ -86,7 +86,8 @@ public struct Head: HTMLRootElement {
         } else if context.site.builtInIconsEnabled == .remoteBootstrap {
             MetaLink.remoteIconCSS
         }
-
+        
+        MetaLink.mediaQueryCSS
         MetaLink(href: page.url, rel: "canonical")
 
         if let favicon = context.site.favicon {

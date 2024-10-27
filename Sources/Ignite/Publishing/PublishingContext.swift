@@ -178,6 +178,8 @@ public class PublishingContext {
             print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
             throw error
         }
+        
+        try copy(resource: "css/media-queries.min.css")
 
         if site.useDefaultBootstrapURLs == .localBootstrap {
             try copy(resource: "css/bootstrap.min.css")

@@ -41,7 +41,8 @@ public struct Body: PageElement, HTMLRootElement {
             )
             .addCustomAttribute(
                 name: "integrity",
-                value: "sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy")
+                value: "sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+            )
             .addCustomAttribute(name: "crossorigin", value: "anonymous")
             .render(context: context)
         }
