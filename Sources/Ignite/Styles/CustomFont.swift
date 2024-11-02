@@ -17,7 +17,8 @@ public struct CustomFont {
     /// - Parameters:
     ///   - fontFamily: "The font-family name matching the font-family name in the font resource"
     ///   - urlString: "The URL string to the resource whether that be local or remote"
-    ///   - fallbackFontFamilies: font-family names to use as a fallback. They will be used in the order presented if one is unavailable. NOTE: custom
+    ///   - fallbackFontFamilies: font-family names to use as a fallback. They will be used in the order presented if one is unavailable. 
+    ///     - NOTE: custom fonts with special characters in the font-family name must be enclosed in single-quotes such as 'my-Cu$t0m-font'
     public init(fontFamily: String, urlString: String, fallbackFontFamilies: [String]? = nil) {
         if let fallbackFontFamilies {
             let fallbackString = fallbackFontFamilies.joined(separator: ", ")
