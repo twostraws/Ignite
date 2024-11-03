@@ -133,7 +133,7 @@ public class PublishingContext {
 
     /// Performs all steps required to publish a site.
     func publish() async throws {
-//        try clearBuildFolder()
+        try clearBuildFolder() // TODO if this is commented out a copy error occurs due to .DS_Store
         try copyResources()
         try await generateContent()
         try await generateTagPages()
