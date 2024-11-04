@@ -159,6 +159,30 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
     public enum LinkStyle: String, CaseIterable {
         case `default`, hover, button
     }
+    
+    /// Allows you to specify the link underline style.
+    public enum UnderlineStyle: Equatable {
+        
+        /// The default underline style with an opacity of 1.
+        case `default`
+        
+        /// A plain underline style with an opacity of 0.
+        case plain
+        
+        /// Adjusts the opacity of the link underline, 0 (fully transparent) and 1 (fully opaque)
+        case opacity(_ opacity: Double)
+        
+        var opacity: Double {
+            switch self {
+            case .default:
+                100
+            case .plain:
+                0
+            case .opacity(let opacity):
+                opacity * 100
+            }
+        }
+    }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -171,6 +195,12 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
 
     /// The style for this link. Defaults to `.default`.
     var style = LinkStyle.default
+    
+    /// The style of the link underline. Defaults to `.default`.
+    var underline: UnderlineStyle = .default
+    
+    /// The style of the link underline when hovering. Defaults to `.default`.
+    var hoverUnderline: UnderlineStyle = .default
 
     /// When rendered as with the `.button` style, this controls the
     /// button's size.
@@ -189,14 +219,30 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
             if role != .default {
                 outputClasses.append("link-\(role.rawValue)")
             }
+            
             if style == .hover {
-                outputClasses.append(contentsOf: [
-                    "link-underline-opacity-0",
-                    "link-underline-opacity-100-hover"
-                ])
+                
+                /// If an underline style has been set, we take that as a priority, otherwise use the default `.hover` style.
+                if underline != .default {
+                    outputClasses.append("link-underline-opacity-\(underline.opacity.formatted())")
+                } else {
+                    outputClasses.append("link-underline-opacity-0")
+                }
+                
+                /// If a hoverUnderline style has been set, we take that as a priority, otherwise use the default `.hover` style.
+                if hoverUnderline != .default {
+                    outputClasses.append("link-underline-opacity-\(hoverUnderline.opacity.formatted())-hover")
+                } else {
+                    outputClasses.append("link-underline-opacity-100-hover")
+                }
+                
+            } else {
+                
+                outputClasses.append("link-underline-opacity-\(underline.opacity.formatted())")
+                outputClasses.append("link-underline-opacity-\(hoverUnderline.opacity.formatted())-hover")
             }
         }
-
+        
         return outputClasses
     }
 
@@ -321,6 +367,50 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
         let attribute = AttributeValue(name: "rel", value: attributeValue)
         copy.attributes.customAttributes.append(attribute)
 
+        return copy
+    }
+    
+    /// Adjusts the underline style of this link.
+    /// - Parameter style: The new underline style.
+    /// - Returns: A new `Link` instance with the updated underline style.
+    public func underlineStyle(_ style: UnderlineStyle) -> Self {
+        var copy = self
+        copy.underline = style
+        
+        /// If the opacity value is larger than 1, we return a default style as it must be between 0 and 1.
+        if case let .opacity(opacity) = style, opacity > 1 {
+            copy.underline = .default
+        }
+
+        // If there isn't already a role for this link,
+        // add one automatically so it has sensible
+        // default button styling.
+        if copy.role == .default {
+            copy.role = .primary
+        }
+        
+        return copy
+    }
+    
+    /// Adjusts the underline style of this link when in hover mode.
+    /// - Parameter style: The new hover underline style.
+    /// - Returns: A new `Link` instance with the updated hover underline style.
+    public func hoverUnderlineStyle(_ style: UnderlineStyle) -> Self {
+        var copy = self
+        copy.hoverUnderline = style
+        
+        /// If the opacity value is larger than 1, we return a default style as it must be between 0 and 1.
+        if case let .opacity(opacity) = style, opacity > 1 {
+            copy.hoverUnderline = .default
+        }
+
+        // If there isn't already a role for this link,
+        // add one automatically so it has sensible
+        // default button styling.
+        if copy.role == .default {
+            copy.role = .primary
+        }
+        
         return copy
     }
 
