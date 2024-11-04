@@ -30,7 +30,6 @@ public struct ContentPreview: BlockElement {
         } header: {
             Text {
                 Link(content)
-                    .underlineStyle(.opacity25)
             }
             .font(.title2)
         } footer: {
