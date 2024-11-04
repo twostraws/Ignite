@@ -163,23 +163,39 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
     /// Allows you to specify the link underline style.
     public enum UnderlineStyle: Equatable {
         
-        /// The default underline style with an opacity of 1.
-        case `default`
-        
         /// A plain underline style with an opacity of 0.
         case plain
         
-        /// Adjusts the opacity of the link underline, 0 (fully transparent) and 1 (fully opaque)
-        case opacity(_ opacity: Double)
+        /// Sets the opacity value at 10% of the original value.
+        case opacity10
         
-        var opacity: Double {
+        /// Sets the opacity value at 25% of the original value.
+        case opacity25
+        
+        /// Sets the opacity value at 50% of the original value.
+        case opacity50
+        
+        /// Sets the opacity value at 75% of the original value.
+        case opacity75
+        
+        /// The default underline style with an opacity of 100.
+        case `default`
+        
+        /// An opacity property which returns the opacity value as an `Integer`.
+        var opacity: Int {
             switch self {
-            case .default:
-                100
             case .plain:
                 0
-            case .opacity(let opacity):
-                opacity * 100
+            case .opacity10:
+                10
+            case .opacity25:
+                25
+            case .opacity50:
+                50
+            case .opacity75:
+                75
+            case .default:
+                100
             }
         }
     }
@@ -376,11 +392,6 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
     public func underlineStyle(_ style: UnderlineStyle) -> Self {
         var copy = self
         copy.underline = style
-        
-        /// If the opacity value is larger than 1, we return a default style as it must be between 0 and 1.
-        if case let .opacity(opacity) = style, opacity > 1 {
-            copy.underline = .default
-        }
 
         // If there isn't already a role for this link,
         // add one automatically so it has sensible
@@ -398,11 +409,6 @@ public struct Link: InlineElement, NavigationItem, DropdownElement {
     public func hoverUnderlineStyle(_ style: UnderlineStyle) -> Self {
         var copy = self
         copy.hoverUnderline = style
-        
-        /// If the opacity value is larger than 1, we return a default style as it must be between 0 and 1.
-        if case let .opacity(opacity) = style, opacity > 1 {
-            copy.hoverUnderline = .default
-        }
 
         // If there isn't already a role for this link,
         // add one automatically so it has sensible
