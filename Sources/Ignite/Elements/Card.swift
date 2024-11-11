@@ -217,7 +217,7 @@ public struct Card: BlockElement {
 
             renderItems()
 
-            if let image, contentPosition.addImageFirst {
+            if let image, !contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
