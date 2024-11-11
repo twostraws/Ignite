@@ -1,3 +1,12 @@
+//
+// CustomFont.swift
+// Ignite
+// https://www.github.com/twostraws/Ignite
+// See LICENSE for license information.
+//
+
+import Foundation
+
 public struct CustomFont {
     /// The URL to the font resource (might be local or remote)
     /// - Returns: String containing a valid URL or "Invalid URL: `urlString`"
