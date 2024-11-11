@@ -44,13 +44,14 @@ public struct ContentPreview: BlockElement {
     /// - Parameter context: The publishing context for rendering.
     /// - Returns: A rendered string of HTML.
     public func render(context: PublishingContext) -> String {
-        // If custom style is provided, use it; otherwise, fallback to default layout.
-        if let style = style {
-            return style.body(content: content, context: context)
+        // If custom style is provided, use it; otherwise,
+        // fallback to default layout.
+        if let style {
+            style.body(content: content, context: context)
                 .attributes(attributes)
                 .render(context: context)
         } else {
-            return defaultCardLayout(context: context)
+            defaultCardLayout(context: context)
                 .attributes(attributes)
                 .render(context: context)
         }
@@ -78,6 +79,5 @@ public struct ContentPreview: BlockElement {
                 .style("margin-top: -5px")
             }
         }
-    }
-    
+    }   
 }
