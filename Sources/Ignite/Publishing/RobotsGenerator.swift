@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 struct RobotsGenerator {
     var site: any Site
 

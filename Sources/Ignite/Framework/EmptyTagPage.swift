@@ -9,7 +9,9 @@ import Foundation
 
 /// A default tag page that does nothing; used to disable tag pages entirely.
 public struct EmptyTagPage: TagPage {
-    public init() { }
+    public init() {}
 
-    public func body(tag: String?, context: PublishingContext) async -> [any BlockElement] { }
+    public var body: EmptyBlockElement {
+        EmptyBlockElement()
+    }
 }

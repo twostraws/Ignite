@@ -17,9 +17,9 @@ public struct Carousel: BlockElement {
         /// Slides should crossfade.
         case crossfade
     }
-
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -55,25 +55,22 @@ public struct Carousel: BlockElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         Group {
-            Group {
-                for index in 0..<items.count {
-                    Button()
-                        .data("bs-target", "#\(carouselID)")
-                        .data("bs-slide-to", String(index))
-                        .class(index == 0 ? "active" : nil)
-                        .aria("current", index == 0 ? "true" : nil)
-                        .aria("label", "Slide \(index + 1)")
-                }
+            ForEach(0..<items.count) { index in
+                Button()
+                    .data("bs-target", "#\(carouselID)")
+                    .data("bs-slide-to", String(index))
+                    .class(index == 0 ? "active" : nil)
+                    .aria("current", index == 0 ? "true" : nil)
+                    .aria("label", "Slide \(index + 1)")
             }
             .class("carousel-indicators")
 
             Group {
-                for (index, item) in items.enumerated() {
+                ForEach(items.enumerated()) { index, item in
                     item.assigned(at: index, in: context)
                 }
             }
             .class("carousel-inner")
-            .render(context: context)
 
             Button {
                 Span()
@@ -86,7 +83,6 @@ public struct Carousel: BlockElement {
             .class("carousel-control-prev")
             .data("bs-target", "#\(carouselID)")
             .data("bs-slide", "prev")
-            .render(context: context)
 
             Button {
                 Span()
@@ -99,10 +95,9 @@ public struct Carousel: BlockElement {
             .class("carousel-control-next")
             .data("bs-target", "#\(carouselID)")
             .data("bs-slide", "next")
-            .render(context: context)
         }
         .attributes(attributes)
-        .id(carouselID)
+        .htmlID(carouselID)
         .class("carousel", "slide", style == .crossfade ? "carousel-fade" : nil)
         .data("bs-ride", "carousel")
         .render(context: context)

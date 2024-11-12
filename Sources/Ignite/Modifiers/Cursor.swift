@@ -24,7 +24,7 @@ public enum Cursor: String {
     case zoomOut = "zoom-out"
 }
 
-public extension PageElement {
+public extension HTML {
     /// Changes the cursor appearance of the element when hovering over the element.
     /// - Parameter cursor: The desired cursor style.
     /// - Returns: The current element with the updated cursor style applied.

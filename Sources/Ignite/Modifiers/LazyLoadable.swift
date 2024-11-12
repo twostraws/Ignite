@@ -8,7 +8,7 @@
 import Foundation
 
 /// A protocol that determines which elements can be loaded lazily.
-public protocol LazyLoadable where Self: PageElement {
+public protocol LazyLoadable where Self: HTML {
     /// Enables lazy loading for this element.
     /// - Returns: A copy of the current element with lazy loading enabled.
     func lazy() -> Self
@@ -18,6 +18,6 @@ public extension LazyLoadable {
     /// Enables lazy loading for this element.
     /// - Returns: A copy of the current element with lazy loading enabled.
     func lazy() -> Self {
-        self.addCustomAttribute(name: "loading", value: "lazy")
+        self.customAttribute(name: "loading", value: "lazy")
     }
 }

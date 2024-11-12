@@ -8,7 +8,8 @@
 import Foundation
 
 /// One piece of Markdown content for this site.
-public struct Content {
+@MainActor
+public struct MarkdownContent: Sendable {
     /// The main title for this content.
     public var title: String
 
@@ -20,7 +21,7 @@ public struct Content {
 
     /// Extra metadata as extracted from YAML front matter.
     /// See https://jekyllrb.com/docs/front-matter/
-    public var metadata: [String: Any]
+    public var metadata: [String: any Sendable]
 
     /// The main body of this content. Excludes its title.
     public var body: String
@@ -226,5 +227,17 @@ public struct Content {
         formatter.dateFormat = "y-MM-dd HH:mm"
         formatter.timeZone = .gmt
         return formatter.date(from: date)
+    }
+}
+
+extension MarkdownContent {
+    /// Creates an empty markdown content instance with default values.
+    init() {
+        self.title = ""
+        self.description = ""
+        self.path = ""
+        self.metadata = [:]
+        self.body = ""
+        self.hasAutomaticDate = false
     }
 }

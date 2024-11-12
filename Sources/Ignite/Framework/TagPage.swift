@@ -10,6 +10,7 @@ import Foundation
 /// Tag pages show all articles on your site that match a specific tag,
 /// or all articles period if `tag` is nil. You get to decide what is shown
 /// on those pages by making a custom type that conforms to this protocol.
-public protocol TagPage: ThemedPage {
-    @BlockElementBuilder func body(tag: String?, context: PublishingContext) async -> [BlockElement]
+public protocol TagPage: ThemePage {
+    associatedtype Body: HTML
+    var body: Body { get }
 }

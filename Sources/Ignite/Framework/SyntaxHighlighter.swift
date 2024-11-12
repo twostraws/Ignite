@@ -8,7 +8,7 @@
 import Foundation
 
 /// The collection of syntax highlighters supported by Ignite.
-public enum SyntaxHighlighter: String {
+public enum SyntaxHighlighter: String, Sendable {
     case appleScript
     case bash
     case c // swiftlint:disable:this identifier_name

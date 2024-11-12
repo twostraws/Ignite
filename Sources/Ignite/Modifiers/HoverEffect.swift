@@ -7,16 +7,18 @@
 
 import Foundation
 
-public extension PageElement {
+public extension HTML {
     /// Applies a hover effect to the page element
     /// - Parameter effect: A closure that returns the effect to be applied.
     ///   The argument acts as a placeholder representing this page element.
     /// - Returns: The page element with the provided hover effect applied.
     @discardableResult
-    func hoverEffect(_ effect: @escaping (EmptyHoverEffect) -> some PageElement) -> Self {
+    func hoverEffect(_ effect: @escaping (EmptyHoverEffect) -> some HTML) -> Self {
         onHover { isHovering in
             if isHovering {
-                ApplyHoverEffects(styles: effect(EmptyHoverEffect()).attributes.styles)
+                let effectElement = effect(EmptyHoverEffect())
+                let effectAttributes = AttributeStore.default.attributes(for: effectElement.id)
+                ApplyHoverEffects(styles: effectAttributes.styles)
             } else {
                 RemoveHoverEffects()
             }
@@ -25,16 +27,15 @@ public extension PageElement {
 }
 
 /// An empty hover effect type to which styles can be added
-public struct EmptyHoverEffect: PageElement {
-    public func render(context: PublishingContext) -> String {
-        ""
-    }
+public struct EmptyHoverEffect: HTML {
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
-    public var attributes = CoreAttributes()
+    public func render(context: PublishingContext) -> String { "" }
 }
 
 private struct ApplyHoverEffects: Action {
-    let styles: [AttributeValue]
+    let styles: OrderedSet<AttributeValue>
 
     func compile() -> String {
         """

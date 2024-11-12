@@ -9,8 +9,8 @@ import Foundation
 
 /// Lets you include arbitrary HTML on a page.
 public struct Include: BlockElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic

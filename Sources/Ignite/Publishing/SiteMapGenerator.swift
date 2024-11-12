@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 struct SiteMapGenerator {
     var context: PublishingContext
 

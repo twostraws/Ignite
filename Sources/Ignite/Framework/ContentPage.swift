@@ -10,18 +10,22 @@ import Foundation
 /// Content pages describe custom page structures for articles. You can provide
 /// one layout in your site to use that for all articles, or create custom layouts and
 /// assign them uniquely to individual articles.
-public protocol ContentPage: ThemedPage {
-
-    /// Renders a layout for a particular piece of content inside the current
-    /// publishing context.
-    /// - Parameters:
-    ///   - content: The content that is being rendered.
-    ///   - context: The current publishing context.
-    /// - Returns: An array of `BlockElement` objects that should be used
-    /// for the content.
-    @BlockElementBuilder func body(content: Content, context: PublishingContext) async -> [BlockElement]
-}
-
-public extension ThemedPage {
-    var theme: MissingTheme { MissingTheme() }
+///
+/// To access the current article's content within your page layout, use the `@Content` property wrapper:
+/// ```swift
+/// struct MyArticle: ContentPage {
+///     @Content private var article
+///
+///     var body: some HTML {
+///         Heading(article.title)
+///         Text(article.description)
+///     }
+/// }
+/// ```
+public protocol ContentPage: ThemePage {
+    /// The type of HTML content this page will generate
+    associatedtype Body: HTML
+    
+    /// The main content of the page, built using the HTML DSL
+    @HTMLBuilder var body: Body { get }
 }

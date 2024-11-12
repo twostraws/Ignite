@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension PageElement {
+public extension HTML {
     /// Rounds all edges of this object by some value specified as a string.
     /// - Parameter length: A string with rounding of your choosing, such as
     /// "50%".

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension PageElement {
+public extension HTML {
     /// Creates a plain-text tooltip for this element.
     /// - Parameter text: The text to show in the tooltip.
     /// - Returns: A copy of the current element with the tooltip attached.

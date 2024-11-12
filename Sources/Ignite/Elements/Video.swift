@@ -9,8 +9,8 @@ import Foundation
 
 /// Shows a Video player on your page.
 public struct Video: BlockElement, InlineElement, LazyLoadable {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic

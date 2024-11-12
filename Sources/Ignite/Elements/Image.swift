@@ -9,8 +9,8 @@ import Foundation
 
 /// An image on your page. Can be vector (SVG) or raster (JPG, PNG, GIF).
 public struct Image: BlockElement, InlineElement, LazyLoadable {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -48,7 +48,7 @@ public struct Image: BlockElement, InlineElement, LazyLoadable {
         self.description = ""
     }
 
-    /// Creates a new decorative `Image` instance from the name of an 
+    /// Creates a new decorative `Image` instance from the name of an
     /// image contained in your site's assets folder. Decorative images are hidden
     /// from screen readers.
     /// - Parameter name: The filename of your image relative to the root
@@ -61,10 +61,10 @@ public struct Image: BlockElement, InlineElement, LazyLoadable {
     /// Allows this image to be scaled up or down from its natural size in
     /// order to fit into its container.
     /// - Returns: A new `Image` instance configured to be flexibly sized.
-    public func resizable() -> Self {
+    public func resizable() -> some BlockElement {
         var copy = self
         copy.attributes.classes.append("img-fluid")
-        return copy
+        return Group { copy }  // Return just the wrapped image with class
     }
 
     /// Sets the accessibility label for this image to a string suitable for

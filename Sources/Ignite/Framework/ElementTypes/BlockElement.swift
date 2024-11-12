@@ -9,7 +9,7 @@ import Foundation
 
 /// Describes a HTML element that is rendered in block style, i.e. that it occupies the
 /// full width of the page by default.
-public protocol BlockElement: PageElement, HorizontalAligning {
+public protocol BlockElement: HTML, HorizontalAligning {
     /// How many columns this should occupy when placed in a section.
     var columnWidth: ColumnWidth { get set }
 

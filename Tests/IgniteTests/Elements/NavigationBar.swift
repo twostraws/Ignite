@@ -9,7 +9,7 @@ import XCTest
 @testable import Ignite
 
 /// Tests for the `NavigationBar` element.
-final class NavigationBarTests: ElementTest {
+@MainActor final class NavigationBarTests: ElementTest {
 
     func test_defaultColumnWidth() {
         let element = NavigationBar()

@@ -10,8 +10,8 @@ import Foundation
 /// A container that automatically adjusts the styling for buttons it contains so
 /// that they sit more neatly together.
 public struct ButtonGroup: BlockElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -45,7 +45,7 @@ public struct ButtonGroup: BlockElement {
         }
         .class("btn-group")
         .aria("label", accessibilityLabel)
-        .addCustomAttribute(name: "role", value: "group")
+        .customAttribute(name: "role", value: "group")
         .render(context: context)
     }
 }

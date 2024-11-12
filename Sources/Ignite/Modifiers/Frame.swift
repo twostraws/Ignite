@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension BlockElement {
+public extension HTML {
     /// Creates a specific frame for this element, either using exact values or
     /// using minimum/maximum ranges. Sizes are specified in units
     /// of your choosing, e.g. "50%", "2cm", or "50vw".

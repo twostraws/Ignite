@@ -8,9 +8,9 @@
 import Foundation
 
 /// One item inside an accordion.
-public struct Item: PageElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+public struct Item: HTML {
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// The title to show for this item. Clicking this title will display the
     /// item's contents.
@@ -20,7 +20,7 @@ public struct Item: PageElement {
     var startsOpen: Bool
 
     /// The contents of this accordion item.
-    var contents: [BlockElement]
+    var contents: any BlockElement
 
     /// Used when rendering this accordion item so that we can send change
     /// notifications back the parent accordion object.
@@ -38,9 +38,9 @@ public struct Item: PageElement {
     ///   - contents: A block element builder that creates the contents
     ///   for this accordion item.
     public init(
-        _ title: any InlineElement,
+        _ title: some InlineElement,
         startsOpen: Bool = false,
-        @BlockElementBuilder contents: () -> [BlockElement]
+        @BlockElementBuilder contents: () -> some BlockElement
     ) {
         self.title = title
         self.startsOpen = startsOpen
@@ -84,7 +84,7 @@ public struct Item: PageElement {
                 }
                 .class("accordion-body")
             }
-            .id(itemID)
+            .htmlID(itemID)
             .class("accordion-collapse", "collapse", startsOpen ? "show" : nil)
             .data("bs-parent", parentOpenMode == .individual ? "#\(parentID)" : "")
         }
