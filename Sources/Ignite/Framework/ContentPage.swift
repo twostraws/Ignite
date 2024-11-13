@@ -11,21 +11,26 @@ import Foundation
 /// one layout in your site to use that for all articles, or create custom layouts and
 /// assign them uniquely to individual articles.
 ///
-/// To access the current article's content within your page layout, use the `@Content` property wrapper:
 /// ```swift
 /// struct MyArticle: ContentPage {
-///     @Content private var article
 ///
 ///     var body: some HTML {
-///         Heading(article.title)
-///         Text(article.description)
+///         Heading(content.title)
+///         Text(content.description)
 ///     }
 /// }
 /// ```
 public protocol ContentPage: ThemePage {
     /// The type of HTML content this page will generate
     associatedtype Body: HTML
-    
-    /// The main content of the page, built using the HTML DSL
+
+    /// The main content of the page
     @HTMLBuilder var body: Body { get }
+}
+
+extension ContentPage {
+    /// The current Markdown content being rendered.
+    var content: Content {
+        ContentContext.current
+    }
 }

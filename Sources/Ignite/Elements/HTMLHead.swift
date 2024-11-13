@@ -32,7 +32,7 @@ public struct HTMLHead: HTMLRootElement {
     ///   information about the site being rendered and more.
     ///   - additionalItems: Additional items to enhance the set of standard headers.
     public init(
-        for page: HTMLPage,
+        for page: Page,
         with configuration: SiteConfiguration,
         @HeadElementBuilder additionalItems: () -> [any HeadElement] = { [] }
     ) {
@@ -55,7 +55,7 @@ public struct HTMLHead: HTMLRootElement {
     ///   - page: The `Page` you want to create headers for.
     ///   - context: The active `PublishingContext`, which includes
     @HeadElementBuilder
-    public static func standardHeaders(for page: HTMLPage, with configuration: SiteConfiguration) -> [any HeadElement] {
+    public static func standardHeaders(for page: Page, with configuration: SiteConfiguration) -> [any HeadElement] {
         MetaTag.utf8
         MetaTag.flexibleViewport
 

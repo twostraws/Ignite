@@ -11,9 +11,9 @@ import XCTest
 /// Tests for the `title` element.
 @MainActor final class SubsiteBodyTests: ElementTest {
     func test_body_simple() {
-        let element = HTMLBody(for: HTMLPage(title: "TITLE", description: "DESCRIPTION",
-                                             url: URL("http://www.yoursite.com/subsite"),
-                                             body: Text("TEXT")))
+        let element = HTMLBody(for: Page(title: "TITLE", description: "DESCRIPTION",
+                                         url: URL("http://www.yoursite.com/subsite"),
+                                         body: Text("TEXT")))
         let output = element.render(context: publishingSubsiteContext)
 
         XCTAssertEqual(output, """

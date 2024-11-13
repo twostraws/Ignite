@@ -130,8 +130,8 @@ public struct NavigationBar: BlockElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        HTMLTag("header") {
-            HTMLTag("nav") {
+        Tag("header") {
+            Tag("nav") {
                 Group {
                     if let logo {
                         Link(logo, target: "/")

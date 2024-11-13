@@ -10,7 +10,7 @@ import Foundation
 @MainActor
 struct FeedGenerator {
     var site: any Site
-    var content: [MarkdownContent]
+    var content: [Content]
 
     func generateFeed() -> String {
         let contentXML = generateContentXML()

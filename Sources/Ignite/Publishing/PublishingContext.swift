@@ -37,7 +37,7 @@ public class PublishingContext {
     private(set) var warnings = [String]()
     
     /// All the Markdown content this user has inside their Content folder.
-    private(set) public var allContent = [MarkdownContent]()
+    private(set) public var allContent = [Content]()
     
     /// The sitemap for this site. Yes, using an array is less efficient when
     /// using `contains()`, but it allows us to list pages in a sensible order.
@@ -71,7 +71,7 @@ public class PublishingContext {
     /// - Parameter tag: The tag to filter by, or nil for all content.
     /// - Returns: An array of content matching the specified tag, or all content
     /// if no tag was specified.
-    public func content(tagged tag: String?) -> [MarkdownContent] {
+    public func content(tagged tag: String?) -> [Content] {
         if let tag {
             allContent.filter { $0.tags.contains(tag) }
         } else {
@@ -83,7 +83,7 @@ public class PublishingContext {
     /// - Parameter type: The type to filter by, or nil for all content.
     /// - Returns: An array of content matching the specified type, or all content
     /// if no type was specified.
-    public func content(ofType type: String?) -> [MarkdownContent] {
+    public func content(ofType type: String?) -> [Content] {
         if let type {
             allContent.filter { $0.type == type }
         } else {
@@ -123,7 +123,7 @@ public class PublishingContext {
             if objectURL.pathExtension == "md" {
                 let values = try objectURL.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey])
                 
-                let article = try MarkdownContent(from: objectURL, in: self, resourceValues: values)
+                let article = try Content(from: objectURL, in: self, resourceValues: values)
                 
                 if article.isPublished {
                     allContent.append(article)
@@ -229,7 +229,7 @@ public class PublishingContext {
     
     /// Renders one page using the correct theme, which is taken either from the
     /// provided them or from the main site theme.
-    func render(_ page: HTMLPage, using theme: any Theme) -> String {
+    func render(_ page: Page, using theme: any Theme) -> String {
         var theme = theme
         
         if theme is MissingTheme {
@@ -256,7 +256,7 @@ public class PublishingContext {
         let page = render {
             let body = staticPage.body
             
-            let page = HTMLPage(
+            let page = Page(
                 title: staticPage.title,
                 description: staticPage.description,
                 url: site.url.appending(path: path),
@@ -279,7 +279,7 @@ public class PublishingContext {
     
     /// Renders one piece of Markdown content.
     /// - Parameter content: The content to render.
-    func render(_ content: MarkdownContent) throws {
+    func render(_ content: Content) throws {
         let layout = try layout(for: content)
         let body = render(content: content) {
             Group(context: self, items: [AnyHTML(layout.body)])
@@ -287,7 +287,7 @@ public class PublishingContext {
         
         currentRenderingPath = content.path
         
-        let page = HTMLPage(
+        let page = Page(
             title: content.title,
             description: content.description,
             url: site.url.appending(path: content.path),
@@ -343,7 +343,7 @@ public class PublishingContext {
     /// layout in your site's `layouts` property is used.
     /// - Parameter content: The content that is being rendered.
     /// - Returns: The correct `ContentPage` instance to use for this content.
-    func layout(for content: MarkdownContent) throws -> any ContentPage {
+    func layout(for content: Content) throws -> any ContentPage {
         if let contentLayout = content.layout {
             for layout in site.layouts {
                 let layoutName = String(describing: type(of: layout))
@@ -378,7 +378,7 @@ extension PublishingContext {
     ///   - content: Optional markdown content being rendered
     ///   - operation: The work to perform with the site values
     /// - Returns: The result of the operation
-    func render<T>(page: HTMLPage? = nil, content: MarkdownContent? = nil, withSiteValues operation: () -> T) -> T {
+    func render<T>(page: Page? = nil, content: Content? = nil, withSiteValues operation: () -> T) -> T {
         let values = EnvironmentValues(site: site, allContent: allContent)
         return EnvironmentStore.update(values) {
             if let content {

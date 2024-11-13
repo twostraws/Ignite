@@ -9,8 +9,6 @@ import Foundation
 
 /// A theme that applies almost no styling.
 public struct EmptyTheme: Theme {
-    @Page private var page
-
     public var body: some HTML {
         HTMLDocument {
             HTMLBody(for: page)

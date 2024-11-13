@@ -28,7 +28,7 @@ public protocol EnvironmentKey: Sendable {
 /// A key for accessing all markdown content in the environment.
 public enum AllContentKey: EnvironmentKey {
     /// The default empty array of markdown content.
-    public static let defaultValue: [MarkdownContent] = []
+    public static let defaultValue: [Content] = []
 }
 
 /// A key for accessing the site configuration in the environment.

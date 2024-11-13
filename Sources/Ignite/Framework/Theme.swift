@@ -13,8 +13,6 @@ import Foundation
 /// Example:
 /// ```swift
 /// struct BlogLayout: Theme {
-///     @Page private var page
-///
 ///     var body: some HTML {
 ///         HTMLDocument {
 ///             Header("My Blog")
@@ -37,6 +35,11 @@ public protocol Theme: Sendable {
 }
 
 public extension Theme {
+    var page: Page {
+        /// The current page being rendered.
+        PageContext.current
+    }
+
     /// Generates a unique identifier for this layout based on its file location and type.
     /// The identifier is used internally for tracking and caching purposes.
     var id: String {
@@ -46,16 +49,5 @@ public extension Theme {
             return (location + description).truncatedHash
         }
         set {}
-    }
-}
-
-extension Theme {
-    /// Renders the layout with the given page content in the current publishing context.
-    /// - Parameters:
-    ///   - page: The page content to render within this layout
-    ///   - context: The current publishing context containing site-wide settings and content
-    /// - Returns: The rendered HTML string
-    func render(page: HTMLPage, context: PublishingContext) -> String {
-        context.render(page: page) { body.render(context: context) }
     }
 }

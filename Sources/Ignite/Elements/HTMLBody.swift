@@ -17,7 +17,7 @@ public struct HTMLBody: HTMLRootElement {
         self.items = items()
     }
     
-    public init(for page: HTMLPage) {
+    public init(for page: Page) {
         self.items = page.body
     }
     

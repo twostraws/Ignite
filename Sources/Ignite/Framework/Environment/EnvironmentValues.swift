@@ -21,7 +21,7 @@ import Foundation
 @MainActor
 public struct EnvironmentValues: Sendable {
     /// All markdown content pages in the site.
-    public var allContent: [MarkdownContent]
+    public var allContent: [Content]
     
     /// Configuration for RSS/Atom feed generation.
     public var feedConfiguration: FeedConfiguration
@@ -40,7 +40,7 @@ public struct EnvironmentValues: Sendable {
         self.siteConfiguration = SiteConfiguration()
     }
 
-    init(site: any Site, allContent: [MarkdownContent]) {
+    init(site: any Site, allContent: [Content]) {
         self.allContent = allContent
         self.feedConfiguration = site.feedConfiguration
         self.isFeedEnabled = site.isFeedEnabled

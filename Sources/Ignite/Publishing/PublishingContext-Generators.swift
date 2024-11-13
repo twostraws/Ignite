@@ -5,13 +5,6 @@
 // See LICENSE for license information.
 //
 
-//
-// PublishingContext-ResourceLoading.swift
-// Ignite
-// https://www.github.com/twostraws/Ignite
-// See LICENSE for license information.
-//
-
 import Foundation
 
 extension PublishingContext {
@@ -55,7 +48,7 @@ extension PublishingContext {
                 }
             }
 
-            let page = HTMLPage(
+            let page = Page(
                 title: "Tags",
                 description: "Tags",
                 url: site.url.appending(path: path),
