@@ -178,7 +178,7 @@ public struct NavigationBar: BlockElement {
             .class("navbar-nav", "mb-2", "mb-md-0", "col", itemAlignment.rawValue)
         }
         .class("collapse", "navbar-collapse")
-        .htmlID("navbarCollapse")
+        .id("navbarCollapse")
     }
 
     private func renderDropdownItem(_ dropdownItem: Dropdown) -> ListItem {

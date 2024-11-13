@@ -62,7 +62,7 @@ public struct Accordion: BlockElement {
         let output = Group { assignedItems }
             .attributes(attributes)
             .class("accordion")
-            .htmlID(accordionID)
+            .id(accordionID)
             .render(context: context)
         
         return output

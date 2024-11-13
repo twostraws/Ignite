@@ -97,7 +97,7 @@ public struct Carousel: BlockElement {
             .data("bs-slide", "next")
         }
         .attributes(attributes)
-        .htmlID(carouselID)
+        .id(carouselID)
         .class("carousel", "slide", style == .crossfade ? "carousel-fade" : nil)
         .data("bs-ride", "carousel")
         .render(context: context)

@@ -126,7 +126,7 @@ public struct Modal: HTML {
         Group {
             Group {
                 Group {
-                    if !header.isEmptyHTML {
+                    if header.isEmptyHTML == false {
                         Group {
                             header
                         }

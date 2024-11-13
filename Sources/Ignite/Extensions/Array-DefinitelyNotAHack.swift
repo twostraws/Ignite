@@ -14,18 +14,16 @@ import Foundation
 /// some spare time.
 // Array-ElementRendering.swift
 extension Array: HeadElement, BlockElement, InlineElement, HTML, HorizontalAligning where Element: HTML {
-    public var body: Array<Element> {
+    public var body: [Element] {
         return Array(self)
     }
-    
+
     public var columnWidth: ColumnWidth {
         get { .automatic }
-        set { }
+        set {}
     }
-    
+
     public func render(context: PublishingContext) -> String {
-        return self.map { element in
-            element.render(context: context)
-        }.joined()
+        self.map { $0.render(context: context) }.joined()
     }
 }

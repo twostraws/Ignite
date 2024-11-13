@@ -204,7 +204,7 @@ public extension HTML {
     /// Sets the `HTML` id attribute of the element.
     /// - Parameter string: The ID value to set
     /// - Returns: The modified `HTML` element
-    func htmlID(_ string: String) -> Self {
+    func id(_ string: String) -> Self {
         var attributes = attributes
         attributes.id = string
         AttributeStore.default.merge(attributes, intoHTML: id)
@@ -280,7 +280,7 @@ public extension HTML {
     /// - Parameter id: The new identifier string
     /// - Returns: A copy of the element with the new ID
     /// - Note: This overrides the default ID generation from file and line info
-    func id(_ id: String) -> Self {
+    func uniqueIdentifier(_ id: String) -> Self {
         var copy = self
         copy.id = id
         return copy
