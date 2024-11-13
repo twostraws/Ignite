@@ -61,10 +61,10 @@ public struct Image: BlockElement, InlineElement, LazyLoadable {
     /// Allows this image to be scaled up or down from its natural size in
     /// order to fit into its container.
     /// - Returns: A new `Image` instance configured to be flexibly sized.
-    public func resizable() -> some BlockElement {
+    public func resizable() -> Self {
         var copy = self
         copy.attributes.classes.append("img-fluid")
-        return Group { copy }  // Return just the wrapped image with class
+        return copy
     }
 
     /// Sets the accessibility label for this image to a string suitable for
