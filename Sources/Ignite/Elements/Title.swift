@@ -10,8 +10,8 @@ import Foundation
 /// Provides the title for a given page, which is rendered in the browser and also
 /// appears in search engine results.
 public struct Title: HeadElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// A plain-text string for the page title.
     var text: String

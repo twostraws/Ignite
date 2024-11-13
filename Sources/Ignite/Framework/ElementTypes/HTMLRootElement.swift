@@ -8,6 +8,4 @@
 import Foundation
 
 /// Describes elements that can exist directly inside a HTML container.
-public protocol HTMLRootElement {
-
-}
+public protocol HTMLRootElement: HTML {}

@@ -9,17 +9,17 @@ import Foundation
 
 /// A protocol for customizing the layout of ContentPreview.
 public protocol ContentPreviewStyle {
-    func body(content: Content, context: PublishingContext) -> BlockElement
+    func body(content: Content, context: PublishingContext) -> any BlockElement
 }
 
 /// A wrapper around Card, specifically aimed at presenting details about
 /// some content on your site. This automatically links to your content page
 /// and adds in tags.
 public struct ContentPreview: BlockElement {
-    var content: Content
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    var content: Content
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -60,7 +60,7 @@ public struct ContentPreview: BlockElement {
     /// Default card layout for rendering the content preview.
     /// - Parameter context: The publishing context for rendering tag links.
     /// - Returns: A BlockElement representing the card layout.
-    private func defaultCardLayout(context: PublishingContext) -> BlockElement {
+    private func defaultCardLayout(context: PublishingContext) -> some BlockElement {
         Card(imageName: content.image) {
             Text(content.description)
                 .margin(.bottom, .none)
@@ -79,5 +79,5 @@ public struct ContentPreview: BlockElement {
                 .style("margin-top: -5px")
             }
         }
-    }   
+    }
 }

@@ -181,7 +181,8 @@ import Foundation
 import Ignite
 
 struct Layout: ContentPage {
-    func body(content: Content, context: PublishingContext) -> [any BlockElement] {
+    @Content private var content
+    var body: some HTML {
         Text(content.title)
             .font(.title1)
 

@@ -40,7 +40,7 @@ public struct CustomFont {
     }
 }
 
-extension PageElement {
+extension HTML {
     public func addCustomFontFace(_ customFont: CustomFont) -> Self {
         style("""
         @font-face {
@@ -78,7 +78,7 @@ extension PageElement {
 //     }
 // }
 //
-// struct MyTheme: Theme {
+// struct MyTheme: Layout {
 //     func render(page: Page, context: PublishingContext) -> HTML {
 //         HTML {
 //             Head(for: page, in: context)

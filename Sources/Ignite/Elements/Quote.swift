@@ -9,24 +9,24 @@ import Foundation
 
 /// A block quote of text.
 public struct Quote: BlockElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
     /// The content of this quote.
-    var contents: [PageElement]
+    var contents: any HTML
 
     /// Provide details about this quote, e.g. a source name.
-    var caption: [InlineElement]
+    var caption: any InlineElement
 
     /// Create a new quote from a page element builder that returns an array
     /// of elements to display in the quote.
     /// - Parameter contents: The elements to display inside the quote.
-    public init(@PageElementBuilder contents: () -> [PageElement]) {
+    public init(@HTMLBuilder contents: () -> some HTML) {
         self.contents = contents()
-        self.caption = []
+        self.caption = EmptyHTML()
     }
 
     /// Create a new quote from a page element builder that returns an array
@@ -37,8 +37,8 @@ public struct Quote: BlockElement {
     /// - contents: The elements to display inside the quote.
     /// - contents: Additional details about the quote, e.g. its source.
     public init(
-        @PageElementBuilder contents: () -> [PageElement],
-        @InlineElementBuilder caption: () -> [InlineElement]
+        @HTMLBuilder contents: () -> some HTML,
+        @InlineElementBuilder caption: () -> some InlineElement
     ) {
         self.contents = contents()
         self.caption = caption()
@@ -50,7 +50,6 @@ public struct Quote: BlockElement {
     public func render(context: PublishingContext) -> String {
         let renderedContents = contents.render(context: context)
         let renderedCaption = caption.render(context: context)
-
         let blockQuoteAttributes = attributes.appending(classes: ["blockquote"])
 
         if renderedCaption.isEmpty {

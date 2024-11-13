@@ -18,7 +18,7 @@ import Foundation
 
 // swiftlint:disable type_body_length
 /// An enum providing RFC-5646 language codes used for web pages.
-public enum Language: String {
+public enum Language: String, Sendable {
     case abkhaz = "ab"
     case afar = "aa"
     case afrikaans = "af"

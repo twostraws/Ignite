@@ -1,5 +1,5 @@
 //
-// TestSubsite.swift                                
+// TestSubsite.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -12,7 +12,7 @@ import Ignite
 struct TestSubsite: Site {
     var name = "My Test Subsite"
     var titleSuffix = " - My Test Subsite"
-    var url: URL = URL("https://www.yoursite.com/subsite")
+    var url: URL = .init("https://www.yoursite.com/subsite")
 
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
     var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
@@ -25,7 +25,7 @@ struct TestSubsite: Site {
 struct TestSubsitePage: StaticPage {
     var title = "Subsite Home"
 
-    func body(context: PublishingContext) -> [any BlockElement] {
+    var body: some HTML {
         Text("Example subsite text")
     }
 }

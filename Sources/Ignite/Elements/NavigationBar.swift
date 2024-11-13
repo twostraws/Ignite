@@ -8,7 +8,7 @@
 import Foundation
 
 /// Describes elements that can be placed into navigation bars.
-public protocol NavigationItem: InlineElement { }
+public protocol NavigationItem: InlineElement {}
 
 /// A bar that sits across the top of your page to provide top-level navigation
 /// throughout your site.
@@ -37,19 +37,23 @@ public struct NavigationBar: BlockElement {
         /// Items are aligned to the trailing edge
         case trailing = "justify-content-end"
     }
-
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
+    
+    /// Controls the maximum width of the navigation bar content at different breakpoints.
+    /// By default, uses Bootstrap's container class.
+    private var widthClasses: [String] = ["container"]
 
     /// The main logo for your site, such as an image or some text. This becomes
     /// clickable to let users navigate to your homepage.
     let logo: (any InlineElement)?
 
     /// An array of items to show in this navigation bar.
-    let items: [NavigationItem]
+    let items: [any NavigationItem]
 
     /// The style to use when rendering this bar.
     var style = NavigationBarStyle.default
@@ -70,15 +74,15 @@ public struct NavigationBar: BlockElement {
     /// Creates a new `NavigationBar` instance from the `logo` and
     /// `items` provided.
     /// - Parameters:
-    ///   - logo: The logo to use in the top-left edge of your bar.
     ///   - items: An element builder that returns an array of
     /// `NavigationItem` objects.
+    ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
-        logo: (any InlineElement)? = nil,
-        @ElementBuilder<NavigationItem> items: () -> [NavigationItem]
+        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        logo: (() -> (any HTML & InlineElement))? = nil
     ) {
-        self.logo = logo
         self.items = items()
+        self.logo = logo?()
     }
 
     /// Adjusts the style of this navigation bar.
@@ -97,6 +101,11 @@ public struct NavigationBar: BlockElement {
     public func width(_ width: Int) -> Self {
         var copy = self
         copy.columnWidth = .count(width)
+        if width == .viewport {
+            copy.widthClasses = ["container-fluid", columnWidth.className]
+        } else {
+            copy.widthClasses = ["container", columnWidth.className]
+        }
         return copy
     }
 
@@ -116,7 +125,7 @@ public struct NavigationBar: BlockElement {
         case .dark: "dark"
         }
     }
-
+    
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
@@ -128,12 +137,10 @@ public struct NavigationBar: BlockElement {
                         Link(logo, target: "/")
                             .class("navbar-brand")
                     }
-
                     renderToggleButton()
-
                     renderNavItems(context: context)
                 }
-                .class("container-fluid", columnWidth.className)
+                .class(widthClasses)
             }
             .attributes(attributes)
             .class("navbar", "navbar-expand-md")
@@ -158,13 +165,13 @@ public struct NavigationBar: BlockElement {
     private func renderNavItems(context: PublishingContext) -> Group {
         Group {
             List {
-                for item in items {
+                ForEach(items) { item in
                     if let dropdownItem = item as? Dropdown {
                         renderDropdownItem(dropdownItem)
                     } else if let link = item as? Link {
                         renderLinkItem(link, context: context)
                     } else {
-                        item
+                        AnyHTML(item)
                     }
                 }
             }

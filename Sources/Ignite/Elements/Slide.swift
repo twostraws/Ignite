@@ -9,8 +9,8 @@ import Foundation
 
 /// One slide in a `Carousel`.
 public struct Slide: BlockElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -20,7 +20,7 @@ public struct Slide: BlockElement {
     var background: String?
 
     /// Other items to display inside this slide.
-    var items: [PageElement]
+    var items: [any HTML]
 
     /// How opaque the background image should be. Use values lower than 1.0
     /// to progressively dim the background image.
@@ -36,14 +36,14 @@ public struct Slide: BlockElement {
     }
 
     /// Creates a new `Slide` object using a background image and a page
-    /// element builder that returns an array of `PageElement` objects to use
+    /// element builder that returns an array of `HTML` objects to use
     /// inside the slide.
     /// - Parameter background: An optional background image to use for
     /// this slide. This should be specified relative to the root of your
     /// site, e.g. /images/dog.jpg.
     /// - Parameter items: Other items to place inside this slide, which will
     /// be placed on top of the background image.
-    public init(background: String? = nil, @PageElementBuilder items: () -> [PageElement]) {
+    public init(background: String? = nil, @HTMLBuilder items: () -> [any HTML]) {
         self.background = background
         self.items = items()
     }
@@ -86,6 +86,6 @@ public struct Slide: BlockElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        items.render(context: context)
+        FlatHTML(items).render(context: context)
     }
 }

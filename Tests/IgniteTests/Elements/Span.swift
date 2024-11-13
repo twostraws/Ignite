@@ -5,13 +5,11 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
-import XCTest
 @testable import Ignite
+import XCTest
 
 /// Tests for the `Span` element.
-final class SpanTests: ElementTest {
+@MainActor final class SpanTests: ElementTest {
     func test_singleElement() {
         let element = Span("This is a test")
         let output = element.render(context: publishingContext)

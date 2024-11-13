@@ -9,7 +9,7 @@ import XCTest
 @testable import Ignite
 
 /// Tests for the `Text` element.
-final class TextTests: ElementTest {
+@MainActor final class TextTests: ElementTest {
     func test_simpleString() {
         let element = Text("Hello")
         let output = element.render(context: publishingContext)

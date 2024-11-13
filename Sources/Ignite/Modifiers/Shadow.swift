@@ -32,7 +32,7 @@ struct Shadow: CustomStringConvertible {
     }
 }
 
-public extension PageElement {
+public extension HTML {
     /// Applies an inner shadow to this element.
     /// - Parameters:
     ///   - color: The shadow's color. Defaults to black at 33% opacity.

@@ -11,11 +11,11 @@ import Foundation
 /// to translate dates into machine-readable format, allowing for better search
 /// engine results or custom features such as reminders.
 public struct Time: InlineElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// The contents of this time tag.
-    public var contents: [InlineElement]
+    public var contents: any InlineElement
 
     /// This attribute indicates the time and/or date of the element.
     public var dateTime: Date?
@@ -24,7 +24,7 @@ public struct Time: InlineElement {
     /// - Parameter dateTime: The time and/or date of the element
     /// inside the time element.
     public init(dateTime: Date? = nil) {
-        self.contents = []
+        self.contents = EmptyHTML()
         self.dateTime = dateTime
     }
 
@@ -33,7 +33,7 @@ public struct Time: InlineElement {
     /// - Parameter dateTime: The time and/or date of the element
     /// inside the time element.
     public init(_ singleElement: any InlineElement, dateTime: Date? = nil) {
-        self.contents = [singleElement]
+        self.contents = singleElement
         self.dateTime = dateTime
     }
 
@@ -41,7 +41,7 @@ public struct Time: InlineElement {
     /// elements to place inside the time element.
     /// - Parameter dateTime: The time and/or date of the element
     /// - Parameter contents: The elements to place inside the time element.
-    public init(dateTime: Date? = nil, @InlineElementBuilder contents: () -> [InlineElement]) {
+    public init(dateTime: Date? = nil, @HTMLBuilder contents: () -> some InlineElement) {
         self.dateTime = dateTime
         self.contents = contents()
     }

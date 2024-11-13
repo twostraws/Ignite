@@ -5,13 +5,11 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
-import XCTest
 @testable import Ignite
+import XCTest
 
 /// Tests for the `Image` element.
-final class ImageTests: ElementTest {
+@MainActor final class ImageTests: ElementTest {
     func test_named() {
         let element = Image("/images/example.jpg", description: "Example image")
         let output = element.render(context: publishingContext)

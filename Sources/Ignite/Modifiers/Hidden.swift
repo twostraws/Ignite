@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension PageElement {
+public extension HTML {
     /// Optionally hides the view in the view hierarchy.
     /// - Parameter isHidden: Whether to hide this element or not.
     /// - Returns: A copy of the current element, optionally hidden.

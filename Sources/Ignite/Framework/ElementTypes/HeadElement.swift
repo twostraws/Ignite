@@ -8,6 +8,6 @@
 import Foundation
 
 /// A metadata element that can exist in the `Head` struct.
-public protocol HeadElement: PageElement {
+public protocol HeadElement: HTML {
 
 }

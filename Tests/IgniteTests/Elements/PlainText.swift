@@ -5,13 +5,11 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
-import XCTest
 @testable import Ignite
+import XCTest
 
 /// Tests for plain text.
-final class PlainTextTests: ElementTest {
+@MainActor final class PlainTextTests: ElementTest {
     func test_singleElement() {
         let element = "This is a test"
         let output = element.render(context: publishingContext)

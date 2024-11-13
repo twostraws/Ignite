@@ -8,7 +8,7 @@
 import Foundation
 
 /// Controls how many columns a given block element takes up in a `Section`.
-public enum ColumnWidth {
+public enum ColumnWidth: Sendable {
     /// The system will divide the available space automatically. For example,
     /// if there are three automatically sized elements in a 12-column section,
     /// each will be allocated four columns.

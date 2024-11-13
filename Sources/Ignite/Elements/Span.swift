@@ -10,29 +10,29 @@ import Foundation
 /// An inline subsection of another element, useful when you need to style
 /// just part of some text, for example.
 public struct Span: InlineElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
-
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
+    
     /// The contents of this span.
-    public var contents: [InlineElement]
+    public var contents: any InlineElement
 
     /// Creates a span with no content. Used in some situations where
     /// exact styling is performed by Bootstrap, e.g. in Carousel.
     public init() {
-        self.contents = []
+        self.contents = EmptyHTML()
     }
 
     /// Creates a span from one `InlineElement`.
     /// - Parameter singleElement: The element you want to place
     /// inside the span.
-    public init(_ singleElement: any InlineElement) {
-        self.contents = [singleElement]
+    public init(_ singleElement: some InlineElement) {
+        self.contents = singleElement
     }
 
     /// Creates a span from an inline element builder that returns an array of
     /// elements to place inside the span.
     /// - Parameter contents: The elements to place inside the span.
-    public init(@InlineElementBuilder contents: () -> [InlineElement]) {
+    public init(@InlineElementBuilder contents: () -> some InlineElement) {
         self.contents = contents()
     }
 

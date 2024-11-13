@@ -9,6 +9,6 @@ import Foundation
 
 /// An element that exists inside a block element, such as an emphasized
 /// piece of text.
-public protocol InlineElement: PageElement {
+public protocol InlineElement: HTML {
 
 }

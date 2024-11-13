@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension PageElement {
+public extension HTML {
     /// Adjusts the opacity of an element.
     /// - Parameter value: A value between 0 (fully transparent) and 1 (fully opaque).
     /// - Returns: A copy of the current element with the updated opacity.

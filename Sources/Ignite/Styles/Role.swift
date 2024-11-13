@@ -40,9 +40,12 @@ public enum Role: String, CaseIterable {
     /// connotations.
     case info
 
-    /// This elements should be rendered in light colors.
+    /// This element should be rendered in light colors.
     case light
 
-    /// This elements should be rendered in dark colors.
+    /// This element should be rendered in dark colors.
     case dark
+    
+    /// This element should be rendered as regular text.
+    case none
 }
