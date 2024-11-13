@@ -91,6 +91,7 @@ public struct HTMLHead: HTMLRootElement {
             analyticsSnippet
         }
     
+        MetaLink.animationCSS
         MetaLink(href: page.url, rel: "canonical")
 
         if let favicon = configuration.favicon {

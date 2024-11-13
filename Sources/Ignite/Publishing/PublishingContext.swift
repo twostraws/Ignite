@@ -37,7 +37,7 @@ public class PublishingContext {
     private(set) var warnings = [String]()
     
     /// All the Markdown content this user has inside their Content folder.
-    private(set) public var allContent = [Content]()
+    public private(set) var allContent = [Content]()
     
     /// The sitemap for this site. Yes, using an array is less efficient when
     /// using `contains()`, but it allows us to list pages in a sensible order.
@@ -138,6 +138,7 @@ public class PublishingContext {
         try copyResources()
         try await generateContent()
         try await generateTagPages()
+        generateAnimations()
         try generateSiteMap()
         try generateFeed()
         try generateRobots()
@@ -179,6 +180,12 @@ public class PublishingContext {
             print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
             throw error
         }
+        
+        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/animations.min.css").path()) {
+            try copy(resource: "css/animations.min.css")
+        }
+        
+        try copy(resource: "js/animations.js")
         
         if site.useDefaultBootstrapURLs == .localBootstrap {
             try copy(resource: "css/bootstrap.min.css")
@@ -245,6 +252,7 @@ public class PublishingContext {
             }
         }
     }
+
     /// Renders a static page.
     /// - Parameters:
     ///   - page: The page to render.

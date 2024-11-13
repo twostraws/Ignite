@@ -107,4 +107,10 @@ extension PublishingContext {
             throw PublishingError.failedToWriteFeed
         }
     }
+
+    /// Generates animations for the site.
+    func generateAnimations() {
+        let animationsPath = buildDirectory.appending(path: "css/animations.min.css")
+        AnimationManager.shared.write(to: animationsPath)
+    }
 }
