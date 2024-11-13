@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 struct FeedGenerator {
     var site: any Site
     var content: [Content]

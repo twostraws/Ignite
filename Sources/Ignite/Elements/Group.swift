@@ -7,36 +7,46 @@
 
 import Foundation
 
-/// Creates some arbitrary group of content in your page. This is used extensively
-/// on the modern web pages to divide pages up into smaller, styled sections.
 public struct Group: BlockElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
-
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
+    
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
-
-    var items: [BaseElement]
-    var isTransparent: Bool
-
-    public init(isTransparent: Bool = false, @ElementBuilder<BaseElement> _ items: () -> [BaseElement]) {
-        self.items = items()
+    
+    var items: any HTML
+    private var isTransparent: Bool
+    
+    public init(@HTMLBuilder _ content: () -> some HTML) {
+        self.items = content()
+        self.isTransparent = false
+    }
+    
+    public init(_ content: some HTML) {
+        self.items = content
+        self.isTransparent = false
+    }
+    
+    public init(isTransparent: Bool, @HTMLBuilder content: () -> some HTML) {
+        self.items = content()
         self.isTransparent = isTransparent
     }
-
-    init(items: [BaseElement], context: PublishingContext) {
+    
+    public init(_ items: any HTML, isTransparent: Bool = false) {
         self.items = items
+        self.isTransparent = isTransparent
+    }
+    
+    init(context: PublishingContext, items: [any HTML]) {
+        self.items = FlatHTML(items)
         self.isTransparent = true
     }
-
-    /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
-    /// - Returns: The HTML for this element.
+    
     public func render(context: PublishingContext) -> String {
         if isTransparent {
-            items.render(context: context)
+            return items.render(context: context)
         } else {
-            "<div\(attributes.description)>\(items.render(context: context))</div>"
+            return "<div\(attributes.description)>\(items.render(context: context))</div>"
         }
     }
 }

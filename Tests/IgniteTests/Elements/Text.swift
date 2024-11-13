@@ -9,7 +9,7 @@ import XCTest
 @testable import Ignite
 
 /// Tests for the `Text` element.
-final class TextTests: ElementTest {
+@MainActor final class TextTests: ElementTest {
     func test_simpleString() {
         let element = Text("Hello")
         let output = element.render(context: publishingContext)
@@ -67,6 +67,14 @@ final class TextTests: ElementTest {
         let output = element.render(context: publishingContext)
         // swiftlint:disable line_length
         XCTAssertEqual(output, "<p>Text in <em>italics</em>, text in <strong>bold</strong>, and text in <em><strong>bold italics</strong></em>.</p>")
+        // swiftlint:enable line_length
+    }
+
+    func test_markdownSoftBreaks() {
+        let element = Text(markdown: "This is a single\nline of markdown with a soft break")
+        let output = element.render(context: publishingContext)
+        // swiftlint:disable line_length
+        XCTAssertEqual(output, "<p>This is a single line of markdown with a soft break</p>")
         // swiftlint:enable line_length
     }
 }

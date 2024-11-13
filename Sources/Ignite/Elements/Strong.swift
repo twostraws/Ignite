@@ -9,15 +9,15 @@ import Foundation
 
 /// Renders text with a strong text effect, which usually means bold.
 public struct Strong: InlineElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// The content that should be strengthened.
-    var content: [InlineElement]
+    var content: any InlineElement
 
     /// Creates a new `Strong` instance using an inline element builder
     /// that returns an array of content to place inside.
-    public init(@InlineElementBuilder content: () -> [InlineElement]) {
+    public init(@InlineElementBuilder content: () -> some InlineElement) {
         self.content = content()
     }
 
@@ -25,7 +25,7 @@ public struct Strong: InlineElement {
     /// that should be rendered with a strong effect.
     /// - Parameter singleElement: The element to strengthen.
     public init(_ singleElement: any InlineElement) {
-        self.content = [singleElement]
+        self.content = singleElement
     }
 
     /// Renders this element using publishing context passed in.

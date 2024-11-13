@@ -23,8 +23,8 @@ public struct Table: BlockElement {
         case stripedColumns
     }
 
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -33,7 +33,7 @@ public struct Table: BlockElement {
     var rows: [Row]
 
     /// An optional array of header to use at the top of this table.
-    var header: [PageElement]?
+    var header: [any HTML]?
 
     /// The styling to apply to this table. Defaults to `.plain`.
     var style = Style.plain
@@ -61,7 +61,7 @@ public struct Table: BlockElement {
     ///   - header: An array of headers to use at the top of the table.
     public init(
         @ElementBuilder<Row> rows: () -> [Row],
-        @PageElementBuilder header: () -> [PageElement]
+        @HTMLBuilder header: () -> [any HTML]
     ) {
         self.rows = rows()
         self.header = header()

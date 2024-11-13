@@ -11,8 +11,8 @@ import Foundation
 /// of your page. For dedicated code blocks that sit on their own line, use
 /// `CodeBlock` instead.
 public struct Code: InlineElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// The code to display.
     var content: String

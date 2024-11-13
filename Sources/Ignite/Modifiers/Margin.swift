@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension PageElement {
+public extension HTML {
     /// Applies margins on all sides of this element. Defaults to 20 pixels.
     /// - Parameter length: The amount of margin to apply, specified in
     /// units of your choosing.

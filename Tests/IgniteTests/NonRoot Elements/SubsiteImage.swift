@@ -1,18 +1,15 @@
 //
-// SubsiteImage.swift                               
+// SubsiteImage.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
 //
 
-import Foundation
-
-import XCTest
 @testable import Ignite
+import XCTest
 
 /// Tests for the `Image` element.
-final class SubsiteImageTests: ElementTest {
-
+@MainActor final class SubsiteImageTests: ElementTest {
     func test_image_named() {
         let element = Image("/images/example.jpg", description: "Example image")
         let output = element.render(context: publishingSubsiteContext)

@@ -5,26 +5,19 @@
 // See LICENSE for license information.
 //
 
-//
-// PublishingContext-ResourceLoading.swift
-// Ignite
-// https://www.github.com/twostraws/Ignite
-// See LICENSE for license information.
-//
-
 import Foundation
 
 extension PublishingContext {
     /// Renders static pages and content pages, including the homepage.
     func generateContent() async throws {
-        try await render(site.homePage, isHomePage: true)
+        try render(site.homePage, isHomePage: true)
 
         for page in site.pages {
-            try await render(page)
+            try render(page)
         }
 
         for content in allContent {
-            try await render(content)
+            try render(content)
         }
         currentRenderingPath = nil
     }
@@ -48,7 +41,12 @@ extension PublishingContext {
 
             let outputDirectory = buildDirectory.appending(path: path)
 
-            let body = await Group(items: site.tagPage.body(tag: tag, context: self), context: self)
+            let body = render(page: nil) {
+                TagContext.withCurrentTag(tag) {
+                    let tagPageBody = site.tagPage.body
+                    return Group(tagPageBody)
+                }
+            }
 
             let page = Page(
                 title: "Tags",
@@ -57,7 +55,7 @@ extension PublishingContext {
                 body: body
             )
 
-            let outputString = await render(page, using: site.tagPage.theme)
+            let outputString = render(page, using: site.tagPage.theme)
 
             try write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }

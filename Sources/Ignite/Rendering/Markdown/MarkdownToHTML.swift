@@ -129,6 +129,13 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
         }
     }
 
+    /// Processes soft breaks (single newlines).
+    /// - Parameter softBreak: The soft break to process.
+    /// - Returns: A single space.
+    public func visitSoftBreak(_ softBreak: SoftBreak) -> String {
+        return " "
+    }
+
     /// Processes emphasis markup.
     /// - Parameter emphasis: The emphasized content to process.
     /// - Returns: A HTML <em> element with the markup's children inside.

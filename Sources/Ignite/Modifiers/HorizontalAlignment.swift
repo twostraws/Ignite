@@ -20,7 +20,7 @@ public enum HorizontalAlignment: String {
 }
 
 /// Determines which elements can have horizontal alignment attached,
-public protocol HorizontalAligning: PageElement { }
+public protocol HorizontalAligning: HTML { }
 
 public extension HorizontalAligning {
     /// Aligns this element using the specific alignment.

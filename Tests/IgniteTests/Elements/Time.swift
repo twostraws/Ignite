@@ -5,13 +5,11 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
-import XCTest
 @testable import Ignite
+import XCTest
 
 /// Tests for the `time` element.
-final class TimeTests: ElementTest {
+@MainActor final class TimeTests: ElementTest {
     func test_without_datetime() {
         let element = Time("This is a test")
         let output = element.render(context: publishingContext)
@@ -34,7 +32,7 @@ final class TimeTests: ElementTest {
             return
         }
         let dateTime = Date(timeIntervalSince1970: customTimeInterval)
-        let element = Time(dateTime: dateTime) { "This is a test" }
+        let element = Time("This is a test", dateTime: dateTime)
         let output = element.render(context: publishingContext)
 
         XCTAssertEqual(output, "<time datetime=\"2024-05-22T20:00:30Z\">This is a test</time>")

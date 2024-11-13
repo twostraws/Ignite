@@ -12,7 +12,7 @@ import Ignite
 struct TestSite: Site {
     var name = "My Test Site"
     var titleSuffix = " - My Test Site"
-    var url: URL = URL("https://www.yoursite.com")
+    var url: URL = .init("https://www.yoursite.com")
 
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
     var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
@@ -25,7 +25,7 @@ struct TestSite: Site {
 struct TestPage: StaticPage {
     var title = "Home"
 
-    func body(context: PublishingContext) -> [any BlockElement] {
+    var body: some HTML {
         Text("Example text")
     }
 }

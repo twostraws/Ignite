@@ -31,8 +31,8 @@ public struct Button: InlineElement {
         }
     }
 
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// Whether this button should submit a form or not. Defaults to `.plain`.
     var type = ButtonType.plain
@@ -44,43 +44,42 @@ public struct Button: InlineElement {
     var role = Role.default
 
     /// Elements to render inside this button.
-    var label: [InlineElement]
+    var label: any HTML
 
     /// Creates a button with no label. Used in some situations where
     /// exact styling is performed by Bootstrap, e.g. in Carousel.
     public init() {
-        self.label = []
+        self.label = EmptyHTML()
     }
 
     /// Creates a button with a label.
     /// - Parameter label: The label text to display on this button.
-    public init(_ label: InlineElement) {
-        self.label = [label]
+    public init(_ label: some InlineElement) {
+        self.label = label
     }
 
     /// Creates a button from a more complex piece of HTML.
     /// - Parameter label: An inline element builder of all the content
     /// for this button.
-    public init(@InlineElementBuilder label: () -> [InlineElement]) {
+    public init(@InlineElementBuilder label: @escaping () -> some InlineElement) {
         self.label = label()
+    }
+    
+    /// Creates a button with a label.
+    /// - Parameter label: The label text to display on this button.
+    /// - actions: An element builder that returns an array of actions to run when this button is pressed.
+    public init(_ label: String, @ActionBuilder actions: () -> [Action]) {
+        self.label = label
+        addEvent(name: "onclick", actions: actions())
     }
 
     /// Creates a button with a label and actions to run when it's pressed.
     /// - Parameters:
     ///   - label: The label text to display on this button.
     ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
-    public init(_ label: any InlineElement, @ElementBuilder<Action> actions: () -> [Action]) {
-        self.label = [label]
-        self.addEvent(name: "onclick", actions: actions())
-    }
-
-    /// Creates a button with a label and actions to run when it's pressed.
-    /// - Parameters:
-    ///   - label: The label text to display on this button.
-    ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
-    public init(@ElementBuilder<Action> actions: () -> [Action], @InlineElementBuilder label: () -> [InlineElement]) {
+    public init(@InlineElementBuilder _ label: @escaping () -> some InlineElement, @ActionBuilder actions: () -> [Action]) {
         self.label = label()
-        self.addEvent(name: "onclick", actions: actions())
+        addEvent(name: "onclick", actions: actions())
     }
 
     /// Adjusts the size of this button.
@@ -146,7 +145,7 @@ public struct Button: InlineElement {
         let buttonAttributes = attributes
             .appending(classes: Button.classes(forRole: role, size: size))
             .appending(aria: Button.aria(forRole: role))
-        let output = label.map { $0.render(context: context) }.joined()
+        let output = FlatHTML(label).map { $0.render(context: context) }.joined()
         return "<button type=\"\(type.htmlName)\"\(buttonAttributes.description)>\(output)</button>"
     }
 }

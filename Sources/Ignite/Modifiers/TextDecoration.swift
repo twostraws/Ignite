@@ -14,7 +14,7 @@ public enum TextDecoration: String {
     case underline
 }
 
-public extension PageElement {
+public extension HTML {
     /// Applies a text decoration style to the current element.
     /// - Parameter style: The style to apply, specified as a `TextDecoration` case.
     /// - Returns: The current element with the updated text decoration style applied.

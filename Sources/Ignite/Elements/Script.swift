@@ -10,8 +10,8 @@ import Foundation
 /// Embeds some JavaScript inside this page, either directly or by
 /// referencing an external file.
 public struct Script: BlockElement & HeadElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
