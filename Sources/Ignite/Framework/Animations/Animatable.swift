@@ -5,70 +5,44 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
-/// Defines the requirements for an animation
+/// A protocol that defines the core animation capabilities for Ignite's animation system.
+///
+/// The `Animatable` protocol provides a foundation for creating animations with customizable
+/// timing, duration, and trigger behaviors. Types conforming to this protocol can be used
+/// with the `animation()` modifier to create dynamic animations.
+///
+/// Example usage:
+/// ```swift
+/// struct FadeInAnimation: Animation, Animatable {
+///     var duration: Double = 1.0
+///     var timing: AnimationTiming = .easeOut
+///     var trigger: AnimationTrigger = .appear
+///
+///     var body: some Animation {
+///         StandardAnimation(property: "opacity", from: "0", to: "1")
+///     }
+/// }
+/// ```
+///
+/// - Note: This protocol is typically used in conjunction with the `Animation` protocol to create
+///         custom animations that can be applied to HTML elements.
 public protocol Animatable {
-    /// The duration of the animation in seconds
-    var duration: Double { get }
+    /// The duration of the animation in seconds.
+    var duration: Double { get set }
     
-    /// The CSS timing function to use for the animation
-    var cssTimingFunction: String { get }
+    /// The timing function that controls the animation's acceleration curve.
+    var timing: AnimationCurve { get set }
     
-    /// The delay before the animation starts in seconds
-    var delay: Double { get }
+    /// The event that triggers the animation.
+    var trigger: AnimationTrigger { get set }
     
-    /// The number of times to repeat the animation (nil for no repeat)
-    var repeatCount: Double? { get }
+    /// The number of times the animation should repeat.
+    /// - Note: Set to `nil` for no repetition, or `.infinity` for endless repetition.
+    var repeatCount: Double? { get set }
     
-    /// Whether the animation should reverse direction on alternate cycles
-    var autoreverses: Bool { get }
+    /// The delay before the animation begins, in seconds.
+    var delay: Double { get set }
     
-    /// The properties being animated and their values
-    var properties: [AnimationValue] { get }
-    
-    /// Sets the duration of the animation
-    func duration(_ duration: Double) -> Self
-    
-    /// Adjusts the speed of the animation (duration is divided by speed)
-    func speed(_ speed: Double) -> Self
-    
-    /// Sets the delay before the animation starts
-    func delay(_ delay: Double) -> Self
-    
-    /// Makes the animation repeat indefinitely
-    func repeatForever(autoreverses: Bool) -> Self
-    
-    /// Sets a specific number of times to repeat the animation
-    func repeatCount(_ count: Int, autoreverses: Bool) -> Self
-    
-    /// Sets whether the animation should reverse on alternate cycles
-    func autoReverse(_ autoreverses: Bool) -> Self
-    
-    /// Creates a linear timing animation
-    static var linear: Self { get }
-    
-    /// Creates a linear timing animation with specified duration
-    static func linear(duration: Double) -> Self
-    
-    /// Creates an ease-in timing animation
-    static var easeIn: Self { get }
-    
-    /// Creates an ease-in timing animation with specified duration
-    static func easeIn(duration: Double) -> Self
-    
-    /// Creates an ease-out timing animation
-    static var easeOut: Self { get }
-    
-    /// Creates an ease-out timing animation with specified duration
-    static func easeOut(duration: Double) -> Self
-    
-    /// Creates an ease-in-out timing animation
-    static var easeInOut: Self { get }
-    
-    /// Creates an ease-in-out timing animation with specified duration
-    static func easeInOut(duration: Double) -> Self
-    
-    /// Creates a spring timing animation with customizable parameters
-    static func spring(dampingRatio: Double, velocity: Double) -> Self
+    /// Whether the animation should play in reverse after completing.
+    var autoreverses: Bool { get set }
 }

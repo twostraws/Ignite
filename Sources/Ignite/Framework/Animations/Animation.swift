@@ -7,195 +7,140 @@
 
 import Foundation
 
-/// The main animation configuration type that provides a flexible way to define CSS animations
-public struct Animation: Animatable, Hashable {
-    /// The duration of the animation in seconds
-    public var duration: Double
-    /// The CSS timing function string that defines the animation's acceleration curve
-    public var cssTimingFunction: String
-    /// The delay before the animation starts in seconds
-    public var delay: Double = 0
-    /// The number of times to repeat the animation
-    public var repeatCount: Double?
-    /// Whether the animation should reverse direction on alternate cycles
-    public var autoreverses: Bool = false
-    /// The CSS properties being animated and their values
-    public var properties: [AnimationValue] = []
+/// A protocol that defines the core animation interface for Ignite.
+///
+/// The `Animation` protocol provides the foundation for creating custom animations with support for
+/// duration, timing, delays, and repetition. It works in conjunction with `Animatable` to enable
+/// both simple and complex animations through a declarative API.
+///
+/// Example usage:
+/// ```swift
+/// struct PulseAnimation: Animation {
+///     var body: some Animation {
+///         StandardAnimation(property: "transform", from: "scale(1)", to: "scale(1.1)")
+///             .duration(0.5)
+///             .timing(.easeInOut)
+///             .repeatCount(2, autoreverses: true)
+///     }
+/// }
+/// ```
+public protocol Animation {
+    associatedtype Body: Animation
+    var body: Body { get }
+    var name: String { get }
+    static var id: String { get }
     
-    /// Defines the available timing functions for animations
-    public enum TimingFunction {
-        /// Linear timing with constant speed
-        case linear
-        /// Starts slow, then speeds up
-        case easeIn
-        /// Starts fast, then slows down
-        case easeOut
-        /// Starts slow, speeds up in the middle, then slows down
-        case easeInOut
-        /// Spring-like animation with customizable damping and velocity
-        case spring(dampingRatio: Double, velocity: Double)
+    func duration(_ duration: Double) -> Self
+    func timing(_ function: AnimationCurve) -> Self
+    func delay(_ delay: Double) -> Self
+    func repeatCount(_ count: Double, autoreverses: Bool) -> Self
+    func speed(_ speed: Double) -> Self
+}
+
+public extension Animation {
+    /// A unique identifier generated from the animation type name
+    static var id: String {
+        String(describing: self).truncatedHash
+    }
+    
+    /// A kebab-case name combining the type name and unique identifier
+    var name: String {
+        let typeName = String(describing: type(of: self))
+            .replacingOccurrences(of: "Style", with: "")
+        let kebabCase = typeName.replacingOccurrences(
+            of: "([a-z0-9])([A-Z])",
+            with: "$1-$2",
+            options: .regularExpression
+        ).lowercased()
         
-        var cssValue: String {
-            switch self {
-            case .linear: return "linear"
-            case .easeIn: return "ease-in"
-            case .easeOut: return "ease-out"
-            case .easeInOut: return "ease-in-out"
-            case .spring(let damping, let velocity):
-                return "cubic-bezier(0.4, \(damping), \(velocity), 1.0)"
-            }
+        return "\(kebabCase)-\(Self.id)"
+    }
+}
+
+public extension Animation {
+    /// Adjusts the animation speed by modifying its duration.
+    /// - Parameter speed: The speed multiplier. Values greater than 1 increase speed, less than 1 decrease it.
+    func speed(_ speed: Double) -> Self {
+        if var copy = self as? any Animatable {
+            duration(copy.duration / speed)
+            return copy as! Self
         }
+        return self
     }
     
-    // MARK: - Protocol Implementation
-
-    /// Adjusts the animation speed by dividing the duration
-    public func speed(_ speed: Double) -> Animation {
-        duration(duration / speed)
+    /// Sets the animation duration.
+    /// - Parameter duration: The duration in seconds.
+    func duration(_ duration: Double) -> Self {
+        if var copy = self as? any Animatable {
+            copy.duration = duration
+            return copy as! Self
+        }
+        return self
     }
     
-    /// Sets the animation duration in seconds
-    public func duration(_ duration: Double) -> Animation {
-        var copy = self
-        copy.duration = duration
-        return copy
+    /// Sets the animation timing function.
+    /// - Parameter function: The timing curve to use.
+    func timing(_ function: AnimationCurve) -> Self {
+        if var copy = self as? any Animatable {
+            copy.timing = function
+            return copy as! Self
+        }
+        return self
     }
     
-    /// Sets the delay before the animation starts
-    public func delay(_ delay: Double) -> Animation {
-        var copy = self
-        copy.delay = delay
-        return copy
+    /// Sets a delay before the animation begins.
+    /// - Parameter delay: The delay duration in seconds.
+    func delay(_ delay: Double) -> Self {
+        if var copy = self as? any Animatable {
+            copy.delay = delay
+            return copy as! Self
+        }
+        return self
     }
     
-    /// Makes the animation repeat indefinitely
-    public func repeatForever(autoreverses: Bool = true) -> Animation {
-        var copy = self
-        copy.repeatCount = .infinity
-        copy.autoreverses = autoreverses
-        return copy
-    }
-    
-    /// Sets a specific number of times to repeat the animation
-    public func repeatCount(_ count: Int, autoreverses: Bool = true) -> Animation {
-        var copy = self
-        copy.repeatCount = Double(count)
-        copy.autoreverses = autoreverses
-        return copy
-    }
-    
-    /// Sets whether the animation should reverse on alternate cycles
-    public func autoReverse(_ autoreverses: Bool = true) -> Animation {
-        var copy = self
-        copy.autoreverses = autoreverses
-        return copy
-    }
-}
-    
-public extension Animation {
-    /// Creates a linear timing animation
-    static var linear: Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.linear.cssValue,
-            delay: 0,
-            repeatCount: nil,
-            autoreverses: false
-        )
-    }
-    
-    /// Creates a linear timing animation with specified duration
-    static func linear(duration: Double) -> Animation {
-        linear.duration(duration)
-    }
-    
-    /// Creates an ease-in timing animation
-    static var easeIn: Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeIn.cssValue,
-            delay: 0,
-            repeatCount: nil,
-            autoreverses: false
-        )
-    }
-    
-    /// Creates an ease-in timing animation with specified duration
-    static func easeIn(duration: Double) -> Animation {
-        easeIn.duration(duration)
-    }
-    
-    /// Creates an ease-out timing animation
-    static var easeOut: Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeOut.cssValue,
-            delay: 0,
-            repeatCount: nil,
-            autoreverses: false
-        )
-    }
-    
-    /// Creates an ease-out timing animation with specified duration
-    static func easeOut(duration: Double) -> Animation {
-        easeOut.duration(duration)
-    }
-    
-    /// Creates an ease-in-out timing animation
-    static var easeInOut: Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeInOut.cssValue,
-            delay: 0,
-            repeatCount: nil,
-            autoreverses: false
-        )
-    }
-    
-    /// Creates an ease-in-out timing animation with specified duration
-    static func easeInOut(duration: Double) -> Animation {
-        easeInOut.duration(duration)
-    }
-    
-    /// Creates a spring timing animation with customizable parameters
-    static func spring(dampingRatio: Double = 0.5, velocity: Double = 0.0) -> Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.spring(dampingRatio: dampingRatio, velocity: velocity).cssValue,
-            delay: 0,
-            repeatCount: nil,
-            autoreverses: false
-        )
+    /// Configures animation repetition.
+    /// - Parameters:
+    ///   - count: Number of times to repeat. Use `.infinity` for endless repetition.
+    ///   - autoreverses: Whether the animation should play in reverse after completing.
+    func repeatCount(_ count: Double, autoreverses: Bool = true) -> Self {
+        if var copy = self as? any Animatable {
+            copy.repeatCount = count
+            copy.autoreverses = autoreverses
+            return copy as! Self
+        }
+        return self
     }
 }
 
-// MARK: - Predefined Animations
-
 public extension Animation {
-    /// Creates a fade-in animation
-    static func fadeIn() -> Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeOut.cssValue,
-            properties: [
-                AnimationValue(name: "opacity", initial: "0", final: "1")
-            ]
-        )
+    @MainActor func register(for elementID: String) -> String {
+        if let resolvedAnimation = AnimationBuilder.buildBlock(self) as? ResolvedAnimation ??
+            AnimationBuilder.buildBlock(body) as? ResolvedAnimation
+        {
+            AnimationManager.shared.registerAnimation(resolvedAnimation, for: elementID)
+            return resolvedAnimation.name
+        }
+        return ""
+    }
+}
+
+public extension Animation where Self == StandardAnimation {
+    /// Creates a fade-in animation that transitions opacity from 0 to 1.
+    static func fadeIn() -> StandardAnimation {
+        StandardAnimation(property: "opacity", from: "0", to: "1")
+            .duration(0.35)
+            .timing(.easeOut)
     }
     
-    /// Creates a fade-out animation
-    static func fadeOut() -> Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeOut.cssValue,
-            properties: [
-                AnimationValue(name: "opacity", initial: "1", final: "0")
-            ]
-        )
+    /// Creates a fade-out animation that transitions opacity from 1 to 0.
+    static func fadeOut() -> StandardAnimation {
+        StandardAnimation(property: "opacity", from: "1", to: "0")
+            .duration(0.35)
+            .timing(.easeOut)
     }
     
-    /// Creates a slide-in animation from a specified edge
-    static func slideIn(from edge: Edge) -> Animation {
+    /// Creates an animation that slides content in from a specified edge.
+    static func slideIn(from edge: Edge) -> StandardAnimation {
         let (property, from) = switch edge {
         case .leading: ("translateX", "-100%")
         case .trailing: ("translateX", "100%")
@@ -204,21 +149,13 @@ public extension Animation {
         default: ("translateX", "-100%")
         }
         
-        return Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeOut.cssValue,
-            properties: [
-                AnimationValue(
-                    name: "transform",
-                    initial: "\(property)(\(from))",
-                    final: "\(property)(0)"
-                )
-            ]
-        )
+        return StandardAnimation(property: "transform", from: "\(property)(\(from))", to: "\(property)(0)")
+            .duration(0.35)
+            .timing(.easeOut)
     }
     
-    /// Creates a slide-out animation to a specified edge
-    static func slideOut(to edge: Edge) -> Animation {
+    /// Creates an animation that slides content out to a specified edge.
+    static func slideOut(to edge: Edge) -> StandardAnimation {
         let (property, to) = switch edge {
         case .leading: ("translateX", "-100%")
         case .trailing: ("translateX", "100%")
@@ -227,162 +164,70 @@ public extension Animation {
         default: ("translateX", "-100%")
         }
         
-        return Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeOut.cssValue,
-            properties: [
-                AnimationValue(
-                    name: "transform",
-                    initial: "\(property)(0)",
-                    final: "\(property)(\(to))"
-                )
-            ]
+        return StandardAnimation(property: "transform", from: "\(property)(0)", to: "\(property)(\(to))")
+            .duration(0.35)
+            .timing(.easeOut)
+    }
+    
+    /// Creates a rotation animation by specified degrees.
+    static func rotate(degrees: Double) -> StandardAnimation {
+        StandardAnimation(property: "transform", from: "rotate(0deg)", to: "rotate(\(degrees)deg)")
+            .duration(0.35)
+            .timing(.easeOut)
+    }
+    
+    /// Creates a scale animation between two values.
+    static func scale(from: Double = 0.8, to: Double = 1.0) -> StandardAnimation {
+        StandardAnimation(property: "transform", from: "scale(\(from))", to: "scale(\(to))")
+            .duration(0.35)
+            .timing(.spring(dampingRatio: 0.5, velocity: 0.1))
+    }
+    
+    /// Creates a color transition animation.
+    static func color(from: String, to: String) -> StandardAnimation {
+        StandardAnimation(property: "color", from: from, to: to)
+            .duration(0.35)
+            .timing(.easeInOut)
+    }
+    
+    /// Creates a background color transition animation.
+    static func backgroundColor(from: String, to: String) -> StandardAnimation {
+        StandardAnimation(property: "background-color", from: from, to: to)
+            .duration(0.35)
+            .timing(.easeInOut)
+    }
+    
+    /// Creates a blur effect animation.
+    static func blur(radius: Double) -> StandardAnimation {
+        StandardAnimation(property: "filter", from: "blur(0px)", to: "blur(\(radius)px)")
+            .duration(0.35)
+            .timing(.easeInOut)
+    }
+    
+    /// Creates a bouncing animation.
+    static func bounce() -> StandardAnimation {
+        StandardAnimation(property: "transform", from: "translateY(0)", to: "translateY(-20px)")
+            .duration(0.5)
+            .timing(.custom("cubic-bezier(0.36, 0, 0.66, -0.56)"))
+            .repeatCount(1, autoreverses: true)
+    }
+    
+    /// Creates a shaking animation.
+    static func shake() -> StandardAnimation {
+        StandardAnimation(property: "transform", from: "translateX(0)", to: "translateX(10px)")
+            .duration(0.5)
+            .timing(.easeInOut)
+            .repeatCount(3, autoreverses: true)
+    }
+    
+    /// Creates a 3D flip animation.
+    static func flip() -> StandardAnimation {
+        StandardAnimation(
+            property: "transform",
+            from: "perspective(400px) rotateY(0)",
+            to: "perspective(400px) rotateY(360deg)"
         )
-    }
-    
-    /// Creates a rotation animation by specified degrees
-    static func rotate(degrees: Double) -> Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeOut.cssValue,
-            properties: [
-                AnimationValue(
-                    name: "transform",
-                    initial: "rotate(0deg)",
-                    final: "rotate(\(degrees)deg)"
-                )
-            ]
-        )
-    }
-    
-    /// Creates a scale animation between two values
-    static func scale(from: Double = 0.8, to: Double = 1.0) -> Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.spring(dampingRatio: 0.5, velocity: 0.1).cssValue,
-            properties: [
-                AnimationValue(name: "transform", initial: "scale(\(from))", final: "scale(\(to))")
-            ]
-        )
-    }
-    
-    /// Creates a color transition animation
-    static func color(from: String, to: String) -> Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeInOut.cssValue,
-            properties: [
-                AnimationValue(
-                    name: "color",
-                    initial: from,
-                    final: to
-                )
-            ]
-        )
-    }
-    
-    /// Creates a background color transition animation
-    static func backgroundColor(from: String, to: String) -> Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeInOut.cssValue,
-            properties: [
-                AnimationValue(
-                    name: "background-color",
-                    initial: from,
-                    final: to
-                )
-            ]
-        )
-    }
-    
-    /// Creates a size transition animation
-    static func size(width: String? = nil, height: String? = nil) -> Animation {
-        var properties: [AnimationValue] = []
-        
-        if let width {
-            properties.append(AnimationValue(name: "width", initial: "auto", final: width))
-        }
-        if let height {
-            properties.append(AnimationValue(name: "height", initial: "auto", final: height))
-        }
-        
-        return Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeInOut.cssValue,
-            properties: properties
-        )
-    }
-    
-    /// Creates a blur effect animation
-    static func blur(radius: Double) -> Animation {
-        Animation(
-            duration: 0.35,
-            cssTimingFunction: TimingFunction.easeInOut.cssValue,
-            properties: [
-                AnimationValue(
-                    name: "filter",
-                    initial: "blur(0px)",
-                    final: "blur(\(radius)px)"
-                )
-            ]
-        )
-    }
-    
-    /// Creates a bouncing animation
-    static func bounce() -> Animation {
-        Animation(
-            duration: 0.5,
-            cssTimingFunction: "cubic-bezier(0.36, 0, 0.66, -0.56)",
-            properties: [
-                AnimationValue(
-                    name: "transform",
-                    initial: "translateY(0)",
-                    final: "translateY(-20px)"
-                )
-            ]
-        ).autoReverse()
-    }
-    
-    /// Creates a shaking animation
-    static func shake() -> Animation {
-        Animation(
-            duration: 0.5,
-            cssTimingFunction: "ease-in-out",
-            properties: [
-                AnimationValue(
-                    name: "transform",
-                    initial: "translateX(0)",
-                    final: "translateX(10px)"
-                )
-            ]
-        ).repeatCount(3).autoReverse()
-    }
-    
-    /// Creates a flip animation
-    static func flip() -> Animation {
-        Animation(
-            duration: 0.6,
-            cssTimingFunction: TimingFunction.easeInOut.cssValue,
-            properties: [
-                AnimationValue(
-                    name: "transform",
-                    initial: "perspective(400px) rotateY(0)",
-                    final: "perspective(400px) rotateY(180deg)"
-                )
-            ]
-        )
-    }
-    
-    /// Creates a pop-in animation combining scale and fade
-    static func popIn() -> Animation {
-        Animation(
-            duration: 0.4,
-            cssTimingFunction: TimingFunction.spring(dampingRatio: 0.5, velocity: 0.1).cssValue,
-            properties: [
-                AnimationValue(name: "opacity", initial: "0", final: "1"),
-                AnimationValue(name: "transform", initial: "scale(0.5)", final: "scale(1)")
-            ]
-        )
+        .duration(1.5)
+        .timing(.easeInOut)
     }
 }
