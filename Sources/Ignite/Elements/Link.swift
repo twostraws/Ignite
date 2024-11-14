@@ -204,10 +204,7 @@ public struct Link: BlockElement, InlineElement, NavigationItem, DropdownElement
             }
         }
     }
-
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
-
+    
     /// The content to display inside this link.
     var content: any HTML
 
