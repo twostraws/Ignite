@@ -53,7 +53,7 @@ public extension Animation {
             options: .regularExpression
         ).lowercased()
         
-        return "\(kebabCase)-\(Self.id)"
+        return "\(kebabCase)-\(UUID().uuidString.truncatedHash)"
     }
 }
 

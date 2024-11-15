@@ -2,6 +2,16 @@ function handleClickAnimation(event) {
     event.preventDefault();
     const element = this;
     const clickClasses = element.dataset.clickClasses.split(' ');
+    const appearClasses = element.dataset.appearClasses?.split(' ') || [];
+    
+    // Check if any appear animation is still running
+    if (appearClasses.some(appearClass => element.classList.contains(appearClass))) {
+        element.addEventListener('animationend', () => {
+            applyClickAnimation(element, clickClasses);
+        }, { once: true });
+        return;
+    }
+    
     applyClickAnimation(element, clickClasses);
 }
 
@@ -19,6 +29,13 @@ function applyClickAnimation(element, clickClasses) {
     });
 }
 
+// Add click handlers when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-click-classes]').forEach(element => {
+        element.addEventListener('click', handleClickAnimation);
+    });
+});
+
 function handleAppearAnimation() {
     if (!this.dataset.appearClasses) return;
     
@@ -28,7 +45,15 @@ function handleAppearAnimation() {
                 requestAnimationFrame(() => {
                     const classes = this.dataset.appearClasses.split(' ');
                     classes.forEach((cls) => {
-                        if (cls) this.classList.add(cls.trim());
+                        if (cls) {
+                            this.classList.add(cls.trim());
+                            // Remove appear class after animation completes
+                            this.addEventListener('animationend', () => {
+                                this.classList.remove(cls.trim());
+                                // Keep the opacity at 1
+                                this.style.opacity = '1';
+                            }, { once: true });
+                        }
                     });
                 });
                 observer.unobserve(this);
@@ -38,13 +63,6 @@ function handleAppearAnimation() {
     
     observer.observe(this);
 }
-
-// Add click handlers when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('[data-click-classes]').forEach(element => {
-        element.addEventListener('click', handleClickAnimation);
-    });
-});
 
 // Immediately handle elements that are already in the DOM
 function initializeAppearAnimations() {

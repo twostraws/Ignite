@@ -32,7 +32,19 @@ final class AnimationManager {
     ///   - animation: The resolved animation to register
     ///   - elementID: The unique identifier of the element to animate
     func registerAnimation(_ animation: ResolvedAnimation, for elementID: String) {
-        animations[elementID, default: [:]][animation.trigger] = animation
+        // If animations already exist for this element
+        if let existingAnimations = animations[elementID] {
+            // Only register if we don't already have this type of animation
+            if !existingAnimations.values.contains(where: { $0.trigger == animation.trigger }) {
+                // Use existing name for consistency if there are other animations
+                var resolvedAnimation = animation
+                resolvedAnimation.name = existingAnimations.values.first?.name ?? animation.name
+                animations[elementID, default: [:]][animation.trigger] = resolvedAnimation
+            }
+        } else {
+            // No existing animations, register normally
+            animations[elementID, default: [:]][animation.trigger] = animation
+        }
     }
     
     /// Registers any animation type for a specific element.
@@ -67,8 +79,20 @@ final class AnimationManager {
     ///
     /// - Parameter file: The URL where the CSS file should be written
     func write(to file: URL) {
-        let cssBlocks = animations.map { _, triggerMap in
-            let name = triggerMap.values.first?.name ?? ""
+        // Group animations by name to deduplicate
+        var uniqueAnimations: [String: [AnimationTrigger: ResolvedAnimation]] = [:]
+        
+        for elementAnimations in animations.values {
+            for (trigger, animation) in elementAnimations {
+                if uniqueAnimations[animation.name] == nil {
+                    uniqueAnimations[animation.name] = [:]
+                }
+                uniqueAnimations[animation.name]?[trigger] = animation
+            }
+        }
+        
+        // Generate CSS only for unique animations
+        let cssBlocks = uniqueAnimations.map { name, triggerMap in
             let builder = AnimationClassGenerator(name: name, triggerMap: triggerMap)
             return builder.build()
         }
