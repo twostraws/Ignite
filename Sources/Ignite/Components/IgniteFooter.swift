@@ -15,7 +15,7 @@ public struct IgniteFooter: HTML {
     public var body: some HTML {
         Text {
             "Created with "
-            Link("Ignite", target: URL("https://github.com/twostraws/Ignite"))
+            Link("Ignite", target: URL(static: "https://github.com/twostraws/Ignite"))
         }
         .horizontalAlignment(.center)
         .margin(.top, .extraLarge)

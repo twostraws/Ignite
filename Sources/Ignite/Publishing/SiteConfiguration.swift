@@ -74,7 +74,7 @@ public struct SiteConfiguration: Sendable {
         self.titleSuffix = ""
         self.description = ""
         self.language = .english
-        self.url = URL("https://example.com")
+        self.url = URL(static: "https://example.com")
         self.useDefaultBootstrapURLs = .localBootstrap
         self.builtInIconsEnabled = .localBootstrap
         self.syntaxHighlighters = []

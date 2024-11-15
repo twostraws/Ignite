@@ -212,7 +212,7 @@ Once you've defined a custom layout, you should add it to your `Site` struct. Th
 ```swift
 struct ExampleSite: Site {    
     var name = "Hello World"
-    var url: URL = URL("https://www.example.com")
+    var url = URL(static: "https://www.example.com")
 
     var homePage = Home()
     var theme = MyTheme()
