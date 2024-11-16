@@ -104,8 +104,8 @@ public extension Animatable {
 /// `Animation` defines the structural composition of animations through its `body` property,
 /// while `Animatable` handles the configurable properties needed for CSS generation.
 /// This separation enables better type safety (types can implement just composition or just
-/// properties), clearer maintainability (new animation types extend Animation, new properties
-/// extend Animatable), and a more intuitive API where Animation describes "what" happens and
-/// Animatable describes "how" it happens. This design is particularly evident in how
-/// AnimationBuilder converts various animation types into ResolvedAnimation instances for
+/// properties), clearer maintainability (new animation types extend `Animation`, new properties
+/// extend `Animatable`), and a more intuitive API where `Animation` describes "what" happens and
+/// `Animatable` describes "how" it happens. This design is particularly evident in how
+/// `AnimationBuilder` converts various animation types into `ResolvedAnimation` instances for
 /// CSS rendering.
