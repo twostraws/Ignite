@@ -12,7 +12,7 @@ import XCTest
 @MainActor final class SubsiteBodyTests: ElementTest {
     func test_body_simple() {
         let element = HTMLBody(for: Page(title: "TITLE", description: "DESCRIPTION",
-                                         url: URL("http://www.yoursite.com/subsite"),
+                                         url: URL(static: "http://www.yoursite.com/subsite"),
                                          body: Text("TEXT")))
         let output = element.render(context: publishingSubsiteContext)
 
