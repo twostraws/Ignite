@@ -17,31 +17,45 @@ public struct AnimationBuilder {
     /// Builds a single animation from one or more animation components.
     /// Converts various animation types into a resolved animation for rendering.
     public static func buildBlock(_ components: any Animation...) -> some Animation {
+        // If no components provided, return empty ResolvedAnimation
         guard let component = components.first else { return ResolvedAnimation() }
         
+        // Case 1: Component is already a ResolvedAnimation
+        // Return it directly since no further processing needed
         if let resolved = component as? ResolvedAnimation {
             return resolved
         }
         
+        // Case 2: Component's body is a ResolvedAnimation
+        // Copy it and update the name to maintain component identity
         if let resolved = component.body as? ResolvedAnimation {
             var copy = resolved
             copy.name = component.name
             return copy
         }
         
-        if let standard = component.body as? StandardAnimation ?? component as? StandardAnimation {
+        // Case 3: Component is or contains a BasicAnimation
+        // Convert it to a ResolvedAnimation with start/end frames
+        if let standard = component.body as? BasicAnimation ?? component as? BasicAnimation {
             return ResolvedAnimation(
                 name: component.name,
-                frames: [Frame("100%", animation: standard)],
+                frames: [
+                    AnimationFrame(0, animations: [standard]),
+                    AnimationFrame(1, animations: [standard])
+                ],
                 trigger: standard.trigger,
                 duration: standard.duration,
                 timing: standard.timing,
                 delay: standard.delay,
                 repeatCount: standard.repeatCount,
-                autoreverses: standard.autoreverses
+                autoreverses: standard.autoreverses,
+                staticProperties: standard.staticProperties,
+                isKeyframe: false
             )
         }
-        
+
+        // Case 4: Component is or contains a KeyframeAnimation
+        // Convert it to a ResolvedAnimation preserving all frames
         if let keyframes = component.body as? KeyframeAnimation ?? component as? KeyframeAnimation {
             return ResolvedAnimation(
                 name: component.name,
@@ -51,31 +65,29 @@ public struct AnimationBuilder {
                 timing: keyframes.timing,
                 delay: keyframes.delay,
                 repeatCount: keyframes.repeatCount,
-                autoreverses: keyframes.autoreverses
+                autoreverses: keyframes.autoreverses,
+                isKeyframe: true
             )
         }
         
+        // Case 5: None of the above matched
+        // Recursively try to build from component's body
         return buildBlock(component.body)
     }
     
     /// Combines multiple Frame components into a single array for keyframe animations
-    public static func buildBlock(_ components: Frame...) -> [Frame] {
+    public static func buildBlock(_ components: AnimationFrame...) -> [AnimationFrame] {
         components
     }
     
     /// Passes through a single Frame component without modification
-    public static func buildExpression(_ frame: Frame) -> Frame {
+    public static func buildExpression(_ frame: AnimationFrame) -> AnimationFrame {
         frame
     }
     
     /// Passes through a single StandardAnimation component without modification
-    public static func buildExpression(_ expression: StandardAnimation) -> StandardAnimation {
+    public static func buildExpression(_ expression: BasicAnimation) -> BasicAnimation {
         expression
-    }
-    
-    /// Takes multiple StandardAnimations and returns the first one, used for frame closures
-    public static func buildBlock(_ components: StandardAnimation...) -> StandardAnimation {
-        components[0]
     }
     
     /// Handles the 'true' branch of conditional animations
@@ -91,5 +103,10 @@ public struct AnimationBuilder {
     /// Provides a default animation when an optional animation is nil
     public static func buildOptional(_ component: (any Animation)?) -> any Animation {
         component ?? ResolvedAnimation()
+    }
+    
+    /// Takes multiple StandardAnimations and returns them as an array
+    public static func buildBlock(_ components: BasicAnimation...) -> [BasicAnimation] {
+        components
     }
 }

@@ -8,33 +8,21 @@
 import Foundation
 
 public extension HTML {
-    /// Applies an animation to an HTML element with default settings.
-    /// - Parameter animation: The animation to apply to the element.
-    /// - Returns: A modified copy of the HTML element with the animation applied.
     func animation(_ animation: some Animation) -> Self {
-        var copy = self
-        
         if let resolved = animation as? ResolvedAnimation, resolved.trigger == .click {
-            copy.attributes = attributes
-            return copy.animation(animation, on: .click)
+            return self.animation(animation, on: .click)
         }
         
         // Set appear as default trigger
-        return copy.animation(animation, on: .appear)
+        return self.animation(animation, on: .appear)
     }
     
-    /// Applies an animation to an HTML element with specific trigger and oscillation settings.
-    /// - Parameters:
-    ///   - animation: The animation to apply to the element.
-    ///   - oscillate: Whether the animation should reverse when completed. Defaults to `true`.
-    ///   - trigger: The event that starts the animation (`.click`, `.hover`, or `.appear`).
-    /// - Returns: A modified copy of the HTML element with the animation applied.
-    func animation(_ animation: some Animation, oscillate: Bool = true, on trigger: AnimationTrigger) -> Self {
-        var copy = self
+    func animation(_ animation: some Animation, autoreverses: Bool = false, on trigger: AnimationTrigger) -> Self {
+        var attributes = attributes
         
         // Only apply inline-block if it's a transform animation
-        if animation is StandardAnimation && (animation as? StandardAnimation)?.property == "transform" {
-            copy.style(.init(name: "display", value: "inline-block"))
+        if animation is BasicAnimation && (animation as? BasicAnimation)?.property == .transform {
+            attributes.append(styles: .init(name: "display", value: "inline-block"))
         }
         
         // Create a resolved animation with the correct trigger
@@ -49,30 +37,40 @@ public extension HTML {
             resolved = ResolvedAnimation()
         }
         
-        resolved.autoreverses = oscillate
+        resolved.autoreverses = autoreverses
         
         // Register the animation
-        AnimationManager.shared.registerAnimation(resolved, for: copy.id)
+        AnimationManager.shared.registerAnimation(resolved, for: self.id)
         
         // Get the potentially updated name after registration
-        if let registeredAnimation = AnimationManager.shared.getAnimations(for: copy.id)?[trigger] {
+        if let registeredAnimation = AnimationManager.shared.getAnimations(for: self.id)?[trigger] {
             resolved.name = registeredAnimation.name
         }
         
-        copy.class(resolved.name)
-        
-        // Add trigger-specific classes and data attributes
+        // Add trigger-specific classes and data attributes BEFORE adding the base class
         switch trigger {
         case .click:
             let clickClasses = resolved.name + "-clicked"
-            copy.data("click-classes", clickClasses)
+            attributes.append(dataAttributes: .init(name: "click-classes", value: clickClasses))
         case .appear:
             let appearClasses = resolved.name + "-appear"
-            copy.data("appear-classes", appearClasses)
+            let finalClasses = resolved.name + "-appear-final"
+            attributes.append(dataAttributes: .init(name: "appear-classes", value: appearClasses))
+            attributes.append(classes: [finalClasses])
         case .hover:
             break
         }
         
-        return copy
+        // Add the base class last to ensure proper ordering
+        attributes.append(classes: [resolved.name])
+        AttributeStore.default.merge(attributes, intoHTML: self.id)
+        
+        return self
+    }
+}
+
+extension Set {
+    mutating func removeAll(where predicate: (Element) -> Bool) {
+        self = self.filter { !predicate($0) }
     }
 }

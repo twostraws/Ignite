@@ -14,22 +14,17 @@ import Foundation
 ///
 /// Example:
 /// ```swift
-/// KeyframeAnimation {
-///     Frame("0%") {
-///         StandardAnimation(property: "transform", from: "scale(1)", to: "scale(1)")
-///     }
-///     Frame("50%") {
-///         StandardAnimation(property: "transform", from: "scale(1)", to: "scale(1.2)")
-///     }
-///     Frame("100%") {
-///         StandardAnimation(property: "transform", from: "scale(1.2)", to: "scale(1)")
-///     }
-/// }
+/// KeyframeAnimation()
+///    .frame(0) { content in
+///        content.backgroundColor("blue")
+///        content.color("yellow")
+///    }
+///    .frame(1) { content in
+///        content.backgroundColor("red")
+///        content.color("white")
+///    }
 /// ```
 public struct KeyframeAnimation: Animation, Animatable {
-    /// The unique identifier for this keyframe animation
-    public let name: String
-    
     /// The collection of frames that define the animation sequence
     var frames: [Frame]
     
@@ -55,10 +50,46 @@ public struct KeyframeAnimation: Animation, Animatable {
     /// - Parameters:
     ///   - name: A unique identifier for this animation
     ///   - content: A closure that returns an array of `Frame` instances defining the animation sequence
-    public init(_ name: String, @AnimationBuilder content: () -> [Frame]) {
-        self.name = name
+    public init(@AnimationBuilder content: () -> [Frame]) {
         self.frames = content()
     }
     
+    /// Creates a new keyframe animation.
+    public init() {
+        self.frames = []
+    }
+    
     public var body: some Animation { self }
+}
+
+public extension KeyframeAnimation {
+    /// Adds a new keyframe to the animation sequence at the specified position
+    /// - Parameters:
+    ///   - position: The position in the timeline (e.g., "0%", "50%", "100%")
+    ///   - content: A closure that configures the frame's animations
+    /// - Returns: A copy of the animation with the new frame added
+    func frame(_ position: Double, content: (inout FrameBuilder) -> Void) -> KeyframeAnimation {
+        var copy = self
+        var frameBuilder = FrameBuilder()
+        content(&frameBuilder)
+        let frame = Frame(position, animations: frameBuilder.animations)
+        copy.frames.append(frame)
+        return copy
+    }
+}
+
+public struct FrameBuilder {
+    var animations: [BasicAnimation] = []
+    
+    public mutating func backgroundColor(_ value: String) {
+        animations.append(BasicAnimation(.backgroundColor, value: value))
+    }
+    
+    public mutating func color(_ value: String) {
+        animations.append(BasicAnimation(.color, value: value))
+    }
+    
+    public mutating func custom(_ property: AnimatableProperty, value: String) {
+        animations.append(BasicAnimation(property, value: value))
+    }
 }

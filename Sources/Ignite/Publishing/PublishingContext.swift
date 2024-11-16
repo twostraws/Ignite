@@ -11,7 +11,7 @@ import Foundation
 /// elements. This allows any part of the site to reference content, add
 /// build warnings, and more.
 @MainActor
-public class PublishingContext {
+public final class PublishingContext {
     /// The site that is currently being built.
     public var site: any Site
     
@@ -135,10 +135,10 @@ public class PublishingContext {
     /// Performs all steps required to publish a site.
     func publish() async throws {
         try clearBuildFolder()
-        try copyResources()
         try await generateContent()
-        try await generateTagPages()
+        try copyResources()
         generateAnimations()
+        try await generateTagPages()
         try generateSiteMap()
         try generateFeed()
         try generateRobots()
@@ -181,11 +181,12 @@ public class PublishingContext {
             throw error
         }
         
-        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/animations.min.css").path()) {
-            try copy(resource: "css/animations.min.css")
+        if AnimationManager.shared.hasAnimations {
+            if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/animations.min.css").path()) {
+                try copy(resource: "css/animations.min.css")
+            }
+            try copy(resource: "js/animations.js")
         }
-        
-        try copy(resource: "js/animations.js")
         
         if site.useDefaultBootstrapURLs == .localBootstrap {
             try copy(resource: "css/bootstrap.min.css")

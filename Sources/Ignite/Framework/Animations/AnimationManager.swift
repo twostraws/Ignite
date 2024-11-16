@@ -23,6 +23,11 @@ final class AnimationManager {
     /// corresponding resolved animations.
     private var animations: [String: [AnimationTrigger: ResolvedAnimation]] = [:]
     
+    /// Returns true if any animations have been registered
+    var hasAnimations: Bool {
+        !animations.isEmpty
+    }
+    
     /// Private initializer to enforce singleton pattern.
     private init() {}
     
@@ -31,19 +36,23 @@ final class AnimationManager {
     /// - Parameters:
     ///   - animation: The resolved animation to register
     ///   - elementID: The unique identifier of the element to animate
-    func registerAnimation(_ animation: ResolvedAnimation, for elementID: String) {
-        // If animations already exist for this element
-        if let existingAnimations = animations[elementID] {
-            // Only register if we don't already have this type of animation
-            if !existingAnimations.values.contains(where: { $0.trigger == animation.trigger }) {
-                // Use existing name for consistency if there are other animations
-                var resolvedAnimation = animation
-                resolvedAnimation.name = existingAnimations.values.first?.name ?? animation.name
-                animations[elementID, default: [:]][animation.trigger] = resolvedAnimation
+    func registerAnimation(_ animation: ResolvedAnimation, for id: String) {
+        if var existingAnimations = animations[id] {
+            if let existing = existingAnimations[animation.trigger] {
+                // Merge frames from the same trigger
+                var merged = existing
+                // Combine frames, ensuring we don't duplicate
+                let newFrames = animation.frames.filter { frame in
+                    !existing.frames.contains { $0.position == frame.position }
+                }
+                merged.frames += newFrames
+                existingAnimations[animation.trigger] = merged
+            } else {
+                existingAnimations[animation.trigger] = animation
             }
+            animations[id] = existingAnimations
         } else {
-            // No existing animations, register normally
-            animations[elementID, default: [:]][animation.trigger] = animation
+            animations[id] = [animation.trigger: animation]
         }
     }
     
@@ -56,16 +65,22 @@ final class AnimationManager {
     ///   - animation: The animation to register
     ///   - elementID: The unique identifier of the element to animate
     func registerAnimation(_ animation: some Animation, for elementID: String) {
+        // Check 1: Is this already a ResolvedAnimation?
+        // If so, register it directly and exit early
         if let resolved = animation as? ResolvedAnimation {
             registerAnimation(resolved, for: elementID)
             return
         }
-        
+            
+        // Check 2: Can the animation be built into a ResolvedAnimation?
+        // This handles BasicAnimation and KeyframeAnimation types
         if let resolved = AnimationBuilder.buildBlock(animation) as? ResolvedAnimation {
             registerAnimation(resolved, for: elementID)
             return
         }
-        
+            
+        // Check 3: Can the animation's body be built into a ResolvedAnimation?
+        // This handles custom Animation types that implement the body property
         if let resolved = AnimationBuilder.buildBlock(animation.body) as? ResolvedAnimation {
             registerAnimation(resolved, for: elementID)
             return

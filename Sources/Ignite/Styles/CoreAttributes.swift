@@ -27,7 +27,7 @@ public struct CoreAttributes: Sendable {
     /// Inline CSS styles.
     var styles = OrderedSet<AttributeValue>()
     
-    /// data- attributes.
+    /// Data attributes.
     var data = Set<AttributeValue>()
     
     /// JavaScript events, such as onclick.
@@ -177,6 +177,12 @@ public struct CoreAttributes: Sendable {
     ///  - Parameter value: The style value, e.g. steelblue
     mutating func append(style: String, value: String) {
         styles.append(AttributeValue(name: style, value: value))
+    }
+    
+    /// Appends a single data attribute to the element.
+    /// - Parameter dataAttributes: Variable number of data attributes to append.
+    mutating func append(dataAttributes: AttributeValue...) {
+        data.formUnion(dataAttributes)
     }
     
     /// Appends multiple custom attributes to the element.

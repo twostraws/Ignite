@@ -40,11 +40,7 @@ struct AnimationClassGenerator {
     /// - Returns: A string containing the CSS animation-fill-mode property if needed
     private func getFillMode(_ animation: ResolvedAnimation) -> String {
         let needsFillMode = animation.frames.first?.animations.contains { animation in
-            let property = animation.property.lowercased()
-            return property.contains("color") ||
-                property == "opacity" ||
-                property.contains("filter") ||
-                property.contains("background")
+            animation.property.needsFillMode
         } ?? false
         
         return needsFillMode ? " forwards" : ""
@@ -56,18 +52,20 @@ struct AnimationClassGenerator {
     private func buildAppearClass(_ animation: ResolvedAnimation) -> String {
         let animationTiming = getAnimationTiming(animation)
         let repeatCount = getRepeatCount(animation)
+        let fillMode = getFillMode(animation)
         
-        // Set initial opacity for appear animations in their own class
-        let hasOpacityAnimation = animation.frames.first?.animations.contains { anim in
-            anim.property.lowercased() == "opacity"
-        } ?? false
-        
-        let initialStyle = hasOpacityAnimation ? "opacity: 0;" : ""
+        // Final state properties
+        let finalProperties = animation.frames.last?.animations.map { anim in
+            "\(anim.property.rawValue): \(anim.to)"
+        }.joined(separator: ";\n    ") ?? ""
         
         return """
+        .\(name)-appear-final {
+            \(finalProperties);
+        }
+        
         .\(name)-appear {
-            \(initialStyle)
-            animation: \(name)-appear \(animationTiming)\(repeatCount);
+            animation: \(name)-appear \(animationTiming)\(repeatCount)\(fillMode);
         }
         """
     }
@@ -83,18 +81,20 @@ struct AnimationClassGenerator {
         
         // Check if we have a color click animation
         let hasColorClick = triggerMap[.click]?.frames.first?.animations.contains { anim in
-            anim.property.lowercased().contains("color")
+            anim.property.isColorProperty
         } ?? false
         
         // Add transition properties for hover animations
         if let hoverAnimation = triggerMap[.hover] {
             let hasTransform = hoverAnimation.frames.flatMap { frame in
                 frame.animations.map { $0.property }
-            }.contains("transform")
+            }.contains { $0 == .transform }
             
             let hasColor = hoverAnimation.frames.flatMap { frame in
                 frame.animations.map { $0.property }
-            }.contains { $0.lowercased().contains("color") }
+            }.contains { property in
+                property.isColorProperty
+            }
             
             let animationTiming = getAnimationTiming(hoverAnimation)
             
@@ -115,9 +115,21 @@ struct AnimationClassGenerator {
         // Handle initial states for click animations
         if let clickAnimation = triggerMap[.click] {
             clickAnimation.frames.first?.animations.forEach { anim in
-                if anim.property.lowercased().contains("color") {
-                    properties.insert("\(anim.property): \(anim.from)")
+                if anim.property.isColorProperty {
+                    properties.insert("\(anim.property.rawValue): \(anim.from)")
                 }
+            }
+        }
+        
+        // Only return the class if we have properties to include
+        if properties.isEmpty {
+            return ""
+        }
+        
+        // Add any static styles from the animation
+        if let clickAnimation = triggerMap[.click] {
+            for style in clickAnimation.staticProperties {
+                properties.insert("\(style.name): \(style.value)")
             }
         }
         
@@ -129,8 +141,6 @@ struct AnimationClassGenerator {
     }
     
     /// Generates CSS keyframe definitions for an animation
-    /// - Parameter animation: The animation to generate keyframes for
-    /// - Returns: A string containing the CSS @keyframes definition
     private func buildKeyframes(_ animation: ResolvedAnimation) -> String {
         animation.generateKeyframes()
     }
@@ -142,7 +152,7 @@ struct AnimationClassGenerator {
         let animationTiming = getAnimationTiming(animation)
         
         let hasColorAnimation = animation.frames.first?.animations.contains { anim in
-            anim.property.lowercased().contains("color")
+            anim.property.isColorProperty
         } ?? false
         
         if hasColorAnimation {
@@ -165,7 +175,7 @@ struct AnimationClassGenerator {
         
         // For standard animations
         let properties = animation.frames.first?.animations.map { anim in
-            "\(anim.property): \(anim.to)"
+            "\(anim.property.rawValue): \(anim.to)"
         }.joined(separator: ";\n    ") ?? ""
         
         return """
@@ -205,7 +215,7 @@ struct AnimationClassGenerator {
         // Get all hover properties
         let hoverProperties = animation.frames.last?.animations
             .map { animation in
-                "\(animation.property): \(animation.to)"
+                "\(animation.property.rawValue): \(animation.to)"
             }
             .joined(separator: ";\n    ") ?? ""
         
@@ -236,23 +246,41 @@ struct AnimationClassGenerator {
             ""
         }
         
-        // Build other trigger classes
+        // Build other trigger classes, consolidating identical animations
+        var seenAnimations = Set<String>()
         let triggerClasses = triggerMap.compactMap { trigger, animation in
+            let key = "\(animation.frames)_\(animation.duration)_\(animation.timing)"
             switch trigger {
             case .click:
-                buildClickClass(animation)
+                return seenAnimations.insert(key).inserted ? buildClickClass(animation) : ""
             case .appear:
-                buildAppearClass(animation)
+                return seenAnimations.insert(key).inserted ? buildAppearClass(animation) : ""
             case .hover:
-                nil
+                return ""
             }
         }
         .filter { !$0.isEmpty }
         .joined(separator: "\n\n")
         
         // Combine all parts in specific order, ensuring base class is only included once
+        // and removing any empty strings
         return [baseClass, hoverClass, keyframes, triggerClasses]
             .filter { !$0.isEmpty }
             .joined(separator: "\n\n")
     }
 }
+
+/*
+ When using appear animations with color transitions, the final state was being lost after the animation
+ completed because the animation class (containing both the animation and final state properties) was being
+ removed by the JavaScript animationend handler. The solution was to split the animation into two classes:
+ one for the animation itself (-appear) and another for the final state (-appear-final). The animation
+ class is removed after the animation completes, but the final state class remains, maintaining the end
+ state of the animation. This approach avoids using !important and maintains clean separation between
+ animation and final state properties.
+
+ See:
+ - AnimationClassGenerator.swift (buildAppearClass method)
+ - Animation-Modifier.swift (animation modifier)
+ - animations.js (igniteHandleAppearAnimation function)
+ */

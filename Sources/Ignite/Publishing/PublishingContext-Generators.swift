@@ -55,7 +55,9 @@ extension PublishingContext {
                 body: body
             )
 
-            let outputString = render(page, using: site.tagPage.theme)
+            let outputString = render(page: page) {
+                render(page, using: site.tagPage.theme)
+            }
 
             try write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }
@@ -110,6 +112,7 @@ extension PublishingContext {
 
     /// Generates animations for the site.
     func generateAnimations() {
+        guard AnimationManager.shared.hasAnimations else { return }
         let animationsPath = buildDirectory.appending(path: "css/animations.min.css")
         AnimationManager.shared.write(to: animationsPath)
     }

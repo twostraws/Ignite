@@ -86,12 +86,15 @@ public struct HTMLHead: HTMLRootElement {
         } else if configuration.builtInIconsEnabled == .remoteBootstrap {
             MetaLink.remoteIconCSS
         }
-        
+
         if let analyticsSnippet = configuration.analyticsSnippet {
             analyticsSnippet
         }
-    
-        MetaLink.animationCSS
+
+        if AnimationManager.shared.hasAnimations {
+            MetaLink.animationCSS
+        }
+
         MetaLink(href: page.url, rel: "canonical")
 
         if let favicon = configuration.favicon {

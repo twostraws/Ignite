@@ -11,7 +11,7 @@ import Foundation
 ///
 /// `StandardAnimation` represents the simplest form of animation in Ignite, handling
 /// transitions of individual CSS properties like opacity, transform, or color.
-public struct StandardAnimation: Animation, Animatable {
+public struct BasicAnimation: Animation, Animatable {
     /// The starting value for the animated property
     var from: String
     
@@ -19,7 +19,7 @@ public struct StandardAnimation: Animation, Animatable {
     var to: String
     
     /// The CSS property to animate (e.g., "opacity", "transform", "background-color")
-    var property: String
+    var property: AnimatableProperty
     
     /// The number of times to repeat the animation
     /// When set to `.infinity`, the animation will loop indefinitely
@@ -40,17 +40,50 @@ public struct StandardAnimation: Animation, Animatable {
     /// Whether the animation should play in reverse after completing
     public var autoreverses: Bool = false
     
+    /// Additional non-animated CSS properties
+    var staticProperties: [AttributeValue] = []
+    
     /// Creates a new standard animation for a specific CSS property.
     /// - Parameters:
     ///   - property: The CSS property to animate
     ///   - from: The starting value for the property
     ///   - to: The ending value for the property
-    public init(property: String, from: String, to: String) {
+    public init(_ property: AnimatableProperty, from: String, to: String) {
         self.property = property
         self.from = from
         self.to = to
     }
     
+    public init(_ property: AnimatableProperty, value: String) {
+        self.property = property
+        self.to = value
+        self.from = ""
+        // Set appropriate default 'from' value based on property
+        switch property {
+        case .backgroundColor:
+            self.from = "transparent"
+        case .color:
+            self.from = "inherit"
+        case .transform:
+            self.from = "none"
+        case .opacity:
+            self.from = "1"
+        default:
+            self.from = "initial"
+        }
+    }
+    
     /// The animation's body, required by the Animation protocol
     public var body: some Animation { self }
+}
+
+extension BasicAnimation {
+    /// Adds an additional CSS style property to the animation
+    /// - Parameter style: The CSS style to add
+    /// - Returns: A modified animation with the additional style
+    public func baseProperty(_ style: AttributeValue) -> BasicAnimation {
+        var animation = self
+        animation.staticProperties.append(style)
+        return animation
+    }
 }

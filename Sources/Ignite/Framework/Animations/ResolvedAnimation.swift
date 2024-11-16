@@ -17,7 +17,7 @@ struct ResolvedAnimation: Animation, Animatable {
     var name: String
     
     /// The collection of keyframes that define this animation's timeline
-    let frames: [Frame]
+    var frames: [AnimationFrame]
     
     /// The number of times the animation should repeat
     /// When set to `.infinity`, the animation will loop indefinitely
@@ -38,6 +38,12 @@ struct ResolvedAnimation: Animation, Animatable {
     /// Whether the animation should play in reverse after completing
     var autoreverses: Bool
     
+    /// Whether this animation was created from a KeyframeAnimation
+    var belongsToKeyframeSequence: Bool
+    
+    /// Static properties that should be applied to the base class
+    var staticProperties: [AttributeValue] = []
+    
     /// Creates a new resolved animation with the specified parameters.
     /// - Parameters:
     ///   - name: The unique identifier for this animation. If nil, a unique name will be generated
@@ -50,13 +56,15 @@ struct ResolvedAnimation: Animation, Animatable {
     ///   - autoreverses: Whether the animation should play in reverse after completing
     init(
         name: String? = nil,
-        frames: [Frame] = [],
+        frames: [AnimationFrame] = [],
         trigger: AnimationTrigger = .hover,
         duration: Double = 0.35,
         timing: AnimationCurve = AnimationCurve.easeOut,
         delay: Double = 0,
         repeatCount: Double? = nil,
-        autoreverses: Bool = false
+        autoreverses: Bool = false,
+        staticProperties: [AttributeValue] = [],
+        isKeyframe: Bool = false
     ) {
         self.name = name ?? "animation-\(Self.id)"
         self.frames = frames
@@ -66,6 +74,8 @@ struct ResolvedAnimation: Animation, Animatable {
         self.delay = delay
         self.repeatCount = repeatCount
         self.autoreverses = autoreverses
+        self.belongsToKeyframeSequence = isKeyframe
+        self.staticProperties = staticProperties
     }
     
     /// The animation's body, required by the Animation protocol
@@ -75,12 +85,20 @@ struct ResolvedAnimation: Animation, Animatable {
     /// - Returns: A string containing the CSS @keyframes rules for this animation
     func generateKeyframes() -> String {
         let forward = frames.map { frame in
-            """
-            \(frame.position) {
-                \(frame.animations.map { animation in
-                    "\(animation.property): \(animation.to)"
-                }.joined(separator: ";\n    "))
-            }
+            let properties = frame.animations.map { animation in
+                // For KeyframeAnimation frames, use to values
+                if belongsToKeyframeSequence {
+                    return "\(animation.property.rawValue): \(animation.to)"
+                }
+                // For BasicAnimation (non-keyframe), use from/to values
+                let value = frame.position == 0 ? animation.from : animation.to
+                return "\(animation.property.rawValue): \(value)"
+            }.joined(separator: ";\n            ")
+            
+            return """
+                \(frame.cssPosition) {
+                    \(properties)
+                }
             """
         }.joined(separator: "\n    ")
         
@@ -90,27 +108,27 @@ struct ResolvedAnimation: Animation, Animatable {
         }
         """
         
-        if trigger == .click {
+        if trigger == .click && autoreverses {
             let reverse = frames.reversed().map { frame in
-                let position = frame.position == "0%" ? "100%" :
-                    frame.position == "100%" ? "0%" :
-                    frame.position
+                let properties = frame.animations.map { animation in
+                    let value = frame.position == 0 ? animation.to : animation.from
+                    return "\(animation.property.rawValue): \(value)"
+                }.joined(separator: ";\n            ")
+                
                 return """
-                \(position) {
-                    \(frame.animations.map { animation in
-                        "\(animation.property): \(animation.to)"
-                    }.joined(separator: ";\n    "))
-                }
+                    \(frame.cssPosition) {
+                        \(properties)
+                    }
                 """
             }.joined(separator: "\n    ")
             
-            let reverseKeyframes = """
+            return """
+            \(forwardKeyframes)
+            
             @keyframes \(name)-\(trigger.rawValue)-reverse {
                 \(reverse)
             }
             """
-            
-            return "\(forwardKeyframes)\n\n\(reverseKeyframes)"
         }
         
         return forwardKeyframes
