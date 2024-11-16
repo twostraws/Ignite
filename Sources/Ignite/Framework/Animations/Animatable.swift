@@ -15,11 +15,11 @@
 /// ```swift
 /// struct FadeInAnimation: Animation, Animatable {
 ///     var duration: Double = 1.0
-///     var timing: AnimationTiming = .easeOut
+///     var timing: AnimationCurve = .easeOut
 ///     var trigger: AnimationTrigger = .appear
 ///
 ///     var body: some Animation {
-///         StandardAnimation(property: "opacity", from: "0", to: "1")
+///         BasicAnimation(.opacity, from: "0", to: "1")
 ///     }
 /// }
 /// ```
