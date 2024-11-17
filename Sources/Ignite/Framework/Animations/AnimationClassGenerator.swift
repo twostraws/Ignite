@@ -92,9 +92,7 @@ struct AnimationClassGenerator {
             
             let hasColor = hoverAnimation.frames.flatMap { frame in
                 frame.animations.map { $0.property }
-            }.contains { property in
-                property.isColorProperty
-            }
+            }.contains { $0.isColorProperty }
             
             let animationTiming = getAnimationTiming(hoverAnimation)
             
