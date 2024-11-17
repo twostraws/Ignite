@@ -9,7 +9,7 @@ import Foundation
 
 /// Specifies the origin point for transform operations like rotation.
 /// This value maps directly to CSS's transform-origin property.
-public enum AnchorPoint {
+public enum AnchorPoint: Sendable {
     /// Centers the transform origin in both axes (50% 50%)
     case center
     

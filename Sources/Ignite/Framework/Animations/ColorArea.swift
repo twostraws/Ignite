@@ -6,7 +6,7 @@
 //
 
 /// Specifies which color property to animate
-public enum ColorArea {
+public enum ColorArea: Sendable {
     /// The foreground color
     case foreground
     /// The background color

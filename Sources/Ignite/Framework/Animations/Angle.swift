@@ -6,7 +6,7 @@
 //
 
 /// Represents an angle that can be expressed in different units
-public enum Angle {
+public enum Angle: Sendable {
     /// Angle in degrees (e.g., 180 degrees)
     case degrees(Double)
     

@@ -39,11 +39,11 @@ struct AnimationClassGenerator {
     /// - Parameter animation: The animation to check for fill mode requirements
     /// - Returns: A string containing the CSS animation-fill-mode property if needed
     private func getFillMode(_ animation: ResolvedAnimation) -> String {
-        let needsFillMode = animation.frames.first?.animations.contains { animation in
-            animation.property.needsFillMode
-        } ?? false
+        let fillMode = animation.frames.first?.animations
+            .compactMap { $0.property.fillMode.rawValue }
+            .first
         
-        return needsFillMode ? " forwards" : ""
+        return fillMode.map { " \($0)" } ?? ""
     }
 
     /// Generates CSS classes for appear animations

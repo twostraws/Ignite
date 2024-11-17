@@ -326,12 +326,12 @@ extension AnimatableProperty {
         }
     }
 
-    /// Whether this property needs fill mode
-    var needsFillMode: Bool {
-        isColorProperty ||
-        isBackgroundProperty ||
-        self == .opacity ||
-        self == .filter
+    ///  How an animation applies styles to its target before and after its execution
+    var fillMode: FillMode {
+        if isColorProperty || isBackgroundProperty || self == .opacity || self == .filter {
+            return .forwards
+        }
+        return .none
     }
 
     /// Whether this property is background-related

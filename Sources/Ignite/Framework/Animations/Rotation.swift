@@ -6,7 +6,7 @@
 //
 
 /// Defines the possible directions for 3D rotations
-public enum Rotation {
+public enum Rotation: Sendable {
     /// Rotates 360 degrees around the Y axis (left to right)
     case forward
     
