@@ -55,7 +55,7 @@ public extension Animation {
         if let resolvedAnimation = AnimationBuilder.buildBlock(self) as? ResolvedAnimation ??
             AnimationBuilder.buildBlock(body) as? ResolvedAnimation
         {
-            AnimationManager.shared.registerAnimation(resolvedAnimation, for: elementID)
+            AnimationManager.default.registerAnimation(resolvedAnimation, for: elementID)
             return resolvedAnimation.name
         }
         return ""

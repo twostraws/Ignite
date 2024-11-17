@@ -40,8 +40,8 @@ public struct AnimationBuilder {
             return ResolvedAnimation(
                 name: component.name,
                 frames: [
-                    AnimationFrame(0, animations: [standard]),
-                    AnimationFrame(1, animations: [standard])
+                    AnimationFrame(0%, animations: [standard]),
+                    AnimationFrame(100%, animations: [standard])
                 ],
                 trigger: standard.trigger,
                 duration: standard.duration,

@@ -91,7 +91,7 @@ public struct HTMLHead: HTMLRootElement {
             analyticsSnippet
         }
 
-        if AnimationManager.shared.hasAnimations {
+        if AnimationManager.default.hasAnimations {
             MetaLink.animationCSS
         }
 

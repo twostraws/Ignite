@@ -91,12 +91,12 @@ struct ResolvedAnimation: Animation, Animatable {
                     return "\(animation.property.rawValue): \(animation.to)"
                 }
                 // For BasicAnimation (non-keyframe), use from/to values
-                let value = frame.position == 0 ? animation.from : animation.to
+                let value = frame.position == 0% ? animation.from : animation.to
                 return "\(animation.property.rawValue): \(value)"
             }.joined(separator: ";\n            ")
             
             return """
-                \(frame.cssPosition) {
+                \(frame.position.roundedValue.asString()) {
                     \(properties)
                 }
             """
@@ -111,12 +111,12 @@ struct ResolvedAnimation: Animation, Animatable {
         if trigger == .click && autoreverses {
             let reverse = frames.reversed().map { frame in
                 let properties = frame.animations.map { animation in
-                    let value = frame.position == 0 ? animation.to : animation.from
+                    let value = frame.position == 0% ? animation.to : animation.from
                     return "\(animation.property.rawValue): \(value)"
                 }.joined(separator: ";\n            ")
                 
                 return """
-                    \(frame.cssPosition) {
+                    \(frame.position.roundedValue.asString()) {
                         \(properties)
                     }
                 """

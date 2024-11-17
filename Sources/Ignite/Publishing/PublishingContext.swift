@@ -181,7 +181,7 @@ public final class PublishingContext {
             throw error
         }
         
-        if AnimationManager.shared.hasAnimations {
+        if AnimationManager.default.hasAnimations {
             if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/animations.min.css").path()) {
                 try copy(resource: "css/animations.min.css")
             }

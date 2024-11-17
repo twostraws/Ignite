@@ -40,10 +40,10 @@ public extension HTML {
         resolved.autoreverses = autoreverses
         
         // Register the animation
-        AnimationManager.shared.registerAnimation(resolved, for: self.id)
+        AnimationManager.default.registerAnimation(resolved, for: self.id)
         
         // Get the potentially updated name after registration
-        if let registeredAnimation = AnimationManager.shared.getAnimations(for: self.id)?[trigger] {
+        if let registeredAnimation = AnimationManager.default.getAnimations(for: self.id)?[trigger] {
             resolved.name = registeredAnimation.name
         }
         

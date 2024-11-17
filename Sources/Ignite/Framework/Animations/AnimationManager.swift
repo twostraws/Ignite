@@ -15,7 +15,7 @@ import Foundation
 @MainActor
 final class AnimationManager {
     /// The shared singleton instance of the animation manager.
-    static let shared = AnimationManager()
+    static let `default` = AnimationManager()
     
     /// Storage for registered animations, keyed by element ID and trigger type.
     ///

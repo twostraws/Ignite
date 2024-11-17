@@ -65,10 +65,14 @@ public struct KeyframeAnimation: Animation, Animatable {
 public extension KeyframeAnimation {
     /// Adds a new keyframe to the animation sequence at the specified position
     /// - Parameters:
-    ///   - position: The position in the timeline (e.g., "0%", "50%", "100%")
+    ///   - position: The position in the timeline (e.g., 0%, 50%, 100%)
     ///   - content: A closure that configures the frame's animations
     /// - Returns: A copy of the animation with the new frame added
-    func frame(_ position: Double, content: (inout FrameBuilder) -> Void) -> KeyframeAnimation {
+    func frame(_ position: Percentage, content: (inout FrameBuilder) -> Void) -> KeyframeAnimation {
+        precondition(
+            position >= 0% && position <= 100%,
+            "Animation frame position must be between 0% and 100%, got \(position)"
+        )
         var copy = self
         var frameBuilder = FrameBuilder()
         content(&frameBuilder)

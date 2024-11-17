@@ -112,8 +112,8 @@ extension PublishingContext {
 
     /// Generates animations for the site.
     func generateAnimations() {
-        guard AnimationManager.shared.hasAnimations else { return }
+        guard AnimationManager.default.hasAnimations else { return }
         let animationsPath = buildDirectory.appending(path: "css/animations.min.css")
-        AnimationManager.shared.write(to: animationsPath)
+        AnimationManager.default.write(to: animationsPath)
     }
 }

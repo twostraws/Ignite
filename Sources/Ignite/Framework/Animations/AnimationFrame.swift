@@ -25,8 +25,8 @@ public extension KeyframeAnimation {
         /// The content of this animation.
         public var body: some Animation { self }
         
-        /// The position in the animation timeline, where `1.0` represents 100%
-        let position: Double
+        /// The position in the animation timeline, between `0%` and `100%`
+        let position: Percentage
         
         /// The property transformations to apply at this position
         var animations: [BasicAnimation]
@@ -44,20 +44,23 @@ public extension KeyframeAnimation {
         /// Whether the animation should reverse after completion
         public var autoreverses: Bool = false
         
-        /// Converts the position to a CSS percentage string
-        var cssPosition: String {
-            "\(Int(position * 100))%"
-        }
-        
         /// Creates a frame with a single animation using a closure
-        public init(_ position: Double, @AnimationBuilder animation: () -> [BasicAnimation]) {
-            self.position = min(max(position, 0), 1)
+        public init(_ position: Percentage, @AnimationBuilder animation: () -> [BasicAnimation]) {
+            precondition(
+                position >= 0% && position <= 100%,
+                "Animation frame position must be between 0% and 100%, got \(position)%"
+            )
+            self.position = position
             self.animations = animation()
         }
         
         /// Creates a frame with a single predefined animation
-        public init(_ position: Double, animations: [BasicAnimation]) {
-            self.position = min(max(position, 0), 1)
+        public init(_ position: Percentage, animations: [BasicAnimation]) {
+            precondition(
+                position >= 0% && position <= 100%,
+                "Animation frame position must be between 0% and 100%, got \(position)%"
+            )
+            self.position = position
             self.animations = animations
         }
     }
