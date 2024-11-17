@@ -17,7 +17,7 @@ public extension KeyframeAnimation {
     ///
     /// Example:
     /// ```swift
-    /// KeyframeAnimation.Frame(0.5) {
+    /// KeyframeAnimation.Frame(50%) {
     ///     BasicAnimation(.transform, value: "scale(1.2)")
     /// }
     /// ```
@@ -67,18 +67,32 @@ public extension KeyframeAnimation {
 }
 
 public extension KeyframeAnimation.Frame {
-    /// Sets the background color for this keyframe
-    /// - Parameter value: The CSS color value (e.g., "blue", "#FF0000", "rgb(255, 0, 0)")
+    /// Sets a color for this keyframe
+    /// - Parameters:
+    ///   - area: Which color property to animate (text or background). Default is `.foreground`.
+    ///   - value: The color to animate to
     /// - Note: This will be animated between frames in the keyframe sequence
-    mutating func backgroundColor(_ value: String) {
-        animations.append(BasicAnimation(.backgroundColor, value: value))
+    mutating func color(_ area: ColorArea = .foreground, to value: Color) {
+        animations.append(BasicAnimation(area.property, value: value.description))
     }
     
-    /// Sets the text color for this keyframe
-    /// - Parameter value: The CSS color value (e.g., "yellow", "#FFFF00", "rgb(255, 255, 0)")
+    /// Sets the scale transform for this keyframe
+    /// - Parameter value: The scale factor to animate to (e.g., 1.5 for 150% size)
     /// - Note: This will be animated between frames in the keyframe sequence
-    mutating func color(_ value: String) {
-        animations.append(BasicAnimation(.color, value: value))
+    mutating func scale(_ value: Double) {
+        animations.append(BasicAnimation(.transform, value: "scale(\(value))"))
+    }
+       
+    /// Sets the rotation transform for this keyframe
+    /// - Parameters:
+    ///   - angle: The angle to rotate by
+    ///   - anchor: The point around which to rotate (defaults to center)
+    /// - Note: This will be animated between frames in the keyframe sequence
+    mutating func rotate(_ angle: Angle, anchor: AnchorPoint = .center) {
+        animations.append(
+            BasicAnimation(.transform, value: "rotate(\(angle.value))")
+                .baseProperty(.init(name: .transformOrigin, value: anchor.value))
+        )
     }
     
     /// Sets a custom style transformation for this keyframe

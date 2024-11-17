@@ -107,9 +107,9 @@ public extension Animation where Self == BasicAnimation {
             .timing(.automatic)
     }
     
-    /// Creates a rotation animation by specified degrees.
-    static func rotate(degrees: Double, anchor: AnchorPoint = .center) -> BasicAnimation {
-        BasicAnimation(.transform, from: "rotate(0deg)", to: "rotate(\(degrees)deg)")
+    /// Creates a rotation animation by specified angle.
+    static func rotate(_ angle: Angle, anchor: AnchorPoint = .center) -> BasicAnimation {
+        BasicAnimation(.transform, from: "rotate(0deg)", to: "rotate(\(angle.value))")
             .baseProperty(.init(name: .transformOrigin, value: anchor.value))
             .duration(0.35)
             .timing(.automatic)
@@ -123,15 +123,15 @@ public extension Animation where Self == BasicAnimation {
     }
     
     /// Creates a color transition animation.
-    static func color(from: String, to: String) -> BasicAnimation {
-        BasicAnimation(.color, from: from, to: to)
+    static func color(from: Color, to: Color) -> BasicAnimation {
+        BasicAnimation(.color, from: from.description, to: to.description)
             .duration(0.35)
             .timing(.automatic)
     }
-    
+
     /// Creates a background color transition animation.
-    static func backgroundColor(from: String, to: String) -> BasicAnimation {
-        BasicAnimation(.backgroundColor, from: from, to: to)
+    static func backgroundColor(from: Color, to: Color) -> BasicAnimation {
+        BasicAnimation(.backgroundColor, from: from.description, to: to.description)
             .duration(0.35)
             .timing(.automatic)
     }
