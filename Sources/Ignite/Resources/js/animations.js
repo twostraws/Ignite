@@ -6,7 +6,7 @@ setTimeout(() => {
     });
 }, 100);
 
-function toggleClickAnimation(element) {
+function igniteToggleClickAnimation(element) {
     if (element.classList.contains('clicked')) {
         element.classList.remove('clicked');
         element.classList.add('unclicked');

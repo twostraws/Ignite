@@ -22,18 +22,10 @@ public struct BasicAnimation: Animation {
 }
 
 public extension BasicAnimation {
-    func combined(with values: [AnimationData]) -> Self {
+    /// Combines the current animation with additional animation data.
+    internal func combined(with values: [AnimationData]) -> Self {
         var copy = self
         copy.data.append(contentsOf: values)
-        return copy
-    }
-    
-    /// Adds an additional CSS style property to the animation
-    /// - Parameter style: The CSS style to add
-    /// - Returns: A modified animation with the additional style
-    func baseProperty(_ style: AttributeValue) -> Self {
-        var copy = self
-        copy.staticProperties.append(style)
         return copy
     }
 

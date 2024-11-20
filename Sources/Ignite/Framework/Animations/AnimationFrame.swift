@@ -47,17 +47,15 @@ public extension KeyframeAnimation.Frame {
         animations.append(AnimationData(.transform, value: "scale(\(value))"))
     }
        
-//    /// Sets the rotation transform for this keyframe
-//    /// - Parameters:
-//    ///   - angle: The angle to rotate by
-//    ///   - anchor: The point around which to rotate (defaults to center)
-//    /// - Note: This will be animated between frames in the keyframe sequence
-//    mutating func rotate(_ angle: Angle, anchor: AnchorPoint = .center) {
-//        animations.append(
-//            ValueAnimation(.transform, value: "rotate(\(angle.value))")
-//                .baseProperty(.init(name: .transformOrigin, value: anchor.value))
-//        )
-//    }
+    /// Sets the rotation transform for this keyframe
+    /// - Parameters:
+    ///   - angle: The angle to rotate by
+    ///   - anchor: The point around which to rotate (defaults to center)
+    /// - Note: This will be animated between frames in the keyframe sequence
+    mutating func rotate(_ angle: Angle, anchor: AnchorPoint = .center) {
+        animations.append(AnimationData(.transformOrigin, value: anchor.value))
+        animations.append(AnimationData(.transform, value: "rotate(\(angle.value))"))
+    }
     
     /// Sets a custom style transformation for this keyframe
     /// - Parameter property: The CSS property to animate

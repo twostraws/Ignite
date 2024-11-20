@@ -15,11 +15,11 @@ import Foundation
 /// Example:
 /// ```swift
 /// KeyframeAnimation()
-///    .frame(0%) { content in
+///    .keyframe(0%) { content in
 ///        content.color(.background, to: .blue)
 ///        content.color(.foreground, to: .yellow)
 ///    }
-///    .frame(100%) { content in
+///    .keyframe(100%) { content in
 ///        content.color(.background, to: .red)
 ///        content.color(.foreground, to: .white)
 ///    }
@@ -70,7 +70,7 @@ public extension KeyframeAnimation {
     ///   - position: The position in the timeline (e.g., "0%", "50%", "100%")
     ///   - content: A closure that configures the frame's animations
     /// - Returns: A copy of the animation with the new frame added
-    func frame(_ position: Percentage, content: (inout Frame) -> Void) -> KeyframeAnimation {
+    func keyframe(_ position: Percentage, content: (inout Frame) -> Void) -> KeyframeAnimation {
         precondition(
             position >= 0% && position <= 100%,
             "Animation frame position must be between 0% and 100%, got \(position)"

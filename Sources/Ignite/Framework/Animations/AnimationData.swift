@@ -51,7 +51,7 @@ public struct AnimationData {
         // Set appropriate default 'from' value based on property
         switch property {
         case .backgroundColor:
-            self.initial = "inherit"
+            self.initial = "transparent"
         case .color:
             self.initial = "inherit"
         case .transform:

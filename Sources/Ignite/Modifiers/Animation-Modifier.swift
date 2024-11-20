@@ -65,13 +65,14 @@ public extension HTML {
         
         // Add click-specific data attributes
         if trigger == .click {
-            attributes.events.insert(Event(name: "onclick", actions: [CustomAction("toggleClickAnimation(this)")]))
+            attributes.events.insert(Event(name: "onclick", actions: [CustomAction("igniteToggleClickAnimation(this)")]))
         }
 
         // Add base class
         attributes.append(classes: [animationName])
         
         AttributeStore.default.merge(attributes, intoHTML: self.id)
+        print(attributes.containerAttributes)
         return self
     }
 }

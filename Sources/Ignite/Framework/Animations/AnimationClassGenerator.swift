@@ -177,26 +177,11 @@ struct AnimationClassGenerator {
         }
         """
     }
-    
-    /// Checks if the animation includes an opacity change.
-    /// - Parameter animation: The animation to check for opacity changes.
-    /// - Returns: `true` if the animation includes opacity changes, `false` otherwise.
-    private func hasOpacityAnimation(_ animation: some Animation) -> Bool {
-        if let basicAnim = animation as? BasicAnimation {
-            return basicAnim.data.contains { $0.property == .opacity }
-        } else if let keyframeAnim = animation as? KeyframeAnimation {
-            return keyframeAnim.frames.contains { frame in
-                frame.animations.contains { $0.property == .opacity }
-            }
-        }
-        return false
-    }
 
     /// Generates CSS classes for appear animations
     /// - Parameter animation: The animation to generate appear classes for
     /// - Returns: A string containing the CSS class definition
     private func buildAppearClass(_ animation: some Animation) -> String {
-        // Get animation properties
         let timings = getAnimationTiming(animation)
         
         // Get properties used by other triggers
@@ -224,40 +209,31 @@ struct AnimationClassGenerator {
         }
         
         // Build transition properties
-        let transitionProps = buildTransitionProperties(animation)
+        let transitions = buildTransitionProperties(animation)
             .filter { prop in usedProperties.contains(prop) }
-        
-        // Add opacity transition if needed
-        var transitions = transitionProps
-        if hasOpacityAnimation(animation) {
-            transitions.append("opacity")
-        }
-        
-        let transitionString = transitions
             .map { prop -> String in
-                let timing = if prop == "opacity", let opacityTiming = getOpacityTiming(animation) {
-                    opacityTiming
-                } else {
-                    timings.first ?? "0.35s ease"
-                }
+                let timing = timings.first ?? "0.35s ease"
                 return "\(prop) \(timing)"
             }
             .joined(separator: ",\n                ")
         
-        // Generate CSS with conditional opacity
+        // Generate CSS with final property values
         var appearedProperties: [String] = []
-        if let basicAnim = animation as? BasicAnimation,
-           let opacityAnim = basicAnim.data.first(where: { $0.property == .opacity })
-        {
-            appearedProperties.append("opacity: \(opacityAnim.final)")
+        
+        if let basicAnim = animation as? BasicAnimation {
+            for data in basicAnim.data {
+                appearedProperties.append("\(data.property.rawValue): \(data.final)")
+            }
         } else if let keyframeAnim = animation as? KeyframeAnimation,
-                  let lastFrame = keyframeAnim.frames.last?.animations.first(where: { $0.property == .opacity })
+                  let lastFrame = keyframeAnim.frames.last
         {
-            appearedProperties.append("opacity: \(lastFrame.final)")
+            for animation in lastFrame.animations {
+                appearedProperties.append("\(animation.property.rawValue): \(animation.final)")
+            }
         }
 
-        if !transitionString.isEmpty {
-            appearedProperties.append("transition: \(transitionString)")
+        if !transitions.isEmpty {
+            appearedProperties.append("transition: \(transitions)")
         }
         if !appearAnimations.isEmpty {
             appearedProperties.append("animation: \(appearAnimations.joined(separator: ", "))")
@@ -270,20 +246,6 @@ struct AnimationClassGenerator {
             \(appearedProperties.joined(separator: ";\n        "));
         }
         """
-    }
-
-    /// Returns the timing configuration for opacity animations.
-    /// - Parameter animation: The animation to extract opacity timing from.
-    /// - Returns: A CSS timing string (e.g. "2s ease-in-out") if opacity animation is present, nil otherwise.
-    private func getOpacityTiming(_ animation: some Animation) -> String? {
-        if let basicAnim = animation as? BasicAnimation,
-           let opacityData = basicAnim.data.first(where: { $0.property == .opacity })
-        {
-            return "\(opacityData.duration)s \(opacityData.timing.cssValue)"
-        } else if let keyframeAnim = animation as? KeyframeAnimation {
-            return "\(keyframeAnim.duration)s \(keyframeAnim.timing.cssValue)"
-        }
-        return nil
     }
 
     /// Extracts all animatable property names from an animation.
@@ -359,29 +321,20 @@ struct AnimationClassGenerator {
     /// Generates the base CSS class containing common properties
     /// - Returns: A string containing the base CSS class definition
     private func buildBaseClass() -> String {
-        // Get base properties from all animations
         var baseProperties: Set<String> = []
         
-        // If we have an appear animation with opacity, set initial state
-        if let appearAnim = triggerMap[.appear] as? BasicAnimation,
-           let opacityAnim = appearAnim.data.first(where: { $0.property == .opacity })
-        {
-            baseProperties.insert("opacity: \(opacityAnim.initial)")
-        } else if let appearAnim = triggerMap[.appear] as? KeyframeAnimation,
-                  let firstFrame = appearAnim.frames.first?.animations.first(where: { $0.property == .opacity })
-        {
-            baseProperties.insert("opacity: \(firstFrame.initial)")
-        }
-        
-        // If we have an appear animation with background color, set initial state
-        if let appearAnim = triggerMap[.appear] as? BasicAnimation,
-            appearAnim.data.contains(where: { $0.property == .backgroundColor })
-        {
-            baseProperties.insert("background-color: transparent")
-        } else if let appearAnim = triggerMap[.appear] as? KeyframeAnimation,
-                  let firstFrame = appearAnim.frames.first?.animations.first(where: { $0.property == .backgroundColor })
-        {
-            baseProperties.insert("background-color: \(firstFrame.final)")
+        if let appearAnim = triggerMap[.appear] {
+            if let basicAnim = appearAnim as? BasicAnimation {
+                for data in basicAnim.data {
+                    baseProperties.insert("\(data.property.rawValue): \(data.initial)")
+                }
+            } else if let keyframeAnim = appearAnim as? KeyframeAnimation,
+                      let firstFrame = keyframeAnim.frames.first
+            {
+                for animation in firstFrame.animations {
+                    baseProperties.insert("\(animation.property.rawValue): \(animation.final)")
+                }
+            }
         }
         
         // Collect static properties from all animations
@@ -391,7 +344,6 @@ struct AnimationClassGenerator {
             }
         }
         
-        // Generate CSS
         return """
         .\(name) {
             \(Array(baseProperties).joined(separator: ";\n        "));
@@ -415,103 +367,6 @@ struct AnimationClassGenerator {
             )
         }
         return (false, false)
-    }
-    
-    /// Generates CSS keyframe definitions for any animation type.
-    /// - Parameter animation: The animation to generate keyframes for
-    /// - Returns: A string containing the complete CSS @keyframes definition(s)
-    private func buildKeyframes(_ animation: some Animation) -> String {
-        if let keyframeAnim = animation as? KeyframeAnimation {
-            return buildKeyframeAnimationKeyframes(keyframeAnim)
-        } else if let basicAnim = animation as? BasicAnimation {
-            return buildBasicAnimationKeyframes(basicAnim)
-        }
-        return ""
-    }
-
-    /// Generates CSS keyframe definitions for a keyframe animation.
-    /// - Parameter animation: The keyframe animation to generate keyframes for
-    /// - Returns: A string containing the complete CSS @keyframes definition
-    private func buildKeyframeAnimationKeyframes(_ animation: KeyframeAnimation) -> String {
-        let forward = animation.frames.map { frame in
-            let properties = frame.animations.map { animation in
-                "\(animation.property.rawValue): \(animation.final)"
-            }.joined(separator: ";\n            ")
-                
-            return """
-                \(frame.position.roundedValue.asString()) {
-                    \(properties)
-                }
-            """
-        }.joined(separator: "\n    ")
-            
-        let forwardKeyframes = """
-        @keyframes \(name)-\(animation.trigger.rawValue) {
-            \(forward)
-        }
-        """
-            
-        if animation.trigger == .click && animation.autoreverses {
-            let reverse = animation.frames.reversed().map { frame in
-                let properties = frame.animations.map { animation in
-                    let value = frame.position == 0% ? animation.final : animation.initial
-                    return "\(animation.property.rawValue): \(value)"
-                }.joined(separator: ";\n            ")
-                    
-                return """
-                    \(frame.position.roundedValue.asString()) {
-                        \(properties)
-                    }
-                """
-            }.joined(separator: "\n    ")
-                
-            return """
-            \(forwardKeyframes)
-            
-            @keyframes \(name)-\(animation.trigger.rawValue)-reverse {
-                \(reverse)
-            }
-            """
-        }
-            
-        return forwardKeyframes
-    }
-
-    /// Generates CSS keyframe definitions for a basic animation.
-    /// - Parameter animation: The basic animation to generate keyframes for
-    /// - Returns: A string containing the complete CSS @keyframes definition(s)
-    private func buildBasicAnimationKeyframes(_ animation: BasicAnimation) -> String {
-        return animation.data.enumerated().map { index, anim in
-            let keyframeName = "\(name)-\(animation.trigger.rawValue)-\(index)"
-            
-            let forwardKeyframes = """
-            @keyframes \(keyframeName) {
-                0% {
-                    \(anim.property.rawValue): \(anim.initial)
-                }
-                100% {
-                    \(anim.property.rawValue): \(anim.final)
-                }
-            }
-            """
-            
-            if animation.trigger == .click && anim.autoreverses {
-                return """
-                \(forwardKeyframes)
-                
-                @keyframes \(keyframeName)-reverse {
-                    0% {
-                        \(anim.property.rawValue): \(anim.final)
-                    }
-                    100% {
-                        \(anim.property.rawValue): \(anim.initial)
-                    }
-                }
-                """
-            }
-            
-            return forwardKeyframes
-        }.joined(separator: "\n\n")
     }
     
     /// Generates CSS classes specifically for color-based click animations
