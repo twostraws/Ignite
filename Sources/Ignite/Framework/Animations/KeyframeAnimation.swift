@@ -15,21 +15,21 @@ import Foundation
 /// Example:
 /// ```swift
 /// KeyframeAnimation()
-///    .frame(0) { content in
-///        content.backgroundColor("blue")
-///        content.color("yellow")
+///    .frame(0%) { content in
+///        content.color(.background, to: .blue)
+///        content.color(.foreground, to: .yellow)
 ///    }
-///    .frame(1) { content in
-///        content.backgroundColor("red")
-///        content.color("white")
+///    .frame(100%) { content in
+///        content.color(.background, to: .red)
+///        content.color(.foreground, to: .white)
 ///    }
 /// ```
-public struct KeyframeAnimation: Animation, Animatable {
+public struct KeyframeAnimation: Animation {
     /// The collection of frames that define the animation sequence
     var frames: [Frame]
     
     /// The number of times to repeat the animation sequence
-    public var repeatCount: Double? = nil
+    public var repeatCount: Double = 1
     
     /// The delay in seconds before the animation begins
     public var delay: Double = 0
@@ -46,20 +46,22 @@ public struct KeyframeAnimation: Animation, Animatable {
     /// Whether the animation should play in reverse after completing
     public var autoreverses: Bool = false
     
-    /// Creates a new keyframe animation with the specified name and frames.
-    /// - Parameters:
-    ///   - name: A unique identifier for this animation
-    ///   - content: A closure that returns an array of `Frame` instances defining the animation sequence
-    public init(@AnimationBuilder content: () -> [Frame]) {
-        self.frames = content()
-    }
+    /// Additional non-animated CSS properties
+    public var staticProperties: OrderedSet<AttributeValue> = []
     
     /// Creates a new keyframe animation.
     public init() {
         self.frames = []
     }
     
-    public var body: some Animation { self }
+    /// Adds an additional CSS style property to the animation
+    /// - Parameter style: The CSS style to add
+    /// - Returns: A modified animation with the additional style
+    public func baseProperty(_ style: AttributeValue) -> Self {
+        var copy = self
+        copy.staticProperties.append(style)
+        return copy
+    }
 }
 
 public extension KeyframeAnimation {

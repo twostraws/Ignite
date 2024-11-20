@@ -51,10 +51,10 @@ public struct Time: InlineElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         guard let dateTime else {
-            return "<time\(attributes.description)>\(contents.render(context: context))</time>"
+            return "<time\(attributes.description())>\(contents.render(context: context))</time>"
         }
         return """
-        <time datetime=\"\(dateTime.asISO8601)\"\(attributes.description)>\
+        <time datetime=\"\(dateTime.asISO8601)\"\(attributes.description())>\
         \(contents.render(context: context))\
         </time>
         """

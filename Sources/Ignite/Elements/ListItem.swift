@@ -28,6 +28,6 @@ public struct ListItem: HTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<li\(attributes.description)>\(content.render(context: context))</li>"
+        "<li\(attributes.description())>\(content.render(context: context))</li>"
     }
 }

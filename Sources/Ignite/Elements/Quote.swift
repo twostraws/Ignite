@@ -54,7 +54,7 @@ public struct Quote: BlockElement {
 
         if renderedCaption.isEmpty {
             return """
-            <blockquote\(blockQuoteAttributes.description)>\(renderedContents)</blockquote>
+            <blockquote\(blockQuoteAttributes.description())>\(renderedContents)</blockquote>
             """
         } else {
             return """

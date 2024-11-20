@@ -35,7 +35,7 @@ public struct Audio: BlockElement, InlineElement, LazyLoadable {
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
     public func render(files: [String], into context: PublishingContext) -> String {
-        var output = "<audio controls\(attributes.description)>"
+        var output = "<audio controls\(attributes.description())>"
 
         for filename in files {
             if let fileType = audioTypes(for: filename) {

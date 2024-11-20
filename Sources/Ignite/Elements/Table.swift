@@ -113,7 +113,7 @@ public struct Table: BlockElement {
             tableAttributes.append(classes: ["table-striped-columns"])
         }
 
-        var output = "<table\(tableAttributes.description)>"
+        var output = "<table\(tableAttributes.description())>"
 
         if let caption {
             output += "<caption>\(caption)</caption>"

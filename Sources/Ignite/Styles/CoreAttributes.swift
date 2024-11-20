@@ -37,17 +37,36 @@ public struct CoreAttributes: Sendable {
     var customAttributes = Set<AttributeValue>()
     
     /// CSS classes that should be applied to a wrapper div around this element.
-    var containerClasses = OrderedSet<String>()
+    /// Each `ContainerAttributes` represents a wrapper div with styling
+    var containerAttributes = OrderedSet<ContainerAttributes>()
     
     /// All core attributes collapsed down to a single string for easy application.
-    var description: String {
+    func description(wrapping content: String? = nil, tag: String? = nil, closingTag: String? = nil) -> String {
         let attributes = "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
-        if containerClasses.isEmpty {
-            return attributes
-        } else {
-            let containerClassString = " class=\"\(containerClasses.joined(separator: " "))\""
-            return "\(containerClassString)><div\(attributes)"
+        
+        var result = content ?? attributes
+        
+        if containerAttributes.isEmpty {
+            if let tag {
+                let closing = closingTag ?? tag
+                return "<\(tag)\(attributes)>\(content ?? "")</\(closing)>"
+            }
+            return result
         }
+       
+        if let tag {
+            let closing = closingTag ?? tag
+            result = "<\(tag)\(attributes)>\(result)</\(closing)>"
+        }
+        
+        // Apply containers from inner to outer
+        for container in containerAttributes.reversed() where !container.isEmpty {
+            let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.joined(separator: " "))\""
+            let styleAttr = container.styles.isEmpty ? "" : " style=\"\(container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; "))\""
+            result = "<div\(classAttr)\(styleAttr)>\(result)</div>"
+        }
+        
+        return result
     }
     
     /// The ID of this element, if set.
@@ -153,6 +172,18 @@ public struct CoreAttributes: Sendable {
         return copy
     }
     
+    /// Appends a class to the elements container.
+    /// - Parameter dataAttributes: Variable number of container attributes to append.
+    mutating func append(containerAttributes: ContainerAttributes...) {
+        self.containerAttributes.formUnion(containerAttributes)
+    }
+    
+    /// Appends a class to the elements container.
+    /// - Parameter dataAttributes: The container attributes to append.
+    mutating func append(containerAttributes: [ContainerAttributes]) {
+        self.containerAttributes.formUnion(containerAttributes)
+    }
+    
     /// Returns a new set of attributes with an extra aria appended
     /// - Parameter aria: The aria to append
     /// - Returns: A copy of the previous `CoreAttributes` object with
@@ -179,7 +210,7 @@ public struct CoreAttributes: Sendable {
         styles.append(AttributeValue(name: style, value: value))
     }
     
-    /// Appends a single data attribute to the element.
+    /// Appends a data attribute to the element.
     /// - Parameter dataAttributes: Variable number of data attributes to append.
     mutating func append(dataAttributes: AttributeValue...) {
         data.formUnion(dataAttributes)

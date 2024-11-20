@@ -45,11 +45,6 @@ public enum AnimationCurve {
 }
 
 public extension AnimationCurve {
-    /// An easing curve that overshoots its target position at both the start and end of the animation.
-    static var easeInOutBack: Self {
-        .bezier(x1: 0.5, y1: -0.5, x2: 0.5, y2: 1.5)
-    }
-
     /// A smooth spring animation with minimal bounce, matching SwiftUI's default spring animation
     /// - Returns: A spring animation curve with maximum damping and no initial velocity
     static var smooth: Self {

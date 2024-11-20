@@ -38,7 +38,7 @@ public struct CodeBlock: BlockElement {
     public func render(context: PublishingContext) -> String {
         if let language {
             """
-            <pre\(attributes.description)>\
+            <pre\(attributes.description())>\
             <code class=\"language-\(language)\">\
             \(content)\
             </code>\
@@ -46,7 +46,7 @@ public struct CodeBlock: BlockElement {
             """
         } else {
             """
-            <pre\(attributes.description)>\
+            <pre\(attributes.description())>\
             <code>\(content)</code>\
             </pre>
             """

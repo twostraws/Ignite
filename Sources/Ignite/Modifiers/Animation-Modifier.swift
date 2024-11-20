@@ -8,69 +8,70 @@
 import Foundation
 
 public extension HTML {
-    func animation(_ animation: some Animation) -> Self {
-        if let resolved = animation as? ResolvedAnimation, resolved.trigger == .click {
-            return self.animation(animation, on: .click)
-        }
-        
-        // Set appear as default trigger
-        return self.animation(animation, on: .appear)
-    }
-    
     func animation(_ animation: some Animation, autoreverses: Bool = false, on trigger: AnimationTrigger) -> Self {
         var attributes = attributes
+        let animationName = "animation-\(self.id)"
         
-        // Only apply inline-block if it's a transform animation
-        if animation is BasicAnimation && (animation as? BasicAnimation)?.property == .transform {
-            attributes.append(styles: .init(name: "display", value: "inline-block"))
-        }
+        // Check for existing animations with this trigger
+        let existingAnimation = AnimationManager.default.getAnimation(for: self.id, trigger: trigger)
         
-        // Create a resolved animation with the correct trigger
-        var resolved: ResolvedAnimation
-        if let r = animation as? ResolvedAnimation {
-            resolved = r
-            resolved.trigger = trigger
-        } else if let r = AnimationBuilder.buildBlock(animation) as? ResolvedAnimation {
-            resolved = r
-            resolved.trigger = trigger
+        // Prepare the animation for registration
+        var modifiedAnimation: any Animation
+        if let basicAnim = animation as? BasicAnimation {
+            var copy = basicAnim
+            copy.trigger = trigger
+            copy.data = basicAnim.data.map { value in
+                var valueCopy = value
+                valueCopy.autoreverses = autoreverses
+                return valueCopy
+            }
+            
+            // Combine with existing animation if present
+            if let existing = existingAnimation as? BasicAnimation {
+                copy.data.append(contentsOf: existing.data)
+            }
+            
+            modifiedAnimation = copy
+        } else if let keyframeAnim = animation as? KeyframeAnimation {
+            var copy = keyframeAnim
+            copy.trigger = trigger
+            copy.autoreverses = autoreverses
+            
+            // Combine with existing keyframe animation if present
+            if let existing = existingAnimation as? KeyframeAnimation {
+                copy.frames.append(contentsOf: existing.frames)
+            }
+            
+            modifiedAnimation = copy
         } else {
-            resolved = ResolvedAnimation()
+            var copy = animation
+            copy.trigger = trigger
+            modifiedAnimation = copy
         }
         
-        resolved.autoreverses = autoreverses
-        
-        // Register the animation
-        AnimationManager.default.registerAnimation(resolved, for: self.id)
-        
-        // Get the potentially updated name after registration
-        if let registeredAnimation = AnimationManager.default.getAnimations(for: self.id)?[trigger] {
-            resolved.name = registeredAnimation.name
+        if trigger == .click || trigger == .hover {
+            modifiedAnimation.staticProperties.append(.init(name: "cursor", value: "pointer"))
         }
         
-        // Add trigger-specific classes and data attributes BEFORE adding the base class
-        switch trigger {
-        case .click:
-            let clickClasses = resolved.name + "-clicked"
-            attributes.append(dataAttributes: .init(name: "click-classes", value: clickClasses))
-        case .appear:
-            let appearClasses = resolved.name + "-appear"
-            let finalClasses = resolved.name + "-appear-final"
-            attributes.append(dataAttributes: .init(name: "appear-classes", value: appearClasses))
-            attributes.append(classes: [finalClasses])
-        case .hover:
-            break
-        }
-        
-        // Add the base class last to ensure proper ordering
-        attributes.append(classes: [resolved.name])
-        AttributeStore.default.merge(attributes, intoHTML: self.id)
-        
-        return self
-    }
-}
+        // Register the combined animation
+        AnimationManager.default.register(modifiedAnimation, for: self.id)
 
-extension Set {
-    mutating func removeAll(where predicate: (Element) -> Bool) {
-        self = self.filter { !predicate($0) }
+        // Add scale wrapper (innermost) for hover animations
+        if trigger == .hover {
+            attributes.append(containerAttributes: ContainerAttributes(
+                classes: ["\(animationName)-hover"]
+            ))
+        }
+        
+        // Add click-specific data attributes
+        if trigger == .click {
+            attributes.events.insert(Event(name: "onclick", actions: [CustomAction("toggleClickAnimation(this)")]))
+        }
+
+        // Add base class
+        attributes.append(classes: [animationName])
+        
+        AttributeStore.default.merge(attributes, intoHTML: self.id)
+        return self
     }
 }

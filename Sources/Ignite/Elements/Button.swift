@@ -146,6 +146,6 @@ public struct Button: InlineElement {
             .appending(classes: Button.classes(forRole: role, size: size))
             .appending(aria: Button.aria(forRole: role))
         let output = FlatHTML(label).map { $0.render(context: context) }.joined()
-        return "<button type=\"\(type.htmlName)\"\(buttonAttributes.description)>\(output)</button>"
+        return "<button type=\"\(type.htmlName)\"\(buttonAttributes.description())>\(output)</button>"
     }
 }

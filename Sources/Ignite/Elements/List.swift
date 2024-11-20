@@ -102,7 +102,7 @@ public struct List: BlockElement {
             listAttributes.append(style: "list-style-type", value: listStyleType)
         }
         
-        var output = "<\(listElementName)\(listAttributes.description)>"
+        var output = "<\(listElementName)\(listAttributes.description())>"
         
         for item in items {
             if item is ListItem {

@@ -36,7 +36,7 @@ public struct Video: BlockElement, InlineElement, LazyLoadable {
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
     public func render(files: [String], into context: PublishingContext) -> String {
-        var output = "<video controls\(attributes.description)>"
+        var output = "<video controls\(attributes.description())>"
 
         for filename in files {
             if let fileType = videoType(for: filename) {

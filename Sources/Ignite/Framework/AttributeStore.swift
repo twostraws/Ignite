@@ -35,7 +35,7 @@ public class AttributeStore {
         mergedAttributes.aria.formUnion(attributes.aria)
         mergedAttributes.data.formUnion(attributes.data)
         mergedAttributes.events.formUnion(attributes.events)
-        mergedAttributes.containerClasses = attributes.containerClasses
+        mergedAttributes.containerAttributes.formUnion(attributes.containerAttributes)
         mergedAttributes.customAttributes.formUnion(attributes.customAttributes)
         mergedAttributes.id = attributes.id
          

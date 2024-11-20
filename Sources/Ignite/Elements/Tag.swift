@@ -51,6 +51,6 @@ public struct Tag: HTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<\(name)\(attributes.description)>\(content.render(context: context))</\(name)>"
+        "<\(name)\(attributes.description())>\(content.render(context: context))</\(name)>"
     }
 }
