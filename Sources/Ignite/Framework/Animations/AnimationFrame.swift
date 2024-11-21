@@ -14,10 +14,10 @@ public extension Animation {
     struct Frame {
         /// The position in the animation timeline, between `0%` and `100%`
         let position: Percentage
-        
+
         /// The property transformations to apply at this position
         var animations: [AnimatableData]
-        
+
         /// Creates a frame with a single predefined animation
         public init(_ position: Percentage, animations: [AnimatableData]) {
             precondition(
@@ -39,14 +39,14 @@ public extension Animation.Frame {
     mutating func color(_ area: ColorArea = .foreground, to value: Color) {
         animations.append(AnimatableData(area.property, value: value.description))
     }
-    
+
     /// Sets the scale transform for this keyframe
     /// - Parameter value: The scale factor to animate to (e.g., 1.5 for 150% size)
     /// - Note: This will be animated between frames in the keyframe sequence
     mutating func scale(_ value: Double) {
         animations.append(AnimatableData(.transform, value: "scale(\(value))"))
     }
-       
+
     /// Sets the rotation transform for this keyframe
     /// - Parameters:
     ///   - angle: The angle to rotate by
@@ -56,7 +56,7 @@ public extension Animation.Frame {
         animations.append(AnimatableData(.transformOrigin, value: anchor.value))
         animations.append(AnimatableData(.transform, value: "rotate(\(angle.value))"))
     }
-    
+
     /// Sets a custom style transformation for this keyframe
     /// - Parameter property: The CSS property to animate
     /// - Parameter value: The CSS value

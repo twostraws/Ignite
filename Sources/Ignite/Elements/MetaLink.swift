@@ -38,7 +38,7 @@ public struct MetaLink: HeadElement, Sendable {
     static let utilityCSS = MetaLink(href: "/css/utilities.min.css", rel: .stylesheet)
     static let themeCSS = MetaLink(href: "/css/themes.min.css", rel: .stylesheet)
     static let animationCSS = MetaLink(href: "/css/animations.min.css", rel: .stylesheet)
-    
+
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

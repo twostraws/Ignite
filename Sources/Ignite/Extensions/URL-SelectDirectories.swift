@@ -13,18 +13,18 @@ extension URL {
     /// - Returns tupple containing source URL and URL where output is built.
     public static func selectDirectories(from file: StaticString) throws -> SourceBuildDirectories {
         var currentURL = URL(filePath: file.description)
-        
+
         while currentURL.path != "/" {
             currentURL = currentURL.deletingLastPathComponent()
             let packageURL = currentURL.appending(path: "Package.swift")
-            
+
             if FileManager.default.fileExists(atPath: packageURL.path) {
                 return SourceBuildDirectories(
                     source: packageURL.deletingLastPathComponent(),
                     build: packageURL.deletingLastPathComponent())
             }
         }
-        
+
         throw PublishingError.missingPackageDirectory
     }
 }

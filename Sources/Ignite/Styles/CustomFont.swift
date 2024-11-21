@@ -45,7 +45,7 @@ extension HTML {
         style("""
         @font-face {
             font-family: '\(customFont.fontFamily)';
-            src: url('\(customFont.fontURLString)') 
+            src: url('\(customFont.fontURLString)')
         }
         """)
     }

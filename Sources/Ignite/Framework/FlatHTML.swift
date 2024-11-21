@@ -12,19 +12,19 @@ import Foundation
 public struct FlatHTML: InlineElement, BlockElement, @preconcurrency Sequence {
     /// The content and behavior of this HTML.
     public var body: some HTML { FlatHTML(elements) }
-    
+
     /// How many columns this should occupy when placed in a section.
     public var columnWidth: ColumnWidth = .automatic
-    
+
     /// The array of HTML elements contained within this group.
     var elements: [any HTML]
-    
+
     /// Creates a new HTML group from an array of elements
     /// - Parameter elements: The array of HTML elements to include in the group
     init(_ elements: [any HTML]) {
         self.elements = elements
     }
-    
+
     /// Creates a new HTML group from a result builder closure
     /// - Parameter content: A closure that returns HTML content using the @HTMLBuilder result builder
     init(@HTMLBuilder _ content: () -> some HTML) {
@@ -34,7 +34,7 @@ public struct FlatHTML: InlineElement, BlockElement, @preconcurrency Sequence {
             self.elements = [content()]
         }
     }
-    
+
     /// Creates a new HTML group from a single HTML element or sequence
     /// - Parameter content: A single HTML element, HTMLGroup, AnyHTML, or sequence of HTML elements
     init(_ content: any HTML) {
@@ -56,11 +56,11 @@ public struct FlatHTML: InlineElement, BlockElement, @preconcurrency Sequence {
             self.elements = [content]
         }
     }
-    
+
     public func makeIterator() -> IndexingIterator<[any HTML]> {
         elements.makeIterator()
     }
-    
+
     public func render(context: PublishingContext) -> String {
         return elements.map { element in
             element.render(context: context)

@@ -17,7 +17,7 @@ public extension HTML {
     func transition(_ transition: Transition, on trigger: AnimationTrigger) -> Self {
         self.applyAnimation(transition, direction: .automatic, trigger: trigger)
     }
-    
+
     /// Applies a keyframe animation to an HTML element.
     ///
     /// - Parameters:
@@ -28,7 +28,7 @@ public extension HTML {
     func animation(_ animation: Animation, direction: AnimationDirection? = nil, on trigger: AnimationTrigger) -> Self {
         self.applyAnimation(animation, direction: direction, trigger: trigger)
     }
-    
+
     /// Applies an animation to an HTML element and manages the necessary container structure.
     ///
     /// - Parameters:
@@ -39,10 +39,10 @@ public extension HTML {
     private func applyAnimation(_ animation: some Animatable, direction: AnimationDirection?, trigger: AnimationTrigger) -> Self {
         var attributes = attributes
         let animationName = "animation-\(self.id)"
-        
+
         // Track which containers we've already added
         let existingContainers = Set(attributes.containerAttributes.flatMap { $0.classes })
-        
+
         // Extract background styles from the element and move them to the animation wrapper
         var wrapperStyles: OrderedSet<AttributeValue> = []
         if let backgroundColor = attributes.styles.first(where: { $0.name == "background-color" }) {
@@ -53,47 +53,47 @@ public extension HTML {
             wrapperStyles.append(background)
             attributes.styles.removeAll { $0.name == "background" }
         }
-        
+
         // Check for existing animations with this trigger
         let existingAnimation = AnimationManager.default.getAnimation(for: self.id, trigger: trigger)
-        
+
         // Prepare the animation for registration
         var modifiedAnimation: any Animatable = animation
         if let basicAnim = animation as? Transition {
             var copy = basicAnim
-            
+
             // Combine with existing animation if present
             if let existing = existingAnimation as? Transition {
                 copy.data.append(contentsOf: existing.data)
             }
-            
+
             modifiedAnimation = copy
         } else if let keyframeAnim = animation as? Animation {
             var copy = keyframeAnim
             if let direction {
                 copy.direction = direction
             }
-            
+
             // Combine with existing keyframe animation if present
             if let existing = existingAnimation as? Animation {
                 copy.frames.append(contentsOf: existing.frames)
             }
-            
+
             modifiedAnimation = copy
         }
-        
+
         modifiedAnimation.trigger = trigger
-        
+
         if trigger == .click || trigger == .hover {
             modifiedAnimation.staticProperties.append(.init(name: "cursor", value: "pointer"))
         }
-        
+
         // Register the combined animation
         AnimationManager.default.register(modifiedAnimation, for: self.id)
-        
+
         // Get all animations for this element sorted by modifier order
         let sortedTriggers = AnimationManager.default.getAnimationTriggers(for: self.id)
-           
+
         // The order of these parent containers is *very* important to ensure no overwriting
         for trigger in sortedTriggers {
             switch trigger {
@@ -123,12 +123,12 @@ public extension HTML {
                         attributes.containerAttributes = OrderedSet(updatedContainers)
                     }
                 }
-                
+
                 // Inner click-specific container
                 attributes.append(containerAttributes: ContainerAttributes(
                     classes: ["click-\(self.id)"]
                 ))
-                
+
             case .hover where !existingContainers.contains("\(animationName)-hover"):
                 // Create outer transform container
                 attributes.append(containerAttributes: ContainerAttributes(
@@ -136,7 +136,7 @@ public extension HTML {
                     classes: ["\(animationName)-transform"],
                     styles: [AttributeValue(name: "transform-style", value: "preserve-3d")]
                 ))
-                
+
                 // Add hover effects container
                 var classes: OrderedSet<String> = ["\(animationName)-hover"]
                 if let animation = animation as? Animation, animation.fillMode == .backwards || animation.fillMode == .both {
@@ -146,17 +146,17 @@ public extension HTML {
                     classes: classes,
                     styles: wrapperStyles
                 ))
-                
+
             case .appear where !existingContainers.contains(animationName):
                 attributes.append(containerAttributes: ContainerAttributes(
                     classes: [animationName],
                     styles: wrapperStyles
                 ))
-            
+
             default: break
             }
         }
-           
+
         AttributeStore.default.merge(attributes, intoHTML: self.id, removing: wrapperStyles)
         return self
     }

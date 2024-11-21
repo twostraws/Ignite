@@ -17,7 +17,7 @@ public struct Carousel: BlockElement {
         /// Slides should crossfade.
         case crossfade
     }
-    
+
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

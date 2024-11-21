@@ -15,37 +15,37 @@ import Foundation
 public struct Text: BlockElement & DropdownElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
-    
+
     /// The font style to use for this text.
     var font = Font.body
-    
+
     /// The content to place inside the text.
     var content: any InlineElement
-    
+
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
     /// - Parameter content: An array of the content to place into the text.
     public init(@InlineElementBuilder content: @escaping () -> any InlineElement) {
         self.content = content()
     }
-    
+
     /// Creates a new `Text` instance from one inline element.
     public init(_ string: any InlineElement) {
         self.content = string
     }
-    
+
     /// Creates a new `Text` instance using "lorem ipsum" placeholder text.
     /// - Parameter placeholderLength: How many placeholder words to generate.
     public init(placeholderLength: Int) {
         precondition(placeholderLength > 0, "placeholderLength must be at least 1.")
-        
+
         let baseWords = ["Lorem", "ipsum", "dolor", "sit", "amet,", "consectetur", "adipiscing", "elit."]
-        
+
         var finalWords: [String]
-        
+
         if placeholderLength < baseWords.count {
             finalWords = Array(baseWords.prefix(placeholderLength))
         } else {
@@ -57,15 +57,15 @@ public struct Text: BlockElement & DropdownElement {
                 "occaecat", "officia", "pariatur", "proident", "qui", "quis", "reprehenderit", "sed", "sint", "sunt",
                 "tempor", "ullamco", "ut", "velit", "veniam", "voluptate"
             ]
-            
+
             var isStartOfSentence = false
             finalWords = baseWords
-            
+
             for _ in baseWords.count ..< placeholderLength {
                 let randomWord = otherWords.randomElement() ?? "ad"
                 var formattedWord = isStartOfSentence ? randomWord.capitalized : randomWord
                 isStartOfSentence = false
-                
+
                 // Randomly add punctuation – 10% chance of adding
                 // a comma, and 10% of adding a full stop instead.
                 let punctuationProbability = Int.random(in: 1 ... 10)
@@ -75,22 +75,22 @@ public struct Text: BlockElement & DropdownElement {
                     formattedWord.append(".")
                     isStartOfSentence = true
                 }
-                
+
                 finalWords.append(formattedWord)
             }
         }
-        
+
         var result = finalWords.joined(separator: " ").trimmingCharacters(in: .punctuationCharacters)
         result += "."
-        
+
         self.content = result
     }
-    
+
     /// Creates a new Text struct from a Markdown string.
     /// - Parameter markdown: The Markdown text to parse.
     public init(markdown: String) {
         let parser = MarkdownToHTML(markdown: markdown, removeTitleFromBody: true)
-        
+
         // Remove any <p></p> tags, because these will be
         // added automatically in render(). This allows us
         // to retain any styling applied elsewhere, e.g.
@@ -98,7 +98,7 @@ public struct Text: BlockElement & DropdownElement {
         let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
         self.content = cleanedHTML
     }
-    
+
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
@@ -123,7 +123,7 @@ public extension HTML where Self == Text {
             return copy
         }
     }
-    
+
     /// Adjusts the font weight (boldness) of this font.
     /// - Parameter newWeight: The new font weight.
     /// - Returns: A new `Text` instance with the updated weight.

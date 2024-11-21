@@ -17,26 +17,26 @@ public protocol DropdownElement: InlineElement {}
 public struct Dropdown: BlockElement, NavigationItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
-    
+
     /// The title for this `Dropdown`.
     var title: any InlineElement
-    
+
     /// The array of items to shown in this `Dropdown`.
     var items: HTMLSequence
-    
+
     /// How large this dropdown should be drawn. Defaults to `.medium`.
     var size = ButtonSize.medium
-    
+
     /// How this dropdown should be styled on the screen. Defaults to `.defaut`.
     var role = Role.default
-    
+
     /// Controls whether this dropdown needs to be created as its own element,
     /// or whether it uses the structure provided by a parent `NavigationBar`.
     private var isNavigationItem = false
-    
+
     /// Creates a new dropdown button using a title and an element that builder
     /// that returns an array of types conforming to `DropdownElement`.
     /// - Parameters:
@@ -49,7 +49,7 @@ public struct Dropdown: BlockElement, NavigationItem {
         self.title = title
         self.items = HTMLSequence(items)
     }
-    
+
     /// Adjusts the size of this dropdown.
     /// - Parameter size: The new size.
     /// - Returns: A new `Dropdown` instance with the updated size.
@@ -58,7 +58,7 @@ public struct Dropdown: BlockElement, NavigationItem {
         copy.size = size
         return copy
     }
-    
+
     /// Adjusts the role of this dropdown
     /// - Parameter style: The new role.
     /// - Returns: A new `Dropdown` instance with the updated role.
@@ -67,7 +67,7 @@ public struct Dropdown: BlockElement, NavigationItem {
         copy.role = role
         return copy
     }
-    
+
     /// Configures this dropdown to be placed inside a `NavigationBar`.
     /// This removes its <div> at render-time, which means it will use the
     /// structure provided directly by the `NavigationBar`.
@@ -78,7 +78,7 @@ public struct Dropdown: BlockElement, NavigationItem {
         copy.isNavigationItem = true
         return copy
     }
-    
+
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
@@ -86,7 +86,7 @@ public struct Dropdown: BlockElement, NavigationItem {
         Group(isTransparent: isNavigationItem) {
             if isNavigationItem {
                 let hasActiveItem = items.contains { context.currentRenderingPath == ($0 as? Link)?.url }
-                
+
                 Link(title, target: "#")
                     .customAttribute(name: "role", value: "button")
                     .class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
@@ -99,7 +99,7 @@ public struct Dropdown: BlockElement, NavigationItem {
                     .data("bs-toggle", "dropdown")
                     .aria("expanded", "false")
             }
-            
+
             List {
                 ForEach(items) { item in
                     if let link = item as? Link {

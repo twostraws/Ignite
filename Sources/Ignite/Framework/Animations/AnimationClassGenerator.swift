@@ -15,10 +15,10 @@ import OrderedCollections
 struct AnimationClassGenerator {
     /// The ID of the element receiving animations
     let elementID: String
-    
+
     /// A mapping of trigger types to their corresponding resolved animations
     let triggerMap: OrderedDictionary<AnimationTrigger, any Animatable>
-    
+
     /// The base name for the generated CSS classes
     private var name: String { "animation-" + elementID }
 
@@ -39,11 +39,11 @@ struct AnimationClassGenerator {
     /// - Returns: A string containing the CSS classes for clicked and unclicked states
     private func buildTransitionClickClass(_ transition: Transition) -> String {
         var properties = ClickAnimationProperties()
-        
+
         for data in transition.data {
             let delay = data.delay > 0 ? " \(data.delay)s" : ""
             let timing = "\(data.duration)s \(data.timing.cssValue)\(delay)"
-            
+
             if data.property == .transform {
                 properties.transformTransitions.append("\(data.property.rawValue) \(timing)")
                 properties.transformProperties.append("\(data.property.rawValue): \(data.final)")
@@ -54,7 +54,7 @@ struct AnimationClassGenerator {
                 properties.unclickedNonTransformProperties.append("\(data.property.rawValue): \(data.initial)")
             }
         }
-        
+
         return buildClickOutput(properties)
     }
 
@@ -63,42 +63,42 @@ struct AnimationClassGenerator {
     /// - Returns: A string containing the formatted CSS classes
     private func buildClickOutput(_ properties: ClickAnimationProperties) -> String {
         var output = ""
-        
+
         if !properties.nonTransformProperties.isEmpty {
             output += """
             .\(name).clicked .click-\(elementID) {
                 transition: \(properties.nonTransformTransitions.joined(separator: ", "));
                 \(properties.nonTransformProperties.joined(separator: ";\n        "));
             }
-            
+
             .\(name).unclicked .click-\(elementID)  {
                 transition: \(properties.nonTransformTransitions.joined(separator: ", "));
                 \(properties.unclickedNonTransformProperties.joined(separator: ";\n        "));
             }
             """
         }
-        
+
         if !properties.transformProperties.isEmpty {
             if !output.isEmpty {
                 output += "\n\n"
             }
-            
+
             output += """
             .\(name).clicked {
                 transition: \(properties.transformTransitions.joined(separator: ", "));
                 \(properties.transformProperties.joined(separator: ";\n        "));
             }
-            
+
             .\(name).unclicked {
                 transition: \(properties.transformTransitions.joined(separator: ", "));
                 \(properties.unclickedTransformProperties.joined(separator: ";\n        "));
             }
             """
         }
-        
+
         return output
     }
-    
+
     /// Generates a CSS timing string for a transition, combining duration, delay, and timing function.
     /// - Parameter animation: The animation to generate timing for
     /// - Returns: A string in the format "Xs timing-function" where X is the duration in seconds
@@ -117,11 +117,11 @@ struct AnimationClassGenerator {
             "\(animation.duration)s",
             animation.timing.cssValue
         ]
-        
+
         if animation.delay > 0 {
             components.append("\(animation.delay)s")
         }
-        
+
         return components.joined(separator: " ")
     }
 
@@ -141,7 +141,7 @@ struct AnimationClassGenerator {
     private func buildKeyframeHoverClass(_ animation: Animation) -> String {
         let timing = getAnimationTiming(animation)
         let iterationCount = animation.repeatCount == .infinity ? "infinite" : String(animation.repeatCount)
-        
+
         // Build initial state for .backwards or .both
         let baseState = if animation.fillMode == .backwards || animation.fillMode == .both {
             animation.frames.last?.animations
@@ -154,7 +154,7 @@ struct AnimationClassGenerator {
         } else {
             ""
         }
-        
+
         // Build post-hover state for .forwards or .both
         let postHoverState = if animation.fillMode == .forwards || animation.fillMode == .both {
             animation.frames.first?.animations
@@ -163,16 +163,16 @@ struct AnimationClassGenerator {
         } else {
             ""
         }
-        
+
         // Add fill mode class if needed
         let fillModeClass = if animation.fillMode == .backwards || animation.fillMode == .both {
             """
-            
+
             .\(name)-hover.fill-\(elementID)-\(animation.fillMode.rawValue) {
                 animation: \(name)-hover \(timing) \(animation.direction.rawValue) \(animation.fillMode.rawValue)\(animation.repeatCount != 1 ? " " + iterationCount : "");
                 animation-play-state: paused;
             }
-            
+
             .\(name)-hover.fill-\(elementID)-\(animation.fillMode.rawValue):hover {
                 animation-play-state: running;
             }
@@ -180,22 +180,22 @@ struct AnimationClassGenerator {
         } else {
             ""
         }
-        
+
         return """
         .\(name)-hover {
             transform-style: preserve-3d;
             \(baseState ?? "")
         }
-        
+
         .\(name)-hover:hover {
             animation: \(name)-hover \(timing) \(animation.direction.rawValue)\(animation.repeatCount != 1 ? " " + iterationCount : "");
         }
-        
+
         .\(name)-hover:not(:hover) {
             \(postHoverState ?? "")
         }
         \(fillModeClass)
-        
+
         @keyframes \(name)-hover {
             \(buildKeyframeContent(animation))
         }
@@ -210,7 +210,7 @@ struct AnimationClassGenerator {
             let properties = frame.animations
                 .map { "\($0.property.rawValue): \($0.final)" }
                 .joined(separator: ";\n                ")
-            
+
             return """
                     \(frame.position.roundedValue.asString()) {
                         \(properties)
@@ -225,25 +225,25 @@ struct AnimationClassGenerator {
     private func buildKeyframeClickClass(_ animation: Animation) -> String {
         guard let firstFrame = animation.frames.first,
               let lastFrame = animation.frames.last else { return "" }
-        
+
         var properties = ClickAnimationProperties()
         let timing = getAnimationTiming(animation)
-        
+
         // Build common animation properties
         var animationProperties = [
             "animation-fill-mode: \(animation.fillMode.rawValue)",
             "animation-direction: \(animation.direction.rawValue)"
         ]
-        
+
         if animation.repeatCount != 1 {
             animationProperties.append("animation-iteration-count: \(animation.repeatCount == .infinity ? "infinite" : String(animation.repeatCount))")
         }
-        
+
         // Add transitions for all unique properties
         let allProperties = Set(animation.frames.flatMap { frame in
             frame.animations.map { $0.property }
         })
-        
+
         for property in allProperties {
             if property == .transform {
                 properties.transformTransitions.append("\(property.rawValue) \(timing)")
@@ -251,7 +251,7 @@ struct AnimationClassGenerator {
                 properties.nonTransformTransitions.append("\(property.rawValue) \(timing)")
             }
         }
-        
+
         // Add final values from last frame
         for anim in lastFrame.animations {
             if anim.property == .transform {
@@ -260,7 +260,7 @@ struct AnimationClassGenerator {
                 properties.nonTransformProperties.append("\(anim.property.rawValue): \(anim.final)")
             }
         }
-        
+
         // Add initial values from first frame
         for anim in firstFrame.animations {
             if anim.property == .transform {
@@ -269,76 +269,76 @@ struct AnimationClassGenerator {
                 properties.unclickedNonTransformProperties.append("\(anim.property.rawValue): \(anim.final)")
             }
         }
-        
+
         return buildClickOutput(properties)
     }
-    
+
     /// Generates base CSS properties for transition animations including cursor and initial property values
     /// - Parameter transition: The transition animation to process
     /// - Returns: A set of CSS properties including transitions and initial values
     private func buildBaseTransitionClass(_ transition: Transition) -> Set<String> {
         var baseProperties: Set<String> = ["cursor: pointer"]
         let timing = getTransitionTiming(transition).first ?? "0.35s ease"
-        
+
         // Set initial values for all properties
         for data in transition.data {
             baseProperties.insert("\(data.property.rawValue): \(data.initial)")
         }
-        
+
         // Add transitions for all properties in one declaration
         let transitions = transition.data.map { data in
             "\(data.property.rawValue) \(timing)"
         }.joined(separator: ", ")
         baseProperties.insert("transition: \(transitions)")
-        
+
         return baseProperties
     }
-    
+
     /// Creates CSS classes for hover-triggered transitions
     /// - Parameter transition: The transition animation to convert to CSS
     /// - Returns: A string containing hover and non-hover state CSS rules
     private func buildTransitionHoverClass(_ transition: Transition) -> String {
         let transformProperties = transition.data.filter { $0.property == .transform }
         let otherProperties = transition.data.filter { $0.property != .transform }
-        
+
         let transformTiming = transformProperties.map { data in
             "transform \(data.duration)s \(data.timing.cssValue)"
         }.joined(separator: ", ")
-        
+
         let otherTiming = otherProperties.map { data in
             "\(data.property.rawValue) \(data.duration)s \(data.timing.cssValue)"
         }.joined(separator: ", ")
-        
+
         return """
         .\(name)-transform {
             transform-style: preserve-3d;
             transition: \(transformTiming);
         }
-        
+
         .\(name)-transform:hover {
             \(transformProperties.map { "transform: \($0.final)" }.joined(separator: ";\n        "))
         }
-        
+
         .\(name)-hover {
             transition: \(otherTiming);
         }
-        
+
         .\(name)-hover:hover {
             \(otherProperties.map { "\($0.property.rawValue): \($0.final)" }.joined(separator: ";\n        "))
         }
         """
     }
-    
+
     /// Builds the complete CSS output including keyframes and all classes
     /// - Returns: A string containing the complete CSS output
     func build() -> String {
         var components: [String] = []
-        
+
         // Base class needs an animation for static properties
         if let firstAnimation = triggerMap.elements.first?.value {
             components.append(buildBaseClass(firstAnimation))
         }
-        
+
         // Add hover animations if present
         if let hoverAnim = triggerMap[.hover] {
             if let transition = hoverAnim as? Transition {
@@ -347,7 +347,7 @@ struct AnimationClassGenerator {
                 components.append(buildKeyframeHoverClass(animation))
             }
         }
-        
+
         // Add appear animations if present
         if let appearAnim = triggerMap[.appear] {
             if let transition = appearAnim as? Transition {
@@ -356,7 +356,7 @@ struct AnimationClassGenerator {
                 components.append(buildAppearKeyframes(animation))
             }
         }
-        
+
         // Add click animations if present
         if let clickAnim = triggerMap[.click] {
             if let transition = clickAnim as? Transition {
@@ -365,12 +365,12 @@ struct AnimationClassGenerator {
                 components.append(buildKeyframeClickClass(animation))
             }
         }
-        
+
         return components
             .filter { !$0.isEmpty }
             .joined(separator: "\n\n")
     }
-    
+
     /// Generates the base CSS class containing common properties and static properties
     /// - Parameter animation: The animation containing static properties to include in the base class
     /// - Returns: A string containing the base CSS class definition and optional appeared state
@@ -382,7 +382,7 @@ struct AnimationClassGenerator {
     /// 4. Formats the output to avoid empty declarations
     private func buildBaseClass(_ animation: any Animatable) -> String {
         var baseProperties: Set<String> = Set(animation.staticProperties.map { "\($0.name): \($0.value)" })
-        
+
         if let appearAnim = triggerMap[.appear] {
             if let transition = appearAnim as? Transition {
                 baseProperties.formUnion(buildBaseTransitionClass(transition))
@@ -390,12 +390,12 @@ struct AnimationClassGenerator {
                 baseProperties.formUnion(buildBaseKeyframeClass(animation))
             }
         }
-        
+
         let appearedProperties = getAppearedProperties()
         let baseClass = """
         .\(name) {\(baseProperties.isEmpty ? "" : "\n        \(baseProperties.joined(separator: ";\n        "));\n    ")}
         """
-        
+
         // Only add appeared class if we have properties to set
         if !appearedProperties.isEmpty {
             return baseClass + "\n\n" + """
@@ -404,7 +404,7 @@ struct AnimationClassGenerator {
             }
             """
         }
-        
+
         return baseClass
     }
 
@@ -417,11 +417,11 @@ struct AnimationClassGenerator {
             let timing = "\(data.duration)s \(data.timing.cssValue)\(delay)"
             return "\(data.property.rawValue) \(timing)"
         }
-        
+
         let properties = transition.data.map { data in
             "\(data.property.rawValue): \(data.final)"
         }
-        
+
         return """
         .\(name).appeared {
             transition: \(transitions.joined(separator: ", "));
@@ -439,14 +439,14 @@ struct AnimationClassGenerator {
             let properties = frame.animations
                 .map { "\($0.property.rawValue): \($0.final)" }
                 .joined(separator: ";\n                ")
-            
+
             return """
                 \(frame.position.roundedValue.asString()) {
                     \(properties)
                 }
             """
         }.joined(separator: "\n        ")
-        
+
         return """
         .\(name).appeared {
             animation: \(name)-appear \(timing);
@@ -454,7 +454,7 @@ struct AnimationClassGenerator {
             animation-direction: \(animation.direction.rawValue);
             \(animation.repeatCount != 1 ? "animation-iteration-count: \(animation.repeatCount == .infinity ? "infinite" : String(animation.repeatCount));" : "")
         }
-        
+
         @keyframes \(name)-appear {
             \(keyframeContent)
         }
@@ -466,13 +466,13 @@ struct AnimationClassGenerator {
     private func getAppearedProperties() -> [String] {
         guard let appearAnim = triggerMap[.appear] else { return [] }
         var properties: [String] = []
-        
+
         if let transition = appearAnim as? Transition {
             properties = transition.data.map { data in
                 "\(data.property.rawValue): \(data.final)"
             }
         }
-        
+
         return properties
     }
 }

@@ -14,12 +14,12 @@ public struct AttributeValue: Hashable, Equatable, Sendable {
 
     /// The attribute's value, e.g. "myFrame" or "stylesheet".
     var value: String
-    
+
     init(name: String, value: String) {
         self.name = name
         self.value = value
     }
-    
+
     init(name: Property, value: String) {
         self.name = name.rawValue
         self.value = value
