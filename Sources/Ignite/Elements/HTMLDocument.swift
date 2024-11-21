@@ -23,7 +23,7 @@ public struct HTMLDocument: HTML {
         self.customAttribute(name: "lang", value: language.rawValue)
         self.customAttribute(name: "data-bs-theme", value: "auto")
         var output = "<!doctype html>"
-        output += "<html\(attributes.description)>"
+        output += "<html\(attributes.description())>"
         output += contents.map { element in
             return element.render(context: context)
         }.joined()

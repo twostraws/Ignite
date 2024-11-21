@@ -46,7 +46,7 @@ public struct Group: BlockElement {
         if isTransparent {
             return items.render(context: context)
         } else {
-            return "<div\(attributes.description)>\(items.render(context: context))</div>"
+            return attributes.description(wrapping: items.render(context: context), tag: "div")
         }
     }
 }

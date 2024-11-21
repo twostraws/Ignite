@@ -11,7 +11,7 @@ import Foundation
 /// elements. This allows any part of the site to reference content, add
 /// build warnings, and more.
 @MainActor
-public class PublishingContext {
+public final class PublishingContext {
     /// The site that is currently being built.
     public var site: any Site
     
@@ -37,7 +37,7 @@ public class PublishingContext {
     private(set) var warnings = [String]()
     
     /// All the Markdown content this user has inside their Content folder.
-    private(set) public var allContent = [Content]()
+    public private(set) var allContent = [Content]()
     
     /// The sitemap for this site. Yes, using an array is less efficient when
     /// using `contains()`, but it allows us to list pages in a sensible order.
@@ -135,8 +135,9 @@ public class PublishingContext {
     /// Performs all steps required to publish a site.
     func publish() async throws {
         try clearBuildFolder()
-        try copyResources()
         try await generateContent()
+        try copyResources()
+        generateAnimations()
         try await generateTagPages()
         try generateSiteMap()
         try generateFeed()
@@ -178,6 +179,13 @@ public class PublishingContext {
         } catch {
             print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
             throw error
+        }
+        
+        if AnimationManager.default.hasAnimations {
+            if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/animations.min.css").path()) {
+                try copy(resource: "css/animations.min.css")
+            }
+            try copy(resource: "js/animations.js")
         }
         
         if site.useDefaultBootstrapURLs == .localBootstrap {
@@ -245,6 +253,7 @@ public class PublishingContext {
             }
         }
     }
+
     /// Renders a static page.
     /// - Parameters:
     ///   - page: The page to render.

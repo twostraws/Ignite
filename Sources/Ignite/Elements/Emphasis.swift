@@ -34,6 +34,6 @@ public struct Emphasis: InlineElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<em\(attributes.description)>\(content.render(context: context))</em>"
+        "<em\(attributes.description())>\(content.render(context: context))</em>"
     }
 }

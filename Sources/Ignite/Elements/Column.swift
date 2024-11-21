@@ -69,6 +69,6 @@ public struct Column: HTML, HorizontalAligning {
             columnAttributes.append(classes: ["align-\(verticalAlignment.rawValue)"])
         }
 
-        return "<td colspan=\"\(columnSpan)\"\(columnAttributes.description)>\(FlatHTML(items).render(context: context))</td>"
+        return "<td colspan=\"\(columnSpan)\"\(columnAttributes.description())>\(FlatHTML(items).render(context: context))</td>"
     }
 }

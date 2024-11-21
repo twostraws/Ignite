@@ -27,7 +27,7 @@ public struct CoreAttributes: Sendable {
     /// Inline CSS styles.
     var styles = OrderedSet<AttributeValue>()
     
-    /// data- attributes.
+    /// Data attributes.
     var data = Set<AttributeValue>()
     
     /// JavaScript events, such as onclick.
@@ -37,17 +37,53 @@ public struct CoreAttributes: Sendable {
     var customAttributes = Set<AttributeValue>()
     
     /// CSS classes that should be applied to a wrapper div around this element.
-    var containerClasses = OrderedSet<String>()
+    /// Each `ContainerAttributes` represents a wrapper div with styling
+    var containerAttributes = OrderedSet<ContainerAttributes>() {
+        didSet {
+            // Ensure transform containers are always last (outermost)
+            containerAttributes = OrderedSet(containerAttributes.sorted { a, b in
+                if a.isTransformContainer && !b.isTransformContainer { return false }
+                if !a.isTransformContainer && b.isTransformContainer { return true }
+                return true
+            })
+        }
+    }
     
     /// All core attributes collapsed down to a single string for easy application.
-    var description: String {
+    func description(wrapping content: String? = nil, tag: String? = nil, closingTag: String? = nil) -> String {
         let attributes = "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
-        if containerClasses.isEmpty {
-            return attributes
-        } else {
-            let containerClassString = " class=\"\(containerClasses.joined(separator: " "))\""
-            return "\(containerClassString)><div\(attributes)"
+        
+        var result = content ?? attributes
+        
+        if containerAttributes.isEmpty {
+            if let tag {
+                let closing = closingTag ?? tag
+                return "<\(tag)\(attributes)>\(content ?? "")</\(closing)>"
+            }
+            return result
         }
+       
+        if let tag {
+            let closing = closingTag ?? tag
+            result = "<\(tag)\(attributes)>\(result)</\(closing)>"
+        }
+        
+        // Apply containers from inner to outer (lower order to higher)
+        for container in containerAttributes where !container.isEmpty {
+            let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.joined(separator: " "))\""
+            let styleAttr = container.styles.isEmpty ? "" : " style=\"\(container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; "))\""
+            
+            // Match the main eventString format
+            var eventAttr = ""
+            for event in container.events where event.actions.isEmpty == false {
+                let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
+                eventAttr += " \(event.name)=\"\(actions)\""
+            }
+            
+            result = "<div\(classAttr)\(styleAttr)\(eventAttr)>\(result)</div>"
+        }
+        
+        return result
     }
     
     /// The ID of this element, if set.
@@ -153,6 +189,18 @@ public struct CoreAttributes: Sendable {
         return copy
     }
     
+    /// Appends a class to the elements container.
+    /// - Parameter dataAttributes: Variable number of container attributes to append.
+    mutating func append(containerAttributes: ContainerAttributes...) {
+        self.containerAttributes.formUnion(containerAttributes)
+    }
+    
+    /// Appends a class to the elements container.
+    /// - Parameter dataAttributes: The container attributes to append.
+    mutating func append(containerAttributes: [ContainerAttributes]) {
+        self.containerAttributes.formUnion(containerAttributes)
+    }
+    
     /// Returns a new set of attributes with an extra aria appended
     /// - Parameter aria: The aria to append
     /// - Returns: A copy of the previous `CoreAttributes` object with
@@ -177,6 +225,12 @@ public struct CoreAttributes: Sendable {
     ///  - Parameter value: The style value, e.g. steelblue
     mutating func append(style: String, value: String) {
         styles.append(AttributeValue(name: style, value: value))
+    }
+    
+    /// Appends a data attribute to the element.
+    /// - Parameter dataAttributes: Variable number of data attributes to append.
+    mutating func append(dataAttributes: AttributeValue...) {
+        data.formUnion(dataAttributes)
     }
     
     /// Appends multiple custom attributes to the element.

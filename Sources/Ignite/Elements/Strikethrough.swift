@@ -32,6 +32,6 @@ public struct Strikethrough: InlineElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<s\(attributes.description)>\(content.render(context: context))</s>"
+        "<s\(attributes.description())>\(content.render(context: context))</s>"
     }
 }

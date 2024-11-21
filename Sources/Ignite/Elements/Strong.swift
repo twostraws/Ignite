@@ -32,6 +32,6 @@ public struct Strong: InlineElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<strong\(attributes.description)>\(content.render(context: context))</strong>"
+        "<strong\(attributes.description())>\(content.render(context: context))</strong>"
     }
 }

@@ -34,6 +34,6 @@ public struct Row: HTML {
             }
         }.joined()
 
-        return "<tr\(attributes.description)>\(output)</tr>"
+        return "<tr\(attributes.description())>\(output)</tr>"
     }
 }

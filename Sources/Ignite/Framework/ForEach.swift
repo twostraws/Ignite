@@ -39,7 +39,7 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineElement, BlockElemen
         for item in HTMLSequence(data.map(content)) {
             if let item = item as? AnyHTML, // Items will be AnyHTML via the @HTMLBuilder implementation
                !(item.wrapped is ListItem), // Check if we're inside a List before wrapping in <li>
-               attributes.description.contains("<li>")
+               attributes.description().contains("<li>")
             {
                 output += "<li>\(item.render(context: context))</li>"
             } else {

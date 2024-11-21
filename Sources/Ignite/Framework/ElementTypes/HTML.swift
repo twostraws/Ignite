@@ -263,7 +263,7 @@ public extension HTML {
     /// - Returns: The original element
     func addContainerClass(_ className: String) -> Self {
         var attributes = attributes
-        attributes.containerClasses.append(className)
+        attributes.containerAttributes.append(.init(classes: [className]))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }

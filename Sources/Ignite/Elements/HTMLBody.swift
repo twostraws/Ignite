@@ -44,10 +44,12 @@ public struct HTMLBody: HTMLRootElement {
             """).render(context: context)
         }
         
-        output += Script(file: "/js/animations.js").render(context: context)
+        if AnimationManager.default.hasAnimations {
+            output += Script(file: "/js/animations.js").render(context: context)
+        }
         output += Script(file: "/js/email-protection.js").render(context: context)
         output += Script(file: "/js/theme-switcher.js").render(context: context)
         
-        return "<body\(attributes.description)>\(output)</body>"
+        return "<body\(attributes.description())>\(output)</body>"
     }
 }

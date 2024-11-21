@@ -103,7 +103,10 @@ public struct Text: BlockElement & DropdownElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        return "<\(font.rawValue)\(attributes.description)>" + content.render(context: context) + "</\(font.rawValue)>"
+        return attributes.description(
+            wrapping: content.render(context: context),
+            tag: font.rawValue
+        )
     }
 }
 

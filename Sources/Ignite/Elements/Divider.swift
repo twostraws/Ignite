@@ -23,6 +23,6 @@ public struct Divider: BlockElement, DropdownElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<hr\(attributes.description) />"
+        "<hr\(attributes.description()) />"
     }
 }
