@@ -31,7 +31,7 @@ public protocol TagPage: ThemePage {
 
 extension TagPage {
     /// The current tag during page generation.
-    var tag: String? {
+    public var tag: String? {
         TagContext.current
     }
 }

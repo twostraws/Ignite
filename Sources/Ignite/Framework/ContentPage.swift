@@ -30,7 +30,7 @@ public protocol ContentPage: ThemePage {
 
 extension ContentPage {
     /// The current Markdown content being rendered.
-    var content: Content {
+    public var content: Content {
         ContentContext.current
     }
 }
