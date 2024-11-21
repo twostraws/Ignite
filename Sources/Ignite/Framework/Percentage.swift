@@ -16,7 +16,7 @@ postfix operator %
 /// let scale: Percentage = 150%
 /// let reduction: Percentage = -25%
 /// ```
-public struct Percentage {
+public struct Percentage: Hashable {
     /// The type used for storing the raw percentage value, allowing for decimal points
     public typealias Value = Double
 
@@ -43,6 +43,24 @@ public struct Percentage {
     public func value(decimals: Int = 1) -> Double {
         let multiplier = pow(10.0, Double(decimals))
         return round(value * multiplier) / multiplier
+    }
+}
+
+public extension Percentage {
+    static func - (lhs: Percentage, rhs: Percentage) -> Double {
+        return lhs.value - rhs.value
+    }
+    
+    static func + (lhs: Percentage, rhs: Percentage) -> Double {
+        return lhs.value + rhs.value
+    }
+    
+    static func * (lhs: Double, rhs: Percentage) -> Double {
+        return lhs * (rhs.value / 100.0)
+    }
+    
+    static func * (lhs: Percentage, rhs: Double) -> Double {
+        return (lhs.value / 100.0) * rhs
     }
 }
 

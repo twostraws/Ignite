@@ -8,7 +8,7 @@
 import Foundation
 
 /// A basic animation type that transitions a single CSS property from one value to another.
-public struct AnimationData {
+public struct AnimatableData {
     /// The starting value for the animated property
     var initial: String
     
@@ -22,17 +22,10 @@ public struct AnimationData {
     var duration: Double = 0.35
     
     /// The timing function that controls the animation's acceleration curve.
-    var timing: AnimationCurve = .automatic
+    var timing: TimingCurve = .automatic
 
     /// The delay before the animation begins, in seconds.
     var delay: Double = 0
-    
-    /// The number of times the animation should repeat.
-    /// - Note: Set to `nil` for no repetition, or `.infinity` for endless repetition.
-    var repeatCount: Double = 1
-    
-    /// Whether the animation should reverse direction on alternate cycles
-    var autoreverses: Bool = false
     
     /// Creates a new value animation for a specific CSS property.
     /// - Parameters:

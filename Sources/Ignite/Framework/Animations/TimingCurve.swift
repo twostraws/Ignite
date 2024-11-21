@@ -8,7 +8,7 @@
 import Foundation
 
 /// Defines the available timing functions for animations
-public enum AnimationCurve {
+public enum TimingCurve {
     /// Spring animation (response: 0.55, dampingFraction: 1.0)
     case automatic
     /// Linear timing with constant speed
@@ -44,7 +44,7 @@ public enum AnimationCurve {
     }
 }
 
-public extension AnimationCurve {
+public extension TimingCurve {
     /// A smooth spring animation with minimal bounce, matching SwiftUI's default spring animation
     /// - Returns: A spring animation curve with maximum damping and no initial velocity
     static var smooth: Self {

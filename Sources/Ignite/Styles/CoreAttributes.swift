@@ -38,7 +38,16 @@ public struct CoreAttributes: Sendable {
     
     /// CSS classes that should be applied to a wrapper div around this element.
     /// Each `ContainerAttributes` represents a wrapper div with styling
-    var containerAttributes = OrderedSet<ContainerAttributes>()
+    var containerAttributes = OrderedSet<ContainerAttributes>() {
+        didSet {
+            // Ensure transform containers are always last (outermost)
+            containerAttributes = OrderedSet(containerAttributes.sorted { a, b in
+                if a.isTransformContainer && !b.isTransformContainer { return false }
+                if !a.isTransformContainer && b.isTransformContainer { return true }
+                return true
+            })
+        }
+    }
     
     /// All core attributes collapsed down to a single string for easy application.
     func description(wrapping content: String? = nil, tag: String? = nil, closingTag: String? = nil) -> String {
@@ -59,11 +68,19 @@ public struct CoreAttributes: Sendable {
             result = "<\(tag)\(attributes)>\(result)</\(closing)>"
         }
         
-        // Apply containers from inner to outer
-        for container in containerAttributes.reversed() where !container.isEmpty {
+        // Apply containers from inner to outer (lower order to higher)
+        for container in containerAttributes where !container.isEmpty {
             let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.joined(separator: " "))\""
             let styleAttr = container.styles.isEmpty ? "" : " style=\"\(container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; "))\""
-            result = "<div\(classAttr)\(styleAttr)>\(result)</div>"
+            
+            // Match the main eventString format
+            var eventAttr = ""
+            for event in container.events where event.actions.isEmpty == false {
+                let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
+                eventAttr += " \(event.name)=\"\(actions)\""
+            }
+            
+            result = "<div\(classAttr)\(styleAttr)\(eventAttr)>\(result)</div>"
         }
         
         return result

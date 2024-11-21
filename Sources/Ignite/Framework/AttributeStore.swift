@@ -26,10 +26,17 @@ public class AttributeStore {
     /// - Parameters:
     ///   - attributes: The new attributes to merge
     ///   - id: The unique identifier of the HTML element
-    func merge(_ attributes: CoreAttributes, intoHTML id: String) {
+    ///   - removedStyles: Optional array of styles to remove after merging
+    ///   - removedClasses: Optional array of classes to remove after merging
+    private func mergeAttributes(
+        _ attributes: CoreAttributes,
+        intoHTML id: String,
+        removedStyles: [AttributeValue]? = nil,
+        removedClasses: [String]? = nil
+    ) -> CoreAttributes {
         let currentAttributes = storage[id] ?? CoreAttributes()
         var mergedAttributes = currentAttributes
-         
+        
         mergedAttributes.styles.formUnion(attributes.styles)
         mergedAttributes.classes.formUnion(attributes.classes)
         mergedAttributes.aria.formUnion(attributes.aria)
@@ -38,7 +45,36 @@ public class AttributeStore {
         mergedAttributes.containerAttributes.formUnion(attributes.containerAttributes)
         mergedAttributes.customAttributes.formUnion(attributes.customAttributes)
         mergedAttributes.id = attributes.id
-         
-        storage[id] = mergedAttributes
+        
+        removedStyles?.forEach { mergedAttributes.styles.remove($0) }
+        removedClasses?.forEach { mergedAttributes.classes.remove($0) }
+        
+        return mergedAttributes
+    }
+
+    /// Merges new attributes with existing ones for a specific HTML element
+    /// - Parameters:
+    ///   - attributes: The new attributes to merge
+    ///   - id: The unique identifier of the HTML element
+    func merge(_ attributes: CoreAttributes, intoHTML id: String) {
+        storage[id] = mergeAttributes(attributes, intoHTML: id)
+    }
+
+    /// Merges new attributes with existing ones for a specific HTML element, then removes specified styles
+    /// - Parameters:
+    ///   - attributes: The new attributes to merge
+    ///   - id: The unique identifier of the HTML element
+    ///   - styles: Array of styles to remove after merging
+    func merge(_ attributes: CoreAttributes, intoHTML id: String, removing styles: some Collection<AttributeValue>) {
+        storage[id] = mergeAttributes(attributes, intoHTML: id, removedStyles: Array(styles))
+    }
+
+    /// Merges new attributes with existing ones for a specific HTML element, then removes specified classes
+    /// - Parameters:
+    ///   - attributes: The new attributes to merge
+    ///   - id: The unique identifier of the HTML element
+    ///   - classes: Array of classes to remove after merging
+    func merge(_ attributes: CoreAttributes, intoHTML id: String, removing classes: some Collection<String>) {
+        storage[id] = mergeAttributes(attributes, intoHTML: id, removedClasses: Array(classes))
     }
 }

@@ -8,22 +8,22 @@
 import Foundation
 
 /// The main animation configuration type that provides a flexible way to define CSS animations
-public struct BasicAnimation: Animation {
+public struct Transition: Animatable {
     /// The CSS properties being animated and their values
-    var data: [AnimationData]
+    var data: [AnimatableData]
     /// Additional non-animated CSS properties
     public var staticProperties: OrderedSet<AttributeValue> = []
     /// The event that triggers this animation (hover, click, or appear)
     public var trigger: AnimationTrigger = .hover
     
-    public init(@AnimationBuilder content: () -> [AnimationData]) {
+    public init(@AnimationBuilder content: () -> [AnimatableData]) {
         self.data = content()
     }
 }
 
-public extension BasicAnimation {
+public extension Transition {
     /// Combines the current animation with additional animation data.
-    internal func combined(with values: [AnimationData]) -> Self {
+    internal func combined(with values: [AnimatableData]) -> Self {
         var copy = self
         copy.data.append(contentsOf: values)
         return copy
@@ -53,28 +53,19 @@ public extension BasicAnimation {
         return copy
     }
     
-    func timing(_ function: AnimationCurve) -> Self {
+    func timing(_ function: TimingCurve) -> Self {
         guard let lastIndex = data.indices.last else { return self }
         var copy = self
         copy.data[lastIndex].timing = function
         return copy
     }
-    
-    /// Sets a specific number of times to repeat the animation
-    func repeatCount(_ count: Double, autoreverses: Bool = true) -> Self {
-        guard let lastIndex = data.indices.last else { return self }
-        var copy = self
-        copy.data[lastIndex].repeatCount = count
-        copy.data[lastIndex].autoreverses = autoreverses
-        return copy
-    }
 }
 
-public extension Animation where Self == BasicAnimation {
+public extension Animatable where Self == Transition {
     /// Creates a fade-in animation that transitions opacity from 0 to 1.
     static var fadeIn: Self {
-        BasicAnimation {
-            AnimationData(.opacity, from: "0", to: "1")
+        Transition {
+            AnimatableData(.opacity, from: "0", to: "1")
         }
         .duration(0.35)
         .timing(.automatic)
@@ -82,13 +73,13 @@ public extension Animation where Self == BasicAnimation {
     
     /// Adds a fade-in effect to the current animation
     func fadeIn() -> Self {
-        self.combined(with: [AnimationData(.opacity, from: "0", to: "1")])
+        self.combined(with: [AnimatableData(.opacity, from: "0", to: "1")])
     }
     
     /// Creates a fade-out animation that transitions opacity from 1 to 0.
     static var fadeOut: Self {
-        BasicAnimation {
-            AnimationData(.opacity, from: "1", to: "0")
+        Transition {
+            AnimatableData(.opacity, from: "1", to: "0")
         }
         .duration(0.35)
         .timing(.automatic)
@@ -96,7 +87,7 @@ public extension Animation where Self == BasicAnimation {
     
     /// Adds a fade-out effect to the current animation
     func fadeOut() -> Self {
-        self.combined(with: [AnimationData(.opacity, from: "1", to: "0")])
+        self.combined(with: [AnimatableData(.opacity, from: "1", to: "0")])
     }
     
     /// Creates an animation that slides content in from a specified edge.
@@ -109,8 +100,8 @@ public extension Animation where Self == BasicAnimation {
         default: ("translateX", "-100%")
         }
         
-        return BasicAnimation {
-            AnimationData(.transform, from: "\(property)(\(from))", to: "\(property)(0)")
+        return Transition {
+            AnimatableData(.transform, from: "\(property)(\(from))", to: "\(property)(0)")
         }
         .duration(0.35)
         .timing(.automatic)
@@ -127,7 +118,7 @@ public extension Animation where Self == BasicAnimation {
         }
         
         return self.combined(with: [
-            AnimationData(.transform, from: "\(property)(\(from))", to: "\(property)(0)")
+            AnimatableData(.transform, from: "\(property)(\(from))", to: "\(property)(0)")
         ])
     }
     
@@ -141,8 +132,8 @@ public extension Animation where Self == BasicAnimation {
         default: ("translateX", "-100%")
         }
         
-        return BasicAnimation {
-            AnimationData(.transform, from: "\(property)(0)", to: "\(property)(\(to))")
+        return Transition {
+            AnimatableData(.transform, from: "\(property)(0)", to: "\(property)(\(to))")
         }
         .duration(0.35)
         .timing(.automatic)
@@ -159,120 +150,80 @@ public extension Animation where Self == BasicAnimation {
         }
         
         return self.combined(with: [
-            AnimationData(.transform, from: "\(property)(0)", to: "\(property)(\(to))")
+            AnimatableData(.transform, from: "\(property)(0)", to: "\(property)(\(to))")
         ])
     }
     
     /// Creates a rotation animation by specified angle.
     static func rotate(_ angle: Angle, anchor: AnchorPoint = .center) -> Self {
-        BasicAnimation {
-            AnimationData(.transform, from: "rotate(0deg)", to: "rotate(\(angle.value))")
-            AnimationData(.transformOrigin, from: anchor.value, to: anchor.value)
+        Transition {
+            AnimatableData(.transform, from: "rotate(0deg)", to: "rotate(\(angle.value))")
+            AnimatableData(.transformOrigin, from: anchor.value, to: anchor.value)
         }
     }
     
     /// Adds a rotation effect to the current animation
     func rotate(_ angle: Angle, anchor: AnchorPoint = .center) -> Self {
         self.combined(with: [
-            AnimationData(.transform, from: "rotate(0deg)", to: "rotate(\(angle.value))"),
-            AnimationData(.transformOrigin, from: anchor.value, to: anchor.value)
+            AnimatableData(.transform, from: "rotate(0deg)", to: "rotate(\(angle.value))"),
+            AnimatableData(.transformOrigin, from: anchor.value, to: anchor.value)
         ])
     }
     
     /// Creates a scale animation between two values.
     static func scale(from: Double = 0.8, to: Double = 1.0) -> Self {
-        BasicAnimation {
-            AnimationData(.transform, from: "scale(\(from))", to: "scale(\(to))")
+        Transition {
+            AnimatableData(.transform, from: "scale(\(from))", to: "scale(\(to))")
         }
     }
     
     /// Adds a scale effect to the current animation
     func scale(from: Double = 0.8, to: Double = 1.0) -> Self {
         self.combined(with: [
-            AnimationData(.transform, from: "scale(\(from))", to: "scale(\(to))")
+            AnimatableData(.transform, from: "scale(\(from))", to: "scale(\(to))")
         ])
     }
     
     /// Creates a color transition animation.
     static func color(_ color: Color) -> Self {
-        BasicAnimation {
-            AnimationData(.color, value: "\(color.description) !important")
+        Transition {
+            AnimatableData(.color, value: "\(color.description) !important")
         }
     }
     
     /// Adds a color transition to the current animation
     func color(_ color: Color) -> Self {
         self.combined(with: [
-            AnimationData(.color, value: "\(color.description) !important")
+            AnimatableData(.color, value: "\(color.description) !important")
         ])
     }
     
     /// Creates a background color transition animation.
     static func backgroundColor(_ color: Color) -> Self {
-        BasicAnimation {
-            AnimationData(.backgroundColor, value: color.description)
+        Transition {
+            AnimatableData(.backgroundColor, value: "\(color.description) !important")
         }
     }
     
     /// Adds a background color transition to the current animation
     func backgroundColor(_ color: Color) -> Self {
         self.combined(with: [
-            AnimationData(.backgroundColor, value: color.description)
+            AnimatableData(.backgroundColor, value: "\(color.description) !important")
         ])
     }
     
     /// Creates a blur effect animation.
     static func blur(radius: Double) -> Self {
-        BasicAnimation {
-            AnimationData(.filter, from: "blur(0px)", to: "blur(\(radius)px)")
+        Transition {
+            AnimatableData(.filter, from: "blur(0px)", to: "blur(\(radius)px)")
         }
     }
     
     /// Adds a blur effect to the current animation
     func blur(radius: Double) -> Self {
         self.combined(with: [
-            AnimationData(.filter, from: "blur(0px)", to: "blur(\(radius)px)")
+            AnimatableData(.filter, from: "blur(0px)", to: "blur(\(radius)px)")
         ])
-    }
-    
-    /// Creates a bouncing animation.
-    static var bounce: Self {
-        BasicAnimation {
-            AnimationData(.transform, from: "translateY(0)", to: "translateY(-20px)")
-        }
-        .duration(0.5)
-        .timing(.custom("cubic-bezier(0.36, 0, 0.66, -0.56)"))
-        .repeatCount(1, autoreverses: true)
-    }
-    
-    /// Adds a bounce effect to the current animation
-    func bounce() -> Self {
-        self.combined(with: [
-            AnimationData(.transform, from: "translateY(0)", to: "translateY(-20px)")
-        ])
-        .duration(0.5)
-        .timing(.custom("cubic-bezier(0.36, 0, 0.66, -0.56)"))
-        .repeatCount(1, autoreverses: true)
-    }
-    
-    /// Creates a shaking animation.
-    static var wiggle: Self {
-        BasicAnimation {
-            AnimationData(.transform, from: "translateX(0)", to: "translateX(10px)")
-        }
-        .duration(0.5)
-        .timing(.automatic)
-        .repeatCount(3, autoreverses: true)
-    }
-    
-    /// Adds a wiggle effect to the current animation
-    func wiggle() -> Self {
-        self.combined(with: [
-            AnimationData(.transform, from: "translateX(0)", to: "translateX(10px)")
-        ])
-        .duration(0.5)
-        .timing(.automatic)
-        .repeatCount(3, autoreverses: true)
     }
     
     /// Creates a 3D flip animation in the specified direction.
@@ -284,8 +235,8 @@ public extension Animation where Self == BasicAnimation {
         case .down: ("X", "360deg")
         }
         
-        return BasicAnimation {
-            AnimationData(
+        return Transition {
+            AnimatableData(
                 .transform,
                 from: "perspective(400px) rotate\(axis)(0)",
                 to: "perspective(400px) rotate\(axis)(\(degrees))")
@@ -304,7 +255,7 @@ public extension Animation where Self == BasicAnimation {
         }
         
         return self.combined(with: [
-            AnimationData(
+            AnimatableData(
                 .transform,
                 from: "perspective(400px) rotate\(axis)(0)",
                 to: "perspective(400px) rotate\(axis)(\(degrees))")

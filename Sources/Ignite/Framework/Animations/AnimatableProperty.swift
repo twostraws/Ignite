@@ -312,36 +312,3 @@ public enum AnimatableProperty: String {
     /// Controls z-index
     case zIndex = "z-index"
 }
-
-extension AnimatableProperty {
-    /// Whether this property is color-related
-    var isColorProperty: Bool {
-        switch self {
-        case .backgroundColor, .color, .borderColor, .borderBottomColor,
-             .borderLeftColor, .borderRightColor, .borderTopColor,
-             .outlineColor, .textDecorationColor:
-            return true
-        default:
-            return false
-        }
-    }
-
-    ///  How an animation applies styles to its target before and after its execution
-    var fillMode: FillMode {
-        if isColorProperty || isBackgroundProperty || self == .opacity || self == .filter {
-            return .forwards
-        }
-        return .none
-    }
-
-    /// Whether this property is background-related
-    var isBackgroundProperty: Bool {
-        switch self {
-        case .background, .backgroundColor, .backgroundPosition,
-             .backgroundPositionX, .backgroundPositionY, .backgroundSize:
-            return true
-        default:
-            return false
-        }
-    }
-}
