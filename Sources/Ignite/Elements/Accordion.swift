@@ -36,7 +36,7 @@ public struct Accordion: BlockElement {
     /// Create a new Accordion from a collection of sections.
     /// - Parameter items: A result builder containing all the sections
     /// you want to display in this accordion.
-    public init(@HTMLBuilder _ items: () -> [Item]) {
+    public init(@ElementBuilder<Item> _ items: () -> [Item]) {
         self.items = items()
     }
 
