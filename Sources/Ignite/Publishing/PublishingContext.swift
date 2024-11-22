@@ -71,21 +71,9 @@ public final class PublishingContext {
     /// - Parameter tag: The tag to filter by, or nil for all content.
     /// - Returns: An array of content matching the specified tag, or all content
     /// if no tag was specified.
-    public func content(tagged tag: String?) -> [Content] {
+    func content(tagged tag: String?) -> [Content] {
         if let tag {
             allContent.filter { $0.tags.contains(tag) }
-        } else {
-            allContent
-        }
-    }
-
-    /// Returns all content tagged with the specified type, or all content if the type is nil.
-    /// - Parameter type: The type to filter by, or nil for all content.
-    /// - Returns: An array of content matching the specified type, or all content
-    /// if no type was specified.
-    public func content(ofType type: String?) -> [Content] {
-        if let type {
-            allContent.filter { $0.type == type }
         } else {
             allContent
         }
@@ -246,7 +234,7 @@ public final class PublishingContext {
 
         return render(page: page) {
             PageContext.withCurrentPage(page) {
-                let values = EnvironmentValues(site: site, allContent: allContent)
+                let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
                 return EnvironmentStore.update(values) {
                     theme.body.render(context: self)
                 }
@@ -388,7 +376,7 @@ extension PublishingContext {
     ///   - operation: The work to perform with the site values
     /// - Returns: The result of the operation
     func render<T>(page: Page? = nil, content: Content? = nil, withSiteValues operation: () -> T) -> T {
-        let values = EnvironmentValues(site: site, allContent: allContent)
+        let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         return EnvironmentStore.update(values) {
             if let content {
                 return ContentContext.withCurrentContent(content) {

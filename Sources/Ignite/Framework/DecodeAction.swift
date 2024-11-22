@@ -1,5 +1,5 @@
 //
-// PublishingContext-ResourceLoading.swift
+// ResourceDecoder.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -7,7 +7,21 @@
 
 import Foundation
 
-extension PublishingContext {
+public struct DecodeAction {
+    /// The root directory for the user's website package.
+    var sourceDirectory: URL
+
+    /// Returns the contents of a file in your Resources folder, if it exists.
+    /// - Parameter resource: The file to look for, e.g. "quotes.json"
+    /// - Returns: A `Data` instance of the file's contents, if it can be found.
+    public func data(forResource resource: String) -> Data? {
+        if let url = url(forResource: resource) {
+            try? Data(contentsOf: url)
+        } else {
+            nil
+        }
+    }
+
     /// Returns the full path to a file in your Resources folder, if it exists.
     /// - Parameter resource: The file to look for, e.g. "quotes.json"
     /// - Returns: The URL, if the file can be found.
@@ -21,17 +35,6 @@ extension PublishingContext {
         }
     }
 
-    /// Returns the contents of a file in your Resources folder, if it exists.
-    /// - Parameter resource: The file to look for, e.g. "quotes.json"
-    /// - Returns: A `Data` instance of the file's contents, if it can be found.
-    public func data(forResource resource: String) -> Data? {
-        if let url = url(forResource: resource) {
-            try? Data(contentsOf: url)
-        } else {
-            nil
-        }
-    }
-
     /// Locates, loads, and decodes a JSON file in your Resources folder.
     /// - Parameters:
     ///   - resource: The file to look for, e.g. "quotes.json".
@@ -40,7 +43,7 @@ extension PublishingContext {
     ///   - keyDecodingStrategy: How to decode keys. Defaults to `.useDefaultKeys`.
     /// - Returns: The decoded type, if the file exists, can be loaded, and decodes
     /// correctly, otherwise nil.
-    public func decode<T: Decodable>(
+    public func callAsFunction<T: Decodable>(
         resource: String,
         as type: T.Type = T.self,
         dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
@@ -54,12 +57,12 @@ extension PublishingContext {
 
                 do {
                     return try decoder.decode(T.self, from: data)
-                } catch DecodingError.keyNotFound(let key, let context) {
+                } catch let DecodingError.keyNotFound(key, context) {
                     // swiftlint:disable:next line_length
                     print("Failed to decode \(resource) due to missing key '\(key.stringValue)' – \(context.debugDescription)")
-                } catch DecodingError.typeMismatch(_, let context) {
+                } catch let DecodingError.typeMismatch(_, context) {
                     print("Failed to decode \(resource) due to type mismatch – \(context.debugDescription)")
-                } catch DecodingError.valueNotFound(let type, let context) {
+                } catch let DecodingError.valueNotFound(type, context) {
                     print("Failed to decode \(resource) due to missing \(type) value – \(context.debugDescription)")
                 } catch DecodingError.dataCorrupted(_) {
                     print("Failed to decode \(resource) because it appears to be invalid JSON.")
