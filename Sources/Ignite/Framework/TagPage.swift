@@ -26,12 +26,16 @@ public protocol TagPage: ThemePage {
     associatedtype Body: HTML
 
     /// The main content of the page
-    var body: Body { get }
+    @HTMLBuilder var body: Body { get }
 }
 
 extension TagPage {
     /// The current tag during page generation.
     public var tag: String? {
         TagContext.current
+    }
+
+    public var content: [Content] {
+        TagContext.content
     }
 }
