@@ -33,7 +33,7 @@ public struct Table: BlockElement {
     var rows: [Row]
 
     /// An optional array of header to use at the top of this table.
-    var header: [any HTML]?
+    var header: HTMLSequence?
 
     /// The styling to apply to this table. Defaults to `.plain`.
     var style = Style.plain
@@ -61,10 +61,10 @@ public struct Table: BlockElement {
     ///   - header: An array of headers to use at the top of the table.
     public init(
         @ElementBuilder<Row> rows: () -> [Row],
-        @HTMLBuilder header: () -> [any HTML]
+        @HTMLBuilder header: () -> some HTML
     ) {
         self.rows = rows()
-        self.header = header()
+        self.header = HTMLSequence(header)
     }
 
     /// Adjusts the style of this table.

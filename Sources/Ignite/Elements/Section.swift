@@ -26,7 +26,7 @@ public struct Section: BlockElement {
     var columnCount: Int?
 
     /// The items to display in this section.
-    var items: any HTML
+    var items: HTMLSequence
 
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
@@ -61,8 +61,17 @@ public struct Section: BlockElement {
             ])
         }
 
-        return FlatHTML([items])
-            .attributes(sectionAttributes)
-            .render(context: context)
+        return Group {
+            ForEach(items) { item in
+                if let item = item as? any BlockElement {
+                    Group(item)
+                        .class(item.columnWidth.className)
+                } else {
+                    item
+                }
+            }
+        }
+        .attributes(sectionAttributes)
+        .render(context: context)
     }
 }
