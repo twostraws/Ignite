@@ -74,6 +74,20 @@ public struct NavigationBar: BlockElement {
     /// Creates a new `NavigationBar` instance from the `logo` and
     /// `items` provided.
     /// - Parameters:
+    ///   - logo: The logo to use in the top-left edge of your bar.
+    ///   - items: An element builder that returns an array of
+    /// `NavigationItem` objects.
+    public init(
+        logo: (any InlineElement)? = nil,
+        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem]
+    ) {
+        self.logo = logo
+        self.items = items()
+    }
+
+    /// Creates a new `NavigationBar` instance from the `logo` and
+    /// `items` provided.
+    /// - Parameters:
     ///   - items: An element builder that returns an array of
     /// `NavigationItem` objects.
     ///   - logo: The logo to use in the top-left edge of your bar.
