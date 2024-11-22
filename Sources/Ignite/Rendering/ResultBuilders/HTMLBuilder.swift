@@ -154,155 +154,19 @@ public struct HTMLBuilder {
 
 /// Extension providing result builder functionality for combining multiple HTML elements
 extension HTMLBuilder {
-    /// Combines two HTML elements into a single element array
-    /// - Parameters:
-    ///   - c0: First HTML element
-    ///   - c1: Second HTML element
-    /// - Returns: Combined array of HTML elements
-    public static func buildBlock<C0: HTML, C1: HTML>(
-        _ c0: C0,
-        _ c1: C1
-    ) -> some HTML {
-        [AnyHTML(c0), AnyHTML(c1)]
+    /// Loads a single piece of HTML to be combined with others.
+    /// - Parameter content: The HTML to load.
+    /// - Returns: The original thing we read, ready to be combined.
+    public static func buildPartialBlock<Content>(first content: Content) -> Content where Content: HTML {
+        content
     }
 
-    /// Combines three HTML elements into a single element array
+    /// Combines an exist piece of HTML with another piece.
     /// - Parameters:
-    ///   - c0: First HTML element
-    ///   - c1: Second HTML element
-    ///   - c2: Third HTML element
-    /// - Returns: Combined array of HTML elements
-    public static func buildBlock<C0: HTML, C1: HTML, C2: HTML>(
-        _ c0: C0,
-        _ c1: C1,
-        _ c2: C2
-    ) -> some HTML {
-        [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2)]
-    }
-
-    /// Combines four HTML elements into a single element array
-    /// - Parameters:
-    ///   - c0: First HTML element
-    ///   - c1: Second HTML element
-    ///   - c2: Third HTML element
-    ///   - c3: Fourth HTML element
-    /// - Returns: Combined array of HTML elements
-    public static func buildBlock<C0: HTML, C1: HTML, C2: HTML, C3: HTML>(
-        _ c0: C0,
-        _ c1: C1,
-        _ c2: C2,
-        _ c3: C3
-    ) -> some HTML {
-        [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2), AnyHTML(c3)]
-    }
-
-    /// Combines five HTML elements into a single element array
-    /// - Parameters:
-    ///   - c0: First HTML element
-    ///   - c1: Second HTML element
-    ///   - c2: Third HTML element
-    ///   - c3: Fourth HTML element
-    ///   - c4: Fifth HTML element
-    /// - Returns: Combined array of HTML elements
-    public static func buildBlock<C0: HTML, C1: HTML, C2: HTML, C3: HTML, C4: HTML>(
-        _ c0: C0,
-        _ c1: C1,
-        _ c2: C2,
-        _ c3: C3,
-        _ c4: C4
-    ) -> some HTML {
-        [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2), AnyHTML(c3), AnyHTML(c4)]
-    }
-
-    /// Combines six HTML elements into a single element array
-    /// - Parameters:
-    ///   - c0: First HTML element
-    ///   - c1: Second HTML element
-    ///   - c2: Third HTML element
-    ///   - c3: Fourth HTML element
-    ///   - c4: Fifth HTML element
-    ///   - c5: Sixth HTML element
-    /// - Returns: Combined array of HTML elements
-    public static func buildBlock<C0: HTML, C1: HTML, C2: HTML, C3: HTML, C4: HTML, C5: HTML>(
-        _ c0: C0,
-        _ c1: C1,
-        _ c2: C2,
-        _ c3: C3,
-        _ c4: C4,
-        _ c5: C5
-    ) -> some HTML {
-        [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2), AnyHTML(c3), AnyHTML(c4), AnyHTML(c5)]
-    }
-
-    /// Combines seven HTML elements into a single element array
-    /// - Parameters:
-    ///   - c0: First HTML element
-    ///   - c1: Second HTML element
-    ///   - c2: Third HTML element
-    ///   - c3: Fourth HTML element
-    ///   - c4: Fifth HTML element
-    ///   - c5: Sixth HTML element
-    ///   - c6: Seventh HTML element
-    /// - Returns: Combined array of HTML elements
-    public static func buildBlock<C0: HTML, C1: HTML, C2: HTML, C3: HTML, C4: HTML, C5: HTML, C6: HTML>(
-        _ c0: C0,
-        _ c1: C1,
-        _ c2: C2,
-        _ c3: C3,
-        _ c4: C4,
-        _ c5: C5,
-        _ c6: C6
-    ) -> some HTML {
-        [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2), AnyHTML(c3), AnyHTML(c4), AnyHTML(c5), AnyHTML(c6)]
-    }
-
-    /// Combines eight HTML elements into a single element array
-    /// - Parameters:
-    ///   - c0: First HTML element
-    ///   - c1: Second HTML element
-    ///   - c2: Third HTML element
-    ///   - c3: Fourth HTML element
-    ///   - c4: Fifth HTML element
-    ///   - c5: Sixth HTML element
-    ///   - c6: Seventh HTML element
-    ///   - c7: Eighth HTML element
-    /// - Returns: Combined array of HTML elements
-    public static func buildBlock<C0: HTML, C1: HTML, C2: HTML, C3: HTML, C4: HTML, C5: HTML, C6: HTML, C7: HTML>(
-        _ c0: C0,
-        _ c1: C1,
-        _ c2: C2,
-        _ c3: C3,
-        _ c4: C4,
-        _ c5: C5,
-        _ c6: C6,
-        _ c7: C7
-    ) -> some HTML {
-        [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2), AnyHTML(c3), AnyHTML(c4), AnyHTML(c5), AnyHTML(c6), AnyHTML(c7)]
-    }
-
-    /// Combines nine HTML elements into a single element array
-    /// - Parameters:
-    ///   - c0: First HTML element
-    ///   - c1: Second HTML element
-    ///   - c2: Third HTML element
-    ///   - c3: Fourth HTML element
-    ///   - c4: Fifth HTML element
-    ///   - c5: Sixth HTML element
-    ///   - c6: Seventh HTML element
-    ///   - c7: Eighth HTML element
-    ///   - c8: Ninth HTML element
-    /// - Returns: Combined array of HTML elements
-    public static func buildBlock<C0: HTML, C1: HTML, C2: HTML, C3: HTML, C4: HTML, C5: HTML, C6: HTML, C7: HTML, C8: HTML>(
-        _ c0: C0,
-        _ c1: C1,
-        _ c2: C2,
-        _ c3: C3,
-        _ c4: C4,
-        _ c5: C5,
-        _ c6: C6,
-        _ c7: C7,
-        _ c8: C8
-    ) -> some HTML {
-        [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2), AnyHTML(c3), AnyHTML(c4), AnyHTML(c5), AnyHTML(c6), AnyHTML(c7), AnyHTML(c8)]
+    ///   - accumulated: The previous collection of HTML.
+    ///   - next: The next piece of HTML to combine.
+    /// - Returns: The combined HTML.
+    public static func buildPartialBlock<C0: HTML, C1: HTML>(accumulated: C0, next: C1) -> some HTML {
+        [AnyHTML(accumulated), AnyHTML(next)]
     }
 }
