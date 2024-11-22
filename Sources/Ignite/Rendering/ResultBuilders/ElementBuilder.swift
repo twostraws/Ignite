@@ -10,7 +10,7 @@ import Foundation
 typealias HeadElementBuilder = ElementBuilder<any HeadElement>
 typealias HTMLRootElementBuilder = ElementBuilder<any HTMLRootElement>
 typealias StaticPageBuilder = ElementBuilder<any StaticPage>
-typealias ContentPageBuilder = ElementBuilder<Content>
+typealias ContentPageBuilder = ElementBuilder<any ContentPage>
 typealias ActionBuilder = ElementBuilder<any Action>
 
 /// A result builder that lets us generically build arrays of some content.
