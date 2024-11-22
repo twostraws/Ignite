@@ -67,30 +67,6 @@ public final class PublishingContext {
         try parseContent()
     }
     
-    /// Returns all content tagged with the specified tag, or all content if the tag is nil.
-    /// - Parameter tag: The tag to filter by, or nil for all content.
-    /// - Returns: An array of content matching the specified tag, or all content
-    /// if no tag was specified.
-    public func content(tagged tag: String?) -> [Content] {
-        if let tag {
-            allContent.filter { $0.tags.contains(tag) }
-        } else {
-            allContent
-        }
-    }
-    
-    /// Returns all content tagged with the specified type, or all content if the type is nil.
-    /// - Parameter type: The type to filter by, or nil for all content.
-    /// - Returns: An array of content matching the specified type, or all content
-    /// if no type was specified.
-    public func content(ofType type: String?) -> [Content] {
-        if let type {
-            allContent.filter { $0.type == type }
-        } else {
-            allContent
-        }
-    }
-    
     /// Adds a warning during a site build.
     /// - Parameter message: The warning string to add.
     func addWarning(_ message: String) {

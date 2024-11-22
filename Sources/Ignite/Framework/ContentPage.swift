@@ -28,7 +28,7 @@ public protocol ContentPage: ThemePage {
     @HTMLBuilder var body: Body { get }
 }
 
-extension ContentPage {
+public extension ContentPage {
     /// The current Markdown content being rendered.
     var content: Content {
         ContentContext.current

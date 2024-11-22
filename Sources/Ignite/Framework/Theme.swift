@@ -35,8 +35,8 @@ public protocol Theme: Sendable {
 }
 
 public extension Theme {
+    /// The current page being rendered.
     var page: Page {
-        /// The current page being rendered.
         PageContext.current
     }
 
