@@ -11,7 +11,7 @@ public enum ColorArea: Sendable {
     case foreground
     /// The background color
     case background
-    
+
     var property: AnimatableProperty {
         switch self {
         case .foreground: .color

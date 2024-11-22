@@ -11,17 +11,17 @@ import Foundation
 public class AttributeStore {
     /// Shared singleton instance for global access
     @MainActor static let `default` = AttributeStore()
-    
+
     /// Storage dictionary mapping element IDs to their core attributes
     var storage: [String: CoreAttributes] = [:]
-     
+
     /// Retrieves the core attributes for a given element ID
     /// - Parameter elementID: The unique identifier of the HTML element
     /// - Returns: The core attributes for the element, or new empty attributes if none exist
     func attributes(for elementID: String) -> CoreAttributes {
         return storage[elementID] ?? CoreAttributes()
     }
-     
+
     /// Merges new attributes with existing ones for a specific HTML element
     /// - Parameters:
     ///   - attributes: The new attributes to merge
@@ -36,7 +36,7 @@ public class AttributeStore {
     ) -> CoreAttributes {
         let currentAttributes = storage[id] ?? CoreAttributes()
         var mergedAttributes = currentAttributes
-        
+
         mergedAttributes.styles.formUnion(attributes.styles)
         mergedAttributes.classes.formUnion(attributes.classes)
         mergedAttributes.aria.formUnion(attributes.aria)
@@ -45,10 +45,10 @@ public class AttributeStore {
         mergedAttributes.containerAttributes.formUnion(attributes.containerAttributes)
         mergedAttributes.customAttributes.formUnion(attributes.customAttributes)
         mergedAttributes.id = attributes.id
-        
+
         removedStyles?.forEach { mergedAttributes.styles.remove($0) }
         removedClasses?.forEach { mergedAttributes.classes.remove($0) }
-        
+
         return mergedAttributes
     }
 

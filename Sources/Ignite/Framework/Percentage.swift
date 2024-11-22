@@ -50,15 +50,15 @@ public extension Percentage {
     static func - (lhs: Percentage, rhs: Percentage) -> Double {
         return lhs.value - rhs.value
     }
-    
+
     static func + (lhs: Percentage, rhs: Percentage) -> Double {
         return lhs.value + rhs.value
     }
-    
+
     static func * (lhs: Double, rhs: Percentage) -> Double {
         return lhs * (rhs.value / 100.0)
     }
-    
+
     static func * (lhs: Percentage, rhs: Double) -> Double {
         return (lhs.value / 100.0) * rhs
     }

@@ -16,7 +16,7 @@ public struct Embed: BlockElement, LazyLoadable {
         /// Creates interactive  item for a Spotify playlist
         case playlist
     }
-    
+
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

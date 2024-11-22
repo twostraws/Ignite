@@ -163,7 +163,7 @@ public struct Link: BlockElement, InlineElement, NavigationItem, DropdownElement
     public enum LinkStyle: String, CaseIterable {
         case `default`, hover, button
     }
-    
+
     /// The content to display inside this link.
     var content: any HTML
 

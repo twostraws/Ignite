@@ -18,23 +18,23 @@ import Foundation
 public struct Section: BlockElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
-    
+
     /// How many columns this should be divided into
     var columnCount: Int?
-    
+
     /// The items to display in this section.
     var items: any HTML
-    
+
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameter items: The items to use in this section.
     public init(@HTMLBuilder items: () -> some HTML) {
         self.items = HTMLSequence(items)
     }
-    
+
     /// Adjusts the number of columns that can be fitted into this section.
     /// - Parameter columns: The number of columns to use
     /// - Returns: A new `Section` instance with the updated column count.
@@ -43,13 +43,13 @@ public struct Section: BlockElement {
         copy.columnCount = columns
         return copy
     }
-    
+
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         var sectionAttributes = attributes.appending(classes: ["row"])
-        
+
         // If a column count is set, we want to use that for all
         // page sizes that are medium and above. Below that we
         // should drop down to width 1 to avoid squeezing things
@@ -60,7 +60,7 @@ public struct Section: BlockElement {
                 "row-cols-md-\(columnCount)"
             ])
         }
-        
+
         return FlatHTML([items])
             .attributes(sectionAttributes)
             .render(context: context)

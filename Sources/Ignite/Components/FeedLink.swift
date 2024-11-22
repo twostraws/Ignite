@@ -9,7 +9,7 @@ import Foundation
 
 /// Displays a link to your RSS feed, if enabled.
 struct FeedLink: HTML {
-    
+
     @Environment(\.siteConfiguration) private var siteConfig
     @Environment(\.feedConfiguration) private var feedConfig
 

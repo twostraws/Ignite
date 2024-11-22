@@ -10,7 +10,7 @@ import Foundation
 typealias HeadElementBuilder = ElementBuilder<any HeadElement>
 typealias HTMLRootElementBuilder = ElementBuilder<any HTMLRootElement>
 typealias StaticPageBuilder = ElementBuilder<any StaticPage>
-typealias ContentPageBuilder = ElementBuilder<Content>
+typealias ContentPageBuilder = ElementBuilder<any ContentPage>
 typealias ActionBuilder = ElementBuilder<any Action>
 
 /// A result builder that lets us generically build arrays of some content.
@@ -22,7 +22,7 @@ public struct ElementBuilder<T> {
     public static func buildBlock(_ components: [T]...) -> [T] {
         components.flatMap { $0 }
     }
-    
+
     /// Flattens a two-dimensional array of values into into a one-dimensional array.
     /// This enables loops in our result builder.
     /// - Parameter components: An array of arrays of our type.
@@ -30,7 +30,7 @@ public struct ElementBuilder<T> {
     public static func buildArray(_ components: [[T]]) -> [T] {
         components.flatMap { $0 }
     }
-    
+
     /// Converts a single object into an array of the same type, so we can flatten
     /// using the methods above.
     /// - Parameter expression: A single value of our type.
@@ -38,7 +38,7 @@ public struct ElementBuilder<T> {
     public static func buildExpression(_ expression: T) -> [T] {
         [expression]
     }
-    
+
     /// Accepts an optional array of our type, either returning it if it exists, or
     /// returning an empty array otherwise.
     /// - Parameter component: An optional array of our type.
@@ -46,14 +46,14 @@ public struct ElementBuilder<T> {
     public static func buildOptional(_ component: [T]?) -> [T] {
         component ?? []
     }
-    
+
     /// Returns its input value. Along with buildEither(second:) this enables conditions
     /// in our result builder.
     /// - Returns: The same array, unchanged.
     public static func buildEither(first component: [T]) -> [T] {
         component
     }
-    
+
     /// Returns its input value. Along with buildEither(first:) this enables conditions
     /// in our result builder.
     /// - Parameter component: An array of our type.

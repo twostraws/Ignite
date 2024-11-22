@@ -12,7 +12,7 @@ import Foundation
 public struct Span: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The contents of this span.
     public var contents: any InlineElement
 

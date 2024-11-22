@@ -14,22 +14,22 @@ public struct AnimationBuilder {
     public static func buildBlock(_ components: AnimatableData...) -> [AnimatableData] {
         components
     }
-    
+
     /// Converts a single animation value into its base type
     public static func buildExpression(_ expression: AnimatableData) -> AnimatableData {
         expression
     }
-    
+
     /// Handles optional animation values by providing an empty array as fallback
     public static func buildOptional(_ component: [AnimatableData]?) -> [AnimatableData] {
         component ?? []
     }
-    
+
     /// Handles conditional animation values by returning the first branch
     public static func buildEither(first component: [AnimatableData]) -> [AnimatableData] {
         component
     }
-    
+
     /// Handles conditional animation values by returning the second branch
     public static func buildEither(second component: [AnimatableData]) -> [AnimatableData] {
         component

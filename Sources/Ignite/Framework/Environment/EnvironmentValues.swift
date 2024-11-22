@@ -22,16 +22,16 @@ import Foundation
 public struct EnvironmentValues: Sendable {
     /// All markdown content pages in the site.
     public var allContent: [Content]
-    
+
     /// Configuration for RSS/Atom feed generation.
     public var feedConfiguration: FeedConfiguration
-    
+
     /// Whether feed generation is enabled for the site.
     public var isFeedEnabled: Bool
-    
+
     /// Global site configuration settings.
     public var siteConfiguration: SiteConfiguration
-    
+
     /// Creates environment values with default settings.
     public init() {
         self.allContent = []

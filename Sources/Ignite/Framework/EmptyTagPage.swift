@@ -11,7 +11,7 @@ import Foundation
 public struct EmptyTagPage: TagPage {
     public init() {}
 
-    public var body: EmptyBlockElement {
+    public var body: some HTML {
         EmptyBlockElement()
     }
 }

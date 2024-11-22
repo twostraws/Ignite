@@ -27,36 +27,36 @@ import Foundation
 public struct Animation: Animatable {
     /// The collection of frames that define the animation sequence
     var frames: [Frame]
-    
+
     /// Controls whether the animation plays forwards, backwards, or alternates
     var direction: AnimationDirection = .automatic
 
     /// Determines how styles are applied before and after the animation executes
     var fillMode: FillMode = .none
-    
+
     /// The number of times to repeat the animation sequence
     var repeatCount: Double = 1
-    
+
     /// The delay in seconds before the animation begins
     public var delay: Double = 0
-    
+
     /// The timing function that controls the animation's acceleration curve
     public var timing: TimingCurve = .easeInOut
-    
+
     /// The duration of the complete animation sequence in seconds
     public var duration: Double = 1
-    
+
     /// The event that triggers this animation
     public var trigger: AnimationTrigger = .hover
-    
+
     /// Additional non-animated CSS properties
     public var staticProperties: OrderedSet<AttributeValue> = []
-    
+
     /// Creates a new keyframe animation.
     public init() {
         self.frames = []
     }
-    
+
     /// Creates a new keyframe animation.
     init(frames: [Frame]) {
         self.frames = frames
@@ -80,7 +80,7 @@ public extension Animation {
         copy.frames.append(frame)
         return copy
     }
-    
+
     /// Configures animation repetition.
     /// - Parameters:
     ///   - count: Number of times to repeat. Use `.infinity` for endless repetition.
@@ -90,7 +90,7 @@ public extension Animation {
         copy.repeatCount = count
         return copy
     }
-    
+
     /// Sets the fill mode for the animation, controlling how styles are applied before and after execution
     /// - Parameter mode: The fill mode to use (.none, .forwards, .backwards, or .both)
     /// - Returns: A new animation instance with the updated fill mode
@@ -108,7 +108,7 @@ public extension Animation {
         copy.direction = direction
         return copy
     }
-    
+
     /// Adds an additional CSS style property to the animation
     /// - Parameter style: The CSS style to add
     /// - Returns: A modified animation with the additional style

@@ -9,13 +9,13 @@
 public enum Angle: Sendable {
     /// Angle in degrees (e.g., 180 degrees)
     case degrees(Double)
-    
+
     /// Angle in radians (e.g., π radians)
     case radians(Double)
-    
+
     /// Angle in turns (e.g., 0.5 turns = 180 degrees)
     case turns(Double)
-    
+
     /// The CSS value for the angle
     var value: String {
         switch self {

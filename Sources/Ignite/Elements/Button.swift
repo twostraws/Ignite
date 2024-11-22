@@ -64,7 +64,7 @@ public struct Button: InlineElement {
     public init(@InlineElementBuilder label: @escaping () -> some InlineElement) {
         self.label = label()
     }
-    
+
     /// Creates a button with a label.
     /// - Parameter label: The label text to display on this button.
     /// - actions: An element builder that returns an array of actions to run when this button is pressed.

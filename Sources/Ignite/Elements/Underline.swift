@@ -11,7 +11,7 @@ import Foundation
 public struct Underline: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The content that should be underlined.
     var content: any InlineElement
 

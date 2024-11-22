@@ -12,7 +12,7 @@ import Foundation
 final class ContentContext {
     /// The current Markdown content being rendered
     static var current: Content = .empty
-    
+
     /// Temporarily sets new current Markdown content for the duration of an operation
     /// - Parameters:
     ///   - content: The content to set as current

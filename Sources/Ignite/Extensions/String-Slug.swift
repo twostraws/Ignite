@@ -33,7 +33,7 @@ extension String {
         if let result {
             if result.isEmpty == false {
                 // Replace multiple dashes with a single dash.
-                return result.replacing(#/-{2,}/#, with: "-")
+                return result.replacing(#/- {2,}/#, with: "-")
             }
         }
 

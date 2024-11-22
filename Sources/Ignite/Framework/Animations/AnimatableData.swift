@@ -11,22 +11,22 @@ import Foundation
 public struct AnimatableData {
     /// The starting value for the animated property
     var initial: String
-    
+
     /// The ending value for the animated property
     var final: String
-    
+
     /// The CSS property to animate (e.g., "opacity", "transform", "background-color")
     var property: AnimatableProperty
-    
+
     /// The duration of the animation in seconds.
     var duration: Double = 0.35
-    
+
     /// The timing function that controls the animation's acceleration curve.
     var timing: TimingCurve = .automatic
 
     /// The delay before the animation begins, in seconds.
     var delay: Double = 0
-    
+
     /// Creates a new value animation for a specific CSS property.
     /// - Parameters:
     ///   - property: The CSS property to animate
@@ -37,7 +37,7 @@ public struct AnimatableData {
         self.initial = from
         self.final = to
     }
-    
+
     public init(_ property: AnimatableProperty, value: String) {
         self.property = property
         self.final = value

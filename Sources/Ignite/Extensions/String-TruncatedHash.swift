@@ -11,22 +11,22 @@ import Foundation
 extension String {
    var truncatedHash: String {
        let hash = strHash(self)
-       
+
        // Create a deterministic string from the hash
        let charset = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
        var result = ""
        var remainingHash = hash
-       
+
        // Generate exactly 4 characters
        for _ in 0..<4 {
            let index = Int(remainingHash % UInt64(charset.count))
            result.append(charset[index])
            remainingHash /= UInt64(charset.count)
        }
-       
+
        return result
    }
-   
+
    private func strHash(_ str: String) -> UInt64 {
        var result = UInt64(5381)
        let buf = [UInt8](str.utf8)

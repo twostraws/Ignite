@@ -42,7 +42,7 @@ extension PublishingContext {
             let outputDirectory = buildDirectory.appending(path: path)
 
             let body = render(page: nil) {
-                TagContext.withCurrentTag(tag) {
+                TagContext.withCurrentTag(tag, content: content(tagged: tag)) {
                     let tagPageBody = site.tagPage.body
                     return Group(tagPageBody)
                 }
