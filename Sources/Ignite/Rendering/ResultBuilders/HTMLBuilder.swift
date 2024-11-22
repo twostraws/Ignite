@@ -167,6 +167,11 @@ extension HTMLBuilder {
     ///   - next: The next piece of HTML to combine.
     /// - Returns: The combined HTML.
     public static func buildPartialBlock<C0: HTML, C1: HTML>(accumulated: C0, next: C1) -> some HTML {
-        [AnyHTML(accumulated), AnyHTML(next)]
+        if var current = accumulated as? [AnyHTML] {
+            current.append(AnyHTML(next))
+            return current
+        } else {
+            return [AnyHTML(accumulated), AnyHTML(next)]
+        }
     }
 }
