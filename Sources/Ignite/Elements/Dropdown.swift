@@ -25,7 +25,7 @@ public struct Dropdown: BlockElement, NavigationItem {
     var title: any InlineElement
 
     /// The array of items to shown in this `Dropdown`.
-    var items: HTMLSequence
+    var items: [any DropdownElement]
 
     /// How large this dropdown should be drawn. Defaults to `.medium`.
     var size = ButtonSize.medium
@@ -44,10 +44,10 @@ public struct Dropdown: BlockElement, NavigationItem {
     ///   - items: The elements to place inside the dropdown menu.
     public init(
         _ title: any InlineElement,
-        @ElementBuilder<any DropdownElement> items: () -> some DropdownElement
+        @ElementBuilder<any DropdownElement> items: () -> [any DropdownElement]
     ) {
         self.title = title
-        self.items = HTMLSequence(items)
+        self.items = items()
     }
 
     /// Adjusts the size of this dropdown.
