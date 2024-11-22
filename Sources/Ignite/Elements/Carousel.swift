@@ -55,13 +55,15 @@ public struct Carousel: BlockElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         Group {
-            ForEach(0..<items.count) { index in
-                Button()
-                    .data("bs-target", "#\(carouselID)")
-                    .data("bs-slide-to", String(index))
-                    .class(index == 0 ? "active" : nil)
-                    .aria("current", index == 0 ? "true" : nil)
-                    .aria("label", "Slide \(index + 1)")
+            Group {
+                ForEach(0..<items.count) { index in
+                    Button()
+                        .data("bs-target", "#\(carouselID)")
+                        .data("bs-slide-to", String(index))
+                        .class(index == 0 ? "active" : nil)
+                        .aria("current", index == 0 ? "true" : nil)
+                        .aria("label", "Slide \(index + 1)")
+                }
             }
             .class("carousel-indicators")
 
