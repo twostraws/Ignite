@@ -105,12 +105,16 @@ public struct List: BlockElement {
         var output = "<\(listElementName)\(listAttributes.description())>"
 
         for item in items {
-            if item is ListItem {
-                output += item.render(context: context)
-            } else {
-                output += "<li>\(item.render(context: context))</li>"
-            }
+            // Pull out what we actually have.
+            let actualItem = (item as? AnyHTML)?.wrapped ?? item
 
+            // Any element that renders its own <li> (e.g. ForEach) should
+            // be allowed to handle that itself.
+            if let listableItem = actualItem as? ListableElement {
+                output += listableItem.renderInList(context: context)
+            } else {
+                output += "<li>\(actualItem.render(context: context))</li>"
+            }
         }
 
         output += "</\(listElementName)>"
