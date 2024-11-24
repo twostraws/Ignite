@@ -15,6 +15,14 @@ public struct Embed: BlockElement, LazyLoadable {
         case track
         /// Creates interactive  item for a Spotify playlist
         case playlist
+        /// Create interactive item for a Spotify artist
+        case artist
+        /// Creates interactive item for a Spotify album
+        case album
+        /// Creates interactive item for a Spotify podcast
+        case show
+        /// Creates interactive item for a Spotify episode
+        case episode
     }
 
     /// The content and behavior of this HTML.
