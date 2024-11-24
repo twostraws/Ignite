@@ -20,7 +20,7 @@ public struct Slide: BlockElement {
     var background: String?
 
     /// Other items to display inside this slide.
-    var items: [any HTML]
+    var items: HTMLSequence
 
     /// How opaque the background image should be. Use values lower than 1.0
     /// to progressively dim the background image.
@@ -32,7 +32,7 @@ public struct Slide: BlockElement {
     /// site, e.g. /images/dog.jpg.
     public init(background: String) {
         self.background = background
-        self.items = []
+        self.items = HTMLSequence([])
     }
 
     /// Creates a new `Slide` object using a background image and a page
@@ -43,9 +43,9 @@ public struct Slide: BlockElement {
     /// site, e.g. /images/dog.jpg.
     /// - Parameter items: Other items to place inside this slide, which will
     /// be placed on top of the background image.
-    public init(background: String? = nil, @HTMLBuilder items: () -> [any HTML]) {
+    public init(background: String? = nil, @HTMLBuilder items: () -> some HTML) {
         self.background = background
-        self.items = items()
+        self.items = HTMLSequence(items)
     }
 
     /// Adjusts the opacity of the background image for this slide. Use values
