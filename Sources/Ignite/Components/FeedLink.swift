@@ -17,7 +17,7 @@ struct FeedLink: HTML {
         Text {
             if siteConfig.builtInIconsEnabled != .none {
                 Image(systemName: "rss-fill")
-                    .foregroundStyle("#f26522")
+                    .foregroundStyle(Color(hex: "#f26522"))
                     .margin(.trailing, 10)
             }
 

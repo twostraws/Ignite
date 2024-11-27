@@ -8,7 +8,7 @@
 import Foundation
 
 /// Defines the available timing functions for animations
-public enum TimingCurve {
+public enum TimingCurve: CSSRepresentable {
     /// Spring animation (response: 0.55, dampingFraction: 1.0)
     case automatic
     /// Linear timing with constant speed
@@ -26,7 +26,7 @@ public enum TimingCurve {
 
     case custom(String)
 
-    var cssValue: String {
+    var css: String {
         switch self {
         case .linear: "linear"
         case .easeIn: "ease-in"

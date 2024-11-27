@@ -9,9 +9,15 @@ import Foundation
 
 /// A group of metadata headers for your page, such as its title,
 /// links to its CSS, and more.
-public struct HTMLHead: HTMLRootElement {
+public struct HTMLHead: RootHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+    
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+    
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// The metadata elements for this page.
     var items: [any HeadElement]
@@ -45,7 +51,9 @@ public struct HTMLHead: HTMLRootElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<head>\(FlatHTML(items).render(context: context))</head>"
+        var attributes = attributes
+        attributes.tag = "head"
+        return attributes.description(wrapping: HTMLCollection(items).render(context: context))
     }
 
     /// A static function, returning the standard set of headers used for a `Page` instance.

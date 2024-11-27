@@ -176,6 +176,8 @@ public final class PublishingContext {
             try copy(resource: "js/animations.js")
         }
 
+        try copy(resource: "js/email-protection.js")
+
         if site.useDefaultBootstrapURLs == .localBootstrap {
             try copy(resource: "css/bootstrap.min.css")
             try copy(resource: "js/bootstrap.bundle.min.js")

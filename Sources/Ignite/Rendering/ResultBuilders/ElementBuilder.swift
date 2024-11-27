@@ -8,7 +8,7 @@
 import Foundation
 
 typealias HeadElementBuilder = ElementBuilder<any HeadElement>
-typealias HTMLRootElementBuilder = ElementBuilder<any HTMLRootElement>
+typealias HTMLRootElementBuilder = ElementBuilder<any RootHTML>
 typealias StaticPageBuilder = ElementBuilder<any StaticPage>
 typealias ContentPageBuilder = ElementBuilder<any ContentPage>
 typealias ActionBuilder = ElementBuilder<any Action>

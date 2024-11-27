@@ -9,7 +9,7 @@ import Foundation
 
 /// Describes a HTML element that is rendered in block style, i.e. that it occupies the
 /// full width of the page by default.
-public protocol BlockElement: HTML, HorizontalAligning {
+public protocol BlockHTML: HTML, HorizontalAligning {
     /// How many columns this should occupy when placed in a section.
     var columnWidth: ColumnWidth { get set }
 
@@ -19,7 +19,7 @@ public protocol BlockElement: HTML, HorizontalAligning {
     func width(_ width: Int) -> Self
 }
 
-extension BlockElement {
+extension BlockHTML {
     /// Adjusts the number of columns assigned to this element.
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A copy of the current element with the adjusted column width.
@@ -29,8 +29,7 @@ extension BlockElement {
 
         // Important: We need to transfer all our existing
         // attributes over to the copy.
-        let currentAttributes = AttributeStore.default.attributes(for: self.id)
-        AttributeStore.default.merge(currentAttributes, intoHTML: copy.id)
+        AttributeStore.default.merge(attributes, intoHTML: copy.id)
 
         return copy
     }

@@ -12,40 +12,56 @@ import Foundation
 /// just use a simple string. Using `Text` is required if you want a specific paragraph
 /// of text with some styling, or a header of a particular size.
 @MainActor
-public struct Text: BlockElement & DropdownElement {
+public struct Text: BlockHTML, DropdownElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-
+    
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+    
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
+    
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
-
+    
     /// The font style to use for this text.
-    var font = Font.body
-
+    var textLevel: Text.Level {
+        if attributes.classes.contains("lead") {
+            Text.Level.lead
+        } else if let tag = attributes.tag, let level = Text.Level(rawValue: tag) {
+            level
+        } else {
+            Text.Level.body
+        }
+    }
+    
     /// The content to place inside the text.
-    var content: any InlineElement
-
+    var content: any InlineHTML
+    
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
     /// - Parameter content: An array of the content to place into the text.
-    public init(@InlineElementBuilder content: @escaping () -> any InlineElement) {
+    public init(@InlineHTMLBuilder content: @escaping () -> any InlineHTML) {
         self.content = content()
+        self.tag(Text.Level.body.rawValue)
     }
-
+    
     /// Creates a new `Text` instance from one inline element.
-    public init(_ string: any InlineElement) {
+    public init(_ string: any InlineHTML) {
         self.content = string
+        self.tag(Text.Level.body.rawValue)
     }
-
+    
     /// Creates a new `Text` instance using "lorem ipsum" placeholder text.
     /// - Parameter placeholderLength: How many placeholder words to generate.
     public init(placeholderLength: Int) {
         precondition(placeholderLength > 0, "placeholderLength must be at least 1.")
-
+        
         let baseWords = ["Lorem", "ipsum", "dolor", "sit", "amet,", "consectetur", "adipiscing", "elit."]
-
+        
         var finalWords: [String]
-
+        
         if placeholderLength < baseWords.count {
             finalWords = Array(baseWords.prefix(placeholderLength))
         } else {
@@ -57,15 +73,15 @@ public struct Text: BlockElement & DropdownElement {
                 "occaecat", "officia", "pariatur", "proident", "qui", "quis", "reprehenderit", "sed", "sint", "sunt",
                 "tempor", "ullamco", "ut", "velit", "veniam", "voluptate"
             ]
-
+            
             var isStartOfSentence = false
             finalWords = baseWords
-
+            
             for _ in baseWords.count ..< placeholderLength {
                 let randomWord = otherWords.randomElement() ?? "ad"
                 var formattedWord = isStartOfSentence ? randomWord.capitalized : randomWord
                 isStartOfSentence = false
-
+                
                 // Randomly add punctuation – 10% chance of adding
                 // a comma, and 10% of adding a full stop instead.
                 let punctuationProbability = Int.random(in: 1 ... 10)
@@ -75,59 +91,45 @@ public struct Text: BlockElement & DropdownElement {
                     formattedWord.append(".")
                     isStartOfSentence = true
                 }
-
+                
                 finalWords.append(formattedWord)
             }
         }
-
+        
         var result = finalWords.joined(separator: " ").trimmingCharacters(in: .punctuationCharacters)
         result += "."
-
+        
         self.content = result
     }
-
+    
     /// Creates a new Text struct from a Markdown string.
     /// - Parameter markdown: The Markdown text to parse.
     public init(markdown: String) {
         let parser = MarkdownToHTML(markdown: markdown, removeTitleFromBody: true)
-
+        
         // Remove any <p></p> tags, because these will be
         // added automatically in render(). This allows us
         // to retain any styling applied elsewhere, e.g.
         // the `font()` modifier.
         let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
         self.content = cleanedHTML
+        self.tag(Text.Level.body.rawValue)
     }
-
+    
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        return attributes.description(
-            wrapping: content.render(context: context),
-            tag: font.rawValue
-        )
+        attributes.description(wrapping: content.render(context: context))
     }
 }
 
-public extension HTML where Self == Text {
-    /// Adjusts the font level of this text.
-    /// - Parameter fontLevel: The new font level.
-    /// - Returns: A new `Text` instance with the updated font style.
-    func font(_ newFont: Font) -> Self {
-        if newFont == .lead {
-            return self.class("lead")
+extension HTML where Self == Text {    
+    func textLevel(_ textLevel: Text.Level) -> Self {
+        if textLevel == .lead {
+            self.class(textLevel.rawValue)
         } else {
-            var copy = self
-            copy.font = newFont
-            return copy
+            self.tag(textLevel.rawValue)
         }
-    }
-
-    /// Adjusts the font weight (boldness) of this font.
-    /// - Parameter newWeight: The new font weight.
-    /// - Returns: A new `Text` instance with the updated weight.
-    func fontWeight(_ newWeight: FontWeight) -> Self {
-        style("font-weight: \(newWeight.rawValue)")
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 /// A collection of slides the user can swipe through.
-public struct Carousel: BlockElement {
+public struct Carousel: BlockHTML {
     /// Whether moving between slides should cause movement or a crossfade.
     public enum CarouselStyle {
         /// Slides should move.
@@ -17,9 +17,15 @@ public struct Carousel: BlockElement {
         /// Slides should crossfade.
         case crossfade
     }
-
+    
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+    
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+    
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -55,15 +61,13 @@ public struct Carousel: BlockElement {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         Group {
-            Group {
-                ForEach(0..<items.count) { index in
-                    Button()
-                        .data("bs-target", "#\(carouselID)")
-                        .data("bs-slide-to", String(index))
-                        .class(index == 0 ? "active" : nil)
-                        .aria("current", index == 0 ? "true" : nil)
-                        .aria("label", "Slide \(index + 1)")
-                }
+            ForEach(0..<items.count) { index in
+                Button()
+                    .data("bs-target", "#\(carouselID)")
+                    .data("bs-slide-to", String(index))
+                    .class(index == 0 ? "active" : nil)
+                    .aria("current", index == 0 ? "true" : nil)
+                    .aria("label", "Slide \(index + 1)")
             }
             .class("carousel-indicators")
 

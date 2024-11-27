@@ -7,6 +7,33 @@
 
 import Foundation
 
+/// A modifier that applies animations or transitions to HTML elements.
+struct AnimationModifier: HTMLModifier {
+    /// The transition to apply, if using a CSS transition animation.
+    var transition: Transition?
+
+    /// The keyframe animation to apply, if using a keyframe-based animation.
+    var animation: Animation?
+
+    /// The direction to play the animation, if using a keyframe animation.
+    var direction: AnimationDirection?
+
+    /// The event that triggers this animation (.hover, .click, or .appear).
+    var trigger: AnimationTrigger
+
+    /// Applies the animation or transition to the provided HTML content.
+    /// - Parameter content: The HTML content to animate
+    /// - Returns: The modified HTML content with animation attributes applied
+    func body(content: some HTML) -> any HTML {
+        if let transition {
+            content.applyAnimation(transition, direction: nil, trigger: trigger)
+        } else if let animation {
+            content.applyAnimation(animation, direction: direction, trigger: trigger)
+        }
+        content
+    }
+}
+
 public extension HTML {
     /// Applies a transition animation to an HTML element.
     ///
@@ -14,8 +41,8 @@ public extension HTML {
     ///   - animation: The transition animation to apply
     ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
     /// - Returns: A modified HTML element with the animation applied
-    func transition(_ transition: Transition, on trigger: AnimationTrigger) -> Self {
-        self.applyAnimation(transition, direction: .automatic, trigger: trigger)
+    func transition(_ transition: Transition, on trigger: AnimationTrigger) -> some HTML {
+        modifier(AnimationModifier(transition: transition, trigger: trigger))
     }
 
     /// Applies a keyframe animation to an HTML element.
@@ -25,8 +52,8 @@ public extension HTML {
     ///   - autoreverses: Whether the animation should play in reverse after completing
     ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
     /// - Returns: A modified HTML element with the animation applied
-    func animation(_ animation: Animation, direction: AnimationDirection? = nil, on trigger: AnimationTrigger) -> Self {
-        self.applyAnimation(animation, direction: direction, trigger: trigger)
+    func animation(_ animation: Animation, direction: AnimationDirection? = nil, on trigger: AnimationTrigger) -> some HTML {
+        modifier(AnimationModifier(animation: animation, direction: direction, trigger: trigger))
     }
 
     /// Applies an animation to an HTML element and manages the necessary container structure.
@@ -36,14 +63,14 @@ public extension HTML {
     ///   - direction: Optional direction for keyframe animations (e.g., alternate, reverse)
     ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
     /// - Returns: The modified HTML element with animation containers and classes applied
-    private func applyAnimation(_ animation: some Animatable, direction: AnimationDirection?, trigger: AnimationTrigger) -> Self {
+    internal func applyAnimation(_ animation: some Animatable, direction: AnimationDirection?, trigger: AnimationTrigger) -> Self {
         var attributes = attributes
         let animationName = "animation-\(self.id)"
 
         // Track which containers we've already added
         let existingContainers = Set(attributes.containerAttributes.flatMap { $0.classes })
 
-        // Extract background styles from the element and move them to the animation wrapper
+        // Extract color styles from the element and move them to the animation wrapper
         var wrapperStyles: OrderedSet<AttributeValue> = []
         if let backgroundColor = attributes.styles.first(where: { $0.name == "background-color" }) {
             wrapperStyles.append(backgroundColor)
@@ -52,6 +79,10 @@ public extension HTML {
         if let background = attributes.styles.first(where: { $0.name == "background" }) {
             wrapperStyles.append(background)
             attributes.styles.removeAll { $0.name == "background" }
+        }
+        if let color = attributes.styles.first(where: { $0.name == "color" }) {
+            wrapperStyles.append(color)
+            attributes.styles.removeAll { $0.name == "color" }
         }
 
         // Check for existing animations with this trigger
@@ -102,6 +133,7 @@ public extension HTML {
                 // if it exists to avoid duplicate class assignments
                 if !existingContainers.contains(animationName) {
                     attributes.append(containerAttributes: ContainerAttributes(
+                        type: .click,
                         classes: [animationName],
                         styles: wrapperStyles,
                         events: [Event(name: "onclick", actions: [CustomAction("igniteToggleClickAnimation(this)")])]
@@ -115,6 +147,7 @@ public extension HTML {
                         let updatedContainers = attributes.containerAttributes.enumerated().map { i, element in
                             if i == index {
                                 var modified = element
+                                modified.type = .click
                                 modified.events.insert(Event(name: "onclick", actions: [CustomAction("igniteToggleClickAnimation(this)")]))
                                 return modified
                             }
@@ -126,13 +159,14 @@ public extension HTML {
 
                 // Inner click-specific container
                 attributes.append(containerAttributes: ContainerAttributes(
+                    type: .animation,
                     classes: ["click-\(self.id)"]
                 ))
 
             case .hover where !existingContainers.contains("\(animationName)-hover"):
                 // Create outer transform container
                 attributes.append(containerAttributes: ContainerAttributes(
-                    isTransformContainer: true,
+                    type: .transform,
                     classes: ["\(animationName)-transform"],
                     styles: [AttributeValue(name: "transform-style", value: "preserve-3d")]
                 ))
@@ -143,12 +177,14 @@ public extension HTML {
                     classes.append("fill-\(self.id)-\(animation.fillMode.rawValue)")
                 }
                 attributes.append(containerAttributes: ContainerAttributes(
+                    type: .animation,
                     classes: classes,
                     styles: wrapperStyles
                 ))
 
             case .appear where !existingContainers.contains(animationName):
                 attributes.append(containerAttributes: ContainerAttributes(
+                    type: .animation,
                     classes: [animationName],
                     styles: wrapperStyles
                 ))

@@ -8,9 +8,15 @@
 import Foundation
 
 /// An image on your page. Can be vector (SVG) or raster (JPG, PNG, GIF).
-public struct Image: BlockElement, InlineElement, LazyLoadable {
+public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+    
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+    
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -48,7 +54,7 @@ public struct Image: BlockElement, InlineElement, LazyLoadable {
         self.description = ""
     }
 
-    /// Creates a new decorative `Image` instance from the name of an
+    /// Creates a new decorative `Image` instance from the name of an 
     /// image contained in your site's assets folder. Decorative images are hidden
     /// from screen readers.
     /// - Parameter name: The filename of your image relative to the root
@@ -61,10 +67,10 @@ public struct Image: BlockElement, InlineElement, LazyLoadable {
     /// Allows this image to be scaled up or down from its natural size in
     /// order to fit into its container.
     /// - Returns: A new `Image` instance configured to be flexibly sized.
-    public func resizable() -> Self {
+    public func resizable() -> some BlockHTML {
         var copy = self
         copy.attributes.classes.append("img-fluid")
-        return copy
+        return Group { copy }  // Return just the wrapped image with class
     }
 
     /// Sets the accessibility label for this image to a string suitable for
@@ -84,7 +90,10 @@ public struct Image: BlockElement, InlineElement, LazyLoadable {
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
     private func render(icon: String, description: String, into context: PublishingContext) -> String {
-        "<i class=\"bi-\(icon)\"\(attributes.description())></i>"
+        var attributes = attributes
+        attributes.append(classes: "bi-\(icon)")
+        attributes.tag = "i"
+        return attributes.description()
     }
 
     /// Renders a user image into the current publishing context.
@@ -94,11 +103,13 @@ public struct Image: BlockElement, InlineElement, LazyLoadable {
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
     private func render(image: String, description: String, into context: PublishingContext) -> String {
-        """
-            <img src=\"\(context.site.url.path)\(image)\" \
-            \(attributes.description())\
-            alt=\"\(description)\"/>
-            """
+        var attributes = attributes
+        attributes.selfClosingTag = "img"
+        attributes.append(customAttributes:
+            .init(name: "src", value: "\(context.site.url.path)\(image)"),
+            .init(name: "alt", value: description)
+        )
+        return attributes.description()
     }
 
     /// Renders this element using publishing context passed in.

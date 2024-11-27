@@ -7,9 +7,12 @@
 
 /// A type-erasing wrapper that can hold any HTML content while maintaining protocol conformance.
 /// This wrapper also handles unwrapping nested AnyHTML instances to prevent unnecessary wrapping layers.
-public struct AnyHTML: HTML, BlockElement, InlineElement {
+public struct AnyHTML: HTML, BlockHTML, InlineHTML {
     /// The body of this HTML element, which is itself
     public var body: some HTML { self }
+    
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// The column width for this element when used in a grid layout
     public var columnWidth: ColumnWidth = .automatic
@@ -28,7 +31,7 @@ public struct AnyHTML: HTML, BlockElement, InlineElement {
             self.wrapped = content
         }
 
-        if let content = wrapped as? (any BlockElement) {
+        if let content = wrapped as? (any BlockHTML) {
             self.columnWidth = content.columnWidth
         }
     }

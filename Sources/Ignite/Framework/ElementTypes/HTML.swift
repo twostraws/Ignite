@@ -20,13 +20,16 @@ public protocol HTML: Sendable {
     /// A unique identifier used to track this element's state and attributes.
     var id: String { get set }
 
+    /// Whether this HTML belongs to the framework.
+    var isPrimitive: Bool { get }
+
     /// The type of HTML content this element contains.
     associatedtype Body: HTML
 
     /// The content and behavior of this `HTML` element.
     @HTMLBuilder var body: Body { get }
 
-    /// Converts this element and its children into an HTML string.
+    /// Converts this element and its children into an HTML string with attributes.
     /// - Parameter context: The current publishing context
     /// - Returns: A string containing the rendered HTML
     func render(context: PublishingContext) -> String
@@ -52,7 +55,7 @@ public extension HTML {
 
 extension HTML {
     /// A Boolean value indicating whether this element contains multiple child elements.
-    var isCompositeElement: Bool {
+    var isComposite: Bool {
         let bodyContent = body
 
         // Unwrap AnyHTML if needed
@@ -61,10 +64,6 @@ extension HTML {
             unwrappedContent = anyHTML.wrapped
         } else {
             unwrappedContent = bodyContent
-        }
-
-        if unwrappedContent is Group || unwrappedContent is FlatHTML {
-            return true
         }
 
         if unwrappedContent is Text {
@@ -121,9 +120,8 @@ public extension HTML {
 
 // Default implementations
 public extension HTML {
-    /// Default rendering implementation that delegates to the body property.
     func render(context: PublishingContext) -> String {
-        return body.render(context: context)
+        body.render(context: context)
     }
 }
 
@@ -132,6 +130,9 @@ public extension HTML {
     var isEmptyHTML: Bool {
         self is EmptyHTML
     }
+
+    /// The default status as a primitive element.
+    var isPrimitive: Bool { false }
 
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
@@ -176,7 +177,7 @@ public extension HTML {
     /// Adds inline styles to the element using string format.
     /// - Parameter values: Variable number of style strings in "property: value" format
     /// - Returns: The modified `HTML` element
-    func style(_ values: String...) -> Self {
+    @discardableResult func style(_ values: String...) -> Self {
         var attributes = attributes
         let attributeValues: [AttributeValue] = values.compactMap { value in
             let parts = value.split(separator: ":")
@@ -216,8 +217,7 @@ public extension HTML {
     ///   - name: The name of the event (e.g., "click", "mouseover")
     ///   - actions: Array of actions to execute when the event occurs
     /// - Returns: The modified `HTML` element
-    @discardableResult
-    func addEvent(name: String, actions: [Action]) -> Self {
+    @discardableResult func addEvent(name: String, actions: [Action]) -> Self {
         guard !actions.isEmpty else { return self }
         var attributes = attributes
         attributes.events.insert(Event(name: name, actions: actions))
@@ -268,6 +268,17 @@ public extension HTML {
         return self
     }
 
+    /// Adds a wrapper div with the specified style to the element's storage
+    /// - Parameter className: The class to apply to the wrapper div
+    /// - Returns: The original element
+    func addContainerStyle(_ styles: AttributeValue...) -> Self {
+        var attributes = attributes
+        let styles = styles.map { $0 }
+        attributes.containerAttributes.append(.init(styles: OrderedSet(styles)))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
     /// Sets the tabindex behavior for this element.
     /// - Parameter tabFocus: The TabFocus enum value defining keyboard navigation behavior
     /// - Returns: The modified HTML element
@@ -276,13 +287,44 @@ public extension HTML {
         customAttribute(name: tabFocus.htmlName, value: tabFocus.value)
     }
 
-    /// Sets a custom identifier for this element.
-    /// - Parameter id: The new identifier string
-    /// - Returns: A copy of the element with the new ID
-    /// - Note: This overrides the default ID generation from file and line info
-    func uniqueIdentifier(_ id: String) -> Self {
-        var copy = self
-        copy.id = id
-        return copy
+    @discardableResult func tag(_ tag: String) -> Self {
+        var attributes = attributes
+        attributes.tag = tag
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
     }
+}
+
+// MARK: - Helper Methods
+
+/// Recursively flattens nested HTML content into a single array, unwrapping any body properties.
+/// - Parameter content: The content to flatten and unwrap
+/// - Returns: An array of unwrapped HTML elements
+@MainActor func flatUnwrap(_ content: Any) -> [any HTML] {
+    if let array = content as? [Any] {
+        return array.flatMap { flatUnwrap($0) }
+    } else if let html = content as? any HTML {
+        if let anyHTML = html as? AnyHTML {
+            return [anyHTML.wrapped.body]
+        }
+        return [html.body]
+    }
+    return []
+}
+
+/// Unwraps HTML content to its most basic form, collecting multiple elements into an HTMLCollection if needed.
+/// - Parameter content: The content to unwrap
+/// - Returns: A single HTML element or collection
+@MainActor func unwrap(_ content: Any) -> any HTML {
+    if let array = content as? [Any] {
+        if let flattened = array.flatMap({ flatUnwrap($0) }) as? [any HTML] {
+            return HTMLCollection(flattened)
+        }
+    } else if let html = content as? any HTML {
+        if let anyHTML = html as? AnyHTML {
+            return anyHTML.wrapped.body
+        }
+        return html.body
+    }
+    return EmptyHTML()
 }

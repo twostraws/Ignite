@@ -8,7 +8,7 @@
 import Foundation
 
 /// A group of information placed inside a gently rounded
-public struct Card: BlockElement {
+public struct Card: BlockHTML {
     /// Styling for this card.
     public enum CardStyle: CaseIterable {
         /// Default styling.
@@ -122,6 +122,12 @@ public struct Card: BlockElement {
 
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+    
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+    
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -133,9 +139,9 @@ public struct Card: BlockElement {
     var imageOpacity = 1.0
 
     var image: Image?
-    private var header: HTMLSequence
-    private var footer: HTMLSequence
-    private var items: HTMLSequence
+    private var header: HTMLCollection
+    private var footer: HTMLCollection
+    private var items: HTMLCollection
 
     var cardClasses: String? {
         switch style {
@@ -158,9 +164,9 @@ public struct Card: BlockElement {
             self.image = Image(decorative: imageName)
         }
 
-        self.header = HTMLSequence(header)
-        self.footer = HTMLSequence(footer)
-        self.items = HTMLSequence(body)
+        self.header = HTMLCollection(header)
+        self.footer = HTMLCollection(footer)
+        self.items = HTMLCollection(body)
     }
 
     public func role(_ role: Role) -> Card {
@@ -254,7 +260,7 @@ public struct Card: BlockElement {
         Group {
             ForEach(items) { item in
                 switch item {
-                case let text as Text where text.font == .body || text.font == .lead:
+                case let text as Text where text.textLevel == .body || text.textLevel == .lead:
                     text.class("card-text")
                 case let text as Text:
                     text.class("card-title")
