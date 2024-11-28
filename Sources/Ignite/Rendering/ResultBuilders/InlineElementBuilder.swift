@@ -20,20 +20,20 @@ public struct InlineElementBuilder {
     public static func buildExpression<Content: InlineElement>(_ content: Content) -> Content {
         content
     }
-    
+
     /// Creates an empty HTML element when no content is provided.
     /// - Returns: An empty HTML element
     public static func buildBlock() -> some HTML {
         EmptyHTML()
     }
-    
+
     /// Passes through a single inline element unchanged.
     /// - Parameter content: The inline element to pass through
     /// - Returns: The same inline element
     public static func buildBlock<Content: InlineElement>(_ content: Content) -> Content {
         content
     }
-    
+
     /// Combines two inline elements into a single flattened HTML structure.
     /// - Parameters:
     ///   - c0: The first inline element
@@ -42,14 +42,14 @@ public struct InlineElementBuilder {
     public static func buildBlock<C0: InlineElement, C1: InlineElement>(_ c0: C0, _ c1: C1) -> some HTML {
         FlatHTML([AnyHTML(c0), AnyHTML(c1)])
     }
-    
+
     /// Handles array transformations in the builder.
     /// - Parameter components: Array of inline elements
     /// - Returns: A flattened HTML element
     public static func buildArray<Content: InlineElement>(_ components: [Content]) -> some HTML {
         FlatHTML(components.map { AnyHTML($0) })
     }
-    
+
     /// Handles optional inline elements.
     /// - Parameter component: An optional inline element
     /// - Returns: Either the wrapped element or an empty element
@@ -59,21 +59,21 @@ public struct InlineElementBuilder {
         }
         return AnyHTML(EmptyHTML())
     }
-    
+
     /// Handles the first branch of an if/else statement.
     /// - Parameter component: The inline element to use if condition is true
     /// - Returns: The provided inline element
     public static func buildEither<Content: InlineElement>(first component: Content) -> Content {
         component
     }
-    
+
     /// Handles the second branch of an if/else statement.
     /// - Parameter component: The inline element to use if condition is false
     /// - Returns: The provided inline element
     public static func buildEither<Content: InlineElement>(second component: Content) -> Content {
         component
     }
-    
+
     /// Handles variadic inline elements by combining them into a flat structure.
     /// - Parameter components: Variable number of inline elements
     /// - Returns: A flattened HTML structure containing all elements
@@ -95,7 +95,7 @@ extension InlineElement {
     ) -> some InlineElement {
         [AnyHTML(c0), AnyHTML(c1)]
     }
-    
+
     /// Combines three inline elements into a single element array
     /// - Parameters:
     ///   - c0: First inline element
@@ -109,7 +109,7 @@ extension InlineElement {
     ) -> some InlineElement {
         [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2)]
     }
-    
+
     /// Combines four inline elements into a single element array
     /// - Parameters:
     ///   - c0: First inline element
@@ -125,7 +125,7 @@ extension InlineElement {
     ) -> some InlineElement {
         [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2), AnyHTML(c3)]
     }
-    
+
     /// Combines five inline elements into a single element array
     /// - Parameters:
     ///   - c0: First inline element
@@ -143,7 +143,7 @@ extension InlineElement {
     ) -> some InlineElement {
         [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2), AnyHTML(c3), AnyHTML(c4)]
     }
-    
+
     /// Combines six inline elements into a single element array
     /// - Parameters:
     ///   - c0: First inline element
@@ -163,7 +163,7 @@ extension InlineElement {
     ) -> some InlineElement {
         [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2), AnyHTML(c3), AnyHTML(c4), AnyHTML(c5)]
     }
-    
+
     /// Combines seven inline elements into a single element array
     /// - Parameters:
     ///   - c0: First inline element
@@ -185,7 +185,7 @@ extension InlineElement {
     ) -> some InlineElement {
         [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2), AnyHTML(c3), AnyHTML(c4), AnyHTML(c5), AnyHTML(c6)]
     }
-    
+
     /// Combines eight inline elements into a single element array
     /// - Parameters:
     ///   - c0: First inline element
@@ -209,7 +209,7 @@ extension InlineElement {
     ) -> some InlineElement {
         [AnyHTML(c0), AnyHTML(c1), AnyHTML(c2), AnyHTML(c3), AnyHTML(c4), AnyHTML(c5), AnyHTML(c6), AnyHTML(c7)]
     }
-    
+
     /// Combines nine inline elements into a single element array
     /// - Parameters:
     ///   - c0: First inline element

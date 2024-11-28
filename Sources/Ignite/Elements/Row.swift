@@ -13,13 +13,13 @@ public struct Row: HTML {
     public var body: some HTML { self }
 
     /// The columns to display inside this row.
-    var columns: [any HTML]
+    var columns: HTMLSequence
 
     /// Create a new `Row` using a page element builder that returns the
     /// array of columns to use in this row.
     /// - Parameter columns: The columns to use in this row.
-    public init(@HTMLBuilder columns: () -> [any HTML]) {
-        self.columns = columns()
+    public init(@HTMLBuilder columns: () -> some HTML) {
+        self.columns = HTMLSequence(columns)
     }
 
     /// Renders this element using publishing context passed in.
@@ -27,13 +27,16 @@ public struct Row: HTML {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         let output = columns.map { column in
-            if column is Column {
-                column.render(context: context)
+            // These are likely to be wrapped in AnyHTML, so unwrap here
+            let actualColumn = (column as? AnyHTML)?.wrapped ?? column
+
+            if actualColumn is Column {
+                return column.render(context: context)
             } else {
-                "<td>\(column.render(context: context))</td>"
+                return "<td>\(column.render(context: context))</td>"
             }
         }.joined()
 
-        return "<tr\(attributes.description)>\(output)</tr>"
+        return "<tr\(attributes.description())>\(output)</tr>"
     }
 }

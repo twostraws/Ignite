@@ -402,7 +402,7 @@ public struct Link: BlockElement, InlineElement, NavigationItem, DropdownElement
         linkAttributes.data.insert(AttributeValue(name: "encoded-url", value: encodedUrl))
 
         return """
-        <a href="#"\(linkAttributes.description)>\(displayContent)</a>
+        <a href="#"\(linkAttributes.description())>\(displayContent)</a>
         """
     }
 
@@ -415,7 +415,7 @@ public struct Link: BlockElement, InlineElement, NavigationItem, DropdownElement
         // char[0] of the 'url' is '/' for an asset; not for a site URL
         let basePath = url.starts(with: "/") ? context.site.url.path : ""
         return """
-        <a href=\"\(basePath)\(url)\"\(linkAttributes.description)>\
+        <a href=\"\(basePath)\(url)\"\(linkAttributes.description())>\
         \(content.render(context: context))\
         </a>
         """

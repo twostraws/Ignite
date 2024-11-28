@@ -45,7 +45,13 @@ public enum Role: String, CaseIterable {
 
     /// This element should be rendered in dark colors.
     case dark
-    
+
     /// This element should be rendered as regular text.
     case none
+
+    /// A list of roles that are useful for Badge elements.
+    @MainActor
+    public static let badgeRoles: [Role] = [
+        .primary, .secondary, .success, .danger, .warning, .info, .light, .dark
+    ]
 }

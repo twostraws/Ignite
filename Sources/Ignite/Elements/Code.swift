@@ -27,6 +27,6 @@ public struct Code: InlineElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<code\(attributes.description)>\(content)</code>"
+        "<code\(attributes.description())>\(content)</code>"
     }
 }

@@ -26,6 +26,12 @@ extension BlockElement {
     public func width(_ width: Int) -> Self {
         var copy = self
         copy.columnWidth = .count(width)
+
+        // Important: We need to transfer all our existing
+        // attributes over to the copy.
+        let currentAttributes = AttributeStore.default.attributes(for: self.id)
+        AttributeStore.default.merge(currentAttributes, intoHTML: copy.id)
+
         return copy
     }
 }

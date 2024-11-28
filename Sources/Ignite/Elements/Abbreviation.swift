@@ -37,6 +37,6 @@ public struct Abbreviation: InlineElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        return "<abbr\(attributes.description)>\(contents.render(context: context))</abbr>"
+        "<abbr\(attributes.description())>\(contents.render(context: context))</abbr>"
     }
 }

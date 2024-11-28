@@ -12,7 +12,7 @@ import Foundation
 public struct Span: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The contents of this span.
     public var contents: any InlineElement
 
@@ -40,6 +40,6 @@ public struct Span: InlineElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<span\(attributes.description)>\(contents.render(context: context))</span>"
+        "<span\(attributes.description())>\(contents.render(context: context))</span>"
     }
 }

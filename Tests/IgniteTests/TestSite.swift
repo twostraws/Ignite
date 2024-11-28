@@ -12,7 +12,7 @@ import Ignite
 struct TestSite: Site {
     var name = "My Test Site"
     var titleSuffix = " - My Test Site"
-    var url: URL = .init("https://www.yoursite.com")
+    var url = URL(static: "https://www.yoursite.com")
 
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
     var syntaxHighlighters = [SyntaxHighlighter.objectiveC]

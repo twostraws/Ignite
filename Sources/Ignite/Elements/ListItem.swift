@@ -10,7 +10,7 @@ import Foundation
 /// Creates one item in a list. This isn't always needed, because you can place other
 /// elements directly into lists if you wish. Use `ListItem` when you specifically
 /// need a styled HTML <li> element.
-public struct ListItem: HTML {
+public struct ListItem: HTML, ListableElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -28,6 +28,16 @@ public struct ListItem: HTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<li\(attributes.description)>\(content.render(context: context))</li>"
+        "<li\(attributes.description())>\(content.render(context: context))</li>"
+    }
+
+
+    /// Renders this element inside a list, using the publishing context passed in.
+    /// - Parameter context: The current publishing context.
+    /// - Returns: The HTML for this element.
+    public func renderInList(context: PublishingContext) -> String {
+        // We do nothing special here, so just send back
+        // the default rendering.
+        render(context: context)
     }
 }

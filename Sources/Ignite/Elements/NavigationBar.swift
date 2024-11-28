@@ -37,13 +37,13 @@ public struct NavigationBar: BlockElement {
         /// Items are aligned to the trailing edge
         case trailing = "justify-content-end"
     }
-    
+
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
-    
+
     /// Controls the maximum width of the navigation bar content at different breakpoints.
     /// By default, uses Bootstrap's container class.
     private var widthClasses: [String] = ["container"]
@@ -69,6 +69,20 @@ public struct NavigationBar: BlockElement {
     ) {
         self.logo = logo
         self.items = []
+    }
+
+    /// Creates a new `NavigationBar` instance from the `logo` and
+    /// `items` provided.
+    /// - Parameters:
+    ///   - logo: The logo to use in the top-left edge of your bar.
+    ///   - items: An element builder that returns an array of
+    /// `NavigationItem` objects.
+    public init(
+        logo: (any InlineElement)? = nil,
+        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem]
+    ) {
+        self.logo = logo
+        self.items = items()
     }
 
     /// Creates a new `NavigationBar` instance from the `logo` and
@@ -125,7 +139,7 @@ public struct NavigationBar: BlockElement {
         case .dark: "dark"
         }
     }
-    
+
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.

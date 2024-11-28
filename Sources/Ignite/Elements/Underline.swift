@@ -11,7 +11,7 @@ import Foundation
 public struct Underline: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The content that should be underlined.
     var content: any InlineElement
 
@@ -32,6 +32,6 @@ public struct Underline: InlineElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<u\(attributes.description)>\(content.render(context: context))</u>"
+        "<u\(attributes.description())>\(content.render(context: context))</u>"
     }
 }

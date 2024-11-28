@@ -12,7 +12,7 @@ import Ignite
 struct TestSubsite: Site {
     var name = "My Test Subsite"
     var titleSuffix = " - My Test Subsite"
-    var url: URL = .init("https://www.yoursite.com/subsite")
+    var url = URL(static: "https://www.yoursite.com/subsite")
 
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
     var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
