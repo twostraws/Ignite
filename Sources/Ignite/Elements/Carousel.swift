@@ -17,13 +17,13 @@ public struct Carousel: BlockHTML {
         /// Slides should crossfade.
         case crossfade
     }
-    
+
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
@@ -61,13 +61,15 @@ public struct Carousel: BlockHTML {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         Group {
-            ForEach(0..<items.count) { index in
-                Button()
-                    .data("bs-target", "#\(carouselID)")
-                    .data("bs-slide-to", String(index))
-                    .class(index == 0 ? "active" : nil)
-                    .aria("current", index == 0 ? "true" : nil)
-                    .aria("label", "Slide \(index + 1)")
+            Group {
+                ForEach(0..<items.count) { index in
+                    Button()
+                        .data("bs-target", "#\(carouselID)")
+                        .data("bs-slide-to", String(index))
+                        .class(index == 0 ? "active" : nil)
+                        .aria("current", index == 0 ? "true" : nil)
+                        .aria("label", "Slide \(index + 1)")
+                }
             }
             .class("carousel-indicators")
 

@@ -14,38 +14,38 @@ public struct Accordion: BlockHTML {
     public enum OpenMode {
         /// Opening one accordion section automatically closes all others.
         case individual
-        
+
         /// Users can open multiple sections simultaneously.
         case all
     }
-    
+
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-    
+
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
-    
+
     /// A collection of sections you want to show inside this accordion.
     var items: [Item]
-    
+
     /// Adjusts what happens when a section is opened.
     /// Defaults to `.individual`, meaning that only one
     /// accordion section may be open at a time.
     private var openMode = OpenMode.individual
-    
+
     /// Create a new Accordion from a collection of sections.
     /// - Parameter items: A result builder containing all the sections
     /// you want to display in this accordion.
-    public init(@HTMLBuilder _ items: () -> [Item]) {
+    public init(@ElementBuilder<Item> _ items: () -> [Item]) {
         self.items = items()
     }
-    
+
     /// Adjusts the open mode for this Accordion.
     /// - Parameter mode: The new open mode.
     /// - Returns: A copy of this Accordion with the new open mode set.
@@ -54,7 +54,7 @@ public struct Accordion: BlockHTML {
         copy.openMode = mode
         return copy
     }
-    
+
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
@@ -70,7 +70,7 @@ public struct Accordion: BlockHTML {
             .class("accordion")
             .id(accordionID)
             .render(context: context)
-        
+
         return output
     }
 }

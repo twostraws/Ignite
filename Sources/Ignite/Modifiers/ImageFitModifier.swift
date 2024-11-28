@@ -17,7 +17,7 @@ public extension Image {
     ) -> Self {
         let xPercent = Int(anchor.x * 100)
         let yPercent = Int(anchor.y * 100)
-        
+
         return self
             .class("w-100 h-100 object-fit-\(fit.rawValue)")
             .style("object-position: \(xPercent)% \(yPercent)%")

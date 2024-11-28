@@ -11,10 +11,10 @@ import Foundation
 public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
@@ -54,7 +54,7 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
         self.description = ""
     }
 
-    /// Creates a new decorative `Image` instance from the name of an 
+    /// Creates a new decorative `Image` instance from the name of an
     /// image contained in your site's assets folder. Decorative images are hidden
     /// from screen readers.
     /// - Parameter name: The filename of your image relative to the root
@@ -67,10 +67,10 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     /// Allows this image to be scaled up or down from its natural size in
     /// order to fit into its container.
     /// - Returns: A new `Image` instance configured to be flexibly sized.
-    public func resizable() -> some BlockHTML {
+    public func resizable() -> Self {
         var copy = self
         copy.attributes.classes.append("img-fluid")
-        return Group { copy }  // Return just the wrapped image with class
+        return copy
     }
 
     /// Sets the accessibility label for this image to a string suitable for

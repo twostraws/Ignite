@@ -18,29 +18,29 @@ import Foundation
 public struct Section: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-    
+
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
-    
+
     /// How many columns this should be divided into
     var columnCount: Int?
-    
+
     /// The items to display in this section.
-    private var content: any HTML
-    
+    private var items: [any HTML]
+
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameter items: The items to use in this section.
     public init(@HTMLBuilder items: () -> some HTML) {
-        self.content = unwrap(items())
+        self.items = flatUnwrap(items())
     }
-    
+
     /// Adjusts the number of columns that can be fitted into this section.
     /// - Parameter columns: The number of columns to use
     /// - Returns: A new `Section` instance with the updated column count.
@@ -49,25 +49,35 @@ public struct Section: BlockHTML {
         copy.columnCount = columns
         return copy
     }
-    
+
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         var sectionAttributes = attributes.appending(classes: ["row"])
-        
+
         // If a column count is set, we want to use that for all
         // page sizes that are medium and above. Below that we
         // should drop down to width 1 to avoid squeezing things
         // into oblivion.
         if let columnCount {
-            sectionAttributes.append(classes:
+            sectionAttributes.append(classes: [
                 "row-cols-1",
-                "row-cols-md-\(columnCount)"
-            )
+                "row-cols-md-\(columnCount)",
+            ])
         }
-        
-        let content = content.render(context: context)
-        return sectionAttributes.description(wrapping: content)
+
+        return Group {
+            ForEach(items) { item in
+                if let item = item as? any BlockHTML {
+                    Group(item)
+                        .class(item.columnWidth.className)
+                } else {
+                    item
+                }
+            }
+        }
+        .attributes(sectionAttributes)
+        .render(context: context)
     }
 }

@@ -11,19 +11,19 @@ import Foundation
 struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
     /// The column width to use when this element appears in a grid layout.
     var columnWidth: ColumnWidth = .automatic
-    
+
     /// A unique identifier for this element.
     var id = UUID().uuidString.truncatedHash
-    
+
     /// The content and behavior of this HTML element.
     var body: some HTML { self }
-    
+
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool = true
-    
+
     /// The underlying HTML content being modified.
     private(set) var content: any HTML
-    
+
     /// Creates a new modified HTML element by applying a modifier to existing content.
     /// - Parameters:
     ///   - content: The HTML content to modify
@@ -34,16 +34,16 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
         } else {
             self.content = unwrap(content.body)
         }
-        
+
         let modifiedContent: any HTML = modifier.body(content: self.content)
 
         AttributeStore.default.merge(modifiedContent.attributes, intoHTML: id)
-        
+
         if let block = self.content as? (any BlockHTML) {
             self.columnWidth = block.columnWidth
         }
     }
-    
+
     /// Renders this element using the provided publishing context.
     /// - Parameter context: The current publishing context
     /// - Returns: The rendered HTML string

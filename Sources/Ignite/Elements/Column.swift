@@ -23,10 +23,10 @@ public struct Column: HTML, HorizontalAligning {
 
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 

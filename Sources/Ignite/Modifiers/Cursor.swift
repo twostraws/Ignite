@@ -28,13 +28,13 @@ public enum Cursor: String {
 struct CursorModifier: HTMLModifier {
     /// The cursor style to apply
     private let cursor: Cursor
-    
+
     /// Creates a new cursor modifier
     /// - Parameter cursor: The desired cursor style
     init(_ cursor: Cursor) {
         self.cursor = cursor
     }
-    
+
     /// Applies the cursor style to the provided HTML content
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with cursor styling applied

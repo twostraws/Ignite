@@ -33,7 +33,7 @@ public struct List: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-    
+
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
@@ -42,7 +42,7 @@ public struct List: BlockHTML {
 
     /// The items to show in this list. This may contain any page elements,
     /// but if you need specific styling you might want to use ListItem objects.
-    var items: HTMLCollection
+    private var items: [any HTML]
 
     // swiftlint:disable empty_enum_arguments
     /// Returns the correct HTML name for this list.
@@ -59,7 +59,7 @@ public struct List: BlockHTML {
     /// an array of `HTML` objects to display in the list.
     /// - Parameter items: The content you want to display in your list.
     public init(@HTMLBuilder items: () -> some HTML) {
-        self.items = HTMLCollection(items)
+        self.items = flatUnwrap(items())
     }
 
     /// Adjusts the style of this list.
@@ -111,15 +111,12 @@ public struct List: BlockHTML {
         var output = "<\(listElementName)\(listAttributes.description())>"
 
         for item in items {
-            // Pull out what we actually have.
-            let actualItem = (item as? AnyHTML)?.wrapped ?? item
-
             // Any element that renders its own <li> (e.g. ForEach) should
             // be allowed to handle that itself.
-            if let listableItem = actualItem as? ListableElement {
+            if let listableItem = item as? ListableElement {
                 output += listableItem.renderInList(context: context)
             } else {
-                output += "<li>\(actualItem.render(context: context))</li>"
+                output += "<li>\(item.render(context: context))</li>"
             }
         }
 

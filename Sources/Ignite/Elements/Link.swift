@@ -11,10 +11,10 @@ import Foundation
 public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
@@ -169,7 +169,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     public enum LinkStyle: String, CaseIterable {
         case `default`, hover, button
     }
-    
+
     /// The content to display inside this link.
     var content: any HTML
 
@@ -334,7 +334,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     /// - Returns: An HTML anchor tag with the appropriate href and content.
     private func renderStandardLink(context: PublishingContext) -> String {
         var linkAttributes = attributes.appending(classes: linkClasses)
-        
+
         // char[0] of the 'url' is '/' for an asset; not for a site URL
         let basePath = url.starts(with: "/") ? context.site.url.path : ""
         linkAttributes.tag = "a href=\"\(basePath)\(url)\""

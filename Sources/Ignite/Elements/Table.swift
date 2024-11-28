@@ -25,10 +25,10 @@ public struct Table: BlockHTML {
 
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
@@ -67,10 +67,10 @@ public struct Table: BlockHTML {
     ///   - header: An array of headers to use at the top of the table.
     public init(
         @ElementBuilder<Row> rows: () -> [Row],
-        @HTMLBuilder header: () -> [any HTML]
+        @HTMLBuilder header: () -> some HTML
     ) {
         self.rows = rows()
-        self.header = header()
+        self.header = flatUnwrap(header())
     }
 
     /// Adjusts the style of this table.

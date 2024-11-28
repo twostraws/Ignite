@@ -21,7 +21,7 @@ public struct HTMLCollection: InlineHTML, BlockHTML, @preconcurrency Sequence {
 
     /// The array of HTML elements contained in this sequence
     var elements: [any HTML]
-    
+
     /// Creates a new HTML sequence using a result builder
     /// - Parameter content: A closure that returns HTML content
     init(@HTMLBuilder _ content: () -> some HTML) {
@@ -32,17 +32,11 @@ public struct HTMLCollection: InlineHTML, BlockHTML, @preconcurrency Sequence {
     /// Creates a new HTML sequence from an array of elements
     /// - Parameter elements: The array of HTML elements to include
     init(_ elements: [any HTML]) {
-        self.elements = elements
+        self.elements = flatUnwrap(elements)
     }
 
     init(_ content: any HTML) {
-        if let group = content as? HTMLCollection {
-            self.elements = group.elements
-        } else if let array = content as? [any HTML] {
-            self.elements = array.map { unwrap($0) }
-        } else {
-            self.elements = [unwrap(content)]
-        }
+        self.elements = flatUnwrap(content)
     }
 
     /// Creates an iterator over the sequence's elements

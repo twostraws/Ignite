@@ -11,10 +11,10 @@ import Foundation
 public struct Video: BlockHTML, InlineHTML, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
@@ -45,7 +45,7 @@ public struct Video: BlockHTML, InlineHTML, LazyLoadable {
         var attributes = attributes
         attributes.tag = "video controls"
         attributes.closingTag = "video"
-        
+
         let sources = files.compactMap { filename in
             guard let fileType = videoType(for: filename) else { return nil }
             var sourceAttributes = CoreAttributes()
@@ -56,7 +56,7 @@ public struct Video: BlockHTML, InlineHTML, LazyLoadable {
             )
             return sourceAttributes.description()
         }.joined()
-        
+
         return attributes.description(wrapping: sources + "Your browser does not support the video tag.")
     }
 

@@ -40,7 +40,7 @@ public protocol HorizontalAligning: HTML { }
 struct HorizontalAlignmentModifier: HTMLModifier {
     /// The alignment to apply
     var alignment: HorizontalAlignment
-    
+
     /// Applies horizontal alignment to the provided HTML content
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with alignment applied

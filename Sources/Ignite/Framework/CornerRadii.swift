@@ -10,17 +10,17 @@ import Foundation
 /// Represents the corner radii for an HTML element, allowing different radius values for each corner.
 public struct CornerRadii {
     /// The radius of the top-leading corner.
-    public var topLeading: Int
-    
+    var topLeading: Int
+
     /// The radius of the top-trailing corner.
-    public var topTrailing: Int
-    
+    var topTrailing: Int
+
     /// The radius of the bottom-leading corner.
-    public var bottomLeading: Int
-    
+    var bottomLeading: Int
+
     /// The radius of the bottom-trailing corner.
-    public var bottomTrailing: Int
-    
+    var bottomTrailing: Int
+
     /// Creates a new `CornerRadii` instance with the specified radii.
     /// - Parameters:
     ///   - topLeading: The radius of the top-leading corner in pixels.
@@ -38,15 +38,13 @@ public struct CornerRadii {
         self.bottomLeading = bottomLeading
         self.bottomTrailing = bottomTrailing
     }
-    
+
     /// Creates a new `CornerRadii` instance with the same radius applied to all corners.
     /// - Parameter radius: The radius to apply to all corners in pixels.
-    public static func all(_ radius: Int) -> CornerRadii {
-        CornerRadii(
-            topLeading: radius,
-            topTrailing: radius,
-            bottomLeading: radius,
-            bottomTrailing: radius
-        )
+    public init(_ radius: Int) {
+        self.topLeading = radius
+        self.topTrailing = radius
+        self.bottomLeading = radius
+        self.bottomTrailing = radius
     }
 }

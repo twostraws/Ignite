@@ -11,16 +11,16 @@ import Foundation
 struct BackgroundImageModifier: HTMLModifier {
     /// The path to the image.
     var imagePath: String
-    
+
     /// The content mode to use for sizing the image.
     var contentMode: BackgroundImageContentMode
-    
+
     /// The position of the image within the element's frame.
     var position: BackgroundPosition
-    
+
     /// Whether the image should be repeated.
     var repeats: Bool
-    
+
     /// Applies the background image to the provided HTML content.
     /// - Parameter content: The HTML content to modify
     /// - Returns: The modified HTML content with background image applied

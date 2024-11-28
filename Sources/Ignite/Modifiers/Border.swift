@@ -11,25 +11,25 @@ import Foundation
 struct BorderModifier: HTMLModifier {
     /// The color of the border.
     var color: Color
-    
+
     /// The width of the border in pixels.
     var width: Int
-    
+
     /// The style of the border.
     var style: BorderStyle
-    
+
     /// The radii for rounding corners.
     var cornerRadii: CornerRadii
-    
+
     /// Which edges should have borders.
     var edges: Edge
-    
+
     /// Applies the border styling to the provided HTML content.
     /// - Parameter content: The HTML content to modify
     /// - Returns: The modified HTML content with border styling applied
     func body(content: some HTML) -> any HTML {
         var modified = content
-        
+
         // Apply border styles based on edges
         if edges.contains(.all) {
             modified = modified.style("border: \(width)px \(style.rawValue) \(color)")
@@ -47,7 +47,7 @@ struct BorderModifier: HTMLModifier {
                 modified = modified.style("border-bottom: \(width)px \(style.rawValue) \(color)")
             }
         }
-        
+
         // Apply corner radii
         if cornerRadii.topLeading > 0 {
             modified = modified.style("border-top-left-radius: \(cornerRadii.topLeading)px")
@@ -61,7 +61,7 @@ struct BorderModifier: HTMLModifier {
         if cornerRadii.bottomTrailing > 0 {
             modified = modified.style("border-bottom-right-radius: \(cornerRadii.bottomTrailing)px")
         }
-        
+
         return modified
     }
 }

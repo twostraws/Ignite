@@ -13,10 +13,10 @@ import Foundation
 public struct Time: InlineHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
@@ -58,11 +58,11 @@ public struct Time: InlineHTML {
     public func render(context: PublishingContext) -> String {
         var attributes = attributes
         attributes.tag = "time"
-        
+
         if let dateTime {
             attributes.append(customAttributes: .init(name: "datetime", value: dateTime.asISO8601))
         }
-        
+
         return attributes.description(wrapping: contents.render(context: context))
     }
 }

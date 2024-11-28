@@ -11,13 +11,13 @@ import Foundation
 struct HoverEffectModifier: HTMLModifier {
     /// The effect to apply when hovering
     private let effect: (EmptyHoverEffect) -> any HTML
-    
+
     /// Creates a new hover effect modifier
     /// - Parameter effect: A closure that returns the effect to be applied
     init(_ effect: @escaping (EmptyHoverEffect) -> any HTML) {
         self.effect = effect
     }
-    
+
     /// Applies hover effect to the provided HTML content
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with hover effect applied

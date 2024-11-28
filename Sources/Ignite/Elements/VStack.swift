@@ -11,22 +11,22 @@ import Foundation
 public struct VStack: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-    
+
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
-    
+
     /// The vertical space between elements in pixels.
     private var spacing: Int
-    
+
     /// The child elements contained in the stack.
     private var items: [any HTML]
-    
+
     /// Creates a new vertical stack with the specified spacing and content.
     /// - Parameters:
     ///   - spacing: The number of pixels between each element. Default is `2`.
@@ -35,7 +35,7 @@ public struct VStack: BlockHTML {
         self.items = flatUnwrap(items())
         self.spacing = spacing
     }
-        
+
     public func render(context: PublishingContext) -> String {
         var itemAttributes = CoreAttributes()
         itemAttributes.append(style: "margin-bottom", value: "0px")
@@ -55,9 +55,9 @@ public struct VStack: BlockHTML {
                 items.append(item)
             }
         }
-        
+
         var attributes = attributes
-        
+
         attributes.append(styles:
             .init(name: .display, value: "flex"),
             .init(name: .flexDirection, value: "column"),

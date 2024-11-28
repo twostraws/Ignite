@@ -12,10 +12,10 @@ import Foundation
 public struct Script: BlockHTML, HeadElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
@@ -51,7 +51,7 @@ public struct Script: BlockHTML, HeadElement {
     public func render(context: PublishingContext) -> String {
         var attributes = attributes
         attributes.tag = "script"
-        
+
         if let file {
             attributes.append(customAttributes: .init(name: "src", value: "\(context.site.url.path)\(file)"))
             return attributes.description()

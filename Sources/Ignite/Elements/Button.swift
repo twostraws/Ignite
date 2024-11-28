@@ -33,10 +33,10 @@ public struct Button: InlineHTML {
 
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
@@ -70,7 +70,7 @@ public struct Button: InlineHTML {
     public init(@InlineHTMLBuilder label: @escaping () -> some InlineHTML) {
         self.label = label()
     }
-    
+
     /// Creates a button with a label.
     /// - Parameter label: The label text to display on this button.
     /// - actions: An element builder that returns an array of actions to run when this button is pressed.
@@ -83,7 +83,10 @@ public struct Button: InlineHTML {
     /// - Parameters:
     ///   - label: The label text to display on this button.
     ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
-    public init(@InlineHTMLBuilder _ label: @escaping () -> some InlineHTML, @ActionBuilder actions: () -> [Action]) {
+    public init(
+        @InlineHTMLBuilder _ label: @escaping () -> some InlineHTML,
+        @ActionBuilder actions: () -> [Action]
+    ) {
         self.label = label()
         addEvent(name: "onclick", actions: actions())
     }

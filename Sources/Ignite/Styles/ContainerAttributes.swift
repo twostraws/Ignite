@@ -5,7 +5,15 @@
 // See LICENSE for license information.
 //
 
-/// Specifies how a container should be rendered in the HTML output.
+/// Specifies how a container should be rendered in the HTML output in relation to other containers.
+///
+/// For certain modifiers, namely animation modifiers, order matters. The order of
+/// animation modifiers determines how containers are nested and thereby prioritized.
+/// However, regardless of their position in the modifier chain, transform animations
+/// should affect the entire element, including its containers. So we need to ensure
+/// they are always the outermost *animation* container without affecting the rest of
+/// the container chain.
+///
 enum ContainerType {
     /// A container that handles animations.
     case animation
@@ -39,4 +47,22 @@ struct ContainerAttributes: Hashable, Sendable {
 
     /// Whether this container has any classes or styles defined
     var isEmpty: Bool { classes.isEmpty && styles.isEmpty && events.isEmpty }
+
+    /// Creates a new container with the specified type, styling, and event handlers.
+    /// - Parameters:
+    ///   - type: The container's rendering behavior and position in the container stack. Defaults to `.regular`.
+    ///   - classes: CSS classes to apply to the container. Defaults to empty.
+    ///   - styles: Inline CSS styles to apply to the container. Defaults to empty.
+    ///   - events: JavaScript event handlers to attach to the container. Defaults to empty.
+    init(
+        type: ContainerType = .regular,
+        classes: some RandomAccessCollection<String> = OrderedSet<String>(),
+        styles: some RandomAccessCollection<AttributeValue> = OrderedSet<AttributeValue>(),
+        events: some Collection<Event> = []
+    ) {
+        self.type = type
+        self.classes = OrderedSet(classes)
+        self.styles = OrderedSet(styles)
+        self.events = Set(events)
+    }
 }

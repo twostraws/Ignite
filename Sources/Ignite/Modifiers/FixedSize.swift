@@ -24,19 +24,3 @@ public extension HTML {
         modifier(FixedSizeModifier())
     }
 }
-
-//public extension BlockHTML {
-//    /// Forces an element to be sized based on its content rather than expanding to fill its container.
-//    /// - Returns: A modified copy of the element with fixed sizing applied
-//    func fixedSize() -> some BlockHTML {
-//        modifier(FixedSizeModifier())
-//    }
-//}
-//
-//public extension InlineHTML {
-//    /// Forces an element to be sized based on its content rather than expanding to fill its container.
-//    /// - Returns: A modified copy of the element with fixed sizing applied
-//    func fixedSize() -> some InlineHTML {
-//        modifier(FixedSizeModifier())
-//    }
-//}

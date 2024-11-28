@@ -11,10 +11,10 @@ import Foundation
 public struct Slide: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
@@ -51,7 +51,7 @@ public struct Slide: BlockHTML {
     /// be placed on top of the background image.
     public init(background: String? = nil, @HTMLBuilder items: () -> [any HTML]) {
         self.background = background
-        self.items = items()
+        self.items = flatUnwrap(items())
     }
 
     /// Adjusts the opacity of the background image for this slide. Use values

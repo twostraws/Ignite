@@ -11,7 +11,7 @@ import Foundation
 public struct Quote: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
 
@@ -54,10 +54,10 @@ public struct Quote: BlockHTML {
         let renderedContents = contents.render(context: context)
         let renderedCaption = caption.render(context: context)
         var attributes = attributes
-        
+
         attributes.tag = "blockquote"
         attributes.append(classes: "blockquote")
-        
+
         if renderedCaption.isEmpty {
             return attributes.description(wrapping: renderedContents)
         } else {

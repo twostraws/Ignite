@@ -61,7 +61,7 @@ extension HTML {
         // Unwrap AnyHTML if needed
         let unwrappedContent: Any
         if let anyHTML = bodyContent as? AnyHTML {
-            unwrappedContent = anyHTML.wrapped
+            unwrappedContent = anyHTML.unwrapped
         } else {
             unwrappedContent = bodyContent
         }
@@ -305,7 +305,9 @@ public extension HTML {
         return array.flatMap { flatUnwrap($0) }
     } else if let html = content as? any HTML {
         if let anyHTML = html as? AnyHTML {
-            return [anyHTML.wrapped.body]
+            return [anyHTML.unwrapped.body]
+        } else if let collection = html as? HTMLCollection {
+            return collection.elements
         }
         return [html.body]
     }
@@ -322,7 +324,7 @@ public extension HTML {
         }
     } else if let html = content as? any HTML {
         if let anyHTML = html as? AnyHTML {
-            return anyHTML.wrapped.body
+            return anyHTML.unwrapped.body
         }
         return html.body
     }

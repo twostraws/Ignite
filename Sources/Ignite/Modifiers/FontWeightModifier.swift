@@ -9,7 +9,7 @@
 struct FontWeightModifier: HTMLModifier {
     /// The weight value to apply to the text
     var weight: Font.Weight
-    
+
     /// Applies font weight styling to the provided HTML content
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with font weight applied

@@ -12,7 +12,7 @@ import Foundation
 extension String: InlineHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-    
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
