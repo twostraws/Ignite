@@ -75,3 +75,26 @@ public extension HTML {
         modifier(HintModifier(markdown: markdown))
     }
 }
+
+public extension InlineHTML {
+    /// Creates a plain-text tooltip for this element.
+    /// - Parameter text: The text to show in the tooltip.
+    /// - Returns: A modified copy of the element with tooltip attached
+    func hint(text: String) -> some InlineHTML {
+        modifier(HintModifier(text: text))
+    }
+
+    /// Creates a HTML tooltip for this element.
+    /// - Parameter html: The HTML to show in the tooltip.
+    /// - Returns: A modified copy of the element with tooltip attached
+    func hint(html: String) -> some InlineHTML {
+        modifier(HintModifier(html: html))
+    }
+
+    /// Creates a Markdown tooltip for this element.
+    /// - Parameter markdown: The Markdown text to parse.
+    /// - Returns: A modified copy of the element with tooltip attached
+    func hint(markdown: String) -> some InlineHTML {
+        modifier(HintModifier(markdown: markdown))
+    }
+}
