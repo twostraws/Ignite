@@ -29,13 +29,6 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
     ///   - content: The HTML content to modify
     ///   - modifier: The modifier to apply to the content
     init(_ content: any HTML, modifier: any HTMLModifier) {
-        
-        // VStack and ZStack merge attributes into their children during rendering, so we must
-        // preserve their original IDs to maintain this parent-child relationship post modification.
-        if content is VStack || content is ZStack {
-            self.id = content.id
-        }
-        
         if let modified = content as? ModifiedHTML {
             self.content = modified.content
         } else {
