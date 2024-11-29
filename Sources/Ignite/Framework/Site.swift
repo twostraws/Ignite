@@ -11,11 +11,11 @@ import Foundation
 @MainActor
 public protocol Site: Sendable {
     /// The type of your homepage. Required.
-    associatedtype HomePageType: StaticLayout
+    associatedtype HomePageLayout: StaticLayout
 
     /// The type used to generate your tag pages. A default is provided that means
     /// no tags pages are generated.
-    associatedtype TagPageType: TagPage
+    associatedtype TagPageLayout: TagLayout
 
     /// The type that defines the base layout structure for all pages.
     associatedtype LayoutType: Layout
@@ -77,11 +77,11 @@ public protocol Site: Sendable {
     var robotsConfiguration: RobotsType { get }
 
     /// The homepage for your site; what users land on when visiting your root domain.
-    var homePage: HomePageType { get }
+    var homePage: HomePageLayout { get }
 
-    /// A type that conforms to `TagPage`, to be used when rendering individual
+    /// A type that conforms to `TagLayout`, to be used when rendering individual
     /// tag pages or the "all tags" page.
-    var tagPage: TagPageType { get }
+    var tagPage: TagPageLayout { get }
 
     /// The base layout applied to all pages. This is used to render all pages that don't
     /// explicitly override the layout with something custom.
@@ -164,8 +164,8 @@ public extension Site {
     /// No content layouts by default.
     var contentLayouts: [any ContentLayout] { [] }
 
-    /// An empty tag page by default, which triggers no tag pages being made.
-    var tagPage: EmptyTagPage { EmptyTagPage() }
+    /// An empty tag layout by default, which triggers no tag pages being made.
+    var tagPage: EmptyTagLayout { EmptyTagLayout() }
 
     /// The default favicon being nil
     var favicon: URL? { nil }

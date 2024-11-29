@@ -24,7 +24,7 @@ extension PublishingContext {
 
     /// Generates all tags pages, including the "all tags" page.
     func generateTagPages() async throws {
-        if site.tagPage is EmptyTagPage { return }
+        if site.tagPage is EmptyTagLayout { return }
 
         /// Creates a unique list of sorted tags from across the site, starting
         /// with `nil` for the "all tags" page.
