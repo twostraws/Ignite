@@ -235,7 +235,7 @@ public final class PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render<T: StaticLayout>(_ staticPage: T, isHomePage: Bool = false) throws {
+    func render(_ staticPage: any StaticLayout, isHomePage: Bool = false) throws {
         let path = isHomePage ? "" : staticPage.path
 
         let page = Page(
