@@ -260,7 +260,7 @@ public struct Card: BlockHTML {
         Group {
             ForEach(items) { item in
                 switch item {
-                case let text as Text where text.textLevel == .body || text.textLevel == .lead:
+                case let text as Text where text.font == .body || text.font == .lead:
                     text.class("card-text")
                 case let text as Text:
                     text.class("card-title")

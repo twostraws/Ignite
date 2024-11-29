@@ -8,8 +8,8 @@
 import Foundation
 
 /// Represents different text styles available in the system
-public extension Text {
-    enum Level: String, CaseIterable, Sendable, LengthUnit {
+public extension Font {
+    enum Style: String, CaseIterable, Sendable, LengthUnit {
         /// A primary heading style using Bootstrap's h1 size (2.5rem)
         case title1 = "h1"
 

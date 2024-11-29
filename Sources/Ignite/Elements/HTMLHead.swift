@@ -89,15 +89,15 @@ public struct HTMLHead: RootHTML {
             MetaLink.syntaxHighlightingCSS
         }
 
+        Script(file: "/js/ignite-core.js")
+
         if configuration.builtInIconsEnabled == .localBootstrap {
             MetaLink.iconCSS
         } else if configuration.builtInIconsEnabled == .remoteBootstrap {
             MetaLink.remoteIconCSS
         }
 
-        if let analyticsSnippet = configuration.analyticsSnippet {
-            analyticsSnippet
-        }
+        MetaLink.themeCSS
 
         if AnimationManager.default.hasAnimations {
             MetaLink.animationCSS

@@ -7,12 +7,12 @@
 
 import Foundation
 
-/// Themes allow you to have complete control over the HTML used to generate
+/// Layouts allow you to have complete control over the HTML used to generate
 /// your pages.
 ///
 /// Example:
 /// ```swift
-/// struct BlogLayout: Theme {
+/// struct BlogLayout: Layout {
 ///     var body: some HTML {
 ///         HTMLDocument {
 ///             Header("My Blog")
@@ -23,7 +23,7 @@ import Foundation
 /// }
 /// ```
 @MainActor
-public protocol Theme: Sendable {
+public protocol Layout: Sendable {
     /// The type of HTML content this layout will generate
     associatedtype Body: HTML
 
@@ -34,7 +34,7 @@ public protocol Theme: Sendable {
     var id: String { get set }
 }
 
-public extension Theme {
+public extension Layout {
     /// The current page being rendered.
     var page: Page {
         PageContext.current
@@ -44,9 +44,7 @@ public extension Theme {
     /// The identifier is used internally for tracking and caching purposes.
     var id: String {
         get {
-            let location = #filePath + #line.description
-            let description = String(describing: self)
-            return (location + description).truncatedHash
+            String(describing: self).truncatedHash
         }
         set {}
     }

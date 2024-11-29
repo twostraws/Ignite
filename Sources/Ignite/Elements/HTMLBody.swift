@@ -50,10 +50,7 @@ public struct HTMLBody: RootHTML {
             """).render(context: context)
         }
 
-        if AnimationManager.default.hasAnimations {
-            output += Script(file: "/js/animations.js").render(context: context)
-        }
-        output += Script(file: "/js/email-protection.js").render(context: context)
+        output += Script(file: "/js/ignite-core.js").render(context: context)
 
         var attributes = attributes
         attributes.tag = "body"
