@@ -89,6 +89,10 @@ public struct HTMLHead: RootHTML {
             MetaLink.syntaxHighlightingCSS
         }
 
+        if !configuration.alternateThemes.isEmpty {
+            Script(file: "/js/theme-switcher.js")
+        }
+
         if configuration.builtInIconsEnabled == .localBootstrap {
             MetaLink.iconCSS
         } else if configuration.builtInIconsEnabled == .remoteBootstrap {
@@ -98,6 +102,8 @@ public struct HTMLHead: RootHTML {
         if let analyticsSnippet = configuration.analyticsSnippet {
             analyticsSnippet
         }
+
+        MetaLink.themeCSS
 
         if AnimationManager.default.hasAnimations {
             MetaLink.animationCSS

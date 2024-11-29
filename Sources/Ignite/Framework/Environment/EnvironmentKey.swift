@@ -36,3 +36,9 @@ public enum ConfigurationKey: EnvironmentKey {
     /// The default site configuration.
     public static var defaultValue: SiteConfiguration = .init()
 }
+
+/// A key for accessing available themes in the environment.
+public struct ThemesKey: EnvironmentKey {
+    /// The default empty array of themes.
+    public static var defaultValue: [any Theme] = []
+}

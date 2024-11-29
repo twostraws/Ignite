@@ -29,6 +29,9 @@ public struct EnvironmentValues: Sendable {
     /// Whether feed generation is enabled for the site.
     public var isFeedEnabled: Bool
 
+    /// Available themes for the site, including light, dark, and any alternates.
+    public var themes: [any Theme]
+
     /// Global site configuration settings.
     public var siteConfiguration: SiteConfiguration
 
@@ -40,6 +43,7 @@ public struct EnvironmentValues: Sendable {
         self.allContent = []
         self.feedConfiguration = FeedConfiguration(mode: .full, contentCount: 0)
         self.isFeedEnabled = false
+        self.themes = []
         self.siteConfiguration = SiteConfiguration()
         self.decode = .init(sourceDirectory: URL(filePath: ""))
     }
@@ -49,6 +53,7 @@ public struct EnvironmentValues: Sendable {
         self.allContent = allContent
         self.feedConfiguration = site.feedConfiguration
         self.isFeedEnabled = site.isFeedEnabled
+        self.themes = [site.lightTheme, site.darkTheme, AutoTheme()] + site.alternateThemes
 
         // Initialize metadata with all head-related configuration
         self.siteConfiguration = SiteConfiguration(

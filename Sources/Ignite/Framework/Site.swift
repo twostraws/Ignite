@@ -17,8 +17,8 @@ public protocol Site: Sendable {
     /// no tags pages are generated.
     associatedtype TagPageType: TagPage
 
-    /// The Layout for your site. Required.
-    associatedtype ThemeType: Theme
+    /// The type that defines the base layout structure for all pages.
+    associatedtype LayoutType: Layout
 
     /// The Markdown parser to use for Content pages.
     associatedtype MarkdownRendererType: MarkdownRenderer
@@ -48,10 +48,6 @@ public protocol Site: Sendable {
 
     /// The base URL for your site, e.g. https://www.example.com
     var url: URL { get }
-
-    /// How wide your page should be on desktop web browsers. Defaults to 10,
-    /// which allows a little margin on either side.
-    var pageWidth: Int { get }
 
     /// Choose whether to use a local version of Bootstrap, a remote version,
     /// or none at all
@@ -89,7 +85,19 @@ public protocol Site: Sendable {
 
     /// The base layout applied to all pages. This is used to render all pages that don't
     /// explicitly override the layout with something custom.
-    var theme: ThemeType { get }
+    var layout: LayoutType { get }
+
+    /// The theme used when the system is in light mode.
+    var lightTheme: any Theme { get }
+
+    /// The theme used when the system is in dark mode.
+    var darkTheme: any Theme { get }
+
+    /// Additional themes that can be selected by users beyond light and dark mode.
+    var alternateThemes: [any Theme] { get }
+
+    /// JavaScript code for analytics tracking, injected into the page head.
+    var analyticsSnippet: Script? { get }
 
     /// The path to the favicon
     var favicon: URL? { get }
@@ -98,7 +106,7 @@ public protocol Site: Sendable {
     @StaticPageBuilder var pages: [any StaticPage] { get }
 
     /// An array of all the content layouts you want to include in your site.
-    @ContentPageBuilder var layouts: [any ContentPage] { get }
+    @ContentPageBuilder var contentPages: [any ContentPage] { get }
 
     /// Publishes this entire site from user space.
     func publish(from file: StaticString, buildDirectoryPath: String) async throws
@@ -117,9 +125,14 @@ public extension Site {
     /// English as default language.
     var language: Language { .english }
 
-    /// Use 10 of the 12 available columns by default. Only applies to
-    /// desktop browsers where horizontal space is plentiful.
-    var pageWidth: Int { 10 }
+    /// No additional themes by default.
+    var alternateThemes: [any Theme] { [] }
+
+    /// Uses the default light theme based on Bootstrap.
+    var lightTheme: any Theme { DefaultLightTheme() }
+
+    /// Uses the default dark theme based on Bootstrap.
+    var darkTheme: any Theme { DefaultDarkTheme() }
 
     /// Enable local Bootstrap files by default
     var useDefaultBootstrapURLs: BootstrapOptions { .localBootstrap }
@@ -152,10 +165,13 @@ public extension Site {
     var pages: [any StaticPage] { [] }
 
     /// No content pages by default.
-    var layouts: [any ContentPage] { [] }
+    var contentPages: [any ContentPage] { [] }
 
     /// An empty tag page by default, which triggers no tag pages being made.
     var tagPage: EmptyTagPage { EmptyTagPage() }
+
+    /// No analytics script by default
+    var analyticsSnippet: Script? { nil }
 
     /// The default favicon being nil
     var favicon: URL? { nil }
@@ -163,7 +179,7 @@ public extension Site {
     /// Performs the entire publishing flow from a file in user space, e.g. main.swift
     /// or Site.swift.
     /// - Parameters:
-    ///   - file: The file that triggered the build. This is used to
+    ///   - file: The path of the file that triggered the build. This is used to
     ///   locate the base directory for their project, so we can find
     ///   key folders.
     ///   - buildDirectoryPath: This path will generate the necessary

@@ -12,7 +12,7 @@ import Foundation
 @MainActor
 public protocol ThemePage: EnvironmentReader {
     /// The type of theme you want this page to use.
-    associatedtype ThemeType: Theme
+    associatedtype ThemeType: Layout
 
     /// The theme to apply to this page.
     var theme: ThemeType { get }
@@ -21,7 +21,7 @@ public protocol ThemePage: EnvironmentReader {
 /// Default implementation that provides a missing layout when no theme is specified.
 /// This allows the framework to detect when a page needs a theme applied.
 public extension ThemePage {
-    var theme: MissingTheme { MissingTheme() }
+    var theme: MissingLayout { MissingLayout() }
 }
 
 /// Default implementation that provides access to the current environment values.

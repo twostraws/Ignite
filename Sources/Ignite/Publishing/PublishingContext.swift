@@ -21,6 +21,9 @@ public final class PublishingContext {
     /// The directory containing their custom assets.
     var assetsDirectory: URL
 
+    /// The directory containing their custom fonts.
+    var fontsDirectory: URL
+
     /// The directory containing their Markdown files.
     var contentDirectory: URL
 
@@ -61,6 +64,7 @@ public final class PublishingContext {
         buildDirectory = sourceBuildDirectories.build.appending(path: buildDirectoryPath)
 
         assetsDirectory = sourceDirectory.appending(path: "Assets")
+        fontsDirectory = sourceDirectory.appending(path: "Fonts")
         contentDirectory = sourceDirectory.appending(path: "Content")
         includesDirectory = sourceDirectory.appending(path: "Includes")
 
@@ -125,6 +129,7 @@ public final class PublishingContext {
         try clearBuildFolder()
         try await generateContent()
         try copyResources()
+        try generateThemes(site.alternateThemes)
         generateAnimations()
         try await generateTagPages()
         try generateSiteMap()
@@ -152,21 +157,11 @@ public final class PublishingContext {
     /// and CSS, icons CSS and fonts if enabled, and syntax highlighters
     /// if enabled.
     func copyResources() throws {
-        do {
-            let assets = try FileManager.default.contentsOfDirectory(
-                at: assetsDirectory,
-                includingPropertiesForKeys: nil
-            )
+        try copyAssets()
+        try copyFonts()
 
-            for asset in assets {
-                try FileManager.default.copyItem(
-                    at: assetsDirectory.appending(path: asset.lastPathComponent),
-                    to: buildDirectory.appending(path: asset.lastPathComponent)
-                )
-            }
-        } catch {
-            print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
-            throw error
+        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/themes.min.css").path()) {
+            try copy(resource: "css/themes.min.css")
         }
 
         if AnimationManager.default.hasAnimations {
@@ -177,6 +172,7 @@ public final class PublishingContext {
         }
 
         try copy(resource: "js/email-protection.js")
+        try copy(resource: "js/theme-switcher.js")
 
         if site.useDefaultBootstrapURLs == .localBootstrap {
             try copy(resource: "css/bootstrap.min.css")
@@ -227,11 +223,11 @@ public final class PublishingContext {
 
     /// Renders one page using the correct theme, which is taken either from the
     /// provided them or from the main site theme.
-    func render(_ page: Page, using theme: any Theme) -> String {
+    func render(_ page: Page, using theme: any Layout) -> String {
         var theme = theme
 
-        if theme is MissingTheme {
-            theme = site.theme
+        if theme is MissingLayout {
+            theme = site.layout
         }
 
         return render(page: page) {
@@ -323,6 +319,52 @@ public final class PublishingContext {
         }
     }
 
+    /// Copies all files from the project's "Assets" directory to the build output's root directory.
+    private func copyAssets() throws {
+        do {
+            let assets = try FileManager.default.contentsOfDirectory(
+                at: assetsDirectory,
+                includingPropertiesForKeys: nil
+            )
+
+            for asset in assets {
+                try FileManager.default.copyItem(
+                    at: assetsDirectory.appending(path: asset.lastPathComponent),
+                    to: buildDirectory.appending(path: asset.lastPathComponent)
+                )
+            }
+        } catch {
+            print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
+            throw error
+        }
+    }
+
+    /// Copies custom font files from the project's "Fonts" directory to the build output's "fonts" directory.
+    private func copyFonts() throws {
+        do {
+            // Copy fonts if directory exists
+            if FileManager.default.fileExists(atPath: fontsDirectory.path()) {
+                let fonts = try FileManager.default.contentsOfDirectory(
+                    at: fontsDirectory,
+                    includingPropertiesForKeys: nil
+                )
+
+                let fontsDestDir = buildDirectory.appending(path: "fonts")
+                try FileManager.default.createDirectory(at: fontsDestDir, withIntermediateDirectories: true)
+
+                for font in fonts {
+                    let destination = fontsDestDir.appending(path: font.lastPathComponent)
+                    try FileManager.default.copyItem(at: font, to: destination)
+                }
+            }
+
+            // Rest of the existing copyResources code...
+        } catch {
+            print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
+            throw error
+        }
+    }
+
     /// Calculates the full list of syntax highlighters need by this site, including
     /// resolving dependencies.
     func copySyntaxHighlighters() throws {
@@ -344,7 +386,7 @@ public final class PublishingContext {
     /// - Returns: The correct `ContentPage` instance to use for this content.
     func layout(for content: Content) throws -> any ContentPage {
         if let contentLayout = content.layout {
-            for layout in site.layouts {
+            for layout in site.contentPages {
                 let layoutName = String(describing: type(of: layout))
 
                 if layoutName == contentLayout {
@@ -353,7 +395,7 @@ public final class PublishingContext {
             }
 
             throw PublishingError.missingNamedLayout(contentLayout)
-        } else if let defaultLayout = site.layouts.first {
+        } else if let defaultLayout = site.contentPages.first {
             return defaultLayout
         } else {
             throw PublishingError.missingDefaultLayout

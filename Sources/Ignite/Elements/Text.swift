@@ -26,13 +26,13 @@ public struct Text: BlockHTML, DropdownElement {
     public var columnWidth = ColumnWidth.automatic
 
     /// The font style to use for this text.
-    var textLevel: Text.Level {
+    var font: Font.Style {
         if attributes.classes.contains("lead") {
-            Text.Level.lead
-        } else if let tag = attributes.tag, let level = Text.Level(rawValue: tag) {
-            level
+            Font.Style.lead
+        } else if let tag = attributes.tag, let style = Font.Style(rawValue: tag) {
+            style
         } else {
-            Text.Level.body
+            Font.Style.body
         }
     }
 
@@ -44,13 +44,13 @@ public struct Text: BlockHTML, DropdownElement {
     /// - Parameter content: An array of the content to place into the text.
     public init(@InlineHTMLBuilder content: @escaping () -> any InlineHTML) {
         self.content = content()
-        self.tag(Text.Level.body.rawValue)
+        self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new `Text` instance from one inline element.
     public init(_ string: any InlineHTML) {
         self.content = string
-        self.tag(Text.Level.body.rawValue)
+        self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new `Text` instance using "lorem ipsum" placeholder text.
@@ -113,7 +113,7 @@ public struct Text: BlockHTML, DropdownElement {
         // the `font()` modifier.
         let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
         self.content = cleanedHTML
-        self.tag(Text.Level.body.rawValue)
+        self.tag(Font.Style.body.rawValue)
     }
 
     /// Renders this element using publishing context passed in.
@@ -125,11 +125,11 @@ public struct Text: BlockHTML, DropdownElement {
 }
 
 extension HTML where Self == Text {
-    func textLevel(_ textLevel: Text.Level) -> Self {
-        if textLevel == .lead {
-            self.class(textLevel.rawValue)
+    func fontStyle(_ font: Font.Style) -> Self {
+        if font == .lead {
+            self.class(font.rawValue)
         } else {
-            self.tag(textLevel.rawValue)
+            self.tag(font.rawValue)
         }
     }
 }

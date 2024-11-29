@@ -9,8 +9,8 @@ import Foundation
 
 /// A theme that does nothing at all. This is used as the default theme, so we can
 /// detect that no theme has been applied to a page.
-public struct MissingTheme: Theme {
+public struct MissingLayout: Layout {
     public var body: HTMLDocument {
-        HTMLDocument { }
+        HTMLDocument {}
     }
 }

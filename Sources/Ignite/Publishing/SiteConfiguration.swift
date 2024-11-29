@@ -42,6 +42,9 @@ public struct SiteConfiguration: Sendable {
     /// The path to the favicon
     public let favicon: URL?
 
+    /// Additional themes that can be selected by users beyond light and dark mode.
+    public let alternateThemes: [any Theme]
+
     public init(
         author: String = "",
         name: String,
@@ -53,6 +56,7 @@ public struct SiteConfiguration: Sendable {
         builtInIconsEnabled: BootstrapOptions = .localBootstrap,
         syntaxHighlighters: [SyntaxHighlighter] = [],
         favicon: URL? = nil,
+        alternateThemes: [any Theme] = [],
         analyticsSnippet: Script? = nil
     ) {
         self.author = author
@@ -65,6 +69,7 @@ public struct SiteConfiguration: Sendable {
         self.builtInIconsEnabled = builtInIconsEnabled
         self.syntaxHighlighters = syntaxHighlighters
         self.favicon = favicon
+        self.alternateThemes = alternateThemes
         self.analyticsSnippet = analyticsSnippet
     }
 
@@ -79,6 +84,7 @@ public struct SiteConfiguration: Sendable {
         self.builtInIconsEnabled = .localBootstrap
         self.syntaxHighlighters = []
         self.favicon = nil
+        self.alternateThemes = []
         self.analyticsSnippet = nil
     }
 }
