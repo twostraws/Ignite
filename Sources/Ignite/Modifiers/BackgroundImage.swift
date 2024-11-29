@@ -1,21 +1,32 @@
+//
+// BackgroundImage.swift
+// Ignite
+// https://www.github.com/twostraws/Ignite
+// See LICENSE for license information.
+//
+
 import Foundation
 
-public extension HTML {
-    /// Applies a background image from the image path
-    /// - Parameters:
-    ///   - image: The path to the image
-    ///   - contentMode: The content mode to use to size the image
-    ///   - position: The position of the image in the objects frame
-    ///   - repeats: Wether the image is repeated or not
-    /// - Returns: The current element with the updated background image
-    func background(
-        image: String,
-        contentMode: BackgroundImageContentMode,
-        position: BackgroundPosition = .center,
-        repeats: Bool = false
-    ) -> Self {
-        style(
-            "background-image: url('\(image)')",
+/// A modifier that applies background images to HTML elements.
+struct BackgroundImageModifier: HTMLModifier {
+    /// The path to the image.
+    var imagePath: String
+
+    /// The content mode to use for sizing the image.
+    var contentMode: BackgroundImageContentMode
+
+    /// The position of the image within the element's frame.
+    var position: BackgroundPosition
+
+    /// Whether the image should be repeated.
+    var repeats: Bool
+
+    /// Applies the background image to the provided HTML content.
+    /// - Parameter content: The HTML content to modify
+    /// - Returns: The modified HTML content with background image applied
+    func body(content: some HTML) -> any HTML {
+        content.style(
+            "background-image: url('\(imagePath)')",
             "background-size: \(contentMode.css)",
             "background-repeat: \(repeats ? "repeat" : "no-repeat")",
             "background-position: \(position.css)"
@@ -23,7 +34,30 @@ public extension HTML {
     }
 }
 
-private protocol CSSRepresentable {
+public extension HTML {
+    /// Applies a background image to the element.
+    /// - Parameters:
+    ///   - image: The path to the image
+    ///   - contentMode: How the image should be sized
+    ///   - position: The position of the image within the element
+    ///   - repeats: Whether the image should be repeated
+    /// - Returns: A modified element with the background image applied
+    func background(
+        image: String,
+        contentMode: BackgroundImageContentMode,
+        position: BackgroundPosition = .center,
+        repeats: Bool = false
+    ) -> some HTML {
+        modifier(BackgroundImageModifier(
+            imagePath: image,
+            contentMode: contentMode,
+            position: position,
+            repeats: repeats
+        ))
+    }
+}
+
+protocol CSSRepresentable {
     var css: String { get }
 }
 

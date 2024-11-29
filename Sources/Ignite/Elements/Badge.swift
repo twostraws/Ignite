@@ -8,15 +8,21 @@
 import Foundation
 
 /// A small, capsule-shaped piece of information, such as a tag.
-public struct Badge: InlineElement {
+public struct Badge: InlineHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     public enum BadgeStyle: CaseIterable {
         case `default`, subtle, subtleBordered
     }
 
-    private var text: any InlineElement
+    private var text: any InlineHTML
     private var style = BadgeStyle.default
     private var role = Role.default
 
@@ -65,7 +71,7 @@ public struct Badge: InlineElement {
         return outputClasses
     }
 
-    public init(_ text: any InlineElement) {
+    public init(_ text: any InlineHTML) {
         self.text = text
     }
 

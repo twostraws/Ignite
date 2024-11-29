@@ -7,93 +7,128 @@
 
 import Foundation
 
-public extension HTML {
-    /// Creates a specific frame for this element, either using exact values or
-    /// using minimum/maximum ranges. Sizes are specified in units
-    /// of your choosing, e.g. "50%", "2cm", or "50vw".
+/// A modifier that applies dimensional constraints to HTML elements
+struct FrameModifier: HTMLModifier {
+    /// The exact width to apply
+    private let width: (any LengthUnit)?
+
+    /// The minimum width to apply
+    private let minWidth: (any LengthUnit)?
+
+    /// The maximum width to apply
+    private let maxWidth: (any LengthUnit)?
+
+    /// The exact height to apply
+    private let height: (any LengthUnit)?
+
+    /// The minimum height to apply
+    private let minHeight: (any LengthUnit)?
+
+    /// The maximum height to apply
+    private let maxHeight: (any LengthUnit)?
+
+    /// The horizontal alignment within the frame
+    private let alignment: HorizontalAlignment
+
+    /// Creates a new frame modifier
     /// - Parameters:
-    ///   - width: An exact width for this element.
-    ///   - minWidth: A minimum width for this element.
-    ///   - maxWidth: A maximum width for this element.
-    ///   - height: An exact height for this element.
-    ///   - minHeight: A minimum height for this element.
-    ///   - maxHeight: A maximum height for this element.
-    ///   - alignment: How to align this element inside its frame.
-    /// - Returns: A copy of the current element with the new frame applied.
-    func frame(
-        width: String? = nil,
-        minWidth: String? = nil,
-        maxWidth: String? = nil,
-        height: String? = nil,
-        minHeight: String? = nil,
-        maxHeight: String? = nil,
+    ///   - width: An exact width for this element
+    ///   - minWidth: A minimum width for this element
+    ///   - maxWidth: A maximum width for this element
+    ///   - height: An exact height for this element
+    ///   - minHeight: A minimum height for this element
+    ///   - maxHeight: A maximum height for this element
+    ///   - alignment: How to align this element inside its frame
+    init(
+        width: (any LengthUnit)? = nil,
+        minWidth: (any LengthUnit)? = nil,
+        maxWidth: (any LengthUnit)? = nil,
+        height: (any LengthUnit)? = nil,
+        minHeight: (any LengthUnit)? = nil,
+        maxHeight: (any LengthUnit)? = nil,
         alignment: HorizontalAlignment = .center
-    ) -> Self {
-        var copy = self
+    ) {
+        self.width = width
+        self.minWidth = minWidth
+        self.maxWidth = maxWidth
+        self.height = height
+        self.minHeight = minHeight
+        self.maxHeight = maxHeight
+        self.alignment = alignment
+    }
+
+    /// Applies frame constraints to the provided HTML content
+    /// - Parameter content: The HTML element to modify
+    /// - Returns: The modified HTML with frame constraints applied
+    func body(content: some HTML) -> any HTML {
+        var modified = content
 
         if let width {
-            copy = copy.style("width: \(width)")
+            modified = modified.style("width: \(width.stringValue)")
         }
 
         if let minWidth {
-            copy = copy.style("min-width: \(minWidth)")
+            modified = modified.style("min-width: \(minWidth.stringValue)")
         }
 
         if let maxWidth {
-            copy = copy.style("max-width: \(maxWidth)")
+            modified = modified.style("max-width: \(maxWidth.stringValue)")
         }
 
         if let height {
-            copy = copy.style("height: \(height)")
+            modified = modified.style("height: \(height.stringValue)")
         }
 
         if let minHeight {
-            copy = copy.style("min-height: \(minHeight)")
+            modified = modified.style("min-height: \(minHeight.stringValue)")
         }
 
         if let maxHeight {
-            copy = copy.style("max-height: \(maxHeight)")
+            modified = modified.style("max-height: \(maxHeight.stringValue)")
         }
 
         if alignment == .center {
-            copy = copy.class("mx-auto")
+            modified = modified.class("mx-auto")
         } else if alignment == .leading {
-            copy = copy.style("margin-right: auto")
+            modified = modified.style("margin-right: auto")
         } else {
-            copy = copy.style("margin-left: auto")
+            modified = modified.style("margin-left: auto")
         }
 
-        return copy
+        return modified
     }
+}
 
+public extension HTML {
     /// Creates a specific frame for this element, either using exact values or
-    /// using minimum/maximum ranges. Sizes are specified as pixels.
+    /// using minimum/maximum ranges. Sizes can be specified using any type conforming
+    /// to the Unit protocol (String, Int, Double).
     /// - Parameters:
-    ///   - width: An exact width for this element.
-    ///   - minWidth: A minimum width for this element.
-    ///   - maxWidth: A maximum width for this element.
-    ///   - height: An exact height for this element.
-    ///   - minHeight: A minimum height for this element.
-    ///   - maxHeight: A maximum height for this element.
-    ///   - alignment: How to align this element inside its frame.
-    /// - Returns: A copy of the current element with the new frame applied.
+    ///   - width: An exact width for this element
+    ///   - minWidth: A minimum width for this element
+    ///   - maxWidth: A maximum width for this element
+    ///   - height: An exact height for this element
+    ///   - minHeight: A minimum height for this element
+    ///   - maxHeight: A maximum height for this element
+    ///   - alignment: How to align this element inside its frame
+    /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
-        width: Int? = nil,
-        minWidth: Int? = nil,
-        maxWidth: Int? = nil,
-        height: Int? = nil,
-        minHeight: Int? = nil,
-        maxHeight: Int? = nil,
+        width: (any LengthUnit)? = nil,
+        minWidth: (any LengthUnit)? = nil,
+        maxWidth: (any LengthUnit)? = nil,
+        height: (any LengthUnit)? = nil,
+        minHeight: (any LengthUnit)? = nil,
+        maxHeight: (any LengthUnit)? = nil,
         alignment: HorizontalAlignment = .center
-    ) -> Self {
-        self.frame(
-            width: width.map { "\($0)px" },
-            minWidth: minWidth.map { "\($0)px" },
-            maxWidth: maxWidth.map { "\($0)px" },
-            height: height.map { "\($0)px" },
-            minHeight: minHeight.map { "\($0)px" },
-            maxHeight: maxHeight.map { "\($0)px" },
+    ) -> some HTML {
+        modifier(FrameModifier(
+            width: width,
+            minWidth: minWidth,
+            maxWidth: maxWidth,
+            height: height,
+            minHeight: minHeight,
+            maxHeight: maxHeight,
             alignment: alignment
-        )
+        ))
     }
 }

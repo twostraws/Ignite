@@ -8,9 +8,15 @@
 import Foundation
 
 /// A hyperlink to another resource on this site or elsewhere.
-public struct Link: BlockElement, InlineElement, NavigationItem, DropdownElement {
+public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth: ColumnWidth = .automatic
@@ -316,24 +322,24 @@ public struct Link: BlockElement, InlineElement, NavigationItem, DropdownElement
         linkAttributes.classes.append("protected-link")
         linkAttributes.data.insert(AttributeValue(name: "encoded-url", value: encodedUrl))
 
-        return """
-        <a href="#"\(linkAttributes.description())>\(displayContent)</a>
+        linkAttributes.tag = """
+        a href="#"
         """
+        linkAttributes.closingTag = "a"
+        return linkAttributes.description(wrapping: displayContent)
     }
 
     /// Renders a standard link with the provided URL and content.
     /// - Parameter context: The current publishing context.
     /// - Returns: An HTML anchor tag with the appropriate href and content.
     private func renderStandardLink(context: PublishingContext) -> String {
-        let linkAttributes = attributes.appending(classes: linkClasses)
+        var linkAttributes = attributes.appending(classes: linkClasses)
 
         // char[0] of the 'url' is '/' for an asset; not for a site URL
         let basePath = url.starts(with: "/") ? context.site.url.path : ""
-        return """
-        <a href=\"\(basePath)\(url)\"\(linkAttributes.description())>\
-        \(content.render(context: context))\
-        </a>
-        """
+        linkAttributes.tag = "a href=\"\(basePath)\(url)\""
+        linkAttributes.closingTag = "a"
+        return linkAttributes.description(wrapping: content.render(context: context))
     }
 }
 
@@ -354,7 +360,7 @@ public extension Link {
     /// - Parameters:
     ///   - content: The user-facing content to show inside the `Link`.
     ///   - target: The `Page` you want to link to.
-    init(_ content: some InlineElement, target: any StaticPage) {
+    init(_ content: some InlineHTML, target: any StaticPage) {
         self.content = content
         self.url = target.path
     }

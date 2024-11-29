@@ -8,9 +8,15 @@
 import Foundation
 
 /// Lets you include arbitrary HTML on a page.
-public struct Include: BlockElement {
+public struct Include: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic

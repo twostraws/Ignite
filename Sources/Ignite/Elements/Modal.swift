@@ -61,10 +61,16 @@ public struct Modal: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    let id: String
-    private var items: HTMLSequence
-    private var header: HTMLSequence
-    private var footer: HTMLSequence
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
+
+    let htmlID: String
+    private var items: HTMLCollection
+    private var header: HTMLCollection
+    private var footer: HTMLCollection
 
     var animated = true
     var scrollable = false
@@ -77,10 +83,10 @@ public struct Modal: HTML {
         @HTMLBuilder header: () -> some HTML = { EmptyHTML() },
         @HTMLBuilder footer: () -> some HTML = { EmptyHTML() }
     ) {
-        self.id = modalId
-        self.items = HTMLSequence(body)
-        self.header = HTMLSequence(header)
-        self.footer = HTMLSequence(footer)
+        self.htmlID = modalId
+        self.items = HTMLCollection(body)
+        self.header = HTMLCollection(header)
+        self.footer = HTMLCollection(footer)
     }
 
     /// Adjusts the size of the modal.
@@ -126,7 +132,7 @@ public struct Modal: HTML {
         Group {
             Group {
                 Group {
-                    if header.isEmptyHTML == false {
+                    if !header.isEmptyHTML {
                         Group {
                             header
                         }
@@ -154,7 +160,7 @@ public struct Modal: HTML {
         }
         .class(animated ? "modal fade" : "modal")
         .tabFocus(.focusable)
-        .id(id)
+        .id(htmlID)
         .aria("labelledby", "modalLabel")
         .aria("hidden", "true")
         .render(context: context)

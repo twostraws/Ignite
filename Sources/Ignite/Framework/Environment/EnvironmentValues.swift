@@ -32,15 +32,20 @@ public struct EnvironmentValues: Sendable {
     /// Global site configuration settings.
     public var siteConfiguration: SiteConfiguration
 
+    /// Locates, loads, and decodes a JSON file in your Resources folder.
+    public var decode: DecodeAction
+
     /// Creates environment values with default settings.
     public init() {
         self.allContent = []
         self.feedConfiguration = FeedConfiguration(mode: .full, contentCount: 0)
         self.isFeedEnabled = false
         self.siteConfiguration = SiteConfiguration()
+        self.decode = .init(sourceDirectory: URL(filePath: ""))
     }
 
-    init(site: any Site, allContent: [Content]) {
+    init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
+        self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.allContent = allContent
         self.feedConfiguration = site.feedConfiguration
         self.isFeedEnabled = site.isFeedEnabled

@@ -15,9 +15,15 @@ import Foundation
 ///
 /// **Note**: A 12-column grid is the default, but you can adjust that downwards
 /// by using the `columns()` modifier.
-public struct Section: BlockElement {
+public struct Section: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -26,13 +32,13 @@ public struct Section: BlockElement {
     var columnCount: Int?
 
     /// The items to display in this section.
-    var items: HTMLSequence
+    private var items: [any HTML]
 
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameter items: The items to use in this section.
     public init(@HTMLBuilder items: () -> some HTML) {
-        self.items = HTMLSequence(items)
+        self.items = flatUnwrap(items())
     }
 
     /// Adjusts the number of columns that can be fitted into this section.
@@ -57,13 +63,13 @@ public struct Section: BlockElement {
         if let columnCount {
             sectionAttributes.append(classes: [
                 "row-cols-1",
-                "row-cols-md-\(columnCount)"
+                "row-cols-md-\(columnCount)",
             ])
         }
 
         return Group {
             ForEach(items) { item in
-                if let item = item as? any BlockElement {
+                if let item = item as? any BlockHTML {
                     Group(item)
                         .class(item.columnWidth.className)
                 } else {

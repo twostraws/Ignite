@@ -8,7 +8,7 @@
 import Foundation
 
 /// Embeds a custom URL, such as YouTube or Vimeo.
-public struct Embed: BlockElement, LazyLoadable {
+public struct Embed: BlockHTML, LazyLoadable {
     /// Determines what kind of Spotify embed we have.
     public enum SpotifyContentType: String {
         /// Creates interactive item for a single Spotify track
@@ -27,6 +27,12 @@ public struct Embed: BlockElement, LazyLoadable {
 
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic

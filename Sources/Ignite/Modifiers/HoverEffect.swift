@@ -7,14 +7,22 @@
 
 import Foundation
 
-public extension HTML {
-    /// Applies a hover effect to the page element
-    /// - Parameter effect: A closure that returns the effect to be applied.
-    ///   The argument acts as a placeholder representing this page element.
-    /// - Returns: The page element with the provided hover effect applied.
-    @discardableResult
-    func hoverEffect(_ effect: @escaping (EmptyHoverEffect) -> some HTML) -> Self {
-        onHover { isHovering in
+/// A modifier that applies hover effects to HTML elements
+struct HoverEffectModifier: HTMLModifier {
+    /// The effect to apply when hovering
+    private let effect: (EmptyHoverEffect) -> any HTML
+
+    /// Creates a new hover effect modifier
+    /// - Parameter effect: A closure that returns the effect to be applied
+    init(_ effect: @escaping (EmptyHoverEffect) -> any HTML) {
+        self.effect = effect
+    }
+
+    /// Applies hover effect to the provided HTML content
+    /// - Parameter content: The HTML element to modify
+    /// - Returns: The modified HTML with hover effect applied
+    func body(content: some HTML) -> any HTML {
+        content.onHover { isHovering in
             if isHovering {
                 let effectElement = effect(EmptyHoverEffect())
                 let effectAttributes = AttributeStore.default.attributes(for: effectElement.id)
@@ -23,6 +31,16 @@ public extension HTML {
                 RemoveHoverEffects()
             }
         }
+    }
+}
+
+public extension HTML {
+    /// Applies a hover effect to the page element
+    /// - Parameter effect: A closure that returns the effect to be applied.
+    ///   The argument acts as a placeholder representing this page element.
+    /// - Returns: A modified copy of the element with hover effect applied
+    func hoverEffect(_ effect: @escaping (EmptyHoverEffect) -> some HTML) -> some HTML {
+        modifier(HoverEffectModifier(effect))
     }
 }
 
