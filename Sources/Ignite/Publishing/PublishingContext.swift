@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftSoup
 
 /// Publishing contexts manage the entire flow of publishing, through all
 /// elements. This allows any part of the site to reference content, add
@@ -129,6 +130,7 @@ public final class PublishingContext {
         try clearBuildFolder()
         try await generateContent()
         try copyResources()
+        try await generateStyles()
         try generateThemes(site.alternateThemes)
         generateAnimations()
         try await generateTagPages()
@@ -164,6 +166,16 @@ public final class PublishingContext {
             try copy(resource: "css/themes.min.css")
         }
 
+        if StyleManager.default.hasStyles,
+           !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/custom.min.css").path())
+        {
+            try copy(resource: "css/custom.min.css")
+        }
+
+        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/utilities.min.css").path()) {
+            try copy(resource: "css/utilities.min.css")
+        }
+
         if AnimationManager.default.hasAnimations {
             if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/animations.min.css").path()) {
                 try copy(resource: "css/animations.min.css")
@@ -189,6 +201,20 @@ public final class PublishingContext {
         }
     }
 
+    /// Formats HTML content with proper indentation and line breaks, returning original HTML if formatting fails.
+    private func prettifyHTML(_ html: String) -> String {
+        do {
+            let doc = try SwiftSoup.parse(html)
+            doc.outputSettings()
+                .prettyPrint(pretty: true)
+                .indentAmount(indentAmount: 2)
+            return try doc.outerHtml()
+        } catch {
+            addWarning("HTML could not be prettified: \(error.localizedDescription).")
+            return html
+        }
+    }
+
     /// Writes a single string of data to a URL.
     /// - Parameters:
     ///   - string: The string to write.
@@ -210,9 +236,14 @@ public final class PublishingContext {
         }
 
         let outputURL = directory.appending(path: "index.html")
+        var html = string
+
+        if site.prettifyHTML {
+            html = prettifyHTML(string)
+        }
 
         do {
-            try string.write(to: outputURL, atomically: true, encoding: .utf8)
+            try html.write(to: outputURL, atomically: true, encoding: .utf8)
             addToSiteMap(relativePath, priority: priority)
         } catch {
             throw PublishingError.failedToCreateBuildFile(outputURL)

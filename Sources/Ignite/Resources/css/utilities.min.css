@@ -1,0 +1,22 @@
+
+/* Utility classes */
+
+.color-inherit {
+    color: inherit;
+}
+
+.border-color-inherit {
+    border-color: inherit;
+}
+
+.background-inherit {
+    background-color: inherit;
+}
+
+.font-inherit {
+    font: inherit;
+}
+
+.font-size-inherit {
+    font-size: inherit;
+}

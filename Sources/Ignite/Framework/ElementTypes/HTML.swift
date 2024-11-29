@@ -261,7 +261,7 @@ public extension HTML {
     /// Adds a wrapper div with the specified class to the element's storage
     /// - Parameter className: The class to apply to the wrapper div
     /// - Returns: The original element
-    func addContainerClass(_ className: String) -> Self {
+    func containerClass(_ className: String) -> Self {
         var attributes = attributes
         attributes.containerAttributes.append(.init(classes: [className]))
         AttributeStore.default.merge(attributes, intoHTML: id)
@@ -271,7 +271,7 @@ public extension HTML {
     /// Adds a wrapper div with the specified style to the element's storage
     /// - Parameter className: The class to apply to the wrapper div
     /// - Returns: The original element
-    func addContainerStyle(_ styles: AttributeValue...) -> Self {
+    func containerStyle(_ styles: AttributeValue...) -> Self {
         var attributes = attributes
         let styles = styles.map { $0 }
         attributes.containerAttributes.append(.init(styles: OrderedSet(styles)))

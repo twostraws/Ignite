@@ -97,11 +97,17 @@ public struct HTMLHead: RootHTML {
             MetaLink.remoteIconCSS
         }
 
-        MetaLink.themeCSS
+        if StyleManager.default.hasStyles {
+            MetaLink.customCSS
+        }
+
+        MetaLink.utilityCSS
 
         if AnimationManager.default.hasAnimations {
             MetaLink.animationCSS
         }
+
+        MetaLink.themeCSS
 
         MetaLink(href: page.url, rel: "canonical")
 

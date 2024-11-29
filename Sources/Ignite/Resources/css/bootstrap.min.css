@@ -20,3 +20,10 @@
 div.alert p:last-child {
   margin-bottom: 0;
 }
+
+/* Removing text syling from a link. */
+.link-plain {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}

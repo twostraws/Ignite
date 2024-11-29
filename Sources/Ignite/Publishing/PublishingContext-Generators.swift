@@ -106,6 +106,13 @@ extension PublishingContext {
         }
     }
 
+    /// Generates custom styles for the site.
+    func generateStyles() async throws {
+        guard StyleManager.default.hasStyles else { return }
+        let stylesPath = buildDirectory.appending(path: "css/custom.min.css")
+        try await StyleManager.default.write(to: stylesPath)
+    }
+
     /// Generates animations for the site.
     func generateAnimations() {
         guard AnimationManager.default.hasAnimations else { return }
