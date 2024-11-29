@@ -11,7 +11,7 @@ import Foundation
 @MainActor
 public protocol Site: Sendable {
     /// The type of your homepage. Required.
-    associatedtype HomePageType: StaticPage
+    associatedtype HomePageType: StaticLayout
 
     /// The type used to generate your tag pages. A default is provided that means
     /// no tags pages are generated.
@@ -88,25 +88,22 @@ public protocol Site: Sendable {
     var layout: LayoutType { get }
 
     /// The theme used when the system is in light mode.
-    var lightTheme: any Theme { get }
+    var lightTheme: (any Theme)? { get }
 
     /// The theme used when the system is in dark mode.
-    var darkTheme: any Theme { get }
+    var darkTheme: (any Theme)? { get }
 
     /// Additional themes that can be selected by users beyond light and dark mode.
     var alternateThemes: [any Theme] { get }
 
-    /// JavaScript code for analytics tracking, injected into the page head.
-    var analyticsSnippet: Script? { get }
-
     /// The path to the favicon
     var favicon: URL? { get }
 
-    /// An array of all the static pages you want to include in your site.
-    @StaticPageBuilder var pages: [any StaticPage] { get }
+    /// An array of all the static layouts you want to include in your site.
+    @StaticLayoutBuilder var staticLayouts: [any StaticLayout] { get }
 
     /// An array of all the content layouts you want to include in your site.
-    @ContentPageBuilder var contentPages: [any ContentPage] { get }
+    @ContentLayoutBuilder var contentLayouts: [any ContentLayout] { get }
 
     /// Publishes this entire site from user space.
     func publish(from file: StaticString, buildDirectoryPath: String) async throws
@@ -125,14 +122,14 @@ public extension Site {
     /// English as default language.
     var language: Language { .english }
 
-    /// No additional themes by default.
-    var alternateThemes: [any Theme] { [] }
-
     /// Uses the default light theme based on Bootstrap.
-    var lightTheme: any Theme { DefaultLightTheme() }
+    var lightTheme: (any Theme)? { DefaultLightTheme() }
 
     /// Uses the default dark theme based on Bootstrap.
-    var darkTheme: any Theme { DefaultDarkTheme() }
+    var darkTheme: (any Theme)? { DefaultDarkTheme() }
+
+    /// No additional themes by default.
+    var alternateThemes: [any Theme] { [] }
 
     /// Enable local Bootstrap files by default
     var useDefaultBootstrapURLs: BootstrapOptions { .localBootstrap }
@@ -161,17 +158,14 @@ public extension Site {
     /// A default robots.txt configuration that allows all robots to index all pages.
     var robotsConfiguration: DefaultRobotsConfiguration { DefaultRobotsConfiguration() }
 
-    /// No static pages by default.
-    var pages: [any StaticPage] { [] }
+    /// No static layouts by default.
+    var staticLayouts: [any StaticLayout] { [] }
 
-    /// No content pages by default.
-    var contentPages: [any ContentPage] { [] }
+    /// No content layouts by default.
+    var contentLayouts: [any ContentLayout] { [] }
 
     /// An empty tag page by default, which triggers no tag pages being made.
     var tagPage: EmptyTagPage { EmptyTagPage() }
-
-    /// No analytics script by default
-    var analyticsSnippet: Script? { nil }
 
     /// The default favicon being nil
     var favicon: URL? { nil }

@@ -12,7 +12,7 @@ extension PublishingContext {
     func generateContent() async throws {
         try render(site.homePage, isHomePage: true)
 
-        for page in site.pages {
+        for page in site.staticLayouts {
             try render(page)
         }
 
@@ -41,11 +41,9 @@ extension PublishingContext {
 
             let outputDirectory = buildDirectory.appending(path: path)
 
-            let body = render(page: nil) {
-                TagContext.withCurrentTag(tag, content: content(tagged: tag)) {
-                    let tagPageBody = site.tagPage.body
-                    return Group(tagPageBody)
-                }
+            let body = TagContext.withCurrentTag(tag, content: content(tagged: tag)) {
+                let tagPageBody = site.tagPage.body
+                return Group(tagPageBody)
             }
 
             let page = Page(
@@ -55,9 +53,7 @@ extension PublishingContext {
                 body: body
             )
 
-            let outputString = render(page: page) {
-                render(page, using: site.tagPage.theme)
-            }
+            let outputString = render(page)
 
             try write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }
@@ -127,7 +123,8 @@ extension PublishingContext {
         ] + theme.alternateFonts
 
         let fontTags = fonts.flatMap { font -> [String] in
-            guard let name = font.name,
+            guard let font,
+                  let name = font.name,
                   !font.sources.isEmpty,
                   !name.contains(Font.systemFonts),
                   !name.contains(Font.monospaceFonts)
@@ -185,36 +182,49 @@ extension PublishingContext {
             }
         }
 
+        let supportsLightTheme = site.lightTheme != nil
+        let supportsDarkTheme = site.darkTheme != nil
+
+        guard supportsLightTheme || supportsDarkTheme else {
+            fatalError("Ignite requires that you provide a light or dark theme.")
+        }
+
+        cssContent += """
+        :root {
+            --supports-light-theme: \(supportsLightTheme);
+            --supports-dark-theme: \(supportsDarkTheme);
+            --bs-root-font-size: 16px;
+            font-size: var(--bs-root-font-size);
+        }
+
+        """
+
+        // Container defaults
         cssContent += """
         .container {
             @media (min-width: 576px) {
-                max-width: var(--theme-container-sm, 540px);  /* Added fallback */
+                max-width: var(\(BootstrapVariable.containerSm.rawValue), 540px);
             }
             @media (min-width: 768px) {
-                max-width: var(--theme-container-md, 720px);  /* Added fallback */
+                max-width: var(\(BootstrapVariable.containerMd.rawValue), 720px);
             }
             @media (min-width: 992px) {
-                max-width: var(--theme-container-lg, 960px);  /* Added fallback */
+                max-width: var(\(BootstrapVariable.containerLg.rawValue), 960px);
             }
             @media (min-width: 1200px) {
-                max-width: var(--theme-container-xl, 1140px); /* Added fallback */
+                max-width: var(\(BootstrapVariable.containerXl.rawValue), 1140px);
             }
             @media (min-width: 1400px) {
-                max-width: var(--theme-container-xxl, 1320px); /* Added fallback */
+                max-width: var(\(BootstrapVariable.containerXxl.rawValue), 1320px);
             }
         }
-        
+
         """
 
         // Generate alternate theme overrides
         for theme in themes {
             cssContent += """
             [data-bs-theme="\(theme.id.kebabCased())"] {
-                --theme-container-sm: \(theme.smallMaxWidth);
-                --theme-container-md: \(theme.mediumMaxWidth);
-                --theme-container-lg: \(theme.largeMaxWidth);
-                --theme-container-xl: \(theme.xLargeMaxWidth);
-                --theme-container-xxl: \(theme.xxLargeMaxWidth);
                 \(generateThemeVariables(theme))
             }
             
@@ -226,65 +236,89 @@ extension PublishingContext {
     }
 
     private func generateThemeVariables(_ theme: Theme) -> String {
-        """
-        /* Bootstrap theme colors */
-        --bs-primary: \(theme.accent);
-        --bs-secondary: \(theme.secondaryAccent);
-        --bs-success: \(theme.success);
-        --bs-info: \(theme.info);
-        --bs-warning: \(theme.warning);
-        --bs-danger: \(theme.danger);
-        --bs-light: \(theme.light);
-        --bs-dark: \(theme.dark);
+        var cssProperties: [String] = []
 
-        /* Body settings */
-        --bs-body-color: \(theme.primary);
-        --bs-body-bg: \(theme.primaryBackground);
+        // Helper function to add property if it exists
+        func addProperty(_ variable: BootstrapVariable, _ value: Any?) {
+            if let value = value {
+                cssProperties.append("\(variable.rawValue): \(value)")
+            }
+        }
 
-        /* Emphasis colors */
-        --bs-emphasis-color: \(theme.emphasis);
-        --bs-secondary-color: \(theme.secondary);
-        --bs-tertiary-color: \(theme.tertiary);
+        // Brand colors
+        addProperty(.primary, theme.accent)
+        addProperty(.secondary, theme.secondaryAccent)
+        addProperty(.success, theme.success)
+        addProperty(.info, theme.info)
+        addProperty(.warning, theme.warning)
+        addProperty(.danger, theme.danger)
+        addProperty(.light, theme.light)
+        addProperty(.dark, theme.dark)
 
-        /* Background colors */
-        --bs-secondary-bg: \(theme.secondaryBackground);
-        --bs-tertiary-bg: \(theme.tertiaryBackground);
+        // Body settings
+        addProperty(.bodyColor, theme.primary)
+        addProperty(.bodyBackground, theme.background)
 
-        /* Link colors */
-        --bs-link-color: \(theme.link);
-        --bs-link-hover-color: \(theme.linkHover);
+        // Emphasis colors
+        addProperty(.emphasisColor, theme.emphasis)
+        addProperty(.secondaryColor, theme.secondary)
+        addProperty(.tertiaryColor, theme.tertiary)
 
-        /* Border colors */
-        --bs-border-color: \(theme.border);
-        
-        /* Font families */
-        --bs-font-sans-serif: \(theme.sansSerifFont.name ?? Font.systemFonts);
-        --bs-font-monospace: \(theme.monospaceFont.name ?? Font.monospaceFonts);
-        --bs-body-font-family: \(theme.font.name ?? Font.systemFonts);
-        --bs-font-code: \(theme.codeFont.name ?? Font.monospaceFonts);
+        // Background colors
+        addProperty(.secondaryBackground, theme.secondaryBackground)
+        addProperty(.tertiaryBackground, theme.tertiaryBackground)
 
-        /* Font sizes */
-        --bs-root-font-size: \(theme.rootFontSize ?? "null");
-        --bs-body-font-size: \(theme.bodySize);
-        --bs-body-font-size-sm: \(theme.smallBodySize);
-        --bs-body-font-size-lg: \(theme.largeBodySize);
+        // Link colors
+        addProperty(.linkColor, theme.link)
+        addProperty(.linkHoverColor, theme.linkHover)
 
-        /* Font weights */
-        --bs-font-weight-lighter: \(theme.lighterFontWeight);
-        --bs-font-weight-light: \(theme.lightFontWeight);
-        --bs-font-weight-normal: \(theme.regularFontWeight);
-        --bs-font-weight-bold: \(theme.boldFontWeight);
-        --bs-font-weight-bolder: \(theme.bolderFontWeight);
+        // Border colors
+        addProperty(.borderColor, theme.border)
 
-        /* Line heights */
-        --bs-body-line-height: \(theme.regularLineHeight);
-        --bs-line-height-sm: \(theme.condensedLineHeight);
-        --bs-line-height-lg: \(theme.expandedLineHeight);
+        // Font families
+        addProperty(.sansSerifFont, theme.sansSerifFont?.name ?? Font.systemFonts)
+        addProperty(.monospaceFont, theme.monospaceFont?.name ?? Font.monospaceFonts)
+        addProperty(.bodyFont, theme.font?.name ?? Font.systemFonts)
+        addProperty(.codeFont, theme.codeFont?.name ?? Font.monospaceFonts)
 
-        /* Heading properties */
-        --bs-headings-margin-bottom: \(theme.headingBottomMargin);
-        --bs-headings-font-weight: \(theme.headingFontWeight);
-        --bs-headings-line-height: \(theme.headingLineHeight);
-        """
+        // Font sizes
+        addProperty(.rootFontSize, theme.rootFontSize)
+        addProperty(.bodyFontSize, theme.bodySize)
+        addProperty(.smallBodyFontSize, theme.smallBodySize)
+        addProperty(.largeBodyFontSize, theme.largeBodySize)
+
+        // Heading sizes
+        addProperty(.h1FontSize, theme.xxLargeHeadingSize)
+        addProperty(.h2FontSize, theme.xLargeHeadingSize)
+        addProperty(.h3FontSize, theme.largeHeadingSize)
+        addProperty(.h4FontSize, theme.mediumHeadingSize)
+        addProperty(.h5FontSize, theme.smallHeadingSize)
+        addProperty(.h6FontSize, theme.xSmallHeadingSize)
+
+        // Font weights
+        addProperty(.lighterFontWeight, theme.lighterFontWeight)
+        addProperty(.lightFontWeight, theme.lightFontWeight)
+        addProperty(.normalFontWeight, theme.regularFontWeight)
+        addProperty(.boldFontWeight, theme.boldFontWeight)
+        addProperty(.bolderFontWeight, theme.bolderFontWeight)
+
+        // Line heights
+        addProperty(.bodyLineHeight, theme.regularLineHeight)
+        addProperty(.condensedLineHeight, theme.condensedLineHeight)
+        addProperty(.expandedLineHeight, theme.expandedLineHeight)
+
+        // Heading properties
+        addProperty(.headingsMarginBottom, theme.headingBottomMargin)
+        addProperty(.headingsFontWeight, theme.headingFontWeight)
+        addProperty(.headingsLineHeight, theme.headingLineHeight)
+
+        // Container sizes
+        addProperty(.containerSm, theme.smallMaxWidth)
+        addProperty(.containerMd, theme.mediumMaxWidth)
+        addProperty(.containerLg, theme.largeMaxWidth)
+        addProperty(.containerXl, theme.xLargeMaxWidth)
+        addProperty(.containerXxl, theme.xxLargeMaxWidth)
+
+        return cssProperties.joined(separator: ";\n")
     }
 }

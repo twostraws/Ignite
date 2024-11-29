@@ -89,18 +89,12 @@ public struct HTMLHead: RootHTML {
             MetaLink.syntaxHighlightingCSS
         }
 
-        if !configuration.alternateThemes.isEmpty {
-            Script(file: "/js/theme-switcher.js")
-        }
+        Script(file: "/js/ignite-core.js")
 
         if configuration.builtInIconsEnabled == .localBootstrap {
             MetaLink.iconCSS
         } else if configuration.builtInIconsEnabled == .remoteBootstrap {
             MetaLink.remoteIconCSS
-        }
-
-        if let analyticsSnippet = configuration.analyticsSnippet {
-            analyticsSnippet
         }
 
         MetaLink.themeCSS

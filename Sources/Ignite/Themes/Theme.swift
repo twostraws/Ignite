@@ -26,73 +26,73 @@ public protocol Theme: Sendable {
     var id: String { get set }
 
     /// Primary brand color
-    var accent: Color { get }
+    var accent: Color? { get }
 
     /// Secondary brand color
-    var secondaryAccent: Color { get }
+    var secondaryAccent: Color? { get }
 
     /// Success state color
-    var success: Color { get }
+    var success: Color? { get }
 
     /// Information state color
-    var info: Color { get }
+    var info: Color? { get }
 
     /// Warning state color
-    var warning: Color { get }
+    var warning: Color? { get }
 
     /// Danger/error state color
-    var danger: Color { get }
+    var danger: Color? { get }
 
     /// Light theme color
-    var light: Color { get }
+    var light: Color? { get }
 
     /// Dark theme color
-    var dark: Color { get }
+    var dark: Color? { get }
 
     /// Default text color for body content
-    var primary: Color { get }
+    var primary: Color? { get }
 
     /// Color for emphasized content
-    var emphasis: Color { get }
+    var emphasis: Color? { get }
 
     /// Color for secondary content
-    var secondary: Color { get }
+    var secondary: Color? { get }
 
     /// Color for tertiary content
-    var tertiary: Color { get }
+    var tertiary: Color? { get }
 
     /// Default background color
-    var primaryBackground: Color { get }
+    var background: Color? { get }
 
     /// Secondary background color
-    var secondaryBackground: Color { get }
+    var secondaryBackground: Color? { get }
 
     /// Tertiary background color
-    var tertiaryBackground: Color { get }
+    var tertiaryBackground: Color? { get }
 
     /// Default link color
-    var link: Color { get }
+    var link: Color? { get }
 
     /// Link color on hover
-    var linkHover: Color { get }
+    var linkHover: Color? { get }
 
     /// Default border color
-    var border: Color { get }
+    var border: Color? { get }
 
     /// Optional custom color for headings
     var heading: Color? { get }
 
     /// Sans-serif font family
-    var sansSerifFont: Font { get }
+    var sansSerifFont: Font? { get }
 
     /// Monospace font family
-    var monospaceFont: Font { get }
+    var monospaceFont: Font? { get }
 
     /// Base font family for body text
-    var font: Font { get }
+    var font: Font? { get }
 
     /// Font family for code blocks
-    var codeFont: Font { get }
+    var codeFont: Font? { get }
 
     /// Alternate fonts
     var alternateFonts: [Font] { get }
@@ -101,98 +101,98 @@ public protocol Theme: Sendable {
     var rootFontSize: (any LengthUnit)? { get }
 
     /// Base font size
-    var bodySize: any LengthUnit { get }
+    var bodySize: (any LengthUnit)? { get }
 
     /// Small font size
-    var smallBodySize: any LengthUnit { get }
+    var smallBodySize: (any LengthUnit)? { get }
 
     /// Large font size
-    var largeBodySize: any LengthUnit { get }
+    var largeBodySize: (any LengthUnit)? { get }
 
     /// Extra light font weight
-    var lighterFontWeight: any LengthUnit { get }
+    var lighterFontWeight: (any LengthUnit)? { get }
 
     /// Light font weight
-    var lightFontWeight: any LengthUnit { get }
+    var lightFontWeight: (any LengthUnit)? { get }
 
     /// Normal font weight
-    var regularFontWeight: any LengthUnit { get }
+    var regularFontWeight: (any LengthUnit)? { get }
 
     /// Bold font weight
-    var boldFontWeight: any LengthUnit { get }
+    var boldFontWeight: (any LengthUnit)? { get }
 
     /// Extra bold font weight
-    var bolderFontWeight: any LengthUnit { get }
+    var bolderFontWeight: (any LengthUnit)? { get }
 
     /// Base line height
-    var regularLineHeight: any LengthUnit { get }
+    var regularLineHeight: (any LengthUnit)? { get }
 
     /// Condensed line height
-    var condensedLineHeight: any LengthUnit { get }
+    var condensedLineHeight: (any LengthUnit)? { get }
 
     /// Expanded line height
-    var expandedLineHeight: any LengthUnit { get }
+    var expandedLineHeight: (any LengthUnit)? { get }
 
     /// Font size for h1 elements
-    var xxLargeHeadingSize: any LengthUnit { get }
+    var xxLargeHeadingSize: (any LengthUnit)? { get }
 
     /// Font size for h2 elements
-    var xLargeHeadingSize: any LengthUnit { get }
+    var xLargeHeadingSize: (any LengthUnit)? { get }
 
     /// Font size for h3 elements
-    var largeHeadingSize: any LengthUnit { get }
+    var largeHeadingSize: (any LengthUnit)? { get }
 
     /// Font size for h4 elements
-    var mediumHeadingSize: any LengthUnit { get }
+    var mediumHeadingSize: (any LengthUnit)? { get }
 
     /// Font size for h5 elements
-    var smallHeadingSize: any LengthUnit { get }
+    var smallHeadingSize: (any LengthUnit)? { get }
 
     /// Font size for h6 elements
-    var xSmallHeadingSize: any LengthUnit { get }
+    var xSmallHeadingSize: (any LengthUnit)? { get }
 
     /// Bottom margin for headings
-    var headingBottomMargin: any LengthUnit { get }
+    var headingBottomMargin: (any LengthUnit)? { get }
 
     /// Optional custom font family for headings
     var headingFont: Font? { get }
 
     /// Font weight for headings
-    var headingFontWeight: any LengthUnit { get }
+    var headingFontWeight: (any LengthUnit)? { get }
 
     /// Line height for headings
-    var headingLineHeight: any LengthUnit { get }
+    var headingLineHeight: (any LengthUnit)? { get }
 
     /// Extra small breakpoint
-    var xSmallBreakpoint: any LengthUnit { get }
+    var xSmallBreakpoint: (any LengthUnit)? { get }
 
     /// Small breakpoint
-    var smallBreakpoint: any LengthUnit { get }
+    var smallBreakpoint: (any LengthUnit)? { get }
 
     /// Medium breakpoint
-    var mediumBreakpoint: any LengthUnit { get }
+    var mediumBreakpoint: (any LengthUnit)? { get }
 
     /// Large breakpoint
-    var largeBreakpoint: any LengthUnit { get }
+    var largeBreakpoint: (any LengthUnit)? { get }
 
     /// Extra large breakpoint
-    var xLargeBreakpoint: any LengthUnit { get }
+    var xLargeBreakpoint: (any LengthUnit)? { get }
 
     /// Extra extra large breakpoint
-    var xxLargeBreakpoint: any LengthUnit { get }
+    var xxLargeBreakpoint: (any LengthUnit)? { get }
 
     /// Maximum width for small containers
-    var smallMaxWidth: any LengthUnit { get }
+    var smallMaxWidth: (any LengthUnit)? { get }
 
     /// Maximum width for medium containers
-    var mediumMaxWidth: any LengthUnit { get }
+    var mediumMaxWidth: (any LengthUnit)? { get }
 
     /// Maximum width for large containers
-    var largeMaxWidth: any LengthUnit { get }
+    var largeMaxWidth: (any LengthUnit)? { get }
 
     /// Maximum width for extra large containers
-    var xLargeMaxWidth: any LengthUnit { get }
+    var xLargeMaxWidth: (any LengthUnit)? { get }
 
     /// Maximum width for extra extra large containers
-    var xxLargeMaxWidth: any LengthUnit { get }
+    var xxLargeMaxWidth: (any LengthUnit)? { get }
 }

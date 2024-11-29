@@ -36,9 +36,6 @@ public struct SiteConfiguration: Sendable {
     /// Array of syntax highlighters enabled for the site
     public let syntaxHighlighters: [SyntaxHighlighter]
 
-    /// JavaScript code for analytics tracking, injected into the page head.
-    public let analyticsSnippet: Script?
-
     /// The path to the favicon
     public let favicon: URL?
 
@@ -56,8 +53,7 @@ public struct SiteConfiguration: Sendable {
         builtInIconsEnabled: BootstrapOptions = .localBootstrap,
         syntaxHighlighters: [SyntaxHighlighter] = [],
         favicon: URL? = nil,
-        alternateThemes: [any Theme] = [],
-        analyticsSnippet: Script? = nil
+        alternateThemes: [any Theme] = []
     ) {
         self.author = author
         self.name = name
@@ -70,7 +66,6 @@ public struct SiteConfiguration: Sendable {
         self.syntaxHighlighters = syntaxHighlighters
         self.favicon = favicon
         self.alternateThemes = alternateThemes
-        self.analyticsSnippet = analyticsSnippet
     }
 
     init() {
@@ -85,6 +80,5 @@ public struct SiteConfiguration: Sendable {
         self.syntaxHighlighters = []
         self.favicon = nil
         self.alternateThemes = []
-        self.analyticsSnippet = nil
     }
 }

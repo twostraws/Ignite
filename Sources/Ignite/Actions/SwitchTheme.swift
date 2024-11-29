@@ -19,6 +19,6 @@ public struct SwitchTheme: Action {
     /// Compiles the action into JavaScript code that calls the switchTheme function
     /// - Returns: JavaScript code to execute the theme switch
     public func compile() -> String {
-        "switchTheme('\(themeID)');"
+        "igniteSwitchTheme('\(themeID)');"
     }
 }

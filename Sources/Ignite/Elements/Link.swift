@@ -224,7 +224,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     ///  - target: The new target to apply.
     ///  - content: The user-facing content to show inside the `Link`.
     /// - Returns: A new `Link` instance with the updated target.
-    public init(target: any StaticPage, @HTMLBuilder content: @escaping () -> some HTML) {
+    public init(target: any StaticLayout, @HTMLBuilder content: @escaping () -> some HTML) {
         self.content = content()
         self.url = target.path
         self.role = .none
@@ -360,7 +360,7 @@ public extension Link {
     /// - Parameters:
     ///   - content: The user-facing content to show inside the `Link`.
     ///   - target: The `Page` you want to link to.
-    init(_ content: some InlineHTML, target: any StaticPage) {
+    init(_ content: some InlineHTML, target: any StaticLayout) {
         self.content = content
         self.url = target.path
     }

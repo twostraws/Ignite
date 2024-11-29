@@ -21,7 +21,8 @@ import Foundation
 ///     }
 /// }
 /// ```
-public protocol TagPage: ThemePage {
+@MainActor
+public protocol TagPage: EnvironmentReader {
     /// The type of HTML content this page will generate
     associatedtype Body: HTML
 

@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// A theme that does nothing at all. This is used as the default theme, so we can
-/// detect that no theme has been applied to a page.
+/// A layout that does nothing at all. This is used as the default layout, so we can
+/// detect that no layout has been applied to a page.
 public struct MissingLayout: Layout {
     public var body: HTMLDocument {
         HTMLDocument {}

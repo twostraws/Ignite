@@ -7,21 +7,21 @@
 
 import Foundation
 
-/// One static page in your site, where the content is entirely standalone rather
+/// One static layout in your site, where the content is entirely standalone rather
 /// than being produced in conjunction with an external Markdown file.
 @MainActor
-public protocol StaticPage: ThemePage {
-    /// All pages have a default path generated for them by Ignite, but you can
+public protocol StaticLayout: EnvironmentReader {
+    /// All layouts have a default path generated for them by Ignite, but you can
     /// override that here if you wish.
     var path: String { get }
 
-    /// The title for this page.
+    /// The title for this layout.
     var title: String { get }
 
-    /// The image for sharing the page
+    /// The image for sharing the layout
     var image: URL? { get }
 
-    /// A plain-text description for this page. Defaults to an empty string.
+    /// A plain-text description for this layout. Defaults to an empty string.
     var description: String { get }
 
     /// The type of HTML content this element contains.
@@ -31,11 +31,11 @@ public protocol StaticPage: ThemePage {
     @HTMLBuilder var body: Body { get }
 }
 
-public extension StaticPage {
-    /// A default description for this page, which is just an empty string.
+public extension StaticLayout {
+    /// A default description for this layout, which is just an empty string.
     var description: String { "" }
 
-    /// Attempts to auto-generate a path for this page using its name then title.
+    /// Attempts to auto-generate a path for this layout using its name then title.
     var path: String {
         // Attempt to use our Swift filename.
         if let suggestedName = String(describing: Self.self).convertedToSlug() {

@@ -7,12 +7,12 @@
 
 import Foundation
 
-/// Themes allow you to have complete control over the HTML used to generate
+/// Layouts allow you to have complete control over the HTML used to generate
 /// your pages.
 ///
 /// Example:
 /// ```swift
-/// struct BlogLayout: Theme {
+/// struct BlogLayout: Layout {
 ///     var body: some HTML {
 ///         HTMLDocument {
 ///             Header("My Blog")

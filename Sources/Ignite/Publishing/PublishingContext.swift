@@ -168,11 +168,9 @@ public final class PublishingContext {
             if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/animations.min.css").path()) {
                 try copy(resource: "css/animations.min.css")
             }
-            try copy(resource: "js/animations.js")
         }
 
-        try copy(resource: "js/email-protection.js")
-        try copy(resource: "js/theme-switcher.js")
+        try copy(resource: "js/ignite-core.js")
 
         if site.useDefaultBootstrapURLs == .localBootstrap {
             try copy(resource: "css/bootstrap.min.css")
@@ -223,19 +221,11 @@ public final class PublishingContext {
 
     /// Renders one page using the correct theme, which is taken either from the
     /// provided them or from the main site theme.
-    func render(_ page: Page, using theme: any Layout) -> String {
-        var theme = theme
-
-        if theme is MissingLayout {
-            theme = site.layout
-        }
-
-        return render(page: page) {
-            PageContext.withCurrentPage(page) {
-                let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-                return EnvironmentStore.update(values) {
-                    theme.body.render(context: self)
-                }
+    func render(_ page: Page) -> String {
+        PageContext.withCurrentPage(page) {
+            let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+            return EnvironmentStore.update(values) {
+                site.layout.body.render(context: self)
             }
         }
     }
@@ -245,7 +235,7 @@ public final class PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render<T: StaticPage>(_ staticPage: T, isHomePage: Bool = false) throws {
+    func render<T: StaticLayout>(_ staticPage: T, isHomePage: Bool = false) throws {
         let path = isHomePage ? "" : staticPage.path
 
         let page = render {
@@ -263,9 +253,7 @@ public final class PublishingContext {
             return page
         }
 
-        let outputString = render(page: page) {
-            render(page, using: staticPage.theme)
-        }
+        let outputString = render(page)
 
         let outputDirectory = buildDirectory.appending(path: path)
 
@@ -275,9 +263,8 @@ public final class PublishingContext {
     /// Renders one piece of Markdown content.
     /// - Parameter content: The content to render.
     func render(_ content: Content) throws {
-        let layout = try layout(for: content)
         let body = render(content: content) {
-            Group(context: self, items: [AnyHTML(layout.body)])
+            Group(context: self, items: [content.body])
         }
 
         currentRenderingPath = content.path
@@ -290,10 +277,7 @@ public final class PublishingContext {
             body: body
         )
 
-        let outputString = render(page: page, content: content) {
-            render(page, using: layout.theme)
-        }
-
+        let outputString = render(page)
         let outputDirectory = buildDirectory.appending(path: content.path)
         try write(outputString, to: outputDirectory, priority: 0.8)
     }
@@ -376,29 +360,6 @@ public final class PublishingContext {
             try result.write(to: destinationURL, atomically: true, encoding: .utf8)
         } catch {
             throw PublishingError.failedToWriteSyntaxHighlighters
-        }
-    }
-
-    /// Locates the best layout to use for a piece of Markdown content. Layouts
-    /// are specified using YAML front matter, but if none are found then the first
-    /// layout in your site's `layouts` property is used.
-    /// - Parameter content: The content that is being rendered.
-    /// - Returns: The correct `ContentPage` instance to use for this content.
-    func layout(for content: Content) throws -> any ContentPage {
-        if let contentLayout = content.layout {
-            for layout in site.contentPages {
-                let layoutName = String(describing: type(of: layout))
-
-                if layoutName == contentLayout {
-                    return layout
-                }
-            }
-
-            throw PublishingError.missingNamedLayout(contentLayout)
-        } else if let defaultLayout = site.contentPages.first {
-            return defaultLayout
-        } else {
-            throw PublishingError.missingDefaultLayout
         }
     }
 }
