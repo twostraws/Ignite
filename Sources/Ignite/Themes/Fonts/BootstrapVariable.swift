@@ -10,7 +10,7 @@
 /// Bootstrap variables control various aspects of a theme including colors, typography,
 /// and spacing. Each case represents a specific CSS variable that
 /// Bootstrap uses for consistent styling across components.
-public enum BootstrapVariable: String {
+enum BootstrapVariable: String {
     // MARK: - Brand Colors
 
     /// The primary brand color
