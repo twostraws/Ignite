@@ -238,32 +238,25 @@ public final class PublishingContext {
     func render<T: StaticLayout>(_ staticPage: T, isHomePage: Bool = false) throws {
         let path = isHomePage ? "" : staticPage.path
 
-        let page = render {
-            let body = staticPage.body
+        let page = Page(
+            title: staticPage.title,
+            description: staticPage.description,
+            url: site.url.appending(path: path),
+            image: staticPage.image,
+            body: staticPage.body
+        )
 
-            let page = Page(
-                title: staticPage.title,
-                description: staticPage.description,
-                url: site.url.appending(path: path),
-                image: staticPage.image,
-                body: body
-            )
-
-            currentRenderingPath = isHomePage ? "/" : staticPage.path
-            return page
-        }
+        currentRenderingPath = isHomePage ? "/" : staticPage.path
 
         let outputString = render(page)
-
         let outputDirectory = buildDirectory.appending(path: path)
-
         try write(outputString, to: outputDirectory, priority: isHomePage ? 1 : 0.9)
     }
 
     /// Renders one piece of Markdown content.
     /// - Parameter content: The content to render.
     func render(_ content: Content) throws {
-        let body = render(content: content) {
+        let body = ContentContext.withCurrentContent(content) {
             Group(context: self, items: [content.body])
         }
 
@@ -360,36 +353,6 @@ public final class PublishingContext {
             try result.write(to: destinationURL, atomically: true, encoding: .utf8)
         } catch {
             throw PublishingError.failedToWriteSyntaxHighlighters
-        }
-    }
-}
-
-extension PublishingContext {
-    /// Executes an operation with the current site values and optional content context.
-    ///
-    /// This method ensures that operations have access to the correct environment, page, and content data
-    /// while rendering HTML. It temporarily sets up the required context and cleans up afterward:
-    /// /// ```swift
-    /// context.render(page: currentPage, content: article) {
-    ///     // Access environment, page, and content safely here
-    ///     return someHTML
-    /// }
-    /// ```
-    /// - Parameters:
-    ///   - page: Optional page being rendered
-    ///   - content: Optional markdown content being rendered
-    ///   - operation: The work to perform with the site values
-    /// - Returns: The result of the operation
-    func render<T>(page: Page? = nil, content: Content? = nil, withSiteValues operation: () -> T) -> T {
-        let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        return EnvironmentStore.update(values) {
-            if let content {
-                return ContentContext.withCurrentContent(content) {
-                    operation()
-                }
-            } else {
-                return operation()
-            }
         }
     }
 }
