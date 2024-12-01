@@ -38,10 +38,10 @@ public struct List: BlockHTML {
     public var columnWidth = ColumnWidth.automatic
 
     /// The current style for this list. Defaults to `.plain`.
-    var listStyle: ListStyle = .plain
+    private var listStyle: ListStyle = .plain
 
     /// The current style for the list item markers. Defaults to `.unordered`.
-    var markerStyle = ListMarkerStyle.unordered(.automatic)
+    private var markerStyle = ListMarkerStyle.unordered(.automatic)
 
     /// The items to show in this list. This may contain any page elements,
     /// but if you need specific styling you might want to use ListItem objects.
