@@ -13,6 +13,12 @@ public struct Title: HeadElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
+
     /// A plain-text string for the page title.
     var text: String
 

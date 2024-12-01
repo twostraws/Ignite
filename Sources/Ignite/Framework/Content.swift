@@ -199,7 +199,7 @@ public struct Content: Sendable {
     /// content, and also link to the tag pages.
     public func tagLinks(in context: PublishingContext) -> [Link] {
         /// If this site has not defined a tag page, send back no links.
-        if context.site.tagPage is EmptyTagPage {
+        if context.site.tagPage is EmptyTagLayout {
             context.addWarning("tagLinks(in:) returned an empty array because your site has no tagPage defined.")
             return []
         }
@@ -243,3 +243,5 @@ extension Content {
         self.hasAutomaticDate = false
     }
 }
+
+

@@ -21,6 +21,9 @@ public final class PublishingContext {
     /// The directory containing their custom assets.
     var assetsDirectory: URL
 
+    /// The directory containing their custom fonts.
+    var fontsDirectory: URL
+
     /// The directory containing their Markdown files.
     var contentDirectory: URL
 
@@ -61,6 +64,7 @@ public final class PublishingContext {
         buildDirectory = sourceBuildDirectories.build.appending(path: buildDirectoryPath)
 
         assetsDirectory = sourceDirectory.appending(path: "Assets")
+        fontsDirectory = sourceDirectory.appending(path: "Fonts")
         contentDirectory = sourceDirectory.appending(path: "Content")
         includesDirectory = sourceDirectory.appending(path: "Includes")
 
@@ -71,21 +75,9 @@ public final class PublishingContext {
     /// - Parameter tag: The tag to filter by, or nil for all content.
     /// - Returns: An array of content matching the specified tag, or all content
     /// if no tag was specified.
-    public func content(tagged tag: String?) -> [Content] {
+    func content(tagged tag: String?) -> [Content] {
         if let tag {
             allContent.filter { $0.tags.contains(tag) }
-        } else {
-            allContent
-        }
-    }
-
-    /// Returns all content tagged with the specified type, or all content if the type is nil.
-    /// - Parameter type: The type to filter by, or nil for all content.
-    /// - Returns: An array of content matching the specified type, or all content
-    /// if no type was specified.
-    public func content(ofType type: String?) -> [Content] {
-        if let type {
-            allContent.filter { $0.type == type }
         } else {
             allContent
         }
@@ -137,6 +129,7 @@ public final class PublishingContext {
         try clearBuildFolder()
         try await generateContent()
         try copyResources()
+        try generateThemes(site.alternateThemes)
         generateAnimations()
         try await generateTagPages()
         try generateSiteMap()
@@ -164,29 +157,20 @@ public final class PublishingContext {
     /// and CSS, icons CSS and fonts if enabled, and syntax highlighters
     /// if enabled.
     func copyResources() throws {
-        do {
-            let assets = try FileManager.default.contentsOfDirectory(
-                at: assetsDirectory,
-                includingPropertiesForKeys: nil
-            )
+        try copyAssets()
+        try copyFonts()
 
-            for asset in assets {
-                try FileManager.default.copyItem(
-                    at: assetsDirectory.appending(path: asset.lastPathComponent),
-                    to: buildDirectory.appending(path: asset.lastPathComponent)
-                )
-            }
-        } catch {
-            print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
-            throw error
+        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/themes.min.css").path()) {
+            try copy(resource: "css/themes.min.css")
         }
 
         if AnimationManager.default.hasAnimations {
             if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/animations.min.css").path()) {
                 try copy(resource: "css/animations.min.css")
             }
-            try copy(resource: "js/animations.js")
         }
+
+        try copy(resource: "js/ignite-core.js")
 
         if site.useDefaultBootstrapURLs == .localBootstrap {
             try copy(resource: "css/bootstrap.min.css")
@@ -237,19 +221,11 @@ public final class PublishingContext {
 
     /// Renders one page using the correct theme, which is taken either from the
     /// provided them or from the main site theme.
-    func render(_ page: Page, using theme: any Theme) -> String {
-        var theme = theme
-
-        if theme is MissingTheme {
-            theme = site.theme
-        }
-
-        return render(page: page) {
-            PageContext.withCurrentPage(page) {
-                let values = EnvironmentValues(site: site, allContent: allContent)
-                return EnvironmentStore.update(values) {
-                    theme.body.render(context: self)
-                }
+    func render(_ page: Page) -> String {
+        PageContext.withCurrentPage(page) {
+            let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+            return EnvironmentStore.update(values) {
+                site.layout.body.render(context: self)
             }
         }
     }
@@ -259,39 +235,29 @@ public final class PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render<T: StaticPage>(_ staticPage: T, isHomePage: Bool = false) throws {
+    func render(_ staticPage: any StaticLayout, isHomePage: Bool = false) throws {
         let path = isHomePage ? "" : staticPage.path
 
-        let page = render {
-            let body = staticPage.body
+        let page = Page(
+            title: staticPage.title,
+            description: staticPage.description,
+            url: site.url.appending(path: path),
+            image: staticPage.image,
+            body: staticPage.body
+        )
 
-            let page = Page(
-                title: staticPage.title,
-                description: staticPage.description,
-                url: site.url.appending(path: path),
-                image: staticPage.image,
-                body: body
-            )
+        currentRenderingPath = isHomePage ? "/" : staticPage.path
 
-            currentRenderingPath = isHomePage ? "/" : staticPage.path
-            return page
-        }
-
-        let outputString = render(page: page) {
-            render(page, using: staticPage.theme)
-        }
-
+        let outputString = render(page)
         let outputDirectory = buildDirectory.appending(path: path)
-
         try write(outputString, to: outputDirectory, priority: isHomePage ? 1 : 0.9)
     }
 
     /// Renders one piece of Markdown content.
     /// - Parameter content: The content to render.
     func render(_ content: Content) throws {
-        let layout = try layout(for: content)
-        let body = render(content: content) {
-            Group(context: self, items: [AnyHTML(layout.body)])
+        let body = ContentContext.withCurrentContent(content) {
+            Group(context: self, items: [content.body])
         }
 
         currentRenderingPath = content.path
@@ -304,10 +270,7 @@ public final class PublishingContext {
             body: body
         )
 
-        let outputString = render(page: page, content: content) {
-            render(page, using: layout.theme)
-        }
-
+        let outputString = render(page)
         let outputDirectory = buildDirectory.appending(path: content.path)
         try write(outputString, to: outputDirectory, priority: 0.8)
     }
@@ -333,6 +296,52 @@ public final class PublishingContext {
         }
     }
 
+    /// Copies all files from the project's "Assets" directory to the build output's root directory.
+    private func copyAssets() throws {
+        do {
+            let assets = try FileManager.default.contentsOfDirectory(
+                at: assetsDirectory,
+                includingPropertiesForKeys: nil
+            )
+
+            for asset in assets {
+                try FileManager.default.copyItem(
+                    at: assetsDirectory.appending(path: asset.lastPathComponent),
+                    to: buildDirectory.appending(path: asset.lastPathComponent)
+                )
+            }
+        } catch {
+            print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
+            throw error
+        }
+    }
+
+    /// Copies custom font files from the project's "Fonts" directory to the build output's "fonts" directory.
+    private func copyFonts() throws {
+        do {
+            // Copy fonts if directory exists
+            if FileManager.default.fileExists(atPath: fontsDirectory.path()) {
+                let fonts = try FileManager.default.contentsOfDirectory(
+                    at: fontsDirectory,
+                    includingPropertiesForKeys: nil
+                )
+
+                let fontsDestDir = buildDirectory.appending(path: "fonts")
+                try FileManager.default.createDirectory(at: fontsDestDir, withIntermediateDirectories: true)
+
+                for font in fonts {
+                    let destination = fontsDestDir.appending(path: font.lastPathComponent)
+                    try FileManager.default.copyItem(at: font, to: destination)
+                }
+            }
+
+            // Rest of the existing copyResources code...
+        } catch {
+            print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
+            throw error
+        }
+    }
+
     /// Calculates the full list of syntax highlighters need by this site, including
     /// resolving dependencies.
     func copySyntaxHighlighters() throws {
@@ -344,59 +353,6 @@ public final class PublishingContext {
             try result.write(to: destinationURL, atomically: true, encoding: .utf8)
         } catch {
             throw PublishingError.failedToWriteSyntaxHighlighters
-        }
-    }
-
-    /// Locates the best layout to use for a piece of Markdown content. Layouts
-    /// are specified using YAML front matter, but if none are found then the first
-    /// layout in your site's `layouts` property is used.
-    /// - Parameter content: The content that is being rendered.
-    /// - Returns: The correct `ContentPage` instance to use for this content.
-    func layout(for content: Content) throws -> any ContentPage {
-        if let contentLayout = content.layout {
-            for layout in site.layouts {
-                let layoutName = String(describing: type(of: layout))
-
-                if layoutName == contentLayout {
-                    return layout
-                }
-            }
-
-            throw PublishingError.missingNamedLayout(contentLayout)
-        } else if let defaultLayout = site.layouts.first {
-            return defaultLayout
-        } else {
-            throw PublishingError.missingDefaultLayout
-        }
-    }
-}
-
-extension PublishingContext {
-    /// Executes an operation with the current site values and optional content context.
-    ///
-    /// This method ensures that operations have access to the correct environment, page, and content data
-    /// while rendering HTML. It temporarily sets up the required context and cleans up afterward:
-    /// /// ```swift
-    /// context.render(page: currentPage, content: article) {
-    ///     // Access environment, page, and content safely here
-    ///     return someHTML
-    /// }
-    /// ```
-    /// - Parameters:
-    ///   - page: Optional page being rendered
-    ///   - content: Optional markdown content being rendered
-    ///   - operation: The work to perform with the site values
-    /// - Returns: The result of the operation
-    func render<T>(page: Page? = nil, content: Content? = nil, withSiteValues operation: () -> T) -> T {
-        let values = EnvironmentValues(site: site, allContent: allContent)
-        return EnvironmentStore.update(values) {
-            if let content {
-                return ContentContext.withCurrentContent(content) {
-                    operation()
-                }
-            } else {
-                return operation()
-            }
         }
     }
 }

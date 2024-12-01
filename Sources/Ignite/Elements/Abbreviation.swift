@@ -8,12 +8,18 @@
 import Foundation
 
 /// Renders an abbreviation.
-public struct Abbreviation: InlineElement {
+public struct Abbreviation: InlineHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
+
     /// The contents of this abbreviation.
-    public var contents: any InlineElement
+    public var contents: any InlineHTML
 
     /// Creates a new `Abbreviation` instance.
     /// - Parameter abbreviation: The abbreviation.
@@ -27,7 +33,7 @@ public struct Abbreviation: InlineElement {
     /// Creates a new `Abbreviation` instance using an inline element builder
     /// that returns an array of content to place inside.
     /// - Parameter description: The description of the abbreviation.
-    public init(_ description: String, @InlineElementBuilder content: () -> some InlineElement) {
+    public init(_ description: String, @InlineHTMLBuilder content: () -> some InlineHTML) {
         contents = content()
         let customAttribute = AttributeValue(name: "title", value: description)
         attributes.customAttributes.insert(customAttribute)
@@ -37,6 +43,8 @@ public struct Abbreviation: InlineElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<abbr\(attributes.description())>\(contents.render(context: context))</abbr>"
+        var attributes = attributes
+        attributes.tag = "abbr"
+        return attributes.description(wrapping: contents.render(context: context))
     }
 }

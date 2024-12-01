@@ -20,7 +20,7 @@ import Foundation
 public protocol EnvironmentKey: Sendable {
     /// The type of value associated with this environment key.
     associatedtype Value: Sendable
-
+    
     /// The default value to use when no explicit value is set.
     static var defaultValue: Self.Value { get }
 }
@@ -35,4 +35,10 @@ public enum AllContentKey: EnvironmentKey {
 public enum ConfigurationKey: EnvironmentKey {
     /// The default site configuration.
     public static var defaultValue: SiteConfiguration = .init()
+}
+
+/// A key for accessing available themes in the environment.
+public struct ThemesKey: EnvironmentKey {
+    /// The default empty array of themes.
+    public static var defaultValue: [any Theme] = []
 }

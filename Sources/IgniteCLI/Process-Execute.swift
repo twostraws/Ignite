@@ -43,7 +43,7 @@ extension Process {
             try process.run()
         }
 
-        // If we have anything i a subsequent command,
+        // If we have anything in a subsequent command,
         // run it now then wait for the main process
         // to terminate. This is why the empty string
         // is important for previewing a local server:

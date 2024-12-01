@@ -13,6 +13,12 @@ public struct Tag: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
+
     /// The name of the tag to use
     var name: String
 
@@ -51,6 +57,8 @@ public struct Tag: HTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        "<\(name)\(attributes.description())>\(content.render(context: context))</\(name)>"
+        var attributes = attributes
+        attributes.tag = name
+        return attributes.description(wrapping: content.render(context: context))
     }
 }

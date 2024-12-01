@@ -8,9 +8,12 @@
 import Foundation
 
 /// A block quote of text.
-public struct Quote: BlockElement {
+public struct Quote: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -19,7 +22,7 @@ public struct Quote: BlockElement {
     var contents: any HTML
 
     /// Provide details about this quote, e.g. a source name.
-    var caption: any InlineElement
+    var caption: any InlineHTML
 
     /// Create a new quote from a page element builder that returns an array
     /// of elements to display in the quote.
@@ -38,7 +41,7 @@ public struct Quote: BlockElement {
     /// - contents: Additional details about the quote, e.g. its source.
     public init(
         @HTMLBuilder contents: () -> some HTML,
-        @InlineElementBuilder caption: () -> some InlineElement
+        @InlineHTMLBuilder caption: () -> some InlineHTML
     ) {
         self.contents = contents()
         self.caption = caption()
@@ -50,19 +53,19 @@ public struct Quote: BlockElement {
     public func render(context: PublishingContext) -> String {
         let renderedContents = contents.render(context: context)
         let renderedCaption = caption.render(context: context)
-        let blockQuoteAttributes = attributes.appending(classes: ["blockquote"])
+        var attributes = attributes
+
+        attributes.tag = "blockquote"
+        attributes.append(classes: "blockquote")
 
         if renderedCaption.isEmpty {
-            return """
-            <blockquote\(blockQuoteAttributes.description())>\(renderedContents)</blockquote>
-            """
+            return attributes.description(wrapping: renderedContents)
         } else {
-            return """
-            <blockquote class="blockquote">\
-            \(renderedContents)\
-            <footer class="blockquote-footer">\(renderedCaption)</footer>\
-            </blockquote>
-            """
+            var footerAttributes = CoreAttributes()
+            footerAttributes.tag = "footer"
+            footerAttributes.append(classes: "blockquote-footer")
+            let footer = footerAttributes.description(wrapping: renderedCaption)
+            return attributes.description(wrapping: renderedContents + footer)
         }
     }
 }
