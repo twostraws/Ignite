@@ -10,14 +10,14 @@ import Foundation
 /// Creates a list of items, either ordered or unordered.
 public struct List: BlockHTML {
     /// Controls whether this list contains items in a specific order or not.
-    public enum ListStyle {
+    public enum ListMarkerStyle {
         /// This list contains items that are ordered, which normally means
         /// they are rendered with numbers such as 1, 2, 3.
-        case ordered(OrderedListStyle)
+        case ordered(OrderedListMarkerStyle)
 
         /// This list contains items that are unordered, which normally means
         /// they are rendered with bullet points.
-        case unordered(UnorderedListStyle)
+        case unordered(UnorderedListMarkerStyle)
 
         /// This list is unordered, with a custom symbol for bullet points.
         /// **Note:** Although you can technically pass more than one
@@ -37,8 +37,11 @@ public struct List: BlockHTML {
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
-    /// The current style for this list. Defaults to `.unordered`.
-    var style = ListStyle.unordered(.default)
+    /// The current style for this list. Defaults to `.plain`.
+    var listStyle: ListStyle = .plain
+
+    /// The current style for the list item markers. Defaults to `.unordered`.
+    var markerStyle = ListMarkerStyle.unordered(.automatic)
 
     /// The items to show in this list. This may contain any page elements,
     /// but if you need specific styling you might want to use ListItem objects.
@@ -47,7 +50,7 @@ public struct List: BlockHTML {
     // swiftlint:disable empty_enum_arguments
     /// Returns the correct HTML name for this list.
     private var listElementName: String {
-        if case .ordered(_) = style {
+        if case .ordered = markerStyle {
             "ol"
         } else {
             "ul"
@@ -67,7 +70,16 @@ public struct List: BlockHTML {
     /// - Returns: A new `List` instance with the updated style.
     public func listStyle(_ style: ListStyle) -> Self {
         var copy = self
-        copy.style = style
+        copy.listStyle = style
+        return copy
+    }
+
+    /// Adjusts the style of the list item markers.
+    /// - Parameter style: The new style.
+    /// - Returns: A new `List` instance with the updated style.
+    public func listMarkerStyle(_ style: ListMarkerStyle) -> Self {
+        var copy = self
+        copy.markerStyle = style
         return copy
     }
 
@@ -75,21 +87,33 @@ public struct List: BlockHTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        var listStyleType = ""
+        var listAttributes = attributes
 
-        if case .ordered(let orderedStyle) = style {
+        if listStyle != .plain {
+            listAttributes.append(classes: "list-group")
+        }
+        if listStyle == .groupFlush {
+            listAttributes.append(classes: "list-group-flush")
+        }
+
+        var listMarkerType = ""
+
+        if case .ordered(let orderedStyle) = markerStyle {
             // Only add the extra styling if we aren't using
             // the default.
-            if orderedStyle != .default {
-                listStyleType = orderedStyle.rawValue
+            if orderedStyle != .automatic {
+                listMarkerType = orderedStyle.rawValue
             }
-        } else if case .unordered(let unorderedListStyle) = style {
+            if listStyle == .group {
+                listAttributes.append(classes: "list-group-numbered")
+            }
+        } else if case .unordered(let unorderedListStyle) = markerStyle {
             // Only add the extra styling if we aren't using
             // the default.
-            if unorderedListStyle != .default {
-                listStyleType = String(describing: unorderedListStyle)
+            if unorderedListStyle != .automatic {
+                listMarkerType = String(describing: unorderedListStyle)
             }
-        } else if case .custom(let symbol) = style {
+        } else if case .custom(let symbol) = markerStyle {
             // We need to convert our symbol to something
             // Unicode friendly, in case they use emoji.
             var cssHex = ""
@@ -99,13 +123,11 @@ public struct List: BlockHTML {
                 cssHex += "\\\(hexValue)"
             }
 
-            listStyleType = "'\(cssHex)'"
+            listMarkerType = "'\(cssHex)'"
         }
 
-        var listAttributes = attributes
-
-        if listStyleType.isEmpty == false {
-            listAttributes.append(style: "list-style-type", value: listStyleType)
+        if listMarkerType.isEmpty == false {
+            listAttributes.append(style: "list-style-type", value: listMarkerType)
         }
 
         var output = "<\(listElementName)\(listAttributes.description())>"
@@ -114,9 +136,14 @@ public struct List: BlockHTML {
             // Any element that renders its own <li> (e.g. ForEach) should
             // be allowed to handle that itself.
             if let listableItem = item as? ListableElement {
+                if listStyle != .plain {
+                    item.class("list-group-item")
+                }
                 output += listableItem.renderInList(context: context)
             } else {
-                output += "<li>\(item.render(context: context))</li>"
+                var styleClass = listStyle != .plain ? "class=\"list-group-item\"" : ""
+                item.class("m-0")
+                output += "<li \(styleClass)>\(item.render(context: context))</li>"
             }
         }
 

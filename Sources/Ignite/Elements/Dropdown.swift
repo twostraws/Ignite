@@ -121,7 +121,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
                     }
                 }
             }
-            .listStyle(.unordered(.default))
+            .listMarkerStyle(.unordered(.automatic))
             .class("dropdown-menu")
         }
         .attributes(attributes)

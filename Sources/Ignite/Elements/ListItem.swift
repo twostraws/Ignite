@@ -30,6 +30,10 @@ public struct ListItem: HTML, ListableElement {
         self.content = content()
     }
 
+    init(@InlineHTMLBuilder content: () -> any InlineHTML) {
+        self.content = content()
+    }
+
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
