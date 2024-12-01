@@ -141,9 +141,9 @@ public struct List: BlockHTML {
                 }
                 output += listableItem.renderInList(context: context)
             } else {
-                var styleClass = listStyle != .plain ? "class=\"list-group-item\"" : ""
+                var styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
                 item.class("m-0")
-                output += "<li \(styleClass)>\(item.render(context: context))</li>"
+                output += "<li\(styleClass)>\(item.render(context: context))</li>"
             }
         }
 
