@@ -9,15 +9,9 @@ import Foundation
 
 /// Embeds some JavaScript inside this page, either directly or by
 /// referencing an external file.
-public struct Script: BlockHTML, HeadElement {
+public struct Script: BlockElement & HeadElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -49,14 +43,10 @@ public struct Script: BlockHTML, HeadElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        var attributes = attributes
-        attributes.tag = "script"
-
         if let file {
-            attributes.append(customAttributes: .init(name: "src", value: "\(context.site.url.path)\(file)"))
-            return attributes.description()
+            return "<script\(attributes.description()) src=\"\(context.site.url.path)\(file)\"></script>"
         } else if let code {
-            return attributes.description(wrapping: code)
+            return "<script\(attributes.description())>\(code)</script>"
         } else {
             context.addWarning("""
             Creating a script with no source or code should not be possible. \

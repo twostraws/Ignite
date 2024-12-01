@@ -8,15 +8,9 @@
 import Foundation
 
 /// A structure that creates HTML content by mapping over a sequence of data.
-public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML, ListableElement {
+public struct ForEach<Data: Sequence, Content: HTML>: InlineElement, BlockElement, ListableElement {
     /// The body content created by mapping over the data sequence.
     public var body: some HTML { self }
-
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth: ColumnWidth = .automatic
@@ -42,7 +36,7 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML, Lis
     public func render(context: PublishingContext) -> String {
         var output = ""
 
-        for item in HTMLCollection(data.map(content)) {
+        for item in HTMLSequence(data.map(content)) {
             output += item.render(context: context)
         }
 
@@ -55,7 +49,7 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML, Lis
     public func renderInList(context: PublishingContext) -> String {
         var output = ""
 
-        for item in HTMLCollection(data.map(content)) {
+        for item in HTMLSequence(data.map(content)) {
             output += "<li>\(item.render(context: context))</li>"
         }
 

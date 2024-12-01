@@ -38,14 +38,14 @@ public struct HTMLBuilder {
     /// - Parameter components: Array of HTML elements
     /// - Returns: A flattened HTML structure
     public static func buildBlock(_ components: [any HTML]) -> some HTML {
-        HTMLCollection(components)
+        FlatHTML(components)
     }
 
     /// Handles array literals in the builder.
     /// - Parameter components: Array of HTML elements
     /// - Returns: A flattened HTML structure
     public static func buildArray(_ components: [any HTML]) -> some HTML {
-        HTMLCollection(components)
+        FlatHTML(components)
     }
 
     /// Handles optional HTML elements.
@@ -103,7 +103,7 @@ public struct HTMLBuilder {
     /// - Parameter components: Variadic array of HTML element arrays
     /// - Returns: A flattened HTML structure
     public static func buildBlock(_ components: [any HTML]...) -> some HTML {
-        HTMLCollection(components.flatMap { $0 })
+        FlatHTML(components.flatMap { $0 })
     }
 
     /// Converts text content into HTML.
@@ -116,7 +116,7 @@ public struct HTMLBuilder {
     /// Handles inline elements that conform to HTML protocol.
     /// - Parameter content: The inline HTML element
     /// - Returns: The same element unchanged
-    public static func buildExpression<Content: InlineHTML>(_ content: Content) -> some HTML {
+    public static func buildExpression<Content: HTML & InlineElement>(_ content: Content) -> some HTML {
         content
     }
 
@@ -131,7 +131,7 @@ public struct HTMLBuilder {
     /// - Parameter components: Two-dimensional array of HTML elements
     /// - Returns: A flattened HTML structure
     public static func buildArray(_ components: [[any HTML]]) -> some HTML {
-        HTMLCollection(components.flatMap { $0 })
+        FlatHTML(components.flatMap { $0 })
     }
 
     /// Handles optional content in if let statements.
@@ -148,7 +148,7 @@ public struct HTMLBuilder {
     /// - Parameter components: Variadic array of optional HTML elements
     /// - Returns: A flattened HTML structure containing non-nil elements
     public static func buildBlock<Content: HTML>(_ components: (any HTML)?...) -> some HTML {
-        HTMLCollection(components.compactMap { $0 })
+        FlatHTML(components.compactMap { $0 })
     }
 }
 

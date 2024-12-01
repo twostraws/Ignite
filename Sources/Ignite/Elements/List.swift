@@ -8,7 +8,7 @@
 import Foundation
 
 /// Creates a list of items, either ordered or unordered.
-public struct List: BlockHTML {
+public struct List: BlockElement {
     /// Controls whether this list contains items in a specific order or not.
     public enum ListStyle {
         /// This list contains items that are ordered, which normally means
@@ -28,12 +28,6 @@ public struct List: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
@@ -42,7 +36,7 @@ public struct List: BlockHTML {
 
     /// The items to show in this list. This may contain any page elements,
     /// but if you need specific styling you might want to use ListItem objects.
-    private var items: [any HTML]
+    var items: HTMLSequence
 
     // swiftlint:disable empty_enum_arguments
     /// Returns the correct HTML name for this list.
@@ -59,7 +53,7 @@ public struct List: BlockHTML {
     /// an array of `HTML` objects to display in the list.
     /// - Parameter items: The content you want to display in your list.
     public init(@HTMLBuilder items: () -> some HTML) {
-        self.items = flatUnwrap(items())
+        self.items = HTMLSequence(items)
     }
 
     /// Adjusts the style of this list.
@@ -111,12 +105,15 @@ public struct List: BlockHTML {
         var output = "<\(listElementName)\(listAttributes.description())>"
 
         for item in items {
+            // Pull out what we actually have.
+            let actualItem = (item as? AnyHTML)?.wrapped ?? item
+
             // Any element that renders its own <li> (e.g. ForEach) should
             // be allowed to handle that itself.
-            if let listableItem = item as? ListableElement {
+            if let listableItem = actualItem as? ListableElement {
                 output += listableItem.renderInList(context: context)
             } else {
-                output += "<li>\(item.render(context: context))</li>"
+                output += "<li>\(actualItem.render(context: context))</li>"
             }
         }
 

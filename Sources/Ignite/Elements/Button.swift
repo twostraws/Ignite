@@ -13,7 +13,7 @@ public enum ButtonSize: String, CaseIterable {
 }
 
 /// A clickable button with a label and styling.
-public struct Button: InlineHTML {
+public struct Button: InlineElement {
     /// Whether this button is just clickable, or whether its submits a form.
     public enum ButtonType {
         /// This button does not submit a form.
@@ -33,12 +33,6 @@ public struct Button: InlineHTML {
 
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// Whether this button should submit a form or not. Defaults to `.plain`.
     var type = ButtonType.plain
@@ -60,14 +54,14 @@ public struct Button: InlineHTML {
 
     /// Creates a button with a label.
     /// - Parameter label: The label text to display on this button.
-    public init(_ label: some InlineHTML) {
+    public init(_ label: some InlineElement) {
         self.label = label
     }
 
     /// Creates a button from a more complex piece of HTML.
     /// - Parameter label: An inline element builder of all the content
     /// for this button.
-    public init(@InlineHTMLBuilder label: @escaping () -> some InlineHTML) {
+    public init(@InlineElementBuilder label: @escaping () -> some InlineElement) {
         self.label = label()
     }
 
@@ -83,10 +77,7 @@ public struct Button: InlineHTML {
     /// - Parameters:
     ///   - label: The label text to display on this button.
     ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
-    public init(
-        @InlineHTMLBuilder _ label: @escaping () -> some InlineHTML,
-        @ActionBuilder actions: () -> [Action]
-    ) {
+    public init(@InlineElementBuilder _ label: @escaping () -> some InlineElement, @ActionBuilder actions: () -> [Action]) {
         self.label = label()
         addEvent(name: "onclick", actions: actions())
     }
@@ -151,12 +142,10 @@ public struct Button: InlineHTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        var buttonAttributes = attributes
+        let buttonAttributes = attributes
             .appending(classes: Button.classes(forRole: role, size: size))
             .appending(aria: Button.aria(forRole: role))
-        let output = HTMLCollection(label).render(context: context)
-        buttonAttributes.tag = "button type=\"\(type.htmlName)\""
-        buttonAttributes.closingTag = "button"
-        return buttonAttributes.description(wrapping: output)
+        let output = FlatHTML(label).map { $0.render(context: context) }.joined()
+        return "<button type=\"\(type.htmlName)\"\(buttonAttributes.description())>\(output)</button>"
     }
 }

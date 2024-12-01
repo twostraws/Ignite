@@ -9,15 +9,9 @@ import Foundation
 
 /// A group of metadata headers for your page, such as its title,
 /// links to its CSS, and more.
-public struct HTMLHead: RootHTML {
+public struct HTMLHead: HTMLRootElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The metadata elements for this page.
     var items: [any HeadElement]
@@ -51,9 +45,7 @@ public struct HTMLHead: RootHTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        var attributes = attributes
-        attributes.tag = "head"
-        return attributes.description(wrapping: HTMLCollection(items).render(context: context))
+        "<head>\(FlatHTML(items).render(context: context))</head>"
     }
 
     /// A static function, returning the standard set of headers used for a `Page` instance.
@@ -89,15 +81,15 @@ public struct HTMLHead: RootHTML {
             MetaLink.syntaxHighlightingCSS
         }
 
-        Script(file: "/js/ignite-core.js")
-
         if configuration.builtInIconsEnabled == .localBootstrap {
             MetaLink.iconCSS
         } else if configuration.builtInIconsEnabled == .remoteBootstrap {
             MetaLink.remoteIconCSS
         }
 
-        MetaLink.themeCSS
+        if let analyticsSnippet = configuration.analyticsSnippet {
+            analyticsSnippet
+        }
 
         if AnimationManager.default.hasAnimations {
             MetaLink.animationCSS

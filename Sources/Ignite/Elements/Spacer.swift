@@ -8,15 +8,9 @@
 import Foundation
 
 /// Creates vertical space of a specific value.
-public struct Spacer: BlockHTML {
+public struct Spacer: BlockElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -50,11 +44,11 @@ public struct Spacer: BlockHTML {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         if let spacingAmount {
-            Group {}
+            Group { }
                 .margin(.top, spacingAmount)
                 .render(context: context)
         } else {
-            Group {}
+            Group { }
                 .frame(height: size)
                 .render(context: context)
         }

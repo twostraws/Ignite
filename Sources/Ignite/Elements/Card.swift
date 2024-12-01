@@ -8,7 +8,7 @@
 import Foundation
 
 /// A group of information placed inside a gently rounded
-public struct Card: BlockHTML {
+public struct Card: BlockElement {
     /// Styling for this card.
     public enum CardStyle: CaseIterable {
         /// Default styling.
@@ -123,12 +123,6 @@ public struct Card: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
@@ -139,9 +133,9 @@ public struct Card: BlockHTML {
     var imageOpacity = 1.0
 
     var image: Image?
-    private var header: HTMLCollection
-    private var footer: HTMLCollection
-    private var items: HTMLCollection
+    private var header: HTMLSequence
+    private var footer: HTMLSequence
+    private var items: HTMLSequence
 
     var cardClasses: String? {
         switch style {
@@ -164,9 +158,9 @@ public struct Card: BlockHTML {
             self.image = Image(decorative: imageName)
         }
 
-        self.header = HTMLCollection(header)
-        self.footer = HTMLCollection(footer)
-        self.items = HTMLCollection(body)
+        self.header = HTMLSequence(header)
+        self.footer = HTMLSequence(footer)
+        self.items = HTMLSequence(body)
     }
 
     public func role(_ role: Role) -> Card {

@@ -22,12 +22,6 @@ public struct MetaTag: HeadElement, Sendable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The type of metadata being provided, which can either be "name"
     /// or "property".
     private var type: String
@@ -135,19 +129,10 @@ public struct MetaTag: HeadElement, Sendable {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        var attributes = CoreAttributes()
-        attributes.selfClosingTag = "meta"
-
         if charset.isEmpty {
-            attributes.append(customAttributes:
-                .init(name: type, value: name),
-                .init(name: "content", value: content)
-            )
+            "<meta \(type)=\"\(name)\" content=\"\(content)\">"
         } else {
-            attributes.append(customAttributes:
-                .init(name: "charset", value: charset)
-            )
+            "<meta charset=\"\(charset)\">"
         }
-        return attributes.description()
     }
 }

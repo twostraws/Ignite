@@ -9,26 +9,20 @@ import Foundation
 
 /// Elements that conform to `DropdownElement` can be shown inside
 /// Dropdown objects.
-public protocol DropdownElement: InlineHTML {}
+public protocol DropdownElement: InlineElement {}
 
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
-public struct Dropdown: BlockHTML, NavigationItem {
+public struct Dropdown: BlockElement, NavigationItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
     /// The title for this `Dropdown`.
-    var title: any InlineHTML
+    var title: any InlineElement
 
     /// The array of items to shown in this `Dropdown`.
     var items: [any DropdownElement]
@@ -49,7 +43,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
     ///   - title: The title to show on this dropdown button.
     ///   - items: The elements to place inside the dropdown menu.
     public init(
-        _ title: any InlineHTML,
+        _ title: any InlineElement,
         @ElementBuilder<any DropdownElement> items: () -> [any DropdownElement]
     ) {
         self.title = title

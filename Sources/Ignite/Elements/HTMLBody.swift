@@ -7,31 +7,25 @@
 
 import Foundation
 
-public struct HTMLBody: RootHTML {
+public struct HTMLBody: HTMLRootElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some HTML { EmptyHTML() }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
-    var items: [any HTML]
+    var items: any HTML
 
     public init(@HTMLBuilder _ items: () -> some HTML) {
-        self.items = flatUnwrap(items())
+        self.items = items()
     }
 
     public init(for page: Page) {
-        self.items = flatUnwrap(page.body)
+        self.items = page.body
     }
 
     public func render(context: PublishingContext) -> String {
         var output = ""
 
         // Render main content
-        let rendered = items.map { $0.render(context: context) }.joined()
+        let rendered = items.render(context: context)
         output = rendered
 
         // Add required scripts
@@ -50,10 +44,12 @@ public struct HTMLBody: RootHTML {
             """).render(context: context)
         }
 
-        output += Script(file: "/js/ignite-core.js").render(context: context)
+        if AnimationManager.default.hasAnimations {
+            output += Script(file: "/js/animations.js").render(context: context)
+        }
+        output += Script(file: "/js/email-protection.js").render(context: context)
+        output += Script(file: "/js/theme-switcher.js").render(context: context)
 
-        var attributes = attributes
-        attributes.tag = "body"
-        return attributes.description(wrapping: output)
+        return "<body\(attributes.description())>\(output)</body>"
     }
 }

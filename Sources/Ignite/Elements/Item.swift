@@ -12,21 +12,15 @@ public struct Item: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The title to show for this item. Clicking this title will display the
     /// item's contents.
-    var title: any InlineHTML
+    var title: any InlineElement
 
     /// Whether this accordion item should start open or not.
     var startsOpen: Bool
 
     /// The contents of this accordion item.
-    var contents: any BlockHTML
+    var contents: any BlockElement
 
     /// Used when rendering this accordion item so that we can send change
     /// notifications back the parent accordion object.
@@ -44,9 +38,9 @@ public struct Item: HTML {
     ///   - contents: A block element builder that creates the contents
     ///   for this accordion item.
     public init(
-        _ title: some InlineHTML,
+        _ title: some InlineElement,
         startsOpen: Bool = false,
-        @BlockHTMLBuilder contents: () -> some BlockHTML
+        @BlockElementBuilder contents: () -> some BlockElement
     ) {
         self.title = title
         self.startsOpen = startsOpen

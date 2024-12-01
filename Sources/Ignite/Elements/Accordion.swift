@@ -9,7 +9,7 @@ import Foundation
 
 /// A control that displays a list of section titles that can be folded out to
 /// display more content.
-public struct Accordion: BlockHTML {
+public struct Accordion: BlockElement {
     /// Controls what happens when a section is opened.
     public enum OpenMode {
         /// Opening one accordion section automatically closes all others.
@@ -21,12 +21,6 @@ public struct Accordion: BlockHTML {
 
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic

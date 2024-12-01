@@ -8,15 +8,9 @@
 import Foundation
 
 /// Shows a Video player on your page.
-public struct Video: BlockHTML, InlineHTML, LazyLoadable {
+public struct Video: BlockElement, InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -42,22 +36,17 @@ public struct Video: BlockHTML, InlineHTML, LazyLoadable {
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
     public func render(files: [String], into context: PublishingContext) -> String {
-        var attributes = attributes
-        attributes.tag = "video controls"
-        attributes.closingTag = "video"
+        var output = "<video controls\(attributes.description())>"
 
-        let sources = files.compactMap { filename in
-            guard let fileType = videoType(for: filename) else { return nil }
-            var sourceAttributes = CoreAttributes()
-            sourceAttributes.selfClosingTag = "source"
-            sourceAttributes.append(customAttributes:
-                .init(name: "src", value: filename),
-                .init(name: "type", value: fileType.rawValue)
-            )
-            return sourceAttributes.description()
-        }.joined()
+        for filename in files {
+            if let fileType = videoType(for: filename) {
+                output += "<source src=\"\(filename)\" type=\"\(fileType.rawValue)\">"
+            }
+        }
 
-        return attributes.description(wrapping: sources + "Your browser does not support the video tag.")
+        output += "Your browser does not support the video tag."
+        output += "</video>"
+        return output
     }
 
     /// Renders this element using publishing context passed in.

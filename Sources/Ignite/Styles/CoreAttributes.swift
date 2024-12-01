@@ -36,40 +36,54 @@ public struct CoreAttributes: Sendable {
     /// Custom attributes not covered by the above, e.g. loading="lazy"
     var customAttributes = Set<AttributeValue>()
 
-    /// The HTML tag to use for this element, e.g. "div" or "p".
-    var tag: String?
-
-    /// An optional different tag to use when closing this element, e.g. "a" for links with href attributes.
-    var closingTag: String?
-
-    /// The tag to use for self-closing elements like "meta" or "img".
-    var selfClosingTag: String?
-
     /// CSS classes that should be applied to a wrapper div around this element.
     /// Each `ContainerAttributes` represents a wrapper div with styling
     var containerAttributes = OrderedSet<ContainerAttributes>() {
         didSet {
+            // Ensure transform containers are always last (outermost)
             containerAttributes = OrderedSet(containerAttributes.sorted { a, b in
-                // First handle transform vs animation containers
-                if a.type == .transform && b.type == .animation {
-                    return false // transform goes after animation
-                }
-                if a.type == .animation && b.type == .transform {
-                    return true // animation goes before transform
-                }
-
-                // Click containers should always be outermost
-                if a.type == .click {
-                    return false // a goes after b
-                }
-                if b.type == .click {
-                    return true // b goes after a
-                }
-
-                // For all other containers, maintain their relative positions
-                return containerAttributes.firstIndex(of: a)! < containerAttributes.firstIndex(of: b)!
+                if a.isTransformContainer && !b.isTransformContainer { return false }
+                if !a.isTransformContainer && b.isTransformContainer { return true }
+                return true
             })
         }
+    }
+
+    /// All core attributes collapsed down to a single string for easy application.
+    func description(wrapping content: String? = nil, tag: String? = nil, closingTag: String? = nil) -> String {
+        let attributes = "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
+
+        var result = content ?? attributes
+
+        if containerAttributes.isEmpty {
+            if let tag {
+                let closing = closingTag ?? tag
+                return "<\(tag)\(attributes)>\(content ?? "")</\(closing)>"
+            }
+            return result
+        }
+
+        if let tag {
+            let closing = closingTag ?? tag
+            result = "<\(tag)\(attributes)>\(result)</\(closing)>"
+        }
+
+        // Apply containers from inner to outer (lower order to higher)
+        for container in containerAttributes where !container.isEmpty {
+            let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.joined(separator: " "))\""
+            let styleAttr = container.styles.isEmpty ? "" : " style=\"\(container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; "))\""
+
+            // Match the main eventString format
+            var eventAttr = ""
+            for event in container.events where event.actions.isEmpty == false {
+                let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
+                eventAttr += " \(event.name)=\"\(actions)\""
+            }
+
+            result = "<div\(classAttr)\(styleAttr)\(eventAttr)>\(result)</div>"
+        }
+
+        return result
     }
 
     /// The ID of this element, if set.
@@ -158,59 +172,10 @@ public struct CoreAttributes: Sendable {
             return output
         }
     }
-    
-    /// Generates an HTML string containing all attributes and optionally wraps content.
-    /// - Parameter content: Optional content to wrap with opening and closing tags
-    /// - Returns: A string containing all attributes and optional content wrapped in tags
-    func description(wrapping content: String? = nil) -> String {
-        let attributes = "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
-
-        var result = content ?? attributes
-
-        if containerAttributes.isEmpty {
-            if let selfClosingTag {
-                return "<\(selfClosingTag)\(attributes) />"
-            }
-            if let tag {
-                let closing = closingTag ?? tag
-                return "<\(tag)\(attributes)>\(content ?? "")</\(closing)>"
-            }
-            return result
-        }
-
-        if let selfClosingTag {
-            result = "<\(selfClosingTag)\(attributes) />"
-        } else if let tag {
-            let closing = closingTag ?? tag
-            result = "<\(tag)\(attributes)>\(result)</\(closing)>"
-        }
-
-        // Apply containers from inner to outer
-        for container in containerAttributes where !container.isEmpty {
-            let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.joined(separator: " "))\""
-            let styleAttr = container.styles.isEmpty ? "" : " style=\"\(container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; "))\""
-
-            var eventAttr = ""
-            for event in container.events where event.actions.isEmpty == false {
-                let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
-                eventAttr += " \(event.name)=\"\(actions)\""
-            }
-
-            result = "<div\(classAttr)\(styleAttr)\(eventAttr)>\(result)</div>"
-        }
-
-        return result
-    }
 
     /// Appends an array of CSS classes to the current element.
     /// - Parameter classes: The CSS classes to append.
     mutating func append(classes: [String]) {
-        self.classes.formUnion(classes)
-    }
-
-    /// Appends multiple CSS classes to the current element.
-    /// - Parameter classes: The CSS classes to append.
-    mutating func append(classes: String...) {
         self.classes.formUnion(classes)
     }
 

@@ -10,15 +10,9 @@ import Foundation
 /// An inline snippet of programming code, embedded inside a larger part
 /// of your page. For dedicated code blocks that sit on their own line, use
 /// `CodeBlock` instead.
-public struct Code: InlineHTML {
+public struct Code: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
-
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The code to display.
     var content: String
@@ -33,8 +27,6 @@ public struct Code: InlineHTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        var attributes = attributes
-        attributes.tag = "code"
-        return attributes.description(wrapping: content)
+        "<code\(attributes.description())>\(content)</code>"
     }
 }
