@@ -8,11 +8,11 @@
 import Foundation
 
 /// Describes elements that can be placed into navigation bars.
-public protocol NavigationItem: InlineElement {}
+public protocol NavigationItem: InlineHTML {}
 
 /// A bar that sits across the top of your page to provide top-level navigation
 /// throughout your site.
-public struct NavigationBar: BlockElement {
+public struct NavigationBar: BlockHTML {
     /// The color scheme for this navigation bar.
     public enum NavigationBarStyle {
         /// No specific color scheme means this bar will be rendered using
@@ -41,6 +41,12 @@ public struct NavigationBar: BlockElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
+
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
@@ -50,7 +56,7 @@ public struct NavigationBar: BlockElement {
 
     /// The main logo for your site, such as an image or some text. This becomes
     /// clickable to let users navigate to your homepage.
-    let logo: (any InlineElement)?
+    let logo: (any InlineHTML)?
 
     /// An array of items to show in this navigation bar.
     let items: [any NavigationItem]
@@ -65,7 +71,7 @@ public struct NavigationBar: BlockElement {
     /// - Parameters:
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
-        logo: (any InlineElement)? = nil
+        logo: (any InlineHTML)? = nil
     ) {
         self.logo = logo
         self.items = []
@@ -78,7 +84,7 @@ public struct NavigationBar: BlockElement {
     ///   - items: An element builder that returns an array of
     /// `NavigationItem` objects.
     public init(
-        logo: (any InlineElement)? = nil,
+        logo: (any InlineHTML)? = nil,
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem]
     ) {
         self.logo = logo
@@ -93,7 +99,7 @@ public struct NavigationBar: BlockElement {
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        logo: (() -> (any HTML & InlineElement))? = nil
+        logo: (() -> (any InlineHTML))? = nil
     ) {
         self.items = items()
         self.logo = logo?()

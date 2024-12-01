@@ -15,7 +15,7 @@ struct Event: Sendable, Hashable {
 
     static func == (lhs: Event, rhs: Event) -> Bool {
         rhs.name == lhs.name &&
-            rhs.actions.map { $0.compile() } == lhs.actions.map { $0.compile() }
+        rhs.actions.map { $0.compile() } == lhs.actions.map { $0.compile() }
     }
 
     func hash(into hasher: inout Hasher) {

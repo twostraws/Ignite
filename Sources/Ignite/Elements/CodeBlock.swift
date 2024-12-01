@@ -9,9 +9,15 @@ import Foundation
 
 /// An separated section of programming code. For inline code that sit along other
 /// text on your page, use `Code` instead.
-public struct CodeBlock: BlockElement {
+public struct CodeBlock: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic

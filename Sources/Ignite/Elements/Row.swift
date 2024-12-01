@@ -12,14 +12,20 @@ public struct Row: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
+
     /// The columns to display inside this row.
-    var columns: HTMLSequence
+    private var columns: [any HTML]
 
     /// Create a new `Row` using a page element builder that returns the
     /// array of columns to use in this row.
     /// - Parameter columns: The columns to use in this row.
     public init(@HTMLBuilder columns: () -> some HTML) {
-        self.columns = HTMLSequence(columns)
+        self.columns = flatUnwrap(columns())
     }
 
     /// Renders this element using publishing context passed in.
@@ -27,16 +33,14 @@ public struct Row: HTML {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         let output = columns.map { column in
-            // These are likely to be wrapped in AnyHTML, so unwrap here
-            let actualColumn = (column as? AnyHTML)?.wrapped ?? column
-
-            if actualColumn is Column {
-                return column.render(context: context)
+            if column is Column {
+                column.render(context: context)
             } else {
-                return "<td>\(column.render(context: context))</td>"
+                "<td>\(column.render(context: context))</td>"
             }
         }.joined()
-
-        return "<tr\(attributes.description())>\(output)</tr>"
+        var attributes = attributes
+        attributes.tag = "tr"
+        return attributes.description(wrapping: output)
     }
 }

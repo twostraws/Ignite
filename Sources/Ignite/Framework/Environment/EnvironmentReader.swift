@@ -12,3 +12,13 @@ public protocol EnvironmentReader: Sendable {
     /// The current environment values for this reader.
     @MainActor var environment: EnvironmentValues { get set }
 }
+
+/// Default implementation that provides access to the current environment values.
+/// The environment store maintains global state and settings that can be accessed
+/// throughout the page rendering process.
+public extension EnvironmentReader {
+    @MainActor var environment: EnvironmentValues {
+        get { EnvironmentStore.current }
+        set { EnvironmentStore.current = newValue }
+    }
+}

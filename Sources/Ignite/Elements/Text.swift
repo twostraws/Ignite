@@ -12,29 +12,45 @@ import Foundation
 /// just use a simple string. Using `Text` is required if you want a specific paragraph
 /// of text with some styling, or a header of a particular size.
 @MainActor
-public struct Text: BlockElement & DropdownElement {
+public struct Text: BlockHTML, DropdownElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
     /// The font style to use for this text.
-    var font = Font.body
+    var font: Font.Style {
+        if attributes.classes.contains("lead") {
+            Font.Style.lead
+        } else if let tag = attributes.tag, let style = Font.Style(rawValue: tag) {
+            style
+        } else {
+            Font.Style.body
+        }
+    }
 
     /// The content to place inside the text.
-    var content: any InlineElement
+    var content: any InlineHTML
 
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
     /// - Parameter content: An array of the content to place into the text.
-    public init(@InlineElementBuilder content: @escaping () -> any InlineElement) {
+    public init(@InlineHTMLBuilder content: @escaping () -> any InlineHTML) {
         self.content = content()
+        self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new `Text` instance from one inline element.
-    public init(_ string: any InlineElement) {
+    public init(_ string: any InlineHTML) {
         self.content = string
+        self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new `Text` instance using "lorem ipsum" placeholder text.
@@ -97,37 +113,23 @@ public struct Text: BlockElement & DropdownElement {
         // the `font()` modifier.
         let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
         self.content = cleanedHTML
+        self.tag(Font.Style.body.rawValue)
     }
 
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        return attributes.description(
-            wrapping: content.render(context: context),
-            tag: font.rawValue
-        )
+        attributes.description(wrapping: content.render(context: context))
     }
 }
 
-public extension HTML where Self == Text {
-    /// Adjusts the font level of this text.
-    /// - Parameter fontLevel: The new font level.
-    /// - Returns: A new `Text` instance with the updated font style.
-    func font(_ newFont: Font) -> Self {
-        if newFont == .lead {
-            return self.class("lead")
+extension HTML where Self == Text {
+    func fontStyle(_ font: Font.Style) -> Self {
+        if font == .lead {
+            self.class(font.rawValue)
         } else {
-            var copy = self
-            copy.font = newFont
-            return copy
+            self.tag(font.rawValue)
         }
-    }
-
-    /// Adjusts the font weight (boldness) of this font.
-    /// - Parameter newWeight: The new font weight.
-    /// - Returns: A new `Text` instance with the updated weight.
-    func fontWeight(_ newWeight: FontWeight) -> Self {
-        style("font-weight: \(newWeight.rawValue)")
     }
 }

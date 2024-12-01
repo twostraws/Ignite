@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Ignite}",
+            "name": "Debug IgniteCLI",
+            "program": "${workspaceFolder:Ignite}/.build/debug/IgniteCLI",
+            "preLaunchTask": "swift: Build Debug IgniteCLI"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Ignite}",
+            "name": "Release IgniteCLI",
+            "program": "${workspaceFolder:Ignite}/.build/release/IgniteCLI",
+            "preLaunchTask": "swift: Build Release IgniteCLI"
+        }
+    ]
+}
