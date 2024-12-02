@@ -11,7 +11,7 @@ import Foundation
 /// the standard HTML color names, can be created using RGB values as
 /// integer or doubles, can be created a grayscale, or using a hex string.
 public enum Color: CustomStringConvertible, Sendable, Hashable {
-    case bootstrap(name: String, red: Int, green: Int, blue: Int, opacity: Double)
+    case bootstrap(name: String, hex: String, opacity: Double)
     case html(red: Int, green: Int, blue: Int, opacity: Double)
 
     /// Bootstrap's primary blue color (#0d6efd)
@@ -68,10 +68,18 @@ public enum Color: CustomStringConvertible, Sendable, Hashable {
     /// The CSS representation of this color.
     public var description: String {
         switch self {
-        case .bootstrap(let name, _, _, _, _):
-            return opacity == 1
-                ? "var(--bs-\(name))"
-                : "rgba(var(--bs-\(name)-rgb), \(opacity))"
+        case .bootstrap(let name, let hex, let opacity):
+            if opacity == 1 {
+                return "var(--bs-\(name))"
+            } else {
+                let components = Self.parseHexColor(hex)
+                return Self.rgbToHex(
+                    red: components.red,
+                    green: components.green,
+                    blue: components.blue,
+                    opacity: opacity
+                )
+            }
         case .html(let red, let green, let blue, let opacity):
             return opacity == 1
                 ? "rgb(\(red), \(green), \(blue))"
@@ -79,45 +87,9 @@ public enum Color: CustomStringConvertible, Sendable, Hashable {
         }
     }
 
-    /// The red component for this color, in the range 0 through 255.
-    private var red: Int {
-        switch self {
-        case .bootstrap(_, let red, _, _, _),
-             .html(let red, _, _, _):
-            return red
-        }
-    }
-
-    /// The green component for this color, in the range 0 through 255.
-    private var green: Int {
-        switch self {
-        case .bootstrap(_, _, let green, _, _),
-             .html(_, let green, _, _):
-            return green
-        }
-    }
-
-    /// The blue component for this color, in the range 0 through 255.
-    private var blue: Int {
-        switch self {
-        case .bootstrap(_, _, _, let blue, _),
-             .html(_, _, let blue, _):
-            return blue
-        }
-    }
-
-    /// The opacity component for this color, in the range 0 (transparent) through 1 (opaque).
-    private var opacity: Double {
-        switch self {
-        case .bootstrap(_, _, _, _, let opacity),
-             .html(_, _, _, let opacity):
-            return opacity
-        }
-    }
-
     private var name: String {
         switch self {
-        case .bootstrap(let name, _, _, _, _):
+        case .bootstrap(let name, _, _):
             return name
         case .html(let red, let green, let blue, let opacity):
             return Self.rgbToHex(red: red, green: green, blue: blue, opacity: opacity)
@@ -129,10 +101,10 @@ public enum Color: CustomStringConvertible, Sendable, Hashable {
     ///   - hex: A string containing a hex color value (e.g., "#FF0000")
     ///   - name: Optional name for the color. If nil, uses the hex value as the name.
     private init(hex: String, name: String? = nil) {
-        let components = Self.parseHexColor(hex)
         if let name {
-            self = .bootstrap(name: name, red: components.red, green: components.green, blue: components.blue, opacity: components.opacity)
+            self = .bootstrap(name: name, hex: hex, opacity: 1.0)
         } else {
+            let components = Self.parseHexColor(hex)
             self = .html(red: components.red, green: components.green, blue: components.blue, opacity: components.opacity)
         }
     }
@@ -183,7 +155,7 @@ public enum Color: CustomStringConvertible, Sendable, Hashable {
     ///   - opacity: How opaque the color should be, in the range of 0
     ///   (transparent) through to 1 (opaque).
     public init(white: Double, opacity: Double = 1) {
-        let intWhite = white * 255
+        let intWhite = Int(white * 255)
         self.init(red: intWhite, green: intWhite, blue: intWhite, opacity: opacity)
     }
 
@@ -194,12 +166,10 @@ public enum Color: CustomStringConvertible, Sendable, Hashable {
     /// is more opaque than the original.
     public func opacity(_ opacity: Double) -> Self {
         switch self {
-        case .bootstrap(let name, let red, let green, let blue, let currentOpacity):
-            return .bootstrap(name: name, red: red, green: green, blue: blue,
-                              opacity: currentOpacity * opacity)
+        case .bootstrap(let name, let hex, let currentOpacity):
+            return .bootstrap(name: name, hex: hex, opacity: currentOpacity * opacity)
         case .html(let red, let green, let blue, let currentOpacity):
-            return .html(red: red, green: green, blue: blue,
-                         opacity: currentOpacity * opacity)
+            return .html(red: red, green: green, blue: blue, opacity: currentOpacity * opacity)
         }
     }
 
@@ -219,7 +189,16 @@ public enum Color: CustomStringConvertible, Sendable, Hashable {
             percentage: percentage
         )
 
-        return .bootstrap(name: variableName, red: red, green: green, blue: blue, opacity: opacity)
+        switch self {
+        case .bootstrap(_, let hex, let opacity):
+            return .bootstrap(name: variableName, hex: hex, opacity: opacity)
+        case .html(let red, let green, let blue, let opacity):
+            return .bootstrap(
+                name: variableName,
+                hex: Self.rgbToHex(red: red, green: green, blue: blue, opacity: opacity),
+                opacity: opacity
+            )
+        }
     }
 
     /// Parses a hexadecimal color string into its RGB components.
@@ -275,7 +254,7 @@ public enum Color: CustomStringConvertible, Sendable, Hashable {
         if opacity == 1 {
             return "#\(r)\(g)\(b)"
         } else {
-            let a = String(format: "%02X", opacity * 255)
+            let a = String(format: "%02X", Int(opacity * 255))
             return "#\(r)\(g)\(b)\(a)"
         }
     }

@@ -326,6 +326,11 @@ extension PublishingContext {
         addProperty(.containerXl, theme.xLargeMaxWidth)
         addProperty(.containerXxl, theme.xxLargeMaxWidth)
 
+        if let syntaxTheme = theme.syntaxHighlighterTheme {
+            cssProperties.append("--syntax-highlight-theme: \(syntaxTheme.rawValue)")
+        }
+
         return cssProperties.joined(separator: ";\n")
     }
 }
+

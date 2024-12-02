@@ -34,6 +34,9 @@ public final class PublishingContext {
     /// The directory containing their final, built website.
     var buildDirectory: URL
 
+    /// An array of languages used with the syntax highlighters on your site.
+    var highlighterLanguages = [HighlighterLanguage]()
+
     /// Path at which content renders. Defaults to nil.
     public var currentRenderingPath: String?
 
@@ -131,7 +134,7 @@ public final class PublishingContext {
         try await generateContent()
         try copyResources()
         try await generateStyles()
-        try generateThemes(site.alternateThemes)
+        try generateThemes(site.allThemes)
         generateAnimations()
         try await generateTagPages()
         try generateSiteMap()
@@ -195,9 +198,8 @@ public final class PublishingContext {
             try copy(resource: "fonts/bootstrap-icons.woff2")
         }
 
-        if site.syntaxHighlighters.isEmpty == false {
+        if highlighterLanguages.isEmpty == false {
             try copySyntaxHighlighters()
-            try copy(resource: "css/prism-default-dark.css")
         }
     }
 
@@ -376,14 +378,8 @@ public final class PublishingContext {
     /// Calculates the full list of syntax highlighters need by this site, including
     /// resolving dependencies.
     func copySyntaxHighlighters() throws {
-        let generator = SyntaxHighlightGenerator(site: site)
-        let result = try generator.generateSyntaxHighlighters()
-
-        do {
-            let destinationURL = buildDirectory.appending(path: "js/syntax-highlighting.js")
-            try result.write(to: destinationURL, atomically: true, encoding: .utf8)
-        } catch {
-            throw PublishingError.failedToWriteSyntaxHighlighters
+        if site.allHighlighterThemes.contains(.xcodeDark) {
+            try copy(resource: "css/highlightjs-xcode-dark.css")
         }
     }
 }

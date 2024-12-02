@@ -38,6 +38,7 @@ public extension DarkTheme {
     var link: Color? { Color(hex: "#6ea8fe") }
     var linkHover: Color? { Color(hex: "#8bb9fe") }
     var border: Color? { Color(hex: "#495057") }
+    var syntaxHighlighterTheme: HighlighterTheme? { .xcodeDark }
 }
 
 extension Theme where Self == DefaultDarkTheme {

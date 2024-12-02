@@ -53,17 +53,7 @@ public struct EnvironmentValues: Sendable {
         self.allContent = allContent
         self.feedConfiguration = site.feedConfiguration
         self.isFeedEnabled = site.isFeedEnabled
-        if let lightTheme = site.lightTheme {
-            self.themes.append(lightTheme)
-        }
-        if let darkTheme = site.darkTheme {
-            self.themes.append(darkTheme)
-        }
-        if site.darkTheme != nil && site.lightTheme != nil {
-            self.themes.append(AutoTheme())
-        }
-        self.themes.append(contentsOf: site.alternateThemes)
-
+        self.themes = site.allThemes
         // Initialize metadata with all head-related configuration
         self.siteConfiguration = SiteConfiguration(
             author: site.author,
@@ -74,7 +64,7 @@ public struct EnvironmentValues: Sendable {
             url: site.url,
             useDefaultBootstrapURLs: site.useDefaultBootstrapURLs,
             builtInIconsEnabled: site.builtInIconsEnabled,
-            syntaxHighlighters: site.syntaxHighlighters,
+            highlightThemes: site.allHighlighterThemes,
             favicon: site.favicon
         )
     }

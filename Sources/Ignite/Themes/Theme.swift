@@ -195,4 +195,7 @@ public protocol Theme: Sendable {
 
     /// Maximum width for extra extra large containers
     var xxLargeMaxWidth: (any LengthUnit)? { get }
+
+    /// The color scheme for syntax highlighting
+    var syntaxHighlighterTheme: HighlighterTheme? { get }
 }
