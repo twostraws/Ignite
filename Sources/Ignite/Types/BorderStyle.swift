@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Defines the style of a border.
 public enum BorderStyle: String {
     /// Specifies no border

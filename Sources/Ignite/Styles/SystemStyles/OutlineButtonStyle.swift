@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Style for outline buttons that provides a bordered appearance with transparent background.
 ///
 /// This style creates buttons that emphasize their borders rather than having a solid fill color.

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Creates a container that stacks its children along the z-axis (depth),
 /// with each subsequent child appearing in front of the previous one.
 public struct ZStack: BlockHTML {

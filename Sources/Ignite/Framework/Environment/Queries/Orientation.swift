@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that represents the device's physical orientation.
 public enum Orientation: String, QueryType {
     /// Device is in portrait orientation (taller than wide).

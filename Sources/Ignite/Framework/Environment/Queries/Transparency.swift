@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that represents the user's transparency preference for UI elements.
 public enum Transparency: String, QueryType {
     /// User prefers reduced transparency effects.

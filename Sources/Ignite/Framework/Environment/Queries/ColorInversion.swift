@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that represents the user's color inversion preference for media queries.
 public enum ColorInversion: String, QueryType {
     /// Colors are inverted from their default appearance.

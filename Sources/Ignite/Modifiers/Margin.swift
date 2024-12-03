@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 struct MarginModifier: HTMLModifier {
     var length: (any LengthUnit)?
     var amount: SpacingAmount?

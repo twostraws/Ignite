@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A concrete implementation of `Style` that generates CSS rules from its properties.
 ///
 /// `ResolvedStyle` combines media queries, selectors, and CSS properties to generate

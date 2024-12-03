@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that represents the user's motion preference for animations.
 public enum Motion: String, QueryType {
     /// User prefers reduced motion for animations.

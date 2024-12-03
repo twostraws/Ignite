@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Represents CSS object-fit values for images
 public enum ImageFit: String {
     /// Stretches the image to fill the container without maintaining aspect ratio

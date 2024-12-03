@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// The list of standard font weights supported by HTML. This
 /// is designed to match the same order provided by SwiftUI.
 /// Note: Bootstrap provides its own font weights as classes,

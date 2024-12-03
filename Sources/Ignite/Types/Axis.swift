@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Describes the axes of a coordinate system.
 public struct Axis: OptionSet, Sendable {
     public let rawValue: Int

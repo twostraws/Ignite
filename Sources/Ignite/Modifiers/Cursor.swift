@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 public enum Cursor: String {
     /// The cursor to display based on the current context. E.g., equivalent to text when hovering text.
     case auto

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Constants that define the weight (lightness or darkness) of a color.
 public enum ColorWeight: Int {
     /// 100: Extremely light variant, mixed with 80% white

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A basic style that applies a single CSS property with a value.
 ///
 /// BasicStyle is the fundamental building block for creating styles in Ignite.

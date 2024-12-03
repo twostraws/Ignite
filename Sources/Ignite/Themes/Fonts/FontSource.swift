@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that represents a source for a font, including its name, weight, style, and location.
 ///
 /// Use `FontSource` to define where font files can be found and their properties. For example:

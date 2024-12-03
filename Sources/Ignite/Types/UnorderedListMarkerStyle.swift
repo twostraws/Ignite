@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 public enum UnorderedListMarkerStyle: String, Sendable {
     /// Lists are shown with filled circle bullet points.
     case automatic = "disc"

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A style that applies CSS properties when a specific theme is active.
 ///
 /// CurrentTheme allows you to define styles that only take effect when a particular

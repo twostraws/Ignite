@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that positions elements relative to the screen dimensions.
 struct ScreenRelativeFrameModifier: HTMLModifier {
     /// The axes to apply screen-relative positioning to

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Creates vertical space of a specific value.
 public struct Spacer: BlockHTML {
     /// The content and behavior of this HTML.

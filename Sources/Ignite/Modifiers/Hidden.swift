@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that controls element visibility
 struct HiddenModifier: HTMLModifier {
     /// Whether the element should be hidden

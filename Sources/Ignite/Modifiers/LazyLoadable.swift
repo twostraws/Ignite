@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A protocol that determines which elements can be loaded lazily.
 public protocol LazyLoadable where Self: HTML {}
 

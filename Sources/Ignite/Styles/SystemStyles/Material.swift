@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A style that applies a translucent material effect to a view's background.
 ///
 /// Material effects combine translucency, blur, and color to create the appearance

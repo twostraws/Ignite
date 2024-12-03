@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A protocol defining the basic information we need to get good
 /// Markdown parsing. This is implemented by the default
 /// MarkdownToHTML parser included with Ignite, but users

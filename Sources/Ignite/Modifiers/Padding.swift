@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 struct PaddingModifier: HTMLModifier {
     var length: (any LengthUnit)?
     var amount: SpacingAmount?

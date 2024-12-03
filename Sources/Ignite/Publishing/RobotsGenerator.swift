@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 @MainActor
 struct RobotsGenerator {
     var site: any Site

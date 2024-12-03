@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A protocol that defines the core behavior and structure of `HTML` elements in Ignite.
 ///
 /// The `HTML` protocol serves as the foundation for building web components in a type-safe,

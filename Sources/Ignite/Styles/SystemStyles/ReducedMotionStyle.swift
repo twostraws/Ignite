@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A style that applies CSS properties when reduced motion is enabled.
 public struct ReducedMotionStyle: Style {
     /// The CSS property to modify

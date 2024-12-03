@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that represents the user's contrast preference for media queries.
 public enum Contrast: String, QueryType {
     /// Higher contrast between foreground and background colors.

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A style that applies font properties to `HTML` elements by converting a `Font` into CSS styles.
 struct FontStyle: Style {
     /// The font configuration to be converted into CSS styles.

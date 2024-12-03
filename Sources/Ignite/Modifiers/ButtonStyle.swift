@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that applies custom button styling to button elements.
 struct ButtonStyleModifier: HTMLModifier {
     /// The style to apply to the button.

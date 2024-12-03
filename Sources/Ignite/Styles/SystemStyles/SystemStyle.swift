@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Base style for system-provided classes that wraps Bootstrap utility classes
 public struct SystemStyle: Style {
     /// The CSS class name to apply from Bootstrap's utility classes

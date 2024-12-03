@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A container that arranges its child elements vertically in a stack.
 public struct VStack: BlockHTML {
     /// The content and behavior of this HTML.

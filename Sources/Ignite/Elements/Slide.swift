@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// One slide in a `Carousel`.
 public struct Slide: BlockHTML {
     /// The content and behavior of this HTML.

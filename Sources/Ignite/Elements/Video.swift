@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Shows a Video player on your page.
 public struct Video: BlockHTML, InlineHTML, LazyLoadable {
     /// The content and behavior of this HTML.

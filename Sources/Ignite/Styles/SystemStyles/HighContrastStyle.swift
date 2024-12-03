@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A style that applies CSS properties when high contrast mode is enabled.
 public struct HighContrastStyle: Style {
     /// The CSS property to modify

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Style for toggle buttons that can be switched between active and inactive states.
 ///
 /// This style creates buttons that maintain their state (pressed/unpressed) when clicked.

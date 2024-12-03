@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Default implementation providing Bootstrap's default light theme values
 public extension Theme {
     var accent: Color? { Color(hex: "#0d6efd") }

@@ -5,7 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
 import DartSass
 
 /// A class that manages the registration and generation of CSS styles.

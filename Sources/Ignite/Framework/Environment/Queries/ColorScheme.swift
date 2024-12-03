@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that represents the user's preferred color scheme for media queries.
 public enum ColorScheme: String, QueryType {
     /// The light appearance for the interface.

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that applies background styling to HTML elements.
 struct BackgroundModifier: HTMLModifier {
     /// The color to apply, if using a direct color value.

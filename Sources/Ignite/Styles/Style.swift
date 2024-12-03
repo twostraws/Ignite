@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that represents a visual style that can be applied to HTML elements
 public protocol Style: Hashable, Equatable {
     /// The associated type that defines the body content of this style

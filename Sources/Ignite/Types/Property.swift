@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Represents CSS properties that can be applied to HTML elements.
 /// These properties control the visual appearance and layout of elements.
 public enum Property: String {

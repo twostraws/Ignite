@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 // There are lots of HTML color names here!
 public extension Color {
     /// A namespace containing standard HTML/CSS color names and their hex values.

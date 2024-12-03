@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that represents how the web application is being displayed.
 public enum DisplayMode: String, QueryType {
     /// Application runs in full-screen mode without browser chrome.

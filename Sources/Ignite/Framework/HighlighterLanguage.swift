@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// The collection of syntax highlighters supported by Ignite.
 public enum HighlighterLanguage: String, Sendable {
     case appleScript = "applescript"

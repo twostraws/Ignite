@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modal dialog presented on top of the screen
 public struct Modal: HTML {
     /// The size of the modal. Except from the full screen modal the height is defined by the height wheras the width

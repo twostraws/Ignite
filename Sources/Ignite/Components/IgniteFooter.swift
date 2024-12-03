@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Displays "Created in Swift with Ignite", with a link back to the Ignite project on GitHub.
 /// Including this is definitely not required for your site, but it's most appreciated 🙌
 public struct IgniteFooter: HTML {

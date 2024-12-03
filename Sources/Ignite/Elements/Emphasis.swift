@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Renders text with emphasis, which usually means italics.
 public struct Emphasis: InlineHTML {
     /// The content and behavior of this HTML.

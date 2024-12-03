@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A style that applies CSS properties when low contrast mode is enabled.
 public struct LowContrastStyle: Style {
     /// The CSS property to modify

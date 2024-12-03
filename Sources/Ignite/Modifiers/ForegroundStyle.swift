@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that applies foreground color styling to HTML elements, handling both primitive and composite content.
 struct ForegroundStyleModifier: HTMLModifier {
     /// The style to apply, if using a registered style.

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A structured piece of text, such as a paragraph of heading. If you are just
 /// placing content inside a list, table, table header, and so on, you can usually
 /// just use a simple string. Using `Text` is required if you want a specific paragraph

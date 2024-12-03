@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A result builder that enables a declarative syntax for creating complex animations.
 @resultBuilder
 public struct AnimationBuilder {

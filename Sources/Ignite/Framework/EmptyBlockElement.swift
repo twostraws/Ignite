@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A placeholder block element that renders nothing
 /// Used as a default or fallback when no block content is needed
 public struct EmptyBlockElement: BlockHTML {

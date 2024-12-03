@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Represents metadata configuration for a website
 public struct SiteConfiguration: Sendable {
     /// The author of the site

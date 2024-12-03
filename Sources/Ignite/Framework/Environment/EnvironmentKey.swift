@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A protocol that defines how environment values are stored and accessed.
 ///
 /// Environment keys provide default values for environment settings. For example:

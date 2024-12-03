@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 public typealias AnimationFrame = Animation.Frame
 
 public extension Animation {

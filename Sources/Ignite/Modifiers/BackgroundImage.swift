@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that applies background images to HTML elements.
 struct BackgroundImageModifier: HTMLModifier {
     /// The path to the image.

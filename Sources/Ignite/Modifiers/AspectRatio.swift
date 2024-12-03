@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Specific aspect ratios that are commonly used
 public enum AspectRatio: String {
     /// A square aspect ratio.

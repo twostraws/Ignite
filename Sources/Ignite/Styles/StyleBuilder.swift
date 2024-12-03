@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A result builder that composes multiple styles into a single resolved style.
 ///
 /// StyleBuilder combines properties from multiple style components, including media queries,

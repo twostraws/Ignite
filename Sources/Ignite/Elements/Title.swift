@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Provides the title for a given page, which is rendered in the browser and also
 /// appears in search engine results.
 public struct Title: HeadElement {

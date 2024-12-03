@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that creates a flex container with horizontal alignment
 struct ContainerRelativeFrameModifier: HTMLModifier {
 

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A style that applies CSS properties based on the device's screen orientation.
 public struct OrientationStyle: Style {
     /// The CSS property to modify (e.g., "color", "font-size")

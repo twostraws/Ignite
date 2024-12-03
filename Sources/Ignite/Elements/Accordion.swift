@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A control that displays a list of section titles that can be folded out to
 /// display more content.
 public struct Accordion: BlockHTML {

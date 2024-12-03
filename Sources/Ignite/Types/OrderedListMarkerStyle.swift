@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Some of the (many!) ways of numbering ordered lists.
 public enum OrderedListMarkerStyle: String, Sendable {
     /// Lists are numbered 1, 2, 3

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A placeholder HTML element that renders nothing
 /// Used as a default or fallback when no content is needed
 public struct EmptyHTML: HTML, InlineHTML, RootHTML {

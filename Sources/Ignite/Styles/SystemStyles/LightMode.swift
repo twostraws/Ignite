@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A style that applies CSS properties when light mode is enabled.
 ///
 /// LightMode allows you to define styles that only take effect when the system
