@@ -28,7 +28,7 @@ public extension Theme {
     var linkHover: Color? { Color(hex: "#0a58ca") }
     var border: Color? { Color(hex: "#dee2e6") }
     var heading: Color? { nil }
-    var syntaxHighlighterTheme: HighlighterTheme? { nil }
+    var syntaxHighlighterTheme: HighlighterTheme? { .automatic }
 
     // Font Families
     var sansSerifFont: Font? { nil }
