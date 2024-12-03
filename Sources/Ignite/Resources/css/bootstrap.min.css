@@ -58,80 +58,90 @@ div.alert p:last-child {
 /* Auto-switching Material Classes */
 .material-ultra-thin {
     background: var(--material-light-ultra-thin);
-    @supports (backdrop-filter: blur(10px)) {
+    @supports ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
         background: var(--material-light-ultra-thin-blur);
+        -webkit-backdrop-filter: blur(10px) saturate(180%);
         backdrop-filter: blur(10px) saturate(180%);
     }
 }
 
 .material-thin {
     background: var(--material-light-thin);
-    @supports (backdrop-filter: blur(20px)) {
+    @supports ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
         background: var(--material-light-thin-blur);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
         backdrop-filter: blur(20px) saturate(180%);
     }
 }
 
 .material-regular {
     background: var(--material-light-regular);
-    @supports (backdrop-filter: blur(30px)) {
+    @supports ((backdrop-filter: blur(30px)) or (-webkit-backdrop-filter: blur(30px))) {
         background: var(--material-light-regular-blur);
+        -webkit-backdrop-filter: blur(30px) saturate(180%);
         backdrop-filter: blur(30px) saturate(180%);
     }
 }
 
 .material-thick {
     background: var(--material-light-thick);
-    @supports (backdrop-filter: blur(50px)) {
+    @supports ((backdrop-filter: blur(50px)) or (-webkit-backdrop-filter: blur(50px))) {
         background: var(--material-light-thick-blur);
+        -webkit-backdrop-filter: blur(50px) saturate(180%);
         backdrop-filter: blur(50px) saturate(180%);
     }
 }
 
 .material-ultra-thick {
     background: var(--material-light-ultra-thick);
-    @supports (backdrop-filter: blur(70px)) {
+    @supports ((backdrop-filter: blur(70px)) or (-webkit-backdrop-filter: blur(70px))) {
         background: var(--material-light-ultra-thick-blur);
+        -webkit-backdrop-filter: blur(70px) saturate(180%);
         backdrop-filter: blur(70px) saturate(180%);
     }
 }
 
 [data-bs-theme*="dark"] .material-ultra-thin {
     background: var(--material-dark-ultra-thin);
-    @supports (backdrop-filter: blur(10px)) {
+    @supports ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
         background: var(--material-dark-ultra-thin-blur);
+        -webkit-backdrop-filter: blur(10px) saturate(180%);
         backdrop-filter: blur(10px) saturate(180%);
     }
 }
 
 [data-bs-theme*="dark"] .material-thin {
     background: var(--material-dark-thin);
-    @supports (backdrop-filter: blur(20px)) {
+    @supports ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
         background: var(--material-dark-thin-blur);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
         backdrop-filter: blur(20px) saturate(180%);
     }
 }
 
 [data-bs-theme*="dark"] .material-regular {
     background: var(--material-dark-regular);
-    @supports (backdrop-filter: blur(30px)) {
+    @supports ((backdrop-filter: blur(30px)) or (-webkit-backdrop-filter: blur(30px))) {
         background: var(--material-dark-regular-blur);
+        -webkit-backdrop-filter: blur(30px) saturate(180%);
         backdrop-filter: blur(30px) saturate(180%);
     }
 }
 
 [data-bs-theme*="dark"] .material-thick {
     background: var(--material-dark-thick);
-    @supports (backdrop-filter: blur(50px)) {
+    @supports ((backdrop-filter: blur(50px)) or (-webkit-backdrop-filter: blur(50px))) {
         background: var(--material-dark-thick-blur);
+        -webkit-backdrop-filter: blur(50px) saturate(180%);
         backdrop-filter: blur(50px) saturate(180%);
     }
 }
 
 [data-bs-theme*="dark"] .material-ultra-thick {
     background: var(--material-dark-ultra-thick);
-    @supports (backdrop-filter: blur(70px)) {
+    @supports ((backdrop-filter: blur(70px)) or (-webkit-backdrop-filter: blur(70px))) {
         background: var(--material-dark-ultra-thick-blur);
+        -webkit-backdrop-filter: blur(70px) saturate(180%);
         backdrop-filter: blur(70px) saturate(180%);
     }
 }
@@ -139,40 +149,45 @@ div.alert p:last-child {
 /* Light Material Classes (for explicit overrides) */
 .material-ultra-thin-light {
     background: var(--material-light-ultra-thin);
-    @supports (backdrop-filter: blur(10px)) {
+    @supports ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
         background: var(--material-light-ultra-thin-blur);
+        -webkit-backdrop-filter: blur(10px) saturate(180%);
         backdrop-filter: blur(10px) saturate(180%);
     }
 }
 
 .material-thin-light {
     background: var(--material-light-thin);
-    @supports (backdrop-filter: blur(20px)) {
+    @supports ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
         background: var(--material-light-thin-blur);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
         backdrop-filter: blur(20px) saturate(180%);
     }
 }
 
 .material-regular-light {
     background: var(--material-light-regular);
-    @supports (backdrop-filter: blur(30px)) {
+    @supports ((backdrop-filter: blur(30px)) or (-webkit-backdrop-filter: blur(30px))) {
         background: var(--material-light-regular-blur);
+        -webkit-backdrop-filter: blur(30px) saturate(180%);
         backdrop-filter: blur(30px) saturate(180%);
     }
 }
 
 .material-thick-light {
     background: var(--material-light-thick);
-    @supports (backdrop-filter: blur(50px)) {
+    @supports ((backdrop-filter: blur(50px)) or (-webkit-backdrop-filter: blur(50px))) {
         background: var(--material-light-thick-blur);
+        -webkit-backdrop-filter: blur(50px) saturate(180%);
         backdrop-filter: blur(50px) saturate(180%);
     }
 }
 
 .material-ultra-thick-light {
     background: var(--material-light-ultra-thick);
-    @supports (backdrop-filter: blur(70px)) {
+    @supports ((backdrop-filter: blur(70px)) or (-webkit-backdrop-filter: blur(70px))) {
         background: var(--material-light-ultra-thick-blur);
+        -webkit-backdrop-filter: blur(70px) saturate(180%);
         backdrop-filter: blur(70px) saturate(180%);
     }
 }
@@ -180,40 +195,45 @@ div.alert p:last-child {
 /* Dark Material Classes (for explicit overrides) */
 .material-ultra-thin-dark {
     background: var(--material-dark-ultra-thin);
-    @supports (backdrop-filter: blur(10px)) {
+    @supports ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
         background: var(--material-dark-ultra-thin-blur);
+        -webkit-backdrop-filter: blur(10px) saturate(180%);
         backdrop-filter: blur(10px) saturate(180%);
     }
 }
 
 .material-thin-dark {
     background: var(--material-dark-thin);
-    @supports (backdrop-filter: blur(20px)) {
+    @supports ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
         background: var(--material-dark-thin-blur);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
         backdrop-filter: blur(20px) saturate(180%);
     }
 }
 
 .material-regular-dark {
     background: var(--material-dark-regular);
-    @supports (backdrop-filter: blur(30px)) {
+    @supports ((backdrop-filter: blur(30px)) or (-webkit-backdrop-filter: blur(30px))) {
         background: var(--material-dark-regular-blur);
+        -webkit-backdrop-filter: blur(30px) saturate(180%);
         backdrop-filter: blur(30px) saturate(180%);
     }
 }
 
 .material-thick-dark {
     background: var(--material-dark-thick);
-    @supports (backdrop-filter: blur(50px)) {
+    @supports ((backdrop-filter: blur(50px)) or (-webkit-backdrop-filter: blur(50px))) {
         background: var(--material-dark-thick-blur);
+        -webkit-backdrop-filter: blur(50px) saturate(180%);
         backdrop-filter: blur(50px) saturate(180%);
     }
 }
 
 .material-ultra-thick-dark {
     background: var(--material-dark-ultra-thick);
-    @supports (backdrop-filter: blur(70px)) {
+    @supports ((backdrop-filter: blur(70px)) or (-webkit-backdrop-filter: blur(70px))) {
         background: var(--material-dark-ultra-thick-blur);
+        -webkit-backdrop-filter: blur(70px) saturate(180%);
         backdrop-filter: blur(70px) saturate(180%);
     }
 }
