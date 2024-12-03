@@ -42,19 +42,19 @@ struct BackgroundModifier: HTMLModifier {
     }
 }
 
-extension HTML {
+public extension HTML {
     /// Applies a background color from a `Color` object.
     /// - Parameter color: The specific color value to use, specified as
     /// a `Color` instance.
     /// - Returns: The current element with the updated background color.
-    public func background(_ color: Color) -> some HTML {
+    func background(_ color: Color) -> some HTML {
         modifier(BackgroundModifier(color: color))
     }
 
     /// Applies a background color from a string.
     /// - Parameter color: The specific color value to use, specified as a string.
     /// - Returns: The current element with the updated background color.
-    public func background(_ color: String) -> some HTML {
+    func background(_ color: String) -> some HTML {
         modifier(BackgroundModifier(colorString: color))
     }
 
@@ -68,19 +68,19 @@ extension HTML {
     }
 }
 
-extension BlockHTML {
+public extension BlockHTML {
     /// Applies a background color from a `Color` object.
     /// - Parameter color: The specific color value to use, specified as
     /// a `Color` instance.
     /// - Returns: The current element with the updated background color.
-    public func background(_ color: Color) -> some BlockHTML {
+    func background(_ color: Color) -> some BlockHTML {
         modifier(BackgroundModifier(color: color))
     }
 
     /// Applies a background color from a string.
     /// - Parameter color: The specific color value to use, specified as a string.
     /// - Returns: The current element with the updated background color.
-    public func background(_ color: String) -> some BlockHTML {
+    func background(_ color: String) -> some BlockHTML {
         modifier(BackgroundModifier(colorString: color))
     }
 
@@ -94,13 +94,13 @@ extension BlockHTML {
     }
 }
 
-extension HTML {
+public extension HTML {
     /// Applies a background color from a string.
     /// - Parameter color: The specific color value to use, specified as a
     /// hex string such as "#FFE700".
     /// - Returns: The current element with the updated background color.
     @available(*, deprecated, renamed: "background(_:)")
-    public func backgroundColor(_ color: String) -> Self {
+    func backgroundColor(_ color: String) -> Self {
         self.style("background-color: \(color)")
     }
 
@@ -109,7 +109,7 @@ extension HTML {
     /// a `Color` instance.
     /// - Returns: The current element with the updated background color.
     @available(*, deprecated, renamed: "background(_:)")
-    public func backgroundColor(_ color: Color) -> Self {
+    func backgroundColor(_ color: Color) -> Self {
         self.style("background-color: \(color.description)")
     }
 }

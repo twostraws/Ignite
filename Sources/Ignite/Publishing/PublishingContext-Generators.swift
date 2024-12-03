@@ -231,7 +231,7 @@ extension PublishingContext {
         // Generate alternate theme overrides
         for theme in themes {
             cssContent += """
-            [data-bs-theme="\(theme.id.kebabCased())"] {
+            [data-bs-theme="\(theme.id)"] {
                 \(generateThemeVariables(theme))
             }
             

@@ -42,9 +42,11 @@ public struct CodeBlock: BlockHTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        if let language {
-            context.usesSyntaxHighlighters = true
-            return """
+        guard context.site.allHighlighterThemes.isEmpty == false else {
+            fatalError("At least one of your themes must specify a syntax highlighter.")
+        }
+        return if let language {
+            """
             <pre\(attributes.description())>\
             <code class=\"hljs language-\(language)\">\
             \(content)\
@@ -52,7 +54,7 @@ public struct CodeBlock: BlockHTML {
             </pre>
             """
         } else {
-            return """
+            """
             <pre\(attributes.description())>\
             <code class=\"hljs\">\(content)</code>\
             </pre>

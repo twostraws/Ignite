@@ -14,7 +14,7 @@ public struct SystemStyle: Style {
 
     /// Creates a new system style with the specified Bootstrap class name
     /// - Parameter className: The Bootstrap utility class name to use
-    public init(_ className: String) {
+    internal init(_ className: String) {
         self.className = className
     }
 

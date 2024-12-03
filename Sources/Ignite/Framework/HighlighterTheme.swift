@@ -6,7 +6,8 @@
 //
 
 public enum HighlighterTheme: String, Sendable {
-    case `default`
+    case automatic
+    case highlightJS
     case github
     case xcode
     case xcodeDark
@@ -19,11 +20,11 @@ public enum HighlighterTheme: String, Sendable {
         switch self {
         case .xcodeDark:
             return "/css/highlightjs-xcode-dark.css"
-        case .default:
+        case .highlightJS:
             return "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
         case .github:
             return "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
-        case .xcode:
+        case .xcode, .automatic:
             return "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/xcode.min.css"
         case .monokai:
             return "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"
