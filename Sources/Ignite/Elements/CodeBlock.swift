@@ -43,7 +43,7 @@ public struct CodeBlock: BlockHTML {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         if let language {
-            context.highlighterLanguages.append(language)
+            context.usesSyntaxHighlighters = true
             return """
             <pre\(attributes.description())>\
             <code class=\"hljs language-\(language)\">\

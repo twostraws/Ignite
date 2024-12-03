@@ -39,7 +39,7 @@ public struct HTMLBody: RootHTML {
             output += Script(file: "/js/bootstrap.bundle.min.js").render(context: context)
         }
 
-        if !context.highlighterLanguages.isEmpty {
+        if context.usesSyntaxHighlighters {
             output += Script(file: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js").render(context: context)
             output += Script(code: "hljs.highlightAll();").render(context: context)
         }

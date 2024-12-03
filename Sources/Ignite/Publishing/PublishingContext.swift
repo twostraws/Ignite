@@ -34,8 +34,8 @@ public final class PublishingContext {
     /// The directory containing their final, built website.
     var buildDirectory: URL
 
-    /// An array of languages used with the syntax highlighters on your site.
-    var highlighterLanguages = [HighlighterLanguage]()
+    /// Whether the site uses code blocks with syntax highlighting.
+    var usesSyntaxHighlighters: Bool = false
 
     /// Path at which content renders. Defaults to nil.
     public var currentRenderingPath: String?
@@ -198,7 +198,7 @@ public final class PublishingContext {
             try copy(resource: "fonts/bootstrap-icons.woff2")
         }
 
-        if highlighterLanguages.isEmpty == false {
+        if usesSyntaxHighlighters {
             try copySyntaxHighlighters()
         }
     }
