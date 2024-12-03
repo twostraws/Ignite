@@ -19,7 +19,7 @@ public struct Material: Style {
     private let type: MaterialType
 
     /// The available material types, matching SwiftUI's Material options
-    public enum MaterialType: String, Sendable {
+    enum MaterialType: String, Sendable {
         case ultraThin = "ultra-thin"
         case thin = "thin"
         case regular = "regular"
