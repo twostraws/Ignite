@@ -68,7 +68,7 @@ public struct Item: HTML {
             fatalError("Accordion sections must not be rendered without a parentID and parentOpenMode in place.")
         }
 
-        let itemID = "\(parentID)-item\(UUID().uuidString.truncatedHash)"
+        let itemID = "\(parentID)-item\(UUID().uuidString)"
 
         return Group {
             Text {
