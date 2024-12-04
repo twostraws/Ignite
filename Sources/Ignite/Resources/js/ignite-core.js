@@ -29,14 +29,19 @@
         if (savedTheme === 'auto') {
             if (supportsLightTheme && supportsDarkTheme) {
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                document.documentElement.setAttribute('data-bs-theme', prefersDark ? 'dark' : 'light');
+                const theme = prefersDark ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-bs-theme', theme);
+                igniteApplySyntaxTheme(theme);
             } else if (supportsDarkTheme) {
                 document.documentElement.setAttribute('data-bs-theme', 'dark');
+                igniteApplySyntaxTheme('dark');
             } else if (supportsLightTheme) {
                 document.documentElement.setAttribute('data-bs-theme', 'light');
+                igniteApplySyntaxTheme('light');
             }
         } else {
             document.documentElement.setAttribute('data-bs-theme', savedTheme);
+            igniteApplySyntaxTheme(savedTheme);
         }
 
         // Setup theme change listener
@@ -44,7 +49,9 @@
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
                 const currentTheme = localStorage.getItem('custom-theme');
                 if (currentTheme === 'auto') {
-                    document.documentElement.setAttribute('data-bs-theme', e.matches ? 'dark' : 'light');
+                    const theme = e.matches ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-bs-theme', theme);
+                    igniteApplySyntaxTheme(theme);
                 }
             });
         }
@@ -57,15 +64,39 @@ function igniteApplyTheme(themeID) {
 
     if (themeID === 'auto') {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.setAttribute('data-bs-theme', prefersDark ? 'dark' : 'light');
+        const theme = prefersDark ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-bs-theme', theme);
     } else {
         document.documentElement.setAttribute('data-bs-theme', themeID);
+    }
+
+    const syntaxTheme = document.documentElement.getAttribute(`data-syntax-theme-${themeID}`);
+    if (syntaxTheme) {
+        igniteApplySyntaxTheme(syntaxTheme);
+    }
+}
+
+function igniteApplySyntaxTheme() {
+    // Get the current syntax theme from CSS variable
+    const syntaxTheme = getComputedStyle(document.documentElement)
+    .getPropertyValue('--syntax-highlight-theme').trim();
+
+    // Disable all themes first
+    document.querySelectorAll('link[data-highlight-theme]').forEach(link => {
+        link.disabled = true;
+    });
+
+    // Enable the selected theme
+    const themeLink = document.querySelector(`link[data-highlight-theme="${syntaxTheme}"]`);
+    if (themeLink) {
+        themeLink.disabled = false;
     }
 }
 
 // Switch theme action
 function igniteSwitchTheme(themeID) {
     igniteApplyTheme(themeID);
+    igniteApplySyntaxTheme();
 }
 
 // SECTION: Email Protection ------------------------------------------------------------------

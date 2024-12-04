@@ -16,7 +16,7 @@ struct FontStyleModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         if content.body.isComposite {
             if style == .lead {
-                content.addContainerClass("lead")
+                content.containerClass("lead")
                     .class("font-inherit")
             } else {
                 Tag(style.rawValue) {

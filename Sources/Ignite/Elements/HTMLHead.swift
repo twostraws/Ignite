@@ -83,8 +83,8 @@ public struct HTMLHead: RootHTML {
             MetaLink.remoteIconCSS
         }
 
-        if configuration.syntaxHighlighters.isEmpty == false {
-            MetaLink.syntaxHighlightingCSS
+        if configuration.highlighterThemes.isEmpty == false {
+            MetaLink.highlighterThemeMetaLinks(for: configuration.highlighterThemes)
         }
 
         Script(file: "/js/ignite-core.js")
@@ -95,11 +95,11 @@ public struct HTMLHead: RootHTML {
             MetaLink.remoteIconCSS
         }
 
-        MetaLink.themeCSS
-
         if AnimationManager.default.hasAnimations {
             MetaLink.animationCSS
         }
+
+        MetaLink.themeCSS
 
         MetaLink(href: page.url, rel: "canonical")
 
