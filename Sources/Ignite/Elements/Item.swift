@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// One item inside an accordion.
 public struct Item: HTML {
     /// The content and behavior of this HTML.

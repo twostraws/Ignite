@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 // It's difficult to find a list of actual language codes
 // supported in web pages, so the list below is a composite
 // of several sources in order to provide maximum flexibility.

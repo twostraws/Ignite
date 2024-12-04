@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 public enum UnorderedListStyle: String {
     /// Lists are shown with filled circle bullet points.
     case `default` = "disc"

@@ -1,11 +1,9 @@
 //
-//  CornerRadii.swift
-//  Ignite
+// CornerRadii.swift
+// Ignite
+// https://www.github.com/twostraws/Ignite
+// See LICENSE for license information.
 //
-//  Created by Joshua Toro on 11/4/24.
-//
-
-import Foundation
 
 /// Represents the corner radii for an HTML element, allowing different radius values for each corner.
 public struct CornerRadii {

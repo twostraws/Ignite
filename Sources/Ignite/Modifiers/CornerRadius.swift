@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that applies corner radius styling to HTML elements
 struct CornerRadiusModifier: HTMLModifier {
     /// The edges to apply corner radius to

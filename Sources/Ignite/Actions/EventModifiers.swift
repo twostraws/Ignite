@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 extension HTML {
     /// Adds an "onclick" JavaScript event to this element, running
     /// the provided actions when triggered.

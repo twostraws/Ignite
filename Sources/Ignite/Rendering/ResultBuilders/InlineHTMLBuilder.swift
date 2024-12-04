@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A result builder that enables declarative syntax for constructing inline HTML elements.
 ///
 /// This builder provides support for creating inline element hierarchies using

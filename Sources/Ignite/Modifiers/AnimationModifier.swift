@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that applies animations or transitions to HTML elements.
 struct AnimationModifier: HTMLModifier {
     /// The transition to apply, if using a CSS transition animation.

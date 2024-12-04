@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Renders text with a strong text effect, which usually means bold.
 public struct Strong: InlineHTML {
     /// The content and behavior of this HTML.

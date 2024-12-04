@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 // swiftlint:disable unused_setter_value line_length
 /// Not my proudest moment. This extension makes arrays of elements conform
 /// to many protocols to make rendering easier. I have no doubt there are better ways

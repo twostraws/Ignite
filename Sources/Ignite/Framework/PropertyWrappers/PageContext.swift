@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Manages the current page context during HTML rendering.
 /// This class provides a way to temporarily set the current page
 /// while rendering HTML elements that need access to page-level information.

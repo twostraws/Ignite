@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Shows a modal dialog with the content of the page element identified by ID
 public struct ShowModal: Action, Sendable {
 

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A result builder that enables declarative syntax for constructing block-level HTML elements.
 ///
 /// This builder provides support for creating complex hierarchies of block elements using

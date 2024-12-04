@@ -5,9 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-import OrderedCollections
-
 /// A thread-safe manager class that handles registration and generation of CSS animations.
 ///
 /// `AnimationManager` serves as the central coordinator for all animations in an Ignite application,

@@ -5,8 +5,6 @@
 //  See LICENSE for license information.
 //
 
-import Foundation
-
 /// Renders an abbreviation.
 public struct Abbreviation: InlineHTML {
     /// The content and behavior of this HTML.

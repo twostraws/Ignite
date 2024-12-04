@@ -5,7 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
 import Ignite
 
 /// An example site used in tests.
@@ -18,11 +17,11 @@ struct TestSite: Site {
     var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
 
     var homePage = TestPage()
-    var theme = EmptyTheme()
+    var layout = EmptyLayout()
 }
 
 /// An example page  used in tests.
-struct TestPage: StaticPage {
+struct TestPage: StaticLayout {
     var title = "Home"
 
     var body: some HTML {

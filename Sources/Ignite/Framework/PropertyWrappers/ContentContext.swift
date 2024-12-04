@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Manages the current Markdown content during HTML rendering
 @MainActor
 final class ContentContext {

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that stores global configuration and Layout settings for your site.
 ///
 /// Environment values are propagated through your site's view hierarchy and can be accessed

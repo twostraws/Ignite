@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Specific values that can be used to position this element.
 public enum Position: String {
     /// No specific position.

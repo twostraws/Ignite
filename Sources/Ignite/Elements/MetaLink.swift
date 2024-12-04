@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// An item of metadata that links to an external resource somehow, such as
 /// a stylesheet.
 public struct MetaLink: HeadElement, Sendable {

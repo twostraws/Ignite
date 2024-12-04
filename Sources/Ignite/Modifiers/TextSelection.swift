@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Controls whether the user can select the text inside this element or not.
 public enum TextSelection: String {
     case automatic = "auto"

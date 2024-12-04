@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 public struct Group: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }

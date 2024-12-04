@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Describes a HTML element that is rendered in block style, i.e. that it occupies the
 /// full width of the page by default.
 public protocol BlockHTML: HTML, HorizontalAligning {

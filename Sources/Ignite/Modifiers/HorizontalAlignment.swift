@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Controls how elements are horizontally positioned in side their container.
 public enum HorizontalAlignment: String {
     /// Elements are positioned at the start of their container.

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// An enum representing the `tabindex` attribute for controlling the tab order and focus behavior of HTML elements.
 public enum TabFocus {
     /// The element is focusable but not part of the tab order (equivalent to `tabindex="-1"`).

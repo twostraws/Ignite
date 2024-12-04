@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that represents a font configuration including style, size, and weight
 public struct Font: Hashable, Equatable, Sendable {
     /// The name of the font family, if using a custom font.

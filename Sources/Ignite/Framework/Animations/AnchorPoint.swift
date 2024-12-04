@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Specifies the origin point for transform operations like rotation.
 /// This value maps directly to CSS's transform-origin property.
 public enum AnchorPoint: Sendable {

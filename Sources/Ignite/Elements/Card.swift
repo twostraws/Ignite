@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A group of information placed inside a gently rounded
 public struct Card: BlockHTML {
     /// Styling for this card.

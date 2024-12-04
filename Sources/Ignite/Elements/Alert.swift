@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Shows a clearly delineated box on your page, providing important information
 /// or warnings to users.
 public struct Alert: BlockHTML {

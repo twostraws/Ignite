@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that wraps HTML content with a modifier, preserving attributes and structure.
 struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
     /// The column width to use when this element appears in a grid layout.

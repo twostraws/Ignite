@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Controls the display size of buttons. Medium is the default.
 public enum ButtonSize: String, CaseIterable {
     case small, medium, large

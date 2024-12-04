@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Plays Audio on your page.
 public struct Audio: BlockHTML, InlineHTML, LazyLoadable {
     /// The content and behavior of this HTML.

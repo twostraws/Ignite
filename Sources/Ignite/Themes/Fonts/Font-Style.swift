@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Represents different text styles available in the system
 public extension Font {
     enum Style: String, CaseIterable, Sendable, LengthUnit {

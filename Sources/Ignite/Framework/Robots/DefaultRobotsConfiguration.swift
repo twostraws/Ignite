@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A simple default robots configuration that disallows nothing.
 public struct DefaultRobotsConfiguration: RobotsConfiguration {
     public init() { }

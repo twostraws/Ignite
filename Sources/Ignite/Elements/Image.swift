@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// An image on your page. Can be vector (SVG) or raster (JPG, PNG, GIF).
 public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     /// The content and behavior of this HTML.

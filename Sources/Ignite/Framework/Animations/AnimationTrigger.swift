@@ -4,7 +4,6 @@
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
 //
-import Foundation
 
 /// Defines the events that can trigger an animation on an HTML element.
 public enum AnimationTrigger: String {

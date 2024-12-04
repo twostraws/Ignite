@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Creates a list of items, either ordered or unordered.
 public struct List: BlockHTML {
     /// Controls whether this list contains items in a specific order or not.

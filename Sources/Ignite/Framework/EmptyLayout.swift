@@ -1,14 +1,12 @@
 //
-// EmptyTheme.swift
+// EmptyLayout.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
 //
 
-import Foundation
-
-/// A theme that applies almost no styling.
-public struct EmptyTheme: Layout {
+/// A layout that applies almost no styling.
+public struct EmptyLayout: Layout {
     public var body: some HTML {
         HTMLDocument {
             HTMLBody(for: page)

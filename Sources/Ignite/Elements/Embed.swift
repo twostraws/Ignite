@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Embeds a custom URL, such as YouTube or Vimeo.
 public struct Embed: BlockHTML, LazyLoadable {
     /// Determines what kind of Spotify embed we have.

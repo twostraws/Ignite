@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Defines the available timing functions for animations
 public enum TimingCurve: CSSRepresentable {
     /// Spring animation (response: 0.55, dampingFraction: 1.0)

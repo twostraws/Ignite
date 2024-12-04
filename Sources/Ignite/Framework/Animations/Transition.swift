@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// The main animation configuration type that provides a flexible way to define CSS animations
 public struct Transition: Animatable {
     /// The CSS properties being animated and their values

@@ -5,9 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-import OrderedCollections
-
 /// A utility type that generates CSS classes for different types of animations.
 ///
 /// `AnimationClassGenerator` converts Ignite animations into CSS classes, handling different

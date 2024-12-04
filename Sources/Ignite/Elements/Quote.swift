@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A block quote of text.
 public struct Quote: BlockHTML {
     /// The content and behavior of this HTML.

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Property sets the appearance of decorative lines on text.
 public enum TextDecoration: String {
     case none

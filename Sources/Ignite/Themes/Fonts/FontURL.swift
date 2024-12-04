@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that can represent a font family name or URL for use in themes.
 public protocol FontURL {}
 

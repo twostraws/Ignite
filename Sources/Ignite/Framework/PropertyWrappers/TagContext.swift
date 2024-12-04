@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Manages the current tag during page generation
 @MainActor
 final class TagContext {

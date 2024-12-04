@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// An element that handles list rendering by placing its <li> tag manually.
 @MainActor
 protocol ListableElement {

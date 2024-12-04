@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 struct AccessibilityLabelModifier: HTMLModifier {
     var label: String
 

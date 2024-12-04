@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// One static layout in your site, where the content is entirely standalone rather
 /// than being produced in conjunction with an external Markdown file.
 @MainActor

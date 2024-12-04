@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Creates one distinct section on your page, where content inside is fitted to
 /// a 12-column grid. If the items in your section have widths that add up to
 /// 12 then they will fit in a single row, otherwise they will be placed on multiple

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A protocol for customizing the layout of ContentPreview.
 public protocol ContentPreviewStyle {
     func body(content: Content, context: PublishingContext) -> any BlockHTML

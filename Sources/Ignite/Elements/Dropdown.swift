@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Elements that conform to `DropdownElement` can be shown inside
 /// Dropdown objects.
 public protocol DropdownElement: InlineHTML {}
