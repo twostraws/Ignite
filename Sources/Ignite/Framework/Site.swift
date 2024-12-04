@@ -94,6 +94,9 @@ public protocol Site: Sendable {
     /// Additional themes that can be selected by users beyond light and dark mode.
     var alternateThemes: [any Theme] { get }
 
+    /// Controls whether HTML output should be formatted with proper indentation.
+    var prettifyHTML: Bool { get }
+
     /// The path to the favicon
     var favicon: URL? { get }
 
@@ -128,6 +131,9 @@ public extension Site {
 
     /// No additional themes by default.
     var alternateThemes: [any Theme] { [] }
+
+    /// Formats HTML output with proper indentation by default.
+    var prettifyHTML: Bool { true }
 
     /// Enable local Bootstrap files by default
     var useDefaultBootstrapURLs: BootstrapOptions { .localBootstrap }
