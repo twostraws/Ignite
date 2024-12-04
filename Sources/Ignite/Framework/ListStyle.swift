@@ -32,3 +32,4 @@ public enum ListStyle: Sendable {
     /// - Important: This style does not support numbered markers.
     case groupFlush
 }
+
