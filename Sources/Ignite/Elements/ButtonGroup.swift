@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A container that automatically adjusts the styling for buttons it contains so
 /// that they sit more neatly together.
 public struct ButtonGroup: BlockHTML {

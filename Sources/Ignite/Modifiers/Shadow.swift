@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 // X and Y are correct names here.
 // swiftlint:disable identifier_name
 /// A type used to define a box-shadow

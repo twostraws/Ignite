@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A basic animation type that transitions a single CSS property from one value to another.
 public struct AnimatableData {
     /// The starting value for the animated property

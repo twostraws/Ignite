@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// CSS properties that can be animated
 public enum AnimatableProperty: String {
     /// Controls the aspect ratio of an element

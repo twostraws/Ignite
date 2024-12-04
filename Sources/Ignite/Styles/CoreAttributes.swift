@@ -11,6 +11,21 @@ import OrderedCollections
 // A typealias that allows us to use OrderedSet without importing OrderedCollections
 public typealias OrderedSet<Element: Hashable> = OrderedCollections.OrderedSet<Element>
 
+// A typealias that allows us to use OrderedDictionary without importing OrderedCollections
+public typealias OrderedDictionary<Key: Hashable, Value> = OrderedCollections.OrderedDictionary<Key, Value>
+
+// A typealias that allows us to use UUID without importing Foundation
+public typealias UUID = Foundation.UUID
+
+// A typealias that allows us to use URL without importing Foundation
+public typealias URL = Foundation.URL
+
+// A typealias that allows us to use Data without importing Foundation
+public typealias Data = Foundation.Data
+
+// A typealias that allows us to use Date without importing Foundation
+public typealias Date = Foundation.Date
+
 /// A handful of attributes that all HTML types must support, either for
 /// rendering or for publishing purposes.
 public struct CoreAttributes: Sendable {
@@ -158,7 +173,7 @@ public struct CoreAttributes: Sendable {
             return output
         }
     }
-    
+
     /// Generates an HTML string containing all attributes and optionally wraps content.
     /// - Parameter content: Optional content to wrap with opening and closing tags
     /// - Returns: A string containing all attributes and optional content wrapped in tags

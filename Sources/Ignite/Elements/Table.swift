@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Used to create tabulated data on a page.
 public struct Table: BlockHTML {
     /// Styling options for tables.

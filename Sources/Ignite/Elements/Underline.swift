@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Renders text with an underline.
 public struct Underline: InlineHTML {
     /// The content and behavior of this HTML.

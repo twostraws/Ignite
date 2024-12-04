@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Common foreground styles that allow for clear readability.
 public enum ForegroundStyle: String {
     case primary = "text-primary"

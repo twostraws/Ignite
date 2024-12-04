@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// An inline snippet of programming code, embedded inside a larger part
 /// of your page. For dedicated code blocks that sit on their own line, use
 /// `CodeBlock` instead.

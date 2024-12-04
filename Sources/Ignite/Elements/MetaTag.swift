@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// An item of metadata that helps browsers and search engines understand
 /// your page better.
 public struct MetaTag: HeadElement, Sendable {

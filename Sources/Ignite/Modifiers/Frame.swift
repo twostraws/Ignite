@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that applies dimensional constraints to HTML elements
 struct FrameModifier: HTMLModifier {
     /// The exact width to apply

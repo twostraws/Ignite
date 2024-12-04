@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A simple key-value pair of strings that is able to store custom attributes.
 public struct AttributeValue: Hashable, Equatable, Sendable {
     /// The attribute's name, e.g. "target" or "rel".

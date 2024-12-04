@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Manages the storage and merging of HTML element attributes throughout the application
 public class AttributeStore {
     /// Shared singleton instance for global access

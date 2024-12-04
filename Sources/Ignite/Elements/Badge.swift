@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A small, capsule-shaped piece of information, such as a tag.
 public struct Badge: InlineHTML {
     /// The content and behavior of this HTML.

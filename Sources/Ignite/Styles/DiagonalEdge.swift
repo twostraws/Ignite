@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Describes diagonal edges on an element, e.g. top-leading, or bottom-trailing, along
 /// with groups of edges such as "top" (top leading *and* top-trailing).
 public struct DiagonalEdge: OptionSet, Sendable {

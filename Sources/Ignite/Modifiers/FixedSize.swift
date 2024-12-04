@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that forces elements to size based on their content
 struct FixedSizeModifier: HTMLModifier {
     /// Applies inline-block display to force content-based sizing

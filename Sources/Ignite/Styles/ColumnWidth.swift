@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Controls how many columns a given block element takes up in a `Section`.
 public enum ColumnWidth: Sendable {
     /// The system will divide the available space automatically. For example,

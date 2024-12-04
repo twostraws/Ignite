@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Describes elements that can be placed into navigation bars.
 public protocol NavigationItem: InlineHTML {}
 

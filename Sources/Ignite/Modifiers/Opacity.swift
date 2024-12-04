@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that applies opacity styling to HTML elements
 struct OpacityModifier: HTMLModifier {
     /// The opacity value between 0% (transparent) and 100% (opaque)

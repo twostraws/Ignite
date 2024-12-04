@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A type that flattens and makes HTML content iterable.
 ///
 /// `HTMLCollection` is used internally to handle opaque HTML content returned from result builders,

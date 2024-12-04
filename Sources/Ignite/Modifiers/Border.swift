@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that applies border styling to HTML elements.
 struct BorderModifier: HTMLModifier {
     /// The color of the border.

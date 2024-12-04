@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Displays a link to your RSS feed, if enabled.
 struct FeedLink: HTML {
 

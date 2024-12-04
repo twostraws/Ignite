@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// An separated section of programming code. For inline code that sit along other
 /// text on your page, use `Code` instead.
 public struct CodeBlock: BlockHTML {

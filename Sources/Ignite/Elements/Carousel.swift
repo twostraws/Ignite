@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A collection of slides the user can swipe through.
 public struct Carousel: BlockHTML {
     /// Whether moving between slides should cause movement or a crossfade.

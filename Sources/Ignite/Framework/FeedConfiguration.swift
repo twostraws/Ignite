@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Configures feed generation for a site.
 public struct FeedConfiguration: Sendable {
     /// How much content should be provided in this feed.

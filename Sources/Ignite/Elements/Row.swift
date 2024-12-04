@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// One row inside a `Table`.
 public struct Row: HTML {
     /// The content and behavior of this HTML.

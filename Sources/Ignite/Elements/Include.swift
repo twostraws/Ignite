@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Lets you include arbitrary HTML on a page.
 public struct Include: BlockHTML {
     /// The content and behavior of this HTML.

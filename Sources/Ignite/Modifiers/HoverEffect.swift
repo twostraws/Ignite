@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that applies hover effects to HTML elements
 struct HoverEffectModifier: HTMLModifier {
     /// The effect to apply when hovering

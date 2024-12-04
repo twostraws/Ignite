@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A structure that creates HTML content by mapping over a sequence of data.
 public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML, ListableElement {
     /// The body content created by mapping over the data sequence.

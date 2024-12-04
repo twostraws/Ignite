@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Specifies what content should be encoded for privacy protection
 public enum PrivacyEncoding: String {
     /// Only encode the URL (default)

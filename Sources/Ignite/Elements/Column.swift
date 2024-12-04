@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A column inside a table row.
 public struct Column: HTML, HorizontalAligning {
     /// How to vertically align the contents of this column.

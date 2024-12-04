@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Renders text with a strikethrough effect.
 public struct Strikethrough: InlineHTML {
     /// The content and behavior of this HTML.

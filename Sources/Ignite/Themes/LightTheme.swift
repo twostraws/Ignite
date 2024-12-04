@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A protocol that provides Bootstrap's light theme defaults as a starting point for custom themes.
 /// Conforming types automatically inherit all default light theme values and can override specific properties as needed.
 ///

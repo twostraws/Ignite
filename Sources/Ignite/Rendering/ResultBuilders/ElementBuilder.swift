@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 typealias HeadElementBuilder = ElementBuilder<any HeadElement>
 typealias RootHTMLBuilder = ElementBuilder<any RootHTML>
 typealias StaticLayoutBuilder = ElementBuilder<any StaticLayout>

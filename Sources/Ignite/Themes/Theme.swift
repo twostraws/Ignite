@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A protocol that defines the visual styling and layout properties for a website theme.
 ///
 /// Themes provide comprehensive control over colors, typography, spacing, and responsive

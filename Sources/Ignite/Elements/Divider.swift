@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A horizontal divider for your page, that can also be used to divide elements
 /// in a dropdown.
 public struct Divider: BlockHTML, DropdownElement {

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A small String extension that allows strings to be used directly inside HTML.
 /// Useful when you don't want your text to be wrapped in a paragraph or similar.
 extension String: InlineHTML {

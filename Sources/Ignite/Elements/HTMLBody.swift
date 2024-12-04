@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 public struct HTMLBody: RootHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }

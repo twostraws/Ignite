@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A modifier that adds tooltips to HTML elements
 struct HintModifier: HTMLModifier {
     /// The tooltip text to display

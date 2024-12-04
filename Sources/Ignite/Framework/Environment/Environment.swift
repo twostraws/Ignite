@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A property wrapper that provides access to values from the environment.
 ///
 /// Use `Environment` to read values that are propagated through your site's view hierarchy. For example:
