@@ -57,9 +57,6 @@ public protocol Site: Sendable {
     /// Visit https://icons.getbootstrap.com for the full list.
     var builtInIconsEnabled: BootstrapOptions { get }
 
-    /// An array of syntax highlighters you want to enable for your site.
-    var syntaxHighlighters: [SyntaxHighlighter] { get }
-
     /// The Markdown renderer to use for content in this site. Note: This
     /// only applies to content pages rendered from the Content folder;
     /// the standard MarkdownToHTML parser is used for `Text` and
@@ -135,9 +132,6 @@ public extension Site {
     /// Disable Bootstrap icons by default.
     var builtInIconsEnabled: BootstrapOptions { .localBootstrap }
 
-    /// Include no syntax highlighters by default.
-    var syntaxHighlighters: [SyntaxHighlighter] { [] }
-
     /// Use the standard MarkdownToHTML renderer by default.
     var markdownRenderer: MarkdownToHTML.Type {
         MarkdownToHTML.self
@@ -167,6 +161,36 @@ public extension Site {
 
     /// The default favicon being nil
     var favicon: URL? { nil }
+
+    /// The syntax highlighting themes from every site theme.
+    internal var allHighlighterThemes: Set<HighlighterTheme> {
+        var themes = Set<HighlighterTheme>()
+
+        if let theme = lightTheme?.syntaxHighlighterTheme {
+            themes.insert(theme)
+        }
+        if let darkTheme = darkTheme?.syntaxHighlighterTheme {
+            themes.insert(darkTheme)
+        }
+        themes.formUnion(alternateThemes.compactMap(\.syntaxHighlighterTheme))
+        return themes
+    }
+
+    /// An array of every site theme.
+    internal var allThemes: [Theme] {
+        var themes = [Theme]()
+        if let lightTheme = lightTheme {
+            themes.append(lightTheme)
+        }
+        if let darkTheme = darkTheme {
+            themes.append(darkTheme)
+        }
+        if darkTheme != nil && lightTheme != nil {
+            themes.append(AutoTheme())
+        }
+        themes.append(contentsOf: alternateThemes)
+        return themes
+    }
 
     /// Performs the entire publishing flow from a file in user space, e.g. main.swift
     /// or Site.swift.
