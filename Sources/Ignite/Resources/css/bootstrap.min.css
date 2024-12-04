@@ -101,7 +101,7 @@ div.alert p:last-child {
     }
 }
 
-[data-bs-theme*="dark"] .material-ultra-thin {
+[data-theme-state*="dark"] .material-ultra-thin {
     background: var(--material-dark-ultra-thin);
     @supports ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
         background: var(--material-dark-ultra-thin-blur);
@@ -110,7 +110,7 @@ div.alert p:last-child {
     }
 }
 
-[data-bs-theme*="dark"] .material-thin {
+[data-theme-state*="dark"] .material-thin {
     background: var(--material-dark-thin);
     @supports ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
         background: var(--material-dark-thin-blur);
@@ -119,7 +119,7 @@ div.alert p:last-child {
     }
 }
 
-[data-bs-theme*="dark"] .material-regular {
+[data-theme-state*="dark"] .material-regular {
     background: var(--material-dark-regular);
     @supports ((backdrop-filter: blur(30px)) or (-webkit-backdrop-filter: blur(30px))) {
         background: var(--material-dark-regular-blur);
@@ -128,7 +128,7 @@ div.alert p:last-child {
     }
 }
 
-[data-bs-theme*="dark"] .material-thick {
+[data-theme-state*="dark"] .material-thick {
     background: var(--material-dark-thick);
     @supports ((backdrop-filter: blur(50px)) or (-webkit-backdrop-filter: blur(50px))) {
         background: var(--material-dark-thick-blur);
@@ -137,7 +137,7 @@ div.alert p:last-child {
     }
 }
 
-[data-bs-theme*="dark"] .material-ultra-thick {
+[data-theme-state*="dark"] .material-ultra-thick {
     background: var(--material-dark-ultra-thick);
     @supports ((backdrop-filter: blur(70px)) or (-webkit-backdrop-filter: blur(70px))) {
         background: var(--material-dark-ultra-thick-blur);
