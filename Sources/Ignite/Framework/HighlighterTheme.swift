@@ -21,25 +21,25 @@ public enum HighlighterTheme: String, Sendable {
     var url: String {
         switch self {
         case .xcodeDark:
-            return "/css/highlightjs-xcode-dark.min.css"
+            return "css/highlightjs-xcode-dark.min.css"
         case .highlightJS:
             return "css/highlightjs-default.min.css"
         case .githubLight:
-            return "/css/highlightjs-github-light.min.css"
+            return "css/highlightjs-github-light.min.css"
         case .githubDark:
-            return "/css/highlightjs-github-light.min.css"
+            return "css/highlightjs-github-light.min.css"
         case .xcodeLight, .automatic:
-            return "/css/xcode-light.min.css"
+            return "css/xcode-light.min.css"
         case .monokai:
-            return "/css/monokai.min.css"
+            return "css/monokai.min.css"
         case .solarizedLight:
-            return "/css/solarized.min.css"
+            return "css/solarized.min.css"
         case .solarizedDark:
-            return "/css/solarized-dark.min.css"
+            return "css/solarized-dark.min.css"
         case .tomorrowNight:
-            return "/css/tomorrow-night-bright.min.css"
+            return "css/tomorrow-night-bright.min.css"
         case .twilight:
-            return "/css/twilight.min.css"
+            return "css/twilight.min.css"
         }
     }
 }
