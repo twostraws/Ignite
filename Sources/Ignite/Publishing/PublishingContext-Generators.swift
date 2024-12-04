@@ -224,7 +224,7 @@ extension PublishingContext {
         // Generate alternate theme overrides
         for theme in themes {
             cssContent += """
-            [data-bs-theme="\(theme.id.kebabCased())"] {
+            [data-bs-theme="\(theme.id)"] {
                 \(generateThemeVariables(theme))
             }
             
@@ -318,6 +318,10 @@ extension PublishingContext {
         addProperty(.containerLg, theme.largeMaxWidth)
         addProperty(.containerXl, theme.xLargeMaxWidth)
         addProperty(.containerXxl, theme.xxLargeMaxWidth)
+
+        if let syntaxTheme = theme.syntaxHighlighterTheme {
+            cssProperties.append("--syntax-highlight-theme: \(syntaxTheme.rawValue)")
+        }
 
         return cssProperties.joined(separator: ";\n")
     }

@@ -37,8 +37,9 @@ public struct HTMLBody: RootHTML {
             output += Script(file: "/js/bootstrap.bundle.min.js").render(context: context)
         }
 
-        if !context.site.syntaxHighlighters.isEmpty {
-            output += Script(file: "/js/syntax-highlighting.js").render(context: context)
+        if context.site.allHighlighterThemes.isEmpty == false {
+            output += Script(file: "/js/highlight.min.js").render(context: context)
+            output += Script(code: "hljs.highlightAll();").render(context: context)
         }
 
         if output.contains(#"data-bs-toggle="tooltip""#) {

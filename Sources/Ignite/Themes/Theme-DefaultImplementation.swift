@@ -26,6 +26,7 @@ public extension Theme {
     var linkHover: Color? { Color(hex: "#0a58ca") }
     var border: Color? { Color(hex: "#dee2e6") }
     var heading: Color? { nil }
+    var syntaxHighlighterTheme: HighlighterTheme? { .automatic }
 
     // Font Families
     var sansSerifFont: Font? { nil }
@@ -80,4 +81,18 @@ public extension Theme {
     var largeMaxWidth: (any LengthUnit)? { nil }
     var xLargeMaxWidth: (any LengthUnit)? { nil }
     var xxLargeMaxWidth: (any LengthUnit)? { nil }
+}
+
+extension Theme {
+    /// Internal identifier used for theme switching and CSS selectors.
+    /// Automatically appends "-light" or "-dark" suffix based on protocol conformance.
+    var id: String {
+        let baseID = name.kebabCased()
+        guard type(of: self) != DefaultLightTheme.self && type(of: self) != DefaultDarkTheme.self else { return baseID }
+        switch self {
+        case is LightTheme: return baseID + "-light"
+        case is DarkTheme: return baseID + "-dark"
+        default: return baseID
+        }
+    }
 }
