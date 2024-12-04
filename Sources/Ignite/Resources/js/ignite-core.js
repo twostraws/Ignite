@@ -67,7 +67,10 @@ function igniteApplyTheme(themeID) {
         const theme = prefersDark ? 'dark' : 'light';
         document.documentElement.setAttribute('data-bs-theme', theme);
     } else {
-        document.documentElement.setAttribute('data-bs-theme', themeID);
+        // For custom themes, strip the -light/-dark suffix for Bootstrap
+        const baseTheme = themeID === 'light' || themeID === 'dark' ? themeID :
+        themeID.replace(/-light$/, '').replace(/-dark$/, '');
+        document.documentElement.setAttribute('data-bs-theme', baseTheme);
     }
 
     const syntaxTheme = document.documentElement.getAttribute(`data-syntax-theme-${themeID}`);
