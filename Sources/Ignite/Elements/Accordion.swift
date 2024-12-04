@@ -61,7 +61,7 @@ public struct Accordion: BlockHTML {
         // each element linked back to a unique accordion ID.
         // This is generated below, then passed into individual
         // items so they can adapt accordinly.
-        let accordionID = "accordion\(UUID().uuidString)"
+        let accordionID = "accordion\(UUID().uuidString.truncatedHash)"
         let assignedItems = items.map { $0.assigned(to: accordionID, openMode: openMode) }
         let output = Group { assignedItems }
             .attributes(attributes)

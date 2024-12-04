@@ -30,7 +30,7 @@ public struct Carousel: BlockHTML {
 
     /// An automatically-generated unique identifier for this carousel.
     /// Used to tell its buttons which carousel they are controlling.
-    private let carouselID = "carousel\(UUID().uuidString)"
+    private let carouselID = "carousel\(UUID().uuidString.truncatedHash)"
 
     /// The collection of slides to show inside this carousel.
     var items: [Slide]
