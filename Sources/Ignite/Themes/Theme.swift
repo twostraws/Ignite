@@ -20,8 +20,8 @@
 /// }
 /// ```
 public protocol Theme: Sendable {
-    /// Unique identifier for the theme, automatically sanitized to lowercase with hyphens
-    var id: String { get set }
+    /// The name of the theme, which must be unique
+    var name: String { get set }
 
     /// Primary brand color
     var accent: Color? { get }
@@ -193,4 +193,7 @@ public protocol Theme: Sendable {
 
     /// Maximum width for extra extra large containers
     var xxLargeMaxWidth: (any LengthUnit)? { get }
+
+    /// The color scheme for syntax highlighting
+    var syntaxHighlighterTheme: HighlighterTheme? { get }
 }

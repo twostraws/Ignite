@@ -28,14 +28,30 @@ public struct MetaLink: HeadElement, Sendable {
         href: "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css",
         rel: .stylesheet)
 
-    /// The standard CSS you should include on all pages that use syntax highlighting.
-    public static let syntaxHighlightingCSS = MetaLink(href: "/css/prism-default-dark.css", rel: .stylesheet)
-
     /// The CSS responsible for controlling the visibility of environment-dependent elements.
     static let customCSS = MetaLink(href: "/css/custom.min.css", rel: .stylesheet)
     static let utilityCSS = MetaLink(href: "/css/utilities.min.css", rel: .stylesheet)
     static let themeCSS = MetaLink(href: "/css/themes.min.css", rel: .stylesheet)
     static let animationCSS = MetaLink(href: "/css/animations.min.css", rel: .stylesheet)
+
+    /// Creates an array of `MetaLink` elements for syntax highlighting themes.
+    /// - Parameter themes: A collection of syntax highlighting themes to include.
+    /// - Returns: An array of MetaLink elements. If multiple themes are provided, includes data attributes for theme switching.
+    static func highlighterThemeMetaLinks(for themes: some Collection<HighlighterTheme>) -> [MetaLink] {
+        let hasMultipleThemes = themes.count > 1
+
+        return themes.map { theme in
+            var link = MetaLink(href: theme.url, rel: .stylesheet)
+
+            if hasMultipleThemes {
+                link = link
+                    .data("highlight-theme", theme.rawValue)
+                    .customAttribute(name: "disabled", value: "")
+            }
+
+            return link
+        }
+    }
 
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
@@ -95,7 +111,7 @@ public struct MetaLink: HeadElement, Sendable {
     /// If the link `href` starts with a `\` it is an asset and requires any `subsite` prepended;
     /// otherwise the `href` is a URL and  doesn't get `subsite` prepended
     public func render(context: PublishingContext) -> String {
-        var attributes = CoreAttributes()
+        var attributes = attributes
         attributes.selfClosingTag = "link"
 
         // char[0] of the link 'href' is '/' for an asset; not for a site URL

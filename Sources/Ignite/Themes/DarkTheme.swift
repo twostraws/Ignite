@@ -36,6 +36,7 @@ public extension DarkTheme {
     var link: Color? { Color(hex: "#6ea8fe") }
     var linkHover: Color? { Color(hex: "#8bb9fe") }
     var border: Color? { Color(hex: "#495057") }
+    var syntaxHighlighterTheme: HighlighterTheme? { .xcodeDark }
 }
 
 extension Theme where Self == DefaultDarkTheme {
@@ -46,5 +47,5 @@ extension Theme where Self == DefaultDarkTheme {
 /// The default dark theme implementation that uses Bootstrap's dark theme values.
 /// This theme provides all standard dark mode colors and styling without any customization.
 struct DefaultDarkTheme: DarkTheme {
-    var id: String = "dark"
+    var name: String = "dark"
 }
