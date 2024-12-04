@@ -345,7 +345,7 @@ public final class PublishingContext {
     /// resolving dependencies.
     func copySyntaxHighlighters() throws {
         if site.allHighlighterThemes.contains(.xcodeDark) {
-            try copy(resource: "css/highlightjs-xcode-dark.css")
+            try copy(resource: "css/highlightjs-xcode-dark.min.css")
         }
     }
 }

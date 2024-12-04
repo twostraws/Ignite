@@ -38,7 +38,7 @@ public struct HTMLBody: RootHTML {
         }
 
         if context.site.allHighlighterThemes.isEmpty == false {
-            output += Script(file: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js").render(context: context)
+            output += Script(file: "/js/highlight.min.js").render(context: context)
             output += Script(code: "hljs.highlightAll();").render(context: context)
         }
 

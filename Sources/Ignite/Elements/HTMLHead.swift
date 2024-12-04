@@ -84,7 +84,7 @@ public struct HTMLHead: RootHTML {
         }
 
         if configuration.highlighterThemes.isEmpty == false {
-            MetaLink.highlighThemeMetaLinks(for: configuration.highlighterThemes)
+            MetaLink.highlighterThemeMetaLinks(for: configuration.highlighterThemes)
         }
 
         Script(file: "/js/ignite-core.js")

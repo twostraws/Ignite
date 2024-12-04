@@ -7,33 +7,39 @@
 
 public enum HighlighterTheme: String, Sendable {
     case automatic
+    case githubLight
+    case githubDark
     case highlightJS
-    case github
-    case xcode
-    case xcodeDark
     case monokai
-    case solarized
-    case tomorrow
+    case solarizedLight
+    case solarizedDark
+    case tomorrowNight
     case twilight
+    case xcodeLight
+    case xcodeDark
 
     var url: String {
         switch self {
         case .xcodeDark:
-            return "/css/highlightjs-xcode-dark.css"
+            return "/css/highlightjs-xcode-dark.min.css"
         case .highlightJS:
-            return "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
-        case .github:
-            return "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
-        case .xcode, .automatic:
-            return "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/xcode.min.css"
+            return "css/highlightjs-default.min.css"
+        case .githubLight:
+            return "/css/highlightjs-github-light.min.css"
+        case .githubDark:
+            return "/css/highlightjs-github-light.min.css"
+        case .xcodeLight, .automatic:
+            return "/css/xcode-light.min.css"
         case .monokai:
-            return "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"
-        case .solarized:
-            return "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/solarized-dark.min.css"
-        case .tomorrow:
-            return "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tomorrow-night.min.css"
+            return "/css/monokai.min.css"
+        case .solarizedLight:
+            return "/css/solarized.min.css"
+        case .solarizedDark:
+            return "/css/solarized-dark.min.css"
+        case .tomorrowNight:
+            return "/css/tomorrow-night-bright.min.css"
         case .twilight:
-            return "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/twilight.min.css"
+            return "/css/twilight.min.css"
         }
     }
 }
