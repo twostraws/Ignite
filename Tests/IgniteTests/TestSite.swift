@@ -15,14 +15,13 @@ struct TestSite: Site {
     var url = URL(static: "https://www.yoursite.com")
 
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
-    var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
 
     var homePage = TestPage()
-    var theme = EmptyTheme()
+    var layout = EmptyLayout()
 }
 
 /// An example page  used in tests.
-struct TestPage: StaticPage {
+struct TestPage: StaticLayout {
     var title = "Home"
 
     var body: some HTML {

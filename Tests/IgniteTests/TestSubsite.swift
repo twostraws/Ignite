@@ -15,14 +15,13 @@ struct TestSubsite: Site {
     var url = URL(static: "https://www.yoursite.com/subsite")
 
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
-    var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
 
     var homePage = TestSubsitePage()
-    var theme = EmptyTheme()
+    var layout = EmptyLayout()
 }
 
 /// An example page  used in tests.
-struct TestSubsitePage: StaticPage {
+struct TestSubsitePage: StaticLayout {
     var title = "Subsite Home"
 
     var body: some HTML {
