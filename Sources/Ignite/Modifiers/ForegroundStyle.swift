@@ -43,7 +43,7 @@ struct ForegroundStyleModifier: HTMLModifier {
         if let color = getColor() {
             if content.body.isComposite {
                 content
-                    .addContainerStyle(.init(name: "color", value: color))
+                    .containerStyle(.init(name: "color", value: color))
                     .class("color-inherit")
             } else {
                 content.style("color: \(color)")
