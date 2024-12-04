@@ -375,8 +375,8 @@ public final class PublishingContext {
     /// Calculates the full list of syntax highlighters need by this site, including
     /// resolving dependencies.
     func copySyntaxHighlighters() throws {
-        if site.allHighlighterThemes.contains(.xcodeDark) {
-            try copy(resource: "css/highlightjs-xcode-dark.css")
+        for theme in site.allHighlighterThemes {
+            try copy(resource: theme.url)
         }
     }
 }

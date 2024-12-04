@@ -90,7 +90,7 @@ public struct List: BlockHTML {
         if listStyle != .plain {
             listAttributes.append(classes: "list-group")
         }
-        if listStyle == .groupFlush {
+        if listStyle == .flushGroup {
             listAttributes.append(classes: "list-group-flush")
         }
 

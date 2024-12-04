@@ -173,7 +173,7 @@ public struct CoreAttributes: Sendable {
             return output
         }
     }
-    
+
     /// Generates an HTML string containing all attributes and optionally wraps content.
     /// - Parameter content: Optional content to wrap with opening and closing tags
     /// - Returns: A string containing all attributes and optional content wrapped in tags
