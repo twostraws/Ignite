@@ -97,7 +97,7 @@ public extension HTML {
     /// Adds a single CSS class to the element.
     /// - Parameter className: The name of the CSS class to add
     /// - Returns: The modified HTML element
-    func `class`(_ className: String) -> Self {
+    @discardableResult func `class`(_ className: String) -> Self {
         var attributes = attributes
         attributes.classes.append(className)
         AttributeStore.default.merge(attributes, intoHTML: id)
