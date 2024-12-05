@@ -11,7 +11,10 @@ public enum ButtonSize: String, CaseIterable {
 }
 
 /// A clickable button with a label and styling.
-public struct Button: InlineHTML {
+public struct Button: BlockHTML, InlineHTML {
+    /// How many columns this should occupy when placed in a section or form.
+    public var columnWidth: ColumnWidth = .automatic
+
     /// Whether this button is just clickable, or whether its submits a form.
     public enum ButtonType {
         /// This button does not submit a form.
@@ -104,6 +107,15 @@ public struct Button: InlineHTML {
     public func role(_ role: Role) -> Self {
         var copy = self
         copy.role = role
+        return copy
+    }
+
+    /// Sets the button type, determining its behavior.
+    /// - Parameter type: The type of button, such as `.plain` or `.submit`.
+    /// - Returns: A new `Button` instance with the updated type.
+    public func type(_ type: ButtonType) -> Self {
+        var copy = self
+        copy.type = type
         return copy
     }
 
