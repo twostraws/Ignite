@@ -45,7 +45,7 @@ public struct Form: BlockHTML {
         /// Labels appear above their fields
         case top
         /// Labels appear to the left of their fields
-        case left
+        case front
         /// Labels float when the field has content
         case floating
         /// No labels are shown
@@ -142,68 +142,70 @@ public struct Form: BlockHTML {
         }
 
         let wrappedContent = Group {
-            Group {
-                ForEach(items) { item in
-                    if let textField = item as? TextField, let labelText = textField.label {
-                        if labelStyle == .hidden {
-                            Group(textField.class(controlSize.controlClass))
-                                .class(getColumnClass(for: item, totalColumns: columnCount))
-                        } else if labelStyle == .floating {
-                            Group {
-                                Group {
-                                    textField
-                                        .class(controlSize.controlClass)
-                                    Label(text: labelText)
-                                        .class(controlSize.labelClass)
-                                        .customAttribute(name: "for", value: textField.attributes.id)
-                                }
-                                .class("form-floating")
-                            }
-                            .class(getColumnClass(for: item, totalColumns: columnCount))
-                        } else {
-                            Group {
-                                Label(text: labelText)
-                                    .class(labelStyle == .left ? "col-form-label col-sm-2" : "form-label")
-                                    .class(controlSize.labelClass)
-                                    .customAttribute(name: "for", value: textField.attributes.id)
-
-                                if labelStyle == .left {
-                                    Group {
-                                        textField
-                                            .class(controlSize.controlClass)
-                                    }
-                                    .class("col-sm-10")
-                                } else {
-                                    textField
-                                        .class(controlSize.controlClass)
-                                }
-                            }
-                            .class(getColumnClass(for: item, totalColumns: columnCount))
-                            .class(labelStyle == .left ? "row" : "")
-                        }
-                    } else if let button = item as? Button {
-                        Group(button.class(controlSize.buttonClass))
-                            .class(getColumnClass(for: item, totalColumns: columnCount))
-                            .class("d-flex", "align-items-stretch")
-                    } else {
-                        Group(item)
-                            .class(getColumnClass(for: item, totalColumns: columnCount))
-                    }
+            ForEach(items) { item in
+                if let textField = item as? TextField, let labelText = textField.label {
+                    renderFormField(textField, labelText: labelText)
+                } else if let button = item as? Button {
+                    renderButton(button)
+                } else {
+                    renderSimpleItem(item)
                 }
             }
-            .class(
-                "row",
-                "g-\(horizontalSpacing.rawValue)",
-                "gy-\(verticalSpacing.rawValue)"
-            )
-            .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
         }
+        .class("row", "g-\(horizontalSpacing.rawValue)", "gy-\(verticalSpacing.rawValue)")
+        .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
         .render(context: context)
 
         var output = wrappedContent
         output += Script(code: action.compile()).render(context: context)
 
         return attributes.description(wrapping: output)
+    }
+
+    private func renderFormField(_ textField: TextField, labelText: String) -> Group {
+        let sizedTextField = textField.class(controlSize.controlClass)
+        let label = Label(text: labelText)
+            .class(controlSize.labelClass)
+            .customAttribute(name: "for", value: textField.attributes.id)
+
+        return switch labelStyle {
+        case .hidden:
+            renderSimpleItem(sizedTextField)
+
+        case .floating:
+            Group {
+                sizedTextField
+                label
+            }
+            .class("form-floating")
+            .containerClass(getColumnClass(for: textField, totalColumns: columnCount))
+
+        case .front:
+            Group {
+                label.class("col-form-label col-sm-2")
+                Group(sizedTextField).class("col-sm-10")
+            }
+            .class("row")
+            .containerClass(getColumnClass(for: textField, totalColumns: columnCount))
+
+        case .top:
+            Group {
+                label.class("form-label")
+                sizedTextField
+            }
+            .class(getColumnClass(for: textField, totalColumns: columnCount))
+        }
+    }
+
+    private func renderButton(_ button: Button) -> Group {
+        Group(button.class(controlSize.buttonClass))
+            .class(getColumnClass(for: button, totalColumns: columnCount))
+            .class("d-flex", "align-items-stretch")
+    }
+
+    private func renderSimpleItem(_ item: any InlineHTML) -> Group {
+        Group(item)
+            .class(getColumnClass(for: item, totalColumns: columnCount))
     }
 
     /// Calculates the appropriate Bootstrap column class for an HTML element.
