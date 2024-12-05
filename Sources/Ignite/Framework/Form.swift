@@ -59,7 +59,9 @@ public struct Form: BlockHTML {
         self.action = onSubmit
         self.verticalSpacing = verticalSpacing
         self.horizontalSpacing = horizontalSpacing
-        attributes.id = UUID().uuidString.truncatedHash
+        if attributes.id.isEmpty {
+            attributes.id = UUID().uuidString.truncatedHash
+        }
     }
 
     public func render(context: PublishingContext) -> String {
