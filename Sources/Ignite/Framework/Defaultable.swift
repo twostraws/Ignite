@@ -28,9 +28,6 @@ extension Color: Defaultable {
 }
 
 extension HighlighterTheme: Defaultable {
-    /// The default theme instance representing no syntax highlighting
-    public static var `default`: HighlighterTheme { .none }
-
     /// Indicates whether this theme is the default (none) theme
-    public var isDefault: Bool { self == .default }
+    public var isDefault: Bool { self == .none }
 }

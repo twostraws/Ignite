@@ -320,7 +320,7 @@ extension PublishingContext {
 
         let syntaxTheme = theme.syntaxHighlighterTheme
         if syntaxTheme != .none {
-            cssProperties.append("--syntax-highlight-theme: \(syntaxTheme.rawValue)")
+            cssProperties.append("--syntax-highlight-theme: \(syntaxTheme.description)")
         }
 
         return cssProperties.joined(separator: ";\n")

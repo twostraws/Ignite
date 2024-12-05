@@ -5,7 +5,8 @@
 // See LICENSE for license information.
 //
 
-public enum HighlighterTheme: String, Sendable {
+/// Represents different syntax highlighting themes available for code blocks
+public enum HighlighterTheme: CustomStringConvertible, Hashable, Sendable {
     case automatic
     case githubLight
     case githubDark
@@ -18,7 +19,9 @@ public enum HighlighterTheme: String, Sendable {
     case xcodeLight
     case xcodeDark
     case none
+    case custom(name: String, filePath: String)
 
+    /// The URL path to the CSS file for this theme
     var url: String {
         switch self {
         case .xcodeDark:
@@ -30,19 +33,39 @@ public enum HighlighterTheme: String, Sendable {
         case .githubDark:
             return "css/highlightjs-github-light.min.css"
         case .xcodeLight, .automatic:
-            return "css/xcode-light.min.css"
+            return "css/highlightjs-xcode-light.min.css"
         case .monokai:
-            return "css/monokai.min.css"
+            return "css/highlightjs-monokai.min.css"
         case .solarizedLight:
-            return "css/solarized.min.css"
+            return "css/highlightjs-solarized.min.css"
         case .solarizedDark:
-            return "css/solarized-dark.min.css"
+            return "css/highlightjs-solarized-dark.min.css"
         case .tomorrowNight:
-            return "css/tomorrow-night-bright.min.css"
+            return "css/highlightjs-tomorrow-night-bright.min.css"
         case .twilight:
-            return "css/twilight.min.css"
+            return "css/highlightjs-twilight.min.css"
+        case .custom(_, let filePath):
+            return filePath
         case .none:
             return ""
+        }
+    }
+
+    /// The string representation of the theme
+    public var description: String {
+        switch self {
+        case .xcodeLight, .automatic: "xcode-light"
+        case .githubLight: "github-light"
+        case .githubDark: "github-dark"
+        case .highlightJS: "highlight-JS"
+        case .monokai: "monokai"
+        case .solarizedLight: "solarized-light"
+        case .solarizedDark: "solarized-dark"
+        case .tomorrowNight: "tomorrow-night"
+        case .twilight: "twilight"
+        case .xcodeDark: "xcode-dark"
+        case .custom(let name, _): name
+        default: "none"
         }
     }
 }
