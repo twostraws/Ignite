@@ -19,6 +19,9 @@ public struct TextField: InlineHTML, BlockHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
+    /// The label text for the field
+    var label: String?
+
     /// The placeholder text shown when the field is empty.
     private var placeholder: String
 
@@ -46,10 +49,16 @@ public struct TextField: InlineHTML, BlockHTML {
         case number
     }
 
-    /// Creates a new text field with the specified placeholder text.
-    /// - Parameter placeholder: The text to display when the field is empty.
-    public init(_ placeholder: String) {
+    /// Creates a new text field with the specified label and placeholder text.
+    /// - Parameters:
+    ///   - label: The label text to display with the field.
+    ///   - placeholder: The text to display when the field is empty.
+    public init(_ label: String? = nil, placeholder: String) {
+        self.label = label
         self.placeholder = placeholder
+        if attributes.id.isEmpty {
+            attributes.id = UUID().uuidString.truncatedHash
+        }
     }
 
     /// Makes this field required
@@ -72,6 +81,7 @@ public struct TextField: InlineHTML, BlockHTML {
         attributes.classes.append("form-control")
         attributes.customAttributes.insert(.init(name: "type", value: type.rawValue))
         attributes.customAttributes.insert(.init(name: "placeholder", value: placeholder))
+        attributes.customAttributes.insert(.init(name: "value", value: placeholder))
 
         if isRequired {
             attributes.customAttributes.insert(.init(name: "required", value: ""))

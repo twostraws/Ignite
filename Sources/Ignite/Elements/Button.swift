@@ -170,3 +170,15 @@ public struct Button: BlockHTML, InlineHTML {
         return buttonAttributes.description(wrapping: output)
     }
 }
+
+extension Button {
+    /// Adjusts the number of columns assigned to this element.
+    /// - Parameter width: The new number of columns to use.
+    /// - Returns: A copy of the current element with the adjusted column width.
+    public func width(_ width: Int) -> Self {
+        var copy = self
+        copy.columnWidth = .count(width)
+        copy.class("w-100")
+        return copy
+    }
+}
