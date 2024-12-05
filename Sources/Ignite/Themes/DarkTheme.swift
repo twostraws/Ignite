@@ -18,25 +18,25 @@
 public protocol DarkTheme: Theme {}
 
 public extension DarkTheme {
-    var accent: Color? { Color(hex: "#0d6efd") }
-    var secondaryAccent: Color? { Color(hex: "#6c757d") }
-    var success: Color? { Color(hex: "#198754") }
-    var info: Color? { Color(hex: "#0dcaf0") }
-    var warning: Color? { Color(hex: "#ffc107") }
-    var danger: Color? { Color(hex: "#dc3545") }
-    var light: Color? { Color(hex: "#f8f9fa") }
-    var dark: Color? { Color(hex: "#212529") }
-    var primary: Color? { Color(hex: "#dee2e6") }
-    var background: Color? { Color(hex: "#212529") }
-    var emphasis: Color? { Color(hex: "#ffffff") }
-    var secondary: Color? { Color(red: 222, green: 226, blue: 230, opacity: 0.75) }
-    var tertiary: Color? { Color(red: 222, green: 226, blue: 230, opacity: 0.5) }
-    var secondaryBackground: Color? { Color(hex: "#343a40") }
-    var tertiaryBackground: Color? { Color(hex: "#2b3035") }
-    var link: Color? { Color(hex: "#6ea8fe") }
-    var linkHover: Color? { Color(hex: "#8bb9fe") }
-    var border: Color? { Color(hex: "#495057") }
-    var syntaxHighlighterTheme: HighlighterTheme? { .xcodeDark }
+    var accent: Color { Color(hex: "#0d6efd") }
+    var secondaryAccent: Color { Color(hex: "#6c757d") }
+    var success: Color { Color(hex: "#198754") }
+    var info: Color { Color(hex: "#0dcaf0") }
+    var warning: Color { Color(hex: "#ffc107") }
+    var danger: Color { Color(hex: "#dc3545") }
+    var light: Color { Color(hex: "#f8f9fa") }
+    var dark: Color { Color(hex: "#212529") }
+    var primary: Color { Color(hex: "#dee2e6") }
+    var background: Color { Color(hex: "#212529") }
+    var emphasis: Color { Color(hex: "#ffffff") }
+    var secondary: Color { Color(red: 222, green: 226, blue: 230, opacity: 0.75) }
+    var tertiary: Color { Color(red: 222, green: 226, blue: 230, opacity: 0.5) }
+    var secondaryBackground: Color { Color(hex: "#343a40") }
+    var tertiaryBackground: Color { Color(hex: "#2b3035") }
+    var link: Color { Color(hex: "#6ea8fe") }
+    var linkHover: Color { Color(hex: "#8bb9fe") }
+    var border: Color { Color(hex: "#495057") }
+    var syntaxHighlighterTheme: HighlighterTheme { .xcodeDark }
 }
 
 extension Theme where Self == DefaultDarkTheme {

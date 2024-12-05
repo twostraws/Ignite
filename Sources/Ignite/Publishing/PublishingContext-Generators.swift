@@ -123,8 +123,7 @@ extension PublishingContext {
         ] + theme.alternateFonts
 
         let fontTags = fonts.flatMap { font -> [String] in
-            guard let font,
-                  let name = font.name,
+            guard let name = font.name,
                   !font.sources.isEmpty,
                   !name.contains(Font.systemFonts),
                   !name.contains(Font.monospaceFonts)
@@ -239,8 +238,8 @@ extension PublishingContext {
         var cssProperties: [String] = []
 
         // Helper function to add property if it exists
-        func addProperty(_ variable: BootstrapVariable, _ value: Any?) {
-            if let value = value {
+        func addProperty(_ variable: BootstrapVariable, _ value: any Defaultable) {
+            if value.isDefault == false {
                 cssProperties.append("\(variable.rawValue): \(value)")
             }
         }
@@ -276,10 +275,10 @@ extension PublishingContext {
         addProperty(.borderColor, theme.border)
 
         // Font families
-        addProperty(.sansSerifFont, theme.sansSerifFont?.name ?? Font.systemFonts)
-        addProperty(.monospaceFont, theme.monospaceFont?.name ?? Font.monospaceFonts)
-        addProperty(.bodyFont, theme.font?.name ?? Font.systemFonts)
-        addProperty(.codeFont, theme.codeFont?.name ?? Font.monospaceFonts)
+        addProperty(.sansSerifFont, theme.sansSerifFont.name ?? Font.systemFonts)
+        addProperty(.monospaceFont, theme.monospaceFont.name ?? Font.monospaceFonts)
+        addProperty(.bodyFont, theme.font.name ?? Font.systemFonts)
+        addProperty(.codeFont, theme.codeFont.name ?? Font.monospaceFonts)
 
         // Font sizes
         addProperty(.rootFontSize, theme.rootFontSize)
@@ -319,7 +318,8 @@ extension PublishingContext {
         addProperty(.containerXl, theme.xLargeMaxWidth)
         addProperty(.containerXxl, theme.xxLargeMaxWidth)
 
-        if let syntaxTheme = theme.syntaxHighlighterTheme {
+        let syntaxTheme = theme.syntaxHighlighterTheme
+        if syntaxTheme != .none {
             cssProperties.append("--syntax-highlight-theme: \(syntaxTheme.rawValue)")
         }
 

@@ -17,6 +17,7 @@ public enum HighlighterTheme: String, Sendable {
     case twilight
     case xcodeLight
     case xcodeDark
+    case none
 
     var url: String {
         switch self {
@@ -40,6 +41,8 @@ public enum HighlighterTheme: String, Sendable {
             return "css/tomorrow-night-bright.min.css"
         case .twilight:
             return "css/twilight.min.css"
+        case .none:
+            return ""
         }
     }
 }
