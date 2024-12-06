@@ -20,10 +20,10 @@ public struct VStack: BlockHTML {
     public var columnWidth = ColumnWidth.automatic
 
     /// The vertical space between elements in pixels.
-    private var spacing: Int?
+    private var customSpacing: Int?
 
     /// The vertical space between elements by utility class.
-    private var spacingAmount: SpacingAmount?
+    private var systemSpacing: SpacingAmount?
 
     /// The child elements contained in the stack.
     private var items: [any HTML]
@@ -34,8 +34,8 @@ public struct VStack: BlockHTML {
     ///   - items: A closure that returns the elements to be arranged vertically.
     public init(spacing: Int = 2, @HTMLBuilder _ items: () -> some HTML) {
         self.items = flatUnwrap(items())
-        self.spacing = spacing
-        self.spacingAmount = nil
+        self.customSpacing = spacing
+        self.systemSpacing = nil
     }
 
     /// Creates a new vertical stack with the specified spacing and content.
@@ -44,8 +44,8 @@ public struct VStack: BlockHTML {
     ///   - items: A closure that returns the elements to be arranged vertically.
     public init(spacing: SpacingAmount = .small, @HTMLBuilder _ items: () -> some HTML) {
         self.items = flatUnwrap(items())
-        self.spacingAmount = spacing
-        self.spacing = nil
+        self.systemSpacing = spacing
+        self.customSpacing = nil
     }
 
     public func render(context: PublishingContext) -> String {
@@ -70,10 +70,10 @@ public struct VStack: BlockHTML {
 
         var attributes = attributes
         attributes.append(classes: "vstack")
-        if let spacing {
-            attributes.append(styles: .init(name: .gap, value: "\(spacing)px"))
-        } else if let spacingAmount {
-            attributes.append(classes: "gap-\(spacingAmount.rawValue)")
+        if let customSpacing {
+            attributes.append(styles: .init(name: .gap, value: "\(customSpacing)px"))
+        } else if let systemSpacing {
+            attributes.append(classes: "gap-\(systemSpacing.rawValue)")
         }
 
         AttributeStore.default.merge(attributes, intoHTML: id)
