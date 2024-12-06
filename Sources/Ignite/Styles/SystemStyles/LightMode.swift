@@ -16,15 +16,11 @@ public struct LightMode: Style {
     /// The value to apply to the CSS property
     let value: String
 
-    /// The CSS class name to apply when dark mode is enabled (if using class-based styling)
-    let targetClass: String?
-
     /// Creates a new light mode color style.
     /// - Parameter value: The color value to apply
     public init(_ value: String) {
         self.value = value
         self.property = "color"
-        self.targetClass = nil
     }
 
     /// Creates a new light mode style with custom property and value.
@@ -34,21 +30,18 @@ public struct LightMode: Style {
     public init(_ property: Property, value: String) {
         self.property = property.rawValue
         self.value = value
-        self.targetClass = nil
     }
 
     /// Creates a new light mode style that applies an existing class.
     public init(class: String) {
         self.property = ""
         self.value = ""
-        self.targetClass = `class`
     }
 
     /// Resolves the style into a concrete implementation
     public var body: some Style {
         ResolvedStyle(
             value: value,
-            targetClass: targetClass,
             mediaQueries: [MediaQuery(conditions: ["(prefers-color-scheme: light)"])],
             className: className
         )

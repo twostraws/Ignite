@@ -16,9 +16,6 @@ public struct CurrentTheme: Style {
     /// The value to apply to the CSS property
     let value: String
 
-    /// The CSS class name to apply when dark mode is enabled (if using class-based styling)
-    let targetClass: String?
-
     /// The unique identifier of the theme this style targets
     public let themeID: String
 
@@ -30,7 +27,6 @@ public struct CurrentTheme: Style {
         self.value = value
         self.property = Property.color.rawValue
         self.themeID = id
-        self.targetClass = nil
     }
 
     /// Creates a new theme-specific style with custom property and value.
@@ -42,15 +38,6 @@ public struct CurrentTheme: Style {
         self.property = property.rawValue
         self.value = value
         self.themeID = id
-        self.targetClass = nil
-    }
-
-    /// Creates a new theme-specific style that applies an existing class.
-    public init(class: String, id: String) {
-        self.property = ""
-        self.value = ""
-        self.targetClass = `class`
-        self.themeID = id
     }
 
     /// Resolves the style into a concrete implementation
@@ -58,7 +45,6 @@ public struct CurrentTheme: Style {
         ResolvedStyle(
             property: self.property,
             value: self.value,
-            targetClass: self.targetClass,
             selectors: [Selector(conditions: ["[data-theme-state=\"\(self.themeID.kebabCased())\"]"])]
         )
     }

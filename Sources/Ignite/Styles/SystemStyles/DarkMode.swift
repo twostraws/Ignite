@@ -37,18 +37,10 @@ public struct DarkMode: Style {
         self.targetClass = nil
     }
 
-    /// Creates a new dark mode style that applies an existing class.
-    public init(class: String) {
-        self.property = ""
-        self.value = ""
-        self.targetClass = `class`
-    }
-
     /// Resolves the style into a concrete implementation
     public var body: some Style {
         ResolvedStyle(
             value: value,
-            targetClass: targetClass,
             mediaQueries: [MediaQuery(conditions: ["(prefers-color-scheme: dark)"])],
             className: className
         )

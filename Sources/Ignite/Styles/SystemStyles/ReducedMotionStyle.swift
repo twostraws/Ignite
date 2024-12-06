@@ -13,15 +13,11 @@ public struct ReducedMotionStyle: Style {
     /// The value to apply to the CSS property
     let value: String
 
-    /// The CSS class name to apply when dark mode is enabled (if using class-based styling)
-    let targetClass: String?
-
     /// Creates a new reduced motion color style.
     /// - Parameter value: The color value to apply
     public init(_ value: String) {
         self.value = value
         self.property = "color"
-        self.targetClass = nil
     }
 
     /// Creates a new reduced motion style with custom property and value.
@@ -31,21 +27,12 @@ public struct ReducedMotionStyle: Style {
     public init(_ property: Property, value: String) {
         self.property = property.rawValue
         self.value = value
-        self.targetClass = nil
-    }
-
-    /// Creates a new reduced motion style that applies an existing class.
-    public init(class: String) {
-        self.property = ""
-        self.value = ""
-        self.targetClass = `class`
     }
 
     /// Resolves the style into a concrete implementation
     public var body: some Style {
         ResolvedStyle(
             value: value,
-            targetClass: targetClass,
             mediaQueries: [MediaQuery(conditions: ["(prefers-reduced-motion: reduce)"])],
             className: className
         )

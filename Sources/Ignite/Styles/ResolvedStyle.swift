@@ -22,9 +22,6 @@ struct ResolvedStyle: Style {
     /// The value to apply to the CSS property
     let value: String
 
-    /// The CSS class to apply (if using class-based styling)
-    let targetClass: String?
-
     /// Media queries to apply to this style
     let mediaQueries: [MediaQuery]
 
@@ -36,88 +33,66 @@ struct ResolvedStyle: Style {
 
     /// Creates a new resolved style with the specified properties
     init(
-        property: String = Property.color.rawValue,
+        property: String = "color",
         value: String = "",
-        targetClass: String? = nil,
         mediaQueries: [MediaQuery] = [],
         selectors: [Selector] = [],
         className: String? = nil
     ) {
-        self.className = className ?? "style-\(Self.id) *"
+        self.className = className ?? "style-\(Self.id)"
         self.mediaQueries = mediaQueries
         self.value = value
         self.property = property
         self.selectors = selectors
-        self.targetClass = targetClass
     }
 
     /// Generates the complete CSS rule string for this style
     var cssRule: String {
         var rules: [String] = []
 
-        // Handle class-based styling
-        if let targetClass {
-            for query in mediaQueries {
-                let mediaConditions = query.conditions.joined(separator: " and ")
-
-                if selectors.isEmpty {
-                    rules.append("""
-                    @media \(mediaConditions) {
-                        .\(className) {
-                            @extend .\(targetClass) !optional;
-                        }
-                    }
-                    """)
-                }
+        // Base rule (no media query, no selector)
+        if !value.isEmpty && selectors.isEmpty && mediaQueries.isEmpty {
+            rules.append("""
+            .\(className) {
+                \(property): \(value);
             }
+            """)
         }
 
-        // Handle property-value styling
-        if !value.isEmpty {
-            // Base rule (no media query, no selector)
-            if selectors.isEmpty && mediaQueries.isEmpty {
+        // Selector-only rules (no media query)
+        if !selectors.isEmpty && mediaQueries.isEmpty {
+            for selector in selectors {
+                let conditions = selector.conditions.joined(separator: " ")
                 rules.append("""
-                .\(className) {
+                \(conditions) .\(className) {
                     \(property): \(value);
                 }
                 """)
             }
+        }
 
-            // Selector-only rules (no media query)
-            if !selectors.isEmpty && mediaQueries.isEmpty {
-                for selector in selectors {
-                    let conditions = selector.conditions.joined(separator: " ")
-                    rules.append("""
-                    \(conditions) .\(className) {
+        // Media query rules (with or without selectors)
+        for query in mediaQueries {
+            let mediaConditions = query.conditions.joined(separator: " and ")
+
+            if selectors.isEmpty {
+                rules.append("""
+                @media \(mediaConditions) {
+                    .\(className) {
                         \(property): \(value);
                     }
-                    """)
                 }
-            }
-
-            // Media query rules (with or without selectors)
-            for query in mediaQueries {
-                let mediaConditions = query.conditions.joined(separator: " and ")
-
-                if selectors.isEmpty {
+                """)
+            } else {
+                for selector in selectors {
+                    let selectorConditions = selector.conditions.joined(separator: " ")
                     rules.append("""
                     @media \(mediaConditions) {
-                        .\(className) {
+                        \(selectorConditions) .\(className) {
                             \(property): \(value);
                         }
                     }
                     """)
-                } else {
-                    for selector in selectors {
-                        let selectorConditions = selector.conditions.joined(separator: " ")
-                        rules.append("""
-                        @media \(mediaConditions) {
-                            \(selectorConditions) .\(className) {
-                                \(property): \(value);
-                            }
-                        }
-                        """)
-                    }
                 }
             }
         }

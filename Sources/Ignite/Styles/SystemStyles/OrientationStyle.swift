@@ -13,9 +13,6 @@ public struct OrientationStyle: Style {
     /// The value to apply to the CSS property
     let value: String
 
-    /// The CSS class name to apply when dark mode is enabled (if using class-based styling)
-    let targetClass: String?
-
     /// The target screen orientation
     let orientation: Orientation
 
@@ -27,7 +24,6 @@ public struct OrientationStyle: Style {
         self.value = value
         self.property = "color"
         self.orientation = orientation
-        self.targetClass = nil
     }
 
     /// Creates a new orientation-specific style with custom property and value.
@@ -39,22 +35,12 @@ public struct OrientationStyle: Style {
         self.property = property.rawValue
         self.value = value
         self.orientation = orientation
-        self.targetClass = nil
-    }
-
-    /// Creates a new orientation-specific style with an existing class.
-    public init(class: String, orientation: Orientation) {
-        self.property = ""
-        self.value = ""
-        self.targetClass = `class`
-        self.orientation = orientation
     }
 
     /// Resolves the style into a concrete implementation
     public var body: some Style {
         ResolvedStyle(
             value: value,
-            targetClass: targetClass,
             mediaQueries: [MediaQuery(conditions: ["(orientation: \(orientation.rawValue))"])],
             className: className
         )

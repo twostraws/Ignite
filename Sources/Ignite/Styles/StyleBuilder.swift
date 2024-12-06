@@ -32,10 +32,6 @@ public struct StyleBuilder {
                 property = resolved.property
             }
 
-            if let resolvedTargetClass = resolved.targetClass {
-                targetClass = resolvedTargetClass
-            }
-
             selectors.append(contentsOf: resolved.selectors)
             mediaQueries.append(contentsOf: resolved.mediaQueries)
         }
@@ -43,7 +39,6 @@ public struct StyleBuilder {
         return ResolvedStyle(
             property: property,
             value: baseValue,
-            targetClass: targetClass,
             mediaQueries: mediaQueries,
             selectors: selectors,
             className: className
