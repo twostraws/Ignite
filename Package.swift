@@ -15,8 +15,7 @@ let package = Package(
         .package(url: "https://github.com/swiftlang/swift-markdown.git", from: "0.5.0"),
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.0.0"),
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.4"),
-        .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.7.5"),
-        .package(url: "https://github.com/johnfairh/swift-sass.git", from: "3.0.0")
+        .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.7.5")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -26,8 +25,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Markdown", package: "swift-markdown"),
                 .product(name: "Collections", package: "swift-collections"),
-                .product(name: "SwiftSoup", package: "swiftsoup"),
-                .product(name: "DartSass", package: "swift-sass")
+                .product(name: "SwiftSoup", package: "swiftsoup")
             ],
             resources: [
                 .copy("Resources")

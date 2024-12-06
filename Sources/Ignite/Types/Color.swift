@@ -54,15 +54,15 @@ public enum Color: CustomStringConvertible, Sendable, Hashable {
     public static let white = Color(hex: "#FFFFFF", name: "white")
 
     /// A structure that holds the RGB and opacity components of a color.
-    private struct RGBComponents {
+    fileprivate struct RGBComponents {
         /// The red component, in the range 0 through 255.
-        let red: Int
+        var red: Int
         /// The green component, in the range 0 through 255.
-        let green: Int
+        var green: Int
         /// The blue component, in the range 0 through 255.
-        let blue: Int
+        var blue: Int
         /// The opacity component, in the range 0 through 1.
-        let opacity: Double
+        var opacity: Double
     }
 
     /// The CSS representation of this color.
@@ -178,27 +178,45 @@ public enum Color: CustomStringConvertible, Sendable, Hashable {
     /// - Returns: A new `HTMLColor` instance with the weighted variant name.
     /// - Note: This function must be called from the main actor as it registers the variant with the shared `StyleManager`.
     @MainActor public func weighted(_ weight: ColorWeight) -> Self {
-        let variableName = "\(name)-\(weight.rawValue)"
-        let function = weight.mixWithWhite ? "tint-color" : "shade-color"
-        let percentage = weight.mixPercentage
+        let mixWithWhite = weight.mixWithWhite
+        let mixColor = mixWithWhite ? Color.white : Color.black
+        let percentage = Double(weight.mixPercentage) / 100.0
 
-        StyleManager.default.registerColorVariant(
-            color: name,
-            weight: weight.rawValue,
-            function: function,
-            percentage: percentage
+        // Get the RGB components of both colors
+        let baseComponents: RGBComponents = {
+            switch self {
+            case .bootstrap(_, let hex, let opacity):
+                var components = Self.parseHexColor(hex)
+                components.opacity = opacity
+                return components
+            case .html(let r, let g, let b, let opacity):
+                return RGBComponents(red: r, green: g, blue: b, opacity: opacity)
+            }
+        }()
+
+        let mixComponents = switch mixColor {
+        case .bootstrap(_, let hex, _):
+            Self.parseHexColor(hex)
+        case .html(let r, let g, let b, _):
+            RGBComponents(red: r, green: g, blue: b, opacity: 1)
+        }
+
+        let mixedComponents = Self.mix(
+            baseComponents,
+            with: mixComponents,
+            weight: percentage
         )
 
-        switch self {
-        case .bootstrap(_, let hex, let opacity):
-            return .bootstrap(name: variableName, hex: hex, opacity: opacity)
-        case .html(let red, let green, let blue, let opacity):
-            return .bootstrap(
-                name: variableName,
-                hex: Self.rgbToHex(red: red, green: green, blue: blue, opacity: opacity),
-                opacity: opacity
-            )
-        }
+        return createHTMLColor(from: mixedComponents)
+    }
+
+    private func createHTMLColor(from components: RGBComponents) -> Self {
+        return .html(
+            red: components.red,
+            green: components.green,
+            blue: components.blue,
+            opacity: components.opacity
+        )
     }
 
     /// Parses a hexadecimal color string into its RGB components.
@@ -279,5 +297,42 @@ public extension Color {
         let green = (hex >> 8) & 0xff
         let blue = hex & 0xff
         self = .html(red: red, green: green, blue: blue, opacity: opacity)
+    }
+
+    /// Mixes two colors using the same algorithm as Sass's mix() function
+    /// - Parameters:
+    ///   - color1: The base color components
+    ///   - color2: The color to mix with
+    ///   - weight: Weight of the second color (0-1), where 0 gives full color1 and 1 gives full color2
+    /// - Returns: The mixed color components
+    private static func mix(_ color1: RGBComponents, with color2: RGBComponents, weight: Double) -> RGBComponents {
+        let w = weight * 2 - 1
+        let a = 0.0
+
+        let numerator = w + a
+        let denominator = 1 + (w * a)
+        let fraction = numerator / denominator
+        let w1 = (w * a == -1 ? w : fraction + 1) / 2
+        let w2 = 1 - w1
+
+        // Break down RGB calculations
+        let red1 = Double(color1.red) * w2
+        let red2 = Double(color2.red) * w1
+        let red = Int(round(red1 + red2))
+
+        let green1 = Double(color1.green) * w2
+        let green2 = Double(color2.green) * w1
+        let green = Int(round(green1 + green2))
+
+        let blue1 = Double(color1.blue) * w2
+        let blue2 = Double(color2.blue) * w1
+        let blue = Int(round(blue1 + blue2))
+
+        return RGBComponents(
+            red: red,
+            green: green,
+            blue: blue,
+            opacity: color1.opacity
+        )
     }
 }
