@@ -6,12 +6,12 @@
 //
 
 /// Displays a link to your RSS feed, if enabled.
-struct FeedLink: HTML {
+public struct FeedLink: HTML {
 
     @Environment(\.siteConfiguration) private var siteConfig
     @Environment(\.feedConfiguration) private var feedConfig
 
-    var body: some HTML {
+    public var body: some HTML {
         Text {
             if siteConfig.builtInIconsEnabled != .none {
                 Image(systemName: "rss-fill")
