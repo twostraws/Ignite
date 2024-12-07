@@ -130,6 +130,7 @@ public final class PublishingContext {
         try clearBuildFolder()
         try await generateContent()
         try copyResources()
+        try await generateStyles()
         try generateThemes(site.allThemes)
         generateAnimations()
         try await generateTagPages()
@@ -163,6 +164,16 @@ public final class PublishingContext {
 
         if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/themes.min.css").path()) {
             try copy(resource: "css/themes.min.css")
+        }
+
+        if StyleManager.default.hasStyles,
+           !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/custom.min.css").path())
+        {
+            try copy(resource: "css/custom.min.css")
+        }
+
+        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/utilities.min.css").path()) {
+            try copy(resource: "css/utilities.min.css")
         }
 
         if AnimationManager.default.hasAnimations {

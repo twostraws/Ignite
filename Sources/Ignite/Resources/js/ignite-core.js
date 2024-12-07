@@ -139,13 +139,15 @@ document.addEventListener('click', (e) => {
 
 // SECTION: Animations ------------------------------------------------------------------------
 
-const appearElements = document.querySelectorAll('[class*="animation-"]');
+document.addEventListener('DOMContentLoaded', () => {
+    const appearElements = document.querySelectorAll('[class*="animation-"]');
 
-setTimeout(() => {
-    appearElements.forEach(element => {
-        element.classList.add('appeared');
-    });
-}, 100);
+    setTimeout(() => {
+        appearElements.forEach(element => {
+            element.classList.add('appeared');
+        });
+    }, 100);
+});
 
 function igniteToggleClickAnimation(element) {
     if (element.classList.contains('clicked')) {
