@@ -32,25 +32,35 @@ public struct Font: Hashable, Equatable, Sendable {
         case oblique
     }
 
-    /// A string containing the default system font stack.
-    public static let systemFonts = """
-    system-ui, -apple-system, "Segoe UI", \
-    Roboto, "Helvetica Neue", Arial, \
-    "Noto Sans", "Liberation Sans", sans-serif
-    """
+    /// An array of system fonts in order of preference.
+    public static let systemFonts = [
+        "system-ui",
+        "-apple-system",
+        "Segoe UI",
+        "Roboto",
+        "Helvetica Neue",
+        "Arial",
+        "Noto Sans",
+        "Liberation Sans",
+        "sans-serif"
+    ]
 
-    /// A string containing the default monospace font stack.
-    public static let monospaceFonts = """
-    SFMono-Regular, Menlo, Monaco, \
-    Consolas, "Liberation Mono", \
-    "Courier New", monospace
-    """
+    /// An array of monospace fonts in order of preference.
+    public static let monospaceFonts = [
+        "SFMono-Regular",
+        "Menlo",
+        "Monaco",
+        "Consolas",
+        "Liberation Mono",
+        "Courier New",
+        "monospace"
+    ]
 
     /// The default sans-serif system font.
-    public static let systemSansSerif = Font(name: systemFonts, weight: .regular)
+    public static let systemSansSerif = Font(name: systemFonts.joined(separator: ","), weight: .regular)
 
     /// The default monospace system font.
-    public static let systemMonospace = Font(name: monospaceFonts, weight: .regular)
+    public static let systemMonospace = Font(name: monospaceFonts.joined(separator: ","), weight: .regular)
 
     /// The default font used for body text.
     public static let systemBodyFont = systemSansSerif
@@ -66,7 +76,7 @@ public struct Font: Hashable, Equatable, Sendable {
     ///   - weight: The weight (boldness) of the font.
     ///   - sources: An array of font sources defining where the font files can be found.
     public init(
-        name: String? = nil,
+        name: String,
         style: Font.Style? = nil,
         size: Double? = nil,
         weight: Font.Weight = .regular,
@@ -83,7 +93,7 @@ public struct Font: Hashable, Equatable, Sendable {
     /// - Parameters:
     ///   - name: The name of the font family.
     ///   - sources: A variadic list of font sources defining where the font files can be found.
-    public init(name: String? = nil, sources: FontSource...) {
+    public init(name: String, sources: FontSource...) {
         self.init(name: name, sources: sources)
     }
 
@@ -94,14 +104,14 @@ public struct Font: Hashable, Equatable, Sendable {
     ///   - source: A URL string pointing to the font file.
     /// - Note: This initializer assumes the source URL is valid and force-unwraps it.
     public init(name: String, style: Font.Style = .body, source: String) {
-        self.init(name: name, style: style, sources: [FontSource(name: source, url: URL(string: source)!)])
+        self.init(name: name, style: style, sources: [FontSource(url: URL(string: source)!)])
     }
 
     /// Creates a system font with the specified style
     /// - Parameter style: The font style to use
     /// - Returns: A Font instance configured with the system font
     public static func system(_ style: Font.Style? = nil, size: Double? = nil, weight: Font.Weight = .regular) -> Font {
-        Font(style: style, size: nil, weight: weight)
+        Font(name: "", style: style, size: nil, weight: weight)
     }
 
     /// Creates a custom font with the specified name and size

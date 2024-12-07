@@ -130,46 +130,45 @@ extension PublishingContext {
         ] + theme.alternateFonts
 
         let fontTags = fonts.flatMap { font -> [String] in
-            guard let font,
-                  let name = font.name,
-                  !font.sources.isEmpty,
-                  !name.contains(Font.systemFonts),
-                  !name.contains(Font.monospaceFonts)
+            guard let font = font, let familyName = font.name else { return [] }
+
+            // Skip if it's a system font
+            guard !Font.systemFonts.contains(familyName) &&
+                  !Font.monospaceFonts.contains(familyName)
             else {
                 return []
             }
 
             return font.sources.map { source in
-                if let url = source.url {
-                    if url.host()?.contains("fonts.googleapis.com") == true {
-                        // For Google Fonts, use @import
-                        return """
-                        @import url('\(url.absoluteString)');
-                        """
-                    } else {
-                        // For other remote fonts
-                        return """
-                        @font-face {
-                            font-family: '\(name)';
-                            src: url('\(url.absoluteString)');
-                            font-weight: \(source.weight.rawValue);
-                            font-style: \(source.style.rawValue);
-                            font-display: swap;
-                        }
-                        """
-                    }
-                } else {
-                    // For local fonts
+                guard let url = source.url else { return "" }
+
+                if url.isFileURL {
                     return """
                     @font-face {
-                        font-family: '\(name)';
-                        src: url('/fonts/\(source.name)');
+                        font-family: '\(familyName)';
+                        src: url('/fonts/\(url.lastPathComponent)');
                         font-weight: \(source.weight.rawValue);
-                        font-style: \(source.style.rawValue);
+                        font-style: \(source.variant.rawValue);
                         font-display: swap;
                     }
                     """
                 }
+
+                if url.host()?.contains("fonts.googleapis.com") == true {
+                    return """
+                    @import url('\(url.absoluteString)');
+                    """
+                }
+
+                return """
+                @font-face {
+                    font-family: '\(familyName)';
+                    src: url('\(url.absoluteString)');
+                    font-weight: \(source.weight.rawValue);
+                    font-style: \(source.variant.rawValue);
+                    font-display: swap;
+                }
+                """
             }
         }.joined(separator: "\n\n")
 
@@ -283,10 +282,10 @@ extension PublishingContext {
         addProperty(.borderColor, theme.border)
 
         // Font families
-        addProperty(.sansSerifFont, theme.sansSerifFont?.name ?? Font.systemFonts)
-        addProperty(.monospaceFont, theme.monospaceFont?.name ?? Font.monospaceFonts)
-        addProperty(.bodyFont, theme.font?.name ?? Font.systemFonts)
-        addProperty(.codeFont, theme.codeFont?.name ?? Font.monospaceFonts)
+        addProperty(.sansSerifFont, theme.sansSerifFont?.name ?? Font.systemFonts.joined(separator: ","))
+        addProperty(.monospaceFont, theme.monospaceFont?.name ?? Font.monospaceFonts.joined(separator: ","))
+        addProperty(.bodyFont, theme.font?.name ?? Font.systemFonts.joined(separator: ","))
+        addProperty(.codeFont, theme.codeFont?.name ?? Font.monospaceFonts.joined(separator: ","))
 
         // Font sizes
         addProperty(.rootFontSize, theme.rootFontSize)
