@@ -43,8 +43,7 @@ public struct CurrentTheme: Style {
     /// Resolves the style into a concrete implementation
     public var body: some Style {
         ResolvedStyle(
-            property: self.property,
-            value: self.value,
+            declarations: [.init(name: property, value: value)],
             selectors: [Selector(conditions: ["[data-theme-state=\"\(self.themeID.kebabCased())\"]"])]
         )
     }
@@ -62,8 +61,7 @@ public extension Style {
         // If there are media queries, we need to combine them with the theme selector
         if !resolvedStyle.mediaQueries.isEmpty {
             return ResolvedStyle(
-                property: resolvedStyle.property,
-                value: resolvedStyle.value,
+                declarations: resolvedStyle.declarations,
                 mediaQueries: resolvedStyle.mediaQueries,
                 selectors: [themeSelector],
                 className: className
@@ -72,8 +70,7 @@ public extension Style {
 
         // If no media queries, just use the theme selector
         return ResolvedStyle(
-            property: resolvedStyle.property,
-            value: resolvedStyle.value,
+            declarations: resolvedStyle.declarations,
             selectors: [themeSelector],
             className: className
         )

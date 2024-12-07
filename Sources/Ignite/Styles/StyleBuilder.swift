@@ -15,33 +15,33 @@ public struct StyleBuilder {
     ///
     /// This method merges properties from all provided components, with later components
     /// taking precedence over earlier ones for conflicting values.
-    public static func buildBlock(_ components: any Style...) -> some Style {
-        var mediaQueries: [MediaQuery] = []
-        var baseValue = ""
-        var selectors: [Selector] = []
-        var property = Property.color.rawValue
-        var targetClass: String? = nil
+    public static func buildBlock<Content: Style>(_ component: Content) -> some Style {
+        component
+    }
 
-        let className = components.first?.className ?? "unknown-\(UUID().uuidString.truncatedHash)"
+    /// Combines the first style component in a sequence.
+    public static func buildPartialBlock<Content: Style>(first: Content) -> some Style {
+        first
+    }
 
-        for component in components {
-            let resolved = (component as? ResolvedStyle) ?? ResolvedStyle()
+    /// Combines an accumulated style with the next style in sequence.
+    public static func buildPartialBlock(accumulated: any Style, next: any Style) -> some Style {
+        let accumulatedResolved = (accumulated as? ResolvedStyle) ??
+        (accumulated.body as? ResolvedStyle) ??
+        ResolvedStyle()
 
-            if !resolved.value.isEmpty {
-                baseValue = resolved.value
-                property = resolved.property
-            }
+        let nextResolved = (next as? ResolvedStyle) ??
+        (next.body as? ResolvedStyle) ??
+        ResolvedStyle()
 
-            selectors.append(contentsOf: resolved.selectors)
-            mediaQueries.append(contentsOf: resolved.mediaQueries)
-        }
+        var combinedStyles = accumulatedResolved.declarations
+        combinedStyles.append(contentsOf: nextResolved.declarations)
 
         return ResolvedStyle(
-            property: property,
-            value: baseValue,
-            mediaQueries: mediaQueries,
-            selectors: selectors,
-            className: className
+            declarations: combinedStyles,
+            mediaQueries: accumulatedResolved.mediaQueries + nextResolved.mediaQueries,
+            selectors: accumulatedResolved.selectors + nextResolved.selectors,
+            className: accumulatedResolved.className
         )
     }
 

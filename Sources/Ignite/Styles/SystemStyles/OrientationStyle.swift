@@ -40,7 +40,7 @@ public struct OrientationStyle: Style {
     /// Resolves the style into a concrete implementation
     public var body: some Style {
         ResolvedStyle(
-            value: value,
+            declarations: [.init(name: property, value: value)],
             mediaQueries: [MediaQuery(conditions: ["(orientation: \(orientation.rawValue))"])],
             className: className
         )

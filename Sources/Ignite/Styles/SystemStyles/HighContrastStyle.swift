@@ -32,7 +32,7 @@ public struct HighContrastStyle: Style {
     /// Resolves the style into a concrete implementation
     public var body: some Style {
         ResolvedStyle(
-            value: value,
+            declarations: [.init(name: property, value: value)],
             mediaQueries: [MediaQuery(conditions: ["(prefers-contrast: more)"])],
             className: className
         )

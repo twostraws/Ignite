@@ -98,6 +98,7 @@ public struct Text: BlockHTML, DropdownElement {
         result += "."
 
         self.content = result
+        self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new Text struct from a Markdown string.
@@ -126,7 +127,7 @@ extension HTML where Self == Text {
     /// Adjusts the font of this text.
     /// - Parameter newFont: The new font.
     /// - Returns: A new `Text` instance with the updated font.
-    func font(_ font: Font) -> Self {
+    public func font(_ font: Font) -> Self {
         let style = FontStyle(font)
         let className = style.register()
         return self.class(className)

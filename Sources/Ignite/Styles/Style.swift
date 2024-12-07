@@ -35,7 +35,8 @@ public extension Style {
     ///
     /// - Returns: The className string if registration was successful, nil otherwise.
     @MainActor func register() -> String? {
-        if let resolvedStyle = StyleBuilder.buildBlock(body) as? ResolvedStyle {
+        if let resolvedStyle = StyleBuilder.buildBlock(self) as? ResolvedStyle ??
+            StyleBuilder.buildBlock(body) as? ResolvedStyle {
             StyleManager.default.registerStyle(resolvedStyle)
             return resolvedStyle.className
         }
@@ -80,7 +81,7 @@ public extension Style {
 extension Style {
     func chain(with condition: String) -> some Style {
         let resolved = (body as? ResolvedStyle)
-        let baseValue = resolved?.value ?? ""
+        let baseDeclarations = resolved?.declarations ?? []
         let baseQueries = resolved?.mediaQueries ?? []
 
         if !baseQueries.isEmpty {
@@ -88,14 +89,14 @@ extension Style {
                 MediaQuery(conditions: query.conditions + [condition])
             }
             return ResolvedStyle(
-                value: baseValue,
+                declarations: baseDeclarations,
                 mediaQueries: updatedQueries,
                 className: className
             )
         }
 
         return ResolvedStyle(
-            value: baseValue,
+            declarations: baseDeclarations,
             mediaQueries: [MediaQuery(conditions: [condition])],
             className: className
         )

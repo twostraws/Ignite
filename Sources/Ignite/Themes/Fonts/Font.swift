@@ -100,18 +100,8 @@ public struct Font: Hashable, Equatable, Sendable {
     /// Creates a system font with the specified style
     /// - Parameter style: The font style to use
     /// - Returns: A Font instance configured with the system font
-    static func system(_ style: Font.Style, size: Double?, weight: Font.Weight = .regular) -> Font {
+    public static func system(_ style: Font.Style? = nil, size: Double? = nil, weight: Font.Weight = .regular) -> Font {
         Font(style: style, size: nil, weight: weight)
-    }
-
-    /// Creates a system font with the specified style and size
-    /// - Parameters:
-    ///   - style: The font style to use
-    ///   - size: The size of the font in pixels
-    ///   - weight: The weight (boldness) of the font
-    /// - Returns: A Font instance configured with the system font
-    static func system(_ style: Font.Style, size: Double, weight: Font.Weight = .regular) -> Font {
-        Font(style: style, size: size, weight: weight)
     }
 
     /// Creates a custom font with the specified name and size
@@ -120,14 +110,7 @@ public struct Font: Hashable, Equatable, Sendable {
     ///   - size: The size of the font in pixels
     ///   - weight: The weight (boldness) of the font
     /// - Returns: A Font instance configured with the custom font
-    static func custom(_ name: String, style: Font.Style = .body, size: Double, weight: Font.Weight = .regular) -> Font {
-        Font(style: style, size: size, weight: weight, sources: [FontSource(name: name)])
-    }
-
-    /// Creates a system font from a comma-separated string of font families
-    /// - Parameter families: A comma-separated string of font family names
-    /// - Returns: A Font instance configured with the system font families
-    static func system(families: String) -> Font {
-        Font(name: families, style: nil, size: nil, weight: .regular)
+    public static func custom(_ name: String, style: Font.Style? = nil, size: Double? = nil, weight: Font.Weight = .regular) -> Font {
+        Font(name: name, style: style, size: size, weight: weight)
     }
 }

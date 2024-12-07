@@ -48,8 +48,7 @@ public struct BasicStyle: Style {
     /// Resolves this style into its concrete form.
     public var body: some Style {
         ResolvedStyle(
-            property: property,
-            value: value,
+            declarations: [.init(name: property, value: value)],
             className: className
         )
     }

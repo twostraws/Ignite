@@ -38,7 +38,8 @@ final class StyleManager {
     /// - Parameter style: The style to register
     func registerStyle(_ style: some Style) {
         guard !registeredStyles.contains(style.className) else { return }
-        let resolvedStyle = (style.body as? ResolvedStyle) ?? ResolvedStyle()
+        let resolvedStyle = (style as? ResolvedStyle) ??
+        (style.body as? ResolvedStyle) ?? ResolvedStyle()
         registerStyle(resolvedStyle)
     }
 
@@ -55,7 +56,6 @@ final class StyleManager {
         
         \(newRules)
         """
-
         try? cssContent.write(to: file, atomically: true, encoding: .utf8)
         pendingRules.removeAll()
     }

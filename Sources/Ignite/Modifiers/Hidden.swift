@@ -34,8 +34,7 @@ struct HiddenModifier: HTMLModifier {
         if let mediaQuery {
             let condition = "(\(mediaQuery.query): \(mediaQuery.rawValue))"
             let style = ResolvedStyle(
-                property: "display",
-                value: "none !important",
+                declarations: [.init(name: "display", value: "none !important")],
                 mediaQueries: [MediaQuery(conditions: [condition])]
             )
             let className = style.register()

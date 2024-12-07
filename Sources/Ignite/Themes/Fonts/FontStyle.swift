@@ -22,8 +22,8 @@ struct FontStyle: Style {
         if let size = font.size {
             BasicStyle(.fontSize, value: size)
         }
-        if let level = font.style {
-            BasicStyle(.fontSize, value: level.sizeVariable)
+        if let style = font.style {
+            BasicStyle(.fontSize, value: style.sizeVariable)
         }
         BasicStyle(.fontWeight, value: font.weight.rawValue)
     }
