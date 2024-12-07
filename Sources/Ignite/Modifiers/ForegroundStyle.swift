@@ -76,18 +76,18 @@ struct ForegroundStyleModifier: HTMLModifier {
     }
 }
 
-extension HTML {
+public extension HTML {
     /// Applies a foreground color to the current element.
     /// - Parameter color: The style to apply, specified as a `Color` object.
     /// - Returns: The current element with the updated color applied.
-    public func foregroundStyle(_ color: Color) -> some HTML {
+    func foregroundStyle(_ color: Color) -> some HTML {
         modifier(ForegroundStyleModifier(color: color))
     }
 
     /// Applies a foreground color to the current element.
     /// - Parameter color: The style to apply, specified as a string.
     /// - Returns: The current element with the updated color applied.
-    public func foregroundStyle(_ color: String) -> some HTML {
+    func foregroundStyle(_ color: String) -> some HTML {
         modifier(ForegroundStyleModifier(colorString: color))
     }
 
@@ -99,18 +99,18 @@ extension HTML {
     }
 }
 
-extension HTML where Self == Image {
+public extension InlineHTML {
     /// Applies a foreground color to the current element.
     /// - Parameter color: The style to apply, specified as a `Color` object.
     /// - Returns: The current element with the updated color applied.
-    public func foregroundStyle(_ color: Color) -> some InlineHTML {
+    func foregroundStyle(_ color: Color) -> some InlineHTML {
         modifier(ForegroundStyleModifier(color: color))
     }
 
     /// Applies a foreground color to the current element.
     /// - Parameter color: The style to apply, specified as a string.
     /// - Returns: The current element with the updated color applied.
-    public func foregroundStyle(_ color: String) -> some InlineHTML {
+    func foregroundStyle(_ color: String) -> some InlineHTML {
         modifier(ForegroundStyleModifier(colorString: color))
     }
 
