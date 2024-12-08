@@ -70,7 +70,11 @@ struct FrameModifier: HTMLModifier {
         }
 
         if let maxWidth {
-            modified = modified.style("max-width: \(maxWidth.stringValue)")
+            if let maxWidth = maxWidth as? Double, maxWidth == .infinity {
+                modified = modified.class("w-100")
+            } else {
+                modified = modified.style("max-width: \(maxWidth.stringValue)")
+            }
         }
 
         if let height {
@@ -82,7 +86,11 @@ struct FrameModifier: HTMLModifier {
         }
 
         if let maxHeight {
-            modified = modified.style("max-height: \(maxHeight.stringValue)")
+            if let maxHeight = maxHeight as? Double, maxHeight == .infinity {
+                modified = modified.class("h-100")
+            } else {
+                modified = modified.style("max-height: \(maxHeight.stringValue)")
+            }
         }
 
         if alignment == .center {
