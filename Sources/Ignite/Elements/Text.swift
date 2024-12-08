@@ -123,16 +123,18 @@ public struct Text: BlockHTML, DropdownElement {
     }
 }
 
-extension HTML where Self == Text {
+public extension HTML where Self == Text {
     /// Adjusts the font of this text.
     /// - Parameter newFont: The new font.
     /// - Returns: A new `Text` instance with the updated font.
-    public func font(_ font: Font) -> Self {
+    func font(_ font: Font) -> Self {
         let style = FontStyle(font)
         let className = style.register()
         return self.class(className)
     }
+}
 
+extension HTML {
     func fontStyle(_ font: Font.Style) -> Self {
         if font == .lead {
             self.class(font.rawValue)

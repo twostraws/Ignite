@@ -30,7 +30,7 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
         if let modified = content as? ModifiedHTML {
             self.content = modified.content
         } else {
-            self.content = unwrap(content.body)
+            self.content = content
         }
 
         let modifiedContent: any HTML = modifier.body(content: self.content)
@@ -50,7 +50,7 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
             return content.render(context: context)
         } else {
             let rawContent = content.render(context: context)
-            var attrs = attributes
+            var attrs = content.attributes
             if attrs.tag == nil { attrs.tag = "div" }
             return attrs.description(wrapping: rawContent)
         }

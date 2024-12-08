@@ -23,10 +23,9 @@ struct FontStyleModifier: HTMLModifier {
                     content.class("font-inherit")
                 }
             }
-        } else if let text = content.body as? Text  {
-            text.fontStyle(style)
+        } else {
+            content.fontStyle(style)
         }
-        content
     }
 }
 
