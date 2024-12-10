@@ -49,7 +49,7 @@ import XCTest
     }
 
     func test_customFont() {
-        for font in Font.allCases {
+        for font in Font.Style.allCases {
             let element = Text("Hello").font(font)
             let output = element.render(context: publishingContext)
 
