@@ -21,7 +21,8 @@ public enum HighlighterTheme: CustomStringConvertible, Hashable, Sendable {
     case none
     case custom(name: String, filePath: String)
 
-    /// The URL path to the CSS file for this theme
+    public static var automatic: HighlighterTheme { .xcodeLight }
+
     var url: String {
         switch self {
         case .xcodeDark:
@@ -31,13 +32,13 @@ public enum HighlighterTheme: CustomStringConvertible, Hashable, Sendable {
         case .githubLight:
             return "css/highlightjs-github-light.min.css"
         case .githubDark:
-            return "css/highlightjs-github-light.min.css"
-        case .xcodeLight, .automatic:
+            return "css/highlightjs-github-dark.min.css"
+        case .xcodeLight:
             return "css/highlightjs-xcode-light.min.css"
         case .monokai:
             return "css/highlightjs-monokai.min.css"
         case .solarizedLight:
-            return "css/highlightjs-solarized.min.css"
+            return "css/highlightjs-solarized-light.min.css"
         case .solarizedDark:
             return "css/highlightjs-solarized-dark.min.css"
         case .tomorrowNight:
