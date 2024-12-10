@@ -7,7 +7,6 @@
 
 /// Represents different syntax highlighting themes available for code blocks
 public enum HighlighterTheme: CustomStringConvertible, Hashable, Sendable {
-    case automatic
     case githubLight
     case githubDark
     case highlightJS
