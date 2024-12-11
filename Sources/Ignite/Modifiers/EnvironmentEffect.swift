@@ -5,10 +5,18 @@
 // See LICENSE for license information.
 //
 
+/// A modifier that applies conditional styles based on media queries and theme states.
 struct EnvironmentEffectModifier: HTMLModifier {
+    /// The media queries to check against.
     private let mediaQueries: [MediaQuery]
+
+    /// The style modifications to apply when conditions are met.
     private let modifications: (any HTML) -> any HTML
 
+    /// Creates a new environment effect modifier.
+    /// - Parameters:
+    ///   - mediaQueries: The media queries to check against
+    ///   - modifications: The style modifications to apply
     init(
         mediaQueries: [MediaQuery],
         modifications: @escaping (any HTML) -> any HTML
@@ -17,6 +25,9 @@ struct EnvironmentEffectModifier: HTMLModifier {
         self.modifications = modifications
     }
 
+    /// Applies the environment-specific modifications to the content.
+    /// - Parameter content: The HTML content to modify
+    /// - Returns: The modified HTML with conditional styles applied
     func body(content: some HTML) -> any HTML {
         let className = "env-\(content.id)"
 
@@ -68,6 +79,11 @@ struct EnvironmentEffectModifier: HTMLModifier {
 }
 
 public extension HTML {
+    /// Applies conditional styles based on media queries and theme states.
+    /// - Parameters:
+    ///   - mediaQueries: One or more media queries to check against
+    ///   - modifications: The style modifications to apply when conditions are met
+    /// - Returns: A modified copy of the HTML with conditional styles applied
     func environmentEffect(
         _ mediaQueries: MediaQuery...,
         modifications: @escaping (any HTML) -> any HTML
@@ -83,6 +99,9 @@ public extension HTML {
 
 // Helper extension for array partition
 private extension Array {
+    /// Splits an array into two arrays based on a predicate.
+    /// - Parameter predicate: A closure that determines which array each element belongs to
+    /// - Returns: A tuple containing matching and non-matching elements
     func partition(by predicate: (Element) -> Bool) -> ([Element], [Element]) {
         var matching: [Element] = []
         var nonMatching: [Element] = []
