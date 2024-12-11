@@ -5,56 +5,55 @@
 // See LICENSE for license information.
 //
 
+/// A type that wraps HTML content with a modifier, preserving attributes and structure.
 struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
+    /// The column width to use when this element appears in a grid layout.
     var columnWidth: ColumnWidth = .automatic
+
+    /// A unique identifier for this element.
     var id = UUID().uuidString.truncatedHash
+
+    /// The content and behavior of this HTML element.
     var body: some HTML { self }
+
+    /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool = true
+
+    /// The underlying HTML content being modified.
     private(set) var content: any HTML
 
+    /// Creates a new modified HTML element by applying a modifier to existing content.
+    /// - Parameters:
+    ///   - content: The HTML content to modify
+    ///   - modifier: The modifier to apply to the content
     init(_ content: any HTML, modifier: any HTMLModifier) {
-        // First handle the content assignment and unwrapping
         if let modified = content as? ModifiedHTML {
             self.content = modified.content
+            AttributeStore.default.merge(modified.attributes, intoHTML: id)
         } else {
             self.content = content
+            AttributeStore.default.merge(content.attributes, intoHTML: id)
         }
 
-        // Apply the modifier to get the modified version
-        let modifiedContent: any HTML = modifier.body(content: self.content)
+        let modifiedContent: any HTML = modifier.body(content: self)
 
-        // Merge attributes in the correct order:
-        // 1. Original content attributes
-        AttributeStore.default.merge(self.content.attributes, intoHTML: id)
+        AttributeStore.default.merge(content.attributes, intoHTML: id)
 
-        // 2. If the content was a ModifiedHTML, get its attributes too
-        if let modified = content as? ModifiedHTML {
-            AttributeStore.default.merge(modified.attributes, intoHTML: id)
-        }
-
-        // 3. Finally merge the modifier's new attributes
-        AttributeStore.default.merge(modifiedContent.attributes, intoHTML: id)
-
-        // Handle column width for block elements
         if let block = self.content as? (any BlockHTML) {
             self.columnWidth = block.columnWidth
         }
     }
 
+    /// Renders this element using the provided publishing context.
+    /// - Parameter context: The current publishing context
+    /// - Returns: The rendered HTML string
     func render(context: PublishingContext) -> String {
         if content.isPrimitive {
-            // For primitive content, let it handle its own rendering
             return content.render(context: context)
         } else {
-            // For non-primitive content:
-            // 1. Get the rendered content
             let rawContent = content.render(context: context)
-
-            // 2. Get our attributes and merge with content's attributes
             var attrs = attributes
             if attrs.tag == nil { attrs.tag = "div" }
-
-            // 3. Return the wrapped content with all attributes
             return attrs.description(wrapping: rawContent)
         }
     }
