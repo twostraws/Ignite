@@ -95,6 +95,10 @@ public struct HTMLHead: RootHTML {
             MetaLink.remoteIconCSS
         }
 
+        if StyleManager.default.hasStyles {
+            MetaLink.customCSS
+        }
+
         MetaLink.themeCSS
 
         if AnimationManager.default.hasAnimations {

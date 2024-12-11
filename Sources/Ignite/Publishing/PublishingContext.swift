@@ -131,6 +131,7 @@ public final class PublishingContext {
         try copyResources()
         try generateThemes(site.alternateThemes)
         generateAnimations()
+        try StyleManager.default.writeStyles(to: buildDirectory)
         try await generateTagPages()
         try generateSiteMap()
         try generateFeed()
@@ -162,6 +163,12 @@ public final class PublishingContext {
 
         if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/themes.min.css").path()) {
             try copy(resource: "css/themes.min.css")
+        }
+
+        if StyleManager.default.hasStyles,
+           !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/custom.min.css").path())
+        {
+            try copy(resource: "css/custom.min.css")
         }
 
         if AnimationManager.default.hasAnimations {
