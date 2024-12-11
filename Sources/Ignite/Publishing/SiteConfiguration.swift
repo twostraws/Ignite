@@ -32,7 +32,7 @@ public struct SiteConfiguration: Sendable {
     public let builtInIconsEnabled: BootstrapOptions
 
     /// Array of syntax highlighters enabled for the site
-    public let syntaxHighlighters: [SyntaxHighlighter]
+    let highlighterThemes: Set<HighlighterTheme>
 
     /// The path to the favicon
     public let favicon: URL?
@@ -49,7 +49,7 @@ public struct SiteConfiguration: Sendable {
         url: URL,
         useDefaultBootstrapURLs: BootstrapOptions = .localBootstrap,
         builtInIconsEnabled: BootstrapOptions = .localBootstrap,
-        syntaxHighlighters: [SyntaxHighlighter] = [],
+        highlightThemes: Set<HighlighterTheme> = [],
         favicon: URL? = nil,
         alternateThemes: [any Theme] = []
     ) {
@@ -61,7 +61,7 @@ public struct SiteConfiguration: Sendable {
         self.url = url
         self.useDefaultBootstrapURLs = useDefaultBootstrapURLs
         self.builtInIconsEnabled = builtInIconsEnabled
-        self.syntaxHighlighters = syntaxHighlighters
+        self.highlighterThemes = highlightThemes
         self.favicon = favicon
         self.alternateThemes = alternateThemes
     }
@@ -75,7 +75,7 @@ public struct SiteConfiguration: Sendable {
         self.url = URL(static: "https://example.com")
         self.useDefaultBootstrapURLs = .localBootstrap
         self.builtInIconsEnabled = .localBootstrap
-        self.syntaxHighlighters = []
+        self.highlighterThemes = []
         self.favicon = nil
         self.alternateThemes = []
     }

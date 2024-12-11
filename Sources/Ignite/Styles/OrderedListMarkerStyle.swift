@@ -6,9 +6,9 @@
 //
 
 /// Some of the (many!) ways of numbering ordered lists.
-public enum OrderedListStyle: String {
+public enum OrderedListMarkerStyle: String, Sendable {
     /// Lists are numbered 1, 2, 3
-    case `default` = "decimal"
+    case automatic = "decimal"
 
     /// Lists are numbered in traditional Armenian numbers.
     case armenian = "armenian"

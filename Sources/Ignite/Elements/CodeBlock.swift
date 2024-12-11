@@ -24,26 +24,29 @@ public struct CodeBlock: BlockHTML {
     var content: String
 
     /// The language of the code being shown.
-    var language: String?
+    var language: HighlighterLanguage?
 
     /// Creates a new `Code` instance from the given content.
     /// - Parameters:
     ///   - language: The programming language for the code. This affects
     ///   how the content is tagged, which in turn affects syntax highlighting.
     ///   - content: The code you want to render.
-    public init(language: String? = nil, _ content: String) {
+    public init(_ language: HighlighterLanguage? = nil, _ content: () -> String) {
         self.language = language
-        self.content = content
+        self.content = content()
     }
 
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        if let language {
+        guard context.site.allHighlighterThemes.isEmpty == false else {
+            fatalError("At least one of your themes must specify a syntax highlighter.")
+        }
+        return if let language {
             """
             <pre\(attributes.description())>\
-            <code class=\"language-\(language)\">\
+            <code class=\"hljs language-\(language)\">\
             \(content)\
             </code>\
             </pre>
@@ -51,7 +54,7 @@ public struct CodeBlock: BlockHTML {
         } else {
             """
             <pre\(attributes.description())>\
-            <code>\(content)</code>\
+            <code class=\"hljs\">\(content)</code>\
             </pre>
             """
         }

@@ -5,9 +5,9 @@
 // See LICENSE for license information.
 //
 
-public enum UnorderedListStyle: String {
+public enum UnorderedListMarkerStyle: String, Sendable {
     /// Lists are shown with filled circle bullet points.
-    case `default` = "disc"
+    case automatic = "disc"
 
     /// Lists are shown with hollow circle bullet points.
     case circle = "circle"

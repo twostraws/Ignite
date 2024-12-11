@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftSoup
 
 /// Publishing contexts manage the entire flow of publishing, through all
 /// elements. This allows any part of the site to reference content, add
@@ -129,7 +130,7 @@ public final class PublishingContext {
         try clearBuildFolder()
         try await generateContent()
         try copyResources()
-        try generateThemes(site.alternateThemes)
+        try generateThemes(site.allThemes)
         generateAnimations()
         try StyleManager.default.writeStyles(to: buildDirectory)
         try await generateTagPages()
@@ -190,9 +191,23 @@ public final class PublishingContext {
             try copy(resource: "fonts/bootstrap-icons.woff2")
         }
 
-        if site.syntaxHighlighters.isEmpty == false {
+        if site.allHighlighterThemes.isEmpty == false {
+            try copy(resource: "js/highlight.min.js")
             try copySyntaxHighlighters()
-            try copy(resource: "css/prism-default-dark.css")
+        }
+    }
+
+    /// Formats HTML content with proper indentation and line breaks, returning original HTML if formatting fails.
+    private func prettifyHTML(_ html: String) -> String {
+        do {
+            let doc = try SwiftSoup.parse(html)
+            doc.outputSettings()
+                .prettyPrint(pretty: true)
+                .indentAmount(indentAmount: 2)
+            return try doc.outerHtml()
+        } catch {
+            addWarning("HTML could not be prettified: \(error.localizedDescription).")
+            return html
         }
     }
 
@@ -217,9 +232,14 @@ public final class PublishingContext {
         }
 
         let outputURL = directory.appending(path: "index.html")
+        var html = string
+
+        if site.prettifyHTML {
+            html = prettifyHTML(string)
+        }
 
         do {
-            try string.write(to: outputURL, atomically: true, encoding: .utf8)
+            try html.write(to: outputURL, atomically: true, encoding: .utf8)
             addToSiteMap(relativePath, priority: priority)
         } catch {
             throw PublishingError.failedToCreateBuildFile(outputURL)
@@ -352,14 +372,8 @@ public final class PublishingContext {
     /// Calculates the full list of syntax highlighters need by this site, including
     /// resolving dependencies.
     func copySyntaxHighlighters() throws {
-        let generator = SyntaxHighlightGenerator(site: site)
-        let result = try generator.generateSyntaxHighlighters()
-
-        do {
-            let destinationURL = buildDirectory.appending(path: "js/syntax-highlighting.js")
-            try result.write(to: destinationURL, atomically: true, encoding: .utf8)
-        } catch {
-            throw PublishingError.failedToWriteSyntaxHighlighters
+        for theme in site.allHighlighterThemes {
+            try copy(resource: theme.url)
         }
     }
 }

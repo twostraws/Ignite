@@ -12,8 +12,8 @@ public struct SwitchTheme: Action {
 
     /// Creates a new theme switching action
     /// - Parameter themeID: The ID of the theme to switch to (will be automatically sanitized)
-    public init(_ themeID: String) {
-        self.themeID = themeID.kebabCased()
+    public init(_ theme: any Theme) {
+        self.themeID = theme.id
     }
 
     /// Compiles the action into JavaScript code that calls the switchTheme function
