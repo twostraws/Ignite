@@ -24,9 +24,14 @@ extension LengthUnit {
     }
 }
 
-/// Returns a special value indicating that a dimension should use 100% of the viewport size
 public extension LengthUnit where Self == Int {
+    /// Returns a special value indicating that a dimension should use 100% of the viewport size
     static var viewport: Int { .max }
+}
+
+public extension LengthUnit where Self == Double {
+    /// Returns a special value indicating that a dimension should use 100% of the parent container
+    static var infinity: Double { Double.infinity }
 }
 
 /// Enables `String` to represent CSS unit values

@@ -181,7 +181,6 @@ import Foundation
 import Ignite
 
 struct Layout: ContentPage {
-    @Content private var content
     var body: some HTML {
         Text(content.title)
             .font(.title1)

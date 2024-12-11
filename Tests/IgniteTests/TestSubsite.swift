@@ -14,7 +14,6 @@ struct TestSubsite: Site {
     var url = URL(static: "https://www.yoursite.com/subsite")
 
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
-    var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
 
     var homePage = TestSubsitePage()
     var layout = EmptyLayout()
