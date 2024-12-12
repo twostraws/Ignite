@@ -14,7 +14,6 @@ struct TestSite: Site {
     var url = URL(static: "https://www.yoursite.com")
 
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
-    var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
 
     var homePage = TestPage()
     var layout = EmptyLayout()
