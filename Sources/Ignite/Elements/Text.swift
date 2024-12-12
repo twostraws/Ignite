@@ -98,6 +98,7 @@ public struct Text: BlockHTML, DropdownElement {
         result += "."
 
         self.content = result
+        self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new Text struct from a Markdown string.
