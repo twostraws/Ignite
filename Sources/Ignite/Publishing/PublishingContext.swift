@@ -185,6 +185,7 @@ public final class PublishingContext {
         }
 
         if site.allHighlighterThemes.isEmpty == false {
+            try copy(resource: "js/highlight.min.js")
             try copySyntaxHighlighters()
         }
     }

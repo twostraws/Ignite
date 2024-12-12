@@ -41,11 +41,11 @@ public struct MetaLink: HeadElement, Sendable {
         let hasMultipleThemes = themes.count > 1
 
         return themes.map { theme in
-            var link = MetaLink(href: theme.url, rel: .stylesheet)
+            var link = MetaLink(href: "/\(theme.url)", rel: .stylesheet)
 
             if hasMultipleThemes {
                 link = link
-                    .data("highlight-theme", "/\(theme.rawValue)")
+                    .data("highlight-theme", theme.rawValue)
                     .customAttribute(name: "disabled", value: "")
             }
 
