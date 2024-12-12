@@ -12,6 +12,28 @@ public struct UnitPoint: Hashable, Sendable {
     var x: Double // swiftlint:disable:this identifier_name
     var y: Double // swiftlint:disable:this identifier_name
 
+    /// Returns the CSS justify-self value for this alignment point
+    var justifySelf: String {
+        if x == 0 {
+            "start"
+        } else if x == 1 {
+            "end"
+        } else {
+            "center"
+        }
+    }
+
+    /// Returns the CSS align-self value for this alignment point
+    var alignSelf: String {
+        if y == 0 {
+            "start"
+        } else if y == 1 {
+            "end"
+        } else {
+            "center"
+        }
+    }
+
     /// Calculates the angle from this `UnitPoint` to another,
     /// measured in radians.
     /// - Parameter endPoint: The `UnitPoint` we're angling towards.
