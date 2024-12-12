@@ -39,6 +39,11 @@ public extension LengthUnit where Self == Int {
     static var `default`: Int { .min }
 }
 
+public extension LengthUnit where Self == Double {
+    /// Returns a special value indicating that a dimension should use 100% of the parent container
+    static var infinity: Double { Double.infinity }
+}
+
 /// Enables `String` to represent CSS unit values
 extension String: LengthUnit {}
 
