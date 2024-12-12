@@ -77,4 +77,18 @@ import XCTest
         XCTAssertEqual(output, "<p>This is a single line of markdown with a soft break</p>")
         // swiftlint:enable line_length
     }
+
+    func test_markdownHardBreaks() {
+        let markdown =
+        """
+        This is line 1  
+        This is line 2  
+        This is line 3  
+        """
+        let element = Text(markdown: markdown)
+        let output = element.render(context: publishingContext)
+        // swiftlint:disable line_length
+        XCTAssertEqual(output, "<p>This is line 1<br />This is line 2<br />This is line 3</p>")
+        // swiftlint:enable line_length
+    }
 }
