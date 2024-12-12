@@ -135,6 +135,13 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
         return " "
     }
 
+    /// Processes hard line breaks (lines ending with 2 spaces or a backslash).
+    /// - Parameter lineBreak: The line break to process.
+    /// - Returns: A HTML <br /> tag.
+    public func visitLineBreak(_ lineBreak: LineBreak) -> String {
+        return "<br />"
+    }
+
     /// Processes emphasis markup.
     /// - Parameter emphasis: The emphasized content to process.
     /// - Returns: A HTML <em> element with the markup's children inside.
