@@ -74,7 +74,7 @@ struct AnimationClassGenerator {
             }
             """
         }
-        
+
         if !properties.transformProperties.isEmpty {
             if !output.isEmpty {
                 output += "\n\n"
@@ -126,7 +126,12 @@ struct AnimationClassGenerator {
     /// - Parameter animation: The keyframe animation to process
     /// - Returns: A set of CSS properties including animation name and timing
     private func buildBaseKeyframeClass(_ animation: Animation) -> Set<String> {
-        var baseProperties: Set<String> = ["cursor: pointer"]
+        var baseProperties = Set<String>()
+
+        if triggerMap[.click] != nil {
+            baseProperties.insert("cursor: pointer")
+        }
+
         let timing = getAnimationTiming(animation)
         baseProperties.insert("animation: \(name)-appear \(timing)")
         return baseProperties
@@ -207,7 +212,7 @@ struct AnimationClassGenerator {
             let properties = frame.animations
                 .map { "\($0.property.rawValue): \($0.final)" }
                 .joined(separator: ";\n                ")
-            
+
             return """
                     \(frame.position.roundedValue.asString()) {
                         \(properties)
@@ -276,18 +281,18 @@ struct AnimationClassGenerator {
     private func buildBaseTransitionClass(_ transition: Transition) -> Set<String> {
         var baseProperties: Set<String> = ["cursor: pointer"]
         let timing = getTransitionTiming(transition).first ?? "0.35s ease"
-        
+
         // Set initial values for all properties
         for data in transition.data {
             baseProperties.insert("\(data.property.rawValue): \(data.initial)")
         }
-        
+
         // Add transitions for all properties in one declaration
         let transitions = transition.data.map { data in
             "\(data.property.rawValue) \(timing)"
         }.joined(separator: ", ")
         baseProperties.insert("transition: \(transitions)")
-        
+
         return baseProperties
     }
 
@@ -295,33 +300,23 @@ struct AnimationClassGenerator {
     /// - Parameter transition: The transition animation to convert to CSS
     /// - Returns: A string containing hover and non-hover state CSS rules
     private func buildTransitionHoverClass(_ transition: Transition) -> String {
-        let transformProperties = transition.data.filter { $0.property == .transform }
-        let otherProperties = transition.data.filter { $0.property != .transform }
+        let transitions = transition.data.map { data in
+            let delay = data.delay > 0 ? " \(data.delay)s" : ""
+            return "\(data.property.rawValue) \(data.duration)s \(data.timing.css)\(delay)"
+        }
 
-        let transformTiming = transformProperties.map { data in
-            "transform \(data.duration)s \(data.timing.css)"
-        }.joined(separator: ", ")
-
-        let otherTiming = otherProperties.map { data in
-            "\(data.property.rawValue) \(data.duration)s \(data.timing.css)"
-        }.joined(separator: ", ")
+        let hoverProperties = transition.data.map { data in
+            "\(data.property.rawValue): \(data.final)"
+        }
 
         return """
         .\(name)-transform {
             transform-style: preserve-3d;
-            transition: \(transformTiming);
+            transition: \(transitions.joined(separator: ", "));
         }
 
         .\(name)-transform:hover {
-            \(transformProperties.map { "transform: \($0.final)" }.joined(separator: ";\n        "))
-        }
-
-        .\(name)-hover {
-            transition: \(otherTiming);
-        }
-
-        .\(name)-hover:hover {
-            \(otherProperties.map { "\($0.property.rawValue): \($0.final)" }.joined(separator: ";\n        "))
+            \(hoverProperties.joined(separator: ";\n        "));
         }
         """
     }
@@ -436,7 +431,7 @@ struct AnimationClassGenerator {
             let properties = frame.animations
                 .map { "\($0.property.rawValue): \($0.final)" }
                 .joined(separator: ";\n                ")
-            
+
             return """
                 \(frame.position.roundedValue.asString()) {
                     \(properties)
@@ -463,7 +458,7 @@ struct AnimationClassGenerator {
     private func getAppearedProperties() -> [String] {
         guard let appearAnim = triggerMap[.appear] else { return [] }
         var properties: [String] = []
-        
+
         if let transition = appearAnim as? Transition {
             properties = transition.data.map { data in
                 "\(data.property.rawValue): \(data.final)"
