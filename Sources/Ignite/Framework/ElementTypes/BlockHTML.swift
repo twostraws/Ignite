@@ -24,11 +24,6 @@ extension BlockHTML {
     public func width(_ width: Int) -> Self {
         var copy = self
         copy.columnWidth = .count(width)
-
-        // Important: We need to transfer all our existing
-        // attributes over to the copy.
-        AttributeStore.default.merge(attributes, intoHTML: copy.id)
-
         return copy
     }
 }
