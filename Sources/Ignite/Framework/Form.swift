@@ -126,45 +126,88 @@ public struct Form: BlockHTML {
         self.action = onSubmit
         self.verticalSpacing = verticalSpacing
         self.horizontalSpacing = horizontalSpacing
-        if attributes.id.isEmpty {
+        if let action = action(attributes.id) as? SubscribeAction, case .mailchimp = action.service {
+            attributes.id = "mc-embedded-subscribe-form"
+        } else {
             attributes.id = UUID().uuidString.truncatedHash
         }
     }
 
     public func render(context: PublishingContext) -> String {
+        guard let action = action(attributes.id) as? SubscribeAction else {
+            fatalError("Form supports only SubscribeAction at this time.")
+        }
+
         var attributes = attributes
         attributes.tag = "form"
-        let action = action(attributes.id)
 
-        if let action = action as? SubscribeAction {
-            attributes.customAttributes.insert(.init(name: "method", value: "post"))
-            attributes.customAttributes.insert(.init(name: "action", value: action.endpoint))
+        attributes.customAttributes.insert(.init(name: "method", value: "post"))
+        attributes.customAttributes.insert(.init(name: "action", value: action.service.endpoint(formID: action.formID)))
+        attributes.data.formUnion(action.service.dataAttributes)
+
+        if let formClass = action.service.formClass {
+            attributes.classes.append(formClass)
+        }
+
+        if case .mailchimp = action.service {
+            attributes.customAttributes.insert(.init(name: "target", value: "_blank"))
         }
 
         let wrappedContent = Group {
             ForEach(items) { item in
-                if let textField = item as? TextField, let labelText = textField.label {
-                    renderFormField(textField, labelText: labelText)
+                if let textField = item as? TextField {
+                    renderFormField(textField)
                 } else if let button = item as? Button {
                     renderButton(button)
                 } else {
                     renderSimpleItem(item)
                 }
             }
+
+            if let honeypotName = action.service.honeypotFieldName {
+                Group {
+                    TextField(placeholder: nil)
+                        .type(.text)
+                        .customAttribute(name: "name", value: honeypotName)
+                        .customAttribute(name: "tabindex", value: "-1")
+                        .customAttribute(name: "value", value: "")
+                        .customAttribute(name: "autocomplete", value: "off")
+                }
+                .customAttribute(name: "style", value: "position: absolute; left: -5000px;")
+                .customAttribute(name: "aria-hidden", value: "true")
+            }
         }
         .class("row", "g-\(horizontalSpacing.rawValue)", "gy-\(verticalSpacing.rawValue)")
         .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
         .render(context: context)
 
-        var output = wrappedContent
-        output += Script(code: action.compile()).render(context: context)
+        var formOutput = attributes.description(wrapping: wrappedContent)
 
-        return attributes.description(wrapping: output)
+        if let action = action as? SubscribeAction, case .sendFox = action.service {
+            formOutput += Script(file: "https://cdn.sendfox.com/js/form.js")
+                .customAttribute(name: "charset", value: "utf-8")
+                .render(context: context)
+        }
+
+        return formOutput
     }
 
-    private func renderFormField(_ textField: TextField, labelText: String) -> Group {
-        let sizedTextField = textField.class(controlSize.controlClass)
-        let label = Label(text: labelText)
+    private func renderFormField(_ textField: TextField) -> Group {
+        guard let action = action(attributes.id) as? SubscribeAction else {
+            fatalError("Forms support only SubscribeAction at the moment.")
+        }
+
+        let sizedTextField = textField
+            .id(action.service.emailFieldID)
+            .class(controlSize.controlClass)
+            .customAttribute(name: "name", value: action.service.emailFieldName!)
+
+        // If no label text, return just the field
+        guard let textLabel = textField.label else {
+            return renderSimpleItem(sizedTextField)
+        }
+
+        let label = Label(text: textLabel)
             .class(controlSize.labelClass)
             .customAttribute(name: "for", value: textField.attributes.id)
 
@@ -220,8 +263,8 @@ public struct Form: BlockHTML {
             let bootstrapColumns = 12 * width / totalColumns
             return "col-md-\(bootstrapColumns)"
         } else {
-            // Default to one column width if not specified
-            return "col-md-\(12 / totalColumns)"
+            // Default to auto width if not specified
+            return "col"
         }
     }
 }

@@ -23,7 +23,7 @@ public struct TextField: InlineHTML, BlockHTML {
     var label: String?
 
     /// The placeholder text shown when the field is empty.
-    private var placeholder: String
+    private var placeholder: String?
 
     /// Whether the field must have a value before the form can be submitted.
     private var isRequired = false
@@ -53,12 +53,9 @@ public struct TextField: InlineHTML, BlockHTML {
     /// - Parameters:
     ///   - label: The label text to display with the field.
     ///   - placeholder: The text to display when the field is empty.
-    public init(_ label: String? = nil, placeholder: String) {
+    public init(_ label: String? = nil, placeholder: String?) {
         self.label = label
         self.placeholder = placeholder
-        if attributes.id.isEmpty {
-            attributes.id = UUID().uuidString.truncatedHash
-        }
     }
 
     /// Makes this field required
@@ -80,8 +77,10 @@ public struct TextField: InlineHTML, BlockHTML {
         attributes.selfClosingTag = "input"
         attributes.classes.append("form-control")
         attributes.customAttributes.insert(.init(name: "type", value: type.rawValue))
-        attributes.customAttributes.insert(.init(name: "placeholder", value: placeholder))
-        attributes.customAttributes.insert(.init(name: "value", value: placeholder))
+
+        if let placeholder {
+            attributes.customAttributes.insert(.init(name: "placeholder", value: placeholder))
+        }
 
         if isRequired {
             attributes.customAttributes.insert(.init(name: "required", value: ""))

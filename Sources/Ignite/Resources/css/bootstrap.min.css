@@ -20,3 +20,8 @@
 div.alert p:last-child {
   margin-bottom: 0;
 }
+
+.form-control::placeholder {
+  color: gray;
+  opacity: 1;
+}
