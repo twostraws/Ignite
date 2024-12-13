@@ -312,6 +312,20 @@ public extension HTML {
     return []
 }
 
+@MainActor func flatUnwrap(_ content: Any) -> [any InlineHTML] {
+    if let array = content as? [Any] {
+        return array.flatMap { flatUnwrap($0) }
+    } else if let html = content as? any InlineHTML {
+        if let anyHTML = html as? AnyHTML, let wrapped = anyHTML.unwrapped.body as? (any InlineHTML) {
+            return [wrapped]
+        } else if let collection = html as? HTMLCollection, let elements = collection.elements as? [any InlineHTML] {
+            return elements
+        }
+        return [html]
+    }
+    return []
+}
+
 /// Unwraps HTML content to its most basic form, collecting multiple elements into an HTMLCollection if needed.
 /// - Parameter content: The content to unwrap
 /// - Returns: A single HTML element or collection
