@@ -36,8 +36,7 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
         }
 
         let modifiedContent: any HTML = modifier.body(content: self)
-
-        AttributeStore.default.merge(content.attributes, intoHTML: id)
+        AttributeStore.default.merge(modifiedContent.attributes, intoHTML: id)
 
         if let block = self.content as? (any BlockHTML) {
             self.columnWidth = block.columnWidth
@@ -49,6 +48,7 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
     /// - Returns: The rendered HTML string
     func render(context: PublishingContext) -> String {
         if content.isPrimitive {
+            AttributeStore.default.merge(attributes, intoHTML: content.id)
             return content.render(context: context)
         } else {
             let rawContent = content.render(context: context)
