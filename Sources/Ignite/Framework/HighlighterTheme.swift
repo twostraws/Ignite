@@ -5,7 +5,8 @@
 // See LICENSE for license information.
 //
 
-public enum HighlighterTheme: String, Sendable {
+/// Represents different syntax highlighting themes available for code blocks
+public enum HighlighterTheme: CustomStringConvertible, Hashable, Sendable {
     case githubLight
     case githubDark
     case highlightJS
@@ -16,6 +17,8 @@ public enum HighlighterTheme: String, Sendable {
     case twilight
     case xcodeLight
     case xcodeDark
+    case none
+    case custom(name: String, filePath: String)
 
     public static var automatic: HighlighterTheme { .xcodeLight }
 
@@ -41,6 +44,28 @@ public enum HighlighterTheme: String, Sendable {
             return "css/highlightjs-tomorrow-night-bright.min.css"
         case .twilight:
             return "css/highlightjs-twilight.min.css"
+        case .custom(_, let filePath):
+            return filePath
+        case .none:
+            return ""
+        }
+    }
+
+    /// The string representation of the theme
+    public var description: String {
+        switch self {
+        case .xcodeLight, .automatic: "xcode-light"
+        case .githubLight: "github-light"
+        case .githubDark: "github-dark"
+        case .highlightJS: "highlight-JS"
+        case .monokai: "monokai"
+        case .solarizedLight: "solarized-light"
+        case .solarizedDark: "solarized-dark"
+        case .tomorrowNight: "tomorrow-night"
+        case .twilight: "twilight"
+        case .xcodeDark: "xcode-dark"
+        case .custom(let name, _): name
+        default: "none"
         }
     }
 }
