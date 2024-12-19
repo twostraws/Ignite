@@ -1,8 +1,8 @@
 //
-//  AnimationClassGenerator-Transitions.swift
-//  Ignite
-//
-//  Created by Paul Hudson on 19/12/2024.
+// Padding.swift
+// Ignite
+// https://www.github.com/twostraws/Ignite
+// See LICENSE for license information.
 //
 
 extension AnimationClassGenerator {
