@@ -184,7 +184,8 @@ public struct Form: BlockHTML {
 
         var formOutput = attributes.description(wrapping: wrappedContent)
 
-        if let action = action as? SubscribeAction, case .sendFox = action.service {
+        // Add custom SendFox JavaScript if needed.
+        if case .sendFox = action.service {
             formOutput += Script(file: "https://cdn.sendfox.com/js/form.js")
                 .customAttribute(name: "charset", value: "utf-8")
                 .render(context: context)
