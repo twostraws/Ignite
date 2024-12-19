@@ -8,6 +8,30 @@
 import Foundation
 
 extension PublishingContext {
+    /// Contains the various snap dimensions for different Bootstrap widths.
+    var containerDefaults: String {
+        """
+        .container {
+            @media (min-width: 576px) {
+                max-width: var(\(BootstrapVariable.containerSm.rawValue), 540px);
+            }
+            @media (min-width: 768px) {
+                max-width: var(\(BootstrapVariable.containerMd.rawValue), 720px);
+            }
+            @media (min-width: 992px) {
+                max-width: var(\(BootstrapVariable.containerLg.rawValue), 960px);
+            }
+            @media (min-width: 1200px) {
+                max-width: var(\(BootstrapVariable.containerXl.rawValue), 1140px);
+            }
+            @media (min-width: 1400px) {
+                max-width: var(\(BootstrapVariable.containerXxl.rawValue), 1320px);
+            }
+        }
+
+        """
+    }
+
     /// Renders static pages and content pages, including the homepage.
     func generateContent() async throws {
         try render(site.homePage, isHomePage: true)
@@ -200,26 +224,7 @@ extension PublishingContext {
         """
 
         // Container defaults
-        cssContent += """
-        .container {
-            @media (min-width: 576px) {
-                max-width: var(\(BootstrapVariable.containerSm.rawValue), 540px);
-            }
-            @media (min-width: 768px) {
-                max-width: var(\(BootstrapVariable.containerMd.rawValue), 720px);
-            }
-            @media (min-width: 992px) {
-                max-width: var(\(BootstrapVariable.containerLg.rawValue), 960px);
-            }
-            @media (min-width: 1200px) {
-                max-width: var(\(BootstrapVariable.containerXl.rawValue), 1140px);
-            }
-            @media (min-width: 1400px) {
-                max-width: var(\(BootstrapVariable.containerXxl.rawValue), 1320px);
-            }
-        }
-
-        """
+        cssContent += containerDefaults
 
         // Generate alternate theme overrides
         for theme in themes {

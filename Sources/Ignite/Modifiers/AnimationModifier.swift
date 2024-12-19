@@ -50,7 +50,11 @@ public extension HTML {
     ///   - autoreverses: Whether the animation should play in reverse after completing
     ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
     /// - Returns: A modified HTML element with the animation applied
-    func animation(_ animation: Animation, direction: AnimationDirection? = nil, on trigger: AnimationTrigger) -> some HTML {
+    func animation(
+        _ animation: Animation,
+        direction: AnimationDirection? = nil,
+        on trigger: AnimationTrigger
+    ) -> some HTML {
         modifier(AnimationModifier(animation: animation, direction: direction, trigger: trigger))
     }
 
@@ -61,7 +65,11 @@ public extension HTML {
     ///   - direction: Optional direction for keyframe animations (e.g., alternate, reverse)
     ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
     /// - Returns: The modified HTML element with animation containers and classes applied
-    internal func applyAnimation(_ animation: some Animatable, direction: AnimationDirection?, trigger: AnimationTrigger) -> Self {
+    internal func applyAnimation(
+        _ animation: some Animatable,
+        direction: AnimationDirection?,
+        trigger: AnimationTrigger
+    ) -> Self {
         var attributes = attributes
         let animationName = "animation-\(self.id)"
 
@@ -70,14 +78,17 @@ public extension HTML {
 
         // Extract color styles from the element and move them to the animation wrapper
         var wrapperStyles: OrderedSet<AttributeValue> = []
+
         if let backgroundColor = attributes.styles.first(where: { $0.name == "background-color" }) {
             wrapperStyles.append(backgroundColor)
             attributes.styles.removeAll { $0.name == "background-color" }
         }
+
         if let background = attributes.styles.first(where: { $0.name == "background" }) {
             wrapperStyles.append(background)
             attributes.styles.removeAll { $0.name == "background" }
         }
+
         if let color = attributes.styles.first(where: { $0.name == "color" }) {
             wrapperStyles.append(color)
             attributes.styles.removeAll { $0.name == "color" }
@@ -88,6 +99,7 @@ public extension HTML {
 
         // Prepare the animation for registration
         var modifiedAnimation: any Animatable = animation
+
         if let basicAnim = animation as? Transition {
             var copy = basicAnim
 
@@ -99,6 +111,7 @@ public extension HTML {
             modifiedAnimation = copy
         } else if let keyframeAnim = animation as? Animation {
             var copy = keyframeAnim
+
             if let direction {
                 copy.direction = direction
             }
@@ -141,16 +154,24 @@ public extension HTML {
                     // it needs to toggle classes on the container that holds both the base animation
                     // and the click-specific styles. If we put the handler on the click-specific
                     // inner container, it wouldn't be able to affect its parent.
-                    if let index = attributes.containerAttributes.firstIndex(where: { $0.classes.contains(animationName) }) {
-                        let updatedContainers = attributes.containerAttributes.enumerated().map { i, element in
-                            if i == index {
+                    let firstAnimation = attributes.containerAttributes.firstIndex {
+                        $0.classes.contains(animationName)
+                    }
+
+                    if let index = firstAnimation {
+                        let updatedContainers = attributes.containerAttributes.enumerated().map { item, element in
+                            if item == index {
                                 var modified = element
+                                let newEvent = Event(name: "onclick", actions: [
+                                    CustomAction("igniteToggleClickAnimation(this)")])
                                 modified.type = .click
-                                modified.events.insert(Event(name: "onclick", actions: [CustomAction("igniteToggleClickAnimation(this)")]))
+                                modified.events.insert(newEvent)
                                 return modified
                             }
+
                             return element
                         }
+
                         attributes.containerAttributes = OrderedSet(updatedContainers)
                     }
                 }
@@ -171,9 +192,12 @@ public extension HTML {
 
                 // Add hover effects container
                 var classes: OrderedSet<String> = ["\(animationName)-hover"]
-                if let animation = animation as? Animation, animation.fillMode == .backwards || animation.fillMode == .both {
+
+                if let animation = animation as? Animation,
+                    animation.fillMode == .backwards || animation.fillMode == .both {
                     classes.append("fill-\(self.id)-\(animation.fillMode.rawValue)")
                 }
+
                 attributes.append(containerAttributes: ContainerAttributes(
                     type: .animation,
                     classes: classes,

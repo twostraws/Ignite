@@ -166,7 +166,8 @@ public final class PublishingContext {
         }
 
         if AnimationManager.default.hasAnimations {
-            if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/animations.min.css").path()) {
+            let animationsPath = buildDirectory.appending(path: "css/animations.min.css").path()
+            if !FileManager.default.fileExists(atPath: animationsPath) {
                 try copy(resource: "css/animations.min.css")
             }
         }

@@ -45,7 +45,6 @@ public struct List: BlockHTML {
     /// but if you need specific styling you might want to use ListItem objects.
     private var items: [any HTML]
 
-    // swiftlint:disable empty_enum_arguments
     /// Returns the correct HTML name for this list.
     private var listElementName: String {
         if case .ordered = markerStyle {
@@ -54,7 +53,6 @@ public struct List: BlockHTML {
             "ul"
         }
     }
-    // swiftlint:enable empty_enum_arguments
 
     /// Creates a new `List` object using a page element builder that returns
     /// an array of `HTML` objects to display in the list.
