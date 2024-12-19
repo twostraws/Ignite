@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-// X and Y are correct names here.
-// swiftlint:disable identifier_name
 /// A type used to define a box-shadow
 struct Shadow: CustomStringConvertible {
     /// The shadow's color.
@@ -83,4 +81,3 @@ public extension HTML {
         modifier(ShadowModifier(color: color, radius: radius, x: x, y: y, inset: false))
     }
 }
-// swiftlint:enable identifier_name

@@ -115,7 +115,8 @@ public struct Form: BlockHTML {
     ///   - horizontalSpacing: The amount of horizontal space between elements. Defaults to `.medium`.
     ///   - verticalSpacing: The amount of vertical space between elements. Defaults to `.medium`.
     ///   - content: A closure that returns the form's elements.
-    ///   - onSubmit: A closure that takes the form's ID as a parameter and returns the action to perform when the form is submitted.
+    ///   - onSubmit: A closure that takes the form's ID as a parameter and returns
+    ///   the action to perform when the form is submitted.
     public init(
         horizontalSpacing: SpacingAmount = .medium,
         verticalSpacing: SpacingAmount = .medium,

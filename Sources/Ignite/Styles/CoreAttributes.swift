@@ -64,25 +64,27 @@ public struct CoreAttributes: Sendable {
     /// Each `ContainerAttributes` represents a wrapper div with styling
     var containerAttributes = OrderedSet<ContainerAttributes>() {
         didSet {
-            containerAttributes = OrderedSet(containerAttributes.sorted { a, b in
+            containerAttributes = OrderedSet(containerAttributes.sorted { first, second in
                 // First handle transform vs animation containers
-                if a.type == .transform && b.type == .animation {
+                if first.type == .transform && second.type == .animation {
                     return false // transform goes after animation
                 }
-                if a.type == .animation && b.type == .transform {
+
+                if first.type == .animation && second.type == .transform {
                     return true // animation goes before transform
                 }
 
                 // Click containers should always be outermost
-                if a.type == .click {
-                    return false // a goes after b
+                if first.type == .click {
+                    return false // first goes after second
                 }
-                if b.type == .click {
-                    return true // b goes after a
+
+                if second.type == .click {
+                    return true // second goes after first
                 }
 
                 // For all other containers, maintain their relative positions
-                return containerAttributes.firstIndex(of: a)! < containerAttributes.firstIndex(of: b)!
+                return containerAttributes.firstIndex(of: first)! < containerAttributes.firstIndex(of: second)!
             })
         }
     }
@@ -178,7 +180,8 @@ public struct CoreAttributes: Sendable {
     /// - Parameter content: Optional content to wrap with opening and closing tags
     /// - Returns: A string containing all attributes and optional content wrapped in tags
     func description(wrapping content: String? = nil) -> String {
-        let attributes = "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
+        let attributes = idString + customAttributeString + classString + styleString
+                         + dataString + ariaString + eventString
 
         var result = content ?? attributes
 
@@ -203,7 +206,9 @@ public struct CoreAttributes: Sendable {
         // Apply containers from inner to outer
         for container in containerAttributes where !container.isEmpty {
             let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.joined(separator: " "))\""
-            let styleAttr = container.styles.isEmpty ? "" : " style=\"\(container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; "))\""
+
+            let allStyles = container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; ")
+            let styleAttr = container.styles.isEmpty ? "" : " style=\"\(allStyles)\""
 
             var eventAttr = ""
             for event in container.events where event.actions.isEmpty == false {

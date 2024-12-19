@@ -29,10 +29,12 @@ extension String {
 
    private func strHash(_ str: String) -> UInt64 {
        var result = UInt64(5381)
-       let buf = [UInt8](str.utf8)
-       for b in buf {
-           result = 127 * (result & 0x00ffffffffffffff) + UInt64(b)
+       let characters = [UInt8](str.utf8)
+
+       for character in characters {
+           result = 127 * (result & 0x00ffffffffffffff) + UInt64(character)
        }
+
        return result
    }
 }

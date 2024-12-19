@@ -47,7 +47,7 @@ public extension HTML {
             let description = String(describing: self)
             return (location + description).truncatedHash
         }
-        set {}
+        set {} // swiftlint:disable:this unused_setter_value
     }
 }
 

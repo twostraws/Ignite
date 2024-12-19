@@ -5,6 +5,7 @@
 // See LICENSE for license information.
 //
 
+// swiftlint:disable file_length type_body_length
 /// Represents CSS properties that can be applied to HTML elements.
 /// These properties control the visual appearance and layout of elements.
 public enum Property: String {
@@ -953,7 +954,8 @@ public enum Property: String {
     /// Specifies how nested elements are rendered in 3D space
     case transformStyle = "transform-style"
 
-    /// Shorthand property for transition-property, transition-duration, transition-timing-function, and transition-delay
+    /// Shorthand property for transition-property, transition-duration,
+    /// transition-timing-function, and transition-delay
     case transition = "transition"
 
     /// Specifies when the transition effect will start
@@ -1010,3 +1012,4 @@ public enum Property: String {
     /// Sets the zoom level of an element
     case zoom = "zoom"
 }
+// swiftlint:enable file_length type_body_length
