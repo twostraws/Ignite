@@ -240,6 +240,7 @@ extension PublishingContext {
         try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
     }
 
+    // swiftlint:disable function_body_length
     private func generateThemeVariables(_ theme: Theme) -> String {
         var cssProperties: [String] = []
 
@@ -330,4 +331,5 @@ extension PublishingContext {
 
         return cssProperties.joined(separator: ";\n")
     }
+    // swiftlint:enable function_body_length
 }

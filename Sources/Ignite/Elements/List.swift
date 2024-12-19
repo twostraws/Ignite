@@ -79,16 +79,12 @@ public struct List: BlockHTML {
         return copy
     }
 
-    /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
-    /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    private func getAttributes() -> CoreAttributes {
         var listAttributes = attributes
 
         if listStyle != .plain {
             listAttributes.append(classes: "list-group")
-        }
-        if listStyle == .flushGroup {
+        } else if listStyle == .flushGroup {
             listAttributes.append(classes: "list-group-flush")
         }
 
@@ -100,6 +96,7 @@ public struct List: BlockHTML {
             if orderedStyle != .automatic {
                 listMarkerType = orderedStyle.rawValue
             }
+
             if listStyle == .group {
                 listAttributes.append(classes: "list-group-numbered")
             }
@@ -126,6 +123,15 @@ public struct List: BlockHTML {
             listAttributes.append(style: "list-style-type", value: listMarkerType)
         }
 
+        return listAttributes
+    }
+
+    /// Renders this element using publishing context passed in.
+    /// - Parameter context: The current publishing context.
+    /// - Returns: The HTML for this element.
+    public func render(context: PublishingContext) -> String {
+        let listAttributes = getAttributes()
+
         var output = "<\(listElementName)\(listAttributes.description())>"
 
         for item in items {
@@ -135,6 +141,7 @@ public struct List: BlockHTML {
                 if listStyle != .plain {
                     item.class("list-group-item")
                 }
+
                 output += listableItem.renderInList(context: context)
             } else {
                 let styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
