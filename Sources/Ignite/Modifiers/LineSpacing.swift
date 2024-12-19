@@ -92,10 +92,10 @@ public enum LineSpacing: String, CaseIterable {
     /// The actual multiplier value for this line height
     var value: Double {
         switch self {
-        case .xSmall: return 1.0
-        case .small: return 1.25
-        case .standard: return 1.5
-        case .large: return 2.0
+        case .xSmall: 1.0
+        case .small: 1.25
+        case .standard: 1.5
+        case .large: 2.0
         }
     }
 }

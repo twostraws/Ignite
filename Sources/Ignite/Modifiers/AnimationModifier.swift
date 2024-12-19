@@ -73,7 +73,7 @@ public extension HTML {
         var attributes = attributes
 
         // Track which containers we've already added
-        let existingContainers = Set(attributes.containerAttributes.flatMap { $0.classes })
+        let existingContainers = Set(attributes.containerAttributes.flatMap(\.classes))
 
         // Extract color styles from the element and move them to the animation wrapper
         var wrapperStyles: OrderedSet<AttributeValue> = []

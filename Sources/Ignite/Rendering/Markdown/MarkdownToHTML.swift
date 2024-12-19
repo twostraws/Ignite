@@ -128,14 +128,14 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     /// - Parameter softBreak: The soft break to process.
     /// - Returns: A single space.
     public func visitSoftBreak(_ softBreak: SoftBreak) -> String {
-        return " "
+        " "
     }
 
     /// Processes hard line breaks (lines ending with 2 spaces or a backslash).
     /// - Parameter lineBreak: The line break to process.
     /// - Returns: A HTML <br /> tag.
     public func visitLineBreak(_ lineBreak: LineBreak) -> String {
-        return "<br />"
+        "<br />"
     }
 
     /// Processes emphasis markup.

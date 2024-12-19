@@ -244,14 +244,15 @@ public struct Card: BlockHTML {
 
     private func renderHeader() -> Group {
         if header.isEmptyHTML == false {
-            return Group {
+            Group {
                 for item in header {
                     item
                 }
             }
             .class("card-header")
+        } else {
+            Group { }
         }
-        return Group {}
     }
 
     private func renderItems() -> Group {

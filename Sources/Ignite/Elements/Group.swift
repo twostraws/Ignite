@@ -26,9 +26,10 @@ public struct Group: BlockHTML {
         self.isTransparent = false
         let items = content.map {
             if let anyHTML = $0 as? AnyHTML {
-                return anyHTML.unwrapped.body
+                anyHTML.unwrapped.body
+            } else {
+                $0.body
             }
-            return $0.body
         }
         self.items = items
     }

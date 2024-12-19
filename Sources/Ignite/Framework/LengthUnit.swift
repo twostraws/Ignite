@@ -13,14 +13,12 @@ public protocol LengthUnit: CustomStringConvertible, Equatable, Hashable, Sendab
 extension LengthUnit {
     public var stringValue: String {
         if let intValue = self as? Int, intValue == .viewport {
-            return "100vw"
+            "100vw"
+        } else if let intValue = self as? Int {
+            "\(intValue)px"
+        } else {
+            String(describing: self)
         }
-
-        if let intValue = self as? Int {
-            return "\(intValue)px"
-        }
-
-        return String(describing: self)
     }
 }
 

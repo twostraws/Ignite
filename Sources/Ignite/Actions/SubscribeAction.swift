@@ -116,6 +116,6 @@ public struct SubscribeAction: Action {
     /// Renders this action using publishing context passed in.
     /// - Returns: The JavaScript for this action.
     public func compile() -> String {
-        return ""
+        ""
     }
 }

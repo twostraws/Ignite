@@ -40,9 +40,10 @@ public struct AnyHTML: HTML, BlockHTML, InlineHTML {
     /// to get to the underlying content
     var unwrapped: any HTML {
         if let anyHTML = wrapped as? AnyHTML {
-            return anyHTML.unwrapped
+            anyHTML.unwrapped
+        } else {
+            wrapped
         }
-        return wrapped
     }
 
     /// Renders the wrapped HTML content using the given publishing context

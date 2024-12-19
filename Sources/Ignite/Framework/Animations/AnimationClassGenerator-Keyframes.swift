@@ -104,7 +104,7 @@ extension AnimationClassGenerator {
 
         // Add transitions for all unique properties
         let allProperties = Set(animation.frames.flatMap { frame in
-            frame.animations.map { $0.property }
+            frame.animations.map(\.property)
         })
 
         for property in allProperties {

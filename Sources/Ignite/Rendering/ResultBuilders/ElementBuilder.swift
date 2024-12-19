@@ -18,7 +18,7 @@ public struct ElementBuilder<T> {
     /// - Parameter components: A variadic array of elements.
     /// - Returns: A one-dimensional array of elements.
     public static func buildBlock(_ components: [T]...) -> [T] {
-        components.flatMap { $0 }
+        components.flatMap(\.self)
     }
 
     /// Flattens a two-dimensional array of values into into a one-dimensional array.
@@ -26,7 +26,7 @@ public struct ElementBuilder<T> {
     /// - Parameter components: An array of arrays of our type.
     /// - Returns: A one-dimensional array of our type.
     public static func buildArray(_ components: [[T]]) -> [T] {
-        components.flatMap { $0 }
+        components.flatMap(\.self)
     }
 
     /// Converts a single object into an array of the same type, so we can flatten

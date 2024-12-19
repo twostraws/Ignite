@@ -10,7 +10,7 @@ extension AnimationClassGenerator {
     /// - Parameter animation: The animation to generate timing for
     /// - Returns: A string in the format "Xs timing-function" where X is the duration in seconds
     func getTransitionTiming(_ transition: Transition) -> [String] {
-        return transition.data.map { data in
+        transition.data.map { data in
             let delay = data.delay > 0 ? " \(data.delay)s" : ""
             return "\(data.duration)s \(data.timing.css)\(delay)"
         }

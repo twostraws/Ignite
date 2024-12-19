@@ -67,24 +67,20 @@ public struct CoreAttributes: Sendable {
             containerAttributes = OrderedSet(containerAttributes.sorted { first, second in
                 // First handle transform vs animation containers
                 if first.type == .transform && second.type == .animation {
-                    return false // transform goes after animation
+                    // transform goes after animation
+                    false
+                } else if first.type == .animation && second.type == .transform {
+                    // animation goes before transform
+                    true
+                } else if first.type == .click {
+                    // Click containers should always be outermost
+                    false // first goes after second
+                } else if second.type == .click {
+                    true // second goes after first
+                } else {
+                    // For all other containers, maintain their relative positions
+                    containerAttributes.firstIndex(of: first)! < containerAttributes.firstIndex(of: second)!
                 }
-
-                if first.type == .animation && second.type == .transform {
-                    return true // animation goes before transform
-                }
-
-                // Click containers should always be outermost
-                if first.type == .click {
-                    return false // first goes after second
-                }
-
-                if second.type == .click {
-                    return true // second goes after first
-                }
-
-                // For all other containers, maintain their relative positions
-                return containerAttributes.firstIndex(of: first)! < containerAttributes.firstIndex(of: second)!
             })
         }
     }
@@ -117,9 +113,9 @@ public struct CoreAttributes: Sendable {
     /// All CSS classes for this element collapsed down to a string.
     var classString: String {
         if classes.isEmpty {
-            return ""
+            ""
         } else {
-            return " class=\"\(classes.joined(separator: " "))\""
+            " class=\"\(classes.joined(separator: " "))\""
         }
     }
 
@@ -261,9 +257,8 @@ public struct CoreAttributes: Sendable {
     /// - Returns: A copy of the previous `CoreAttributes` object with
     /// the extra aria applied.
     func appending(aria: AttributeValue?) -> CoreAttributes {
-        guard let aria else {
-            return self
-        }
+        guard let aria else { return self }
+
         var copy = self
         copy.aria.insert(aria)
         return copy

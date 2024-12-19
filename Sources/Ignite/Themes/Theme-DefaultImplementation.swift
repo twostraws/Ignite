@@ -88,7 +88,11 @@ extension Theme {
     /// Automatically appends "-light" or "-dark" suffix based on protocol conformance.
     var id: String {
         let baseID = name.kebabCased()
-        guard type(of: self) != DefaultLightTheme.self && type(of: self) != DefaultDarkTheme.self else { return baseID }
+
+        guard type(of: self) != DefaultLightTheme.self && type(of: self) != DefaultDarkTheme.self else {
+            return baseID
+        }
+
         switch self {
         case is LightTheme: return baseID + "-light"
         case is DarkTheme: return baseID + "-dark"
