@@ -31,10 +31,10 @@ public enum ForegroundStyle: String {
 /// A modifier that applies foreground color styling to HTML elements, handling both primitive and composite content.
 struct ForegroundStyleModifier: HTMLModifier {
     /// The style to apply, if using a registered style.
-    var colorString: String? = nil
+    var colorString: String?
 
     /// The color to apply, if using a direct color value.
-    var color: Color? = nil
+    var color: Color?
 
     /// Applies the foreground style to the provided HTML content.
     /// - Parameter content: The HTML content to modify

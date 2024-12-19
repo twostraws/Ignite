@@ -243,5 +243,3 @@ extension Content {
         self.hasAutomaticDate = false
     }
 }
-
-

@@ -227,7 +227,7 @@ extension PublishingContext {
             [data-bs-theme="\(theme.id)"] {
                 \(generateThemeVariables(theme))
             }
-            
+
             """
         }
 

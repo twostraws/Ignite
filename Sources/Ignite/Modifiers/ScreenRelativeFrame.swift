@@ -9,7 +9,7 @@
 struct ScreenRelativeFrameModifier: HTMLModifier {
     /// The axes to apply screen-relative positioning to
     var axes: Axis
-    
+
     /// Applies screen-relative positioning to the provided HTML content
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with screen-relative positioning applied
@@ -23,7 +23,7 @@ struct ScreenRelativeFrameModifier: HTMLModifier {
         if axes.contains(.vertical) {
             modified.style("margin-block: calc(50% - 50vh)")
         }
-        
+
         return modified
     }
 }
