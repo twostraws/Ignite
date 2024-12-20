@@ -57,7 +57,7 @@ public struct ShowModal: Action, Sendable {
     public func compile() -> String {
         """
         const options = {
-            \(options.map { $0.htmlOption }.joined(separator: ",\n\t"))
+            \(options.map(\.htmlOption).joined(separator: ",\n\t"))
         };
         const modal = new bootstrap.Modal(document.getElementById('\(id)'), options);
         modal.show();

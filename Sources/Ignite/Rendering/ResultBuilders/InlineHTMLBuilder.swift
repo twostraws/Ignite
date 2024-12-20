@@ -44,9 +44,10 @@ public struct InlineHTMLBuilder {
     /// - Returns: Either the wrapped element or an empty element
     public static func buildOptional<Content: InlineHTML>(_ component: Content?) -> some InlineHTML {
         if let component {
-            return AnyHTML(component)
+            AnyHTML(component)
+        } else {
+            AnyHTML(EmptyHTML())
         }
-        return AnyHTML(EmptyHTML())
     }
 
     /// Handles the first branch of an if/else statement.

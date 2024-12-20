@@ -23,7 +23,7 @@ public struct BlockHTMLBuilder {
     /// - Parameter content: The block elements to combine
     /// - Returns: A combined block element containing all inputs
     static func buildBlock<Content: BlockHTML>(_ content: Content...) -> some BlockHTML {
-        return content
+        content
     }
 
     /// Creates an empty block element when no content is provided.
@@ -58,9 +58,10 @@ public struct BlockHTMLBuilder {
     /// - Returns: Either the wrapped element or an empty element
     public static func buildOptional<Content: BlockHTML>(_ component: Content?) -> some BlockHTML {
         if let component {
-            return AnyHTML(component)
+            AnyHTML(component)
+        } else {
+            AnyHTML(EmptyBlockElement())
         }
-        return AnyHTML(EmptyBlockElement())
     }
 
     /// Handles the first branch of an if/else statement.

@@ -37,14 +37,14 @@ public extension Font {
         /// The Bootstrap CSS variable that defines this style's font size
         var sizeVariable: String {
             switch self {
-            case .title1: return "var(--bs-h1-font-size)"
-            case .title2: return "var(--bs-h2-font-size)"
-            case .title3: return "var(--bs-h3-font-size)"
-            case .title4: return "var(--bs-h4-font-size)"
-            case .title5: return "var(--bs-h5-font-size)"
-            case .title6: return "var(--bs-h6-font-size)"
-            case .body: return "var(--bs-body-font-size)"
-            case .lead: return "var(--bs-body-font-size-lg)"
+            case .title1: "var(--bs-h1-font-size)"
+            case .title2: "var(--bs-h2-font-size)"
+            case .title3: "var(--bs-h3-font-size)"
+            case .title4: "var(--bs-h4-font-size)"
+            case .title5: "var(--bs-h5-font-size)"
+            case .title6: "var(--bs-h6-font-size)"
+            case .body: "var(--bs-body-font-size)"
+            case .lead: "var(--bs-body-font-size-lg)"
             }
         }
 

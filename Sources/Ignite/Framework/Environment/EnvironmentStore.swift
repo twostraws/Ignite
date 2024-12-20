@@ -20,7 +20,7 @@
 final class EnvironmentStore {
     /// The current environment values for the application.
     static var current = EnvironmentValues()
-    
+
     /// Temporarily updates the environment values for the duration of an operation.
     /// - Parameters:
     ///   - environment: The new environment values to use

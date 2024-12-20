@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-// X and Y are correct names here.
-// swiftlint:disable identifier_name
 /// A type used to define a box-shadow
 struct Shadow: CustomStringConvertible {
     /// The shadow's color.
@@ -34,24 +32,24 @@ struct Shadow: CustomStringConvertible {
 struct ShadowModifier: HTMLModifier {
     /// The shadow's color
     var color: Color
-    
+
     /// The shadow's blur radius in pixels
     var radius: Int
-    
+
     /// The horizontal offset in pixels
     var x: Int
-    
+
     /// The vertical offset in pixels
     var y: Int
-    
+
     /// Whether the shadow should be inset
     var inset: Bool
-    
+
     /// Computed shadow configuration
     private var shadow: Shadow {
         Shadow(color: color, radius: radius, x: x, y: y, inset: inset)
     }
-    
+
     /// Applies box shadow styling to the provided HTML content
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with box shadow applied
@@ -83,4 +81,3 @@ public extension HTML {
         modifier(ShadowModifier(color: color, radius: radius, x: x, y: y, inset: false))
     }
 }
-// swiftlint:enable identifier_name

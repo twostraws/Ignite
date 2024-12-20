@@ -51,18 +51,14 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
         } catch {
             throw PublishingError.unopenableFile(error.localizedDescription)
         }
-        do {
-            let processed = processMetadata(for: markdown)
-            let document = Document(parsing: processed)
-            body = visit(document)
 
-            if title.isEmpty {
-                // Assign a title that's better than the default empty string.
-                title = url.deletingPathExtension().lastPathComponent
-            }
-            if false { throw PublishingError.badMarkdown(url) } // to silence "'catch' block is unreachable" warning
-        } catch {
-            throw PublishingError.badMarkdown(url)
+        let processed = processMetadata(for: markdown)
+        let document = Document(parsing: processed)
+        body = visit(document)
+
+        if title.isEmpty {
+            // Assign a title that's better than the default empty string.
+            title = url.deletingPathExtension().lastPathComponent
         }
     }
 
@@ -132,14 +128,14 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     /// - Parameter softBreak: The soft break to process.
     /// - Returns: A single space.
     public func visitSoftBreak(_ softBreak: SoftBreak) -> String {
-        return " "
+        " "
     }
 
     /// Processes hard line breaks (lines ending with 2 spaces or a backslash).
     /// - Parameter lineBreak: The line break to process.
     /// - Returns: A HTML <br /> tag.
     public func visitLineBreak(_ lineBreak: LineBreak) -> String {
-        return "<br />"
+        "<br />"
     }
 
     /// Processes emphasis markup.
@@ -158,9 +154,8 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
 
     /// Processes heading markup.
     /// - Parameter heading: The heading to process.
-    /// - Returns: A HTML <h*> element with its children inside. The exact
-    /// heading level depends on the markup. If this is our first heading, we use it
-    /// for the document title.
+    /// - Returns: A HTML <h*> element with its children inside. The heading
+    /// level depends on the markup. The first heading is used for the document title.
     mutating public func visitHeading(_ heading: Markdown.Heading) -> String {
         var headingContent = ""
 
@@ -172,8 +167,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
         if title.isEmpty {
             title = headingContent
 
-            // If we've been asked to strip out the title from
-            // the rendered body, send back nothing here.
+            // If we're stripping the title from the rendered body, send back nothing here.
             if removeTitleFromBody {
                 return ""
             }
@@ -261,9 +255,8 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     /// Processes a paragraph of text.
     /// - Parameter paragraph: The paragraph markup to process.
     /// - Returns: If we're inside a list this sends back the paragraph's
-    /// contents directly. Otherwise, it wraps the contents in a HTML <p> element.
-    /// If this is the first paragraph of text in the document we use it for the
-    /// description of this document.
+    /// contents. Otherwise, it wraps the contents in a HTML <p> element.
+    /// The first paragraph in the document is used for the document description.
     mutating public func visitParagraph(_ paragraph: Markdown.Paragraph) -> String {
         var result = ""
         var paragraphContents = ""
@@ -320,7 +313,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
 
     /// Processes table markup.
     /// - Parameter table: The table markup to process.
-    /// - Returns: A HTML <table> element, optionally with <thead> and
+    /// - Returns: A HTML <table> element, with <thead> and
     /// <tbody> if they are provided.
     public mutating func visitTable(_ table: Markdown.Table) -> String {
         var output = "<table>"
@@ -402,12 +395,5 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
 
         result += "</ul>"
         return result
-    }
-}
-
-extension Markup {
-    /// A small helper that determines whether this markup or any parent is a list.
-    var isInsideList: Bool {
-        self is ListItemContainer || parent?.isInsideList == true
     }
 }

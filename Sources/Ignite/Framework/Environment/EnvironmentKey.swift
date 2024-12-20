@@ -18,7 +18,7 @@
 public protocol EnvironmentKey: Sendable {
     /// The type of value associated with this environment key.
     associatedtype Value: Sendable
-    
+
     /// The default value to use when no explicit value is set.
     static var defaultValue: Self.Value { get }
 }
