@@ -60,25 +60,25 @@ public struct Form: BlockHTML {
 
         var controlClass: String? {
             switch self {
-            case .small: return "form-control-sm"
-            case .large: return "form-control-lg"
-            case .medium: return nil
+            case .small: "form-control-sm"
+            case .large: "form-control-lg"
+            case .medium: nil
             }
         }
 
         var labelClass: String? {
             switch self {
-            case .small: return "col-form-label-sm"
-            case .large: return "col-form-label-lg"
-            case .medium: return nil
+            case .small: "col-form-label-sm"
+            case .large: "col-form-label-lg"
+            case .medium: nil
             }
         }
 
         var buttonClass: String? {
             switch self {
-            case .small: return "btn-sm"
-            case .large: return "btn-lg"
-            case .medium: return nil
+            case .small: "btn-sm"
+            case .large: "btn-lg"
+            case .medium: nil
             }
         }
     }
@@ -115,7 +115,8 @@ public struct Form: BlockHTML {
     ///   - horizontalSpacing: The amount of horizontal space between elements. Defaults to `.medium`.
     ///   - verticalSpacing: The amount of vertical space between elements. Defaults to `.medium`.
     ///   - content: A closure that returns the form's elements.
-    ///   - onSubmit: A closure that takes the form's ID as a parameter and returns the action to perform when the form is submitted.
+    ///   - onSubmit: A closure that takes the form's ID as a parameter and returns
+    ///   the action to perform when the form is submitted.
     public init(
         horizontalSpacing: SpacingAmount = .medium,
         verticalSpacing: SpacingAmount = .medium,
@@ -183,7 +184,8 @@ public struct Form: BlockHTML {
 
         var formOutput = attributes.description(wrapping: wrappedContent)
 
-        if let action = action as? SubscribeAction, case .sendFox = action.service {
+        // Add custom SendFox JavaScript if needed.
+        if case .sendFox = action.service {
             formOutput += Script(file: "https://cdn.sendfox.com/js/form.js")
                 .customAttribute(name: "charset", value: "utf-8")
                 .render(context: context)

@@ -36,7 +36,8 @@ public struct MetaLink: HeadElement, Sendable {
 
     /// Creates an array of `MetaLink` elements for syntax highlighting themes.
     /// - Parameter themes: A collection of syntax highlighting themes to include.
-    /// - Returns: An array of MetaLink elements. If multiple themes are provided, includes data attributes for theme switching.
+    /// - Returns: An array of MetaLink elements. If multiple themes are provided,
+    /// includes data attributes for theme switching.
     static func highlighterThemeMetaLinks(for themes: some Collection<HighlighterTheme>) -> [MetaLink] {
         let hasMultipleThemes = themes.count > 1
 
@@ -45,7 +46,7 @@ public struct MetaLink: HeadElement, Sendable {
 
             if hasMultipleThemes {
                 link = link
-                    .data("highlight-theme", theme.rawValue)
+                    .data("highlight-theme", theme.description)
                     .customAttribute(name: "disabled", value: "")
             }
 

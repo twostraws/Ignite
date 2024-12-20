@@ -27,7 +27,7 @@ extension String {
             reverse: false
         ) {
             let urlComponents = latin.components(separatedBy: String.slugSafeCharacters.inverted)
-            result = urlComponents.filter { $0 != "" }.joined(separator: "-")
+            result = urlComponents.filter { $0.isEmpty == false }.joined(separator: "-")
         }
 
         if let result {

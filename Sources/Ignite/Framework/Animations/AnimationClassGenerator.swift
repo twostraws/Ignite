@@ -17,12 +17,14 @@ struct AnimationClassGenerator {
     let triggerMap: OrderedDictionary<AnimationTrigger, any Animatable>
 
     /// The base name for the generated CSS classes
-    private var name: String { "animation-" + elementID }
+    var name: String { "animation-" + elementID }
 
-    /// Holds CSS properties and transitions for both clicked and unclicked states, separated into transform and non-transform properties.
-    /// Transform properties need their own container to avoid conflicts with other transforms and maintain proper 3D rendering,
-    /// while non-transform properties can be safely nested in child elements.
-    private struct ClickAnimationProperties {
+    /// Holds CSS properties and transitions for both clicked and unclicked states,
+    /// separated into transform and non-transform properties. Transform properties
+    /// need their own container to avoid conflicts with other transforms and maintain
+    /// proper 3D rendering, while non-transform properties can be safely nested
+    /// in child elements.
+    struct ClickAnimationProperties {
         var nonTransformTransitions: [String] = []
         var nonTransformProperties: [String] = []
         var transformTransitions: [String] = []
@@ -31,34 +33,10 @@ struct AnimationClassGenerator {
         var unclickedTransformProperties: [String] = []
     }
 
-    /// Generates CSS classes for click-triggered transitions, separating transform and non-transform properties
-    /// - Parameter transition: The transition animation to convert to CSS
-    /// - Returns: A string containing the CSS classes for clicked and unclicked states
-    private func buildTransitionClickClass(_ transition: Transition) -> String {
-        var properties = ClickAnimationProperties()
-
-        for data in transition.data {
-            let delay = data.delay > 0 ? " \(data.delay)s" : ""
-            let timing = "\(data.duration)s \(data.timing.css)\(delay)"
-
-            if data.property == .transform {
-                properties.transformTransitions.append("\(data.property.rawValue) \(timing)")
-                properties.transformProperties.append("\(data.property.rawValue): \(data.final)")
-                properties.unclickedTransformProperties.append("\(data.property.rawValue): \(data.initial)")
-            } else {
-                properties.nonTransformTransitions.append("\(data.property.rawValue) \(timing)")
-                properties.nonTransformProperties.append("\(data.property.rawValue): \(data.final)")
-                properties.unclickedNonTransformProperties.append("\(data.property.rawValue): \(data.initial)")
-            }
-        }
-
-        return buildClickOutput(properties)
-    }
-
     /// Formats CSS output for click animations, creating separate rules for transform and non-transform properties
     /// - Parameter properties: The collected CSS properties and transitions
     /// - Returns: A string containing the formatted CSS classes
-    private func buildClickOutput(_ properties: ClickAnimationProperties) -> String {
+    func buildClickOutput(_ properties: ClickAnimationProperties) -> String {
         var output = ""
 
         if !properties.nonTransformProperties.isEmpty {
@@ -96,20 +74,10 @@ struct AnimationClassGenerator {
         return output
     }
 
-    /// Generates a CSS timing string for a transition, combining duration, delay, and timing function.
-    /// - Parameter animation: The animation to generate timing for
-    /// - Returns: A string in the format "Xs timing-function" where X is the duration in seconds
-    private func getTransitionTiming(_ transition: Transition) -> [String] {
-        return transition.data.map { data in
-            let delay = data.delay > 0 ? " \(data.delay)s" : ""
-            return "\(data.duration)s \(data.timing.css)\(delay)"
-        }
-    }
-
     /// Creates a CSS animation timing string including duration, delay, timing function, and iteration count
     /// - Parameter animation: The animation to generate timing for
     /// - Returns: A string in the format "Xs timing-function delay iteration-count"
-    private func getAnimationTiming(_ animation: Animation) -> String {
+    func getAnimationTiming(_ animation: Animation) -> String {
         var components: [String] = [
             "\(animation.duration)s",
             animation.timing.css
@@ -384,15 +352,20 @@ struct AnimationClassGenerator {
         }
 
         let appearedProperties = getAppearedProperties()
+        let joinedProperties = baseProperties.joined(separator: ";\n        ")
+        let baseClassProperties = baseProperties.isEmpty ? "" : "\n        \(joinedProperties);\n    "
+
         let baseClass = """
-        .\(name) {\(baseProperties.isEmpty ? "" : "\n        \(baseProperties.joined(separator: ";\n        "));\n    ")}
+        .\(name) {\(baseClassProperties)}
         """
 
         // Only add appeared class if we have properties to set
         if !appearedProperties.isEmpty {
+            let joinedAppearedProperties = appearedProperties.joined(separator: ";\n        ")
+
             return baseClass + "\n\n" + """
             .\(name).appeared {
-                \(appearedProperties.joined(separator: ";\n        "));
+                \(joinedAppearedProperties);
             }
             """
         }
@@ -400,31 +373,10 @@ struct AnimationClassGenerator {
         return baseClass
     }
 
-    /// Generates CSS classes for appear-triggered transitions
-    /// - Parameter transition: The transition animation to convert to CSS
-    /// - Returns: A string containing the CSS class for the appeared state
-    private func buildTransitionAppearClass(_ transition: Transition) -> String {
-        let transitions: [String] = transition.data.map { data in
-            let delay = data.delay > 0 ? " \(data.delay)s" : ""
-            let timing = "\(data.duration)s \(data.timing.css)\(delay)"
-            return "\(data.property.rawValue) \(timing)"
-        }
-
-        let properties = transition.data.map { data in
-            "\(data.property.rawValue): \(data.final)"
-        }
-
-        return """
-        .\(name).appeared {
-            transition: \(transitions.joined(separator: ", "));
-            \(properties.joined(separator: ";\n        "));
-        }
-        """
-    }
-
     /// Generates CSS keyframe animations specifically for appear trigger animations.
     /// - Parameter animation: The animation to generate appear keyframes for
-    /// - Returns: A string containing the CSS @keyframes definition for the appear animation, or an empty string if the animation isn't an `Animation`
+    /// - Returns: A string containing the CSS @keyframes definition for the appear animation,
+    /// or an empty string if the animation isn't an `Animation`
     private func buildAppearKeyframes(_ animation: Animation) -> String {
         let timing = getAnimationTiming(animation)
         let keyframeContent = animation.frames.map { frame in
@@ -439,12 +391,15 @@ struct AnimationClassGenerator {
             """
         }.joined(separator: "\n        ")
 
+        let repeatCount = animation.repeatCount == .infinity ? "infinite" : String(animation.repeatCount)
+        let repeatString = animation.repeatCount != 1 ? "animation-iteration-count: \(repeatCount);" : ""
+
         return """
         .\(name).appeared {
             animation: \(name)-appear \(timing);
             animation-fill-mode: \(animation.fillMode.rawValue);
             animation-direction: \(animation.direction.rawValue);
-            \(animation.repeatCount != 1 ? "animation-iteration-count: \(animation.repeatCount == .infinity ? "infinite" : String(animation.repeatCount));" : "")
+            \(repeatString)
         }
 
         @keyframes \(name)-appear {

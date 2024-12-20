@@ -5,12 +5,7 @@
 // See LICENSE for license information.
 //
 
-// swiftlint:disable unused_setter_value line_length
-/// Not my proudest moment. This extension makes arrays of elements conform
-/// to many protocols to make rendering easier. I have no doubt there are better ways
-/// of doing this, and I would love this to be rewritten when I (or perhaps you!) have
-/// some spare time.
-// Array-ElementRendering.swift
+// swiftlint:disable unused_setter_value
 extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
     public var body: some HTML { self }
 
@@ -39,3 +34,4 @@ extension Array: InlineHTML where Element: InlineHTML {
         self.map { $0.render(context: context) }.joined()
     }
 }
+// swiftlint:enable unused_setter_value

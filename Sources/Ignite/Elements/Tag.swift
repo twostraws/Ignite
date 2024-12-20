@@ -17,7 +17,7 @@ public struct Tag: HTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// The name of the tag to use
+    /// The name of the tag to use.
     var name: String
 
     // The contents of this tag.

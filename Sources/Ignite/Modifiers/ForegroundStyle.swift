@@ -28,37 +28,56 @@ public enum ForegroundStyle: String {
     case bodyEmphasis = "text-body-emphasis"
 }
 
-/// A modifier that applies foreground color styling to HTML elements, handling both primitive and composite content.
+/// A modifier that applies foreground color styling to HTML elements,
+/// handling both primitive and composite content.
 struct ForegroundStyleModifier: HTMLModifier {
-    /// The style to apply, if using a registered style.
-    var colorString: String? = nil
+    /// The type of style this contains.
+    enum Style {
+        case none
+        case string(String)
+        case color(Color)
+        case style(ForegroundStyle)
+    }
 
-    /// The color to apply, if using a direct color value.
-    var color: Color? = nil
+    private var internalStyle: Style
+
+    init(string: String) {
+        internalStyle = .string(string)
+    }
+
+    init(color: Color) {
+        internalStyle = .color(color)
+    }
+
+    init(style: ForegroundStyle) {
+        internalStyle = .style(style)
+    }
 
     /// Applies the foreground style to the provided HTML content.
     /// - Parameter content: The HTML content to modify
     /// - Returns: The modified HTML content with foreground styling applied
     func body(content: some HTML) -> any HTML {
-        if let color = getColor() {
+        switch internalStyle {
+        case .none:
+            content
+        case .string(let string):
             if content.body.isComposite {
                 content
-                    .containerStyle(.init(name: "color", value: color))
+                    .containerStyle(.init(name: "color", value: string))
                     .class("color-inherit")
             } else {
-                content.style("color: \(color)")
+                content.style("color: \(string)")
             }
-        }
-        content
-    }
-
-    private func getColor() -> String? {
-        if let colorString {
-            colorString
-        } else if let color {
-            color.description
-        } else {
-            nil
+        case .color(let color):
+            if content.body.isComposite {
+                content
+                    .containerStyle(.init(name: "color", value: color.description))
+                    .class("color-inherit")
+            } else {
+                content.style("color: \(color.description)")
+            }
+        case .style(let foregroundStyle):
+            content.class(foregroundStyle.rawValue)
         }
     }
 }
@@ -75,7 +94,14 @@ extension HTML {
     /// - Parameter color: The style to apply, specified as a string.
     /// - Returns: The current element with the updated color applied.
     public func foregroundStyle(_ color: String) -> some HTML {
-        modifier(ForegroundStyleModifier(colorString: color))
+        modifier(ForegroundStyleModifier(string: color))
+    }
+
+    /// Applies a foreground color to the current element.
+    /// - Parameter color: The style to apply, specified as a `Color` object.
+    /// - Returns: The current element with the updated color applied.
+    public func foregroundStyle(_ style: ForegroundStyle) -> some HTML {
+        modifier(ForegroundStyleModifier(style: style))
     }
 }
 
@@ -91,6 +117,6 @@ extension HTML where Self == Image {
     /// - Parameter color: The style to apply, specified as a string.
     /// - Returns: The current element with the updated color applied.
     public func foregroundStyle(_ color: String) -> some InlineHTML {
-        modifier(ForegroundStyleModifier(colorString: color))
+        modifier(ForegroundStyleModifier(string: color))
     }
 }

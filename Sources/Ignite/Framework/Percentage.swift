@@ -48,35 +48,35 @@ public struct Percentage: Hashable {
 
 public extension Percentage {
     static func - (lhs: Percentage, rhs: Percentage) -> Double {
-        return lhs.value - rhs.value
+        lhs.value - rhs.value
     }
 
     static func + (lhs: Percentage, rhs: Percentage) -> Double {
-        return lhs.value + rhs.value
+        lhs.value + rhs.value
     }
 
     static func * (lhs: Double, rhs: Percentage) -> Double {
-        return lhs * (rhs.value / 100.0)
+        lhs * (rhs.value / 100.0)
     }
 
     static func * (lhs: Percentage, rhs: Double) -> Double {
-        return (lhs.value / 100.0) * rhs
+        (lhs.value / 100.0) * rhs
     }
 }
 
 /// Creates a `Percentage` from a `Double`
 public postfix func % (value: Double) -> Percentage {
-    return Percentage(value)
+    Percentage(value)
 }
 
 /// Creates a `Percentage` from an `Int`
 public postfix func % (value: Int) -> Percentage {
-    return Percentage(Double(value))
+    Percentage(Double(value))
 }
 
 extension Percentage: Comparable {
     public static func < (lhs: Percentage, rhs: Percentage) -> Bool {
-        return lhs.value < rhs.value
+        lhs.value < rhs.value
     }
 }
 
@@ -84,7 +84,7 @@ extension BinaryFloatingPoint {
     /// Returns a string representation with the percentage symbol
     /// - Returns: Formatted string with percentage symbol
     func asString() -> String where Self == Percentage.Value {
-        return "\(self)%"
+        "\(self)%"
     }
 }
 
@@ -92,6 +92,6 @@ extension BinaryInteger {
     /// Returns a string representation with the percentage symbol
     /// - Returns: Formatted string with percentage symbol
     func asString() -> String where Self == Percentage.RoundedValue {
-        return "\(self)%"
+        "\(self)%"
     }
 }
