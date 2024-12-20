@@ -21,13 +21,13 @@ public enum ColorWeight: Int {
 
     /// 500: Base color with no mixing
     case regular = 500
-    
+
     /// 600: Slightly dark variant, mixed with 20% black
     case semiDark = 600
 
     /// 700: Dark variant, mixed with 40% black
     case dark = 700
-    
+
     /// 800: Very dark variant, mixed with 60% black
     case darker = 800
 
@@ -48,7 +48,7 @@ public enum ColorWeight: Int {
         case .darkest: return 80
         }
     }
-    
+
     /// Indicates whether to mix with white (true) or black (false).
     var mixWithWhite: Bool {
         rawValue < 500
