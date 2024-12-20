@@ -23,6 +23,8 @@ div.alert p:last-child {
 
 .font-inherit {
   font: inherit;
+}
+
 .form-control::placeholder {
   color: gray;
   opacity: 1;
