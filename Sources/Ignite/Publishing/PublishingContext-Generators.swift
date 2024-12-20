@@ -8,6 +8,30 @@
 import Foundation
 
 extension PublishingContext {
+    /// Contains the various snap dimensions for different Bootstrap widths.
+    var containerDefaults: String {
+        """
+        .container {
+            @media (min-width: 576px) {
+                max-width: var(\(BootstrapVariable.containerSm.rawValue), 540px);
+            }
+            @media (min-width: 768px) {
+                max-width: var(\(BootstrapVariable.containerMd.rawValue), 720px);
+            }
+            @media (min-width: 992px) {
+                max-width: var(\(BootstrapVariable.containerLg.rawValue), 960px);
+            }
+            @media (min-width: 1200px) {
+                max-width: var(\(BootstrapVariable.containerXl.rawValue), 1140px);
+            }
+            @media (min-width: 1400px) {
+                max-width: var(\(BootstrapVariable.containerXxl.rawValue), 1320px);
+            }
+        }
+
+        """
+    }
+
     /// Renders static pages and content pages, including the homepage.
     func generateContent() async throws {
         try render(site.homePage, isHomePage: true)
@@ -23,8 +47,8 @@ extension PublishingContext {
     }
 
     /// Generates all tags pages, including the "all tags" page.
-    func generateTagPages() async throws {
-        if site.tagPage is EmptyTagLayout { return }
+    func generateTagLayouts() async throws {
+        if site.tagLayout is EmptyTagLayout { return }
 
         /// Creates a unique list of sorted tags from across the site, starting
         /// with `nil` for the "all tags" page.
@@ -42,8 +66,8 @@ extension PublishingContext {
             let outputDirectory = buildDirectory.appending(path: path)
 
             let body = TagContext.withCurrentTag(tag, content: content(tagged: tag)) {
-                let tagPageBody = site.tagPage.body
-                return Group(tagPageBody)
+                let tagLayoutBody = site.tagLayout.body
+                return Group(tagLayoutBody)
             }
 
             let page = Page(
@@ -199,26 +223,7 @@ extension PublishingContext {
         """
 
         // Container defaults
-        cssContent += """
-        .container {
-            @media (min-width: 576px) {
-                max-width: var(\(BootstrapVariable.containerSm.rawValue), 540px);
-            }
-            @media (min-width: 768px) {
-                max-width: var(\(BootstrapVariable.containerMd.rawValue), 720px);
-            }
-            @media (min-width: 992px) {
-                max-width: var(\(BootstrapVariable.containerLg.rawValue), 960px);
-            }
-            @media (min-width: 1200px) {
-                max-width: var(\(BootstrapVariable.containerXl.rawValue), 1140px);
-            }
-            @media (min-width: 1400px) {
-                max-width: var(\(BootstrapVariable.containerXxl.rawValue), 1320px);
-            }
-        }
-
-        """
+        cssContent += containerDefaults
 
         // Generate alternate theme overrides
         for theme in themes {
@@ -226,7 +231,7 @@ extension PublishingContext {
             [data-bs-theme="\(theme.id)"] {
                 \(generateThemeVariables(theme))
             }
-            
+
             """
         }
 
@@ -234,6 +239,7 @@ extension PublishingContext {
         try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
     }
 
+    // swiftlint:disable function_body_length
     private func generateThemeVariables(_ theme: Theme) -> String {
         var cssProperties: [String] = []
 
@@ -325,4 +331,5 @@ extension PublishingContext {
 
         return cssProperties.joined(separator: ";\n")
     }
+    // swiftlint:enable function_body_length
 }

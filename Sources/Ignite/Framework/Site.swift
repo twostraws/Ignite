@@ -76,7 +76,7 @@ public protocol Site: Sendable {
 
     /// A type that conforms to `TagLayout`, to be used when rendering individual
     /// tag pages or the "all tags" page.
-    var tagPage: TagPageLayout { get }
+    var tagLayout: TagPageLayout { get }
 
     /// The base layout applied to all pages. This is used to render all pages that don't
     /// explicitly override the layout with something custom.
@@ -163,7 +163,7 @@ public extension Site {
     var contentLayouts: [any ContentLayout] { [] }
 
     /// An empty tag layout by default, which triggers no tag pages being made.
-    var tagPage: EmptyTagLayout { EmptyTagLayout() }
+    var tagLayout: EmptyTagLayout { EmptyTagLayout() }
 
     /// The default favicon being nil
     var favicon: URL? { nil }

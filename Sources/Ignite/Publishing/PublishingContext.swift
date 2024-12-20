@@ -132,7 +132,7 @@ public final class PublishingContext {
         try copyResources()
         try generateThemes(site.allThemes)
         generateAnimations()
-        try await generateTagPages()
+        try await generateTagLayouts()
         try generateSiteMap()
         try generateFeed()
         try generateRobots()
@@ -166,7 +166,8 @@ public final class PublishingContext {
         }
 
         if AnimationManager.default.hasAnimations {
-            if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/animations.min.css").path()) {
+            let animationsPath = buildDirectory.appending(path: "css/animations.min.css").path()
+            if !FileManager.default.fileExists(atPath: animationsPath) {
                 try copy(resource: "css/animations.min.css")
             }
         }
@@ -255,18 +256,18 @@ public final class PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render(_ staticPage: any StaticLayout, isHomePage: Bool = false) throws {
-        let path = isHomePage ? "" : staticPage.path
+    func render(_ staticLayout: any StaticLayout, isHomePage: Bool = false) throws {
+        let path = isHomePage ? "" : staticLayout.path
 
         let page = Page(
-            title: staticPage.title,
-            description: staticPage.description,
+            title: staticLayout.title,
+            description: staticLayout.description,
             url: site.url.appending(path: path),
-            image: staticPage.image,
-            body: staticPage.body
+            image: staticLayout.image,
+            body: staticLayout.body
         )
 
-        currentRenderingPath = isHomePage ? "/" : staticPage.path
+        currentRenderingPath = isHomePage ? "/" : staticLayout.path
 
         let outputString = render(page)
         let outputDirectory = buildDirectory.appending(path: path)

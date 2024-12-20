@@ -19,196 +19,11 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     /// How many columns this should occupy when placed in a section.
     public var columnWidth: ColumnWidth = .automatic
 
-    /// Describes what kind of link this is.
-    public enum Relationship: String {
-        /// Alternate versions of this current code.
-        case alternate = "alternate"
-
-        /// An augmented-reality resource for this page.
-        case ar = "ar" // swiftlint:disable:this identifier_name
-
-        /// A link to the creator of this page.
-        case author = "author"
-
-        /// A permanent link for this page.
-        case bookmark = "bookmark"
-
-        /// Marks that this is the preferred URL for this resource.
-        case canonical = "canonical"
-
-        /// Instructs the browser to look up DNS details for this
-        /// resource immediately.
-        case dnsPrefetch = "dns-prefetch"
-
-        /// Marks that this resource belongs to a different site.
-        case external = "external"
-
-        /// This resource points to further help about this page.
-        case help = "help"
-
-        /// An icon representing this document.
-        case icon = "icon"
-
-        /// This link points to a specific license that applies to the current page.
-        case license = "license"
-
-        /// This link points to the web app manifest for the current page.
-        case manifest = "manifest"
-
-        /// Used for links about a person when they point to other pages about
-        /// the same person.
-        case me = "me" // swiftlint:disable:this identifier_name
-
-        /// Instructs the browser to preload a script immediately.
-        case modulePreload = "modulepreload"
-
-        /// Marks this document as being part of a series, where the next
-        /// document is contained in this link.
-        case next = "next"
-
-        /// Indicates to search engines that this link should not be followed,
-        /// This is helpful when linking to external sites – if they do something
-        /// that Google et al frown upon the future, that won't somehow affect
-        /// your site ranking.
-        case noFollow = "nofollow"
-
-        /// Adds an extra layer of security when opening links to resources
-        /// not owned by you, by disallowing them to access JavaScript's
-        /// `window.opener` property.
-        case noOpener = "noopener"
-
-        /// Disables the HTTP referrer header from being included, and
-        /// also includes `.noOpener`.
-        case noReferrer = "noreferrer"
-
-        /// Pages opened with this attribute are allowed have control over
-        /// the original page, such as changing its URL. Please use with care.
-        case opener = "opener"
-
-        /// Provides the address of the server that handles pingback events for
-        /// the current page.
-        case pingback = "pingback"
-
-        /// Instructs the browser to immediately make a connection to the server
-        /// providing this resource. Useful when you know data from there will
-        /// be accessed very soon.
-        case preconnect = "preconnect"
-
-        /// Instructs the browser to immediately fetch the linked data. Useful when
-        /// you know the data will be needed immediately.
-        case prefetch = "prefetch"
-
-        /// Instructs the browser to immediately fetch and fully process the
-        /// linked data. Useful when you know the data will be needed immediately.
-        case prerender = "prerender"
-
-        /// Marks this document as being part of a series, where the previous
-        /// document is contained in this link.
-        case prev = "previous"
-
-        /// This link points to the privacy policy for the current page.
-        case privacyPolicy = "privacy-policy"
-
-        /// This link points to the search page for your site.
-        case search = "search"
-
-        /// Brings a CSS file into your page.
-        case stylesheet = "stylesheet"
-
-        /// Marks this link as pointing to a page consisting of content belonging
-        /// to a particular tag string.
-        case tag = "tag"
-
-        /// This link points to the legal terms of service for the current page.
-        case termsOfService = "terms-of-service"
-    }
-
-    /// Controls where this link should be opened, e.g. in the current browser
-    /// window or in a new window.
-    public enum Target {
-        /// No location is specified, which usually means the link opens in
-        /// the current browser window.
-        case `default`
-
-        /// The page should be opened in a new window.
-        case blank
-
-        /// The page should be opened in a new window. (same as `.blank`)`
-        case newWindow
-
-        /// The page should be opened in the parent window.
-        case parent
-
-        /// The page should be opened at the top-most level in the user's
-        /// browser. Used when your page is displayed inside a frame.
-        case top
-
-        /// Target a specific, named location.
-        case custom(String)
-
-        /// Converts enum cases to the matching HTML.
-        var name: String? {
-            switch self {
-            case .default:
-                nil
-            case .blank, .newWindow:
-                "_blank"
-            case .parent:
-                "_parent"
-            case .top:
-                "_top"
-            case .custom(let name):
-                name
-            }
-        }
-    }
-
     /// Allows you to style links as buttons if needed.
     public enum LinkStyle: String, CaseIterable {
         case `default`, hover, button
     }
-    
-    /// Defines the prominence of the underline decoration for links,
-    /// allowing customisation of both base and hover styles.
-    public enum UnderlineProminence: Equatable {
 
-        /// No underline style with an opacity of 0%.
-        case none
-
-        /// A faint underline style with an opacity of 10%.
-        case faint
-
-        /// A light underline style with an opacity of 25%.
-        case light
-
-        /// A medium underline style with an opacity of 50%.
-        case medium
-
-        /// A bold underline style with an opacity of 75%.
-        case bold
-
-        /// A fully opaque underline style with an opacity of 100%.
-        case heavy
-
-        /// The opacity value as an `Int`, representing the opacity percentage.
-        var opacity: Int {
-            switch self {
-            case .none:
-                0
-            case .faint:
-                10
-            case .light:
-                25
-            case .medium:
-                50
-            case .bold:
-                75
-            case .heavy:
-                100
-            }
-        }
-    }
-    
     /// The content to display inside this link.
     var content: any HTML
 
@@ -217,10 +32,10 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
 
     /// The style for this link. Defaults to `.default`.
     var style = LinkStyle.default
-    
+
     /// The decoration style of the base link underline. Defaults to `.heavy`.
     var baseDecoration: UnderlineProminence = .heavy
-    
+
     /// The decoration style of the link underline when hovering. Defaults to `.heavy`.
     var hoverDecoration: UnderlineProminence = .heavy
 
@@ -242,30 +57,30 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
             } else if role != .default {
                 outputClasses.append("link-\(role.rawValue)")
             }
-            
+
             if style == .hover {
-                
-                /// If a `baseDecoration` has been set, we take that as a priority, otherwise use the default `.hover` style.
+                // If a `baseDecoration` has been set, we take that as a priority,
+                // otherwise use the default `.hover` style.
                 if baseDecoration != .heavy {
                     outputClasses.append("link-underline-opacity-\(baseDecoration.opacity.formatted())")
                 } else {
                     outputClasses.append("link-underline-opacity-0")
                 }
-                
-                /// If a `hoverDecoration` has been set, we take that as a priority, otherwise use the default `.hover` style.
+
+                // If a `hoverDecoration` has been set, we take that as a
+                // priority, otherwise use the default `.hover` style.
                 if hoverDecoration != .heavy {
                     outputClasses.append("link-underline-opacity-\(hoverDecoration.opacity.formatted())-hover")
                 } else {
                     outputClasses.append("link-underline-opacity-100-hover")
                 }
-                
+
             } else {
-                
                 outputClasses.append("link-underline-opacity-\(baseDecoration.opacity.formatted())")
                 outputClasses.append("link-underline-opacity-\(hoverDecoration.opacity.formatted())-hover")
             }
         }
-        
+
         return outputClasses
     }
 
@@ -351,7 +166,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
         copy.attributes.customAttributes.insert(attribute)
         return copy
     }
-    
+
     /// Adjusts the underline decoration for both the base link and its hover state.
     /// The underline can be set to various levels of prominence, from `.none` (no underline)
     /// to `.heavy` (fully opaque), with options like `.faint`, `.light`, and `.bold` in between.
@@ -363,14 +178,14 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
         var copy = self
         copy.baseDecoration = base
         copy.hoverDecoration = hover
-        
+
         // If there isn't already a role for this link,
         // add one automatically so it has sensible
         // default button styling.
         if copy.role == .default {
             copy.role = .primary
         }
-        
+
         return copy
     }
 

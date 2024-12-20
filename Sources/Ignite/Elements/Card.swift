@@ -8,7 +8,7 @@
 /// A group of information placed inside a gently rounded
 public struct Card: BlockHTML {
     /// Styling for this card.
-    public enum CardStyle: CaseIterable {
+    public enum Style: CaseIterable {
         /// Default styling.
         case `default`
 
@@ -131,7 +131,7 @@ public struct Card: BlockHTML {
     public var columnWidth = ColumnWidth.automatic
 
     var role = Role.default
-    var style = CardStyle.default
+    var style = Style.default
 
     var contentPosition = ContentPosition.default
     var imageOpacity = 1.0
@@ -181,7 +181,7 @@ public struct Card: BlockHTML {
     /// Adjusts the rendering style of this card.
     /// - Parameter style: The new card style to use.
     /// - Returns: A new `Card` instance with the updated style.
-    public func cardStyle(_ style: CardStyle) -> Card {
+    public func cardStyle(_ style: Style) -> Card {
         var copy = self
         copy.style = style
         return copy
@@ -244,14 +244,15 @@ public struct Card: BlockHTML {
 
     private func renderHeader() -> Group {
         if header.isEmptyHTML == false {
-            return Group {
+            Group {
                 for item in header {
                     item
                 }
             }
             .class("card-header")
+        } else {
+            Group { }
         }
-        return Group {}
     }
 
     private func renderItems() -> Group {

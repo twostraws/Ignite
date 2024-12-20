@@ -17,7 +17,7 @@ public class AttributeStore {
     /// - Parameter elementID: The unique identifier of the HTML element
     /// - Returns: The core attributes for the element, or new empty attributes if none exist
     func attributes(for elementID: String) -> CoreAttributes {
-        return storage[elementID] ?? CoreAttributes()
+        storage[elementID] ?? CoreAttributes()
     }
 
     /// Merges new attributes with existing ones for a specific HTML element
