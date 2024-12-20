@@ -87,8 +87,6 @@ public struct HTMLHead: RootHTML {
             MetaLink.highlighterThemeMetaLinks(for: configuration.highlighterThemes)
         }
 
-        Script(file: "/js/ignite-core.js")
-
         if configuration.builtInIconsEnabled == .localBootstrap {
             MetaLink.iconCSS
         } else if configuration.builtInIconsEnabled == .remoteBootstrap {

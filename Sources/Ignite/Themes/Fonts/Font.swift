@@ -120,7 +120,12 @@ public struct Font: Hashable, Equatable, Sendable {
     ///   - size: The size of the font in pixels
     ///   - weight: The weight (boldness) of the font
     /// - Returns: A Font instance configured with the custom font
-    static func custom(_ name: String, style: Font.Style = .body, size: Double, weight: Font.Weight = .regular) -> Font {
+    static func custom(
+        _ name: String,
+        style: Font.Style = .body,
+        size: Double,
+        weight: Font.Weight = .regular
+    ) -> Font {
         Font(style: style, size: size, weight: weight, sources: [FontSource(name: name)])
     }
 

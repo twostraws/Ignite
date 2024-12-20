@@ -47,7 +47,7 @@ public extension HTML {
             let description = String(describing: self)
             return (location + description).truncatedHash
         }
-        set {}
+        set {} // swiftlint:disable:this unused_setter_value
     }
 }
 
@@ -109,7 +109,7 @@ public extension HTML {
     /// - Returns: The modified HTML element
     func `class`(_ newClasses: String?...) -> Self {
         var attributes = attributes
-        let compacted = newClasses.compactMap { $0 }
+        let compacted = newClasses.compactMap(\.self)
         attributes.classes.formUnion(compacted)
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -126,7 +126,11 @@ public extension HTML {
 public extension HTML {
     /// Checks if this element is an empty HTML element.
     var isEmptyHTML: Bool {
-        self is EmptyHTML
+        if let collection = self as? HTMLCollection {
+            collection.elements.allSatisfy { $0 is EmptyHTML }
+        } else {
+            self is EmptyHTML
+        }
     }
 
     /// The default status as a primitive element.
@@ -271,7 +275,6 @@ public extension HTML {
     /// - Returns: The original element
     func containerStyle(_ styles: AttributeValue...) -> Self {
         var attributes = attributes
-        let styles = styles.map { $0 }
         attributes.containerAttributes.append(.init(styles: OrderedSet(styles)))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -300,16 +303,34 @@ public extension HTML {
 /// - Returns: An array of unwrapped HTML elements
 @MainActor func flatUnwrap(_ content: Any) -> [any HTML] {
     if let array = content as? [Any] {
-        return array.flatMap { flatUnwrap($0) }
+        array.flatMap { flatUnwrap($0) }
     } else if let html = content as? any HTML {
         if let anyHTML = html as? AnyHTML {
-            return [anyHTML.unwrapped.body]
+            [anyHTML.unwrapped.body]
         } else if let collection = html as? HTMLCollection {
-            return collection.elements
+            collection.elements
+        } else {
+            [html.body]
         }
-        return [html.body]
+    } else {
+        []
     }
-    return []
+}
+
+@MainActor func flatUnwrap(_ content: Any) -> [any InlineHTML] {
+    if let array = content as? [Any] {
+        array.flatMap { flatUnwrap($0) }
+    } else if let html = content as? any InlineHTML {
+        if let anyHTML = html as? AnyHTML, let wrapped = anyHTML.unwrapped.body as? (any InlineHTML) {
+            [wrapped]
+        } else if let collection = html as? HTMLCollection, let elements = collection.elements as? [any InlineHTML] {
+            elements
+        } else {
+            [html]
+        }
+    } else {
+        []
+    }
 }
 
 /// Unwraps HTML content to its most basic form, collecting multiple elements into an HTMLCollection if needed.
@@ -326,5 +347,6 @@ public extension HTML {
         }
         return html.body
     }
+
     return EmptyHTML()
 }

@@ -10,10 +10,6 @@ extension Array where Element == String {
     /// each time using the `localizedStandardContains()` method
     /// for smarter checks.
     func localizedContains(_ string: String) -> Bool {
-        for item in self where item.localizedStandardContains(string) {
-            return true
-        }
-
-        return false
+        self.contains { $0.localizedStandardContains(string) }
     }
 }

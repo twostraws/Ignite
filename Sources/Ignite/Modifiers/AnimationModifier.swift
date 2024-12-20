@@ -50,7 +50,11 @@ public extension HTML {
     ///   - autoreverses: Whether the animation should play in reverse after completing
     ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
     /// - Returns: A modified HTML element with the animation applied
-    func animation(_ animation: Animation, direction: AnimationDirection? = nil, on trigger: AnimationTrigger) -> some HTML {
+    func animation(
+        _ animation: Animation,
+        direction: AnimationDirection? = nil,
+        on trigger: AnimationTrigger
+    ) -> some HTML {
         modifier(AnimationModifier(animation: animation, direction: direction, trigger: trigger))
     }
 
@@ -61,23 +65,29 @@ public extension HTML {
     ///   - direction: Optional direction for keyframe animations (e.g., alternate, reverse)
     ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
     /// - Returns: The modified HTML element with animation containers and classes applied
-    internal func applyAnimation(_ animation: some Animatable, direction: AnimationDirection?, trigger: AnimationTrigger) -> Self {
+    internal func applyAnimation(
+        _ animation: some Animatable,
+        direction: AnimationDirection?,
+        trigger: AnimationTrigger
+    ) -> Self {
         var attributes = attributes
-        let animationName = "animation-\(self.id)"
 
         // Track which containers we've already added
-        let existingContainers = Set(attributes.containerAttributes.flatMap { $0.classes })
+        let existingContainers = Set(attributes.containerAttributes.flatMap(\.classes))
 
         // Extract color styles from the element and move them to the animation wrapper
         var wrapperStyles: OrderedSet<AttributeValue> = []
+
         if let backgroundColor = attributes.styles.first(where: { $0.name == "background-color" }) {
             wrapperStyles.append(backgroundColor)
             attributes.styles.removeAll { $0.name == "background-color" }
         }
+
         if let background = attributes.styles.first(where: { $0.name == "background" }) {
             wrapperStyles.append(background)
             attributes.styles.removeAll { $0.name == "background" }
         }
+
         if let color = attributes.styles.first(where: { $0.name == "color" }) {
             wrapperStyles.append(color)
             attributes.styles.removeAll { $0.name == "color" }
@@ -87,29 +97,11 @@ public extension HTML {
         let existingAnimation = AnimationManager.default.getAnimation(for: self.id, trigger: trigger)
 
         // Prepare the animation for registration
-        var modifiedAnimation: any Animatable = animation
-        if let basicAnim = animation as? Transition {
-            var copy = basicAnim
-
-            // Combine with existing animation if present
-            if let existing = existingAnimation as? Transition {
-                copy.data.append(contentsOf: existing.data)
-            }
-
-            modifiedAnimation = copy
-        } else if let keyframeAnim = animation as? Animation {
-            var copy = keyframeAnim
-            if let direction {
-                copy.direction = direction
-            }
-
-            // Combine with existing keyframe animation if present
-            if let existing = existingAnimation as? Animation {
-                copy.frames.append(contentsOf: existing.frames)
-            }
-
-            modifiedAnimation = copy
-        }
+        var modifiedAnimation: any Animatable = createBaseAnimation(
+            for: animation,
+            direction: direction,
+            existingAnimation: existingAnimation
+        )
 
         modifiedAnimation.trigger = trigger
 
@@ -124,7 +116,60 @@ public extension HTML {
         let sortedTriggers = AnimationManager.default.getAnimationTriggers(for: self.id)
 
         // The order of these parent containers is *very* important to ensure no overwriting
-        for trigger in sortedTriggers {
+        apply(
+            animation: animation,
+            triggers: sortedTriggers,
+            to: &attributes,
+            in: existingContainers,
+            styles: wrapperStyles
+        )
+
+        AttributeStore.default.merge(attributes, intoHTML: self.id, removing: wrapperStyles)
+        return self
+    }
+
+    func createBaseAnimation(
+        for animation: any Animatable,
+        direction: AnimationDirection?,
+        existingAnimation: Animatable?
+    ) -> any Animatable {
+        if let basicAnim = animation as? Transition {
+            var copy = basicAnim
+
+            // Combine with existing animation if present
+            if let existing = existingAnimation as? Transition {
+                copy.data.append(contentsOf: existing.data)
+            }
+
+            return copy
+        } else if let keyframeAnim = animation as? Animation {
+            var copy = keyframeAnim
+
+            if let direction {
+                copy.direction = direction
+            }
+
+            // Combine with existing keyframe animation if present
+            if let existing = existingAnimation as? Animation {
+                copy.frames.append(contentsOf: existing.frames)
+            }
+
+            return copy
+        } else {
+            return animation
+        }
+    }
+
+    private func apply(
+        animation: some Animatable,
+        triggers: [AnimationTrigger],
+        to attributes: inout CoreAttributes,
+        in existingContainers: Set<String>,
+        styles wrapperStyles: OrderedSet<AttributeValue>
+    ) {
+        let animationName = "animation-\(self.id)"
+
+        for trigger in triggers {
             switch trigger {
             case .click where !existingContainers.contains("click-\(self.id)"):
                 // Add click handler to a new container, or the appear container
@@ -141,16 +186,12 @@ public extension HTML {
                     // it needs to toggle classes on the container that holds both the base animation
                     // and the click-specific styles. If we put the handler on the click-specific
                     // inner container, it wouldn't be able to affect its parent.
-                    if let index = attributes.containerAttributes.firstIndex(where: { $0.classes.contains(animationName) }) {
-                        let updatedContainers = attributes.containerAttributes.enumerated().map { i, element in
-                            if i == index {
-                                var modified = element
-                                modified.type = .click
-                                modified.events.insert(Event(name: "onclick", actions: [CustomAction("igniteToggleClickAnimation(this)")]))
-                                return modified
-                            }
-                            return element
-                        }
+                    let firstAnimation = attributes.containerAttributes.firstIndex {
+                        $0.classes.contains(animationName)
+                    }
+
+                    if let index = firstAnimation {
+                        let updatedContainers = addOnClick(to: attributes, index: index)
                         attributes.containerAttributes = OrderedSet(updatedContainers)
                     }
                 }
@@ -171,9 +212,12 @@ public extension HTML {
 
                 // Add hover effects container
                 var classes: OrderedSet<String> = ["\(animationName)-hover"]
-                if let animation = animation as? Animation, animation.fillMode == .backwards || animation.fillMode == .both {
+
+                if let animation = animation as? Animation,
+                   animation.fillMode == .backwards || animation.fillMode == .both {
                     classes.append("fill-\(self.id)-\(animation.fillMode.rawValue)")
                 }
+
                 attributes.append(containerAttributes: ContainerAttributes(
                     type: .animation,
                     classes: classes,
@@ -190,8 +234,20 @@ public extension HTML {
             default: break
             }
         }
+    }
 
-        AttributeStore.default.merge(attributes, intoHTML: self.id, removing: wrapperStyles)
-        return self
+    private func addOnClick(to attributes: CoreAttributes, index: Int) -> [ContainerAttributes] {
+        attributes.containerAttributes.enumerated().map { i, element in
+            if i == index {
+                var modified = element
+                let newEvent = Event(name: "onclick", actions: [
+                    CustomAction("igniteToggleClickAnimation(this)")])
+                modified.type = .click
+                modified.events.insert(newEvent)
+                return modified
+            }
+
+            return element
+        }
     }
 }

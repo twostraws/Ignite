@@ -29,12 +29,13 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
     init(_ content: any HTML, modifier: any HTMLModifier) {
         if let modified = content as? ModifiedHTML {
             self.content = modified.content
+            AttributeStore.default.merge(modified.attributes, intoHTML: id)
         } else {
-            self.content = unwrap(content.body)
+            self.content = content
+            AttributeStore.default.merge(content.attributes, intoHTML: id)
         }
 
-        let modifiedContent: any HTML = modifier.body(content: self.content)
-
+        let modifiedContent: any HTML = modifier.body(content: self)
         AttributeStore.default.merge(modifiedContent.attributes, intoHTML: id)
 
         if let block = self.content as? (any BlockHTML) {
@@ -47,6 +48,7 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
     /// - Returns: The rendered HTML string
     func render(context: PublishingContext) -> String {
         if content.isPrimitive {
+            AttributeStore.default.merge(attributes, intoHTML: content.id)
             return content.render(context: context)
         } else {
             let rawContent = content.render(context: context)

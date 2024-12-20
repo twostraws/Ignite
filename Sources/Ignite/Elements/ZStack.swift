@@ -51,25 +51,23 @@ public struct ZStack: BlockHTML {
         items.enumerated().forEach { index, item in
             var elementAttributes = CoreAttributes()
             elementAttributes.append(styles: [
-                .init(name: "position", value: "absolute"),
-                .init(name: alignment.x == 0 ? "left" : "right", value: "0"),
-                .init(name: alignment.y == 1 ? "bottom" : "top", value: "0"),
-                .init(name: "z-index", value: "\(index)")
+                .init(name: "grid-area", value: "1/1"),
+                .init(name: "z-index", value: "\(index)"),
+                .init(name: "width", value: "fit-content"),
+                .init(name: "height", value: "fit-content"),
+                .init(name: "justify-self", value: alignment.justifySelf),
+                .init(name: "align-self", value: alignment.alignSelf)
             ])
 
             AttributeStore.default.merge(elementAttributes, intoHTML: item.id)
         }
 
         var attributes = attributes
-
-        attributes.append(styles: [
-            .init(name: "position", value: "relative"),
-            .init(name: "width", value: "100%"),
-            .init(name: "height", value: "100%")
-        ])
+        attributes.append(styles: .init(name: "display", value: "grid"))
 
         AttributeStore.default.merge(attributes, intoHTML: id)
         attributes.tag = "div"
+
         let content = items.map { $0.render(context: context) }.joined()
         return attributes.description(wrapping: content)
     }

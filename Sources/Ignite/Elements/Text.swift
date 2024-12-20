@@ -26,11 +26,11 @@ public struct Text: BlockHTML, DropdownElement {
     /// The font style to use for this text.
     var font: Font.Style {
         if attributes.classes.contains("lead") {
-            Font.Style.lead
+            .lead
         } else if let tag = attributes.tag, let style = Font.Style(rawValue: tag) {
             style
         } else {
-            Font.Style.body
+            .body
         }
     }
 
@@ -98,6 +98,7 @@ public struct Text: BlockHTML, DropdownElement {
         result += "."
 
         self.content = result
+        self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new Text struct from a Markdown string.

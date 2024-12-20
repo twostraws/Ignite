@@ -16,7 +16,7 @@ public enum TextDecoration: String {
 struct TextDecorationModifier: HTMLModifier {
     /// The type of text decoration to apply (underline, line-through, etc.)
     var style: TextDecoration
-    
+
     /// Applies text decoration styling to the provided HTML content
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with text decoration applied

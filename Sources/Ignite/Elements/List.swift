@@ -45,7 +45,6 @@ public struct List: BlockHTML {
     /// but if you need specific styling you might want to use ListItem objects.
     private var items: [any HTML]
 
-    // swiftlint:disable empty_enum_arguments
     /// Returns the correct HTML name for this list.
     private var listElementName: String {
         if case .ordered = markerStyle {
@@ -54,7 +53,6 @@ public struct List: BlockHTML {
             "ul"
         }
     }
-    // swiftlint:enable empty_enum_arguments
 
     /// Creates a new `List` object using a page element builder that returns
     /// an array of `HTML` objects to display in the list.
@@ -81,16 +79,12 @@ public struct List: BlockHTML {
         return copy
     }
 
-    /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
-    /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    private func getAttributes() -> CoreAttributes {
         var listAttributes = attributes
 
         if listStyle != .plain {
             listAttributes.append(classes: "list-group")
-        }
-        if listStyle == .flushGroup {
+        } else if listStyle == .flushGroup {
             listAttributes.append(classes: "list-group-flush")
         }
 
@@ -102,6 +96,7 @@ public struct List: BlockHTML {
             if orderedStyle != .automatic {
                 listMarkerType = orderedStyle.rawValue
             }
+
             if listStyle == .group {
                 listAttributes.append(classes: "list-group-numbered")
             }
@@ -128,6 +123,15 @@ public struct List: BlockHTML {
             listAttributes.append(style: "list-style-type", value: listMarkerType)
         }
 
+        return listAttributes
+    }
+
+    /// Renders this element using publishing context passed in.
+    /// - Parameter context: The current publishing context.
+    /// - Returns: The HTML for this element.
+    public func render(context: PublishingContext) -> String {
+        let listAttributes = getAttributes()
+
         var output = "<\(listElementName)\(listAttributes.description())>"
 
         for item in items {
@@ -137,6 +141,7 @@ public struct List: BlockHTML {
                 if listStyle != .plain {
                     item.class("list-group-item")
                 }
+
                 output += listableItem.renderInList(context: context)
             } else {
                 let styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
