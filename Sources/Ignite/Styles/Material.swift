@@ -42,7 +42,7 @@ public struct Material {
     }
 
     /// Gets the CSS class name for this material
-    fileprivate var className: String {
+    var className: String {
         let baseClass = "material-\(type.rawValue)"
         if let colorScheme {
             return baseClass + "-" + colorScheme.rawValue
@@ -64,14 +64,4 @@ public struct Material {
 
     /// An ultra-thick material effect
     @MainActor public static let ultraThickMaterial = Material(type: .ultraThick)
-}
-
-// Extension to allow materials to be used with background modifier
-public extension HTML {
-    /// Applies a material effect background
-    /// - Parameter material: The type of material to apply
-    /// - Returns: The modified HTML element
-    func background(_ material: Material) -> some HTML {
-        self.class(material.className)
-    }
 }

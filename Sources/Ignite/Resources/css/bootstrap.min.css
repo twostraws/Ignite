@@ -22,8 +22,9 @@ div.alert p:last-child {
 }
 
 .form-control::placeholder {
-  color: gray;
-  opacity: 1;
+    color: gray;
+    opacity: 1;
+}
 /* Removing text syling from a link. */
 .link-plain {
     color: inherit;

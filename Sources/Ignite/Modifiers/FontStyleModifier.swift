@@ -14,7 +14,7 @@ struct FontStyleModifier: HTMLModifier {
     /// - Parameter content: The HTML content to modify
     /// - Returns: The modified HTML content with text level styling applied
     func body(content: some HTML) -> any HTML {
-        if content.body.isComposite {
+        if content.isComposite {
             if style == .lead {
                 content.containerClass("lead")
                     .class("font-inherit")
@@ -23,10 +23,9 @@ struct FontStyleModifier: HTMLModifier {
                     content.class("font-inherit")
                 }
             }
-        } else if let text = content.body as? Text  {
-            text.fontStyle(style)
+        } else {
+            content.fontStyle(style)
         }
-        content
     }
 }
 

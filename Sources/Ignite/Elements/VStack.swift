@@ -59,9 +59,6 @@ public struct VStack: BlockHTML {
                     AttributeStore.default.merge(itemAttributes, intoHTML: item.id)
                     items.append(item)
                 }
-            case let modified as ModifiedHTML:
-                AttributeStore.default.merge(itemAttributes, intoHTML: modified.content.id)
-                items.append(modified.content)
             default:
                 AttributeStore.default.merge(itemAttributes, intoHTML: item.id)
                 items.append(item)
