@@ -94,15 +94,6 @@ extension HTML {
 
 // Style modifiers
 public extension HTML {
-    /// Adds a single CSS class to the element.
-    /// - Parameter className: The name of the CSS class to add
-    /// - Returns: The modified HTML element
-    func `class`(_ className: String) {
-        var attributes = attributes
-        attributes.classes.append(className)
-        AttributeStore.default.merge(attributes, intoHTML: id)
-    }
-
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
