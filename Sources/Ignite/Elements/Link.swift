@@ -40,7 +40,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     var hoverDecoration: UnderlineProminence = .heavy
 
     /// When rendered with the `.button` style, this controls the button's size.
-    var size = ButtonSize.medium
+    var size = Button.Size.medium
 
     /// The role of this link, which applies various styling effects.
     var role = Role.default
@@ -123,7 +123,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     /// Adjusts the style of this link, when rendered in the `.button` style.
     /// - Parameter size: The new style.
     /// - Returns: A new `Link` instance with the updated size.
-    public func buttonSize(_ size: ButtonSize) -> Self {
+    public func buttonSize(_ size: Button.Size) -> Self {
         var copy = self
         copy.size = size
         return copy

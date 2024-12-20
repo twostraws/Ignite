@@ -32,7 +32,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
     var items: [any DropdownElement]
 
     /// How large this dropdown should be drawn. Defaults to `.medium`.
-    var size = ButtonSize.medium
+    var size = Button.Size.medium
 
     /// How this dropdown should be styled on the screen. Defaults to `.defaut`.
     var role = Role.default
@@ -57,7 +57,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
     /// Adjusts the size of this dropdown.
     /// - Parameter size: The new size.
     /// - Returns: A new `Dropdown` instance with the updated size.
-    public func dropdownSize(_ size: ButtonSize) -> Self {
+    public func dropdownSize(_ size: Button.Size) -> Self {
         var copy = self
         copy.size = size
         return copy

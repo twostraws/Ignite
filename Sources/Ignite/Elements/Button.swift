@@ -5,18 +5,18 @@
 // See LICENSE for license information.
 //
 
-/// Controls the display size of buttons. Medium is the default.
-public enum ButtonSize: String, CaseIterable {
-    case small, medium, large
-}
-
 /// A clickable button with a label and styling.
 public struct Button: BlockHTML, InlineHTML {
     /// How many columns this should occupy when placed in a section or form.
     public var columnWidth: ColumnWidth = .automatic
 
+    /// Controls the display size of buttons. Medium is the default.
+    public enum Size: String, CaseIterable {
+        case small, medium, large
+    }
+
     /// Whether this button is just clickable, or whether its submits a form.
-    public enum ButtonType {
+    public enum `Type` {
         /// This button does not submit a form.
         case plain
 
@@ -42,10 +42,10 @@ public struct Button: BlockHTML, InlineHTML {
     public var isPrimitive: Bool { true }
 
     /// Whether this button should submit a form or not. Defaults to `.plain`.
-    var type = ButtonType.plain
+    var type = Type.plain
 
     /// How large this button should be drawn. Defaults to `.medium`.
-    var size = ButtonSize.medium
+    var size = Size.medium
 
     /// How this button should be styled on the screen. Defaults to `.default`.
     var role = Role.default
@@ -95,7 +95,7 @@ public struct Button: BlockHTML, InlineHTML {
     /// Adjusts the size of this button.
     /// - Parameter size: The new size.
     /// - Returns: A new `Button` instance with the updated size.
-    public func buttonSize(_ size: ButtonSize) -> Self {
+    public func buttonSize(_ size: Size) -> Self {
         var copy = self
         copy.size = size
         return copy
@@ -113,7 +113,7 @@ public struct Button: BlockHTML, InlineHTML {
     /// Sets the button type, determining its behavior.
     /// - Parameter type: The type of button, such as `.plain` or `.submit`.
     /// - Returns: A new `Button` instance with the updated type.
-    public func type(_ type: ButtonType) -> Self {
+    public func type(_ type: Type) -> Self {
         var copy = self
         copy.type = type
         return copy
@@ -126,7 +126,7 @@ public struct Button: BlockHTML, InlineHTML {
     ///   - role: The role we are styling.
     ///   - size: The size we are styling.
     /// - Returns: The CSS classes to apply for this button
-    public static func classes(forRole role: Role, size: ButtonSize) -> [String] {
+    public static func classes(forRole role: Role, size: Size) -> [String] {
         var outputClasses = ["btn"]
 
         switch size {
