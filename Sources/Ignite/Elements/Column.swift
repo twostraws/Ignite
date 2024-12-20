@@ -36,13 +36,13 @@ public struct Column: HTML, HorizontalAligning {
     var verticalAlignment = VerticalAlignment.top
 
     /// The items to render inside this column.
-    var items: [any HTML]
+    var items: HTMLCollection
 
     /// Creates a new column from a page element builder of items.
     /// - Parameter items: A page element builder that returns the items
     /// for this column.
-    public init(@HTMLBuilder items: () -> [any HTML]) {
-        self.items = items()
+    public init(@HTMLBuilder items: () -> some HTML) {
+        self.items = HTMLCollection(items())
     }
 
     /// Adjusts how many columns in a row this column should span.

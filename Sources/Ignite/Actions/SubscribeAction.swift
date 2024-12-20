@@ -87,8 +87,6 @@ public struct SubscribeAction: Action {
                 "EMAIL"
             case .kit:
                 "email_address"
-            default:
-                nil
             }
         }
 

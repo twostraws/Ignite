@@ -46,8 +46,8 @@ public struct Content: Sendable {
         metadata["modified"] as? Date ?? date
     }
 
-    /// The `ContentPage` name to use for this content. This should be the name
-    /// of a type that conforms to the `ContentPage` protocol.
+    /// The `ContentLayout` name to use for this content. This should be the name
+    /// of a type that conforms to the `ContentLayout` protocol.
     public var layout: String? {
         metadata["layout"] as? String
     }
@@ -197,15 +197,9 @@ public struct Content: Sendable {
 
     /// An array of `Link` objects that show badges for the tags of this
     /// content, and also link to the tag pages.
-    public func tagLinks(in context: PublishingContext) -> [Link] {
-        /// If this site has not defined a tag page, send back no links.
-        if context.site.tagPage is EmptyTagLayout {
-            context.addWarning("tagLinks(in:) returned an empty array because your site has no tagPage defined.")
-            return []
-        }
-
+    public func tagLinks() -> [Link] {
         if let tags = metadata["tags"] as? String {
-            return tags.splitAndTrim().map { tag in
+            tags.splitAndTrim().map { tag in
                 let tagPath = tag.convertedToSlug() ?? tag
 
                 return Link(target: "/tags/\(tagPath)") {
@@ -216,7 +210,7 @@ public struct Content: Sendable {
                 .relationship(.tag)
             }
         } else {
-            return []
+            []
         }
     }
 

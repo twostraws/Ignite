@@ -47,8 +47,8 @@ extension PublishingContext {
     }
 
     /// Generates all tags pages, including the "all tags" page.
-    func generateTagPages() async throws {
-        if site.tagPage is EmptyTagLayout { return }
+    func generateTagLayouts() async throws {
+        if site.tagLayout is EmptyTagLayout { return }
 
         /// Creates a unique list of sorted tags from across the site, starting
         /// with `nil` for the "all tags" page.
@@ -66,8 +66,8 @@ extension PublishingContext {
             let outputDirectory = buildDirectory.appending(path: path)
 
             let body = TagContext.withCurrentTag(tag, content: content(tagged: tag)) {
-                let tagPageBody = site.tagPage.body
-                return Group(tagPageBody)
+                let tagLayoutBody = site.tagLayout.body
+                return Group(tagLayoutBody)
             }
 
             let page = Page(

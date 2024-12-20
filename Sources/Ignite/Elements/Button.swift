@@ -148,6 +148,7 @@ public struct Button: BlockHTML, InlineHTML {
         return outputClasses
     }
 
+    /// Adds the correct ARIA attribute for Close buttons, if needed.
     public static func aria(forRole role: Role) -> AttributeValue? {
         switch role {
         case .close:
