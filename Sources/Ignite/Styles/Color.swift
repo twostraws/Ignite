@@ -467,37 +467,37 @@ public struct Color: CustomStringConvertible, Equatable, Sendable {
     public static let yellowGreen = Color(hex: "#9ACD32")
 
     /// Bootstrap's primary blue color (#0d6efd)
-  public static let bootstrapBlue = Color(hex: "#0d6efd")
+    public static let bootstrapBlue = Color(hex: "#0d6efd")
 
-  /// Bootstrap's indigo color (#6610f2)
-  public static let bootstrapIndigo = Color(hex: "#6610f2")
+    /// Bootstrap's indigo color (#6610f2)
+    public static let bootstrapIndigo = Color(hex: "#6610f2")
 
-  /// Bootstrap's purple color (#6f42c1)
-  public static let bootstrapPurple = Color(hex: "#6f42c1")
+    /// Bootstrap's purple color (#6f42c1)
+    public static let bootstrapPurple = Color(hex: "#6f42c1")
 
-  /// Bootstrap's pink color (#d63384)
-  public static let bootstrapPink = Color(hex: "#d63384")
+    /// Bootstrap's pink color (#d63384)
+    public static let bootstrapPink = Color(hex: "#d63384")
 
-  /// Bootstrap's red color (#dc3545)
-  public static let bootstrapRed = Color(hex: "#dc3545")
+    /// Bootstrap's red color (#dc3545)
+    public static let bootstrapRed = Color(hex: "#dc3545")
 
-  /// Bootstrap's orange color (#fd7e14)
-  public static let bootstrapOrange = Color(hex: "#fd7e14")
+    /// Bootstrap's orange color (#fd7e14)
+    public static let bootstrapOrange = Color(hex: "#fd7e14")
 
-  /// Bootstrap's yellow color (#ffc107)
-  public static let bootstrapYellow = Color(hex: "#ffc107")
+    /// Bootstrap's yellow color (#ffc107)
+    public static let bootstrapYellow = Color(hex: "#ffc107")
 
-  /// Bootstrap's green color (#198754)
-  public static let bootstrapGreen = Color(hex: "#198754")
+    /// Bootstrap's green color (#198754)
+    public static let bootstrapGreen = Color(hex: "#198754")
 
-  /// Bootstrap's teal color (#20c997)
-  public static let bootstrapTeal = Color(hex: "#20c997")
+    /// Bootstrap's teal color (#20c997)
+    public static let bootstrapTeal = Color(hex: "#20c997")
 
-  /// Bootstrap's cyan color (#0dcaf0)
-  public static let bootstrapCyan = Color(hex: "#0dcaf0")
+    /// Bootstrap's cyan color (#0dcaf0)
+    public static let bootstrapCyan = Color(hex: "#0dcaf0")
 
-  /// Bootstrap's gray color (#adb5bd)
-  public static let bootstrapGray = Color(hex: "#adb5bd")
+    /// Bootstrap's gray color (#adb5bd)
+    public static let bootstrapGray = Color(hex: "#adb5bd")
 
     /// The red component for this color, in the range 0 through 255.
     public var red: Int
