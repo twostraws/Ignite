@@ -6,25 +6,37 @@
 //
 
 /// A protocol representing a CSS unit of measurement or value
-public protocol LengthUnit: CustomStringConvertible, Equatable, Hashable, Sendable {
+public protocol LengthUnit: CustomStringConvertible, Equatable, Hashable, Defaultable, Sendable {
+    /// The string representation of this unit's value
     var stringValue: String { get }
+
+    /// Indicates whether this unit represents a default value
+    var isDefault: Bool { get }
 }
 
 extension LengthUnit {
+    public var isDefault: Bool {
+        (self as? Int) == .min
+    }
+
     public var stringValue: String {
-        if let intValue = self as? Int, intValue == .viewport {
-            "100vw"
-        } else if let intValue = self as? Int {
-            "\(intValue)px"
-        } else {
-            String(describing: self)
+        guard let intValue = self as? Int else {
+            return String(describing: self)
+        }
+
+        switch intValue {
+        case .viewport: return "100vw"
+        default: return "\(intValue)px"
         }
     }
 }
 
 public extension LengthUnit where Self == Int {
-    /// Returns a special value indicating that a dimension should use 100% of the viewport size
+    /// A special value indicating that a dimension should use 100% of the viewport width
     static var viewport: Int { .max }
+
+    /// The default value for length units, represented by the minimum integer value
+    static var `default`: Int { .min }
 }
 
 public extension LengthUnit where Self == Double {

@@ -179,6 +179,7 @@ public extension Site {
             themes.insert(darkTheme)
         }
         themes.formUnion(alternateThemes.compactMap(\.syntaxHighlighterTheme))
+        themes.remove(.none)
         return themes
     }
 

@@ -46,7 +46,7 @@ public struct MetaLink: HeadElement, Sendable {
 
             if hasMultipleThemes {
                 link = link
-                    .data("highlight-theme", theme.rawValue)
+                    .data("highlight-theme", theme.description)
                     .customAttribute(name: "disabled", value: "")
             }
 
