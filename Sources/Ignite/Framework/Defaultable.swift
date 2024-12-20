@@ -13,7 +13,7 @@ public protocol Defaultable {
 
 extension Font: Defaultable {
     /// The empty font instance used as a default value
-    public static var `default`: Font { Font(sources: []) }
+    public static var `default`: Font { Font(name: "", sources: []) }
 
     /// Indicates whether this font is the default (empty) font
     public var isDefault: Bool { self == .default }
