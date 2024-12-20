@@ -77,7 +77,7 @@ extension PublishingContext {
                 body: body
             )
 
-            let outputString = render(page)
+            let outputString = render(page, using: site.tagLayout.parentLayout)
 
             try write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }
