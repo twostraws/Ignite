@@ -97,6 +97,7 @@ public extension HTML {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
+    @discardableResult
     func `class`(_ newClasses: String?...) -> Self {
         var attributes = attributes
         let compacted = newClasses.compactMap(\.self)
