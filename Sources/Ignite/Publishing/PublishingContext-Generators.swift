@@ -147,7 +147,7 @@ extension PublishingContext {
         ] + theme.alternateFonts
 
         let fontTags = fonts.flatMap { font -> [String] in
-            guard let font = font, let familyName = font.name else { return [] }
+            guard let familyName = font.name else { return [] }
 
             // Skip if it's a system font
             guard !Font.systemFonts.contains(familyName) &&
@@ -281,10 +281,10 @@ extension PublishingContext {
         addProperty(.borderColor, theme.border)
 
         // Font families
-        addProperty(.sansSerifFont, theme.sansSerifFont?.name ?? Font.systemFonts.joined(separator: ","))
-        addProperty(.monospaceFont, theme.monospaceFont?.name ?? Font.monospaceFonts.joined(separator: ","))
-        addProperty(.bodyFont, theme.font?.name ?? Font.systemFonts.joined(separator: ","))
-        addProperty(.codeFont, theme.codeFont?.name ?? Font.monospaceFonts.joined(separator: ","))
+        addProperty(.sansSerifFont, theme.sansSerifFont.name ?? Font.systemFonts.joined(separator: ","))
+        addProperty(.monospaceFont, theme.monospaceFont.name ?? Font.monospaceFonts.joined(separator: ","))
+        addProperty(.bodyFont, theme.font.name ?? Font.systemFonts.joined(separator: ","))
+        addProperty(.codeFont, theme.codeFont.name ?? Font.monospaceFonts.joined(separator: ","))
 
         // Font sizes
         addProperty(.rootFontSize, theme.rootFontSize)
