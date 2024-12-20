@@ -35,7 +35,7 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
             AttributeStore.default.merge(content.attributes, intoHTML: id)
         }
 
-        let modifiedContent: any HTML = modifier.body(content: self)
+        _ = modifier.body(content: content)
 
         AttributeStore.default.merge(content.attributes, intoHTML: id)
 
