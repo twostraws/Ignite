@@ -87,33 +87,23 @@ extension AnimationClassGenerator {
     /// - Parameter transition: The transition animation to convert to CSS
     /// - Returns: A string containing hover and non-hover state CSS rules
     func buildTransitionHoverClass(_ transition: Transition) -> String {
-        let transformProperties = transition.data.filter { $0.property == .transform }
-        let otherProperties = transition.data.filter { $0.property != .transform }
+        let transitions = transition.data.map { data in
+            let delay = data.delay > 0 ? " \(data.delay)s" : ""
+            return "\(data.property.rawValue) \(data.duration)s \(data.timing.css)\(delay)"
+        }
 
-        let transformTiming = transformProperties.map { data in
-            "transform \(data.duration)s \(data.timing.css)"
-        }.joined(separator: ", ")
-
-        let otherTiming = otherProperties.map { data in
-            "\(data.property.rawValue) \(data.duration)s \(data.timing.css)"
-        }.joined(separator: ", ")
+        let hoverProperties = transition.data.map { data in
+            "\(data.property.rawValue): \(data.final)"
+        }
 
         return """
         .\(name)-transform {
             transform-style: preserve-3d;
-            transition: \(transformTiming);
+            transition: \(transitions.joined(separator: ", "));
         }
 
         .\(name)-transform:hover {
-            \(transformProperties.map { "transform: \($0.final)" }.joined(separator: ";\n        "))
-        }
-
-        .\(name)-hover {
-            transition: \(otherTiming);
-        }
-
-        .\(name)-hover:hover {
-            \(otherProperties.map { "\($0.property.rawValue): \($0.final)" }.joined(separator: ";\n        "))
+            \(hoverProperties.joined(separator: ";\n        "));
         }
         """
     }
