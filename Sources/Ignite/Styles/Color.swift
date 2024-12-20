@@ -15,43 +15,37 @@ public enum Color: CustomStringConvertible, Sendable, Hashable {
     case html(red: Int, green: Int, blue: Int, opacity: Double)
 
     /// Bootstrap's primary blue color (#0d6efd)
-    public static let blue = Color(hex: "#0d6efd", name: "blue")
+    public static let bootstrapBlue = Color(hex: "#0d6efd", name: "blue")
 
     /// Bootstrap's indigo color (#6610f2)
-    public static let indigo = Color(hex: "#6610f2", name: "indigo")
+    public static let bootstrapIndigo = Color(hex: "#6610f2", name: "indigo")
 
     /// Bootstrap's purple color (#6f42c1)
-    public static let purple = Color(hex: "#6f42c1", name: "purple")
+    public static let bootstrapPurple = Color(hex: "#6f42c1", name: "purple")
 
     /// Bootstrap's pink color (#d63384)
-    public static let pink = Color(hex: "#d63384", name: "pink")
+    public static let bootstrapPink = Color(hex: "#d63384", name: "pink")
 
     /// Bootstrap's red color (#dc3545)
-    public static let red = Color(hex: "#dc3545", name: "red")
+    public static let bootstrapRed = Color(hex: "#dc3545", name: "red")
 
     /// Bootstrap's orange color (#fd7e14)
-    public static let orange = Color(hex: "#fd7e14", name: "orange")
+    public static let bootstrapOrange = Color(hex: "#fd7e14", name: "orange")
 
     /// Bootstrap's yellow color (#ffc107)
-    public static let yellow = Color(hex: "#ffc107", name: "yellow")
+    public static let bootstrapYellow = Color(hex: "#ffc107", name: "yellow")
 
     /// Bootstrap's green color (#198754)
-    public static let green = Color(hex: "#198754", name: "green")
+    public static let bootstrapGreen = Color(hex: "#198754", name: "green")
 
     /// Bootstrap's teal color (#20c997)
-    public static let teal = Color(hex: "#20c997", name: "teal")
+    public static let bootstrapTeal = Color(hex: "#20c997", name: "teal")
 
     /// Bootstrap's cyan color (#0dcaf0)
-    public static let cyan = Color(hex: "#0dcaf0", name: "cyan")
+    public static let bootstrapCyan = Color(hex: "#0dcaf0", name: "cyan")
 
     /// Bootstrap's gray color (#adb5bd)
-    public static let gray = Color(hex: "#adb5bd", name: "gray")
-
-    /// The HTML color name "black" (#000000)
-    public static let black = Color(hex: "#000000", name: "black")
-
-    /// The HTML color name "white" (#FFFFFF)
-    public static let white = Color(hex: "#FFFFFF", name: "white")
+    public static let bootstrapGray = Color(hex: "#adb5bd", name: "gray")
 
     /// A structure that holds the RGB and opacity components of a color.
     fileprivate struct RGBComponents {
