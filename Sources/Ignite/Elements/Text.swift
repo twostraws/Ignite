@@ -123,7 +123,7 @@ public struct Text: BlockHTML, DropdownElement {
     }
 }
 
-extension HTML where Self == Text {
+extension HTML {
     func fontStyle(_ font: Font.Style) -> Self {
         if font == .lead {
             self.class(font.rawValue)

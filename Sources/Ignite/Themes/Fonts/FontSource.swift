@@ -35,34 +35,28 @@
 /// )
 /// ```
 public struct FontSource: Hashable, Equatable, Sendable {
-    /// The name of the font file or family.
-    let name: String
-
     /// The weight (boldness) of this font variant.
     let weight: Font.Weight
 
     /// The style (normal, italic, or oblique) of this font variant.
-    let style: Font.Variant
+    let variant: Font.Variant
 
     /// The URL where the font file can be found, if it's a web font.
     let url: URL?
 
     /// Creates a font source with a remote URL.
     /// - Parameters:
-    ///   - name: The name of the font file or family.
     ///   - weight: The weight of this font variant, defaulting to regular.
     ///   - style: The style of this font variant, defaulting to normal.
     ///   - url: The URL where the font file can be found.
     public init(
-        name: String,
         weight: Font.Weight = .regular,
-        style: Font.Variant = .normal,
+        variant: Font.Variant = .normal,
         url: URL
     ) {
-        self.name = name
         self.url = url
         self.weight = weight
-        self.style = style
+        self.variant = variant
     }
 
     /// Creates a font source for a local font file.
@@ -71,13 +65,11 @@ public struct FontSource: Hashable, Equatable, Sendable {
     ///   - weight: The weight of this font variant, defaulting to regular.
     ///   - style: The style of this font variant, defaulting to normal.
     init(
-        name: String,
         weight: Font.Weight = .regular,
-        style: Font.Variant = .normal
+        variant: Font.Variant = .normal
     ) {
-        self.name = name
         self.weight = weight
-        self.style = style
+        self.variant = variant
         self.url = nil
     }
 }

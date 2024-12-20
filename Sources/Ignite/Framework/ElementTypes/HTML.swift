@@ -251,6 +251,16 @@ public extension HTML {
         return self
     }
 
+    /// Adds a wrapper div with the specified attributes to the element's storage
+    /// - Parameter newAttributes: The attributes to apply to the wrapper div
+    /// - Returns: The original element
+    internal func containerAttributes(_ newAttributes: ContainerAttributes...) -> Self {
+        var attributes = attributes
+        attributes.containerAttributes.formUnion(newAttributes.map { $0 })
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
     /// Adds a wrapper div with the specified class to the element's storage
     /// - Parameter className: The class to apply to the wrapper div
     /// - Returns: The original element
