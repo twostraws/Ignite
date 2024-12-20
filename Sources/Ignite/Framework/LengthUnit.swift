@@ -20,13 +20,14 @@ extension LengthUnit {
     }
 
     public var stringValue: String {
-        guard let intValue = self as? Int else {
-            return String(describing: self)
-        }
-
-        switch intValue {
-        case .viewport: return "100vw"
-        default: return "\(intValue)px"
+        if let intValue = self as? Int {
+            if intValue == .viewport {
+                "100vw"
+            } else {
+                "\(intValue)px"
+            }
+        } else {
+            String(describing: self)
         }
     }
 }
