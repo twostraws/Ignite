@@ -126,7 +126,11 @@ public extension HTML {
 public extension HTML {
     /// Checks if this element is an empty HTML element.
     var isEmptyHTML: Bool {
-        self is EmptyHTML
+        if let collection = self as? HTMLCollection {
+            collection.elements.allSatisfy { $0 is EmptyHTML }
+        } else {
+            self is EmptyHTML
+        }
     }
 
     /// The default status as a primitive element.

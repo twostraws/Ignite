@@ -219,7 +219,9 @@ public struct Card: BlockHTML {
                 }
             }
 
-            renderHeader()
+            if header.isEmptyHTML == false {
+                renderHeader()
+            }
 
             renderItems()
 
@@ -234,7 +236,9 @@ public struct Card: BlockHTML {
                 }
             }
 
-            renderFooter()
+            if footer.isEmptyHTML == false {
+                renderFooter()
+            }
         }
         .attributes(attributes)
         .class("card")
@@ -243,16 +247,12 @@ public struct Card: BlockHTML {
     }
 
     private func renderHeader() -> Group {
-        if header.isEmptyHTML == false {
-            Group {
-                for item in header {
-                    item
-                }
+        Group {
+            for item in header {
+                item
             }
-            .class("card-header")
-        } else {
-            Group { }
         }
+        .class("card-header")
     }
 
     private func renderItems() -> Group {
@@ -276,14 +276,11 @@ public struct Card: BlockHTML {
     }
 
     private func renderFooter() -> Group {
-        if footer.isEmptyHTML == false {
-            return Group {
-                for item in footer {
-                    item
-                }
+        Group {
+            for item in footer {
+                item
             }
-            .class("card-footer", "text-body-secondary")
         }
-        return Group {}
+        .class("card-footer", "text-body-secondary")
     }
 }
