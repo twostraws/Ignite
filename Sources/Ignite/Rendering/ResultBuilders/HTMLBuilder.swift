@@ -51,9 +51,10 @@ public struct HTMLBuilder {
     /// - Returns: Either the wrapped element or an empty element
     public static func buildOptional<Content: HTML>(_ component: Content?) -> some HTML {
         if let component {
-            return AnyHTML(component)
+            AnyHTML(component)
+        } else {
+            AnyHTML(EmptyHTML())
         }
-        return AnyHTML(EmptyHTML())
     }
 
     /// Handles optional arrays of HTML elements.
@@ -61,9 +62,10 @@ public struct HTMLBuilder {
     /// - Returns: Either the wrapped elements or an empty element
     public static func buildOptional<Content: HTML>(_ component: [Content]?) -> some HTML {
         if let component {
-            return AnyHTML(component)
+            AnyHTML(component)
+        } else {
+            AnyHTML(EmptyHTML())
         }
-        return AnyHTML(EmptyHTML())
     }
 
     /// Handles the first branch of an if/else statement.
@@ -85,9 +87,10 @@ public struct HTMLBuilder {
     /// - Returns: Either the wrapped element or an empty element
     public static func buildIf<Content: HTML>(_ component: Content?) -> AnyHTML {
         if let component {
-            return AnyHTML(component)
+            AnyHTML(component)
+        } else {
+            AnyHTML(EmptyHTML())
         }
-        return AnyHTML(EmptyHTML())
     }
 
     /// Handles array transformations in the builder.
@@ -101,7 +104,7 @@ public struct HTMLBuilder {
     /// - Parameter components: Variadic array of HTML element arrays
     /// - Returns: A flattened HTML structure
     public static func buildBlock(_ components: [any HTML]...) -> some HTML {
-        HTMLCollection(components.flatMap { $0 })
+        HTMLCollection(components.flatMap(\.self))
     }
 
     /// Converts text content into HTML.
@@ -129,7 +132,7 @@ public struct HTMLBuilder {
     /// - Parameter components: Two-dimensional array of HTML elements
     /// - Returns: A flattened HTML structure
     public static func buildArray(_ components: [[any HTML]]) -> some HTML {
-        HTMLCollection(components.flatMap { $0 })
+        HTMLCollection(components.flatMap(\.self))
     }
 
     /// Handles optional content in if let statements.
@@ -137,16 +140,17 @@ public struct HTMLBuilder {
     /// - Returns: Either the wrapped element or an empty element
     public static func buildBlock<Content: HTML>(_ content: Content?) -> some HTML {
         if let content {
-            return AnyHTML(content)
+            AnyHTML(content)
+        } else {
+            AnyHTML(EmptyHTML())
         }
-        return AnyHTML(EmptyHTML())
     }
 
     /// Handles multiple optional conditions in nested if let statements.
     /// - Parameter components: Variadic array of optional HTML elements
     /// - Returns: A flattened HTML structure containing non-nil elements
     public static func buildBlock<Content: HTML>(_ components: (any HTML)?...) -> some HTML {
-        HTMLCollection(components.compactMap { $0 })
+        HTMLCollection(components.compactMap(\.self))
     }
 }
 

@@ -18,8 +18,8 @@
 /// ```
 @MainActor
 public struct EnvironmentValues: Sendable {
-    /// All markdown content pages in the site.
-    public var allContent: [Content]
+    /// Provides access to the Markdown pages on this site.
+    public var content: ContentLoader
 
     /// Configuration for RSS/Atom feed generation.
     public var feedConfiguration: FeedConfiguration
@@ -38,7 +38,7 @@ public struct EnvironmentValues: Sendable {
 
     /// Creates environment values with default settings.
     public init() {
-        self.allContent = []
+        self.content = ContentLoader(content: [])
         self.feedConfiguration = FeedConfiguration(mode: .full, contentCount: 0)
         self.isFeedEnabled = false
         self.themes = []
@@ -48,7 +48,7 @@ public struct EnvironmentValues: Sendable {
 
     init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
-        self.allContent = allContent
+        self.content = ContentLoader(content: allContent)
         self.feedConfiguration = site.feedConfiguration
         self.isFeedEnabled = site.isFeedEnabled
         self.themes = site.allThemes

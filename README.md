@@ -4,7 +4,7 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/macOS-14.0+-2980b9.svg" />
-    <img src="https://img.shields.io/badge/swift-5.9+-8e44ad.svg" />
+    <img src="https://img.shields.io/badge/swift-6.0+-8e44ad.svg" />
     <a href="https://twitter.com/twostraws">
         <img src="https://img.shields.io/badge/Contact-@twostraws-95a5a6.svg?style=flat" alt="Twitter: @twostraws" />
     </a>
@@ -174,14 +174,13 @@ And it results inn this **Build** structure:
 
 **A precondition for this to work is to have a layout available to render your content.** If you don't have a valid layout in place, Ignite will issue a warning saying "Your site must provide at least one layout in order to render Markdown."
 
-You can create custom layouts by making types conform to the `ContentPage` protocol. For example:
+You can create custom content layouts by making types conform to the `ContentLayout` protocol, which will automatically be given a `content` property to access the content it is displaying. For example:
 
 ```swift
 import Foundation
 import Ignite
 
-struct Layout: ContentPage {
-    @Content private var content
+struct CustomContentLayout: ContentLayout {
     var body: some HTML {
         Text(content.title)
             .font(.title1)
@@ -191,7 +190,6 @@ struct Layout: ContentPage {
                 .resizable()
                 .cornerRadius(20)
                 .frame(maxHeight: 300)
-                .horizontalAlignment(.center)
         }
 
         if content.hasTags {
@@ -215,11 +213,11 @@ struct ExampleSite: Site {
     var url = URL(static: "https://www.example.com")
 
     var homePage = Home()
-    var theme = MyTheme()
+    var layout = MyLayout()
 
     /* This part adds the custom layout */
-    var layouts: [any ContentPage] {
-        Layout()
+    var layouts: [any ContentLayout] {
+        CustomContentLayout()
     }
 }
 ```
@@ -279,8 +277,17 @@ That will launch a local web server you should use to preview your site, and als
 I welcome all contributions, whether that's adding new tests, fixing up existing code, adding comments, or improving this README – everyone is welcome!
 
 - You must comment your code thoroughly, using documentation comments or regular comments as applicable.
+- Please ensure you run SwiftLint in the Sources directory, and fix all outstanding issues.
 - All code must be licensed under the MIT license so it can benefit the most people.
+- Ensure you build IgniteSamples using your  modified copy of Ignite, and compare it to [the live version](https://github.com/twostraws/IgniteSamples).
 - If you create a new element, please consider adding it to the IgniteSamples repository, so folks can see it more easily.
+
+
+## Credits
+
+Ignite is an open-source project with many contributors, including Paul Hudson, JP Toro, Henrik Christensen, Michael Freiwald, and Jobert Sá.
+
+All contributions are welcome, but please ensure you abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 
 ## License
@@ -296,8 +303,6 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Ignite was originally created by [Paul Hudson](https://twitter.com/twostraws), who writes [free Swift tutorials over at Hacking with Swift](https://www.hackingwithswift.com). It’s available under the MIT license, which permits commercial use, modification, distribution, and private use.
-
-Other contributors to Ignite include Henrik Christensen, Michael Freiwald, and Jobert Sá – thank you!
 
 
 <p align="center">

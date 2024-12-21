@@ -61,7 +61,7 @@ public struct Section: BlockHTML {
         if let columnCount {
             sectionAttributes.append(classes: [
                 "row-cols-1",
-                "row-cols-md-\(columnCount)",
+                "row-cols-md-\(columnCount)"
             ])
         }
 

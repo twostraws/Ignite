@@ -37,6 +37,7 @@ final class AnimationManager {
         if animations[elementID] == nil {
             animations[elementID] = [:]
         }
+
         animations[elementID]?[animation.trigger] = animation
     }
 
@@ -53,14 +54,14 @@ final class AnimationManager {
     ///   - trigger: The animation trigger type to retrieve
     /// - Returns: The animation for the specified trigger, or nil if none exists
     func getAnimation(for elementID: String, trigger: AnimationTrigger) -> (any Animatable)? {
-        return animations[elementID]?[trigger]
+        animations[elementID]?[trigger]
     }
 
     /// Returns all animations registered for a specific HTML element.
     /// - Parameter elementID: The unique identifier of the HTML element
     /// - Returns: An array of animations associated with the element, or an empty array if none exist
     func getAnimations(for elementID: String) -> [any Animatable] {
-        return animations[elementID]?.values.map { $0 } ?? []
+        animations[elementID]?.values.map(\.self) ?? []
     }
 
     /// Generates and writes CSS for all registered animations to a file.

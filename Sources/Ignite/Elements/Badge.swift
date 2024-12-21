@@ -16,12 +16,13 @@ public struct Badge: InlineHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    public enum BadgeStyle: CaseIterable {
+    /// The different options for styling this badge.
+    public enum Style: CaseIterable {
         case `default`, subtle, subtleBordered
     }
 
     private var text: any InlineHTML
-    private var style = BadgeStyle.default
+    private var style = Style.default
     private var role = Role.default
 
     var badgeClasses: [String] {
@@ -83,7 +84,7 @@ public struct Badge: InlineHTML {
         return copy
     }
 
-    public func badgeStyle(_ style: BadgeStyle) -> Badge {
+    public func badgeStyle(_ style: Style) -> Badge {
         var copy = self
         copy.style = style
         return copy

@@ -29,7 +29,7 @@ public enum Position: String {
 struct PositionModifier: HTMLModifier {
     /// The type of positioning to apply (static, relative, absolute, etc.)
     var position: Position
-    
+
     /// Applies position styling to the provided HTML content
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with position applied

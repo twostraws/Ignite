@@ -20,7 +20,7 @@ struct HiddenModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with visibility applied
     func body(content: some HTML) -> any HTML {
-        return content.class(isHidden ? "d-none" : nil)
+        content.class(isHidden ? "d-none" : nil)
     }
 }
 

@@ -70,7 +70,11 @@ struct FrameModifier: HTMLModifier {
         }
 
         if let maxWidth {
-            modified = modified.style("max-width: \(maxWidth.stringValue)")
+            if let maxWidth = maxWidth as? Double, maxWidth == .infinity {
+                modified = modified.class("w-100")
+            } else {
+                modified = modified.style("max-width: \(maxWidth.stringValue)")
+            }
         }
 
         if let height {
@@ -82,7 +86,11 @@ struct FrameModifier: HTMLModifier {
         }
 
         if let maxHeight {
-            modified = modified.style("max-height: \(maxHeight.stringValue)")
+            if let maxHeight = maxHeight as? Double, maxHeight == .infinity {
+                modified = modified.class("h-100")
+            } else {
+                modified = modified.style("max-height: \(maxHeight.stringValue)")
+            }
         }
 
         if alignment == .center {
@@ -119,6 +127,40 @@ public extension HTML {
         maxHeight: (any LengthUnit)? = nil,
         alignment: HorizontalAlignment = .center
     ) -> some HTML {
+        modifier(FrameModifier(
+            width: width,
+            minWidth: minWidth,
+            maxWidth: maxWidth,
+            height: height,
+            minHeight: minHeight,
+            maxHeight: maxHeight,
+            alignment: alignment
+        ))
+    }
+}
+
+public extension InlineHTML {
+    /// Creates a specific frame for this element, either using exact values or
+    /// using minimum/maximum ranges. Sizes can be specified using any type conforming
+    /// to the Unit protocol (String, Int, Double).
+    /// - Parameters:
+    ///   - width: An exact width for this element
+    ///   - minWidth: A minimum width for this element
+    ///   - maxWidth: A maximum width for this element
+    ///   - height: An exact height for this element
+    ///   - minHeight: A minimum height for this element
+    ///   - maxHeight: A maximum height for this element
+    ///   - alignment: How to align this element inside its frame
+    /// - Returns: A modified copy of the element with frame constraints applied
+    func frame(
+        width: (any LengthUnit)? = nil,
+        minWidth: (any LengthUnit)? = nil,
+        maxWidth: (any LengthUnit)? = nil,
+        height: (any LengthUnit)? = nil,
+        minHeight: (any LengthUnit)? = nil,
+        maxHeight: (any LengthUnit)? = nil,
+        alignment: HorizontalAlignment = .center
+    ) -> some InlineHTML {
         modifier(FrameModifier(
             width: width,
             minWidth: minWidth,

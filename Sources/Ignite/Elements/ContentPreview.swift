@@ -74,7 +74,7 @@ public struct ContentPreview: BlockHTML {
             }
             .font(.title2)
         } footer: {
-            let tagLinks = content.tagLinks(in: context)
+            let tagLinks = content.tagLinks()
 
             if tagLinks.isEmpty == false {
                 Group {
