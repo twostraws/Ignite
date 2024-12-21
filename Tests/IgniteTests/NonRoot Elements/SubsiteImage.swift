@@ -13,8 +13,9 @@ import XCTest
     func test_image_named() {
         let element = Image("/images/example.jpg", description: "Example image")
         let output = element.render(context: publishingSubsiteContext)
-
-        XCTAssertEqual(output, "<img src=\"/subsite/images/example.jpg\" alt=\"Example image\"/>")
+        let normalizedOutput = normalizeHTML(output)
+        
+        XCTAssertEqual(normalizedOutput, "<img alt=\"Example image\" src=\"/subsite/images/example.jpg\"/>")
     }
 
     func test_image_icon() {

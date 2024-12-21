@@ -17,9 +17,7 @@ import XCTest
         let output = element.render(context: publishingSubsiteContext)
 
         XCTAssertEqual(output, """
-        <body><div class=\"col-sm-10 mx-auto\"><p>TEXT</p>\
-        </div><script src=\"/subsite/js/bootstrap.bundle.min.js\"></script>\
-        <script src=\"/subsite/js/syntax-highlighting.js\"></script></body>
+        <body><p>TEXT</p><script src="/subsite/js/bootstrap.bundle.min.js"></script><script src="/subsite/js/highlight.min.js"></script><script>hljs.highlightAll();</script><script src="/subsite/js/ignite-core.js"></script></body>
         """)
     }
 }

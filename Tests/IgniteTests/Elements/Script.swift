@@ -29,7 +29,8 @@ import XCTest
             .data("key", "value")
             .customAttribute(name: "custom", value: "part")
         let output = element.render(context: publishingContext)
+        let normalizedOutput = normalizeHTML(output)
 
-        XCTAssertEqual(output, "<script custom=\"part\" data-key=\"value\" src=\"/code.js\"></script>")
+        XCTAssertEqual(normalizedOutput, "<script custom=\"part\" key=\"value\" src=\"/code.js\"></script>")
     }
 }

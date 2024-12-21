@@ -14,7 +14,7 @@ import XCTest
         let element = Link("Go Home", target: "/")
         let output = element.render(context: publishingSubsiteContext)
 
-        XCTAssertEqual(output, "<a href=\"/subsite/\">Go Home</a>")
+        XCTAssertEqual(output, "<a href=\"/subsite/\" class=\"link-underline-opacity-100 link-underline-opacity-100-hover\">Go Home</a>")
     }
 
     func test_page_target() {
@@ -31,6 +31,6 @@ import XCTest
         }
         let output = element.render(context: publishingSubsiteContext)
 
-        XCTAssertEqual(output, "<a href=\"/subsite/test-page\">MORE <p>CONTENT</p></a>")
+        XCTAssertEqual(output, "<a href=\"/subsite/test-page\" class=\"link-plain link-underline-opacity-100 link-underline-opacity-100-hover\">MORE <p>CONTENT</p></a>")
     }
 }

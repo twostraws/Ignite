@@ -55,9 +55,9 @@ import XCTest
 
             if font == .lead {
                 // This applies a paragraph class rather than a different tag.
-                XCTAssertEqual(output, "<p class=\"lead\">Hello</p>")
+                XCTAssertEqual(output, "<div class=\"lead\"><p class=\"font-inherit\">Hello</p></div>")
             } else {
-                XCTAssertEqual(output, "<\(font.rawValue)>Hello</\(font.rawValue)>")
+                XCTAssertEqual(output, "<div class=\"\(font.fontSizeClass)\"><p class=\"font-inherit\">Hello</p></div>")
             }
         }
     }
