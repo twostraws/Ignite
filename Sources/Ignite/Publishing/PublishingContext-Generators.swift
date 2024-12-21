@@ -250,6 +250,13 @@ extension PublishingContext {
             }
         }
 
+        // Helper function specifically for font properties
+        func addFont(_ variable: BootstrapVariable, _ font: Font, defaultFonts: [String]) {
+            if !font.isDefault {
+                cssProperties.append("\(variable.rawValue): \(font.name ?? defaultFonts.joined(separator: ","))")
+            }
+        }
+
         // Brand colors
         addProperty(.primary, theme.accent)
         addProperty(.secondary, theme.secondaryAccent)
@@ -281,10 +288,10 @@ extension PublishingContext {
         addProperty(.borderColor, theme.border)
 
         // Font families
-        addProperty(.sansSerifFont, theme.sansSerifFont.name ?? Font.systemFonts.joined(separator: ","))
-        addProperty(.monospaceFont, theme.monospaceFont.name ?? Font.monospaceFonts.joined(separator: ","))
-        addProperty(.bodyFont, theme.font.name ?? Font.systemFonts.joined(separator: ","))
-        addProperty(.codeFont, theme.codeFont.name ?? Font.monospaceFonts.joined(separator: ","))
+        addFont(.sansSerifFont, theme.sansSerifFont, defaultFonts: Font.systemFonts)
+        addFont(.monospaceFont, theme.monospaceFont, defaultFonts: Font.monospaceFonts)
+        addFont(.bodyFont, theme.font, defaultFonts: Font.systemFonts)
+        addFont(.codeFont, theme.codeFont, defaultFonts: Font.monospaceFonts)
 
         // Font sizes
         addProperty(.rootFontSize, theme.rootFontSize)
