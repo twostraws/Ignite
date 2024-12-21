@@ -5,13 +5,11 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Shows a modal dialog with the content of the page element identified by ID
-public struct ShowModal: Action {
+public struct ShowModal: Action, Sendable {
 
     /// The options used to configure the modal presentation
-    public enum Option {
+    public enum Option: Sendable {
         /// Shows the modal with a backdrop optionally dismissible by clicking on the backdrop.
         /// - Parameter dismissible: Whether the modal can be dismissed by clicking on the backdrop. Default is `true`.
         case backdrop(dismissible: Bool)
@@ -59,7 +57,7 @@ public struct ShowModal: Action {
     public func compile() -> String {
         """
         const options = {
-            \(options.map { $0.htmlOption }.joined(separator: ",\n\t"))
+            \(options.map(\.htmlOption).joined(separator: ",\n\t"))
         };
         const modal = new bootstrap.Modal(document.getElementById('\(id)'), options);
         modal.show();

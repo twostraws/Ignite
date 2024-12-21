@@ -5,30 +5,34 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Elements that conform to `DropdownElement` can be shown inside
 /// Dropdown objects.
-public protocol DropdownElement: InlineElement { }
+public protocol DropdownElement: InlineHTML {}
 
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
-public struct Dropdown: BlockElement, NavigationItem {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+public struct Dropdown: BlockHTML, NavigationItem {
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
     /// The title for this `Dropdown`.
-    var title: any InlineElement
+    var title: any InlineHTML
 
     /// The array of items to shown in this `Dropdown`.
     var items: [any DropdownElement]
 
     /// How large this dropdown should be drawn. Defaults to `.medium`.
-    var size = ButtonSize.medium
+    var size = Button.Size.medium
 
     /// How this dropdown should be styled on the screen. Defaults to `.defaut`.
     var role = Role.default
@@ -43,7 +47,7 @@ public struct Dropdown: BlockElement, NavigationItem {
     ///   - title: The title to show on this dropdown button.
     ///   - items: The elements to place inside the dropdown menu.
     public init(
-        _ title: any InlineElement,
+        _ title: any InlineHTML,
         @ElementBuilder<any DropdownElement> items: () -> [any DropdownElement]
     ) {
         self.title = title
@@ -53,7 +57,7 @@ public struct Dropdown: BlockElement, NavigationItem {
     /// Adjusts the size of this dropdown.
     /// - Parameter size: The new size.
     /// - Returns: A new `Dropdown` instance with the updated size.
-    public func dropdownSize(_ size: ButtonSize) -> Self {
+    public func dropdownSize(_ size: Button.Size) -> Self {
         var copy = self
         copy.size = size
         return copy
@@ -85,9 +89,10 @@ public struct Dropdown: BlockElement, NavigationItem {
     public func render(context: PublishingContext) -> String {
         Group(isTransparent: isNavigationItem) {
             if isNavigationItem {
-                let hasActiveItem = items.contains { context.currentRenderingPath == ($0 as? Link)?.url  }
+                let hasActiveItem = items.contains { context.currentRenderingPath == ($0 as? Link)?.url }
+
                 Link(title, target: "#")
-                    .addCustomAttribute(name: "role", value: "button")
+                    .customAttribute(name: "role", value: "button")
                     .class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
                     .data("bs-toggle", "dropdown")
                     .aria("expanded", "false")
@@ -100,19 +105,21 @@ public struct Dropdown: BlockElement, NavigationItem {
             }
 
             List {
-                for item in items {
-                    ListItem {
-                        if let link = item as? Link {
-                            item.class("dropdown-item")
+                ForEach(items) { item in
+                    if let link = item as? Link {
+                        ListItem {
+                            link.class("dropdown-item")
                                 .class(context.currentRenderingPath == link.url ? "active" : nil)
                                 .aria("current", context.currentRenderingPath == link.url ? "page" : nil)
-                        } else {
-                            item.class("dropdown-header")
+                        }
+                    } else if let text = item as? Text {
+                        ListItem {
+                            text.class("dropdown-header")
                         }
                     }
                 }
             }
-            .listStyle(.unordered(.default))
+            .listMarkerStyle(.unordered(.automatic))
             .class("dropdown-menu")
         }
         .attributes(attributes)

@@ -5,12 +5,16 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Plays Audio on your page.
-public struct Audio: BlockElement, InlineElement, LazyLoadable {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+public struct Audio: BlockHTML, InlineHTML, LazyLoadable {
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -35,7 +39,7 @@ public struct Audio: BlockElement, InlineElement, LazyLoadable {
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
     public func render(files: [String], into context: PublishingContext) -> String {
-        var output = "<audio controls\(attributes.description)>"
+        var output = "<audio controls\(attributes.description())>"
 
         for filename in files {
             if let fileType = audioTypes(for: filename) {
@@ -52,7 +56,7 @@ public struct Audio: BlockElement, InlineElement, LazyLoadable {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        guard let files = self.files else {
+        guard let files = files else {
             context.addWarning("""
             Creating audio with no name should not be possible. \
             Please file a bug report on the Ignite project.
@@ -105,7 +109,6 @@ public struct Audio: BlockElement, InlineElement, LazyLoadable {
         "webm": .webm,
         ".xm": .xm
     ]
-
 }
 
 public extension Audio {
@@ -291,5 +294,4 @@ public extension Audio {
         }
         return nil
     }
-
 }

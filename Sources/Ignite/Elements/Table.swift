@@ -5,10 +5,8 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Used to create tabulated data on a page.
-public struct Table: BlockElement {
+public struct Table: BlockHTML {
     /// Styling options for tables.
     public enum Style {
         /// All table rows and columns look the same. The default.
@@ -23,8 +21,14 @@ public struct Table: BlockElement {
         case stripedColumns
     }
 
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -33,7 +37,7 @@ public struct Table: BlockElement {
     var rows: [Row]
 
     /// An optional array of header to use at the top of this table.
-    var header: [PageElement]?
+    var header: [any HTML]?
 
     /// The styling to apply to this table. Defaults to `.plain`.
     var style = Style.plain
@@ -61,10 +65,10 @@ public struct Table: BlockElement {
     ///   - header: An array of headers to use at the top of the table.
     public init(
         @ElementBuilder<Row> rows: () -> [Row],
-        @PageElementBuilder header: () -> [PageElement]
+        @HTMLBuilder header: () -> some HTML
     ) {
         self.rows = rows()
-        self.header = header()
+        self.header = flatUnwrap(header())
     }
 
     /// Adjusts the style of this table.
@@ -113,7 +117,7 @@ public struct Table: BlockElement {
             tableAttributes.append(classes: ["table-striped-columns"])
         }
 
-        var output = "<table\(tableAttributes.description)>"
+        var output = "<table\(tableAttributes.description())>"
 
         if let caption {
             output += "<caption>\(caption)</caption>"

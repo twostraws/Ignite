@@ -7,10 +7,10 @@
 
 import Foundation
 
-extension URL {
+public extension URL {
     /// Creates URLs from static strings, which will only fail if you have made
     /// a significant typing error.
-    public init(_ string: StaticString) {
+    init(static string: StaticString) {
         if let created = URL(string: String(describing: string)) {
             self = created
         } else {

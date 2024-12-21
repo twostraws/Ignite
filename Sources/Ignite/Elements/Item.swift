@@ -5,22 +5,26 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// One item inside an accordion.
-public struct Item: PageElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+public struct Item: HTML {
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// The title to show for this item. Clicking this title will display the
     /// item's contents.
-    var title: any InlineElement
+    var title: any InlineHTML
 
     /// Whether this accordion item should start open or not.
     var startsOpen: Bool
 
     /// The contents of this accordion item.
-    var contents: [BlockElement]
+    var contents: any BlockHTML
 
     /// Used when rendering this accordion item so that we can send change
     /// notifications back the parent accordion object.
@@ -38,9 +42,9 @@ public struct Item: PageElement {
     ///   - contents: A block element builder that creates the contents
     ///   for this accordion item.
     public init(
-        _ title: any InlineElement,
+        _ title: some InlineHTML,
         startsOpen: Bool = false,
-        @BlockElementBuilder contents: () -> [BlockElement]
+        @BlockHTMLBuilder contents: () -> some BlockHTML
     ) {
         self.title = title
         self.startsOpen = startsOpen
@@ -64,7 +68,7 @@ public struct Item: PageElement {
             fatalError("Accordion sections must not be rendered without a parentID and parentOpenMode in place.")
         }
 
-        let itemID = "\(parentID)-item\(UUID().uuidString)"
+        let itemID = "\(parentID)-item\(UUID().uuidString.truncatedHash)"
 
         return Group {
             Text {

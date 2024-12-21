@@ -1,23 +1,21 @@
 //
-// SubsiteImage.swift                               
+// SubsiteImage.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
 //
 
-import Foundation
-
-import XCTest
 @testable import Ignite
+import XCTest
 
 /// Tests for the `Image` element.
-final class SubsiteImageTests: ElementTest {
- 
+@MainActor final class SubsiteImageTests: ElementTest {
     func test_image_named() {
         let element = Image("/images/example.jpg", description: "Example image")
         let output = element.render(context: publishingSubsiteContext)
-
-        XCTAssertEqual(output, "<img src=\"/subsite/images/example.jpg\" alt=\"Example image\"/>")
+        let normalizedOutput = normalizeHTML(output)
+        
+        XCTAssertEqual(normalizedOutput, "<img alt=\"Example image\" src=\"/subsite/images/example.jpg\"/>")
     }
 
     func test_image_icon() {
@@ -26,5 +24,4 @@ final class SubsiteImageTests: ElementTest {
 
         XCTAssertEqual(output, "<i class=\"bi-browser-safari\"></i>")
     }
-    
 }

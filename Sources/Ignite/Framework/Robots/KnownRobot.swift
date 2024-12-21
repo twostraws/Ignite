@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A collection of known robots.
 public enum KnownRobot: String {
     /// Apple's robot.

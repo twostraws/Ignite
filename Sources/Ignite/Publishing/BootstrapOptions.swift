@@ -1,5 +1,5 @@
 /// Configuration option including a remote or local version of Bootstrap or none at all
-public enum BootstrapOptions {
+public enum BootstrapOptions: Sendable {
     /// Use a local copy of Bootstrap. This will copy Bootstrap's CSS and JavaScript to the
     /// generated code and add references in the generated pages
     case localBootstrap

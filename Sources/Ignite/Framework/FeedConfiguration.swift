@@ -5,12 +5,10 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Configures feed generation for a site.
-public struct FeedConfiguration {
+public struct FeedConfiguration: Sendable {
     /// How much content should be provided in this feed.
-    public enum ContentMode {
+    public enum ContentMode: Sendable {
         /// Disable the feed entirely.
         case disabled
 
@@ -23,7 +21,7 @@ public struct FeedConfiguration {
 
     /// Configures an image to be used with your feed, to customize its
     /// appearance in feed readers.
-    public struct FeedImage {
+    public struct FeedImage: Sendable {
         /// The URL to your feed image.
         var url: String
 

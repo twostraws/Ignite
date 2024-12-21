@@ -13,7 +13,7 @@ import Foundation
 /// Colors that can be used for backgrounds and foregrounds. Comes with all
 /// the standard HTML color names, can be created using RGB values as
 /// integer or doubles, can be created a grayscale, or using a hex string.
-public struct Color: CustomStringConvertible {
+public struct Color: CustomStringConvertible, Equatable, Sendable {
     /// The CSS representation of this color.
     public var description: String {
         "rgb(\(red) \(green) \(blue) / \(opacity)%)"
@@ -466,6 +466,39 @@ public struct Color: CustomStringConvertible {
     /// The HTML color name "yellowgreen" (#9ACD32)
     public static let yellowGreen = Color(hex: "#9ACD32")
 
+    /// Bootstrap's primary blue color (#0d6efd)
+    public static let bootstrapBlue = Color(hex: "#0d6efd")
+
+    /// Bootstrap's indigo color (#6610f2)
+    public static let bootstrapIndigo = Color(hex: "#6610f2")
+
+    /// Bootstrap's purple color (#6f42c1)
+    public static let bootstrapPurple = Color(hex: "#6f42c1")
+
+    /// Bootstrap's pink color (#d63384)
+    public static let bootstrapPink = Color(hex: "#d63384")
+
+    /// Bootstrap's red color (#dc3545)
+    public static let bootstrapRed = Color(hex: "#dc3545")
+
+    /// Bootstrap's orange color (#fd7e14)
+    public static let bootstrapOrange = Color(hex: "#fd7e14")
+
+    /// Bootstrap's yellow color (#ffc107)
+    public static let bootstrapYellow = Color(hex: "#ffc107")
+
+    /// Bootstrap's green color (#198754)
+    public static let bootstrapGreen = Color(hex: "#198754")
+
+    /// Bootstrap's teal color (#20c997)
+    public static let bootstrapTeal = Color(hex: "#20c997")
+
+    /// Bootstrap's cyan color (#0dcaf0)
+    public static let bootstrapCyan = Color(hex: "#0dcaf0")
+
+    /// Bootstrap's gray color (#adb5bd)
+    public static let bootstrapGray = Color(hex: "#adb5bd")
+
     /// The red component for this color, in the range 0 through 255.
     public var red: Int
 
@@ -574,6 +607,26 @@ public struct Color: CustomStringConvertible {
         var copy = self
         copy.opacity = Int(Double(copy.opacity) * opacity)
         return copy
+    }
+
+    /// Creates a weighted variant of the color by mixing it with white or black.
+    /// - Parameter weight: The desired weight to apply to the color, determining how much white or black to mix.
+    /// - Returns: A new Color instance with the weighted variant.
+    public func weighted(_ weight: ColorWeight) -> Self {
+        let mixWithWhite = weight.mixWithWhite
+        let mixColor = mixWithWhite ? Color.white : Color.black
+        let percentage = Double(weight.mixPercentage) / 100.0
+
+        let newRed = Int(Double(red) * (1 - percentage) + Double(mixColor.red) * percentage)
+        let newGreen = Int(Double(green) * (1 - percentage) + Double(mixColor.green) * percentage)
+        let newBlue = Int(Double(blue) * (1 - percentage) + Double(mixColor.blue) * percentage)
+
+        return Color(
+            red: newRed,
+            green: newGreen,
+            blue: newBlue,
+            opacity: opacity
+        )
     }
 }
 

@@ -5,14 +5,30 @@
 // See LICENSE for license information.
 //
 
-import Foundation
+/// A modifier that controls element visibility
+struct HiddenModifier: HTMLModifier {
+    /// Whether the element should be hidden
+    private let isHidden: Bool
 
-public extension PageElement {
+    /// Creates a new hidden modifier with a boolean flag
+    /// - Parameter isHidden: Whether to hide the element
+    init(isHidden: Bool = true) {
+        self.isHidden = isHidden
+    }
+
+    /// Applies visibility styling to the provided HTML content
+    /// - Parameter content: The HTML element to modify
+    /// - Returns: The modified HTML with visibility applied
+    func body(content: some HTML) -> any HTML {
+        content.class(isHidden ? "d-none" : nil)
+    }
+}
+
+extension HTML {
     /// Optionally hides the view in the view hierarchy.
     /// - Parameter isHidden: Whether to hide this element or not.
-    /// - Returns: A copy of the current element, optionally hidden.
-    func hidden(_ isHidden: Bool = true) -> Self {
-        self
-            .class(isHidden ? "d-none" : nil)
+    /// - Returns: A modified copy of the element with visibility applied
+    public func hidden(_ isHidden: Bool = true) -> some HTML {
+        modifier(HiddenModifier(isHidden: isHidden))
     }
 }

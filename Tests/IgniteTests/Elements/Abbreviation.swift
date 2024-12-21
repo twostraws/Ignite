@@ -5,13 +5,11 @@
 //  See LICENSE for license information.
 //
 
-import Foundation
-
-import XCTest
 @testable import Ignite
+import XCTest
 
 /// Tests for the `Abbreviation` element.
-final class AbbreviationTests: ElementTest {
+@MainActor final class AbbreviationTests: ElementTest {
     func test_basic() {
         let element = Abbreviation("abbr", description: "abbreviation")
         let output = element.render(context: publishingContext)
@@ -20,7 +18,7 @@ final class AbbreviationTests: ElementTest {
     }
     
     func test_singleElement() {
-        let element = Abbreviation(Strong("abbr"), description: "abbreviation")
+        let element = Abbreviation("abbreviation") { Strong("abbr") }
         let output = element.render(context: publishingContext)
 
         XCTAssertEqual(output, "<abbr title=\"abbreviation\"><strong>abbr</strong></abbr>")
@@ -28,9 +26,7 @@ final class AbbreviationTests: ElementTest {
 
     func test_builder() {
         let element = Abbreviation("abbreviation") {
-            Strong {
-                "abbr"
-            }
+            Strong { "abbr" }
         }
 
         let output = element.render(context: publishingContext)

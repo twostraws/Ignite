@@ -5,10 +5,8 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A column inside a table row.
-public struct Column: PageElement, HorizontalAligning {
+public struct Column: HTML, HorizontalAligning {
     /// How to vertically align the contents of this column.
     public enum VerticalAlignment: String {
         /// Align contents to the top of the column.
@@ -21,8 +19,14 @@ public struct Column: PageElement, HorizontalAligning {
         case bottom
     }
 
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     var columnSpan = 1
@@ -32,13 +36,13 @@ public struct Column: PageElement, HorizontalAligning {
     var verticalAlignment = VerticalAlignment.top
 
     /// The items to render inside this column.
-    var items: [PageElement]
+    var items: HTMLCollection
 
     /// Creates a new column from a page element builder of items.
     /// - Parameter items: A page element builder that returns the items
     /// for this column.
-    public init(@PageElementBuilder items: () -> [PageElement]) {
-        self.items = items()
+    public init(@HTMLBuilder items: () -> some HTML) {
+        self.items = HTMLCollection(items())
     }
 
     /// Adjusts how many columns in a row this column should span.
@@ -68,7 +72,8 @@ public struct Column: PageElement, HorizontalAligning {
         if verticalAlignment != .top {
             columnAttributes.append(classes: ["align-\(verticalAlignment.rawValue)"])
         }
-
-        return "<td colspan=\"\(columnSpan)\"\(columnAttributes.description)>\(items.render(context: context))</td>"
+        columnAttributes.tag = "td colspan=\"\(columnSpan)\""
+        columnAttributes.closingTag = "td"
+        return columnAttributes.description(wrapping: HTMLCollection(items).render(context: context))
     }
 }

@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Creates one distinct section on your page, where content inside is fitted to
 /// a 12-column grid. If the items in your section have widths that add up to
 /// 12 then they will fit in a single row, otherwise they will be placed on multiple
@@ -15,9 +13,15 @@ import Foundation
 ///
 /// **Note**: A 12-column grid is the default, but you can adjust that downwards
 /// by using the `columns()` modifier.
-public struct Section: BlockElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+public struct Section: BlockHTML {
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
@@ -26,13 +30,13 @@ public struct Section: BlockElement {
     var columnCount: Int?
 
     /// The items to display in this section.
-    var items: [any BlockElement]
+    private var items: [any HTML]
 
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameter items: The items to use in this section.
-    public init(@BlockElementBuilder items: () -> [any BlockElement]) {
-        self.items = items()
+    public init(@HTMLBuilder items: () -> some HTML) {
+        self.items = flatUnwrap(items())
     }
 
     /// Adjusts the number of columns that can be fitted into this section.
@@ -62,11 +66,13 @@ public struct Section: BlockElement {
         }
 
         return Group {
-            for item in items {
-                Group {
+            ForEach(items) { item in
+                if let item = item as? any BlockHTML {
+                    Group(item)
+                        .class(item.columnWidth.className)
+                } else {
                     item
                 }
-                .class(item.columnWidth.className)
             }
         }
         .attributes(sectionAttributes)

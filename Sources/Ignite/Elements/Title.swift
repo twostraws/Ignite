@@ -5,13 +5,17 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Provides the title for a given page, which is rendered in the browser and also
 /// appears in search engine results.
 public struct Title: HeadElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// A plain-text string for the page title.
     var text: String

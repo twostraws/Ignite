@@ -5,23 +5,27 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Shows a clearly delineated box on your page, providing important information
 /// or warnings to users.
-public struct Alert: BlockElement {
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+public struct Alert: BlockHTML {
+    /// The content and behavior of this HTML.
+    public var body: some HTML { self }
+
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
-    var content: [any PageElement]
+    var content: any HTML
+
     var role = Role.default
 
     var alertClasses: [String] {
         var outputClasses = ["alert"]
-
         outputClasses.append(contentsOf: attributes.classes.sorted())
 
         switch role {
@@ -33,10 +37,9 @@ public struct Alert: BlockElement {
         }
 
         return outputClasses
-
     }
 
-    public init(@PageElementBuilder content: () -> [any PageElement]) {
+    public init(@HTMLBuilder content: () -> some HTML) {
         self.content = content()
     }
 
@@ -50,14 +53,8 @@ public struct Alert: BlockElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        let alertAttributes = attributes.appending(classes: alertClasses)
-
-        return Group {
-            for item in content {
-                item
-            }
-        }
-        .attributes(alertAttributes)
-        .render(context: context)
+        var attributes = attributes
+        attributes.append(containerAttributes: .init(classes: alertClasses))
+        return attributes.description(wrapping: content.render(context: context))
     }
 }

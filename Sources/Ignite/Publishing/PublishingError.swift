@@ -23,8 +23,8 @@ public enum PublishingError: LocalizedError {
     /// A file cannot be opened (bad encoding, etc).
     case unopenableFile(String)
 
-//    /// Publishing attempted to remove the build directory, but failed.
-//    case failedToRemoveBuildDirectory(URL)
+    /// Publishing attempted to remove the build directory, but failed.
+    case failedToRemoveBuildDirectory(URL)
 
     /// Publishing attempted to create the build directory, but failed.
     case failedToCreateBuildDirectory(URL)
@@ -75,8 +75,8 @@ public enum PublishingError: LocalizedError {
             "Markdown could not be parsed: \(url.absoluteString)."
         case .unopenableFile(let reason):
             "Failed to open file: \(reason)."
-//        case .failedToRemoveBuildDirectory(let url):
-//            "Failed to clear the build folder: \(url.absoluteString)."
+        case .failedToRemoveBuildDirectory(let url):
+            "Failed to clear the build folder: \(url.absoluteString)."
         case .failedToCreateBuildDirectory(let url):
             "Failed to create the build folder: \(url.absoluteString)."
         case .failedToCreateBuildFile(let url):

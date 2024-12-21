@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Roles let us attach semantic meaning to various elements, which Bootstrap
 /// uses to add specific styling. For example, `.danger` elements will be
 /// colored some shade of red.
@@ -40,9 +38,18 @@ public enum Role: String, CaseIterable {
     /// connotations.
     case info
 
-    /// This elements should be rendered in light colors.
+    /// This element should be rendered in light colors.
     case light
 
-    /// This elements should be rendered in dark colors.
+    /// This element should be rendered in dark colors.
     case dark
+
+    /// This element should be rendered as regular text.
+    case none
+
+    /// A list of roles that are useful for Badge elements.
+    @MainActor
+    public static let badgeRoles: [Role] = [
+        .primary, .secondary, .success, .danger, .warning, .info, .light, .dark
+    ]
 }

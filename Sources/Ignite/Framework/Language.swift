@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 // It's difficult to find a list of actual language codes
 // supported in web pages, so the list below is a composite
 // of several sources in order to provide maximum flexibility.
@@ -18,7 +16,7 @@ import Foundation
 
 // swiftlint:disable type_body_length
 /// An enum providing RFC-5646 language codes used for web pages.
-public enum Language: String {
+public enum Language: String, Sendable {
     case abkhaz = "ab"
     case afar = "aa"
     case afrikaans = "af"

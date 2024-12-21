@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// Specific values that can be used to position this element.
 public enum Position: String {
     /// No specific position.
@@ -27,13 +25,25 @@ public enum Position: String {
     case stickyBottom = "sticky-bottom"
 }
 
-public extension BlockElement {
+/// A modifier that applies CSS positioning to HTML elements.
+struct PositionModifier: HTMLModifier {
+    /// The type of positioning to apply (static, relative, absolute, etc.)
+    var position: Position
 
+    /// Applies position styling to the provided HTML content
+    /// - Parameter content: The HTML element to modify
+    /// - Returns: The modified HTML with position applied
+    func body(content: some HTML) -> any HTML {
+        content.class(position.rawValue)
+    }
+}
+
+public extension BlockHTML {
     /// Adjusts the rendering position for this element, using a handful of
     /// specific, known position values.
     /// - Parameter newPosition: A `Position` case to use for this element.
     /// - Returns: A copy of this element with the new position applied.
-    func position(_ newPosition: Position) -> Self {
-        self.class(newPosition.rawValue)
+    func position(_ newPosition: Position) -> some BlockHTML {
+        modifier(PositionModifier(position: newPosition))
     }
 }
