@@ -6,13 +6,14 @@
 //
 
 import Testing
+
 @testable import Ignite
 
 /// Tests for the `Script` element.
 @Suite("Script Tests")
-struct ScriptTests {
-    /// A publishing context with sample values for root site tests.
-    let publishingContext = try! PublishingContext(for: TestSite(), from: "Test Site")
+@MainActor struct ScriptTests {
+    let publishingContext = ElementTest.publishingContext
+
     @Test("Code Test")
     func test_code() async throws {
         let element = Script(code: "javascript code")
@@ -31,9 +32,12 @@ struct ScriptTests {
     func test_attributes() async throws {
         let element = Script(file: "/code.js")
             .data("key", "value")
-            .addCustomAttribute(name: "custom", value: "part")
+            .customAttribute(name: "custom", value: "part")
         let output = element.render(context: publishingContext)
-
-        #expect(output == "<script custom=\"part\" data-key=\"value\" src=\"/code.js\"></script>")
+        let normalizedOutput = ElementTest.normalizeHTML(output)
+        #expect(
+            normalizedOutput
+                == "<script custom=\"part\" key=\"value\" src=\"/code.js\"></script>"
+        )
     }
 }

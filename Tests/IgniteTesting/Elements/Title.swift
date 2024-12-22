@@ -6,15 +6,15 @@
 //
 
 import Foundation
-
 import Testing
+
 @testable import Ignite
 
 /// Tests for the `title` element.
 @Suite("Title Tests")
-struct TitleTests {
-    /// A publishing context with sample values for root site tests.
-    let publishingContext = try! PublishingContext(for: TestSite(), from: "Test Site")
+@MainActor struct TitleTests {
+    let publishingContext = ElementTest.publishingContext
+
     @Test("Empty Title Test")
     func test_empty() async throws {
         let element = Title("")

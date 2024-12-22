@@ -5,8 +5,9 @@
 // See LICENSE for license information.
 //
 
-@testable import Ignite
 import XCTest
+
+@testable import Ignite
 
 /// Tests for the `Span` element.
 @MainActor final class SpanTests: ElementTest {

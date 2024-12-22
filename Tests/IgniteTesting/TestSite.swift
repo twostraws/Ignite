@@ -12,20 +12,19 @@ import Ignite
 struct TestSite: Site {
     var name = "My Test Site"
     var titleSuffix = " - My Test Site"
-    var url: URL = URL("https://www.yoursite.com")
+    var url = URL(static: "https://www.yoursite.com")
 
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
-    var syntaxHighlighters = [SyntaxHighlighter.objectiveC]
 
     var homePage = TestPage()
-    var theme = EmptyTheme()
+    var layout = EmptyLayout()
 }
 
 /// An example page  used in tests.
-struct TestPage: StaticPage {
+struct TestPage: StaticLayout {
     var title = "Home"
 
-    func body(context: PublishingContext) -> [any BlockElement] {
-        Text("Example text")
+    var body: some HTML {
+        Text("Hello, World!")
     }
 }

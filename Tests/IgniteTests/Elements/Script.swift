@@ -6,6 +6,7 @@
 //
 
 import XCTest
+
 @testable import Ignite
 
 /// Tests for the `Script` element.
@@ -31,6 +32,8 @@ import XCTest
         let output = element.render(context: publishingContext)
         let normalizedOutput = normalizeHTML(output)
 
-        XCTAssertEqual(normalizedOutput, "<script custom=\"part\" key=\"value\" src=\"/code.js\"></script>")
+        XCTAssertEqual(
+            normalizedOutput,
+            "<script custom=\"part\" key=\"value\" src=\"/code.js\"></script>")
     }
 }

@@ -6,15 +6,15 @@
 //
 
 import Foundation
-
 import Testing
+
 @testable import Ignite
 
 /// Tests for plain text.
 @Suite("Plain Text Tests")
-struct PlainTextTests {
-    /// A publishing context with sample values for root site tests.
-    let publishingContext = try! PublishingContext(for: TestSite(), from: "Test Site")
+@MainActor struct PlainTextTests {
+    let publishingContext = ElementTest.publishingContext
+
     @Test("Single Element")
     func test_singleElement() async throws {
         let element = "This is a test"

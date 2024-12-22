@@ -5,8 +5,9 @@
 // See LICENSE for license information.
 //
 
-@testable import Ignite
 import XCTest
+
+@testable import Ignite
 
 /// Tests for the `time` element.
 @MainActor final class TimeTests: ElementTest {
@@ -18,16 +19,18 @@ import XCTest
     }
 
     func test_builder() {
-        guard let customTimeInterval = DateComponents(
-            calendar: .current,
-            timeZone: .gmt,
-            year: 2024,
-            month: 5,
-            day: 22,
-            hour: 20,
-            minute: 0,
-            second: 30
-        ).date?.timeIntervalSince1970 else {
+        guard
+            let customTimeInterval = DateComponents(
+                calendar: .current,
+                timeZone: .gmt,
+                year: 2024,
+                month: 5,
+                day: 22,
+                hour: 20,
+                minute: 0,
+                second: 30
+            ).date?.timeIntervalSince1970
+        else {
             XCTFail("Failed to create test data!")
             return
         }
@@ -35,6 +38,8 @@ import XCTest
         let element = Time("This is a test", dateTime: dateTime)
         let output = element.render(context: publishingContext)
 
-        XCTAssertEqual(output, "<time datetime=\"2024-05-22T20:00:30Z\">This is a test</time>")
+        XCTAssertEqual(
+            output,
+            "<time datetime=\"2024-05-22T20:00:30Z\">This is a test</time>")
     }
 }

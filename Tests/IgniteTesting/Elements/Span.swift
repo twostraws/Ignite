@@ -6,15 +6,15 @@
 //
 
 import Foundation
-
 import Testing
+
 @testable import Ignite
 
 /// Tests for the `Span` element.
 @Suite("Span Tests")
-struct SpanTests {
-    /// A publishing context with sample values for root site tests.
-    let publishingContext = try! PublishingContext(for: TestSite(), from: "Test Site")
+@MainActor struct SpanTests {
+    let publishingContext = ElementTest.publishingContext
+
     @Test("Single Element Test")
     func test_singleElement() async throws {
         let element = Span("This is a test")

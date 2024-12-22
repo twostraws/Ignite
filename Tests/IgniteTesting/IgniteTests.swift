@@ -11,15 +11,15 @@ import XCTest
 
 // swiftlint:disable force_try
 /// A base class that sets up an example publishing context for testing purposes.
-@MainActor class ElementTest: XCTestCase {
+@MainActor class ElementTest {
     /// A publishing context with sample values for root site tests.
-    let publishingContext = try! PublishingContext(
+    static let publishingContext = try! PublishingContext(
         for: TestSite(), from: #filePath)
     /// A publishing context with sample values for subsite tests.
-    let publishingSubsiteContext = try! PublishingContext(
+    static let publishingSubsiteContext = try! PublishingContext(
         for: TestSubsite(), from: #filePath)
-
-    public func normalizeHTML(_ html: String) -> String {
+    
+    public static func normalizeHTML(_ html: String) -> String {
         // Function to sort attributes within a tag
         func sortAttributes(in attributes: String) -> String {
             // Match key="value" pairs
@@ -84,5 +84,4 @@ import XCTest
     }
 
 }
-
 // swiftlint:enable force_try

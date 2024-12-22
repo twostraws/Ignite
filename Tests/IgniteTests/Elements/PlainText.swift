@@ -5,8 +5,9 @@
 // See LICENSE for license information.
 //
 
-@testable import Ignite
 import XCTest
+
+@testable import Ignite
 
 /// Tests for plain text.
 @MainActor final class PlainTextTests: ElementTest {
