@@ -64,25 +64,23 @@ public struct CoreAttributes: Sendable {
     /// Each `ContainerAttributes` represents a wrapper div with styling
     var containerAttributes = OrderedSet<ContainerAttributes>() {
         didSet {
-            containerAttributes = OrderedSet(containerAttributes.sorted { a, b in
+            containerAttributes = OrderedSet(containerAttributes.sorted { first, second in
                 // First handle transform vs animation containers
-                if a.type == .transform && b.type == .animation {
-                    return false // transform goes after animation
+                if first.type == .transform && second.type == .animation {
+                    // transform goes after animation
+                    false
+                } else if first.type == .animation && second.type == .transform {
+                    // animation goes before transform
+                    true
+                } else if first.type == .click {
+                    // Click containers should always be outermost
+                    false // first goes after second
+                } else if second.type == .click {
+                    true // second goes after first
+                } else {
+                    // For all other containers, maintain their relative positions
+                    containerAttributes.firstIndex(of: first)! < containerAttributes.firstIndex(of: second)!
                 }
-                if a.type == .animation && b.type == .transform {
-                    return true // animation goes before transform
-                }
-
-                // Click containers should always be outermost
-                if a.type == .click {
-                    return false // a goes after b
-                }
-                if b.type == .click {
-                    return true // b goes after a
-                }
-
-                // For all other containers, maintain their relative positions
-                return containerAttributes.firstIndex(of: a)! < containerAttributes.firstIndex(of: b)!
             })
         }
     }
@@ -115,9 +113,9 @@ public struct CoreAttributes: Sendable {
     /// All CSS classes for this element collapsed down to a string.
     var classString: String {
         if classes.isEmpty {
-            return ""
+            ""
         } else {
-            return " class=\"\(classes.joined(separator: " "))\""
+            " class=\"\(classes.joined(separator: " "))\""
         }
     }
 
@@ -178,7 +176,8 @@ public struct CoreAttributes: Sendable {
     /// - Parameter content: Optional content to wrap with opening and closing tags
     /// - Returns: A string containing all attributes and optional content wrapped in tags
     func description(wrapping content: String? = nil) -> String {
-        let attributes = "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
+        let attributes = idString + customAttributeString + classString + styleString
+                         + dataString + ariaString + eventString
 
         var result = content ?? attributes
 
@@ -203,7 +202,9 @@ public struct CoreAttributes: Sendable {
         // Apply containers from inner to outer
         for container in containerAttributes where !container.isEmpty {
             let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.joined(separator: " "))\""
-            let styleAttr = container.styles.isEmpty ? "" : " style=\"\(container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; "))\""
+
+            let allStyles = container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; ")
+            let styleAttr = container.styles.isEmpty ? "" : " style=\"\(allStyles)\""
 
             var eventAttr = ""
             for event in container.events where event.actions.isEmpty == false {
@@ -256,9 +257,8 @@ public struct CoreAttributes: Sendable {
     /// - Returns: A copy of the previous `CoreAttributes` object with
     /// the extra aria applied.
     func appending(aria: AttributeValue?) -> CoreAttributes {
-        guard let aria else {
-            return self
-        }
+        guard let aria else { return self }
+
         var copy = self
         copy.aria.insert(aria)
         return copy

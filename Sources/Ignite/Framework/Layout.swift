@@ -44,6 +44,6 @@ public extension Layout {
         get {
             String(describing: self).truncatedHash
         }
-        set {}
+        set {} // swiftlint:disable:this unused_setter_value
     }
 }

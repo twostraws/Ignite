@@ -47,7 +47,7 @@ public extension HTML {
             let description = String(describing: self)
             return (location + description).truncatedHash
         }
-        set {}
+        set {} // swiftlint:disable:this unused_setter_value
     }
 }
 
@@ -94,22 +94,13 @@ extension HTML {
 
 // Style modifiers
 public extension HTML {
-    /// Adds a single CSS class to the element.
-    /// - Parameter className: The name of the CSS class to add
-    /// - Returns: The modified HTML element
-    func `class`(_ className: String) -> Self {
-        var attributes = attributes
-        attributes.classes.append(className)
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
+    @discardableResult
     func `class`(_ newClasses: String?...) -> Self {
         var attributes = attributes
-        let compacted = newClasses.compactMap { $0 }
+        let compacted = newClasses.compactMap(\.self)
         attributes.classes.formUnion(compacted)
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -126,7 +117,11 @@ public extension HTML {
 public extension HTML {
     /// Checks if this element is an empty HTML element.
     var isEmptyHTML: Bool {
-        self is EmptyHTML
+        if let collection = self as? HTMLCollection {
+            collection.elements.allSatisfy { $0 is EmptyHTML }
+        } else {
+            self is EmptyHTML
+        }
     }
 
     /// The default status as a primitive element.
@@ -256,6 +251,16 @@ public extension HTML {
         return self
     }
 
+    /// Adds a wrapper div with the specified attributes to the element's storage
+    /// - Parameter newAttributes: The attributes to apply to the wrapper div
+    /// - Returns: The original element
+    internal func containerAttributes(_ newAttributes: ContainerAttributes...) -> Self {
+        var attributes = attributes
+        attributes.containerAttributes.formUnion(newAttributes.map { $0 })
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
     /// Adds a wrapper div with the specified class to the element's storage
     /// - Parameter className: The class to apply to the wrapper div
     /// - Returns: The original element
@@ -271,7 +276,6 @@ public extension HTML {
     /// - Returns: The original element
     func containerStyle(_ styles: AttributeValue...) -> Self {
         var attributes = attributes
-        let styles = styles.map { $0 }
         attributes.containerAttributes.append(.init(styles: OrderedSet(styles)))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -300,30 +304,38 @@ public extension HTML {
 /// - Returns: An array of unwrapped HTML elements
 @MainActor func flatUnwrap(_ content: Any) -> [any HTML] {
     if let array = content as? [Any] {
-        return array.flatMap { flatUnwrap($0) }
+        array.flatMap { flatUnwrap($0) }
     } else if let html = content as? any HTML {
         if let anyHTML = html as? AnyHTML {
-            return [anyHTML.unwrapped.body]
+            [anyHTML.unwrapped.body]
         } else if let collection = html as? HTMLCollection {
-            return collection.elements
+            collection.elements
+        } else {
+            [html.body]
         }
-        return [html.body]
+    } else {
+        []
     }
-    return []
 }
 
+
+/// Recursively flattens nested `InlineHTML` content into a single array, unwrapping any body properties.
+/// - Parameter content: The content to flatten and unwrap
+/// - Returns: An array of unwrapped `InlineHTML` elements
 @MainActor func flatUnwrap(_ content: Any) -> [any InlineHTML] {
     if let array = content as? [Any] {
-        return array.flatMap { flatUnwrap($0) }
+        array.flatMap { flatUnwrap($0) }
     } else if let html = content as? any InlineHTML {
         if let anyHTML = html as? AnyHTML, let wrapped = anyHTML.unwrapped.body as? (any InlineHTML) {
-            return [wrapped]
+            [wrapped]
         } else if let collection = html as? HTMLCollection, let elements = collection.elements as? [any InlineHTML] {
-            return elements
+            elements
+        } else {
+            [html]
         }
-        return [html]
+    } else {
+        []
     }
-    return []
 }
 
 /// Unwraps HTML content to its most basic form, collecting multiple elements into an HTMLCollection if needed.
@@ -340,5 +352,6 @@ public extension HTML {
         }
         return html.body
     }
+
     return EmptyHTML()
 }

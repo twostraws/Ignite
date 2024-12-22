@@ -1,0 +1,13 @@
+identifier_name:
+  excluded:
+    - x
+    - y
+    - x1
+    - x2
+    - y1
+    - y2
+    - i
+    - j
+    - id
+    - to
+    - up

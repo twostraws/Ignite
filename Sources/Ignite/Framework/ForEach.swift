@@ -6,7 +6,7 @@
 //
 
 /// A structure that creates HTML content by mapping over a sequence of data.
-public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML, ListableElement {
+public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML {
     /// The body content created by mapping over the data sequence.
     public var body: some HTML { self }
 

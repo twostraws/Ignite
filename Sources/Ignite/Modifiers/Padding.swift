@@ -9,7 +9,7 @@ struct PaddingModifier: HTMLModifier {
     var length: (any LengthUnit)?
     var amount: SpacingAmount?
     var edges = Edge.all
-    
+
     func body(content: some HTML) -> any HTML {
         if let length {
             content.edgeAdjust(prefix: "padding", edges, length.stringValue)

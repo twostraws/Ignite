@@ -52,6 +52,7 @@ public struct VStack: BlockHTML {
         var itemAttributes = CoreAttributes()
         itemAttributes.append(classes: "mb-0")
         var items = [any HTML]()
+
         for item in self.items {
             switch item {
             case let container as HTMLCollection:
@@ -67,10 +68,12 @@ public struct VStack: BlockHTML {
 
         var attributes = attributes
         attributes.append(classes: "vstack")
+
         attributes.append(styles:
             .init(name: "display", value: "block"),
             .init(name: "width", value: "100%")
         )
+
         if let customSpacing {
             attributes.append(styles: .init(name: .gap, value: "\(customSpacing)px"))
         } else if let systemSpacing {
@@ -80,6 +83,7 @@ public struct VStack: BlockHTML {
         AttributeStore.default.merge(attributes, intoHTML: id)
         attributes.tag = "div"
         let content = items.map { $0.render(context: context) }.joined()
+
         return attributes.description(wrapping: content)
     }
 }

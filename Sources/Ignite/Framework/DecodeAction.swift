@@ -44,7 +44,7 @@ public struct DecodeAction {
     /// - Returns: The decoded type, if the file exists, can be loaded, and decodes
     /// correctly, otherwise nil.
     public func callAsFunction<T: Decodable>(
-        resource: String,
+        _ resource: String,
         as type: T.Type = T.self,
         dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
         keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys

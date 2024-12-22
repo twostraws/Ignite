@@ -89,4 +89,3 @@ public struct TextField: InlineHTML, BlockHTML {
         return attributes.description()
     }
 }
-
