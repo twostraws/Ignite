@@ -131,6 +131,7 @@ public final class PublishingContext {
         try await generateContent()
         try copyResources()
         try generateThemes(site.allThemes)
+        try generateMediaQueryCSS()
         generateAnimations()
         try await generateTagLayouts()
         try generateSiteMap()
