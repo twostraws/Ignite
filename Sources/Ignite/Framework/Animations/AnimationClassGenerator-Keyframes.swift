@@ -12,7 +12,12 @@ extension AnimationClassGenerator {
     /// - Parameter animation: The keyframe animation to process
     /// - Returns: A set of CSS properties including animation name and timing
     func buildBaseKeyframeClass(_ animation: Animation) -> Set<String> {
-        var baseProperties: Set<String> = ["cursor: pointer"]
+        var baseProperties = Set<String>()
+
+        if triggerMap[.click] != nil {
+            baseProperties.insert("cursor: pointer")
+        }
+
         let timing = getAnimationTiming(animation)
         baseProperties.insert("animation: \(name)-appear \(timing)")
         return baseProperties

@@ -39,9 +39,7 @@ public struct ZStack: BlockHTML {
         var items = [any HTML]()
 
         for item in self.items {
-            if let modified = item as? ModifiedHTML {
-                items.append(modified.content)
-            } else if let container = item as? HTMLCollection {
+            if let container = item as? HTMLCollection {
                 items.append(contentsOf: container.elements)
             } else {
                 items.append(item)
