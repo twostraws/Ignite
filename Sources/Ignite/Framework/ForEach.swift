@@ -46,17 +46,4 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML {
 
         return output
     }
-
-    /// Renders the ForEach content, handling list items automatically.
-    /// - Parameter context: The current publishing context.
-    /// - Returns: The rendered HTML string.
-    public func renderInList(context: PublishingContext) -> String {
-        var output = ""
-
-        for item in HTMLCollection(data.map(content)) {
-            output += "<li>\(item.render(context: context))</li>"
-        }
-
-        return output
-    }
 }
