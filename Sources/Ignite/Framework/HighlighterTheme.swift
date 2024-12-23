@@ -9,11 +9,11 @@
 public enum HighlighterTheme: CustomStringConvertible, Hashable, Sendable {
     case githubLight
     case githubDark
-    case highlightJS
-    case monokai
+    case prism
+    case okaidia
     case solarizedLight
     case solarizedDark
-    case tomorrowNight
+    case tomorrow
     case twilight
     case xcodeLight
     case xcodeDark
@@ -25,25 +25,25 @@ public enum HighlighterTheme: CustomStringConvertible, Hashable, Sendable {
     var url: String {
         switch self {
         case .xcodeDark:
-            return "css/highlightjs-xcode-dark.min.css"
-        case .highlightJS:
-            return "css/highlightjs-default.min.css"
+            return "css/prism-xcode-dark.css"
+        case .prism:
+            return "css/prism-default.min.css"
         case .githubLight:
-            return "css/highlightjs-github-light.min.css"
+            return "css/prism-github-light.css"
         case .githubDark:
-            return "css/highlightjs-github-dark.min.css"
+            return "css/prism-github-dark.css"
         case .xcodeLight:
-            return "css/highlightjs-xcode-light.min.css"
-        case .monokai:
-            return "css/highlightjs-monokai.min.css"
+            return "css/prism-xcode-light.css"
+        case .okaidia:
+            return "css/prism-okaidia.min.css"
         case .solarizedLight:
-            return "css/highlightjs-solarized-light.min.css"
+            return "css/prism-solarized-light.min.css"
         case .solarizedDark:
-            return "css/highlightjs-solarized-dark.min.css"
-        case .tomorrowNight:
-            return "css/highlightjs-tomorrow-night-bright.min.css"
+            return "css/prism-solarized-dark.css"
+        case .tomorrow:
+            return "css/prism-tomorrow.css"
         case .twilight:
-            return "css/highlightjs-twilight.min.css"
+            return "css/prism-twilight.css"
         case .custom(_, let filePath):
             return filePath
         case .none:
@@ -57,11 +57,11 @@ public enum HighlighterTheme: CustomStringConvertible, Hashable, Sendable {
         case .xcodeLight, .automatic: "xcode-light"
         case .githubLight: "github-light"
         case .githubDark: "github-dark"
-        case .highlightJS: "highlight-JS"
-        case .monokai: "monokai"
+        case .prism: "default"
+        case .okaidia: "okaidia"
         case .solarizedLight: "solarized-light"
         case .solarizedDark: "solarized-dark"
-        case .tomorrowNight: "tomorrow-night"
+        case .tomorrow: "tomorrow"
         case .twilight: "twilight"
         case .xcodeDark: "xcode-dark"
         case .custom(let name, _): name

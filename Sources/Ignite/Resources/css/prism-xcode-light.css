@@ -1,0 +1,102 @@
+code[class*="language-"],
+pre[class*="language-"] {
+    color: #000000;
+    background: transparent;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Monaco, 'Andale Mono', 'Ubuntu Mono', Courier, monospace;
+    font-size: 1em;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+    tab-size: 4;
+    hyphens: none;
+}
+
+pre[class*="language-"] {
+    padding: 1em;
+    margin: .5em 0;
+    overflow: auto;
+    border-radius: 0.3em;
+    background: #ffffff;
+}
+
+:not(pre) > code[class*="language-"] {
+    padding: .1em;
+    border-radius: .3em;
+    background: #f5f5f5;
+}
+
+/* Exact Xcode light theme colors */
+.token.comment {
+    color: #007400;
+}
+
+.token.keyword,
+.token.tag,
+.token.selector-tag {
+    color: #AA0D91;
+}
+
+.token.string,
+.token.attr-value {
+    color: #C41A16;
+}
+
+.token.regex,
+.token.important {
+    color: #0E0EFF;
+}
+
+.token.number,
+.token.symbol,
+.token.constant {
+    color: #1C00CF;
+}
+
+.token.property,
+.token.attr-name {
+    color: #836C28;
+}
+
+.token.function,
+.token.variable {
+    color: #3F6E74;
+}
+
+.token.class-name,
+.token.builtin {
+    color: #5C2699;
+}
+
+.token.operator,
+.token.punctuation {
+    color: #000000;
+}
+
+.token.meta {
+    color: #643820;
+}
+
+/* Only add backgrounds for diff highlights */
+.token.inserted {
+    background-color: rgba(186, 238, 186, 0.3);
+}
+
+.token.deleted {
+    background-color: rgba(255, 200, 189, 0.3);
+}
+
+.token.formula {
+    font-style: italic;
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+
+.token.italic {
+    font-style: italic;
+}

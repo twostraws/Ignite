@@ -43,18 +43,19 @@ public struct CodeBlock: BlockHTML {
         guard context.site.allHighlighterThemes.isEmpty == false else {
             fatalError("At least one of your themes must specify a syntax highlighter.")
         }
-        return if let language {
-            """
+        if let language {
+            context.highlighterLanguages.insert(language)
+            return """
             <pre\(attributes.description())>\
-            <code class=\"hljs language-\(language)\">\
+            <code class=\"language-\(language)\">\
             \(content)\
             </code>\
             </pre>
             """
         } else {
-            """
+            return """
             <pre\(attributes.description())>\
-            <code class=\"hljs\">\(content)</code>\
+            <code>\(content)</code>\
             </pre>
             """
         }

@@ -10,7 +10,7 @@ public enum HighlighterLanguage: String, Sendable {
     case appleScript = "applescript"
     case bash = "bash"
     case c = "c" // swiftlint:disable:this identifier_name
-    case cLike = "c-like"
+    case cLike = "clike"
     case cPlusPlus = "cpp"
     case cSharp = "csharp"
     case css = "css"
@@ -36,4 +36,33 @@ public enum HighlighterLanguage: String, Sendable {
     case typeScript = "typescript"
     case webAssembly = "wasm"
     case yaml = "yaml"
+
+    var dependency: HighlighterLanguage? {
+        switch self {
+        case .c: .cLike
+        case .cPlusPlus: .c
+        case .cSharp: .cLike
+        case .dart: .cLike
+        case .go: .cLike
+        case .java: .cLike
+        case .javaScript: .cLike
+        case .kotlin: .cLike
+        case .markdown: .markup
+        case .objectiveC: .c
+        case .ruby: .cLike
+        case .typeScript: .javaScript
+        default: nil
+        }
+    }
+
+    var files: [String] {
+        var result = ["prism-core.js"]
+
+        if let dependency {
+            result.append("\(dependency.rawValue).js")
+        }
+
+        result.append("\(self.rawValue).js")
+        return result
+    }
 }
