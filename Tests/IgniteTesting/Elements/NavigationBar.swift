@@ -21,11 +21,11 @@ import Testing
 
         #expect(output.contains("container-fluid col"))
     }
-    @Test("Column With Value Test")
-    func test_columnWidthValueSet() async throws {
-        let element = NavigationBar().width(.count(10))
+    @Test("Column With Value Test", arguments: [10, 20, 30])
+    func test_columnWidthValueSet(count: Int) async throws {
+        let element = NavigationBar().width(.count(count))
         let output = element.render(context: publishingContext)
 
-        #expect(output.contains("container col-md-10"))
+        #expect(output.contains("container col-md-\(count)"))
     }
 }

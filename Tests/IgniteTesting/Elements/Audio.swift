@@ -16,24 +16,24 @@ import Testing
 @MainActor struct AudioTests {
     let publishingContext = ElementTest.publishingContext
 
-    @Test("Lone File Audio")
-    func test_loneFileAudio() async throws {
-        let element = Audio("/audio/example.mp3")
+    @Test("Lone File Audio", arguments: ["/audio/example.mp3"])
+    func test_loneFileAudio(audioFile: String) async throws {
+        let element = Audio(audioFile)
         let output = element.render(context: publishingContext)
 
         #expect(
             output == """
-                <audio controls><source src="/audio/example.mp3" type="audio/mp3">Your browser does not support the audio element.</audio>
+                <audio controls><source src="\(audioFile)" type="audio/mp3">Your browser does not support the audio element.</audio>
                 """)
     }
-    @Test("Multiple File Audio")
-    func test_multiFileAudio() async throws {
-        let element = Audio("/audio/example1.mp3", "/audio/example2.wav")
+    @Test("Multiple File Audio", arguments: ["/audio/example1.mp3"], ["/audio/example1.wav"])
+    func test_multiFileAudio(audioFile1: String, audioFile2: String) async throws {
+        let element = Audio(audioFile1, audioFile2)
         let output = element.render(context: publishingContext)
 
         #expect(
             output == """
-                <audio controls><source src="/audio/example1.mp3" type="audio/mp3"><source src="/audio/example2.wav" type="audio/wav">Your browser does not support the audio element.</audio>
+                <audio controls><source src="\(audioFile1)" type="audio/mp3"><source src="\(audioFile2)" type="audio/wav">Your browser does not support the audio element.</audio>
                 """)
     }
 }

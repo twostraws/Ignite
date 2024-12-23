@@ -15,14 +15,14 @@ import Testing
 @MainActor struct SubsiteScriptTests {
     let publishingContext = ElementTest.publishingSubsiteContext
     
-    @Test("Empty Element")
-    func test_empty() async throws {
-        let element = Script(file: "/js/bootstrap.bundle.min.js").render(
+    @Test("Empty Element", arguments: ["/js/bootstrap.bundle.min.js"])
+    func test_empty(script: String) async throws {
+        let element = Script(file: script).render(
             context: publishingContext)
         let output = element.render(context: publishingContext)
 
         #expect(
-            output == "<script src=\"/subsite/js/bootstrap.bundle.min.js\"></script>")
+            output == "<script src=\"/subsite\(script)\"></script>")
     }
 
 }

@@ -55,24 +55,27 @@ import Testing
         )
 
     }
-    @Test("Custom Font Test")
-    func test_customFont() async throws {
-        for font in Font.Style.allCases {
-            let element = Text("Hello").font(font)
-            let output = element.render(context: publishingContext)
+    @Test(
+        "Custom Font Test",
+        arguments: [
+            Font.Style.lead, .body, .title1, .title2, .title3, .title4, .title5,
+            .title6,
+        ])
+    func test_customFont(font: Font.Style) async throws {
+        let element = Text("Hello").font(font)
+        let output = element.render(context: publishingContext)
 
-            if font == .lead {
-                // This applies a paragraph class rather than a different tag.
-                #expect(
-                    output
-                        == "<div class=\"lead\"><p class=\"font-inherit\">Hello</p></div>"
-                )
-            } else {
-                #expect(
-                    output
-                        == "<div class=\"\(font.fontSizeClass)\"><p class=\"font-inherit\">Hello</p></div>"
-                )
-            }
+        if font == .lead {
+            // This applies a paragraph class rather than a different tag.
+            #expect(
+                output
+                    == "<div class=\"lead\"><p class=\"font-inherit\">Hello</p></div>"
+            )
+        } else {
+            #expect(
+                output
+                    == "<div class=\"\(font.fontSizeClass)\"><p class=\"font-inherit\">Hello</p></div>"
+            )
         }
     }
     @Test("Markdown Test")

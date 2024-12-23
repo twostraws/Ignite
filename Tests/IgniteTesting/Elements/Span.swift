@@ -15,18 +15,18 @@ import Testing
 @MainActor struct SpanTests {
     let publishingContext = ElementTest.publishingContext
 
-    @Test("Single Element Test")
-    func test_singleElement() async throws {
-        let element = Span("This is a test")
+    @Test("Single Element Test", arguments: ["This is a test", "Another test"])
+    func test_singleElement(spanText: String) async throws {
+        let element = Span(spanText)
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<span>This is a test</span>")
+        #expect(output == "<span>\(spanText)</span>")
     }
-    @Test("Builder Test")
-    func test_builder() async throws {
-        let element = Span { "This is a test" }
+    @Test("Builder Test", arguments: ["This is a test", "Another test"])
+    func test_builder(spanText: String) async throws {
+        let element = Span { spanText }
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<span>This is a test</span>")
+        #expect(output == "<span>\(spanText)</span>")
     }
 }

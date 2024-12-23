@@ -15,21 +15,21 @@ import Testing
 @MainActor struct SubsiteImageTests {
     let publishingContext = ElementTest.publishingSubsiteContext
 
-    @Test("Image Test")
-    func test_image_named() async throws {
-        let element = Image("/images/example.jpg", description: "Example image")
+    @Test("Image Test", arguments: ["/images/example.jpg"], ["Example image"])
+    func test_image_named(imageFile: String, description: String) async throws {
+        let element = Image(imageFile, description: description)
         let output = element.render(context: publishingContext)
         let normalizedOutput = ElementTest.normalizeHTML(output)
         #expect(
             normalizedOutput
-                == "<img alt=\"Example image\" src=\"/subsite/images/example.jpg\"/>")
+            == "<img alt=\"\(description)\" src=\"/subsite\(imageFile)\"/>")
     }
-    @Test("Icon Test")
-    func test_image_icon() async throws {
+    @Test("Icon Test", arguments: ["browser-safari"], ["Safari logo"])
+    func test_image_icon(systemName: String, description: String) async throws {
         let element = Image(
-            systemName: "browser-safari", description: "Safari logo")
+            systemName: systemName, description: description)
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<i class=\"bi-browser-safari\"></i>")
+        #expect(output == "<i class=\"bi-\(systemName)\"></i>")
     }
 }

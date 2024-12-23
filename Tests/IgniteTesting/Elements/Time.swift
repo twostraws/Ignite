@@ -15,15 +15,15 @@ import Testing
 @MainActor struct TimeTests {
     let publishingContext = ElementTest.publishingContext
 
-    @Test("Without DateTime Test")
-    func test_without_datetime() async throws {
-        let element = Time("This is a test")
+    @Test("Without DateTime Test", arguments: ["This is a test", "Another test"])
+    func test_without_datetime(timeText: String) async throws {
+        let element = Time(timeText)
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<time>This is a test</time>")
+        #expect(output == "<time>\(timeText)</time>")
     }
-    @Test("Builder Test")
-    func test_builder() async throws {
+    @Test("Builder Test", arguments: ["This is a test", "Another test"])
+    func test_builder(timeText: String) async throws {
         guard
             let customTimeInterval = DateComponents(
                 calendar: .current,
@@ -40,12 +40,12 @@ import Testing
             return
         }
         let dateTime = Date(timeIntervalSince1970: customTimeInterval)
-        let element = Time("This is a test", dateTime: dateTime)
+        let element = Time(timeText, dateTime: dateTime)
         let output = element.render(context: publishingContext)
 
         #expect(
             output
-                == "<time datetime=\"2024-05-22T20:00:30Z\">This is a test</time>"
+            == "<time datetime=\"2024-05-22T20:00:30Z\">\(timeText)</time>"
         )
     }
 }

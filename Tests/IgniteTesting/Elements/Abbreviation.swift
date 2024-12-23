@@ -16,27 +16,27 @@ import Testing
 struct AbbreviationTests {
     let publishingContext = ElementTest.publishingContext
 
-    @Test("Basic Abbreviation Test")
-    func test_basic() async throws {
-        let element = Abbreviation("abbr", description: "abbreviation")
+    @Test("Basic Abbreviation Test", arguments: ["abbr"], ["abbreviation"])
+    func test_basic(abbreviation: String, description: String) async throws {
+        let element = Abbreviation(abbreviation, description: description)
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<abbr title=\"abbreviation\">abbr</abbr>")
+        #expect(output == "<abbr title=\"\(description)\">\(abbreviation)</abbr>")
     }
-    @Test("Single Element Abbreviation Test")
-    func test_singleElement() async throws {
-        let element = Abbreviation("abbreviation") { Strong("abbr") }
+    @Test("Single Element Abbreviation Test", arguments: ["abbreviation"], ["abbr"])
+    func test_singleElement(description: String, abbreviation: String) async throws {
+        let element = Abbreviation(description) { Strong(abbreviation) }
         let output = element.render(context: publishingContext)
 
         #expect(
             output
-                == "<abbr title=\"abbreviation\"><strong>abbr</strong></abbr>")
+                == "<abbr title=\"\(description)\"><strong>\(abbreviation)</strong></abbr>")
     }
-    @Test("Builder Abbreviation Test")
-    func test_builder() async throws {
-        let element = Abbreviation("abbreviation") {
+    @Test("Builder Abbreviation Test", arguments: ["abbreviation"], ["abbr"])
+    func test_builder(description: String, abbreviation: String) async throws {
+        let element = Abbreviation(description) {
             Strong {
-                "abbr"
+                abbreviation
             }
         }
 
@@ -44,6 +44,6 @@ struct AbbreviationTests {
 
         #expect(
             output
-                == "<abbr title=\"abbreviation\"><strong>abbr</strong></abbr>")
+                == "<abbr title=\"\(description)\"><strong>\(abbreviation)</strong></abbr>")
     }
 }

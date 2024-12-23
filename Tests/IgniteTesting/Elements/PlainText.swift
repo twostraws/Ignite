@@ -15,9 +15,9 @@ import Testing
 @MainActor struct PlainTextTests {
     let publishingContext = ElementTest.publishingContext
 
-    @Test("Single Element")
-    func test_singleElement() async throws {
-        let element = "This is a test"
+    @Test("Single Element", arguments: ["This is a test"])
+    func test_singleElement(element: String) async throws {
+        let element = element
         let output = element.render(context: publishingContext)
 
         #expect(output == "This is a test")

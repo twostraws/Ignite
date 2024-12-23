@@ -21,23 +21,24 @@ import Testing
 
         #expect(output == "<script>javascript code</script>")
     }
-    @Test("File Test")
-    func test_file() async throws {
-        let element = Script(file: "/code.js")
+    @Test("File Test", arguments: ["/code.js"])
+    func test_file(scriptFile: String) async throws {
+        let element = Script(file: scriptFile)
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<script src=\"/code.js\"></script>")
+        #expect(output == "<script src=\"\(scriptFile)\"></script>")
     }
-    @Test("Attributes Test")
-    func test_attributes() async throws {
-        let element = Script(file: "/code.js")
+    @Test("Attributes Test", arguments: ["/code.js"])
+    func test_attributes(scriptFile: String) async throws {
+        let element = Script(file: scriptFile)
             .data("key", "value")
             .customAttribute(name: "custom", value: "part")
         let output = element.render(context: publishingContext)
         let normalizedOutput = ElementTest.normalizeHTML(output)
+        
         #expect(
             normalizedOutput
-                == "<script custom=\"part\" key=\"value\" src=\"/code.js\"></script>"
+                == "<script custom=\"part\" key=\"value\" src=\"\(scriptFile)\"></script>"
         )
     }
 }

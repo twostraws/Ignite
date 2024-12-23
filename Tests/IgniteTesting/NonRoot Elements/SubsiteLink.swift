@@ -15,14 +15,14 @@ import Testing
 @MainActor struct SubsiteLinkTests {
     let publishingContext = ElementTest.publishingSubsiteContext
 
-    @Test("String Target Test")
-    func test_string_target() async throws {
-        let element = Link("Go Home", target: "/")
+    @Test("String Target Test", arguments: ["/"])
+    func test_string_target(linkTarget: String) async throws {
+        let element = Link("Go Home", target: linkTarget)
         let output = element.render(context: publishingContext)
 
         #expect(
             output
-                == "<a href=\"/subsite/\" class=\"link-underline-opacity-100 link-underline-opacity-100-hover\">Go Home</a>"
+                == "<a href=\"/subsite\(linkTarget)\" class=\"link-underline-opacity-100 link-underline-opacity-100-hover\">Go Home</a>"
         )
     }
     @Test("Page Target Test")

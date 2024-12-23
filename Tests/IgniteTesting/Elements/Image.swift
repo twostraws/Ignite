@@ -15,9 +15,9 @@ import Testing
 @MainActor struct ImageTests {
     let publishingContext = ElementTest.publishingContext
 
-    @Test("Image Test")
-    func test_named() async throws {
-        let element = Image("/images/example.jpg", description: "Example image")
+    @Test("Image Test", arguments: ["/images/example.jpg"], ["Example image"])
+    func test_named(image: String, description: String) async throws {
+        let element = Image(image, description: description)
         let output = element.render(context: publishingContext)
         let normalizedOutput = ElementTest.normalizeHTML(output)
 
@@ -25,10 +25,10 @@ import Testing
             normalizedOutput
                 == "<img alt=\"Example image\" src=\"/images/example.jpg\"/>")
     }
-    @Test("Icon Image Test")
-    func test_icon() async throws {
+    @Test("Icon Image Test", arguments: ["browser-safari"], ["Safari logo"])
+    func test_icon(systemName: String, description: String) async throws {
         let element = Image(
-            systemName: "browser-safari", description: "Safari logo")
+            systemName: systemName, description: description)
         let output = element.render(context: publishingContext)
 
         #expect(output == "<i class=\"bi-browser-safari\"></i>")

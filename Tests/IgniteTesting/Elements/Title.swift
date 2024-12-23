@@ -15,18 +15,18 @@ import Testing
 @MainActor struct TitleTests {
     let publishingContext = ElementTest.publishingContext
 
-    @Test("Empty Title Test")
-    func test_empty() async throws {
-        let element = Title("")
+    @Test("Empty Title Test", arguments: [""])
+    func test_empty(emptyTitleText: String) async throws {
+        let element = Title(emptyTitleText)
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<title> - My Test Site</title>")
+        #expect(output == "<title>\(emptyTitleText) - My Test Site</title>")
     }
-    @Test("Builder Test")
-    func test_builder() async throws {
-        let element = Title("Example Page")
+    @Test("Builder Test", arguments: ["Example Page", "Another Example Page"])
+    func test_builder(titleText: String) async throws {
+        let element = Title(titleText)
         let output = element.render(context: publishingContext)
 
-        #expect(output == "<title>Example Page - My Test Site</title>")
+        #expect(output == "<title>\(titleText) - My Test Site</title>")
     }
 }
