@@ -79,7 +79,7 @@ function igniteApplyTheme(themeID) {
 function igniteApplySyntaxTheme() {
     // Get the current syntax theme from CSS variable
     const syntaxTheme = getComputedStyle(document.documentElement)
-    .getPropertyValue('--syntax-highlight-theme').trim();
+        .getPropertyValue('--syntax-highlight-theme').trim();
 
     // Disable all themes first
     document.querySelectorAll('link[data-highlight-theme]').forEach(link => {
@@ -93,10 +93,23 @@ function igniteApplySyntaxTheme() {
     }
 }
 
-// Switch theme action
 function igniteSwitchTheme(themeID) {
     igniteApplyTheme(themeID);
-    igniteApplySyntaxTheme();
+
+    // Force style recalculation using CSS custom property
+    const timestamp = Date.now();
+    document.documentElement.style.setProperty('--theme-update', `"${timestamp}"`);
+
+    // Additional force reflow with minimal DOM mutation
+    const forceReflow = document.createElement('div');
+    document.body.appendChild(forceReflow);
+    document.body.offsetHeight; // Force reflow
+    document.body.removeChild(forceReflow);
+
+    // Final cleanup
+    requestAnimationFrame(() => {
+        document.documentElement.style.removeProperty('--theme-update');
+    });
 }
 
 // SECTION: Email Protection ------------------------------------------------------------------
