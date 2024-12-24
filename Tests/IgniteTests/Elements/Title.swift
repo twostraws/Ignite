@@ -5,8 +5,9 @@
 // See LICENSE for license information.
 //
 
-@testable import Ignite
 import XCTest
+
+@testable import Ignite
 
 /// Tests for the `title` element.
 @MainActor final class TitleTests: ElementTest {

@@ -5,20 +5,25 @@
 // See LICENSE for license information.
 //
 
-@testable import Ignite
 import XCTest
+
+@testable import Ignite
 
 /// Tests for the `Image` element.
 @MainActor final class ImageTests: ElementTest {
     func test_named() {
         let element = Image("/images/example.jpg", description: "Example image")
         let output = element.render(context: publishingContext)
+        let normalizedOutput = normalizeHTML(output)
 
-        XCTAssertEqual(output, "<img src=\"/images/example.jpg\" alt=\"Example image\"/>")
+        XCTAssertEqual(
+            normalizedOutput,
+            "<img alt=\"Example image\" src=\"/images/example.jpg\"/>")
     }
 
     func test_icon() {
-        let element = Image(systemName: "browser-safari", description: "Safari logo")
+        let element = Image(
+            systemName: "browser-safari", description: "Safari logo")
         let output = element.render(context: publishingContext)
 
         XCTAssertEqual(output, "<i class=\"bi-browser-safari\"></i>")
