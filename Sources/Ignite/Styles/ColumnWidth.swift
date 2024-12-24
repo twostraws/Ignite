@@ -20,8 +20,8 @@ public enum ColumnWidth: Sendable {
         switch self {
         case .automatic:
             "col"
-        case .count(let int):
-            "col-md-\(int)"
+        case .count(let count):
+            "col-md-\(count)"
         }
     }
 }

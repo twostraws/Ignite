@@ -23,6 +23,14 @@ public struct NavigationBar: BlockHTML {
         /// This bar must always be rendered in dark mode.
         case dark
     }
+    
+    /// The new number of columns to use.
+    public enum Width {
+        /// Viewport sets column width
+        case viewport
+        /// Specific count sets column width
+        case count(Int)
+    }
 
     /// How navigation bar items should be aligned horizontally.
     public enum ItemAlignment: String {
@@ -116,13 +124,14 @@ public struct NavigationBar: BlockHTML {
     /// It does not have an effect on the navigation bar itself.
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A new `NavigationBar` instance with the adjusted column width.
-    public func width(_ width: Int) -> Self {
+    public func width(_ width: Width) -> Self {
         var copy = self
-        copy.columnWidth = .count(width)
-        if width == .viewport {
-            copy.widthClasses = ["container-fluid", columnWidth.className]
-        } else {
-            copy.widthClasses = ["container", columnWidth.className]
+        switch width {
+        case .viewport:
+            copy.widthClasses = ["container-fluid", copy.columnWidth.className]
+        case .count(let count):
+            copy.columnWidth = .count(count)
+            copy.widthClasses = ["container", copy.columnWidth.className]
         }
         return copy
     }
@@ -217,3 +226,5 @@ public struct NavigationBar: BlockHTML {
         .class("nav-item")
     }
 }
+
+
