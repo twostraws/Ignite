@@ -28,10 +28,13 @@ public struct MetaLink: HeadElement, Sendable {
         href: "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css",
         rel: .stylesheet)
 
-    /// The CSS responsible for controlling the visibility of environment-dependent elements.
-    static let customCSS = MetaLink(href: "/css/custom.min.css", rel: .stylesheet)
-    static let utilityCSS = MetaLink(href: "/css/utilities.min.css", rel: .stylesheet)
+    /// The CSS responsible for applying theme-specific styles and variables.
     static let themeCSS = MetaLink(href: "/css/themes.min.css", rel: .stylesheet)
+
+    /// The CSS responsible for handling media query-based visibility rules.
+    static let mediaQueryCSS = MetaLink(href: "/css/media-queries.min.css", rel: .stylesheet)
+
+    /// The CSS responsible for managing animation states and transitions.
     static let animationCSS = MetaLink(href: "/css/animations.min.css", rel: .stylesheet)
 
     /// Creates an array of `MetaLink` elements for syntax highlighting themes.

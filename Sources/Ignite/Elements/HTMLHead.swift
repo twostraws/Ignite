@@ -98,6 +98,7 @@ public struct HTMLHead: RootHTML {
         }
 
         MetaLink.themeCSS
+        MetaLink.mediaQueryCSS
 
         MetaLink(href: page.url, rel: "canonical")
 
