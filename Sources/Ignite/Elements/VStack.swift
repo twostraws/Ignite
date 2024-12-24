@@ -70,7 +70,7 @@ public struct VStack: BlockHTML {
         attributes.append(classes: "vstack")
 
         attributes.append(styles:
-            .init(name: "display", value: "block"),
+            .init(name: "display", value: "flex"),
             .init(name: "width", value: "100%")
         )
 
