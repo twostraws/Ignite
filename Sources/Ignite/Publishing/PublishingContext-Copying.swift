@@ -78,6 +78,16 @@ extension PublishingContext {
     /// Calculates the full list of syntax highlighters need by this site, including
     /// resolving dependencies.
     func copySyntaxHighlighters() throws {
+        let generator = SyntaxHighlightGenerator(site: site)
+        let result = try generator.generateSyntaxHighlighters(context: self)
+
+        do {
+            let destinationURL = buildDirectory.appending(path: "js/syntax-highlighting.js")
+            try result.write(to: destinationURL, atomically: true, encoding: .utf8)
+        } catch {
+            throw PublishingError.failedToWriteSyntaxHighlighters
+        }
+
         for theme in site.allHighlighterThemes {
             try copy(resource: theme.url)
         }
