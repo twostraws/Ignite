@@ -6,7 +6,7 @@
 //
 
 /// A structure that creates HTML content by mapping over a sequence of data.
-public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML {
+public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML, ListableElement {
     /// The body content created by mapping over the data sequence.
     public var body: some HTML { self }
 
@@ -45,5 +45,13 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML {
         }
 
         return output
+    }
+
+    /// Renders the ForEach content when this isn't part of a list.
+    /// - Parameter context: The current publishing context.
+    /// - Returns: The rendered HTML string.
+    func renderInList(context: PublishingContext) -> String {
+        // ListableElement conformance ensures other views never wrap ForEach in <li> tags.
+        render(context: context)
     }
 }
