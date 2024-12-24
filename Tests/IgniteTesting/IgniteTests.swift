@@ -18,7 +18,7 @@ import XCTest
     /// A publishing context with sample values for subsite tests.
     static let publishingSubsiteContext = try! PublishingContext(
         for: TestSubsite(), from: #filePath)
-    
+
     public static func normalizeHTML(_ html: String) -> String {
         // Function to sort attributes within a tag
         func sortAttributes(in attributes: String) -> String {

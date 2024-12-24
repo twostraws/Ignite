@@ -15,7 +15,8 @@ import Testing
 @MainActor struct TimeTests {
     let publishingContext = ElementTest.publishingContext
 
-    @Test("Without DateTime Test", arguments: ["This is a test", "Another test"])
+    @Test(
+        "Without DateTime Test", arguments: ["This is a test", "Another test"])
     func test_without_datetime(timeText: String) async throws {
         let element = Time(timeText)
         let output = element.render(context: publishingContext)
@@ -45,7 +46,7 @@ import Testing
 
         #expect(
             output
-            == "<time datetime=\"2024-05-22T20:00:30Z\">\(timeText)</time>"
+                == "<time datetime=\"2024-05-22T20:00:30Z\">\(timeText)</time>"
         )
     }
 }

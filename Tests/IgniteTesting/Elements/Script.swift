@@ -35,7 +35,7 @@ import Testing
             .customAttribute(name: "custom", value: "part")
         let output = element.render(context: publishingContext)
         let normalizedOutput = ElementTest.normalizeHTML(output)
-        
+
         #expect(
             normalizedOutput
                 == "<script custom=\"part\" key=\"value\" src=\"\(scriptFile)\"></script>"

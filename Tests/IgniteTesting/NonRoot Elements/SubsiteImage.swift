@@ -22,7 +22,7 @@ import Testing
         let normalizedOutput = ElementTest.normalizeHTML(output)
         #expect(
             normalizedOutput
-            == "<img alt=\"\(description)\" src=\"/subsite\(imageFile)\"/>")
+                == "<img alt=\"\(description)\" src=\"/subsite\(imageFile)\"/>")
     }
     @Test("Icon Test", arguments: ["browser-safari"], ["Safari logo"])
     func test_image_icon(systemName: String, description: String) async throws {

@@ -14,7 +14,7 @@ import Testing
 @Suite("Subsite Script Tests")
 @MainActor struct SubsiteScriptTests {
     let publishingContext = ElementTest.publishingSubsiteContext
-    
+
     @Test("Empty Element", arguments: ["/js/bootstrap.bundle.min.js"])
     func test_empty(script: String) async throws {
         let element = Script(file: script).render(
