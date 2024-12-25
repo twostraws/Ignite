@@ -241,53 +241,82 @@ extension PublishingContext {
 
         // Generate CSS for each theme
         for theme in themes {
-            // Generate theme variables
-            let themeVars = generateThemeVariables(theme)
-
             // Add theme-specific CSS block
-            cssContent += """
-            [data-bs-theme="\(theme.name)"] {
-                \(themeVars)
-            }
+            cssContent += generateThemeRules(theme, selector: "[data-bs-theme=\"\(theme.name)\"]") + "\n\n"
 
-            """
-
-            // If this is the primary light theme, also set root and auto variables
+            // If this is the primary light theme, also set root and auto variables/rules
             if theme.name == site.lightTheme?.name {
-                cssContent += """
-                :root {
-                    \(themeVars)
-                }
-
-                [data-bs-theme="auto"] {
-                    \(themeVars)
-                }
-
-                """
+                cssContent += generateThemeRules(theme, selector: ":root") + "\n\n"
+                cssContent += generateThemeRules(theme, selector: "[data-bs-theme=\"auto\"]") + "\n\n"
             }
         }
 
-        // Handle dark theme separately to maintain media query wrapping
+        // Handle dark theme with media query
         if let darkTheme = site.darkTheme {
             cssContent += """
             @media (prefers-color-scheme: dark) {
-                :root {
-                    \(generateThemeVariables(darkTheme))
-                }
-
-                [data-bs-theme="dark"] {
-                    \(generateThemeVariables(darkTheme))
-                }
-
-                [data-bs-theme="auto"] {
-                    \(generateThemeVariables(darkTheme))
-                }
+                \(generateThemeRules(darkTheme, selector: ":root"))
+                
+                \(generateThemeRules(darkTheme, selector: "[data-bs-theme=\"dark\"]"))
+                
+                \(generateThemeRules(darkTheme, selector: "[data-bs-theme=\"auto\"]"))
             }
             """
         }
 
         let cssPath = buildDirectory.appending(path: "css/themes.min.css")
         try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
+    }
+
+    private func generateThemeRules(_ theme: Theme, selector: String) -> String {
+        var rules = ["\(selector) {", generateThemeVariables(theme), "}"]
+
+        var bodyStyles: [String] = []
+        if !theme.primary.isDefault { bodyStyles.append("color: var(--bs-body-color)") }
+        if !theme.background.isDefault { bodyStyles.append("background-color: var(--bs-body-bg)") }
+        if !theme.font.isDefault { bodyStyles.append("font-family: var(--bs-body-font-family)") }
+        if !theme.bodySize.isDefault { bodyStyles.append("font-size: var(--bs-body-font-size)") }
+        if !theme.regularLineHeight.isDefault { bodyStyles.append("line-height: var(--bs-body-line-height)") }
+
+        if !bodyStyles.isEmpty {
+            rules.append("\(selector) {")
+            rules.append(bodyStyles.joined(separator: ";\n"))
+            rules.append("}")
+        }
+
+        if !theme.link.isDefault {
+            rules.append("\(selector) a { color: var(--bs-link-color); }")
+        }
+        if !theme.linkHover.isDefault {
+            rules.append("\(selector) a:hover { color: var(--bs-link-hover-color); }")
+        }
+
+        var headingStyles: [String] = []
+        if !theme.headingBottomMargin.isDefault { headingStyles.append("margin-bottom: var(--bs-headings-margin-bottom)") }
+        if !theme.headingFontWeight.isDefault { headingStyles.append("font-weight: var(--bs-headings-font-weight)") }
+        if !theme.headingLineHeight.isDefault { headingStyles.append("line-height: var(--bs-headings-line-height)") }
+
+        if !headingStyles.isEmpty {
+            rules.append("""
+            \(selector) h1, \(selector) h2, \(selector) h3,
+            \(selector) h4, \(selector) h5, \(selector) h6 {
+                \(headingStyles.joined(separator: ";\n"))
+            }
+            """)
+        }
+
+        if !theme.xxLargeHeadingSize.isDefault { rules.append("\(selector) h1 { font-size: var(--bs-h1-font-size); }") }
+        if !theme.xLargeHeadingSize.isDefault { rules.append("\(selector) h2 { font-size: var(--bs-h2-font-size); }") }
+        if !theme.largeHeadingSize.isDefault { rules.append("\(selector) h3 { font-size: var(--bs-h3-font-size); }") }
+        if !theme.mediumHeadingSize.isDefault { rules.append("\(selector) h4 { font-size: var(--bs-h4-font-size); }") }
+        if !theme.smallHeadingSize.isDefault { rules.append("\(selector) h5 { font-size: var(--bs-h5-font-size); }") }
+        if !theme.xSmallHeadingSize.isDefault { rules.append("\(selector) h6 { font-size: var(--bs-h6-font-size); }") }
+
+        if !theme.monospaceFont.isDefault {
+            rules.append("\(selector) code, \(selector) pre { font-family: var(--bs-font-monospace); }")
+        }
+
+        return rules.joined(separator: "\n\n")
     }
 
     // swiftlint:disable function_body_length
