@@ -218,12 +218,20 @@ extension PublishingContext {
             fatalError("Ignite requires that you provide a light or dark theme.")
         }
 
+        // Set initial root variables
         cssContent += """
         :root {
             --supports-light-theme: \(supportsLightTheme);
             --supports-dark-theme: \(supportsDarkTheme);
-            --bs-root-font-size: 16px;
-            font-size: var(--bs-root-font-size);
+        }
+
+        html {
+            font-size: var(--bs-root-font-size, 16px);
+        }
+
+        body {
+            font-family: var(--bs-body-font-family);
+            font-size: var(--bs-body-font-size, 1rem);
         }
 
         """
@@ -231,13 +239,50 @@ extension PublishingContext {
         // Container defaults
         cssContent += containerDefaults
 
-        // Generate alternate theme overrides
+        // Generate CSS for each theme
         for theme in themes {
+            // Generate theme variables
+            let themeVars = generateThemeVariables(theme)
+
+            // Add theme-specific CSS block
             cssContent += """
-            [data-bs-theme="\(theme.id)"] {
-                \(generateThemeVariables(theme))
+            [data-bs-theme="\(theme.name)"] {
+                \(themeVars)
             }
 
+            """
+
+            // If this is the primary light theme, also set root and auto variables
+            if theme.name == site.lightTheme?.name {
+                cssContent += """
+                :root {
+                    \(themeVars)
+                }
+
+                [data-bs-theme="auto"] {
+                    \(themeVars)
+                }
+
+                """
+            }
+        }
+
+        // Handle dark theme separately to maintain media query wrapping
+        if let darkTheme = site.darkTheme {
+            cssContent += """
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    \(generateThemeVariables(darkTheme))
+                }
+
+                [data-bs-theme="dark"] {
+                    \(generateThemeVariables(darkTheme))
+                }
+
+                [data-bs-theme="auto"] {
+                    \(generateThemeVariables(darkTheme))
+                }
+            }
             """
         }
 
