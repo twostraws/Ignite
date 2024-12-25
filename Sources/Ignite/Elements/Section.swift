@@ -29,14 +29,35 @@ public struct Section: BlockHTML {
     /// How many columns this should be divided into
     var columnCount: Int?
 
+    /// The vertical space between elements in pixels.
+    private var customSpacing: Int?
+
+    /// The vertical space between elements by utility class.
+    private var systemSpacing: SpacingAmount?
+
     /// The items to display in this section.
     private var items: [any HTML]
 
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
-    /// - Parameter items: The items to use in this section.
-    public init(@HTMLBuilder items: () -> some HTML) {
+    /// - Parameters:
+    ///   - spacing: The number of pixels between each element. Default is nil.
+    ///   - items: The items to use in this section.
+    public init(spacing: Int? = nil, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
+        self.customSpacing = spacing
+        self.systemSpacing = nil
+    }
+
+    /// Creates a new `Section` object using a block element builder
+    /// that returns an array of items to use in this section.
+    /// - Parameters:
+    ///   - spacing: The predefined size between each element.
+    ///   - items: The items to use in this section.
+    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
+        self.items = flatUnwrap(items())
+        self.systemSpacing = spacing
+        self.customSpacing = nil
     }
 
     /// Adjusts the number of columns that can be fitted into this section.
@@ -65,11 +86,17 @@ public struct Section: BlockHTML {
             ])
         }
 
+        if let customSpacing {
+            sectionAttributes.append(styles: .init(name: .gap, value: "\(customSpacing)px"))
+        } else if let systemSpacing {
+            sectionAttributes.append(classes: "g-\(systemSpacing.rawValue)")
+        }
+
         return Group {
             ForEach(items) { item in
                 if let item = item as? any BlockHTML {
                     Group(item)
-                        .class(item.columnWidth.className)
+                        .class(className(for: item))
                 } else {
                     item
                 }
@@ -77,5 +104,20 @@ public struct Section: BlockHTML {
         }
         .attributes(sectionAttributes)
         .render(context: context)
+    }
+
+    /// Calculates the appropriate Bootstrap column class name for a block element.
+    /// - Parameter item: The block element to calculate the class name for.
+    /// - Returns: A Bootstrap class name that represents the element's width, scaled according to the section's column count if needed.
+    private func className(for item: any BlockHTML) -> String {
+        let className: String
+        if let columnCount, case .count(let width) = item.columnWidth {
+            // Scale the width to be relative to the new column count
+            let scaledWidth = width * 12 / columnCount
+            return ColumnWidth.count(scaledWidth).className
+        } else {
+            className = item.columnWidth.className
+        }
+        return className
     }
 }
