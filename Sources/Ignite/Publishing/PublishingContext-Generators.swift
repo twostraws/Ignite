@@ -236,38 +236,75 @@ extension PublishingContext {
 
         """
 
-        // Container defaults
         cssContent += containerDefaults
 
-        // Generate CSS for each theme
-        for theme in themes {
-            // Add theme-specific CSS block
-            cssContent += generateThemeRules(theme, selector: "[data-bs-theme=\"\(theme.name)\"]") + "\n\n"
+        if let lightTheme = site.lightTheme {
+            // Only output light theme variables if it's the only theme
+            if !supportsDarkTheme {
+                cssContent += """
+                :root {
+                    \(generateThemeVariables(lightTheme))
+                }
 
-            // If this is the primary light theme, also set root and auto variables/rules
-            if theme.name == site.lightTheme?.name {
-                cssContent += generateThemeRules(theme, selector: ":root") + "\n\n"
-                cssContent += generateThemeRules(theme, selector: "[data-bs-theme=\"auto\"]") + "\n\n"
+                [data-bs-theme="\(lightTheme.id)"] {
+                    \(generateThemeVariables(lightTheme))
+                }
+                """
+            } else {
+                // If both themes exist, use the standard structure
+                cssContent += """
+                :root {
+                    \(generateThemeVariables(lightTheme))
+                }
+
+                [data-bs-theme="light"] {
+                    \(generateThemeVariables(lightTheme))
+                }
+
+                [data-bs-theme="auto"] {
+                    \(generateThemeVariables(lightTheme))
+                }
+                """
             }
         }
 
-        // Handle dark theme with media query
         if let darkTheme = site.darkTheme {
-            cssContent += """
-            @media (prefers-color-scheme: dark) {
-                \(generateThemeRules(darkTheme, selector: ":root"))
-                
-                \(generateThemeRules(darkTheme, selector: "[data-bs-theme=\"dark\"]"))
-                
-                \(generateThemeRules(darkTheme, selector: "[data-bs-theme=\"auto\"]"))
+            // Only output dark theme variables if it's the only theme
+            if !supportsLightTheme {
+                cssContent += """
+                :root {
+                    \(generateThemeVariables(darkTheme))
+                }
+
+                [data-bs-theme="\(darkTheme.id)"] {
+                    \(generateThemeVariables(darkTheme))
+                }
+                """
+            } else {
+                // If both themes exist, use the standard structure with media query
+                cssContent += """
+                @media (prefers-color-scheme: dark) {
+                    :root {
+                        \(generateThemeVariables(darkTheme))
+                    }
+
+                    [data-bs-theme="dark"] {
+                        \(generateThemeVariables(darkTheme))
+                    }
+
+                    [data-bs-theme="auto"] {
+                        \(generateThemeVariables(darkTheme))
+                    }
+                }
+                """
             }
-            """
         }
 
         let cssPath = buildDirectory.appending(path: "css/themes.min.css")
         try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
     }
 
+    /// Generates CSS rules for the given theme using the specified selector, including color variables and basic styling.
     private func generateThemeRules(_ theme: Theme, selector: String) -> String {
         var rules = ["\(selector) {", generateThemeVariables(theme), "}"]
 
