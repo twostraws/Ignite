@@ -28,21 +28,32 @@ public struct VStack: BlockHTML {
     /// The child elements contained in the stack.
     private var items: [any HTML]
 
-    /// Creates a new vertical stack with the specified spacing and content.
-    /// - Parameters:
-    ///   - spacing: The number of pixels between each element. Default is `2`.
-    ///   - items: A closure that returns the elements to be arranged vertically.
-    public init(spacing: Int = 2, @HTMLBuilder _ items: () -> some HTML) {
+    /// Creates a new `Section` object using a block element builder
+    /// that returns an array of items to use in this section.
+    /// - Parameter items: The items to use in this section.
+    public init(@HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
-        self.customSpacing = spacing
+        self.customSpacing = nil
         self.systemSpacing = nil
     }
 
-    /// Creates a new vertical stack with the specified spacing and content.
+    /// Creates a new `Section` object using a block element builder
+    /// that returns an array of items to use in this section.
     /// - Parameters:
-    ///   - spacing: The predefined size between each element. Default is `.small`.
-    ///   - items: A closure that returns the elements to be arranged vertically.
-    public init(spacing: SpacingAmount = .small, @HTMLBuilder _ items: () -> some HTML) {
+    ///   - spacing: The number of pixels between elements.
+    ///   - items: The items to use in this section.
+    public init(spacing pixels: Int, @HTMLBuilder items: () -> some HTML) {
+        self.items = flatUnwrap(items())
+        self.customSpacing = pixels
+        self.systemSpacing = nil
+    }
+
+    /// Creates a new `Section` object using a block element builder
+    /// that returns an array of items to use in this section.
+    /// - Parameters:
+    ///   - spacing: The predefined size between elements.
+    ///   - items: The items to use in this section.
+    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
         self.systemSpacing = spacing
         self.customSpacing = nil
