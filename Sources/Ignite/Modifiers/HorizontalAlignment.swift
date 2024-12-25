@@ -15,6 +15,15 @@ public enum HorizontalAlignment: String {
 
     /// Elements are positioned at the end of their container.
     case trailing = "text-end"
+
+    /// The Bootstrap class for flex alignment
+    var bootstrapClass: String {
+        switch self {
+        case .leading: return "justify-content-start"
+        case .center: return "justify-content-center"
+        case .trailing: return "justify-content-end"
+        }
+    }
 }
 
 extension HorizontalAlignment {
@@ -30,6 +39,7 @@ extension HorizontalAlignment {
         }
     }
 }
+
 
 /// Determines which elements can have horizontal alignment attached,
 public protocol HorizontalAligning: HTML { }
