@@ -101,6 +101,10 @@ struct FrameModifier: HTMLModifier {
             }
         } else if let value = value as? Int, value == .container {
             classes.append(dimension.bootstrapClass)
+            if dimension.needsFlexAlignment {
+                classes.append("d-flex")
+                classes.append(contentsOf: alignment.bootstrapClasses)
+            }
         } else {
             modified = modified.style("\(dimension.cssProperty): \(value.stringValue)")
         }
