@@ -101,7 +101,7 @@ struct FrameModifier: HTMLModifier {
                 classes.append(contentsOf: alignment.bootstrapClasses)
             }
 
-        case .container:
+        case .percent(100%):
             classes.append(dimension.bootstrapClass)
             if dimension.needsFlexAlignment {
                 classes.append("d-flex")

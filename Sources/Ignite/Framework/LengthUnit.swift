@@ -14,23 +14,20 @@ public enum LengthUnit: Hashable, Equatable, Sendable, CustomStringConvertible, 
     /// Relative to parent element font size (em)
     case em(Double)
     /// Percentage (%)
-    case percent(Double)
+    case percent(Percentage)
     /// Viewport width unit (vw)
     case vw(Double)
     /// Viewport height unit (vh)
     case vh(Double)
-    /// Special value indicating container width
-    case container
 
     public var description: String {
         switch self {
         case .px(let value): "\(value)px"
         case .rem(let value): "\(value)rem"
         case .em(let value): "\(value)em"
-        case .percent(let value): "\(value)%"
+        case .percent(let percentage): "\(percentage.value)%"
         case .vw(let value): "\(value)vw"
         case .vh(let value): "\(value)vh"
-        case .container: "100%"
         }
     }
 
