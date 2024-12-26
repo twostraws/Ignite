@@ -19,16 +19,18 @@ struct FontModifier: HTMLModifier {
 
             modified = modified.style("font-weight: \(font.weight.rawValue)")
 
-            if let name = font.name {
+            if let name = font.name, name.isEmpty == false {
                 modified = modified.style("font-family: \(name)")
             }
 
-            if let size = font.size {
-                modified = modified.style("font-size: \(size)px")
-            }
-
+            // Only apply the style class if no custom size is specified
             if let style = font.style {
-                modified = modified.fontStyle(style)
+                if font.size == nil {
+                    modified = modified.fontStyle(style)
+                } else {
+                    // If we have a custom size, don't apply the Bootstrap class
+                    modified = modified.style("font-size: \(font.size!)px")
+                }
             }
 
             return modified
@@ -37,16 +39,18 @@ struct FontModifier: HTMLModifier {
                 .init(name: "font-weight", value: String(font.weight.rawValue))
             ])
 
-            if let name = font.name {
+            if let name = font.name, name.isEmpty == false {
                 containerAttributes.styles.append(AttributeValue(name: "font-family", value: name))
             }
 
-            if let size = font.size {
-                containerAttributes.styles.append(AttributeValue(name: "font-size", value: "\(size)px"))
-            }
-
+            // Only apply the style class if no custom size is specified
             if let style = font.style {
-                containerAttributes.classes.append(style.fontSizeClass)
+                if font.size == nil {
+                    containerAttributes.classes.append(style.fontSizeClass)
+                } else {
+                    // If we have a custom size, don't apply the Bootstrap class
+                    containerAttributes.styles.append(AttributeValue(name: "font-size", value: "\(font.size!)px"))
+                }
             }
 
             return content
