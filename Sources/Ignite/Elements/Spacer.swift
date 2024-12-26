@@ -8,7 +8,7 @@
 /// Creates vertical space of a specific value.
 public struct Spacer: BlockHTML {
     enum SpacerType {
-        case exact(Int)
+        case exact(Double)
         case semantic(SpacingAmount)
     }
 
@@ -31,7 +31,7 @@ public struct Spacer: BlockHTML {
     /// Defaults to 20.
     /// - Parameter size: The amount of vertical space this `Spacer`
     /// should occupy. Defaults to 20.
-    public init(size: Int = 20) {
+    public init(size: Double = 20) {
         spacingAmount = .exact(size)
     }
 
@@ -52,7 +52,7 @@ public struct Spacer: BlockHTML {
                 .render(context: context)
         } else if case let .exact(int) = spacingAmount {
             Group {}
-                .frame(height: int)
+                .frame(height: .px(int))
                 .render(context: context)
         } else {
             fatalError("Unknown spacing amount: \(spacingAmount)")

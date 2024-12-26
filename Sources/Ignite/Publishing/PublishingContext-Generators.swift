@@ -132,6 +132,7 @@ extension PublishingContext {
 
     /// Generates the CSS file containing all media query rules.
     func generateMediaQueryCSS() throws {
+        CSSManager.default.setThemes(site.allThemes)
         let cssPath = buildDirectory.appending(path: "css/media-queries.min.css")
         try CSSManager.default.allRules.write(to: cssPath, atomically: true, encoding: .utf8)
     }
@@ -218,12 +219,20 @@ extension PublishingContext {
             fatalError("Ignite requires that you provide a light or dark theme.")
         }
 
+        // Set initial root variables
         cssContent += """
         :root {
             --supports-light-theme: \(supportsLightTheme);
             --supports-dark-theme: \(supportsDarkTheme);
-            --bs-root-font-size: 16px;
-            font-size: var(--bs-root-font-size);
+        }
+
+        html {
+            font-size: var(--bs-root-font-size, 16px);
+        }
+
+        body {
+            font-family: var(--bs-body-font-family);
+            font-size: var(--bs-body-font-size, 1rem);
         }
 
         """
@@ -231,18 +240,124 @@ extension PublishingContext {
         // Container defaults
         cssContent += containerDefaults
 
-        // Generate alternate theme overrides
-        for theme in themes {
-            cssContent += """
-            [data-bs-theme="\(theme.id)"] {
-                \(generateThemeVariables(theme))
-            }
+        // Generate theme variables
+        if let lightTheme = site.lightTheme {
+            // Only output light theme variables if it's the only theme
+            if !supportsDarkTheme {
+                cssContent += """
+                :root {
+                    \(generateThemeVariables(lightTheme))
+                }
 
-            """
+                [data-bs-theme="\(lightTheme.id)"] {
+                    \(generateThemeVariables(lightTheme))
+                }
+                """
+            } else {
+                // If both themes exist, use the standard structure
+                cssContent += """
+                :root {
+                    \(generateThemeVariables(lightTheme))
+                }
+
+                [data-bs-theme="light"] {
+                    \(generateThemeVariables(lightTheme))
+                }
+
+                [data-bs-theme="auto"] {
+                    \(generateThemeVariables(lightTheme))
+                }
+                """
+            }
+        }
+
+        // Generate dark theme overrides
+        if let darkTheme = site.darkTheme {
+            // Only output dark theme variables if it's the only theme
+            if !supportsLightTheme {
+                cssContent += """
+                :root {
+                    \(generateThemeVariables(darkTheme))
+                }
+
+                [data-bs-theme="\(darkTheme.id)"] {
+                    \(generateThemeVariables(darkTheme))
+                }
+                """
+            } else {
+                // If both themes exist, use the standard structure with media query
+                cssContent += """
+                @media (prefers-color-scheme: dark) {
+                    :root {
+                        \(generateThemeVariables(darkTheme))
+                    }
+
+                    [data-bs-theme="dark"] {
+                        \(generateThemeVariables(darkTheme))
+                    }
+
+                    [data-bs-theme="auto"] {
+                        \(generateThemeVariables(darkTheme))
+                    }
+                }
+                """
+            }
         }
 
         let cssPath = buildDirectory.appending(path: "css/themes.min.css")
         try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
+    }
+
+    /// Generates CSS rules for the given theme using the specified selector, including color variables and basic styling.
+    private func generateThemeRules(_ theme: Theme, selector: String) -> String {
+        var rules = ["\(selector) {", generateThemeVariables(theme), "}"]
+
+        var bodyStyles: [String] = []
+        if !theme.primary.isDefault { bodyStyles.append("color: var(--bs-body-color)") }
+        if !theme.background.isDefault { bodyStyles.append("background-color: var(--bs-body-bg)") }
+        if !theme.font.isDefault { bodyStyles.append("font-family: var(--bs-body-font-family)") }
+        if !theme.bodySize.isDefault { bodyStyles.append("font-size: var(--bs-body-font-size)") }
+        if !theme.regularLineHeight.isDefault { bodyStyles.append("line-height: var(--bs-body-line-height)") }
+
+        if !bodyStyles.isEmpty {
+            rules.append("\(selector) {")
+            rules.append(bodyStyles.joined(separator: ";\n"))
+            rules.append("}")
+        }
+
+        if !theme.link.isDefault {
+            rules.append("\(selector) a { color: var(--bs-link-color); }")
+        }
+        if !theme.linkHover.isDefault {
+            rules.append("\(selector) a:hover { color: var(--bs-link-hover-color); }")
+        }
+
+        var headingStyles: [String] = []
+        if !theme.headingBottomMargin.isDefault { headingStyles.append("margin-bottom: var(--bs-headings-margin-bottom)") }
+        if !theme.headingFontWeight.isDefault { headingStyles.append("font-weight: var(--bs-headings-font-weight)") }
+        if !theme.headingLineHeight.isDefault { headingStyles.append("line-height: var(--bs-headings-line-height)") }
+
+        if !headingStyles.isEmpty {
+            rules.append("""
+            \(selector) h1, \(selector) h2, \(selector) h3,
+            \(selector) h4, \(selector) h5, \(selector) h6 {
+                \(headingStyles.joined(separator: ";\n"))
+            }
+            """)
+        }
+
+        if !theme.xxLargeHeadingSize.isDefault { rules.append("\(selector) h1 { font-size: var(--bs-h1-font-size); }") }
+        if !theme.xLargeHeadingSize.isDefault { rules.append("\(selector) h2 { font-size: var(--bs-h2-font-size); }") }
+        if !theme.largeHeadingSize.isDefault { rules.append("\(selector) h3 { font-size: var(--bs-h3-font-size); }") }
+        if !theme.mediumHeadingSize.isDefault { rules.append("\(selector) h4 { font-size: var(--bs-h4-font-size); }") }
+        if !theme.smallHeadingSize.isDefault { rules.append("\(selector) h5 { font-size: var(--bs-h5-font-size); }") }
+        if !theme.xSmallHeadingSize.isDefault { rules.append("\(selector) h6 { font-size: var(--bs-h6-font-size); }") }
+
+        if !theme.monospaceFont.isDefault {
+            rules.append("\(selector) code, \(selector) pre { font-family: var(--bs-font-monospace); }")
+        }
+
+        return rules.joined(separator: "\n\n")
     }
 
     // swiftlint:disable function_body_length

@@ -96,103 +96,103 @@ public protocol Theme: Sendable {
     var alternateFonts: [Font] { get }
 
     /// Root font size nil uses browser default
-    var rootFontSize: any LengthUnit { get }
+    var rootFontSize: LengthUnit { get }
 
     /// Base font size
-    var bodySize: any LengthUnit { get }
+    var bodySize: LengthUnit { get }
 
     /// Small font size
-    var smallBodySize: any LengthUnit { get }
+    var smallBodySize: LengthUnit { get }
 
     /// Large font size
-    var largeBodySize: any LengthUnit { get }
+    var largeBodySize: LengthUnit { get }
 
     /// Extra light font weight
-    var lighterFontWeight: any LengthUnit { get }
+    var lighterFontWeight: LengthUnit { get }
 
     /// Light font weight
-    var lightFontWeight: any LengthUnit { get }
+    var lightFontWeight: LengthUnit { get }
 
     /// Normal font weight
-    var regularFontWeight: any LengthUnit { get }
+    var regularFontWeight: LengthUnit { get }
 
     /// Bold font weight
-    var boldFontWeight: any LengthUnit { get }
+    var boldFontWeight: LengthUnit { get }
 
     /// Extra bold font weight
-    var bolderFontWeight: any LengthUnit { get }
+    var bolderFontWeight: LengthUnit { get }
 
     /// Base line height
-    var regularLineHeight: any LengthUnit { get }
+    var regularLineHeight: LengthUnit { get }
 
     /// Condensed line height
-    var condensedLineHeight: any LengthUnit { get }
+    var condensedLineHeight: LengthUnit { get }
 
     /// Expanded line height
-    var expandedLineHeight: any LengthUnit { get }
+    var expandedLineHeight: LengthUnit { get }
 
     /// Font size for h1 elements
-    var xxLargeHeadingSize: any LengthUnit { get }
+    var xxLargeHeadingSize: LengthUnit { get }
 
     /// Font size for h2 elements
-    var xLargeHeadingSize: any LengthUnit { get }
+    var xLargeHeadingSize: LengthUnit { get }
 
     /// Font size for h3 elements
-    var largeHeadingSize: any LengthUnit { get }
+    var largeHeadingSize: LengthUnit { get }
 
     /// Font size for h4 elements
-    var mediumHeadingSize: any LengthUnit { get }
+    var mediumHeadingSize: LengthUnit { get }
 
     /// Font size for h5 elements
-    var smallHeadingSize: any LengthUnit { get }
+    var smallHeadingSize: LengthUnit { get }
 
     /// Font size for h6 elements
-    var xSmallHeadingSize: any LengthUnit { get }
+    var xSmallHeadingSize: LengthUnit { get }
 
     /// Bottom margin for headings
-    var headingBottomMargin: any LengthUnit { get }
+    var headingBottomMargin: LengthUnit { get }
 
     /// Optional custom font family for headings
     var headingFont: Font { get }
 
     /// Font weight for headings
-    var headingFontWeight: any LengthUnit { get }
+    var headingFontWeight: LengthUnit { get }
 
     /// Line height for headings
-    var headingLineHeight: any LengthUnit { get }
+    var headingLineHeight: LengthUnit { get }
 
     /// Extra small breakpoint
-    var xSmallBreakpoint: any LengthUnit { get }
+    var xSmallBreakpoint: LengthUnit { get }
 
     /// Small breakpoint
-    var smallBreakpoint: any LengthUnit { get }
+    var smallBreakpoint: LengthUnit { get }
 
     /// Medium breakpoint
-    var mediumBreakpoint: any LengthUnit { get }
+    var mediumBreakpoint: LengthUnit { get }
 
     /// Large breakpoint
-    var largeBreakpoint: any LengthUnit { get }
+    var largeBreakpoint: LengthUnit { get }
 
     /// Extra large breakpoint
-    var xLargeBreakpoint: any LengthUnit { get }
+    var xLargeBreakpoint: LengthUnit { get }
 
     /// Extra extra large breakpoint
-    var xxLargeBreakpoint: any LengthUnit { get }
+    var xxLargeBreakpoint: LengthUnit { get }
 
     /// Maximum width for small containers
-    var smallMaxWidth: any LengthUnit { get }
+    var smallMaxWidth: LengthUnit { get }
 
     /// Maximum width for medium containers
-    var mediumMaxWidth: any LengthUnit { get }
+    var mediumMaxWidth: LengthUnit { get }
 
     /// Maximum width for large containers
-    var largeMaxWidth: any LengthUnit { get }
+    var largeMaxWidth: LengthUnit { get }
 
     /// Maximum width for extra large containers
-    var xLargeMaxWidth: any LengthUnit { get }
+    var xLargeMaxWidth: LengthUnit { get }
 
     /// Maximum width for extra extra large containers
-    var xxLargeMaxWidth: any LengthUnit { get }
+    var xxLargeMaxWidth: LengthUnit { get }
 
     /// The color scheme for syntax highlighting
     var syntaxHighlighterTheme: HighlighterTheme { get }
