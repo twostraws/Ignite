@@ -94,7 +94,15 @@ public struct Section: BlockHTML {
 
         return Group {
             ForEach(items) { item in
-                if let item = item as? any BlockHTML {
+                if let modified = item as? ModifiedHTML, let group = modified.content as? Group {
+                    ForEach(group.items) { item in
+                        if let item = item as? any BlockHTML {
+                            Group(item)
+                                .class(className(for: group))
+                                .attributes(modified.attributes)
+                        }
+                    }
+                } else if let item = item as? any BlockHTML {
                     Group(item)
                         .class(className(for: item))
                 } else {
