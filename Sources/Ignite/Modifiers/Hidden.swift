@@ -35,8 +35,10 @@ struct HiddenModifier: HTMLModifier {
     /// Applies visibility styling to the provided HTML content
     func body(content: some HTML) -> any HTML {
         if let queries, !queries.isEmpty {
-            // Use the cached class name for these conditions
-            return content.class(CSSManager.default.className(for: queries))
+            let hash = CSSManager.default.hashForQueries(queries)
+            let className = "style-\(hash)"
+            CSSManager.default.register(queries)
+            return content.class(className)
         } else {
             return content.class(isHidden ? "d-none" : nil)
         }

@@ -37,54 +37,49 @@ final class CSSManager {
 
         // Process all pending registrations
         for registration in pendingRegistrations {
-            if let className = registration.className {
-                register(registration.queries, properties: registration.properties, className: className)
-            } else {
-                register(registration.queries, properties: registration.properties)
-            }
+            register(
+                registration.queries,
+                properties: registration.properties,
+                className: registration.className
+            )
         }
         pendingRegistrations.removeAll()
     }
 
-    /// Registers a set of media queries and generates a corresponding CSS class if needed.
+    /// Registers a set of media queries and generates a corresponding CSS class
     /// - Parameters:
-    ///   - queries: An array of media queries that determine when styles should be applied.
-    ///   - properties: An array of tuples containing CSS property names and values.
-    func register(_ queries: [MediaQuery], properties: [(String, String)] = [("display", "none")]) {
+    ///   - queries: Media queries that determine when styles should be applied
+    ///   - properties: CSS property names and values to apply
+    ///   - className: Optional specific class name to use (generates one if nil)
+    /// - Returns: The class name used for these styles
+    @discardableResult
+    func register(
+        _ queries: [MediaQuery],
+        properties: [(String, String)] = [("display", "none")],
+        className: String? = nil
+    ) -> String {
+        let hash = hashForQueries(queries)
+
         if themes.isEmpty {
             // Queue the registration for later
-            pendingRegistrations.append(PendingRegistration(queries: queries, properties: properties, className: nil))
-            return
+            pendingRegistrations.append(PendingRegistration(
+                queries: queries,
+                properties: properties,
+                className: className
+            ))
+            // Return the class name that will be used
+            return className ?? "style-\(hash)"
         }
 
-        let hash = hashForQueries(queries)
-        if classNames[hash] == nil {
-            let className = "hide-\(hash)"
-            classNames[hash] = className
-            styleProperties[hash] = properties
-            rules[hash] = generateCSSRule(for: queries, className: className, properties: properties)
-        }
-    }
-
-    /// Registers a set of media queries with a specific class name
-    /// - Parameters:
-    ///   - queries: An array of media queries that determine when styles should be applied.
-    ///   - properties: An array of tuples containing CSS property names and values.
-    ///   - className: The specific class name to use for these styles.
-    func register(_ queries: [MediaQuery], properties: [(String, String)], className: String) {
-        if themes.isEmpty {
-            // Queue the registration for later
-            pendingRegistrations.append(PendingRegistration(queries: queries, properties: properties, className: className))
-            return
-        }
-
-        let hash = hashForQueries(queries)
-        classNames[hash] = className
+        let finalClassName = className ?? "style-\(hash)"
+        classNames[hash] = finalClassName
         styleProperties[hash] = properties
-        rules[hash] = generateCSSRule(for: queries, className: className, properties: properties)
+        rules[hash] = generateCSSRule(for: queries, className: finalClassName, properties: properties)
+
+        return finalClassName
     }
 
-    /// Returns the CSS class name for a specific combination of media queries.
+    /// Gets the class name for a set of media queries.
     /// - Parameter queries: The media queries to look up.
     /// - Returns: The corresponding CSS class name, or an empty string if not found.
     func className(for queries: [MediaQuery]) -> String {
@@ -95,19 +90,19 @@ final class CSSManager {
     /// Generates a unique, order-independent hash for a set of media queries.
     /// - Parameter queries: The media queries to hash.
     /// - Returns: A truncated hash string that uniquely identifies this combination of queries.
-    private func hashForQueries(_ queries: [MediaQuery]) -> String {
+    func hashForQueries(_ queries: [MediaQuery]) -> String {
         let sortedQueries = queries.sorted { String(describing: $0) < String(describing: $1) }
         return sortedQueries.map { String(describing: $0) }
             .joined()
             .truncatedHash
     }
 
-    /// Generates a CSS rule for applying styles based on the provided queries.
+    /// Generates a CSS rule for a set of media queries and properties.
     /// - Parameters:
-    ///   - queries: The media queries that determine when the rule applies.
-    ///   - className: The CSS class name to use in the generated rule.
-    ///   - properties: An array of tuples containing CSS property names and values.
-    /// - Returns: A CSS rule string that implements the styling behavior.
+    ///   - queries: The media queries to apply.
+    ///   - className: The CSS class name to use.
+    ///   - properties: The CSS properties to apply.
+    /// - Returns: A CSS rule string.
     private func generateCSSRule(
         for queries: [MediaQuery],
         className: String,
@@ -144,6 +139,7 @@ final class CSSManager {
 
         return rules.joined(separator: "\n\n")
     }
+
     /// Generates a base CSS rule without theme context
     /// - Parameters:
     ///   - className: The CSS class name to use
