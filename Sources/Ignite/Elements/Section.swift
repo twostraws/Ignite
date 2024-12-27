@@ -86,10 +86,13 @@ public struct Section: BlockHTML {
             ])
         }
 
+        var gutterClass = ""
+        var gapStyle: AttributeValue?
+
         if let customSpacing {
-            sectionAttributes.append(styles: .init(name: .gap, value: "\(customSpacing)px"))
+            sectionAttributes.append(styles: .init(name: .rowGap, value: "\(customSpacing)px"))
         } else if let systemSpacing {
-            sectionAttributes.append(classes: "g-\(systemSpacing.rawValue)")
+            gutterClass = "gy-\(systemSpacing.rawValue)"
         }
 
         return Group {
@@ -101,6 +104,8 @@ public struct Section: BlockHTML {
                 } else if let item = item as? any BlockHTML {
                     Group(item)
                         .class(className(for: item))
+                        .class(gutterClass)
+                        .style(gapStyle)
                 } else {
                     item
                 }
@@ -116,10 +121,16 @@ public struct Section: BlockHTML {
     ///   - attributes: HTML attributes to apply to each element in the group.
     /// - Returns: A view containing the styled group elements.
     func handleGroup(_ group: Group, attributes: CoreAttributes) -> some HTML {
-        ForEach(group.items) { item in
+        let gutterClass = if let systemSpacing {
+            "g-\(systemSpacing.rawValue)"
+        } else {
+            ""
+        }
+        return ForEach(group.items) { item in
             if let item = item as? any BlockHTML {
                 Group(item)
                     .class(className(for: group))
+                    .class(gutterClass)
                     .attributes(attributes)
             }
         }
