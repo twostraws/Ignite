@@ -10,21 +10,27 @@ struct BackgroundModifier: HTMLModifier {
     /// The color to apply, if using a direct color value.
     var color: Color?
 
-    // The color to apply, if using a string value.
+    /// The color to apply, if using a string value.
     var colorString: String?
 
-    // The material to apply.
+    /// The material to apply.
     var material: Material?
+
+    /// The gradient to apply.
+    var gradient: LinearGradient?
 
     /// Applies the background style to the provided HTML content.
     /// - Parameter content: The HTML content to modify
     /// - Returns: The modified HTML content with background styling applied
     func body(content: some HTML) -> any HTML {
-        if let color = getColor() {
-            content.style("background-color: \(color)")
+        if let gradient {
+            return content.style("background-image: \(gradient)")
+        } else if let color = getColor() {
+            return content.style("background-color: \(color)")
         } else if let material {
-            content.class(material.className)
+            return content.class(material.className)
         }
+        return content
     }
 
     private func getColor() -> String? {
@@ -60,6 +66,13 @@ public extension HTML {
     func background(_ material: Material) -> some HTML {
         modifier(BackgroundModifier(material: material))
     }
+
+    /// Applies a linear gradient background
+    /// - Parameter gradient: The gradient to apply
+    /// - Returns: The modified HTML element
+    func background(_ gradient: LinearGradient) -> some HTML {
+        modifier(BackgroundModifier(gradient: gradient))
+    }
 }
 
 public extension BlockHTML {
@@ -83,5 +96,12 @@ public extension BlockHTML {
     /// - Returns: The current element with the updated background material.
     func background(_ material: Material) -> some BlockHTML {
         modifier(BackgroundModifier(material: material))
+    }
+
+    /// Applies a linear gradient background
+    /// - Parameter gradient: The gradient to apply
+    /// - Returns: The modified HTML element
+    func background(_ gradient: LinearGradient) -> some BlockHTML {
+        modifier(BackgroundModifier(gradient: gradient))
     }
 }
