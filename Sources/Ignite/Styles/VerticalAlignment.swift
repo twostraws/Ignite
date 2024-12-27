@@ -6,7 +6,7 @@
 //
 
 /// Defines how content should be aligned vertically within its container
-public enum VerticalAlignment {
+public enum VerticalAlignment: Equatable, Sendable {
     /// Align content to the top
     case top
     /// Center content vertically

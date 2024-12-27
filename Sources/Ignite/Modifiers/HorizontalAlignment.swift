@@ -6,7 +6,7 @@
 //
 
 /// Controls how elements are horizontally positioned in side their container.
-public enum HorizontalAlignment: String {
+public enum HorizontalAlignment: String, Equatable, Sendable {
     /// Elements are positioned at the start of their container.
     case leading = "text-start"
 
