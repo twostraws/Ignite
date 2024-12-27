@@ -94,14 +94,10 @@ public struct Section: BlockHTML {
 
         return Group {
             ForEach(items) { item in
-                if let modified = item as? ModifiedHTML, let group = modified.content as? Group {
-                    ForEach(group.items) { item in
-                        if let item = item as? any BlockHTML {
-                            Group(item)
-                                .class(className(for: group))
-                                .attributes(modified.attributes)
-                        }
-                    }
+                if let group = item as? Group {
+                    handleGroup(group, attributes: group.attributes)
+                } else if let modified = item as? ModifiedHTML, let group = modified.content as? Group {
+                    handleGroup(group, attributes: modified.attributes)
                 } else if let item = item as? any BlockHTML {
                     Group(item)
                         .class(className(for: item))
@@ -112,6 +108,21 @@ public struct Section: BlockHTML {
         }
         .attributes(sectionAttributes)
         .render(context: context)
+    }
+
+    /// Renders a group of HTML elements with consistent styling and attributes.
+    /// - Parameters:
+    ///   - group: The group containing the HTML elements to render.
+    ///   - attributes: HTML attributes to apply to each element in the group.
+    /// - Returns: A view containing the styled group elements.
+    func handleGroup(_ group: Group, attributes: CoreAttributes) -> some HTML {
+        ForEach(group.items) { item in
+            if let item = item as? any BlockHTML {
+                Group(item)
+                    .class(className(for: group))
+                    .attributes(attributes)
+            }
+        }
     }
 
     /// Calculates the appropriate Bootstrap column class name for a block element.
