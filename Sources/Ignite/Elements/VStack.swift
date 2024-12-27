@@ -80,11 +80,6 @@ public struct VStack: BlockHTML {
         var attributes = attributes
         attributes.append(classes: "vstack")
 
-        attributes.append(styles:
-            .init(name: "display", value: "flex"),
-            .init(name: "width", value: "100%")
-        )
-
         if let customSpacing {
             attributes.append(styles: .init(name: .gap, value: "\(customSpacing)px"))
         } else if let systemSpacing {
