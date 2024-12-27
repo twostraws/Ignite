@@ -128,6 +128,11 @@ struct FrameModifier: HTMLModifier {
         handleDimension(minHeight, dimension: .minHeight, classes: &classes, modified: &modified)
         handleDimension(maxHeight, dimension: .maxHeight, classes: &classes, modified: &modified)
 
+        if alignment != .topLeading {
+            classes.append("d-flex")
+            classes.append(contentsOf: alignment.bootstrapClasses)
+        }
+
         if !classes.isEmpty {
             modified = modified.class(classes.joined(separator: " "))
         }
