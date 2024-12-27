@@ -129,7 +129,6 @@ struct FrameModifier: HTMLModifier {
         handleDimension(maxHeight, dimension: .maxHeight, classes: &classes, modified: &modified)
 
         if alignment != .topLeading {
-            classes.append("d-flex")
             classes.append(contentsOf: alignment.bootstrapClasses)
         }
 
