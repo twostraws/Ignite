@@ -59,7 +59,7 @@ final class CSSManager {
 
         let hash = hashForQueries(queries)
         if classNames[hash] == nil {
-            let className = "style-\(hash)"
+            let className = "hide-\(hash)"
             classNames[hash] = className
             styleProperties[hash] = properties
             rules[hash] = generateCSSRule(for: queries, className: className, properties: properties)
