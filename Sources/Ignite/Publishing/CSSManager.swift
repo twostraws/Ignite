@@ -175,13 +175,12 @@ final class CSSManager {
             }
         }
 
-        let selector = "[data-bs-theme=\"\(theme.id)\"]"
+        let selector = "[data-theme-state=\"\(theme.id)\"]"
         let styleRules = properties.map { "\($0.0): \($0.1);" }.joined(separator: " ")
 
-        if !mediaQueries.isEmpty {
-            let mediaConditions = mediaQueries.joined(separator: ") and (")
+        if mediaQueries.isEmpty {
             return """
-            @media (\(mediaConditions)) {
+            @media (prefers-color-scheme: \(theme.name)) {
                 \(selector) .\(className) {
                     \(styleRules)
                 }
@@ -189,8 +188,10 @@ final class CSSManager {
             """
         } else {
             return """
-            \(selector) .\(className) {
-                \(styleRules)
+            @media (\(mediaQueries.joined(separator: ") and ("))) {
+                \(selector) .\(className) {
+                    \(styleRules)
+                }
             }
             """
         }
