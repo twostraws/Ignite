@@ -1,11 +1,11 @@
 //
-// Group.swift
+// GroupBox.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
 //
 
-public struct Group: BlockHTML {
+public struct GroupBox: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -19,24 +19,32 @@ public struct Group: BlockHTML {
     public var columnWidth = ColumnWidth.automatic
 
     var items: [any HTML] = []
+    private var backgroundColor: Color?
 
-    public init(@HTMLBuilder _ content: () -> some HTML) {
+    public init(background: Color? = nil, @HTMLBuilder content: () -> some HTML) {
         self.items = flatUnwrap(content())
+        self.backgroundColor = background
     }
 
-    public init(_ items: any HTML) {
+    public init(_ items: any HTML, background: Color? = nil) {
         self.items = flatUnwrap(items)
+        self.backgroundColor = background
     }
 
     init(context: PublishingContext, items: [any HTML]) {
         self.items = flatUnwrap(items)
+        self.backgroundColor = nil
     }
 
     public func render(context: PublishingContext) -> String {
-        return items.map {
-            let item: any HTML = $0
-            AttributeStore.default.merge(attributes, intoHTML: item.id)
-            return item.render(context: context)
-        }.joined()
+        let content = items.map { $0.render(context: context) }.joined()
+        var attributes = attributes
+        attributes.tag = "div"
+
+        if let backgroundColor {
+            attributes.append(styles: .init(name: "background-color", value: backgroundColor.description))
+        }
+
+        return attributes.description(wrapping: content)
     }
 }
