@@ -307,9 +307,9 @@ public extension HTML {
         array.flatMap { flatUnwrap($0) }
     } else if let html = content as? any HTML {
         if let anyHTML = html as? AnyHTML {
-            [anyHTML.unwrapped.body]
+            flatUnwrap([anyHTML.unwrapped.body])
         } else if let collection = html as? HTMLCollection {
-            collection.elements
+            flatUnwrap(collection.elements)
         } else {
             [html.body]
         }
@@ -327,9 +327,9 @@ public extension HTML {
         array.flatMap { flatUnwrap($0) }
     } else if let html = content as? any InlineHTML {
         if let anyHTML = html as? AnyHTML, let wrapped = anyHTML.unwrapped.body as? (any InlineHTML) {
-            [wrapped]
+            flatUnwrap([wrapped])
         } else if let collection = html as? HTMLCollection, let elements = collection.elements as? [any InlineHTML] {
-            elements
+            flatUnwrap(elements)
         } else {
             [html]
         }
