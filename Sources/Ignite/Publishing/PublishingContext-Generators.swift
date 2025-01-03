@@ -9,26 +9,30 @@ import Foundation
 
 extension PublishingContext {
     /// Contains the various snap dimensions for different Bootstrap widths.
+    /// Contains the various snap dimensions for different Bootstrap widths.
     var containerDefaults: String {
-        """
-        .container {
-            @media (min-width: 576px) {
-                max-width: var(\(BootstrapVariable.containerSm.rawValue), 540px);
-            }
-            @media (min-width: 768px) {
-                max-width: var(\(BootstrapVariable.containerMd.rawValue), 720px);
-            }
-            @media (min-width: 992px) {
-                max-width: var(\(BootstrapVariable.containerLg.rawValue), 960px);
-            }
-            @media (min-width: 1200px) {
-                max-width: var(\(BootstrapVariable.containerXl.rawValue), 1140px);
-            }
-            @media (min-width: 1400px) {
-                max-width: var(\(BootstrapVariable.containerXxl.rawValue), 1320px);
-            }
+        guard let theme = site.lightTheme ?? site.darkTheme else {
+            fatalError("Ignite requires that you provide a light or dark theme.")
         }
 
+        return """
+        .container {
+            @media (min-width: \(theme.smallBreakpoint.stringValue)) {
+                max-width: var(\(BootstrapVariable.smallContainer.rawValue), \(theme.smallMaxWidth.stringValue));
+            }
+            @media (min-width: \(theme.mediumBreakpoint.stringValue)) {
+                max-width: var(\(BootstrapVariable.mediumContainer.rawValue), \(theme.mediumMaxWidth.stringValue));
+            }
+            @media (min-width: \(theme.largeBreakpoint.stringValue)) {
+                max-width: var(\(BootstrapVariable.largeContainer.rawValue), \(theme.largeMaxWidth.stringValue));
+            }
+            @media (min-width: \(theme.xLargeBreakpoint.stringValue)) {
+                max-width: var(\(BootstrapVariable.xLargeContainer.rawValue), \(theme.xLargeMaxWidth.stringValue));
+            }
+            @media (min-width: \(theme.xxLargeBreakpoint.stringValue)) {
+                max-width: var(\(BootstrapVariable.xxLargeContainer.rawValue), \(theme.xxLargeMaxWidth.stringValue));
+            }
+        }
         """
     }
 
@@ -150,7 +154,8 @@ extension PublishingContext {
             theme.sansSerifFont,
             theme.monospaceFont,
             theme.font,
-            theme.codeFont
+            theme.codeFont,
+            theme.headingFont
         ] + theme.alternateFonts
 
         let fontTags = fonts.flatMap { font -> [String] in
@@ -200,6 +205,93 @@ extension PublishingContext {
     }
 
     /// Generates CSS for all themes including font faces, colors, and typography settings, writing to themes.min.css.
+    private func generateGlobalRules() -> String {
+        """
+        /* Global style rules */
+
+        /* Root and body styles */
+        html {
+            font-size: var(--bs-root-font-size, 16px);
+        }
+
+        body {
+            font-family: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif);
+            font-size: var(--bs-body-font-size, 1rem);
+            line-height: var(--bs-body-line-height, 1.5);
+            color: var(--bs-body-color);
+            background-color: var(--bs-body-bg);
+        }
+        
+        /* Paragraph margin */
+        p {
+            margin-top: 0;
+            margin-bottom: var(--bs-paragraph-margin-bottom, 1rem);
+        }
+
+        /* Heading font rules */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--bs-headings-font-family, inherit);
+            margin-bottom: var(--bs-headings-margin-bottom, 0.5rem);
+            font-weight: var(--bs-headings-font-weight, 500);
+            line-height: var(--bs-headings-line-height, 1.2);
+        }
+
+        /* Color rules */
+        .text-primary { color: var(--bs-primary) !important; }
+        .text-secondary { color: var(--bs-secondary) !important; }
+        .text-success { color: var(--bs-success) !important; }
+        .text-info { color: var(--bs-info) !important; }
+        .text-warning { color: var(--bs-warning) !important; }
+        .text-danger { color: var(--bs-danger) !important; }
+        .text-light { color: var(--bs-light) !important; }
+        .text-dark { color: var(--bs-dark) !important; }
+
+        /* Background rules */
+        .bg-primary { background-color: var(--bs-primary) !important; }
+        .bg-secondary { background-color: var(--bs-secondary) !important; }
+        .bg-success { background-color: var(--bs-success) !important; }
+        .bg-info { background-color: var(--bs-info) !important; }
+        .bg-warning { background-color: var(--bs-warning) !important; }
+        .bg-danger { background-color: var(--bs-danger) !important; }
+        .bg-light { background-color: var(--bs-light) !important; }
+        .bg-dark { background-color: var(--bs-dark) !important; }
+
+        /* Button rules */
+        .btn-primary { 
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+        }
+        .btn-secondary {
+            background-color: var(--bs-secondary);
+            border-color: var(--bs-secondary);
+        }
+        .btn-success {
+            background-color: var(--bs-success);
+            border-color: var(--bs-success);
+        }
+        .btn-info {
+            background-color: var(--bs-info);
+            border-color: var(--bs-info);
+        }
+        .btn-warning {
+            background-color: var(--bs-warning);
+            border-color: var(--bs-warning);
+        }
+        .btn-danger {
+            background-color: var(--bs-danger);
+            border-color: var(--bs-danger);
+        }
+        .btn-light {
+            background-color: var(--bs-light);
+            border-color: var(--bs-light);
+        }
+        .btn-dark {
+            background-color: var(--bs-dark);
+            border-color: var(--bs-dark);
+        }
+        """
+    }
+
     func generateThemes(_ themes: [any Theme]) throws {
         guard !themes.isEmpty else { return }
         var cssContent = ""
@@ -219,83 +311,72 @@ extension PublishingContext {
             fatalError("Ignite requires that you provide a light or dark theme.")
         }
 
-        // Set initial root variables
-        cssContent += """
-        :root {
-            --supports-light-theme: \(supportsLightTheme);
-            --supports-dark-theme: \(supportsDarkTheme);
-        }
-
-        html {
-            font-size: var(--bs-root-font-size, 16px);
-        }
-
-        body {
-            font-family: var(--bs-body-font-family);
-            font-size: var(--bs-body-font-size, 1rem);
-        }
-
-        """
-
-        cssContent += containerDefaults
-
+        // Root variables and default theme (light)
         if let lightTheme = site.lightTheme {
-            // Only output light theme variables if it's the only theme
-            if !supportsDarkTheme {
-                cssContent += """
-                :root {
-                    \(generateThemeVariables(lightTheme))
-                }
+            cssContent += """
+            :root {
+                --supports-light-theme: \(supportsLightTheme);
+                --supports-dark-theme: \(supportsDarkTheme);
+                --light-theme-id: "\(site.lightTheme?.id ?? "")";
+                --dark-theme-id: "\(site.darkTheme?.id ?? "")";
 
-                [data-bs-theme="\(lightTheme.id)"] {
-                    \(generateThemeVariables(lightTheme))
-                }
-                """
-            } else {
-                // If both themes exist, use the standard structure
-                cssContent += """
-                :root {
-                    \(generateThemeVariables(lightTheme))
-                }
-
-                [data-bs-theme="light"] {
-                    \(generateThemeVariables(lightTheme))
-                }
-
-                [data-bs-theme="auto"] {
-                    \(generateThemeVariables(lightTheme))
-                }
-                """
+                /* Light theme variables (default theme) */
+                \(generateThemeVariables(lightTheme))
             }
+
+            \(containerDefaults)
+
+            \(generateGlobalRules())
+
+            /* Light theme override */
+            [data-bs-theme="\(lightTheme.id)"] {
+                \(generateThemeVariables(lightTheme))
+            }
+
+            /* Auto theme starts with light theme */
+            [data-bs-theme="auto"] {
+                \(generateThemeVariables(lightTheme))
+            }
+            """
         }
 
+        // Dark theme handling
         if let darkTheme = site.darkTheme {
-            // Only output dark theme variables if it's the only theme
             if !supportsLightTheme {
+                // Only dark theme exists - use as root
                 cssContent += """
                 :root {
+                    --supports-light-theme: \(supportsLightTheme);
+                    --supports-dark-theme: \(supportsDarkTheme);
+                    --light-theme-id: "\(site.lightTheme?.id ?? "")";
+                    --dark-theme-id: "\(site.darkTheme?.id ?? "")";
+
+                    /* Dark theme variables */
                     \(generateThemeVariables(darkTheme))
                 }
+
+                \(containerDefaults)
+
+                \(generateGlobalRules())
 
                 [data-bs-theme="\(darkTheme.id)"] {
                     \(generateThemeVariables(darkTheme))
                 }
                 """
             } else {
-                // If both themes exist, use the standard structure with media query
+                // Both themes exist - update auto theme in dark mode and add explicit dark theme
                 cssContent += """
+
+                /* Dark theme media query for auto theme */
                 @media (prefers-color-scheme: dark) {
-                    :root {
-                        \(generateThemeVariables(darkTheme))
-                    }
-
-                    [data-bs-theme="dark"] {
-                        \(generateThemeVariables(darkTheme))
-                    }
-
                     [data-bs-theme="auto"] {
                         \(generateThemeVariables(darkTheme))
                     }
+                }
+
+                /* Explicit dark theme */
+                [data-bs-theme="\(darkTheme.id)"] {
+                    \(generateThemeVariables(darkTheme))
                 }
                 """
             }
@@ -305,56 +386,69 @@ extension PublishingContext {
         try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
     }
 
-    /// Generates CSS rules for the given theme using the specified selector, including color variables and basic styling.
     private func generateThemeRules(_ theme: Theme, selector: String) -> String {
-        var rules = ["\(selector) {", generateThemeVariables(theme), "}"]
+        // First generate all the CSS variables
+        let variables = generateThemeVariables(theme)
 
-        var bodyStyles: [String] = []
-        if !theme.primary.isDefault { bodyStyles.append("color: var(--bs-body-color)") }
-        if !theme.background.isDefault { bodyStyles.append("background-color: var(--bs-body-bg)") }
-        if !theme.font.isDefault { bodyStyles.append("font-family: var(--bs-body-font-family)") }
-        if !theme.bodySize.isDefault { bodyStyles.append("font-size: var(--bs-body-font-size)") }
-        if !theme.regularLineHeight.isDefault { bodyStyles.append("line-height: var(--bs-body-line-height)") }
-
-        if !bodyStyles.isEmpty {
-            rules.append("\(selector) {")
-            rules.append(bodyStyles.joined(separator: ";\n"))
-            rules.append("}")
-        }
-
-        if !theme.link.isDefault {
-            rules.append("\(selector) a { color: var(--bs-link-color); }")
-        }
-        if !theme.linkHover.isDefault {
-            rules.append("\(selector) a:hover { color: var(--bs-link-hover-color); }")
-        }
-
-        var headingStyles: [String] = []
-        if !theme.headingBottomMargin.isDefault { headingStyles.append("margin-bottom: var(--bs-headings-margin-bottom)") }
-        if !theme.headingFontWeight.isDefault { headingStyles.append("font-weight: var(--bs-headings-font-weight)") }
-        if !theme.headingLineHeight.isDefault { headingStyles.append("line-height: var(--bs-headings-line-height)") }
-
-        if !headingStyles.isEmpty {
-            rules.append("""
-            \(selector) h1, \(selector) h2, \(selector) h3,
-            \(selector) h4, \(selector) h5, \(selector) h6 {
-                \(headingStyles.joined(separator: ";\n"))
+        // Then generate the actual CSS rules that use these variables
+        let rules = """
+            \(selector) {
+                \(variables)
             }
-            """)
-        }
 
-        if !theme.xxLargeHeadingSize.isDefault { rules.append("\(selector) h1 { font-size: var(--bs-h1-font-size); }") }
-        if !theme.xLargeHeadingSize.isDefault { rules.append("\(selector) h2 { font-size: var(--bs-h2-font-size); }") }
-        if !theme.largeHeadingSize.isDefault { rules.append("\(selector) h3 { font-size: var(--bs-h3-font-size); }") }
-        if !theme.mediumHeadingSize.isDefault { rules.append("\(selector) h4 { font-size: var(--bs-h4-font-size); }") }
-        if !theme.smallHeadingSize.isDefault { rules.append("\(selector) h5 { font-size: var(--bs-h5-font-size); }") }
-        if !theme.xSmallHeadingSize.isDefault { rules.append("\(selector) h6 { font-size: var(--bs-h6-font-size); }") }
+            \(selector) .text-primary { color: var(--bs-primary) !important; }
+            \(selector) .text-secondary { color: var(--bs-secondary) !important; }
+            \(selector) .text-success { color: var(--bs-success) !important; }
+            \(selector) .text-info { color: var(--bs-info) !important; }
+            \(selector) .text-warning { color: var(--bs-warning) !important; }
+            \(selector) .text-danger { color: var(--bs-danger) !important; }
+            \(selector) .text-light { color: var(--bs-light) !important; }
+            \(selector) .text-dark { color: var(--bs-dark) !important; }
 
-        if !theme.monospaceFont.isDefault {
-            rules.append("\(selector) code, \(selector) pre { font-family: var(--bs-font-monospace); }")
-        }
+            \(selector) .bg-primary { background-color: var(--bs-primary) !important; }
+            \(selector) .bg-secondary { background-color: var(--bs-secondary) !important; }
+            \(selector) .bg-success { background-color: var(--bs-success) !important; }
+            \(selector) .bg-info { background-color: var(--bs-info) !important; }
+            \(selector) .bg-warning { background-color: var(--bs-warning) !important; }
+            \(selector) .bg-danger { background-color: var(--bs-danger) !important; }
+            \(selector) .bg-light { background-color: var(--bs-light) !important; }
+            \(selector) .bg-dark { background-color: var(--bs-dark) !important; }
 
-        return rules.joined(separator: "\n\n")
+            \(selector) .btn-primary { 
+                background-color: var(--bs-primary);
+                border-color: var(--bs-primary);
+            }
+            \(selector) .btn-secondary {
+                background-color: var(--bs-secondary);
+                border-color: var(--bs-secondary);
+            }
+            \(selector) .btn-success {
+                background-color: var(--bs-success);
+                border-color: var(--bs-success);
+            }
+            \(selector) .btn-info {
+                background-color: var(--bs-info);
+                border-color: var(--bs-info);
+            }
+            \(selector) .btn-warning {
+                background-color: var(--bs-warning);
+                border-color: var(--bs-warning);
+            }
+            \(selector) .btn-danger {
+                background-color: var(--bs-danger);
+                border-color: var(--bs-danger);
+            }
+            \(selector) .btn-light {
+                background-color: var(--bs-light);
+                border-color: var(--bs-light);
+            }
+            \(selector) .btn-dark {
+                background-color: var(--bs-dark);
+                border-color: var(--bs-dark);
+            }
+        """
+
+        return rules
     }
 
     // swiftlint:disable function_body_length
@@ -364,14 +458,14 @@ extension PublishingContext {
         // Helper function to add property if it exists
         func addProperty(_ variable: BootstrapVariable, _ value: any Defaultable) {
             if value.isDefault == false {
-                cssProperties.append("\(variable.rawValue): \(value)")
+                cssProperties.append("    \(variable.rawValue): \(value)")
             }
         }
 
         // Helper function specifically for font properties
         func addFont(_ variable: BootstrapVariable, _ font: Font, defaultFonts: [String]) {
             if !font.isDefault {
-                cssProperties.append("\(variable.rawValue): \(font.name ?? defaultFonts.joined(separator: ","))")
+                cssProperties.append("    \(variable.rawValue): \(font.name ?? defaultFonts.joined(separator: ","))")
             }
         }
 
@@ -410,6 +504,7 @@ extension PublishingContext {
         addFont(.monospaceFont, theme.monospaceFont, defaultFonts: Font.monospaceFonts)
         addFont(.bodyFont, theme.font, defaultFonts: Font.systemFonts)
         addFont(.codeFont, theme.codeFont, defaultFonts: Font.monospaceFonts)
+        addFont(.headingFont, theme.headingFont, defaultFonts: Font.systemFonts)
 
         // Font sizes
         addProperty(.rootFontSize, theme.rootFontSize)
@@ -443,15 +538,22 @@ extension PublishingContext {
         addProperty(.headingsLineHeight, theme.headingLineHeight)
 
         // Container sizes
-        addProperty(.containerSm, theme.smallMaxWidth)
-        addProperty(.containerMd, theme.mediumMaxWidth)
-        addProperty(.containerLg, theme.largeMaxWidth)
-        addProperty(.containerXl, theme.xLargeMaxWidth)
-        addProperty(.containerXxl, theme.xxLargeMaxWidth)
+        addProperty(.smallContainer, theme.smallMaxWidth)
+        addProperty(.mediumContainer, theme.mediumMaxWidth)
+        addProperty(.largeContainer, theme.largeMaxWidth)
+        addProperty(.xLargeContainer, theme.xLargeMaxWidth)
+        addProperty(.xxLargeContainer, theme.xxLargeMaxWidth)
+
+        // Breakpoints
+        addProperty(.smallBreakpoint, theme.smallBreakpoint)
+        addProperty(.mediumBreakpoint, theme.mediumBreakpoint)
+        addProperty(.largeBreakpoint, theme.largeBreakpoint)
+        addProperty(.xLargeBreakpoint, theme.xLargeBreakpoint)
+        addProperty(.xxLargeBreakpoint, theme.xxLargeBreakpoint)
 
         let syntaxTheme = theme.syntaxHighlighterTheme
         if syntaxTheme != .none {
-            cssProperties.append("--syntax-highlight-theme: \(syntaxTheme.description)")
+            cssProperties.append("    --syntax-highlight-theme: \(syntaxTheme.description)")
         }
 
         return cssProperties.joined(separator: ";\n")

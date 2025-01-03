@@ -26,5 +26,5 @@ extension Theme where Self == DefaultLightTheme {
 /// The default light theme implementation that uses Bootstrap's light theme values.
 /// This theme provides all standard light mode colors and styling without any customization.
 struct DefaultLightTheme: LightTheme {
-    var name: String = "light"
+    static var name: String = "light"
 }

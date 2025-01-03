@@ -47,5 +47,5 @@ extension Theme where Self == DefaultDarkTheme {
 /// The default dark theme implementation that uses Bootstrap's dark theme values.
 /// This theme provides all standard dark mode colors and styling without any customization.
 struct DefaultDarkTheme: DarkTheme {
-    var name: String = "dark"
+    static var name: String = "dark"
 }

@@ -12,7 +12,7 @@ public struct SwitchTheme: Action {
 
     /// Creates a new theme switching action
     /// - Parameter themeID: The ID of the theme to switch to (will be automatically sanitized)
-    public init(_ theme: any Theme) {
+    @MainActor public init(_ theme: any Theme) {
         self.themeID = theme.id
     }
 

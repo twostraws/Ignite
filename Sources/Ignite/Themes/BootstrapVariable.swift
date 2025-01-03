@@ -105,6 +105,9 @@ enum BootstrapVariable: String {
     /// Large body font size
     case largeBodyFontSize = "--bs-body-font-size-lg"
 
+    /// Font family for headings
+    case headingFont = "--bs-headings-font-family"
+
     // MARK: - Heading Sizes
 
     /// Font size for h1 elements
@@ -155,29 +158,51 @@ enum BootstrapVariable: String {
 
     // MARK: - Heading Properties
 
-    /// Bottom margin for headings
-    case headingsMarginBottom = "--bs-headings-margin-bottom"
-
     /// Font weight for headings
     case headingsFontWeight = "--bs-headings-font-weight"
 
     /// Line height for headings
     case headingsLineHeight = "--bs-headings-line-height"
 
+    // MARK: - Bottom Margins
+
+    /// Bottom margin for headings
+    case headingsMarginBottom = "--bs-headings-margin-bottom"
+
+    /// Paragraph margin bottom
+    case paragraphMarginBottom = "--bs-paragraph-margin-bottom"
+
     // MARK: - Container Sizes
 
     /// Maximum width for small containers
-    case containerSm = "--theme-container-sm"
+    case smallContainer = "--theme-container-sm"
 
     /// Maximum width for medium containers
-    case containerMd = "--theme-container-md"
+    case mediumContainer = "--theme-container-md"
 
     /// Maximum width for large containers
-    case containerLg = "--theme-container-lg"
+    case largeContainer = "--theme-container-lg"
 
     /// Maximum width for extra large containers
-    case containerXl = "--theme-container-xl"
+    case xLargeContainer = "--theme-container-xl"
 
     /// Maximum width for extra extra large containers
-    case containerXxl = "--theme-container-xxl"
+    case xxLargeContainer = "--theme-container-xxl"
+
+    // MARK: - Breakpoints
+
+    /// Small breakpoint value
+    case smallBreakpoint = "--bs-breakpoint-sm"
+
+    /// Medium breakpoint value
+    case mediumBreakpoint = "--bs-breakpoint-md"
+
+    /// Large breakpoint value
+    case largeBreakpoint = "--bs-breakpoint-lg"
+
+    /// Extra large breakpoint value
+    case xLargeBreakpoint = "--bs-breakpoint-xl"
+
+    /// Extra extra large breakpoint value
+    case xxLargeBreakpoint = "--bs-breakpoint-xxl"
 }
