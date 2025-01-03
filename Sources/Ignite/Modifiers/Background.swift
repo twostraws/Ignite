@@ -24,13 +24,13 @@ struct BackgroundModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         switch background {
         case .gradient(let gradient):
-            return content.style("background-image: \(gradient)")
+            content.style("background-image: \(gradient)")
         case .color(let color):
-            return content.style("background-color: \(color.description)")
+            content.style("background-color: \(color.description)")
         case .colorString(let colorString):
-            return content.style("background-color: \(colorString)")
+            content.style("background-color: \(colorString)")
         case .material(let material):
-            return content.class(material.className)
+            content.class(material.className)
         }
     }
 }
@@ -74,7 +74,7 @@ public extension BlockHTML {
     func background(_ color: Color) -> some BlockHTML {
         modifier(BackgroundModifier(background: .color(color)))
     }
-
+    
     /// Applies a background color from a string.
     /// - Parameter color: The specific color value to use, specified as a string.
     /// - Returns: The current element with the updated background color.
