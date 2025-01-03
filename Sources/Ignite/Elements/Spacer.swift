@@ -20,13 +20,15 @@ public struct Spacer: BlockHTML {
     public var columnWidth = ColumnWidth.automatic
 
     /// The amount of space to occupy.
-    var spacingAmount: SpacingType
+    var spacingAmount: SpacingType?
 
     /// Creates a new `Spacer` using adaptive sizing.
     /// - Parameter size: The amount of margin to apply, specified as a
     /// `SpacingAmount` case.
-    public init(size: SpacingAmount) {
-        spacingAmount = .semantic(size)
+    public init(size: SpacingAmount? = nil) {
+        if let size {
+            spacingAmount = .semantic(size)
+        }
     }
 
     /// Renders this element using publishing context passed in.

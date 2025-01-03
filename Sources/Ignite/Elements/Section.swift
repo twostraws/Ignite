@@ -40,9 +40,11 @@ public struct Section: BlockHTML {
     /// - Parameters:
     ///   - spacing: The size between each element.
     ///   - items: The items to use in this section.
-    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
+    public init(spacing: SpacingAmount? = nil, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
-        self.spacingAmount = .semantic(spacing)
+        if let spacing {
+            self.spacingAmount = .semantic(spacing)
+        }
     }
 
     /// Adjusts the number of columns that can be fitted into this section.
