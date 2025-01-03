@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-/// Controls how elements are horizontally positioned in side their container.
+/// Controls how elements are horizontally positioned inside their container.
 public enum HorizontalAlignment: String, Equatable, Sendable {
     /// Elements are positioned at the start of their container.
     case leading = "text-start"
@@ -19,9 +19,9 @@ public enum HorizontalAlignment: String, Equatable, Sendable {
     /// The Bootstrap class for flex alignment
     var bootstrapClass: String {
         switch self {
-        case .leading: return "justify-content-start"
-        case .center: return "justify-content-center"
-        case .trailing: return "justify-content-end"
+        case .leading: "justify-content-start"
+        case .center: "justify-content-center"
+        case .trailing: "justify-content-end"
         }
     }
 }
@@ -30,16 +30,12 @@ extension HorizontalAlignment {
     /// Converts HorizontalAlignment to CSS justify-content values
     var justifyContent: String {
         switch self {
-        case .leading:
-            return "flex-start"
-        case .center:
-            return "center"
-        case .trailing:
-            return "flex-end"
+        case .leading: "flex-start"
+        case .center: "center"
+        case .trailing: "flex-end"
         }
     }
 }
-
 
 /// Determines which elements can have horizontal alignment attached,
 public protocol HorizontalAligning: HTML { }

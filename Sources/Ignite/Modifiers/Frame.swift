@@ -53,21 +53,21 @@ struct FrameModifier: HTMLModifier {
         }
     }
 
-    private let width: (any LengthUnit)?
-    private let minWidth: (any LengthUnit)?
-    private let maxWidth: (any LengthUnit)?
-    private let height: (any LengthUnit)?
-    private let minHeight: (any LengthUnit)?
-    private let maxHeight: (any LengthUnit)?
+    private let width: LengthUnit?
+    private let minWidth: LengthUnit?
+    private let maxWidth: LengthUnit?
+    private let height: LengthUnit?
+    private let minHeight: LengthUnit?
+    private let maxHeight: LengthUnit?
     private let alignment: Alignment
 
     init(
-        width: (any LengthUnit)? = nil,
-        minWidth: (any LengthUnit)? = nil,
-        maxWidth: (any LengthUnit)? = nil,
-        height: (any LengthUnit)? = nil,
-        minHeight: (any LengthUnit)? = nil,
-        maxHeight: (any LengthUnit)? = nil,
+        width: LengthUnit? = nil,
+        minWidth: LengthUnit? = nil,
+        maxWidth: LengthUnit? = nil,
+        height: LengthUnit? = nil,
+        minHeight: LengthUnit? = nil,
+        maxHeight: LengthUnit? = nil,
         alignment: Alignment = .center
     ) {
         self.width = width
@@ -86,26 +86,33 @@ struct FrameModifier: HTMLModifier {
     ///   - classes: The collection of Bootstrap classes to append to
     ///   - modified: The HTML element being modified
     private func handleDimension(
-        _ value: (any LengthUnit)?,
+        _ value: LengthUnit?,
         dimension: Dimension,
         classes: inout [String],
         modified: inout any HTML
     ) {
         guard let value else { return }
 
-        if let value = value as? Double, value == .infinity {
+        switch value {
+        case .vh(100), .vw(100):
             classes.append(dimension.viewportClass)
             if dimension.needsFlexAlignment {
                 classes.append("d-flex")
                 classes.append(contentsOf: alignment.bootstrapClasses)
             }
-        } else if let value = value as? Int, value == .container {
+
+        case .percent(100%):
             classes.append(dimension.bootstrapClass)
             if dimension.needsFlexAlignment {
                 classes.append("d-flex")
                 classes.append(contentsOf: alignment.bootstrapClasses)
             }
-        } else {
+
+        case .default:
+            // Don't apply any styling for default values
+            break
+
+        default:
             modified = modified.style("\(dimension.cssProperty): \(value.stringValue)")
         }
     }
@@ -121,6 +128,10 @@ struct FrameModifier: HTMLModifier {
         handleDimension(minHeight, dimension: .minHeight, classes: &classes, modified: &modified)
         handleDimension(maxHeight, dimension: .maxHeight, classes: &classes, modified: &modified)
 
+        if alignment != .topLeading {
+            classes.append(contentsOf: alignment.bootstrapClasses)
+        }
+
         if !classes.isEmpty {
             modified = modified.class(classes.joined(separator: " "))
         }
@@ -131,8 +142,7 @@ struct FrameModifier: HTMLModifier {
 
 public extension HTML {
     /// Creates a specific frame for this element, either using exact values or
-    /// using minimum/maximum ranges. Sizes can be specified using any type conforming
-    /// to the Unit protocol (String, Int, Double).
+    /// using minimum/maximum ranges.
     /// - Parameters:
     ///   - width: An exact width for this element
     ///   - minWidth: A minimum width for this element
@@ -143,12 +153,12 @@ public extension HTML {
     ///   - alignment: How to align this element inside its frame
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
-        width: (any LengthUnit)? = nil,
-        minWidth: (any LengthUnit)? = nil,
-        maxWidth: (any LengthUnit)? = nil,
-        height: (any LengthUnit)? = nil,
-        minHeight: (any LengthUnit)? = nil,
-        maxHeight: (any LengthUnit)? = nil,
+        width: LengthUnit? = nil,
+        minWidth: LengthUnit? = nil,
+        maxWidth: LengthUnit? = nil,
+        height: LengthUnit? = nil,
+        minHeight: LengthUnit? = nil,
+        maxHeight: LengthUnit? = nil,
         alignment: Alignment = .center
     ) -> some HTML {
         modifier(FrameModifier(
@@ -165,8 +175,7 @@ public extension HTML {
 
 public extension InlineHTML {
     /// Creates a specific frame for this element, either using exact values or
-    /// using minimum/maximum ranges. Sizes can be specified using any type conforming
-    /// to the Unit protocol (String, Int, Double).
+    /// using minimum/maximum ranges.
     /// - Parameters:
     ///   - width: An exact width for this element
     ///   - minWidth: A minimum width for this element
@@ -177,12 +186,12 @@ public extension InlineHTML {
     ///   - alignment: How to align this element inside its frame
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
-        width: (any LengthUnit)? = nil,
-        minWidth: (any LengthUnit)? = nil,
-        maxWidth: (any LengthUnit)? = nil,
-        height: (any LengthUnit)? = nil,
-        minHeight: (any LengthUnit)? = nil,
-        maxHeight: (any LengthUnit)? = nil,
+        width: LengthUnit? = nil,
+        minWidth: LengthUnit? = nil,
+        maxWidth: LengthUnit? = nil,
+        height: LengthUnit? = nil,
+        minHeight: LengthUnit? = nil,
+        maxHeight: LengthUnit? = nil,
         alignment: Alignment = .center
     ) -> some InlineHTML {
         modifier(FrameModifier(

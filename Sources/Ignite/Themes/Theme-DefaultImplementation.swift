@@ -36,51 +36,51 @@ public extension Theme {
     var alternateFonts: [Font] { [] }
 
     // Font Sizes
-    var rootFontSize: any LengthUnit { .default }
-    var bodySize: any LengthUnit { .default }
-    var smallBodySize: any LengthUnit { .default }
-    var largeBodySize: any LengthUnit { .default }
+    var rootFontSize: LengthUnit { .default }
+    var bodySize: LengthUnit { .default }
+    var smallBodySize: LengthUnit { .default }
+    var largeBodySize: LengthUnit { .default }
 
     // Font Weights
-    var lighterFontWeight: any LengthUnit { .default }
-    var lightFontWeight: any LengthUnit { .default }
-    var regularFontWeight: any LengthUnit { .default }
-    var boldFontWeight: any LengthUnit { .default }
-    var bolderFontWeight: any LengthUnit { .default }
+    var lighterFontWeight: LengthUnit { .default }
+    var lightFontWeight: LengthUnit { .default }
+    var regularFontWeight: LengthUnit { .default }
+    var boldFontWeight: LengthUnit { .default }
+    var bolderFontWeight: LengthUnit { .default }
 
     // Line Heights
-    var regularLineHeight: any LengthUnit { .default }
-    var condensedLineHeight: any LengthUnit { .default }
-    var expandedLineHeight: any LengthUnit { .default }
+    var regularLineHeight: LengthUnit { .default }
+    var condensedLineHeight: LengthUnit { .default }
+    var expandedLineHeight: LengthUnit { .default }
 
     // Heading Sizes
-    var xxLargeHeadingSize: any LengthUnit { .default }
-    var xLargeHeadingSize: any LengthUnit { .default }
-    var largeHeadingSize: any LengthUnit { .default }
-    var mediumHeadingSize: any LengthUnit { .default }
-    var smallHeadingSize: any LengthUnit { .default }
-    var xSmallHeadingSize: any LengthUnit { .default }
+    var xxLargeHeadingSize: LengthUnit { .default }
+    var xLargeHeadingSize: LengthUnit { .default }
+    var largeHeadingSize: LengthUnit { .default }
+    var mediumHeadingSize: LengthUnit { .default }
+    var smallHeadingSize: LengthUnit { .default }
+    var xSmallHeadingSize: LengthUnit { .default }
 
     // Heading Properties
-    var headingBottomMargin: any LengthUnit { .default }
+    var headingBottomMargin: LengthUnit { .default }
     var headingFont: Font { .default }
-    var headingFontWeight: any LengthUnit { .default }
-    var headingLineHeight: any LengthUnit { .default }
+    var headingFontWeight: LengthUnit { .default }
+    var headingLineHeight: LengthUnit { .default }
 
     // Breakpoints
-    var xSmallBreakpoint: any LengthUnit { .default }
-    var smallBreakpoint: any LengthUnit { .default }
-    var mediumBreakpoint: any LengthUnit { .default }
-    var largeBreakpoint: any LengthUnit { .default }
-    var xLargeBreakpoint: any LengthUnit { .default }
-    var xxLargeBreakpoint: any LengthUnit { .default }
+    var xSmallBreakpoint: LengthUnit { .px(576) }
+    var smallBreakpoint: LengthUnit { .px(576) }
+    var mediumBreakpoint: LengthUnit { .px(768) }
+    var largeBreakpoint: LengthUnit { .px(992) }
+    var xLargeBreakpoint: LengthUnit { .px(1200) }
+    var xxLargeBreakpoint: LengthUnit { .px(1400) }
 
     // Maximum widths
-    var smallMaxWidth: any LengthUnit { .default }
-    var mediumMaxWidth: any LengthUnit { .default }
-    var largeMaxWidth: any LengthUnit { .default }
-    var xLargeMaxWidth: any LengthUnit { .default }
-    var xxLargeMaxWidth: any LengthUnit { .default }
+    var smallMaxWidth: LengthUnit { .default }
+    var mediumMaxWidth: LengthUnit { .default }
+    var largeMaxWidth: LengthUnit { .default }
+    var xLargeMaxWidth: LengthUnit { .default }
+    var xxLargeMaxWidth: LengthUnit { .default }
 }
 
 extension Theme {

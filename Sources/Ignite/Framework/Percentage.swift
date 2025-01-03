@@ -16,7 +16,7 @@ postfix operator %
 /// let scale: Percentage = 150%
 /// let reduction: Percentage = -25%
 /// ```
-public struct Percentage: Hashable {
+public struct Percentage: Hashable, Sendable {
     /// The type used for storing the raw percentage value, allowing for decimal points
     public typealias Value = Double
 
