@@ -237,10 +237,8 @@ extension PublishingContext {
 
         """
 
-        // Container defaults
         cssContent += containerDefaults
 
-        // Generate theme variables
         if let lightTheme = site.lightTheme {
             // Only output light theme variables if it's the only theme
             if !supportsDarkTheme {
@@ -271,7 +269,6 @@ extension PublishingContext {
             }
         }
 
-        // Generate dark theme overrides
         if let darkTheme = site.darkTheme {
             // Only output dark theme variables if it's the only theme
             if !supportsLightTheme {

@@ -24,7 +24,9 @@ public enum HorizontalAlignment: String, Equatable, Sendable {
         case .trailing: return "justify-content-end"
         }
     }
+}
 
+extension HorizontalAlignment {
     /// Converts HorizontalAlignment to CSS justify-content values
     var justifyContent: String {
         switch self {
@@ -44,6 +46,7 @@ extension HorizontalAlignment: Responsive {
         return "text-\(alignmentClass)"
     }
 }
+
 
 /// Determines which elements can have horizontal alignment attached,
 public protocol HorizontalAligning: HTML { }

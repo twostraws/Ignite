@@ -7,11 +7,6 @@
 
 /// Creates vertical space of a specific value.
 public struct Spacer: BlockHTML {
-    enum SpacerType {
-        case exact(Double)
-        case semantic(SpacingAmount)
-    }
-
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -25,21 +20,15 @@ public struct Spacer: BlockHTML {
     public var columnWidth = ColumnWidth.automatic
 
     /// The amount of space to occupy.
-    var spacingAmount: SpacerType
-
-    /// Creates a new `Spacer` with a size in pixels of your choosing.
-    /// Defaults to 20.
-    /// - Parameter size: The amount of vertical space this `Spacer`
-    /// should occupy. Defaults to 20.
-    public init(size: Double = 20) {
-        spacingAmount = .exact(size)
-    }
+    var spacingAmount: SpacingType?
 
     /// Creates a new `Spacer` using adaptive sizing.
     /// - Parameter size: The amount of margin to apply, specified as a
     /// `SpacingAmount` case.
-    public init(size: SpacingAmount) {
-        spacingAmount = .semantic(size)
+    public init(size: SpacingAmount? = nil) {
+        if let size {
+            spacingAmount = .semantic(size)
+        }
     }
 
     /// Renders this element using publishing context passed in.
