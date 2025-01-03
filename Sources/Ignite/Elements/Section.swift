@@ -74,7 +74,6 @@ public struct Section: BlockHTML {
         }
 
         var gutterClass = ""
-        var gapStyle: AttributeValue?
 
         if let spacingAmount {
             switch spacingAmount {
@@ -96,7 +95,6 @@ public struct Section: BlockHTML {
                     Group(item)
                         .class(className(for: item))
                         .class(gutterClass)
-                        .style(gapStyle)
                 } else {
                     item
                 }

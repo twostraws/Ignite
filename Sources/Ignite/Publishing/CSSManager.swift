@@ -157,7 +157,7 @@ final class CSSManager {
         properties: [(String, String)],
         theme: Theme
     ) -> String {
-        let (themeQueries, mediaQueries) = queries.reduce(into: (Set<String>(), [String]())) { result, query in
+        let (_, mediaQueries) = queries.reduce(into: (Set<String>(), [String]())) { result, query in
             if case .theme(let id) = query {
                 result.0.insert(id.kebabCased())
             } else {
