@@ -84,7 +84,7 @@ public struct Section: BlockHTML {
             }
         }
 
-        return Group {
+        return GroupBox {
             ForEach(items) { item in
                 if let group = item as? Group {
                     handleGroup(group, attributes: group.attributes)
@@ -92,7 +92,7 @@ public struct Section: BlockHTML {
                           let group = modified.content as? Group {
                     handleGroup(group, attributes: modified.attributes)
                 } else if let item = item as? any BlockHTML {
-                    Group(item)
+                    GroupBox(item)
                         .class(className(for: item))
                         .class(gutterClass)
                 } else {
@@ -117,7 +117,7 @@ public struct Section: BlockHTML {
         }
         return ForEach(group.items) { item in
             if let item = item as? any BlockHTML {
-                Group(item)
+                GroupBox(item)
                     .class(className(for: group))
                     .class(gutterClass)
                     .attributes(attributes)

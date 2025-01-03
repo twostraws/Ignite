@@ -154,7 +154,7 @@ public struct Form: BlockHTML {
             attributes.customAttributes.insert(.init(name: "target", value: "_blank"))
         }
 
-        let wrappedContent = Group {
+        let wrappedContent = GroupBox {
             ForEach(items) { item in
                 if let textField = item as? TextField {
                     renderFormField(textField)
@@ -166,7 +166,7 @@ public struct Form: BlockHTML {
             }
 
             if let honeypotName = action.service.honeypotFieldName {
-                Group {
+                GroupBox {
                     TextField(placeholder: nil)
                         .type(.text)
                         .customAttribute(name: "name", value: honeypotName)
@@ -194,7 +194,7 @@ public struct Form: BlockHTML {
         return formOutput
     }
 
-    private func renderFormField(_ textField: TextField) -> Group {
+    private func renderFormField(_ textField: TextField) -> GroupBox {
         guard let action = action(attributes.id) as? SubscribeAction else {
             fatalError("Forms support only SubscribeAction at the moment.")
         }
@@ -218,7 +218,7 @@ public struct Form: BlockHTML {
             renderSimpleItem(sizedTextField)
 
         case .floating:
-            Group {
+            GroupBox {
                 sizedTextField
                 label
             }
@@ -226,15 +226,15 @@ public struct Form: BlockHTML {
             .containerClass(getColumnClass(for: textField, totalColumns: columnCount))
 
         case .front:
-            Group {
+            GroupBox {
                 label.class("col-form-label col-sm-2")
-                Group(sizedTextField).class("col-sm-10")
+                GroupBox(sizedTextField).class("col-sm-10")
             }
             .class("row")
             .containerClass(getColumnClass(for: textField, totalColumns: columnCount))
 
         case .top:
-            Group {
+            GroupBox {
                 label.class("form-label")
                 sizedTextField
             }
@@ -242,14 +242,14 @@ public struct Form: BlockHTML {
         }
     }
 
-    private func renderButton(_ button: Button) -> Group {
-        Group(button.class(controlSize.buttonClass))
+    private func renderButton(_ button: Button) -> GroupBox {
+        GroupBox(button.class(controlSize.buttonClass))
             .class(getColumnClass(for: button, totalColumns: columnCount))
             .class("d-flex", "align-items-stretch")
     }
 
-    private func renderSimpleItem(_ item: any InlineHTML) -> Group {
-        Group(item)
+    private func renderSimpleItem(_ item: any InlineHTML) -> GroupBox {
+        GroupBox(item)
             .class(getColumnClass(for: item, totalColumns: columnCount))
     }
 
