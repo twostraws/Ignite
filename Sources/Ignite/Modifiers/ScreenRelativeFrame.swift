@@ -14,7 +14,7 @@ struct ScreenRelativeFrameModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with screen-relative positioning applied
     func body(content: some HTML) -> any HTML {
-        let modified = content
+        let modified = content.class("row justify-content-center")
 
         if axes.contains(.horizontal) {
             modified.style("margin-inline: calc(50% - 50vw)")
