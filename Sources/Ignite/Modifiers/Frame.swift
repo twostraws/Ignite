@@ -94,7 +94,7 @@ struct FrameModifier: HTMLModifier {
         guard let value else { return }
 
         switch value {
-        case .vh(100), .vw(100):
+        case .vh(100%), .vw(100%):
             classes.append(dimension.viewportClass)
             if dimension.needsFlexAlignment {
                 classes.append("d-flex")
