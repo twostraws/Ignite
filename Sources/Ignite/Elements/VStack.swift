@@ -27,14 +27,30 @@ public struct VStack: BlockHTML {
 
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
+    /// - Parameter items: The items to use in this section.
+    public init(@HTMLBuilder items: () -> some HTML) {
+        self.items = flatUnwrap(items())
+        self.spacingAmount = nil
+    }
+
+    /// Creates a new `Section` object using a block element builder
+    /// that returns an array of items to use in this section.
+    /// - Parameters:
+    ///   - spacing: The number of pixels between elements.
+    ///   - items: The items to use in this section.
+    public init(spacing pixels: Double, @HTMLBuilder items: () -> some HTML) {
+        self.items = flatUnwrap(items())
+        self.spacingAmount = .exact(pixels)
+    }
+
+    /// Creates a new `Section` object using a block element builder
+    /// that returns an array of items to use in this section.
     /// - Parameters:
     ///   - spacing: The predefined size between elements.
     ///   - items: The items to use in this section.
-    public init(spacing: SpacingAmount? = nil, @HTMLBuilder items: () -> some HTML) {
+    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
-        if let spacing {
-            self.spacingAmount = .semantic(spacing)
-        }
+        self.spacingAmount = .semantic(spacing)
     }
 
     public func render(context: PublishingContext) -> String {
