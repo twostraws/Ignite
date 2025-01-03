@@ -29,11 +29,8 @@ public struct Section: BlockHTML {
     /// How many columns this should be divided into
     var columnCount: Int?
 
-    /// The vertical space between elements in pixels.
-    private var customSpacing: Int?
-
-    /// The vertical space between elements by utility class.
-    private var systemSpacing: SpacingAmount?
+    /// The amount of space between elements.
+    private var spacingAmount: SpacingType?
 
     /// The items to display in this section.
     private var items: [any HTML]
@@ -41,23 +38,11 @@ public struct Section: BlockHTML {
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameters:
-    ///   - spacing: The number of pixels between each element. Default is nil.
-    ///   - items: The items to use in this section.
-    public init(spacing: Int? = nil, @HTMLBuilder items: () -> some HTML) {
-        self.items = flatUnwrap(items())
-        self.customSpacing = spacing
-        self.systemSpacing = nil
-    }
-
-    /// Creates a new `Section` object using a block element builder
-    /// that returns an array of items to use in this section.
-    /// - Parameters:
-    ///   - spacing: The predefined size between each element.
+    ///   - spacing: The size between each element.
     ///   - items: The items to use in this section.
     public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
-        self.systemSpacing = spacing
-        self.customSpacing = nil
+        self.spacingAmount = .semantic(spacing)
     }
 
     /// Adjusts the number of columns that can be fitted into this section.
@@ -89,17 +74,21 @@ public struct Section: BlockHTML {
         var gutterClass = ""
         var gapStyle: AttributeValue?
 
-        if let customSpacing {
-            sectionAttributes.append(styles: .init(name: .rowGap, value: "\(customSpacing)px"))
-        } else if let systemSpacing {
-            gutterClass = "gy-\(systemSpacing.rawValue)"
+        if let spacingAmount {
+            switch spacingAmount {
+            case .exact(let pixels):
+                sectionAttributes.append(styles: .init(name: .rowGap, value: "\(pixels)px"))
+            case .semantic(let amount):
+                gutterClass = "gy-\(amount.rawValue)"
+            }
         }
 
         return Group {
             ForEach(items) { item in
                 if let group = item as? Group {
                     handleGroup(group, attributes: group.attributes)
-                } else if let modified = item as? ModifiedHTML, let group = modified.content as? Group {
+                } else if let modified = item as? ModifiedHTML,
+                          let group = modified.content as? Group {
                     handleGroup(group, attributes: modified.attributes)
                 } else if let item = item as? any BlockHTML {
                     Group(item)
@@ -121,8 +110,8 @@ public struct Section: BlockHTML {
     ///   - attributes: HTML attributes to apply to each element in the group.
     /// - Returns: A view containing the styled group elements.
     func handleGroup(_ group: Group, attributes: CoreAttributes) -> some HTML {
-        let gutterClass = if let systemSpacing {
-            "g-\(systemSpacing.rawValue)"
+        let gutterClass = if case .semantic(let amount) = spacingAmount {
+            "g-\(amount.rawValue)"
         } else {
             ""
         }
