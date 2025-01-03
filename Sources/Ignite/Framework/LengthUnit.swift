@@ -7,18 +7,18 @@
 
 /// Represents a CSS length value with its unit of measurement
 public enum LengthUnit: Hashable, Equatable, Sendable, CustomStringConvertible, Defaultable {
-    /// Pixels (px)
+    /// Pixels
     case px(Double)
-    /// Relative to root element font size (rem)
+    /// Relative to root element font size
     case rem(Double)
-    /// Relative to parent element font size (em)
+    /// Relative to parent element font size
     case em(Double)
-    /// Percentage (%)
+    /// Relative to the parent element
     case percent(Percentage)
-    /// Viewport width unit (vw)
-    case vw(Double)
-    /// Viewport height unit (vh)
-    case vh(Double)
+    /// Relative to 1% of the viewport width
+    case vw(Percentage)
+    /// Relative to 1% of the viewport height
+    case vh(Percentage)
 
     public var description: String {
         switch self {
@@ -26,8 +26,8 @@ public enum LengthUnit: Hashable, Equatable, Sendable, CustomStringConvertible, 
         case .rem(let value): "\(value)rem"
         case .em(let value): "\(value)em"
         case .percent(let percentage): "\(percentage.value)%"
-        case .vw(let value): "\(value)vw"
-        case .vh(let value): "\(value)vh"
+        case .vw(let percentage): "\(percentage.value)vw"
+        case .vh(let percentage): "\(percentage.value)vh"
         }
     }
 
