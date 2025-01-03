@@ -74,7 +74,7 @@ public extension BlockHTML {
     func background(_ color: Color) -> some BlockHTML {
         modifier(BackgroundModifier(background: .color(color)))
     }
-    
+
     /// Applies a background color from a string.
     /// - Parameter color: The specific color value to use, specified as a string.
     /// - Returns: The current element with the updated background color.
