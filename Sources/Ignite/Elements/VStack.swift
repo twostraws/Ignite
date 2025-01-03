@@ -19,44 +19,22 @@ public struct VStack: BlockHTML {
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
-    /// The vertical space between elements in pixels.
-    private var customSpacing: Int?
-
-    /// The vertical space between elements by utility class.
-    private var systemSpacing: SpacingAmount?
+    /// The spacing between elements.
+    private var spacingAmount: SpacingType?
 
     /// The child elements contained in the stack.
     private var items: [any HTML]
 
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
-    /// - Parameter items: The items to use in this section.
-    public init(@HTMLBuilder items: () -> some HTML) {
-        self.items = flatUnwrap(items())
-        self.customSpacing = nil
-        self.systemSpacing = nil
-    }
-
-    /// Creates a new `Section` object using a block element builder
-    /// that returns an array of items to use in this section.
-    /// - Parameters:
-    ///   - spacing: The number of pixels between elements.
-    ///   - items: The items to use in this section.
-    public init(spacing pixels: Int, @HTMLBuilder items: () -> some HTML) {
-        self.items = flatUnwrap(items())
-        self.customSpacing = pixels
-        self.systemSpacing = nil
-    }
-
-    /// Creates a new `Section` object using a block element builder
-    /// that returns an array of items to use in this section.
     /// - Parameters:
     ///   - spacing: The predefined size between elements.
     ///   - items: The items to use in this section.
-    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
+    public init(spacing: SpacingAmount? = nil, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
-        self.systemSpacing = spacing
-        self.customSpacing = nil
+        if let spacing {
+            self.spacingAmount = .semantic(spacing)
+        }
     }
 
     public func render(context: PublishingContext) -> String {
@@ -80,10 +58,10 @@ public struct VStack: BlockHTML {
         var attributes = attributes
         attributes.append(classes: "vstack")
 
-        if let customSpacing {
-            attributes.append(styles: .init(name: .gap, value: "\(customSpacing)px"))
-        } else if let systemSpacing {
-            attributes.append(classes: "gap-\(systemSpacing.rawValue)")
+        if case let .exact(pixels) = spacingAmount {
+            attributes.append(styles: .init(name: .gap, value: "\(pixels)px"))
+        } else if case let .semantic(amount) = spacingAmount {
+            attributes.append(classes: "gap-\(amount.rawValue)")
         }
 
         AttributeStore.default.merge(attributes, intoHTML: id)
