@@ -19,9 +19,9 @@ public enum HorizontalAlignment: String, Equatable, Sendable {
     /// The Bootstrap class for flex alignment
     var bootstrapClass: String {
         switch self {
-        case .leading: return "justify-content-start"
-        case .center: return "justify-content-center"
-        case .trailing: return "justify-content-end"
+        case .leading: "justify-content-start"
+        case .center: "justify-content-center"
+        case .trailing: "justify-content-end"
         }
     }
 }
@@ -30,9 +30,9 @@ extension HorizontalAlignment {
     /// Converts HorizontalAlignment to CSS justify-content values
     var justifyContent: String {
         switch self {
-        case .leading: return "flex-start"
-        case .center: return "center"
-        case .trailing: return "flex-end"
+        case .leading: "flex-start"
+        case .center: "center"
+        case .trailing: "flex-end"
         }
     }
 }
