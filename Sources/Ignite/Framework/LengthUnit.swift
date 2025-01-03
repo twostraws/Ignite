@@ -21,7 +21,7 @@ extension LengthUnit {
 
     public var stringValue: String {
         if let intValue = self as? Int {
-            if intValue == .viewport {
+            if intValue == .container {
                 "100vw"
             } else {
                 "\(intValue)px"
@@ -34,7 +34,7 @@ extension LengthUnit {
 
 public extension LengthUnit where Self == Int {
     /// A special value indicating that a dimension should use 100% of the viewport width
-    static var viewport: Int { .max }
+    static var container: Int { .max }
 
     /// The default value for length units, represented by the minimum integer value
     static var `default`: Int { .min }
@@ -42,7 +42,7 @@ public extension LengthUnit where Self == Int {
 
 public extension LengthUnit where Self == Double {
     /// Returns a special value indicating that a dimension should use 100% of the parent container
-    static var infinity: Double { Double.infinity }
+    static var viewport: Double { Double.infinity }
 }
 
 /// Enables `String` to represent CSS unit values

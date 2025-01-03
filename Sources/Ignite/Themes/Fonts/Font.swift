@@ -111,7 +111,7 @@ public struct Font: Hashable, Equatable, Sendable {
     /// - Parameter style: The font style to use
     /// - Returns: A Font instance configured with the system font
     public static func system(_ style: Font.Style? = nil, size: Double? = nil, weight: Font.Weight = .regular) -> Font {
-        Font(name: "", style: style, size: nil, weight: weight)
+        Font(name: "", style: style, size: size, weight: weight)
     }
 
     /// Creates a custom font with the specified name and size

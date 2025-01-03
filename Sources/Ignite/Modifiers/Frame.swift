@@ -7,36 +7,60 @@
 
 /// A modifier that applies dimensional constraints to HTML elements
 struct FrameModifier: HTMLModifier {
-    /// The exact width to apply
+    /// Represents the different types of dimensional constraints that can be applied to an element.
+    private enum Dimension {
+        /// The exact width, minimum width, or maximum width constraints
+        case width, minWidth, maxWidth
+        /// The exact height, minimum height, or maximum height constraints
+        case height, minHeight, maxHeight
+
+        /// The CSS property name for this dimension.
+        var cssProperty: String {
+            switch self {
+            case .width: return "width"
+            case .minWidth: return "min-width"
+            case .maxWidth: return "max-width"
+            case .height: return "height"
+            case .minHeight: return "min-height"
+            case .maxHeight: return "max-height"
+            }
+        }
+
+        /// The Bootstrap class to use when the dimension should fill its container.
+        var bootstrapClass: String {
+            switch self {
+            case .width, .minWidth, .maxWidth: return "w-100"
+            case .height, .minHeight, .maxHeight: return "h-100"
+            }
+        }
+
+        /// The Bootstrap class to use when the dimension should fill the viewport.
+        var viewportClass: String {
+            switch self {
+            case .width, .maxWidth: return "vw-100"
+            case .minWidth: return "min-vw-100"
+            case .height, .maxHeight: return "vh-100"
+            case .minHeight: return "min-vh-100"
+            }
+        }
+
+        /// Whether this dimension requires flex alignment when using viewport sizing.
+        var needsFlexAlignment: Bool {
+            switch self {
+            case .width, .maxWidth, .height, .maxHeight: return true
+            case .minWidth, .minHeight: return false
+            }
+        }
+    }
+
     private let width: (any LengthUnit)?
-
-    /// The minimum width to apply
     private let minWidth: (any LengthUnit)?
-
-    /// The maximum width to apply
     private let maxWidth: (any LengthUnit)?
-
-    /// The exact height to apply
     private let height: (any LengthUnit)?
-
-    /// The minimum height to apply
     private let minHeight: (any LengthUnit)?
-
-    /// The maximum height to apply
     private let maxHeight: (any LengthUnit)?
+    private let alignment: Alignment
 
-    /// The horizontal alignment within the frame
-    private let alignment: HorizontalAlignment
-
-    /// Creates a new frame modifier
-    /// - Parameters:
-    ///   - width: An exact width for this element
-    ///   - minWidth: A minimum width for this element
-    ///   - maxWidth: A maximum width for this element
-    ///   - height: An exact height for this element
-    ///   - minHeight: A minimum height for this element
-    ///   - maxHeight: A maximum height for this element
-    ///   - alignment: How to align this element inside its frame
     init(
         width: (any LengthUnit)? = nil,
         minWidth: (any LengthUnit)? = nil,
@@ -44,7 +68,7 @@ struct FrameModifier: HTMLModifier {
         height: (any LengthUnit)? = nil,
         minHeight: (any LengthUnit)? = nil,
         maxHeight: (any LengthUnit)? = nil,
-        alignment: HorizontalAlignment = .center
+        alignment: Alignment = .center
     ) {
         self.width = width
         self.minWidth = minWidth
@@ -55,50 +79,50 @@ struct FrameModifier: HTMLModifier {
         self.alignment = alignment
     }
 
-    /// Applies frame constraints to the provided HTML content
-    /// - Parameter content: The HTML element to modify
-    /// - Returns: The modified HTML with frame constraints applied
-    func body(content: some HTML) -> any HTML {
-        var modified = content
+    /// Processes a single dimensional constraint and applies the appropriate styling.
+    /// - Parameters:
+    ///   - value: The length value to apply, if any
+    ///   - dimension: The type of dimension being processed (width, height, etc.)
+    ///   - classes: The collection of Bootstrap classes to append to
+    ///   - modified: The HTML element being modified
+    private func handleDimension(
+        _ value: (any LengthUnit)?,
+        dimension: Dimension,
+        classes: inout [String],
+        modified: inout any HTML
+    ) {
+        guard let value else { return }
 
-        if let width {
-            modified = modified.style("width: \(width.stringValue)")
-        }
-
-        if let minWidth {
-            modified = modified.style("min-width: \(minWidth.stringValue)")
-        }
-
-        if let maxWidth {
-            if let maxWidth = maxWidth as? Double, maxWidth == .infinity {
-                modified = modified.class("w-100")
-            } else {
-                modified = modified.style("max-width: \(maxWidth.stringValue)")
+        if let value = value as? Double, value == .infinity {
+            classes.append(dimension.viewportClass)
+            if dimension.needsFlexAlignment {
+                classes.append("d-flex")
+                classes.append(contentsOf: alignment.bootstrapClasses)
             }
-        }
-
-        if let height {
-            modified = modified.style("height: \(height.stringValue)")
-        }
-
-        if let minHeight {
-            modified = modified.style("min-height: \(minHeight.stringValue)")
-        }
-
-        if let maxHeight {
-            if let maxHeight = maxHeight as? Double, maxHeight == .infinity {
-                modified = modified.class("h-100")
-            } else {
-                modified = modified.style("max-height: \(maxHeight.stringValue)")
+        } else if let value = value as? Int, value == .container {
+            classes.append(dimension.bootstrapClass)
+            if dimension.needsFlexAlignment {
+                classes.append("d-flex")
+                classes.append(contentsOf: alignment.bootstrapClasses)
             }
-        }
-
-        if alignment == .center {
-            modified = modified.class("mx-auto")
-        } else if alignment == .leading {
-            modified = modified.style("margin-right: auto")
         } else {
-            modified = modified.style("margin-left: auto")
+            modified = modified.style("\(dimension.cssProperty): \(value.stringValue)")
+        }
+    }
+
+    func body(content: some HTML) -> any HTML {
+        var modified: any HTML = content
+        var classes = [String]()
+
+        handleDimension(width, dimension: .width, classes: &classes, modified: &modified)
+        handleDimension(minWidth, dimension: .minWidth, classes: &classes, modified: &modified)
+        handleDimension(maxWidth, dimension: .maxWidth, classes: &classes, modified: &modified)
+        handleDimension(height, dimension: .height, classes: &classes, modified: &modified)
+        handleDimension(minHeight, dimension: .minHeight, classes: &classes, modified: &modified)
+        handleDimension(maxHeight, dimension: .maxHeight, classes: &classes, modified: &modified)
+
+        if !classes.isEmpty {
+            modified = modified.class(classes.joined(separator: " "))
         }
 
         return modified
@@ -125,7 +149,7 @@ public extension HTML {
         height: (any LengthUnit)? = nil,
         minHeight: (any LengthUnit)? = nil,
         maxHeight: (any LengthUnit)? = nil,
-        alignment: HorizontalAlignment = .center
+        alignment: Alignment = .center
     ) -> some HTML {
         modifier(FrameModifier(
             width: width,
@@ -159,7 +183,7 @@ public extension InlineHTML {
         height: (any LengthUnit)? = nil,
         minHeight: (any LengthUnit)? = nil,
         maxHeight: (any LengthUnit)? = nil,
-        alignment: HorizontalAlignment = .center
+        alignment: Alignment = .center
     ) -> some InlineHTML {
         modifier(FrameModifier(
             width: width,
