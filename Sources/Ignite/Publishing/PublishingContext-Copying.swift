@@ -52,23 +52,18 @@ extension PublishingContext {
     /// Copies custom font files from the project's "Fonts" directory to the build output's "fonts" directory.
     func copyFonts() throws {
         do {
-            // Copy fonts if directory exists
-            if FileManager.default.fileExists(atPath: fontsDirectory.path()) {
-                let fonts = try FileManager.default.contentsOfDirectory(
-                    at: fontsDirectory,
-                    includingPropertiesForKeys: nil
-                )
+            let fonts = try FileManager.default.contentsOfDirectory(
+                at: fontsDirectory,
+                includingPropertiesForKeys: nil
+            )
 
-                let fontsDestDir = buildDirectory.appending(path: "fonts")
-                try FileManager.default.createDirectory(at: fontsDestDir, withIntermediateDirectories: true)
+            let fontsDestDir = buildDirectory.appending(path: "fonts")
+            try FileManager.default.createDirectory(at: fontsDestDir, withIntermediateDirectories: true)
 
-                for font in fonts {
-                    let destination = fontsDestDir.appending(path: font.lastPathComponent)
-                    try FileManager.default.copyItem(at: font, to: destination)
-                }
+            for font in fonts {
+                let destination = fontsDestDir.appending(path: font.lastPathComponent)
+                try FileManager.default.copyItem(at: font, to: destination)
             }
-
-            // Rest of the existing copyResources code...
         } catch {
             print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
             throw error

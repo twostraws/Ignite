@@ -11,7 +11,7 @@ struct BorderModifier: HTMLModifier {
     var color: Color
 
     /// The width of the border in pixels.
-    var width: Int
+    var width: Double
 
     /// The style of the border.
     var style: BorderStyle
@@ -75,7 +75,7 @@ public extension HTML {
     /// - Returns: A modified element with the border applied
     func border(
         _ color: Color,
-        width: Int = 1,
+        width: Double = 1,
         style: BorderStyle = .solid,
         cornerRadii: CornerRadii = CornerRadii(),
         edges: Edge = .all
@@ -101,7 +101,7 @@ public extension InlineHTML {
     /// - Returns: A modified element with the border applied
     func border(
         _ color: Color,
-        width: Int = 1,
+        width: Double = 1,
         style: BorderStyle = .solid,
         cornerRadii: CornerRadii = CornerRadii(),
         edges: Edge = .all
