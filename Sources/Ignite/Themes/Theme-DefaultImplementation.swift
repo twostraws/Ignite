@@ -89,7 +89,7 @@ public extension Theme {
 extension Theme {
 
     /// The unique identifier for this theme instance, including any system-generated suffix.
-    var id: String {
+    public var id: String {
         Self.id
     }
 
