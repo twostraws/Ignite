@@ -32,7 +32,8 @@
 
     /// Sets the themes and processes any pending registrations
     /// - Parameter themes: Array of themes from the site
-    func setThemes(_ themes: [Theme]) {
+    /// - Returns: A string containing all generated CSS rules, separated by newlines.
+    func generateAllRules(themes: [Theme]) -> String {
         self.themes = themes
 
         // Process all pending registrations
@@ -44,6 +45,7 @@
             )
         }
         pendingRegistrations.removeAll()
+        return rules.values.joined(separator: "\n\n")
     }
 
     /// Registers a set of media queries and generates a corresponding CSS class
@@ -161,7 +163,7 @@
             if case .theme(let id) = query {
                 result.0.insert(id.kebabCased())
             } else {
-                result.1.append(query.query(with: theme))
+                result.1.append(query.queryString(with: theme))
             }
         }
 
@@ -185,10 +187,5 @@
             }
             """
         }
-    }
-
-    /// A string containing all generated CSS rules, separated by newlines.
-    var allRules: String {
-        rules.values.joined(separator: "\n\n")
     }
 }

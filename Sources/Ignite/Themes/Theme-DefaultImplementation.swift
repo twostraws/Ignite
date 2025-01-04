@@ -94,7 +94,7 @@ extension Theme {
     }
 
     /// The display name of this theme instance.
-    var name: String {
+    public var name: String {
         Self.name
     }
 
