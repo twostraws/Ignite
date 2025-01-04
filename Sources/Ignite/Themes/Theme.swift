@@ -19,9 +19,9 @@
 ///     var fontFamilyBase: Font = .custom("Helvetica")
 /// }
 /// ```
-public protocol Theme: Sendable {
+@MainActor public protocol Theme: Sendable {
     /// The name of the theme, which must be unique
-    var name: String { get set }
+    static var name: String { get set }
 
     /// Primary brand color
     var accent: Color { get }
@@ -149,9 +149,6 @@ public protocol Theme: Sendable {
     /// Font size for h6 elements
     var xSmallHeadingSize: LengthUnit { get }
 
-    /// Bottom margin for headings
-    var headingBottomMargin: LengthUnit { get }
-
     /// Optional custom font family for headings
     var headingFont: Font { get }
 
@@ -160,6 +157,12 @@ public protocol Theme: Sendable {
 
     /// Line height for headings
     var headingLineHeight: LengthUnit { get }
+
+    /// Bottom margin for headings
+    var headingBottomMargin: LengthUnit { get }
+
+    /// Bottom margin for paragraphs
+    var paragraphMarginBottom: LengthUnit { get }
 
     /// Extra small breakpoint
     var xSmallBreakpoint: LengthUnit { get }
