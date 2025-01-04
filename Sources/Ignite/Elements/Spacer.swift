@@ -44,7 +44,7 @@ public struct Spacer: BlockHTML {
                 .frame(height: .px(int))
                 .render(context: context)
         } else {
-            fatalError("Unknown spacing amount: \(spacingAmount)")
+            fatalError("Unknown spacing amount: \(String(describing: spacingAmount))")
         }
     }
 }
