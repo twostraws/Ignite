@@ -6,9 +6,9 @@
 //
 
 /// A manager that generates and maintains CSS classes for media query-based styling rules.
-final class CSSManager {
+@MainActor final class CSSManager {
     /// The shared instance used for managing CSS rules across the application.
-    @MainActor static let `default` = CSSManager()
+    static let `default` = CSSManager()
 
     /// All themes available in the site
     private var themes: [Theme] = []
@@ -157,7 +157,7 @@ final class CSSManager {
         properties: [(String, String)],
         theme: Theme
     ) -> String {
-        let (themeQueries, mediaQueries) = queries.reduce(into: (Set<String>(), [String]())) { result, query in
+        let (_, mediaQueries) = queries.reduce(into: (Set<String>(), [String]())) { result, query in
             if case .theme(let id) = query {
                 result.0.insert(id.kebabCased())
             } else {
