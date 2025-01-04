@@ -25,20 +25,20 @@ public protocol Responsive {
 ///     .padding(.small(8), .medium(16), .large(24))
 /// ```
 public enum ResponsiveValue<Value>: Hashable, Equatable, Sendable where Value: Equatable & Hashable & Sendable {
-    /// Applies value at the small breakpoint (≤576px)
+    /// Applies value at the small breakpoint
     case small(Value)
 
-    /// Applies value at the medium breakpoint (≥768px)
+    /// Applies value at the medium breakpoint
     case medium(Value)
 
-    /// Applies value at the large breakpoint (≥992px)
+    /// Applies value at the large breakpoint
     case large(Value)
 
-    /// Applies value at the extra large breakpoint (≥1200px)
-    case extraLarge(Value)
+    /// Applies value at the extra large breakpoint
+    case xLarge(Value)
 
-    /// Applies value at the extra extra large breakpoint (≥1400px)
-    case extraExtraLarge(Value)
+    /// Applies value at the extra extra large breakpoint
+    case xxLarge(Value)
 
     /// Returns the breakpoint and value for this responsive value
     var resolved: (breakpoint: String?, value: Value) {
@@ -46,8 +46,8 @@ public enum ResponsiveValue<Value>: Hashable, Equatable, Sendable where Value: E
         case .small(let value): (nil, value)
         case .medium(let value): ("md", value)
         case .large(let value): ("lg", value)
-        case .extraLarge(let value): ("xl", value)
-        case .extraExtraLarge(let value): ("xxl", value)
+        case .xLarge(let value): ("xl", value)
+        case .xxLarge(let value): ("xxl", value)
         }
     }
 }
