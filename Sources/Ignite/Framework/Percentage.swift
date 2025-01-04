@@ -32,6 +32,12 @@ public struct Percentage: Hashable, Sendable {
         self.value = value
     }
 
+    /// Creates a new percentage with the specified integer value
+    /// - Parameter value: The percentage value to store (e.g. 42.5 for 42.5%)
+    init(_ value: Int) {
+        self.value = Value(value)
+    }
+
     /// Returns the percentage as a whole number, rounded to the nearest integer
     public var roundedValue: RoundedValue {
         RoundedValue(round(value))
