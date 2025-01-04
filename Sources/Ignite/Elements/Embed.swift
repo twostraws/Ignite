@@ -120,7 +120,7 @@ public struct Embed: BlockHTML, LazyLoadable {
             """)
         }
 
-        return GroupBox {
+        return Container {
              #"<iframe src="\#(url)" title="\#(title)" allow="\#(allowPermissions)"></iframe>"#
         }
         .attributes(attributes)

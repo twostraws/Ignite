@@ -5,7 +5,15 @@
 // See LICENSE for license information.
 //
 
-public struct GroupBox: BlockHTML {
+/// A container element that wraps its children in a `div` element.
+///
+/// Use `Container` when you want to group elements together and have them rendered
+/// within a containing HTML `div`. This is useful for applying shared styling,
+/// creating layout structures, or logically grouping related content.
+///
+/// - Note: Unlike ``Group``, modifiers applied to a `Container` affect the
+///         containing `div` element rather than being propagated to child elements.
+public struct Container: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -19,32 +27,23 @@ public struct GroupBox: BlockHTML {
     public var columnWidth = ColumnWidth.automatic
 
     var items: [any HTML] = []
-    private var backgroundColor: Color?
 
-    public init(background: Color? = nil, @HTMLBuilder content: () -> some HTML) {
+    public init(@HTMLBuilder content: () -> some HTML) {
         self.items = flatUnwrap(content())
-        self.backgroundColor = background
     }
 
     public init(_ items: any HTML, background: Color? = nil) {
         self.items = flatUnwrap(items)
-        self.backgroundColor = background
     }
 
     init(context: PublishingContext, items: [any HTML]) {
         self.items = flatUnwrap(items)
-        self.backgroundColor = nil
     }
 
     public func render(context: PublishingContext) -> String {
         let content = items.map { $0.render(context: context) }.joined()
         var attributes = attributes
         attributes.tag = "div"
-
-        if let backgroundColor {
-            attributes.append(styles: .init(name: "background-color", value: backgroundColor.description))
-        }
-
         return attributes.description(wrapping: content)
     }
 }

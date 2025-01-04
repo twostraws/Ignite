@@ -207,7 +207,7 @@ public struct Card: BlockHTML {
     }
 
     public func render(context: PublishingContext) -> String {
-        GroupBox {
+        Container {
             if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
@@ -246,8 +246,8 @@ public struct Card: BlockHTML {
         .render(context: context)
     }
 
-    private func renderHeader() -> GroupBox {
-        GroupBox {
+    private func renderHeader() -> Container {
+        Container {
             for item in header {
                 item
             }
@@ -255,8 +255,8 @@ public struct Card: BlockHTML {
         .class("card-header")
     }
 
-    private func renderItems() -> GroupBox {
-        GroupBox {
+    private func renderItems() -> Container {
+        Container {
             ForEach(items) { item in
                 switch item {
                 case let text as Text where text.font == .body || text.font == .lead:
@@ -275,8 +275,8 @@ public struct Card: BlockHTML {
         .class(contentPosition.bodyClasses)
     }
 
-    private func renderFooter() -> GroupBox {
-        GroupBox {
+    private func renderFooter() -> Container {
+        Container {
             for item in footer {
                 item
             }

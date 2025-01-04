@@ -159,7 +159,7 @@ public struct NavigationBar: BlockHTML {
     public func render(context: PublishingContext) -> String {
         Tag("header") {
             Tag("nav") {
-                GroupBox {
+                Container {
                     if let logo {
                         Link(logo, target: "/")
                             .class("navbar-brand")
@@ -189,8 +189,8 @@ public struct NavigationBar: BlockHTML {
         .aria("label", "Toggle navigation")
     }
 
-    private func renderNavItems(context: PublishingContext) -> GroupBox {
-        GroupBox {
+    private func renderNavItems(context: PublishingContext) -> Container {
+        Container {
             List {
                 ForEach(items) { item in
                     if let dropdownItem = item as? Dropdown {

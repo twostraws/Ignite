@@ -42,11 +42,11 @@ public struct Spacer: BlockHTML {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         if case let .semantic(spacingAmount) = spacingAmount {
-            GroupBox {}
+            Container {}
                 .margin(.top, spacingAmount)
                 .render(context: context)
         } else if case let .exact(int) = spacingAmount {
-            GroupBox {}
+            Container {}
                 .frame(height: .px(int))
                 .render(context: context)
         } else {

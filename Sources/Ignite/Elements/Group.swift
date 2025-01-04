@@ -5,6 +5,17 @@
 // See LICENSE for license information.
 //
 
+/// A transparent grouping construct that propagates modifiers to its children.
+///
+/// Use `Group` when you want to apply shared modifiers to multiple elements
+/// without introducing additional HTML structure. Unlike ``Container``, `Group`
+/// doesn't wrap its children in a `div`; instead, it passes modifiers through
+/// to each child element.
+///
+/// - Note: `Group` is particularly useful for applying shared styling or
+///         attributes to multiple elements without affecting the document
+///         structure. If you need a containing `div` element, use
+///         ``Container`` instead.
 public struct Group: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }

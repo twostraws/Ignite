@@ -77,7 +77,7 @@ public struct ContentPreview: BlockHTML {
             let tagLinks = content.tagLinks()
 
             if tagLinks.isEmpty == false {
-                GroupBox {
+                Container {
                     tagLinks
                 }
                 .style("margin-top: -5px")

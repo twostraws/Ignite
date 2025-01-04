@@ -292,7 +292,7 @@ public final class PublishingContext {
         let layout = try layout(for: content)
 
         let body = ContentContext.withCurrentContent(content) {
-            GroupBox(context: self, items: [layout.body])
+            Container(context: self, items: [layout.body])
         }
 
         currentRenderingPath = content.path
