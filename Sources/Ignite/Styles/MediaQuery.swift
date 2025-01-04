@@ -106,7 +106,7 @@ public enum MediaQuery {
     /// Generates the CSS media query string for this condition
     /// - Parameter theme: The theme to use for breakpoint values
     /// - Returns: A CSS media query string
-    func query(with theme: Theme) -> String {
+    @MainActor func query(with theme: Theme) -> String {
         switch self {
         case .colorScheme(let scheme):
             return switch scheme {

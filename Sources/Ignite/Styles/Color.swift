@@ -499,6 +499,9 @@ public struct Color: CustomStringConvertible, Equatable, Sendable {
     /// Bootstrap's gray color (#adb5bd)
     public static let bootstrapGray = Color(hex: "#adb5bd")
 
+   /// A fully transparent color (RGBA: 0, 0, 0, 0)
+   public static let clear = Color(red: 0, green: 0, blue: 0, opacity: 0)
+
     /// The red component for this color, in the range 0 through 255.
     public var red: Int
 
@@ -518,12 +521,12 @@ public struct Color: CustomStringConvertible, Equatable, Sendable {
     ///   - green: How much green to use, in the range of 0 through 255.
     ///   - blue: How much blue to use, in the range of 0 through 255.
     ///   - opacity: How opaque the color should be, in the range of 0
-    ///   (transparent) through to 100 (opaque). Defaults to 100,
-    public init(red: Int, green: Int, blue: Int, opacity: Int = 100) {
+    ///   (transparent) through to 100% (opaque). Defaults to 100%,
+    public init(red: Int, green: Int, blue: Int, opacity: Percentage = 100%) {
         self.red = red
         self.green = green
         self.blue = blue
-        self.opacity = opacity
+        self.opacity = opacity.roundedValue
     }
 
     /// Creates a new color from the specified RGB components, optionally also
@@ -540,7 +543,7 @@ public struct Color: CustomStringConvertible, Equatable, Sendable {
         let intBlue = Int(blue * 255)
         let intOpacity = Int(opacity * 255)
 
-        self.init(red: intRed, green: intGreen, blue: intBlue, opacity: intOpacity)
+        self.init(red: intRed, green: intGreen, blue: intBlue, opacity: intOpacity%)
     }
 
     /// Creates a new grayscale color from the specified white value, optionally also
@@ -553,7 +556,7 @@ public struct Color: CustomStringConvertible, Equatable, Sendable {
         let intWhite = Int(white * 255)
         let intOpacity = Int(opacity * 255)
 
-        self.init(red: intWhite, green: intWhite, blue: intWhite, opacity: intOpacity)
+        self.init(red: intWhite, green: intWhite, blue: intWhite, opacity: intOpacity%)
     }
 
     /// Creates a new color from a HTML hex color string. Must start with #, e.g.
@@ -577,7 +580,7 @@ public struct Color: CustomStringConvertible, Equatable, Sendable {
                     blue = Int((hexNumber & 0x0000ff00) >> 8)
                     alpha = Int(hexNumber & 0x000000ff)
 
-                    self.init(red: red, green: green, blue: blue, opacity: alpha)
+                    self.init(red: red, green: green, blue: blue, opacity: alpha%)
                     return
                 }
             } else if hexColor.count == 6 {
@@ -625,7 +628,7 @@ public struct Color: CustomStringConvertible, Equatable, Sendable {
             red: newRed,
             green: newGreen,
             blue: newBlue,
-            opacity: opacity
+            opacity: opacity%
         )
     }
 }

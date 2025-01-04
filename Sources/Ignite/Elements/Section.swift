@@ -38,13 +38,23 @@ public struct Section: BlockHTML {
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameters:
-    ///   - spacing: The size between each element.
+    ///   - spacing: The number of pixels between each element. Default is nil.
     ///   - items: The items to use in this section.
-    public init(spacing: SpacingAmount? = nil, @HTMLBuilder items: () -> some HTML) {
+    public init(spacing: Double? = nil, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
         if let spacing {
-            self.spacingAmount = .semantic(spacing)
+            self.spacingAmount = .exact(spacing)
         }
+    }
+
+    /// Creates a new `Section` object using a block element builder
+    /// that returns an array of items to use in this section.
+    /// - Parameters:
+    ///   - spacing: The predefined size between each element.
+    ///   - items: The items to use in this section.
+    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
+        self.items = flatUnwrap(items())
+        self.spacingAmount = .semantic(spacing)
     }
 
     /// Adjusts the number of columns that can be fitted into this section.
