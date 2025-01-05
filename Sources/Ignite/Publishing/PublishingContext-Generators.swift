@@ -9,7 +9,6 @@ import Foundation
 
 extension PublishingContext {
     /// Contains the various snap dimensions for different Bootstrap widths.
-    /// Contains the various snap dimensions for different Bootstrap widths.
     var containerDefaults: String {
         guard let theme = site.lightTheme ?? site.darkTheme else {
             fatalError("Ignite requires that you provide a light or dark theme.")
@@ -18,19 +17,19 @@ extension PublishingContext {
         return """
         .container {
             @media (min-width: \(theme.smallBreakpoint.stringValue)) {
-                max-width: var(\(BootstrapVariable.smallContainer.rawValue), \(theme.smallMaxWidth.stringValue));
+                max-width: var(\(BootstrapVariable.smallContainer.rawValue), 540px);
             }
             @media (min-width: \(theme.mediumBreakpoint.stringValue)) {
-                max-width: var(\(BootstrapVariable.mediumContainer.rawValue), \(theme.mediumMaxWidth.stringValue));
+                max-width: var(\(BootstrapVariable.mediumContainer.rawValue), 720px);
             }
             @media (min-width: \(theme.largeBreakpoint.stringValue)) {
-                max-width: var(\(BootstrapVariable.largeContainer.rawValue), \(theme.largeMaxWidth.stringValue));
+                max-width: var(\(BootstrapVariable.largeContainer.rawValue), 960px);
             }
             @media (min-width: \(theme.xLargeBreakpoint.stringValue)) {
-                max-width: var(\(BootstrapVariable.xLargeContainer.rawValue), \(theme.xLargeMaxWidth.stringValue));
+                max-width: var(\(BootstrapVariable.xLargeContainer.rawValue), 1140px);
             }
             @media (min-width: \(theme.xxLargeBreakpoint.stringValue)) {
-                max-width: var(\(BootstrapVariable.xxLargeContainer.rawValue), \(theme.xxLargeMaxWidth.stringValue));
+                max-width: var(\(BootstrapVariable.xxLargeContainer.rawValue), 1320px);
             }
         }
         """
@@ -292,6 +291,7 @@ extension PublishingContext {
         """
     }
 
+    /// Generates CSS for all themes including font faces, colors, and typography settings, writing to themes.min.css.
     func generateThemes(_ themes: [any Theme]) throws {
         guard !themes.isEmpty else { return }
         var cssContent = ""
@@ -382,76 +382,22 @@ extension PublishingContext {
             }
         }
 
+        for theme in site.alternateThemes {
+            cssContent += """
+
+            /* Alternate theme: \(theme.name) */
+            [data-bs-theme="\(theme.id)"] {
+                \(generateThemeVariables(theme))
+            }
+            """
+        }
+
         let cssPath = buildDirectory.appending(path: "css/themes.min.css")
         try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
     }
 
-    private func generateThemeRules(_ theme: Theme, selector: String) -> String {
-        // First generate all the CSS variables
-        let variables = generateThemeVariables(theme)
-
-        // Then generate the actual CSS rules that use these variables
-        let rules = """
-            \(selector) {
-                \(variables)
-            }
-
-            \(selector) .text-primary { color: var(--bs-primary) !important; }
-            \(selector) .text-secondary { color: var(--bs-secondary) !important; }
-            \(selector) .text-success { color: var(--bs-success) !important; }
-            \(selector) .text-info { color: var(--bs-info) !important; }
-            \(selector) .text-warning { color: var(--bs-warning) !important; }
-            \(selector) .text-danger { color: var(--bs-danger) !important; }
-            \(selector) .text-light { color: var(--bs-light) !important; }
-            \(selector) .text-dark { color: var(--bs-dark) !important; }
-
-            \(selector) .bg-primary { background-color: var(--bs-primary) !important; }
-            \(selector) .bg-secondary { background-color: var(--bs-secondary) !important; }
-            \(selector) .bg-success { background-color: var(--bs-success) !important; }
-            \(selector) .bg-info { background-color: var(--bs-info) !important; }
-            \(selector) .bg-warning { background-color: var(--bs-warning) !important; }
-            \(selector) .bg-danger { background-color: var(--bs-danger) !important; }
-            \(selector) .bg-light { background-color: var(--bs-light) !important; }
-            \(selector) .bg-dark { background-color: var(--bs-dark) !important; }
-
-            \(selector) .btn-primary { 
-                background-color: var(--bs-primary);
-                border-color: var(--bs-primary);
-            }
-            \(selector) .btn-secondary {
-                background-color: var(--bs-secondary);
-                border-color: var(--bs-secondary);
-            }
-            \(selector) .btn-success {
-                background-color: var(--bs-success);
-                border-color: var(--bs-success);
-            }
-            \(selector) .btn-info {
-                background-color: var(--bs-info);
-                border-color: var(--bs-info);
-            }
-            \(selector) .btn-warning {
-                background-color: var(--bs-warning);
-                border-color: var(--bs-warning);
-            }
-            \(selector) .btn-danger {
-                background-color: var(--bs-danger);
-                border-color: var(--bs-danger);
-            }
-            \(selector) .btn-light {
-                background-color: var(--bs-light);
-                border-color: var(--bs-light);
-            }
-            \(selector) .btn-dark {
-                background-color: var(--bs-dark);
-                border-color: var(--bs-dark);
-            }
-        """
-
-        return rules
-    }
-
     // swiftlint:disable function_body_length
+    /// Generates CSS variables for a theme's colors, typography, spacing, and other customizable properties.
     private func generateThemeVariables(_ theme: Theme) -> String {
         var cssProperties: [String] = []
 
