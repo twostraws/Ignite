@@ -87,7 +87,25 @@ public struct Dropdown: BlockHTML, NavigationItem {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        Group(isTransparent: isNavigationItem) {
+        let content = renderDropdownContent(context: context)
+        if isNavigationItem {
+            return Group(content)
+                .attributes(attributes)
+                .class("dropdown")
+                .render(context: context)
+        } else {
+            return Container(content)
+                .attributes(attributes)
+                .class("dropdown")
+                .render(context: context)
+        }
+    }
+
+    /// Creates the internal dropdown structure including the trigger button and menu items.
+    /// - Parameter context: The current publishing context.
+    /// - Returns: A group containing the dropdown's trigger and menu list.
+    private func renderDropdownContent(context: PublishingContext) -> some HTML {
+        Group {
             if isNavigationItem {
                 let hasActiveItem = items.contains { context.currentRenderingPath == ($0 as? Link)?.url }
 
@@ -122,8 +140,5 @@ public struct Dropdown: BlockHTML, NavigationItem {
             .listMarkerStyle(.unordered(.automatic))
             .class("dropdown-menu")
         }
-        .attributes(attributes)
-        .class("dropdown")
-        .render(context: context)
     }
 }

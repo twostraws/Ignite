@@ -70,7 +70,7 @@ public struct Item: HTML {
 
         let itemID = "\(parentID)-item\(UUID().uuidString.truncatedHash)"
 
-        return Group {
+        return Container {
             Text {
                 Button(title)
                     .class("accordion-button", startsOpen ? "" : "collapsed")
@@ -82,8 +82,8 @@ public struct Item: HTML {
             .font(.title2)
             .class("accordion-header")
 
-            Group {
-                Group {
+            Container {
+                Container {
                     contents.render(context: context)
                 }
                 .class("accordion-body")
