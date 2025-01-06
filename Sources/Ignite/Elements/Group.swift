@@ -5,6 +5,17 @@
 // See LICENSE for license information.
 //
 
+/// A transparent grouping construct that propagates modifiers to its children.
+///
+/// Use `Group` when you want to apply shared modifiers to multiple elements
+/// without introducing additional HTML structure. Unlike ``Container``, `Group`
+/// doesn't wrap its children in a `div`; instead, it passes modifiers through
+/// to each child element.
+///
+/// - Note: `Group` is particularly useful for applying shared styling or
+///         attributes to multiple elements without affecting the document
+///         structure. If you need a containing `div` element, use
+///         ``Container`` instead.
 public struct Group: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
@@ -19,49 +30,24 @@ public struct Group: BlockHTML {
     public var columnWidth = ColumnWidth.automatic
 
     var items: [any HTML] = []
-    private var isTransparent: Bool
 
     public init(@HTMLBuilder _ content: () -> some HTML) {
-        let content: [any HTML] = flatUnwrap(content())
-        self.isTransparent = false
-        let items = content.map {
-            if let anyHTML = $0 as? AnyHTML {
-                anyHTML.unwrapped.body
-            } else {
-                $0.body
-            }
-        }
-        self.items = items
-    }
-
-    public init(_ content: some HTML) {
-        self.items = flatUnwrap(content)
-        self.isTransparent = false
-    }
-
-    public init(isTransparent: Bool, @HTMLBuilder content: () -> some HTML) {
         self.items = flatUnwrap(content())
-        self.isTransparent = isTransparent
     }
 
-    public init(_ items: any HTML, isTransparent: Bool = false) {
+    public init(_ items: any HTML) {
         self.items = flatUnwrap(items)
-        self.isTransparent = isTransparent
     }
 
     init(context: PublishingContext, items: [any HTML]) {
         self.items = flatUnwrap(items)
-        self.isTransparent = true
     }
 
     public func render(context: PublishingContext) -> String {
-        let content = items.map { $0.render(context: context) }.joined()
-        if isTransparent {
-            return content
-        } else {
-            var attributes = attributes
-            attributes.tag = "div"
-            return attributes.description(wrapping: content)
-        }
+        return items.map {
+            let item: any HTML = $0
+            AttributeStore.default.merge(attributes, intoHTML: item.id)
+            return item.render(context: context)
+        }.joined()
     }
 }

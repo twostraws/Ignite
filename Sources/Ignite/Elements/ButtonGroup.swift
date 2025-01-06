@@ -44,7 +44,7 @@ public struct ButtonGroup: BlockHTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        Group {
+        Container {
             content.map { $0.render(context: context) }.joined()
         }
         .class("btn-group")

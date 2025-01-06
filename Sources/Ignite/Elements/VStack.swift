@@ -19,33 +19,38 @@ public struct VStack: BlockHTML {
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
-    /// The vertical space between elements in pixels.
-    private var customSpacing: Int?
-
-    /// The vertical space between elements by utility class.
-    private var systemSpacing: SpacingAmount?
+    /// The spacing between elements.
+    private var spacingAmount: SpacingType?
 
     /// The child elements contained in the stack.
     private var items: [any HTML]
 
-    /// Creates a new vertical stack with the specified spacing and content.
-    /// - Parameters:
-    ///   - spacing: The number of pixels between each element. Default is `2`.
-    ///   - items: A closure that returns the elements to be arranged vertically.
-    public init(spacing: Int = 2, @HTMLBuilder _ items: () -> some HTML) {
+    /// Creates a new `Section` object using a block element builder
+    /// that returns an array of items to use in this section.
+    /// - Parameter items: The items to use in this section.
+    public init(@HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
-        self.customSpacing = spacing
-        self.systemSpacing = nil
+        self.spacingAmount = nil
     }
 
-    /// Creates a new vertical stack with the specified spacing and content.
+    /// Creates a new `Section` object using a block element builder
+    /// that returns an array of items to use in this section.
     /// - Parameters:
-    ///   - spacing: The predefined size between each element. Default is `.small`.
-    ///   - items: A closure that returns the elements to be arranged vertically.
-    public init(spacing: SpacingAmount = .small, @HTMLBuilder _ items: () -> some HTML) {
+    ///   - spacing: The number of pixels between elements.
+    ///   - items: The items to use in this section.
+    public init(spacing pixels: Double, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
-        self.systemSpacing = spacing
-        self.customSpacing = nil
+        self.spacingAmount = .exact(pixels)
+    }
+
+    /// Creates a new `Section` object using a block element builder
+    /// that returns an array of items to use in this section.
+    /// - Parameters:
+    ///   - spacing: The predefined size between elements.
+    ///   - items: The items to use in this section.
+    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
+        self.items = flatUnwrap(items())
+        self.spacingAmount = .semantic(spacing)
     }
 
     public func render(context: PublishingContext) -> String {
@@ -69,15 +74,10 @@ public struct VStack: BlockHTML {
         var attributes = attributes
         attributes.append(classes: "vstack")
 
-        attributes.append(styles:
-            .init(name: "display", value: "flex"),
-            .init(name: "width", value: "100%")
-        )
-
-        if let customSpacing {
-            attributes.append(styles: .init(name: .gap, value: "\(customSpacing)px"))
-        } else if let systemSpacing {
-            attributes.append(classes: "gap-\(systemSpacing.rawValue)")
+        if case let .exact(pixels) = spacingAmount {
+            attributes.append(styles: .init(name: .gap, value: "\(pixels)px"))
+        } else if case let .semantic(amount) = spacingAmount {
+            attributes.append(classes: "gap-\(amount.rawValue)")
         }
 
         AttributeStore.default.merge(attributes, intoHTML: id)

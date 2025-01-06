@@ -205,7 +205,7 @@ public struct Content: Sendable {
                 return Link(target: "/tags/\(tagPath)") {
                     Badge(tag)
                         .role(.primary)
-                        .margin(.trailing, 5)
+                        .margin(.trailing, .px(5))
                 }
                 .relationship(.tag)
             }

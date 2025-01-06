@@ -16,7 +16,7 @@ postfix operator %
 /// let scale: Percentage = 150%
 /// let reduction: Percentage = -25%
 /// ```
-public struct Percentage: Hashable {
+public struct Percentage: Hashable, Sendable {
     /// The type used for storing the raw percentage value, allowing for decimal points
     public typealias Value = Double
 
@@ -30,6 +30,12 @@ public struct Percentage: Hashable {
     /// - Parameter value: The percentage value to store (e.g. 42.5 for 42.5%)
     public init(_ value: Value) {
         self.value = value
+    }
+
+    /// Creates a new percentage with the specified integer value
+    /// - Parameter value: The percentage value to store (e.g. 42.5 for 42.5%)
+    init(_ value: Int) {
+        self.value = Value(value)
     }
 
     /// Returns the percentage as a whole number, rounded to the nearest integer

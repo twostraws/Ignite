@@ -7,11 +7,6 @@
 
 /// Creates vertical space of a specific value.
 public struct Spacer: BlockHTML {
-    enum SpacerType {
-        case exact(Int)
-        case semantic(SpacingAmount)
-    }
-
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -25,13 +20,13 @@ public struct Spacer: BlockHTML {
     public var columnWidth = ColumnWidth.automatic
 
     /// The amount of space to occupy.
-    var spacingAmount: SpacerType
+    var spacingAmount: SpacingType
 
     /// Creates a new `Spacer` with a size in pixels of your choosing.
     /// Defaults to 20.
     /// - Parameter size: The amount of vertical space this `Spacer`
     /// should occupy. Defaults to 20.
-    public init(size: Int = 20) {
+    public init(size: Double = 20) {
         spacingAmount = .exact(size)
     }
 
@@ -47,15 +42,15 @@ public struct Spacer: BlockHTML {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         if case let .semantic(spacingAmount) = spacingAmount {
-            Group {}
+            Container {}
                 .margin(.top, spacingAmount)
                 .render(context: context)
         } else if case let .exact(int) = spacingAmount {
-            Group {}
-                .frame(height: int)
+            Container {}
+                .frame(height: .px(int))
                 .render(context: context)
         } else {
-            fatalError("Unknown spacing amount: \(spacingAmount)")
+            fatalError("Unknown spacing amount: \(String(describing: spacingAmount))")
         }
     }
 }

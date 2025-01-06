@@ -7,7 +7,7 @@
 
 /// Adaptive spacing amounts that are used by Bootstrap to provide consistency
 /// in site design.
-public enum SpacingAmount: Int {
+public enum SpacingAmount: Double {
     case none = 0
     case extraSmall
     case small

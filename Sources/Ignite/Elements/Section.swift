@@ -29,14 +29,32 @@ public struct Section: BlockHTML {
     /// How many columns this should be divided into
     var columnCount: Int?
 
+    /// The amount of space between elements.
+    private var spacingAmount: SpacingType?
+
     /// The items to display in this section.
     private var items: [any HTML]
 
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
-    /// - Parameter items: The items to use in this section.
-    public init(@HTMLBuilder items: () -> some HTML) {
+    /// - Parameters:
+    ///   - spacing: The number of pixels between each element. Default is nil.
+    ///   - items: The items to use in this section.
+    public init(spacing: Double? = nil, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
+        if let spacing {
+            self.spacingAmount = .exact(spacing)
+        }
+    }
+
+    /// Creates a new `Section` object using a block element builder
+    /// that returns an array of items to use in this section.
+    /// - Parameters:
+    ///   - spacing: The predefined size between each element.
+    ///   - items: The items to use in this section.
+    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
+        self.items = flatUnwrap(items())
+        self.spacingAmount = .semantic(spacing)
     }
 
     /// Adjusts the number of columns that can be fitted into this section.
@@ -65,11 +83,28 @@ public struct Section: BlockHTML {
             ])
         }
 
-        return Group {
+        var gutterClass = ""
+
+        if let spacingAmount {
+            switch spacingAmount {
+            case .exact(let pixels):
+                sectionAttributes.append(styles: .init(name: .rowGap, value: "\(pixels)px"))
+            case .semantic(let amount):
+                gutterClass = "gy-\(amount.rawValue)"
+            }
+        }
+
+        return Container {
             ForEach(items) { item in
-                if let item = item as? any BlockHTML {
-                    Group(item)
-                        .class(item.columnWidth.className)
+                if let group = item as? Group {
+                    handleGroup(group, attributes: group.attributes)
+                } else if let modified = item as? ModifiedHTML,
+                          let group = modified.content as? Group {
+                    handleGroup(group, attributes: modified.attributes)
+                } else if let item = item as? any BlockHTML {
+                    Container(item)
+                        .class(className(for: item))
+                        .class(gutterClass)
                 } else {
                     item
                 }
@@ -77,5 +112,41 @@ public struct Section: BlockHTML {
         }
         .attributes(sectionAttributes)
         .render(context: context)
+    }
+
+    /// Renders a group of HTML elements with consistent styling and attributes.
+    /// - Parameters:
+    ///   - group: The group containing the HTML elements to render.
+    ///   - attributes: HTML attributes to apply to each element in the group.
+    /// - Returns: A view containing the styled group elements.
+    func handleGroup(_ group: Group, attributes: CoreAttributes) -> some HTML {
+        let gutterClass = if case .semantic(let amount) = spacingAmount {
+            "g-\(amount.rawValue)"
+        } else {
+            ""
+        }
+        return ForEach(group.items) { item in
+            if let item = item as? any BlockHTML {
+                Container(item)
+                    .class(className(for: group))
+                    .class(gutterClass)
+                    .attributes(attributes)
+            }
+        }
+    }
+
+    /// Calculates the appropriate Bootstrap column class name for a block element.
+    /// - Parameter item: The block element to calculate the class name for.
+    /// - Returns: A Bootstrap class name that represents the element's width, scaled according to the section's column count if needed.
+    private func className(for item: any BlockHTML) -> String {
+        let className: String
+        if let columnCount, case .count(let width) = item.columnWidth {
+            // Scale the width to be relative to the new column count
+            let scaledWidth = width * 12 / columnCount
+            return ColumnWidth.count(scaledWidth).className
+        } else {
+            className = item.columnWidth.className
+        }
+        return className
     }
 }

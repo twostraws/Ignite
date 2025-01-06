@@ -16,7 +16,7 @@ public struct FeedLink: HTML {
             if siteConfig.builtInIconsEnabled != .none {
                 Image(systemName: "rss-fill")
                     .foregroundStyle("#f26522")
-                    .margin(.trailing, 10)
+                    .margin(.trailing, .px(10))
             }
 
             Link("RSS Feed", target: feedConfig.path)

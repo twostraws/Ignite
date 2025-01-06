@@ -28,6 +28,9 @@ public enum MediaQuery {
     /// Applies styles based on the current theme.
     case theme(String)
 
+    /// Applies styles based on viewport width breakpoints
+    case breakpoint(Breakpoint)
+
     /// The user's preferred color scheme options.
     public enum ColorScheme {
         /// Dark mode preference
@@ -86,42 +89,58 @@ public enum MediaQuery {
         case windowControlsOverlay
     }
 
-    /// The CSS media query string for this condition.
-    var query: String {
+    /// The user's breakpoint preference options.
+    public enum Breakpoint: String {
+        /// Small breakpoint (typically ≥576px)
+        case small = "sm"
+        /// Medium breakpoint (typically ≥768px)
+        case medium = "md"
+        /// Large breakpoint (typically ≥992px)
+        case large = "lg"
+        /// Extra large breakpoint (typically ≥1200px)
+        case xLarge = "xl"
+        /// Extra extra large breakpoint (typically ≥1400px)
+        case xxLarge = "xxl"
+    }
+
+    /// Generates the CSS media query string for this condition
+    /// - Parameter theme: The theme to use for breakpoint values
+    /// - Returns: A CSS media query string
+    @MainActor func query(with theme: Theme) -> String {
         switch self {
         case .colorScheme(let scheme):
-            switch scheme {
+            return switch scheme {
             case .dark: "prefers-color-scheme: dark"
             case .light: "prefers-color-scheme: light"
             }
 
         case .motion(let motion):
-            switch motion {
+            return  switch motion {
             case .reduced: "prefers-reduced-motion: reduce"
             case .allowed: "prefers-reduced-motion: no-preference"
             }
 
         case .contrast(let contrast):
-            switch contrast {
+            return switch contrast {
             case .reduced: "prefers-contrast: less"
             case .high: "prefers-contrast: more"
             case .low: "prefers-contrast: less"
             }
 
         case .transparency(let transparency):
-            switch transparency {
+            return switch transparency {
             case .reduced: "prefers-reduced-transparency: reduce"
             case .normal: "prefers-reduced-transparency: no-preference"
             }
 
         case .orientation(let orientation):
-            switch orientation {
+            return switch orientation {
             case .portrait: "orientation: portrait"
             case .landscape: "orientation: landscape"
             }
 
         case .displayMode(let mode):
-            switch mode {
+            return switch mode {
             case .browser: "display-mode: browser"
             case .fullscreen: "display-mode: fullscreen"
             case .minimalUI: "display-mode: minimal-ui"
@@ -131,7 +150,18 @@ public enum MediaQuery {
             }
 
         case .theme(let id):
-            "data-theme-state=\"\(id.kebabCased())\""
+            return "data-theme-state=\"\(id.kebabCased())\""
+
+        case .breakpoint(let breakpoint):
+            let breakpointValue = switch breakpoint {
+            case .small: theme.smallBreakpoint.stringValue
+            case .medium: theme.mediumBreakpoint.stringValue
+            case .large: theme.largeBreakpoint.stringValue
+            case .xLarge: theme.xLargeBreakpoint.stringValue
+            case .xxLarge: theme.xxLargeBreakpoint.stringValue
+            }
+
+            return "min-width: \(breakpointValue)"
         }
     }
 }

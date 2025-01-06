@@ -7,7 +7,7 @@
 
 /// Represents different text styles available in the system
 public extension Font {
-    enum Style: String, CaseIterable, Sendable, LengthUnit {
+    enum Style: String, CaseIterable, Sendable {
         /// A primary heading style using Bootstrap's h1 size (2.5rem)
         case title1 = "h1"
 
