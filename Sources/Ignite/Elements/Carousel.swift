@@ -58,8 +58,8 @@ public struct Carousel: BlockHTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        Group {
-            Group {
+        Container {
+            Container {
                 ForEach(0..<items.count) { index in
                     Button()
                         .data("bs-target", "#\(carouselID)")
@@ -71,7 +71,7 @@ public struct Carousel: BlockHTML {
             }
             .class("carousel-indicators")
 
-            Group {
+            Container {
                 ForEach(items.enumerated()) { index, item in
                     item.assigned(at: index, in: context)
                 }

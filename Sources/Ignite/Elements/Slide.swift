@@ -65,15 +65,15 @@ public struct Slide: BlockHTML {
     /// Used during rendering to assign this carousel slide to a particular parent,
     /// so our open paging behavior works correctly.
     func assigned(at index: Int, in context: PublishingContext) -> String {
-        Group {
+        Container {
             if let slideBackground = background {
                 Image(slideBackground, description: "")
                     .class("d-block", "w-100")
                     .style("height: 100%", "object-fit: cover", "opacity: \(backgroundOpacity)")
             }
 
-            Group {
-                Group {
+            Container {
+                Container {
                     render(context: context)
                 }
                 .class("carousel-caption")
