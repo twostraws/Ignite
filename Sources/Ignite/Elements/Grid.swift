@@ -93,7 +93,7 @@ public struct Grid: BlockHTML {
             }
         }
 
-        return Stack {
+        return Section {
             ForEach(items) { item in
                 if let group = item as? Group {
                     handleGroup(group, attributes: group.attributes)
@@ -101,7 +101,7 @@ public struct Grid: BlockHTML {
                           let group = modified.content as? Group {
                     handleGroup(group, attributes: modified.attributes)
                 } else if let item = item as? any BlockHTML {
-                    Stack(item)
+                    Section(item)
                         .class(className(for: item))
                         .class(gutterClass)
                 } else {
@@ -126,7 +126,7 @@ public struct Grid: BlockHTML {
         }
         return ForEach(group.items) { item in
             if let item = item as? any BlockHTML {
-                Stack(item)
+                Section(item)
                     .class(className(for: group))
                     .class(gutterClass)
                     .attributes(attributes)
