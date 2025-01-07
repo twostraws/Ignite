@@ -127,7 +127,7 @@ public struct Card: BlockHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     var role = Role.default
@@ -207,7 +207,7 @@ public struct Card: BlockHTML {
     }
 
     public func render(context: PublishingContext) -> String {
-        Stack {
+        Section {
             if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
@@ -246,8 +246,8 @@ public struct Card: BlockHTML {
         .render(context: context)
     }
 
-    private func renderHeader() -> Stack {
-        Stack {
+    private func renderHeader() -> Section {
+        Section {
             for item in header {
                 item
             }
@@ -255,8 +255,8 @@ public struct Card: BlockHTML {
         .class("card-header")
     }
 
-    private func renderItems() -> Stack {
-        Stack {
+    private func renderItems() -> Section {
+        Section {
             ForEach(items) { item in
                 switch item {
                 case let text as Text where text.font == .body || text.font == .lead:
@@ -275,8 +275,8 @@ public struct Card: BlockHTML {
         .class(contentPosition.bodyClasses)
     }
 
-    private func renderFooter() -> Stack {
-        Stack {
+    private func renderFooter() -> Section {
+        Section {
             for item in footer {
                 item
             }

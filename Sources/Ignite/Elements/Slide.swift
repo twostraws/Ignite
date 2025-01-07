@@ -16,7 +16,7 @@ public struct Slide: BlockHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     /// An optional background image to use for this slide. This should be
@@ -65,15 +65,15 @@ public struct Slide: BlockHTML {
     /// Used during rendering to assign this carousel slide to a particular parent,
     /// so our open paging behavior works correctly.
     func assigned(at index: Int, in context: PublishingContext) -> String {
-        Stack {
+        Section {
             if let slideBackground = background {
                 Image(slideBackground, description: "")
                     .class("d-block", "w-100")
                     .style("height: 100%", "object-fit: cover", "opacity: \(backgroundOpacity)")
             }
 
-            Stack {
-                Stack {
+            Section {
+                Section {
                     render(context: context)
                 }
                 .class("carousel-caption")

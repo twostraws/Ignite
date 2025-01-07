@@ -292,7 +292,7 @@ public final class PublishingContext {
         let layout = try layout(for: content)
 
         let body = ContentContext.withCurrentContent(content) {
-            Stack(context: self, items: [layout.body])
+            Section(context: self, items: [layout.body])
         }
 
         currentRenderingPath = content.path

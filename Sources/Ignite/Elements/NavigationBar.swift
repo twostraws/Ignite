@@ -53,7 +53,7 @@ public struct NavigationBar: BlockHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     /// Controls the maximum width of the navigation bar content at different breakpoints.
@@ -159,7 +159,7 @@ public struct NavigationBar: BlockHTML {
     public func render(context: PublishingContext) -> String {
         Tag("header") {
             Tag("nav") {
-                Stack {
+                Section {
                     if let logo {
                         Link(logo, target: "/")
                             .class("navbar-brand")
@@ -189,8 +189,8 @@ public struct NavigationBar: BlockHTML {
         .aria("label", "Toggle navigation")
     }
 
-    private func renderNavItems(context: PublishingContext) -> Stack {
-        Stack {
+    private func renderNavItems(context: PublishingContext) -> Section {
+        Section {
             List {
                 ForEach(items) { item in
                     if let dropdownItem = item as? Dropdown {

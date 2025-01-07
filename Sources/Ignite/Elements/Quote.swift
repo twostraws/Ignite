@@ -13,7 +13,7 @@ public struct Quote: BlockHTML {
     /// The unique identifier of this HTML.
     public var id = UUID().uuidString.truncatedHash
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     /// The content of this quote.

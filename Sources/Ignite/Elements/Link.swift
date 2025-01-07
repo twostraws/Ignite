@@ -16,7 +16,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth: ColumnWidth = .automatic
 
     /// Allows you to style links as buttons if needed.

@@ -25,7 +25,7 @@ public struct Carousel: BlockHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     /// An automatically-generated unique identifier for this carousel.
@@ -58,8 +58,8 @@ public struct Carousel: BlockHTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        Stack {
-            Stack {
+        Section {
+            Section {
                 ForEach(0..<items.count) { index in
                     Button()
                         .data("bs-target", "#\(carouselID)")
@@ -71,7 +71,7 @@ public struct Carousel: BlockHTML {
             }
             .class("carousel-indicators")
 
-            Stack {
+            Section {
                 ForEach(items.enumerated()) { index, item in
                     item.assigned(at: index, in: context)
                 }

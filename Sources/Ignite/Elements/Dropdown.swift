@@ -22,7 +22,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     /// The title for this `Dropdown`.
@@ -94,7 +94,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
                 .class("dropdown")
                 .render(context: context)
         } else {
-            return Stack(content)
+            return Section(content)
                 .attributes(attributes)
                 .class("dropdown")
                 .render(context: context)

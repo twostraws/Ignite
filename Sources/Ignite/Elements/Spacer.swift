@@ -16,7 +16,7 @@ public struct Spacer: BlockHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     /// The amount of space to occupy.
@@ -42,11 +42,11 @@ public struct Spacer: BlockHTML {
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
         if case let .semantic(spacingAmount) = spacingAmount {
-            Stack {}
+            Section {}
                 .margin(.top, spacingAmount)
                 .render(context: context)
         } else if case let .exact(int) = spacingAmount {
-            Stack {}
+            Section {}
                 .frame(height: .px(int))
                 .render(context: context)
         } else {

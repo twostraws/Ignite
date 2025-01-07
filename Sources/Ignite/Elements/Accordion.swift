@@ -26,7 +26,7 @@ public struct Accordion: BlockHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     /// A collection of sections you want to show inside this accordion.
@@ -63,7 +63,7 @@ public struct Accordion: BlockHTML {
         // items so they can adapt accordinly.
         let accordionID = "accordion\(UUID().uuidString.truncatedHash)"
         let assignedItems = items.map { $0.assigned(to: accordionID, openMode: openMode) }
-        let output = Stack { assignedItems }
+        let output = Section { assignedItems }
             .attributes(attributes)
             .class("accordion")
             .id(accordionID)

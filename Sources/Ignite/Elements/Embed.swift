@@ -32,7 +32,7 @@ public struct Embed: BlockHTML, LazyLoadable {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     /// The URL we're embedding inside our page.
@@ -120,7 +120,7 @@ public struct Embed: BlockHTML, LazyLoadable {
             """)
         }
 
-        return Stack {
+        return Section {
              #"<iframe src="\#(url)" title="\#(title)" allow="\#(allowPermissions)"></iframe>"#
         }
         .attributes(attributes)
