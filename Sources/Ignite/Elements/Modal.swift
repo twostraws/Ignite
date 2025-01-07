@@ -127,23 +127,23 @@ public struct Modal: HTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        Container {
-            Container {
-                Container {
+        Section {
+            Section {
+                Section {
                     if !header.isEmptyHTML {
-                        Container {
+                        Section {
                             header
                         }
                         .class("modal-header")
                     }
 
-                    Container {
+                    Section {
                         items
                     }
                     .class("modal-body")
 
                     if !footer.isEmptyHTML {
-                        Container {
+                        Section {
                             footer
                         }
                         .class("modal-footer")
