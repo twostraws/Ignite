@@ -26,7 +26,7 @@ public struct Spacer: BlockHTML {
     /// Defaults to 20.
     /// - Parameter size: The amount of vertical space this `Spacer`
     /// should occupy. Defaults to 20.
-    public init(size: Double = 20) {
+    public init(size: Int = 20) {
         spacingAmount = .exact(size)
     }
 

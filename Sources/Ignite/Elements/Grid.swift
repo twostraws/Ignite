@@ -39,7 +39,7 @@ public struct Grid: BlockHTML {
     /// - Parameters:
     ///   - spacing: The number of pixels between each element. Default is nil.
     ///   - items: The items to use in this section.
-    public init(spacing: Double? = nil, @HTMLBuilder items: () -> some HTML) {
+    public init(spacing: Int? = nil, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
         if let spacing {
             self.spacingAmount = .exact(spacing)

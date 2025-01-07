@@ -38,7 +38,7 @@ public struct VStack: BlockHTML {
     /// - Parameters:
     ///   - spacing: The number of pixels between elements.
     ///   - items: The items to use in this section.
-    public init(spacing pixels: Double, @HTMLBuilder items: () -> some HTML) {
+    public init(spacing pixels: Int, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
         self.spacingAmount = .exact(pixels)
     }
