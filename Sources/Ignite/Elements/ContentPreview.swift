@@ -25,7 +25,7 @@ public struct ContentPreview: BlockHTML {
 
     var content: Content
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     /// Custom style for the content preview.
@@ -77,7 +77,7 @@ public struct ContentPreview: BlockHTML {
             let tagLinks = content.tagLinks()
 
             if tagLinks.isEmpty == false {
-                Container {
+                Section {
                     tagLinks
                 }
                 .style("margin-top: -5px")

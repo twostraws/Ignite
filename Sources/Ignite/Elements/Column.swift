@@ -28,7 +28,7 @@ public struct Column: HTML, HorizontalAligning {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     var columnSpan = 1
 
     /// How the contents of this column should be vertically aligned.

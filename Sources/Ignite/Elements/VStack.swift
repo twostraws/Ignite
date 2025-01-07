@@ -16,7 +16,7 @@ public struct VStack: BlockHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     /// The spacing between elements.

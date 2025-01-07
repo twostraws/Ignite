@@ -17,7 +17,7 @@ public struct ButtonGroup: BlockHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     /// A required screen reader description for this element.
@@ -44,7 +44,7 @@ public struct ButtonGroup: BlockHTML {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render(context: PublishingContext) -> String {
-        Container {
+        Section {
             content.map { $0.render(context: context) }.joined()
         }
         .class("btn-group")
