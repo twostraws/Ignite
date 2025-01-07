@@ -70,7 +70,7 @@ extension PublishingContext {
 
             let body = TagContext.withCurrentTag(tag, content: content(tagged: tag)) {
                 let tagLayoutBody = site.tagLayout.body
-                return Container(tagLayoutBody)
+                return Stack(tagLayoutBody)
             }
 
             let page = Page(

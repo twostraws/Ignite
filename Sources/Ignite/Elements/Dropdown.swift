@@ -94,7 +94,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
                 .class("dropdown")
                 .render(context: context)
         } else {
-            return Container(content)
+            return Stack(content)
                 .attributes(attributes)
                 .class("dropdown")
                 .render(context: context)

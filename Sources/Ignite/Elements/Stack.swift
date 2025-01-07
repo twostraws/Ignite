@@ -11,9 +11,9 @@
 /// within a containing HTML `div`. This is useful for applying shared styling,
 /// creating layout structures, or logically grouping related content.
 ///
-/// - Note: Unlike ``Group``, modifiers applied to a `Container` affect the
+/// - Note: Unlike ``Group``, modifiers applied to a `Stack` affect the
 ///         containing `div` element rather than being propagated to child elements.
-public struct Container: BlockHTML {
+public struct Stack: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

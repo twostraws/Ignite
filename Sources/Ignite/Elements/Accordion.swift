@@ -63,7 +63,7 @@ public struct Accordion: BlockHTML {
         // items so they can adapt accordinly.
         let accordionID = "accordion\(UUID().uuidString.truncatedHash)"
         let assignedItems = items.map { $0.assigned(to: accordionID, openMode: openMode) }
-        let output = Container { assignedItems }
+        let output = Stack { assignedItems }
             .attributes(attributes)
             .class("accordion")
             .id(accordionID)

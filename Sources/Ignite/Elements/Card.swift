@@ -207,7 +207,7 @@ public struct Card: BlockHTML {
     }
 
     public func render(context: PublishingContext) -> String {
-        Container {
+        Stack {
             if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
@@ -246,8 +246,8 @@ public struct Card: BlockHTML {
         .render(context: context)
     }
 
-    private func renderHeader() -> Container {
-        Container {
+    private func renderHeader() -> Stack {
+        Stack {
             for item in header {
                 item
             }
@@ -255,8 +255,8 @@ public struct Card: BlockHTML {
         .class("card-header")
     }
 
-    private func renderItems() -> Container {
-        Container {
+    private func renderItems() -> Stack {
+        Stack {
             ForEach(items) { item in
                 switch item {
                 case let text as Text where text.font == .body || text.font == .lead:
@@ -275,8 +275,8 @@ public struct Card: BlockHTML {
         .class(contentPosition.bodyClasses)
     }
 
-    private func renderFooter() -> Container {
-        Container {
+    private func renderFooter() -> Stack {
+        Stack {
             for item in footer {
                 item
             }
