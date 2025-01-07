@@ -8,14 +8,14 @@
 /// A transparent grouping construct that propagates modifiers to its children.
 ///
 /// Use `Group` when you want to apply shared modifiers to multiple elements
-/// without introducing additional HTML structure. Unlike ``Container``, `Group`
+/// without introducing additional HTML structure. Unlike ``Section``, `Group`
 /// doesn't wrap its children in a `div`; instead, it passes modifiers through
 /// to each child element.
 ///
 /// - Note: `Group` is particularly useful for applying shared styling or
 ///         attributes to multiple elements without affecting the document
 ///         structure. If you need a containing `div` element, use
-///         ``Container`` instead.
+///         ``Section`` instead.
 public struct Group: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
@@ -26,7 +26,7 @@ public struct Group: BlockHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a section.
+    /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
     var items: [any HTML] = []

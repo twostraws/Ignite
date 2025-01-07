@@ -50,12 +50,12 @@ struct AspectRatioModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         if let contentMode {
             if let ratio {
-                Container {
+                Section {
                     content.class(contentMode.htmlClass)
                 }
                 .aspectRatio(ratio)
             } else if let customRatio {
-                Container {
+                Section {
                     content.class(contentMode.htmlClass)
                 }
                 .aspectRatio(customRatio)
@@ -112,7 +112,7 @@ public extension Image {
     ///   - contentMode: The content mode to apply.
     /// - Returns: A new instance of this element with the ratio and content mode applied.
     func aspectRatio(_ ratio: AspectRatio, contentMode: ContentMode) -> some BlockHTML {
-        Container {
+        Section {
             self.class(contentMode.htmlClass)
         }
         .aspectRatio(ratio)
@@ -124,7 +124,7 @@ public extension Image {
     ///   - contentMode: The content mode to apply.
     /// - Returns: A new instance of this element with the ratio and content mode applied.
     func aspectRatio(_ ratio: Double, contentMode: ContentMode) -> some BlockHTML {
-        Container {
+        Section {
             self.class(contentMode.htmlClass)
         }
         .aspectRatio(ratio)
