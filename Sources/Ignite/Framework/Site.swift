@@ -199,6 +199,18 @@ public extension Site {
         return themes
     }
 
+    /// Whether the site uses custom fonts.
+    internal var usesCustomFonts: Bool {
+        for theme in allThemes {
+            if !theme.font.isDefault { return true }
+            if !theme.sansSerifFont.isDefault { return true }
+            if !theme.monospaceFont.isDefault { return true }
+            if !theme.codeFont.isDefault { return true }
+            if !theme.alternateFonts.isEmpty { return true }
+        }
+        return false
+    }
+
     /// Performs the entire publishing flow from a file in user space, e.g. main.swift
     /// or Site.swift.
     /// - Parameters:
