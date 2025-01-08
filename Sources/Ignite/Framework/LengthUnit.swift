@@ -8,7 +8,7 @@
 /// Represents a CSS length value with its unit of measurement
 public enum LengthUnit: Hashable, Equatable, Sendable, CustomStringConvertible, Defaultable {
     /// Pixels
-    case px(Double)
+    case px(Int)
     /// Relative to root element font size
     case rem(Double)
     /// Relative to parent element font size
@@ -35,7 +35,7 @@ public enum LengthUnit: Hashable, Equatable, Sendable, CustomStringConvertible, 
     public var stringValue: String { description }
 
     /// Special value indicating default
-    static var `default`: LengthUnit { .px(.infinity) }
+    static var `default`: LengthUnit { .em(.infinity) }
 
     /// Indicates whether this unit represents a default value
     public var isDefault: Bool {

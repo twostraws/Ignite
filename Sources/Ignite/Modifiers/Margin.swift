@@ -22,10 +22,17 @@ struct MarginModifier: HTMLModifier {
 
 public extension HTML {
     /// Applies margins on all sides of this element. Defaults to 20 pixels.
+    /// - Parameter length: The amount of margin to apply, specified in pixels.
+    /// - Returns: A copy of the current element with the new margins applied.
+    func margin(_ length: Int = 20) -> some HTML {
+        modifier(MarginModifier(length: .px(length)))
+    }
+
+    /// Applies margins on all sides of this element. Defaults to 20 pixels.
     /// - Parameter length: The amount of margin to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ length: LengthUnit = .px(20)) -> some HTML {
+    func margin(_ length: LengthUnit) -> some HTML {
         modifier(MarginModifier(length: length))
     }
 
@@ -40,10 +47,19 @@ public extension HTML {
     /// Applies margins on selected sides of this element. Defaults to 20 pixels.
     /// - Parameters:
     ///   - edges: The edges where this margin should be applied.
+    ///   - length: The amount of margin to apply, specified in pixels.
+    /// - Returns: A copy of the current element with the new margins applied.
+    func margin(_ edges: Edge, _ length: Int = 20) -> some HTML {
+        modifier(MarginModifier(length: .px(length), edges: edges))
+    }
+
+    /// Applies margins on selected sides of this element. Defaults to 20 pixels.
+    /// - Parameters:
+    ///   - edges: The edges where this margin should be applied.
     ///   - length: The amount of margin to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ edges: Edge, _ length: LengthUnit = .px(20)) -> some HTML {
+    func margin(_ edges: Edge, _ length: LengthUnit) -> some HTML {
         modifier(MarginModifier(length: length, edges: edges))
     }
 
@@ -60,10 +76,17 @@ public extension HTML {
 
 public extension InlineHTML {
     /// Applies margins on all sides of this element. Defaults to 20 pixels.
+    /// - Parameter length: The amount of margin to apply, specified in pixels.
+    /// - Returns: A copy of the current element with the new margins applied.
+    func margin(_ length: Int = 20) -> some InlineHTML {
+        modifier(MarginModifier(length: .px(length)))
+    }
+
+    /// Applies margins on all sides of this element. Defaults to 20 pixels.
     /// - Parameter length: The amount of margin to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ length: LengthUnit = .px(20)) -> some InlineHTML {
+    func margin(_ length: LengthUnit) -> some InlineHTML {
         modifier(MarginModifier(length: length))
     }
 
@@ -78,10 +101,19 @@ public extension InlineHTML {
     /// Applies margins on selected sides of this element. Defaults to 20 pixels.
     /// - Parameters:
     ///   - edges: The edges where this margin should be applied.
+    ///   - length: The amount of margin to apply, specified in pixels.
+    /// - Returns: A copy of the current element with the new margins applied.
+    func margin(_ edges: Edge, _ length: Int = 20) -> some InlineHTML {
+        modifier(MarginModifier(length: .px(length), edges: edges))
+    }
+
+    /// Applies margins on selected sides of this element. Defaults to 20 pixels.
+    /// - Parameters:
+    ///   - edges: The edges where this margin should be applied.
     ///   - length: The amount of margin to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ edges: Edge, _ length: LengthUnit = .px(20)) -> some InlineHTML {
+    func margin(_ edges: Edge, _ length: LengthUnit) -> some InlineHTML {
         modifier(MarginModifier(length: length, edges: edges))
     }
 
