@@ -15,6 +15,9 @@ public struct HTMLBody: RootHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
+    /// Whether this HTML uses Bootstrap's `container` class to determine page width.
+    var isBoundByContainer: Bool = true
+
     var items: [any HTML]
 
     public init(@HTMLBuilder _ items: () -> some HTML) {
@@ -23,6 +26,18 @@ public struct HTMLBody: RootHTML {
 
     public init(for page: Page) {
         self.items = flatUnwrap(page.body)
+    }
+
+    /// Removes the Bootstrap `container` class from the body element.
+    ///
+    /// By default, the body element uses Bootstrap's container class to provide consistent page margins.
+    /// Call this method when you want content to extend to the full width of the viewport.
+    ///
+    /// - Returns: A copy of the current element that ignores page gutters.
+    public func ignorePageGutters() -> Self {
+        var copy = self
+        copy.isBoundByContainer = false
+        return copy
     }
 
     public func render(context: PublishingContext) -> String {
@@ -52,6 +67,9 @@ public struct HTMLBody: RootHTML {
 
         var attributes = attributes
         attributes.tag = "body"
+        if isBoundByContainer {
+            attributes.append(classes: ["container"])
+        }
         return attributes.description(wrapping: output)
     }
 }
