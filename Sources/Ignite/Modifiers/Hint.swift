@@ -44,7 +44,7 @@ struct HintModifier: HTMLModifier {
             .data("bs-title", text)
 
         if isHTML {
-            modified = modified.data("bs-html", "true")
+            modified.data("bs-html", "true")
         }
 
         return modified
