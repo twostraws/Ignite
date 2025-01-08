@@ -51,6 +51,10 @@ extension PublishingContext {
 
     /// Copies custom font files from the project's "Fonts" directory to the build output's "fonts" directory.
     func copyFonts() throws {
+        guard FileManager.default.fileExists(atPath: fontsDirectory.path()) else {
+            return
+        }
+
         do {
             let fonts = try FileManager.default.contentsOfDirectory(
                 at: fontsDirectory,
