@@ -270,16 +270,20 @@ public final class PublishingContext {
     ///   final path that is written to.
     func render(_ staticLayout: any StaticLayout, isHomePage: Bool = false) throws {
         let path = isHomePage ? "" : staticLayout.path
+        currentRenderingPath = isHomePage ? "/" : staticLayout.path
+
+        let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+        let body = EnvironmentStore.update(values) {
+            staticLayout.body
+        }
 
         let page = Page(
             title: staticLayout.title,
             description: staticLayout.description,
             url: site.url.appending(path: path),
             image: staticLayout.image,
-            body: staticLayout.body
+            body: body
         )
-
-        currentRenderingPath = isHomePage ? "/" : staticLayout.path
 
         let outputString = render(page, using: staticLayout.parentLayout)
         let outputDirectory = buildDirectory.appending(path: path)

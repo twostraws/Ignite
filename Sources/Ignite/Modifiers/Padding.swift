@@ -22,10 +22,17 @@ struct PaddingModifier: HTMLModifier {
 
 public extension HTML {
     /// Applies padding on all sides of this element. Defaults to 20 pixels.
+    /// - Parameter length: The amount of padding to apply, specified in pixels.
+    /// - Returns: A copy of the current element with the new padding applied.
+    func padding(_ length: Int = 20) -> some HTML {
+        modifier(PaddingModifier(length: .px(length)))
+    }
+
+    /// Applies padding on all sides of this element. Defaults to 20 pixels.
     /// - Parameter length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ length: LengthUnit = .px(20)) -> some HTML {
+    func padding(_ length: LengthUnit) -> some HTML {
         modifier(PaddingModifier(length: length))
     }
 
@@ -40,10 +47,19 @@ public extension HTML {
     /// Applies padding on selected sides of this element. Defaults to 20 pixels.
     /// - Parameters:
     ///   - edges: The edges where this padding should be applied.
+    ///   - length: The amount of padding to apply, specified in pixels.
+    /// - Returns: A copy of the current element with the new padding applied.
+    func padding(_ edges: Edge, _ length: Int = 20) -> some HTML {
+        modifier(PaddingModifier(length: .px(length), edges: edges))
+    }
+
+    /// Applies padding on selected sides of this element. Defaults to 20 pixels.
+    /// - Parameters:
+    ///   - edges: The edges where this padding should be applied.
     ///   - length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ edges: Edge, _ length: LengthUnit = .px(20)) -> some HTML {
+    func padding(_ edges: Edge, _ length: LengthUnit) -> some HTML {
         modifier(PaddingModifier(length: length, edges: edges))
     }
 
@@ -60,10 +76,17 @@ public extension HTML {
 
 public extension RootHTML {
     /// Applies padding on all sides of this element. Defaults to 20 pixels.
+    /// - Parameter length: The amount of padding to apply, specified in pixels.
+    /// - Returns: A copy of the current element with the new padding applied.
+    func padding(_ length: Int = 20) -> some RootHTML {
+        modifier(PaddingModifier(length: .px(length)))
+    }
+
+    /// Applies padding on all sides of this element. Defaults to 20 pixels.
     /// - Parameter length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ length: LengthUnit = .px(20)) -> some RootHTML {
+    func padding(_ length: LengthUnit) -> some RootHTML {
         modifier(PaddingModifier(length: length))
     }
 
@@ -78,10 +101,19 @@ public extension RootHTML {
     /// Applies padding on selected sides of this element. Defaults to 20 pixels.
     /// - Parameters:
     ///   - edges: The edges where this padding should be applied.
+    ///   - length: The amount of padding to apply, specified in pixels.
+    /// - Returns: A copy of the current element with the new padding applied.
+    func padding(_ edges: Edge, _ length: Int = 20) -> some RootHTML {
+        modifier(PaddingModifier(length: .px(length), edges: edges))
+    }
+
+    /// Applies padding on selected sides of this element. Defaults to 20 pixels.
+    /// - Parameters:
+    ///   - edges: The edges where this padding should be applied.
     ///   - length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ edges: Edge, _ length: LengthUnit = .px(20)) -> some RootHTML {
+    func padding(_ edges: Edge, _ length: LengthUnit) -> some RootHTML {
         modifier(PaddingModifier(length: length, edges: edges))
     }
 

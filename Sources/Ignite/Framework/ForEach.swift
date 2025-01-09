@@ -38,13 +38,12 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML, Lis
     /// - Parameter context: The current publishing context.
     /// - Returns: The rendered HTML string.
     public func render(context: PublishingContext) -> String {
-        var output = ""
-
-        for item in HTMLCollection(data.map(content)) {
-            output += item.render(context: context)
-        }
-
-        return output
+        let items = data.map(content)
+        return items.map {
+            let item: any HTML = $0
+            AttributeStore.default.merge(attributes, intoHTML: item.id)
+            return item.render(context: context)
+        }.joined()
     }
 
     /// Renders the ForEach content when this isn't part of a list.

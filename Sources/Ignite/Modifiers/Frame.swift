@@ -79,6 +79,16 @@ struct FrameModifier: HTMLModifier {
         self.alignment = alignment
     }
 
+    init(alignment: Alignment) {
+        self.width = nil
+        self.minWidth = nil
+        self.maxWidth = nil
+        self.height = nil
+        self.minHeight = nil
+        self.maxHeight = nil
+        self.alignment = alignment
+    }
+
     /// Processes a single dimensional constraint and applies the appropriate styling.
     /// - Parameters:
     ///   - value: The length value to apply, if any
@@ -113,7 +123,7 @@ struct FrameModifier: HTMLModifier {
             break
 
         default:
-            modified = modified.style("\(dimension.cssProperty): \(value.stringValue)")
+            modified.style("\(dimension.cssProperty): \(value.stringValue)")
         }
     }
 
@@ -133,7 +143,7 @@ struct FrameModifier: HTMLModifier {
         }
 
         if !classes.isEmpty {
-            modified = modified.class(classes.joined(separator: " "))
+            modified.class(classes.joined(separator: " "))
         }
 
         return modified
@@ -171,6 +181,44 @@ public extension HTML {
             alignment: alignment
         ))
     }
+
+    /// Creates a specific frame for this element, either using exact pixel values or
+    /// using minimum/maximum pixel ranges.
+    /// - Parameters:
+    ///   - width: An exact width for this element
+    ///   - minWidth: A minimum width for this element
+    ///   - maxWidth: A maximum width for this element
+    ///   - height: An exact height for this element
+    ///   - minHeight: A minimum height for this element
+    ///   - maxHeight: A maximum height for this element
+    ///   - alignment: How to align this element inside its frame
+    /// - Returns: A modified copy of the element with frame constraints applied
+    func frame(
+        width: Int? = nil,
+        minWidth: Int? = nil,
+        maxWidth: Int? = nil,
+        height: Int? = nil,
+        minHeight: Int? = nil,
+        maxHeight: Int? = nil,
+        alignment: Alignment = .center
+    ) -> some HTML {
+        modifier(FrameModifier(
+            width: width.map { .px($0) },
+            minWidth: minWidth.map { .px($0) },
+            maxWidth: maxWidth.map { .px($0) },
+            height: height.map { .px($0) },
+            minHeight: minHeight.map { .px($0) },
+            maxHeight: maxHeight.map { .px($0) },
+            alignment: alignment
+        ))
+    }
+
+    /// A convenience method for setting only the alignment.
+    /// - Parameter alignment: The desired alignment
+    /// - Returns: A modified element with the specified alignment
+    func frame(alignment: Alignment) -> some HTML {
+        modifier(FrameModifier(alignment: alignment))
+    }
 }
 
 public extension InlineHTML {
@@ -203,5 +251,43 @@ public extension InlineHTML {
             maxHeight: maxHeight,
             alignment: alignment
         ))
+    }
+
+    /// Creates a specific frame for this element, either using exact pixel values or
+    /// using minimum/maximum pixel ranges.
+    /// - Parameters:
+    ///   - width: An exact width for this element
+    ///   - minWidth: A minimum width for this element
+    ///   - maxWidth: A maximum width for this element
+    ///   - height: An exact height for this element
+    ///   - minHeight: A minimum height for this element
+    ///   - maxHeight: A maximum height for this element
+    ///   - alignment: How to align this element inside its frame
+    /// - Returns: A modified copy of the element with frame constraints applied
+    func frame(
+        width: Int? = nil,
+        minWidth: Int? = nil,
+        maxWidth: Int? = nil,
+        height: Int? = nil,
+        minHeight: Int? = nil,
+        maxHeight: Int? = nil,
+        alignment: Alignment = .center
+    ) -> some InlineHTML {
+        modifier(FrameModifier(
+            width: width.map { .px($0) },
+            minWidth: minWidth.map { .px($0) },
+            maxWidth: maxWidth.map { .px($0) },
+            height: height.map { .px($0) },
+            minHeight: minHeight.map { .px($0) },
+            maxHeight: maxHeight.map { .px($0) },
+            alignment: alignment
+        ))
+    }
+
+    /// A convenience method for setting only the alignment.
+    /// - Parameter alignment: The desired alignment
+    /// - Returns: A modified element with the specified alignment
+    func frame(alignment: Alignment) -> some InlineHTML {
+        modifier(FrameModifier(alignment: alignment))
     }
 }
