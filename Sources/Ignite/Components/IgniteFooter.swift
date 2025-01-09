@@ -16,6 +16,6 @@ public struct IgniteFooter: HTML {
             Link("Ignite", target: URL(static: "https://github.com/twostraws/Ignite"))
         }
         .horizontalAlignment(.center)
-        .margin(.top, .extraLarge)
+        .margin(.top, .xLarge)
     }
 }

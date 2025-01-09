@@ -9,9 +9,9 @@
 /// in site design.
 public enum SpacingAmount: Int {
     case none = 0
-    case extraSmall
+    case xSmall
     case small
     case medium
     case large
-    case extraLarge
+    case xLarge
 }
