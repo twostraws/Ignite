@@ -40,3 +40,9 @@ public struct ThemesKey: EnvironmentKey {
     /// The default empty array of themes.
     public static var defaultValue: [any Theme] = []
 }
+
+/// A key for accessing the current frame alignment in the environment.
+public struct FrameAlignmentKey: EnvironmentKey {
+    /// The default center alignment.
+    public static var defaultValue: Alignment = .center
+}

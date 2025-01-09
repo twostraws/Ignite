@@ -26,6 +26,10 @@ struct BorderModifier: HTMLModifier {
     /// - Parameter content: The HTML content to modify
     /// - Returns: The modified HTML content with border styling applied
     func body(content: some HTML) -> any HTML {
+        style(content: content)
+    }
+
+    func style<T: Modifiable>(content: T) -> T {
         var modified = content
 
         // Apply border styles based on edges
