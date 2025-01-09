@@ -82,8 +82,6 @@ struct FontModifier: HTMLModifier {
                 modified.class(classNames)
             } else if let size = font.size {
                 modified.style("font-size: \(size.stringValue)")
-            } else if let style = font.style {
-                modified.style("font-size: \(style.sizeVariable)")
             }
 
             return modified
@@ -96,13 +94,13 @@ struct FontModifier: HTMLModifier {
                 containerAttributes.styles.append(AttributeValue(name: "font-family", value: name))
             }
 
-            if !font.responsiveSizes.isEmpty {
+            if font.responsiveSizes.isEmpty == false {
                 let classNames = registerResponsiveClasses()
                 containerAttributes.classes.append(classNames)
             } else if let size = font.size {
-                containerAttributes.styles.append(AttributeValue(name: "font-size", value: size.stringValue))
+                containerAttributes.styles.append(.init(name: "font-size", value: size.stringValue))
             } else if let style = font.style {
-                containerAttributes.styles.append(AttributeValue(name: "font-size", value: style.sizeVariable))
+                containerAttributes.styles.append(.init(name: "font-size", value: style.sizeVariable))
             }
 
             return content
