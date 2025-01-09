@@ -82,6 +82,8 @@ struct FontModifier: HTMLModifier {
                 modified.class(classNames)
             } else if let size = font.size {
                 modified.style("font-size: \(size.stringValue)")
+            } else if let style = font.style {
+                modified.style("font-size: \(style.sizeVariable)")
             }
 
             return modified
