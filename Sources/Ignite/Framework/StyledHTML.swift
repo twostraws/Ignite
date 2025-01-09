@@ -119,8 +119,8 @@ public extension StyledHTML {
         self.edgeAdjust(prefix: "margin", edges, length.stringValue)
     }
 
-    func opacity(_ value: Percentage) -> Self {
-        OpacityModifier(value: value).style(content: self)
+    func opacity(_ percentage: Percentage) -> Self {
+        self.style("opacity: \(percentage.value)")
     }
 
     func padding(_ edges: Edge, _ length: LengthUnit) -> Self {
