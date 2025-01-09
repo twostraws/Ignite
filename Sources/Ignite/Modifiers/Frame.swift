@@ -123,7 +123,7 @@ struct FrameModifier: HTMLModifier {
             break
 
         default:
-            modified = modified.style("\(dimension.cssProperty): \(value.stringValue)")
+            modified.style("\(dimension.cssProperty): \(value.stringValue)")
         }
     }
 
@@ -143,7 +143,7 @@ struct FrameModifier: HTMLModifier {
         }
 
         if !classes.isEmpty {
-            modified = modified.class(classes.joined(separator: " "))
+            modified.class(classes.joined(separator: " "))
         }
 
         return modified
