@@ -627,6 +627,8 @@ extension PublishingContext {
 
         // Root variables and default theme (light)
         if let lightTheme = site.lightTheme {
+            let hasMultipleThemes = supportsDarkTheme || !site.alternateThemes.isEmpty
+
             cssContent += """
             :root {
                 --supports-light-theme: \(supportsLightTheme);
@@ -641,17 +643,22 @@ extension PublishingContext {
             \(containerDefaults)
 
             \(generateGlobalRules())
-
-            /* Light theme override */
-            [data-bs-theme="\(lightTheme.id)"] {
-                \(generateThemeVariables(lightTheme))
-            }
-
-            /* Auto theme starts with light theme */
-            [data-bs-theme="auto"] {
-                \(generateThemeVariables(lightTheme))
-            }
             """
+
+            if hasMultipleThemes {
+                cssContent += """
+
+                /* Light theme override */
+                [data-bs-theme="\(lightTheme.id)"] {
+                    \(generateThemeVariables(lightTheme))
+                }
+
+                /* Auto theme starts with light theme */
+                [data-bs-theme="auto"] {
+                    \(generateThemeVariables(lightTheme))
+                }
+                """
+            }
         }
 
         // Dark theme handling
