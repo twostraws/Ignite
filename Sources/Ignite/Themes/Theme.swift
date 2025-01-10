@@ -162,7 +162,7 @@
     var headingBottomMargin: LengthUnit { get }
 
     /// Bottom margin for paragraphs
-    var paragraphMarginBottom: LengthUnit { get }
+    var paragraphBottomMargin: LengthUnit { get }
 
     /// Extra small breakpoint
     var xSmallBreakpoint: LengthUnit { get }

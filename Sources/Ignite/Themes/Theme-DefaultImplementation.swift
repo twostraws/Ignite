@@ -68,7 +68,7 @@ public extension Theme {
 
     // Bottom Margins
     var headingBottomMargin: LengthUnit { .default }
-    var paragraphMarginBottom: LengthUnit { .default }
+    var paragraphBottomMargin: LengthUnit { .default }
 
     // Breakpoints
     var xSmallBreakpoint: LengthUnit { .px(576) }
