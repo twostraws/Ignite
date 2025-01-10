@@ -17,25 +17,25 @@ extension Modifiable {
     /// - Returns: A copy of the current element with the updated edge adjustment.
     func edgeAdjust(prefix: String, _ edges: Edge = .all, _ length: String = "20px") -> Self {
         if edges.contains(.all) {
-            return self.style("\(prefix): \(length)")
+            return self.style(.init(name: prefix, value: length))
         }
 
         var copy = self
 
         if edges.contains(.leading) {
-            copy = copy.style("\(prefix)-left: \(length)")
+            copy.style(.init(name: "\(prefix)-left", value: length))
         }
 
         if edges.contains(.trailing) {
-            copy = copy.style("\(prefix)-right: \(length)")
+            copy.style(.init(name: "\(prefix)-right", value: length))
         }
 
         if edges.contains(.top) {
-            copy = copy.style("\(prefix)-top: \(length)")
+            copy.style(.init(name: "\(prefix)-top", value: length))
         }
 
         if edges.contains(.bottom) {
-            copy = copy.style("\(prefix)-bottom: \(length)")
+            copy.style(.init(name: "\(prefix)-bottom", value: length))
         }
 
         return copy
@@ -57,26 +57,26 @@ extension HTML {
         var copy = self
 
         if edges.contains(.horizontal) {
-            copy = copy.class("\(prefix)x-\(amount.rawValue)")
+            copy.class("\(prefix)x-\(amount.rawValue)")
         } else {
             if edges.contains(.leading) {
-                copy = copy.class("\(prefix)s-\(amount.rawValue)")
+                copy.class("\(prefix)s-\(amount.rawValue)")
             }
 
             if edges.contains(.trailing) {
-                copy = copy.class("\(prefix)e-\(amount.rawValue)")
+                copy.class("\(prefix)e-\(amount.rawValue)")
             }
         }
 
         if edges.contains(.vertical) {
-            copy = copy.class("\(prefix)y-\(amount.rawValue)")
+            copy.class("\(prefix)y-\(amount.rawValue)")
         } else {
             if edges.contains(.top) {
-                copy = copy.class("\(prefix)t-\(amount.rawValue)")
+                copy.class("\(prefix)t-\(amount.rawValue)")
             }
 
             if edges.contains(.bottom) {
-                copy = copy.class("\(prefix)b-\(amount.rawValue)")
+                copy.class("\(prefix)b-\(amount.rawValue)")
             }
         }
 

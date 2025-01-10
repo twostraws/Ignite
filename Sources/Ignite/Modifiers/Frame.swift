@@ -44,57 +44,15 @@ struct FrameModifier: HTMLModifier {
     }
 
     func body(content: some HTML) -> any HTML {
-        style(content: content)
-    }
-
-    func style<T: Modifiable>(content: T) -> T {
-        var copy = content
-
-        if let width {
-            copy = copy.style("width: \(width)")
-        }
-
-        if let minWidth {
-            copy = copy.style("min-width: \(minWidth)")
-        }
-
-        if let maxWidth {
-            copy = copy.style("max-width: \(maxWidth)")
-        }
-
-        if let height {
-            copy = copy.style("height: \(height)")
-        }
-
-        if let minHeight {
-            copy = copy.style("min-height: \(minHeight)")
-        }
-
-        if let maxHeight {
-            copy = copy.style("max-height: \(maxHeight)")
-        }
-
-        copy = copy.style("display: flex", "flex-direction: column")
-
-        switch alignment.horizontal {
-        case .center:
-            copy = copy.style("align-items: center")
-        case .leading:
-            copy = copy.style("align-items: start")
-        case .trailing:
-            copy = copy.style("align-items: end")
-        }
-
-        switch alignment.vertical {
-        case .center:
-            copy = copy.style("justify-content: center")
-        case .bottom:
-            copy = copy.style("justify-content: flex-end")
-        case .top:
-            copy = copy.style("justify-content: start")
-        }
-
-        return copy
+        styleFrame(
+            content: content,
+            width: width,
+            minWidth: minWidth,
+            maxWidth: maxWidth,
+            height: height,
+            minHeight: minHeight,
+            maxHeight: maxHeight,
+            alignment: alignment)
     }
 }
 
@@ -238,4 +196,98 @@ public extension InlineHTML {
     func frame(alignment: Alignment) -> some InlineHTML {
         modifier(FrameModifier(alignment: alignment))
     }
+}
+
+public extension StyledHTML {
+    /// Creates a specific frame for this element, either using exact values or
+    /// using minimum/maximum ranges.
+    /// - Parameters:
+    ///   - width: An exact width for this element
+    ///   - minWidth: A minimum width for this element
+    ///   - maxWidth: A maximum width for this element
+    ///   - height: An exact height for this element
+    ///   - minHeight: A minimum height for this element
+    ///   - maxHeight: A maximum height for this element
+    ///   - alignment: How to align this element inside its frame
+    /// - Returns: A modified copy of the element with frame constraints applied
+    func frame(
+        width: LengthUnit? = nil,
+        minWidth: LengthUnit? = nil,
+        maxWidth: LengthUnit? = nil,
+        height: LengthUnit? = nil,
+        minHeight: LengthUnit? = nil,
+        maxHeight: LengthUnit? = nil,
+        alignment: Alignment = .center
+    ) -> Self {
+        styleFrame(
+            content: self,
+            width: width,
+            minWidth: minWidth,
+            maxWidth: maxWidth,
+            height: height,
+            minHeight: minHeight,
+            maxHeight: maxHeight,
+            alignment: alignment)
+    }
+}
+
+// A helper method that encapsulates the frame generation logic.
+@MainActor fileprivate func styleFrame<T: Modifiable>(
+    content: T,
+    width: LengthUnit? = nil,
+    minWidth: LengthUnit? = nil,
+    maxWidth: LengthUnit? = nil,
+    height: LengthUnit? = nil,
+    minHeight: LengthUnit? = nil,
+    maxHeight: LengthUnit? = nil,
+    alignment: Alignment = .center
+) -> T {
+    var copy = content
+
+    if let width {
+        copy.style(.init(name: .width, value: width.stringValue))
+    }
+
+    if let minWidth {
+        copy.style(.init(name: .minWidth, value: minWidth.stringValue))
+    }
+
+    if let maxWidth {
+        copy.style(.init(name: .maxWidth, value: maxWidth.stringValue))
+    }
+
+    if let height {
+        copy.style(.init(name: .height, value: height.stringValue))
+    }
+
+    if let minHeight {
+        copy.style(.init(name: .minHeight, value: minHeight.stringValue))
+    }
+
+    if let maxHeight {
+        copy.style(.init(name: .maxHeight, value: maxHeight.stringValue))
+    }
+
+    copy.style(.init(name: .display, value: "flex"))
+    copy.style(.init(name: .flexDirection, value: "column"))
+
+    switch alignment.horizontal {
+    case .center:
+        copy.style(.init(name: .alignItems, value: "center"))
+    case .leading:
+        copy.style(.init(name: .alignItems, value: "start"))
+    case .trailing:
+        copy.style(.init(name: .alignItems, value: "end"))
+    }
+
+    switch alignment.vertical {
+    case .center:
+        copy.style(.init(name: .justifyContent, value: "center"))
+    case .bottom:
+        copy.style(.init(name: .justifyContent, value: "flex-end"))
+    case .top:
+        copy.style(.init(name: .justifyContent, value: "start"))
+    }
+
+    return copy
 }
