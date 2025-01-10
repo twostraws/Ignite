@@ -628,6 +628,7 @@ extension PublishingContext {
         // Root variables and default theme (light)
         if let lightTheme = site.lightTheme {
             let hasMultipleThemes = supportsDarkTheme || !site.alternateThemes.isEmpty
+            let hasAutoTheme = supportsLightTheme && supportsDarkTheme
 
             cssContent += """
             :root {
@@ -652,6 +653,11 @@ extension PublishingContext {
                 [data-bs-theme="\(lightTheme.id)"] {
                     \(generateThemeVariables(lightTheme))
                 }
+                """
+            }
+
+            if hasAutoTheme {
+                cssContent += """
 
                 /* Auto theme starts with light theme */
                 [data-bs-theme="auto"] {
@@ -663,8 +669,8 @@ extension PublishingContext {
 
         // Dark theme handling
         if let darkTheme = site.darkTheme {
-            if !supportsLightTheme {
-                // Only dark theme exists - use as root
+            if !supportsLightTheme && site.alternateThemes.isEmpty {
+                // Only dark theme exists and no alternates - use as root
                 cssContent += """
                 :root {
                     --supports-light-theme: \(supportsLightTheme);
@@ -679,27 +685,29 @@ extension PublishingContext {
                 \(containerDefaults)
 
                 \(generateGlobalRules())
-
-                [data-bs-theme="\(darkTheme.id)"] {
-                    \(generateThemeVariables(darkTheme))
-                }
                 """
             } else {
-                // Both themes exist - update auto theme in dark mode and add explicit dark theme
+                // Add dark theme override
                 cssContent += """
-
-                /* Dark theme media query for auto theme */
-                @media (prefers-color-scheme: dark) {
-                    [data-bs-theme="auto"] {
-                        \(generateThemeVariables(darkTheme))
-                    }
-                }
 
                 /* Explicit dark theme */
                 [data-bs-theme="\(darkTheme.id)"] {
                     \(generateThemeVariables(darkTheme))
                 }
                 """
+
+                // Only add auto theme dark mode if both themes exist
+                if supportsLightTheme {
+                    cssContent += """
+
+                    /* Dark theme media query for auto theme */
+                    @media (prefers-color-scheme: dark) {
+                        [data-bs-theme="auto"] {
+                            \(generateThemeVariables(darkTheme))
+                        }
+                    }
+                    """
+                }
             }
         }
 
