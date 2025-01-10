@@ -36,9 +36,6 @@ public struct EnvironmentValues: Sendable {
     /// Locates, loads, and decodes a JSON file in your Resources folder.
     public var decode: DecodeAction
 
-    /// The current frame alignment that will be inherited by child views.
-    public var frameAlignment: Alignment = .center
-
     /// Creates environment values with default settings.
     public init() {
         self.content = ContentLoader(content: [])
@@ -47,7 +44,6 @@ public struct EnvironmentValues: Sendable {
         self.themes = []
         self.siteConfiguration = SiteConfiguration()
         self.decode = .init(sourceDirectory: URL(filePath: ""))
-        self.frameAlignment = .center
     }
 
     init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
