@@ -14,7 +14,7 @@ extension Array: HeadElement, HTML, Modifiable, HorizontalAligning where Element
     }
 
 
-    @MainActor public func style(_ property: Property, _ value: String) -> some HTML {
+    @MainActor func style(_ property: Property, _ value: String) -> some HTML {
         self.map { $0.style(.init(name: property, value: value)) }
     }
 }
