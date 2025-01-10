@@ -269,7 +269,6 @@ public extension StyledHTML {
     }
 
     copy.style(.init(name: .display, value: "flex"))
-    copy.style(.init(name: .flexDirection, value: "column"))
 
     switch alignment.horizontal {
     case .center:
