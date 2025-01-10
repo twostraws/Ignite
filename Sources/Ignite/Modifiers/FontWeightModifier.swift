@@ -20,18 +20,27 @@ struct FontWeightModifier: HTMLModifier {
 
 public extension HTML {
     /// Adjusts the font weight (boldness) of this font.
-    /// - Parameter newWeight: The new font weight.
+    /// - Parameter weight: The new font weight.
     /// - Returns: A new `Text` instance with the updated weight.
-    func fontWeight(_ newWeight: Font.Weight) -> some HTML {
-        modifier(FontWeightModifier(weight: newWeight))
+    func fontWeight(_ weight: Font.Weight) -> some HTML {
+        modifier(FontWeightModifier(weight: weight))
     }
 }
 
 public extension InlineHTML {
     /// Adjusts the font weight (boldness) of this font.
-    /// - Parameter newWeight: The new font weight.
+    /// - Parameter weight: The new font weight.
     /// - Returns: A new `Text` instance with the updated weight.
-    func fontWeight(_ newWeight: Font.Weight) -> some InlineHTML {
-        modifier(FontWeightModifier(weight: newWeight))
+    func fontWeight(_ weight: Font.Weight) -> some InlineHTML {
+        modifier(FontWeightModifier(weight: weight))
+    }
+}
+
+public extension StyledHTML {
+    /// Adjusts the font weight (boldness) of this font.
+    /// - Parameter weight: The new font weight.
+    /// - Returns: A new instance with the updated weight.
+    func fontWeight(_ weight: Font.Weight) -> Self {
+        self.style(.init(name: .fontWeight, value: String(weight.rawValue)))
     }
 }

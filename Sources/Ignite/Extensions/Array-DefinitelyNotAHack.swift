@@ -6,11 +6,16 @@
 //
 
 // swiftlint:disable unused_setter_value
-extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
+extension Array: HeadElement, HTML, Modifiable, HorizontalAligning where Element: HTML {
     public var body: some HTML { self }
 
     public func render(context: PublishingContext) -> String {
         self.map { $0.render(context: context) }.joined()
+    }
+
+
+    @MainActor func style(_ property: Property, _ value: String) -> some HTML {
+        self.map { $0.style(.init(name: property, value: value)) }
     }
 }
 
