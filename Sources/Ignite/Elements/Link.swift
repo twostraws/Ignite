@@ -174,7 +174,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     ///   - base: The `UnderlineProminence` for the base link style.
     ///   - hover: The `UnderlineProminence` for the hover style.
     /// - Returns: A new `Link` instance with the updated underline decoration.
-    func linkDecoration(_ base: UnderlineProminence = .heavy, hover: UnderlineProminence = .heavy) -> Self {
+    public func linkDecoration(_ base: UnderlineProminence = .heavy, hover: UnderlineProminence = .heavy) -> Self {
         var copy = self
         copy.baseDecoration = base
         copy.hoverDecoration = hover
