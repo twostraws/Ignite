@@ -157,6 +157,8 @@ extension PublishingContext {
             theme.headingFont
         ] + theme.alternateFonts
 
+        var uniqueSources: Set<String> = []
+
         let fontTags = fonts.flatMap { font -> [String] in
             guard let familyName = font.name else { return [] }
 
@@ -167,8 +169,18 @@ extension PublishingContext {
                 return []
             }
 
-            return font.sources.map { source in
-                guard let url = source.url else { return "" }
+            return font.sources.compactMap { source in
+                guard let url = source.url else { return nil }
+
+                // Create a unique key for this font source
+                let sourceKey = "\(familyName)-\(source.weight.rawValue)-\(source.variant.rawValue)-\(url.absoluteString)"
+
+                // Skip if we've already processed this source
+                guard !uniqueSources.contains(sourceKey) else {
+                    return nil
+                }
+
+                uniqueSources.insert(sourceKey)
 
                 if url.isFileURL {
                     return """
@@ -203,6 +215,7 @@ extension PublishingContext {
         return fontTags
     }
 
+    // swiftlint:disable function_body_length
     /// Generates CSS for all themes including font faces, colors, and typography settings, writing to themes.min.css.
     private func generateGlobalRules() -> String {
         """
@@ -221,19 +234,292 @@ extension PublishingContext {
             background-color: var(--bs-body-bg);
         }
         
+        /* Link styles */
+        a {
+            color: var(--bs-link-color);
+            text-decoration: var(--bs-link-decoration, underline);
+        }
+
+        a:hover {
+            color: var(--bs-link-hover-color);
+        }
+
+        /* Link role styles */
+        .link-primary {
+            color: var(--bs-primary) !important;
+            text-decoration-color: var(--bs-primary) !important;
+        }
+        .link-primary:hover {
+            color: rgba(var(--bs-primary-rgb), 0.8) !important;
+            text-decoration-color: rgba(var(--bs-primary-rgb), 0.8) !important;
+        }
+
+        .link-secondary {
+            color: var(--bs-secondary) !important;
+            text-decoration-color: var(--bs-secondary) !important;
+        }
+        .link-secondary:hover {
+            color: rgba(var(--bs-secondary-rgb), 0.8) !important;
+            text-decoration-color: rgba(var(--bs-secondary-rgb), 0.8) !important;
+        }
+
+        .link-success {
+            color: var(--bs-success) !important;
+            text-decoration-color: var(--bs-success) !important;
+        }
+        .link-success:hover {
+            color: rgba(var(--bs-success-rgb), 0.8) !important;
+            text-decoration-color: rgba(var(--bs-success-rgb), 0.8) !important;
+        }
+
+        .link-info {
+            color: var(--bs-info) !important;
+            text-decoration-color: var(--bs-info) !important;
+        }
+        .link-info:hover {
+            color: rgba(var(--bs-info-rgb), 0.8) !important;
+            text-decoration-color: rgba(var(--bs-info-rgb), 0.8) !important;
+        }
+
+        .link-warning {
+            color: var(--bs-warning) !important;
+            text-decoration-color: var(--bs-warning) !important;
+        }
+        .link-warning:hover {
+            color: rgba(var(--bs-warning-rgb), 0.8) !important;
+            text-decoration-color: rgba(var(--bs-warning-rgb), 0.8) !important;
+        }
+
+        .link-danger {
+            color: var(--bs-danger) !important;
+            text-decoration-color: var(--bs-danger) !important;
+        }
+        .link-danger:hover {
+            color: rgba(var(--bs-danger-rgb), 0.8) !important;
+            text-decoration-color: rgba(var(--bs-danger-rgb), 0.8) !important;
+        }
+
+        .link-light {
+            color: var(--bs-light) !important;
+            text-decoration-color: var(--bs-light) !important;
+        }
+        .link-light:hover {
+            color: rgba(var(--bs-light-rgb), 0.8) !important;
+            text-decoration-color: rgba(var(--bs-light-rgb), 0.8) !important;
+        }
+
+        .link-dark {
+            color: var(--bs-dark) !important;
+            text-decoration-color: var(--bs-dark) !important;
+        }
+        .link-dark:hover {
+            color: rgba(var(--bs-dark-rgb), 0.8) !important;
+            text-decoration-color: rgba(var(--bs-dark-rgb), 0.8) !important;
+        }
+
+        /* Alert styles */
+        .alert-primary {
+            color: var(--bs-primary-text-emphasis);
+            background-color: rgba(var(--bs-primary-rgb), 0.15);
+            border-color: rgba(var(--bs-primary-rgb), 0.4);
+        }
+
+        .alert-secondary {
+            color: var(--bs-secondary-text-emphasis);
+            background-color: rgba(var(--bs-secondary-rgb), 0.15);
+            border-color: rgba(var(--bs-secondary-rgb), 0.4);
+        }
+
+        .alert-success {
+            color: var(--bs-success-text-emphasis);
+            background-color: rgba(var(--bs-success-rgb), 0.15);
+            border-color: rgba(var(--bs-success-rgb), 0.4);
+        }
+
+        .alert-info {
+            color: var(--bs-info-text-emphasis);
+            background-color: rgba(var(--bs-info-rgb), 0.15);
+            border-color: rgba(var(--bs-info-rgb), 0.4);
+        }
+
+        .alert-warning {
+            color: var(--bs-warning-text-emphasis);
+            background-color: rgba(var(--bs-warning-rgb), 0.15);
+            border-color: rgba(var(--bs-warning-rgb), 0.4);
+        }
+
+        .alert-danger {
+            color: var(--bs-danger-text-emphasis);
+            background-color: rgba(var(--bs-danger-rgb), 0.15);
+            border-color: rgba(var(--bs-danger-rgb), 0.4);
+        }
+
+        .alert-light {
+            color: var(--bs-light-text-emphasis);
+            background-color: rgba(var(--bs-light-rgb), 0.15);
+            border-color: rgba(var(--bs-light-rgb), 0.4);
+        }
+
+        .alert-dark {
+            color: var(--bs-dark-text-emphasis);
+            background-color: rgba(var(--bs-dark-rgb), 0.15);
+            border-color: rgba(var(--bs-dark-rgb), 0.4);
+        }
+
+        /* Subtle backgrounds */
+        .bg-primary-subtle {
+            background-color: rgba(var(--bs-primary-rgb), 0.15) !important;
+        }
+
+        .bg-secondary-subtle {
+            background-color: rgba(var(--bs-secondary-rgb), 0.15) !important;
+        }
+
+        .bg-success-subtle {
+            background-color: rgba(var(--bs-success-rgb), 0.15) !important;
+        }
+
+        .bg-info-subtle {
+            background-color: rgba(var(--bs-info-rgb), 0.15) !important;
+        }
+
+        .bg-warning-subtle {
+            background-color: rgba(var(--bs-warning-rgb), 0.15) !important;
+        }
+
+        .bg-danger-subtle {
+            background-color: rgba(var(--bs-danger-rgb), 0.15) !important;
+        }
+
+        .bg-light-subtle {
+            background-color: rgba(var(--bs-light-rgb), 0.15) !important;
+        }
+
+        .bg-dark-subtle {
+            background-color: rgba(var(--bs-dark-rgb), 0.15) !important;
+        }
+
+        /* Card with solid background */
+        .text-bg-primary {
+            color: #fff;
+            background-color: var(--bs-primary) !important;
+        }
+
+        .text-bg-secondary {
+            color: #fff;
+            background-color: var(--bs-secondary) !important;
+        }
+
+        .text-bg-success {
+            color: #fff;
+            background-color: var(--bs-success) !important;
+        }
+
+        .text-bg-info {
+            color: #000;
+            background-color: var(--bs-info) !important;
+        }
+
+        .text-bg-warning {
+            color: #000;
+            background-color: var(--bs-warning) !important;
+        }
+
+        .text-bg-danger {
+            color: #fff;
+            background-color: var(--bs-danger) !important;
+        }
+
+        .text-bg-light {
+            color: #000;
+            background-color: var(--bs-light) !important;
+        }
+
+        .text-bg-dark {
+            color: #fff;
+            background-color: var(--bs-dark) !important;
+        }
+
+        /* Card with colored border */
+        .border-primary {
+            border-color: var(--bs-primary) !important;
+        }
+
+        .border-secondary {
+            border-color: var(--bs-secondary) !important;
+        }
+
+        .border-success {
+            border-color: var(--bs-success) !important;
+        }
+
+        .border-info {
+            border-color: var(--bs-info) !important;
+        }
+
+        .border-warning {
+            border-color: var(--bs-warning) !important;
+        }
+
+        .border-danger {
+            border-color: var(--bs-danger) !important;
+        }
+
+        .border-light {
+            border-color: var(--bs-light) !important;
+        }
+
+        .border-dark {
+            border-color: var(--bs-dark) !important;
+        }
+        
         /* Paragraph margin */
         p {
             margin-top: 0;
             margin-bottom: var(--bs-paragraph-margin-bottom, 1rem);
         }
 
-        /* Heading font rules */
+        /* Heading styles */
         h1, h2, h3, h4, h5, h6 {
             font-family: var(--bs-headings-font-family, inherit);
             margin-bottom: var(--bs-headings-margin-bottom, 0.5rem);
             font-weight: var(--bs-headings-font-weight, 500);
             line-height: var(--bs-headings-line-height, 1.2);
+            color: var(--bs-heading-color, inherit);
         }
+
+        /* Individual heading sizes */
+        h1 { font-size: var(--bs-h1-font-size, 2.5rem); }
+        h2 { font-size: var(--bs-h2-font-size, 2rem); }
+        h3 { font-size: var(--bs-h3-font-size, 1.75rem); }
+        h4 { font-size: var(--bs-h4-font-size, 1.5rem); }
+        h5 { font-size: var(--bs-h5-font-size, 1.25rem); }
+        h6 { font-size: var(--bs-h6-font-size, 1rem); }
+
+        /* Font weights */
+        .fw-lighter { font-weight: var(--bs-font-weight-lighter, 200); }
+        .fw-light { font-weight: var(--bs-font-weight-light, 300); }
+        .fw-normal { font-weight: var(--bs-font-weight-normal, 400); }
+        .fw-bold { font-weight: var(--bs-font-weight-bold, 700); }
+        .fw-bolder { font-weight: var(--bs-font-weight-bolder, 800); }
+
+        /* Font sizes */
+        .fs-small { font-size: var(--bs-body-font-size-sm, 0.875rem); }
+        .fs-base { font-size: var(--bs-body-font-size, 1rem); }
+        .fs-large { font-size: var(--bs-body-font-size-lg, 1.25rem); }
+
+        /* Line heights */
+        .lh-1 { line-height: var(--bs-line-height-condensed, 1); }
+        .lh-base { line-height: var(--bs-line-height-base, 1.5); }
+        .lh-lg { line-height: var(--bs-line-height-expanded, 2); }
+
+        /* Code blocks */
+        code, pre {
+            font-family: var(--bs-font-monospace, monospace);
+        }
+
+        /* Border styles */
+        .border { border: 1px solid var(--bs-border-color) !important; }
 
         /* Color rules */
         .text-primary { color: var(--bs-primary) !important; }
@@ -260,36 +546,76 @@ extension PublishingContext {
             background-color: var(--bs-primary);
             border-color: var(--bs-primary);
         }
+        .btn-primary:hover {
+            background-color: rgba(var(--bs-primary-rgb), 0.8);
+            border-color: rgba(var(--bs-primary-rgb), 0.8);
+        }
+
         .btn-secondary {
             background-color: var(--bs-secondary);
             border-color: var(--bs-secondary);
         }
+        .btn-secondary:hover {
+            background-color: rgba(var(--bs-secondary-rgb), 0.8);
+            border-color: rgba(var(--bs-secondary-rgb), 0.8);
+        }
+
         .btn-success {
             background-color: var(--bs-success);
             border-color: var(--bs-success);
         }
+        .btn-success:hover {
+            background-color: rgba(var(--bs-success-rgb), 0.8);
+            border-color: rgba(var(--bs-success-rgb), 0.8);
+        }
+
         .btn-info {
             background-color: var(--bs-info);
             border-color: var(--bs-info);
         }
+        .btn-info:hover {
+            background-color: rgba(var(--bs-info-rgb), 0.8);
+            border-color: rgba(var(--bs-info-rgb), 0.8);
+        }
+
         .btn-warning {
             background-color: var(--bs-warning);
             border-color: var(--bs-warning);
         }
+        .btn-warning:hover {
+            background-color: rgba(var(--bs-warning-rgb), 0.8);
+            border-color: rgba(var(--bs-warning-rgb), 0.8);
+        }
+
         .btn-danger {
             background-color: var(--bs-danger);
             border-color: var(--bs-danger);
         }
+        .btn-danger:hover {
+            background-color: rgba(var(--bs-danger-rgb), 0.8);
+            border-color: rgba(var(--bs-danger-rgb), 0.8);
+        }
+
         .btn-light {
             background-color: var(--bs-light);
             border-color: var(--bs-light);
         }
+        .btn-light:hover {
+            background-color: rgba(var(--bs-light-rgb), 0.8);
+            border-color: rgba(var(--bs-light-rgb), 0.8);
+        }
+
         .btn-dark {
             background-color: var(--bs-dark);
             border-color: var(--bs-dark);
         }
+        .btn-dark:hover {
+            background-color: rgba(var(--bs-dark-rgb), 0.8);
+            border-color: rgba(var(--bs-dark-rgb), 0.8);
+        }
         """
     }
+    // swiftlint:enable function_body_length
 
     /// Generates CSS for all themes including font faces, colors, and typography settings, writing to themes.min.css.
     func generateThemes(_ themes: [any Theme]) throws {
@@ -313,6 +639,9 @@ extension PublishingContext {
 
         // Root variables and default theme (light)
         if let lightTheme = site.lightTheme {
+            let hasMultipleThemes = supportsDarkTheme || !site.alternateThemes.isEmpty
+            let hasAutoTheme = supportsLightTheme && supportsDarkTheme
+
             cssContent += """
             :root {
                 --supports-light-theme: \(supportsLightTheme);
@@ -327,23 +656,33 @@ extension PublishingContext {
             \(containerDefaults)
 
             \(generateGlobalRules())
-
-            /* Light theme override */
-            [data-bs-theme="\(lightTheme.id)"] {
-                \(generateThemeVariables(lightTheme))
-            }
-
-            /* Auto theme starts with light theme */
-            [data-bs-theme="auto"] {
-                \(generateThemeVariables(lightTheme))
-            }
             """
+
+            if hasMultipleThemes {
+                cssContent += """
+
+                /* Light theme override */
+                [data-bs-theme="\(lightTheme.id)"] {
+                    \(generateThemeVariables(lightTheme))
+                }
+                """
+            }
+
+            if hasAutoTheme {
+                cssContent += """
+
+                /* Auto theme starts with light theme */
+                [data-bs-theme="auto"] {
+                    \(generateThemeVariables(lightTheme))
+                }
+                """
+            }
         }
 
         // Dark theme handling
         if let darkTheme = site.darkTheme {
-            if !supportsLightTheme {
-                // Only dark theme exists - use as root
+            if !supportsLightTheme && site.alternateThemes.isEmpty {
+                // Only dark theme exists and no alternates - use as root
                 cssContent += """
                 :root {
                     --supports-light-theme: \(supportsLightTheme);
@@ -358,27 +697,29 @@ extension PublishingContext {
                 \(containerDefaults)
 
                 \(generateGlobalRules())
-
-                [data-bs-theme="\(darkTheme.id)"] {
-                    \(generateThemeVariables(darkTheme))
-                }
                 """
             } else {
-                // Both themes exist - update auto theme in dark mode and add explicit dark theme
+                // Add dark theme override
                 cssContent += """
-
-                /* Dark theme media query for auto theme */
-                @media (prefers-color-scheme: dark) {
-                    [data-bs-theme="auto"] {
-                        \(generateThemeVariables(darkTheme))
-                    }
-                }
 
                 /* Explicit dark theme */
                 [data-bs-theme="\(darkTheme.id)"] {
                     \(generateThemeVariables(darkTheme))
                 }
                 """
+
+                // Only add auto theme dark mode if both themes exist
+                if supportsLightTheme {
+                    cssContent += """
+
+                    /* Dark theme media query for auto theme */
+                    @media (prefers-color-scheme: dark) {
+                        [data-bs-theme="auto"] {
+                            \(generateThemeVariables(darkTheme))
+                        }
+                    }
+                    """
+                }
             }
         }
 
@@ -405,6 +746,13 @@ extension PublishingContext {
         func addProperty(_ variable: BootstrapVariable, _ value: any Defaultable) {
             if value.isDefault == false {
                 cssProperties.append("    \(variable.rawValue): \(value)")
+                // Add RGB variables for colors
+                if let color = value as? Color {
+                    cssProperties.append("    \(variable.rawValue)-rgb: \(color.red), \(color.green), \(color.blue)")
+                    // Add darker variant for alerts
+                    let darkerColor = color.weighted(.darker)
+                    cssProperties.append("    \(variable.rawValue)-text-emphasis: \(darkerColor)")
+                }
             }
         }
 
@@ -438,9 +786,10 @@ extension PublishingContext {
         addProperty(.secondaryBackground, theme.secondaryBackground)
         addProperty(.tertiaryBackground, theme.tertiaryBackground)
 
-        // Link colors
+        // Link styles
         addProperty(.linkColor, theme.link)
         addProperty(.linkHoverColor, theme.linkHover)
+        addProperty(.linkDecoration, theme.linkDecoration)
 
         // Border colors
         addProperty(.borderColor, theme.border)
@@ -479,9 +828,12 @@ extension PublishingContext {
         addProperty(.expandedLineHeight, theme.expandedLineHeight)
 
         // Heading properties
-        addProperty(.headingsMarginBottom, theme.headingBottomMargin)
         addProperty(.headingsFontWeight, theme.headingFontWeight)
         addProperty(.headingsLineHeight, theme.headingLineHeight)
+
+        // Bottom margins
+        addProperty(.headingsMarginBottom, theme.headingBottomMargin)
+        addProperty(.paragraphMarginBottom, theme.paragraphBottomMargin)
 
         // Container sizes
         addProperty(.smallContainer, theme.smallMaxWidth)
@@ -497,12 +849,7 @@ extension PublishingContext {
         addProperty(.xLargeBreakpoint, theme.xLargeBreakpoint)
         addProperty(.xxLargeBreakpoint, theme.xxLargeBreakpoint)
 
-        let syntaxTheme = theme.syntaxHighlighterTheme
-        if syntaxTheme != .none {
-            cssProperties.append("    --syntax-highlight-theme: \(syntaxTheme.description)")
-        }
-
-        return cssProperties.joined(separator: ";\n")
+        return cssProperties.joined(separator: ";\n") + ";"
     }
     // swiftlint:enable function_body_length
 }

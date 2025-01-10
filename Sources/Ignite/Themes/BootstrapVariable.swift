@@ -72,6 +72,9 @@ enum BootstrapVariable: String {
     /// Color for links on hover
     case linkHoverColor = "--bs-link-hover-color"
 
+    /// Link text decoration
+    case linkDecoration = "--bs-link-decoration"
+
     // MARK: - Border Colors
 
     /// Default border color
