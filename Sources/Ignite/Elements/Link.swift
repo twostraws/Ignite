@@ -21,7 +21,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
 
     /// Allows you to style links as buttons if needed.
     public enum LinkStyle: String, CaseIterable {
-        case `default`, hover, button
+        case automatic, hover, button
     }
 
     /// The content to display inside this link.
@@ -31,7 +31,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     var url: String
 
     /// The style for this link. Defaults to `.default`.
-    var style = LinkStyle.default
+    var style = LinkStyle.automatic
 
     /// The decoration style of the base link underline. Defaults to `.heavy`.
     var baseDecoration: UnderlineProminence = .heavy
@@ -58,27 +58,9 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
                 outputClasses.append("link-\(role.rawValue)")
             }
 
-            if style == .hover {
-                // If a `baseDecoration` has been set, we take that as a priority,
-                // otherwise use the default `.hover` style.
-                if baseDecoration != .heavy {
-                    outputClasses.append("link-underline-opacity-\(baseDecoration.opacity.formatted())")
-                } else {
-                    outputClasses.append("link-underline-opacity-0")
-                }
-
-                // If a `hoverDecoration` has been set, we take that as a
-                // priority, otherwise use the default `.hover` style.
-                if hoverDecoration != .heavy {
-                    outputClasses.append("link-underline-opacity-\(hoverDecoration.opacity.formatted())-hover")
-                } else {
-                    outputClasses.append("link-underline-opacity-100-hover")
-                }
-
-            } else {
-                outputClasses.append("link-underline-opacity-\(baseDecoration.opacity.formatted())")
-                outputClasses.append("link-underline-opacity-\(hoverDecoration.opacity.formatted())-hover")
-            }
+            outputClasses.append("link-underline")
+            outputClasses.append("link-underline-opacity-\(baseDecoration)")
+            outputClasses.append("link-underline-opacity-\(hoverDecoration)-hover")
         }
 
         return outputClasses
@@ -178,14 +160,18 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
         var copy = self
         copy.baseDecoration = base
         copy.hoverDecoration = hover
+        return copy
+    }
 
-        // If there isn't already a role for this link,
-        // add one automatically so it has sensible
-        // default button styling.
-        if copy.role == .default {
-            copy.role = .primary
-        }
-
+    /// Adjusts the underline decoration for both the base link and its hover state.
+    /// The underline can be set to various levels of prominence, from `.none` (no underline)
+    /// to `.heavy` (fully opaque), with options like `.faint`, `.light`, and `.bold` in between.
+    /// - Parameter prominence: The `UnderlineProminence` for both the base and hover states.
+    /// - Returns: A new `Link` instance with the updated underline decoration.
+    public func linkDecoration(_ prominence: UnderlineProminence) -> Self {
+        var copy = self
+        copy.baseDecoration = prominence
+        copy.hoverDecoration = prominence
         return copy
     }
 
