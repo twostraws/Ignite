@@ -157,6 +157,8 @@ extension PublishingContext {
             theme.headingFont
         ] + theme.alternateFonts
 
+        var uniqueSources: Set<String> = []
+
         let fontTags = fonts.flatMap { font -> [String] in
             guard let familyName = font.name else { return [] }
 
@@ -167,8 +169,18 @@ extension PublishingContext {
                 return []
             }
 
-            return font.sources.map { source in
-                guard let url = source.url else { return "" }
+            return font.sources.compactMap { source in
+                guard let url = source.url else { return nil }
+
+                // Create a unique key for this font source
+                let sourceKey = "\(familyName)-\(source.weight.rawValue)-\(source.variant.rawValue)-\(url.absoluteString)"
+
+                // Skip if we've already processed this source
+                guard !uniqueSources.contains(sourceKey) else {
+                    return nil
+                }
+
+                uniqueSources.insert(sourceKey)
 
                 if url.isFileURL {
                     return """
