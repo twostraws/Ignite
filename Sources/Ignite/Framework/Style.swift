@@ -14,9 +14,9 @@
 /// struct MyCustomStyle: Style {
 ///     func style(content: StyledHTML, environment: EnvironmentConditions) -> StyledHTML {
 ///         if environment.colorScheme == .dark {
-///             content.style(.color, "red")
+///             content.foregroundStyle(.red)
 ///         } else {
-///             content.style(.color, "blue")
+///             content.foregroundStyle(.blue)
 ///         }
 ///     }
 /// }
