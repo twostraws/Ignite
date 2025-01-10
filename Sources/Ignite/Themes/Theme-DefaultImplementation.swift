@@ -22,11 +22,14 @@ public extension Theme {
     var background: Color { Color(hex: "#ffffff") }
     var secondaryBackground: Color { Color(hex: "#e9ecef") }
     var tertiaryBackground: Color { Color(hex: "#f8f9fa") }
-    var link: Color { Color(hex: "#0d6efd") }
-    var linkHover: Color { Color(hex: "#0a58ca") }
     var border: Color { Color(hex: "#dee2e6") }
     var heading: Color { .default }
     var syntaxHighlighterTheme: HighlighterTheme { .automatic }
+
+    // Links
+    var link: Color { Color(hex: "#0d6efd") }
+    var linkHover: Color { Color(hex: "#0a58ca") }
+    var linkDecoration: TextDecoration { .underline }
 
     // Font Families
     var sansSerifFont: Font { .default }

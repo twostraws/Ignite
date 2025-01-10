@@ -237,7 +237,7 @@ extension PublishingContext {
         /* Link styles */
         a {
             color: var(--bs-link-color);
-            text-decoration: underline;
+            text-decoration: var(--bs-link-decoration, underline);
         }
 
         a:hover {
@@ -786,9 +786,10 @@ extension PublishingContext {
         addProperty(.secondaryBackground, theme.secondaryBackground)
         addProperty(.tertiaryBackground, theme.tertiaryBackground)
 
-        // Link colors
+        // Link styles
         addProperty(.linkColor, theme.link)
         addProperty(.linkHoverColor, theme.linkHover)
+        addProperty(.linkDecoration, theme.linkDecoration)
 
         // Border colors
         addProperty(.borderColor, theme.border)

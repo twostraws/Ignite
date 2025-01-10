@@ -14,7 +14,7 @@
 /// Example:
 /// ```swift
 /// struct CustomTheme: Theme {
-///     var id: String = "custom"
+///     static var name: String = "custom"
 ///     var primary: String = "#ff0000"
 ///     var fontFamilyBase: Font = .custom("Helvetica")
 /// }
@@ -73,6 +73,9 @@
 
     /// Link color on hover
     var linkHover: Color { get }
+
+    /// Link text decoration style
+    var linkDecoration: TextDecoration { get }
 
     /// Default border color
     var border: Color { get }
