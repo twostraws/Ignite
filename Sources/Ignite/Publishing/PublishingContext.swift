@@ -165,7 +165,7 @@ public final class PublishingContext {
         try copyAssets()
         try copyFonts()
 
-        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/themes.min.css").path()) {
+        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/themes.min.css").path(percentEncoded: false)) {
             try copy(resource: "css/themes.min.css")
         }
 
