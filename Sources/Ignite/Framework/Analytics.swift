@@ -26,6 +26,8 @@ public struct Analytics: HeadElement {
         case fathom(siteID: String)
         /// Clicky Analytics
         case clicky(siteID: String)
+        /// TelemetryDeck Analytics
+        case telemetryDeck(siteID: String)
         /// Custom analytics script
         case custom(_ code: String)
 
@@ -81,7 +83,7 @@ public struct Analytics: HeadElement {
             """
 
             if needs404Script {
-                script + "\n<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>"
+                script += "\n<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>"
             }
             return script
 
@@ -96,6 +98,15 @@ public struct Analytics: HeadElement {
             <!-- Clicky Analytics -->
             <script>var clicky_site_ids = clicky_site_ids || []; clicky_site_ids.push(\(siteID));</script>
             <script async src="//static.getclicky.com/js"></script>
+            """
+
+        case .telemetryDeck(let siteID):
+            return """
+            <!-- TelemetryDeck Analytics -->
+            <script
+                src="https://cdn.telemetrydeck.com/websdk/telemetrydeck.min.js"
+                data-app-id="\(siteID)"
+            ></script>
             """
 
         case .custom(let code):
