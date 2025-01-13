@@ -25,7 +25,9 @@ struct BuildCommand: ParsableCommand {
        }
 
         print("⚙️  Building your site...")
-        let (_, error) = try Process.execute(command: "swift run")
+
+        // Build executable and report errors & earnings
+        let (_, error) = try Process.execute(command: "swift build")
 
         // If something went wrong, print a message then
         // bail out.
@@ -39,6 +41,24 @@ struct BuildCommand: ParsableCommand {
             // Warnings can just be printed; they won't hold
             // up a successful build.
             print(error)
+        }
+
+        // Execute site generation with output, and report errors & earnings
+        let (output, runError) = try Process.execute(command: "swift run")
+        print(output)
+
+        // If something went wrong, print a message then
+        // bail out.
+        if runError.contains("error:") {
+            print(runError)
+
+            print("")
+            print("❌ Failed to generate HTML.")
+            return
+        } else if runError.contains("warning:") {
+            // Warnings can just be printed; they won't hold
+            // up a successful build.
+            print(runError)
         }
 
         print("✅ Successfully built!")
