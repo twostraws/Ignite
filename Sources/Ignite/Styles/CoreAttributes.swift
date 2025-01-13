@@ -148,7 +148,7 @@ public struct CoreAttributes: Sendable {
     var eventString: String {
         var result = ""
 
-        for event in events where event.actions.isEmpty == false {
+        for event in events.sorted() where event.actions.isEmpty == false {
             let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
 
             result += " \(event.name)=\"\(actions)\""
