@@ -319,83 +319,51 @@ extension PublishingContext {
 
         /* Alert styles */
         .alert-primary {
-            --bs-alert-color: var(--bs-primary-text-emphasis);
-            --bs-alert-bg: var(--bs-primary-bg-subtle);
-            --bs-alert-border-color: var(--bs-primary-border-subtle);
-            --bs-alert-link-color: var(--bs-primary-text-emphasis);
-            color: var(--bs-alert-color);
-            background-color: var(--bs-alert-bg);
-            border-color: var(--bs-alert-border-color);
+            color: var(--bs-primary-text-emphasis);
+            background-color: var(--bs-primary-bg-subtle);
+            border-color: var(--bs-primary-border-subtle);
         }
 
         .alert-secondary {
-            --bs-alert-color: var(--bs-secondary-text-emphasis);
-            --bs-alert-bg: var(--bs-secondary-bg-subtle);
-            --bs-alert-border-color: var(--bs-secondary-border-subtle);
-            --bs-alert-link-color: var(--bs-secondary-text-emphasis);
-            color: var(--bs-alert-color);
-            background-color: var(--bs-alert-bg);
-            border-color: var(--bs-alert-border-color);
+            color: var(--bs-secondary-text-emphasis);
+            background-color: var(--bs-secondary-bg-subtle);
+            border-color: var(--bs-secondary-border-subtle);
         }
 
         .alert-success {
-            --bs-alert-color: var(--bs-success-text-emphasis);
-            --bs-alert-bg: var(--bs-success-bg-subtle);
-            --bs-alert-border-color: var(--bs-success-border-subtle);
-            --bs-alert-link-color: var(--bs-success-text-emphasis);
-            color: var(--bs-alert-color);
-            background-color: var(--bs-alert-bg);
-            border-color: var(--bs-alert-border-color);
+            color: var(--bs-success-text-emphasis);
+            background-color: var(--bs-success-bg-subtle);
+            border-color: var(--bs-success-border-subtle);
         }
 
         .alert-info {
-            --bs-alert-color: var(--bs-info-text-emphasis);
-            --bs-alert-bg: var(--bs-info-bg-subtle);
-            --bs-alert-border-color: var(--bs-info-border-subtle);
-            --bs-alert-link-color: var(--bs-info-text-emphasis);
-            color: var(--bs-alert-color);
-            background-color: var(--bs-alert-bg);
-            border-color: var(--bs-alert-border-color);
+            color: var(--bs-info-text-emphasis);
+            background-color: var(--bs-info-bg-subtle);
+            border-color: var(--bs-info-border-subtle);
         }
 
         .alert-warning {
-            --bs-alert-color: var(--bs-warning-text-emphasis);
-            --bs-alert-bg: var(--bs-warning-bg-subtle);
-            --bs-alert-border-color: var(--bs-warning-border-subtle);
-            --bs-alert-link-color: var(--bs-warning-text-emphasis);
-            color: var(--bs-alert-color);
-            background-color: var(--bs-alert-bg);
-            border-color: var(--bs-alert-border-color);
+            color: var(--bs-warning-text-emphasis);
+            background-color: var(--bs-warning-bg-subtle);
+            border-color: var(--bs-warning-border-subtle);
         }
 
         .alert-danger {
-            --bs-alert-color: var(--bs-danger-text-emphasis);
-            --bs-alert-bg: var(--bs-danger-bg-subtle);
-            --bs-alert-border-color: var(--bs-danger-border-subtle);
-            --bs-alert-link-color: var(--bs-danger-text-emphasis);
-            color: var(--bs-alert-color);
-            background-color: var(--bs-alert-bg);
-            border-color: var(--bs-alert-border-color);
+            color: var(--bs-danger-text-emphasis);
+            background-color: var(--bs-danger-bg-subtle);
+            border-color: var(--bs-danger-border-subtle);
         }
 
         .alert-light {
-            --bs-alert-color: var(--bs-light-text-emphasis);
-            --bs-alert-bg: var(--bs-light-bg-subtle);
-            --bs-alert-border-color: var(--bs-light-border-subtle);
-            --bs-alert-link-color: var(--bs-light-text-emphasis);
-            color: var(--bs-alert-color);
-            background-color: var(--bs-alert-bg);
-            border-color: var(--bs-alert-border-color);
+            color: var(--bs-light-text-emphasis);
+            background-color: var(--bs-light-bg-subtle);
+            border-color: var(--bs-light-border-subtle);
         }
 
         .alert-dark {
-            --bs-alert-color: var(--bs-dark-text-emphasis);
-            --bs-alert-bg: var(--bs-dark-bg-subtle);
-            --bs-alert-border-color: var(--bs-dark-border-subtle);
-            --bs-alert-link-color: var(--bs-dark-text-emphasis);
-            color: var(--bs-alert-color);
-            background-color: var(--bs-alert-bg);
-            border-color: var(--bs-alert-border-color);
+            color: var(--bs-dark-text-emphasis);
+            background-color: var(--bs-dark-bg-subtle);
+            border-color: var(--bs-dark-border-subtle);
         }
 
         /* Subtle backgrounds */
@@ -778,12 +746,37 @@ extension PublishingContext {
         func addProperty(_ variable: BootstrapVariable, _ value: any Defaultable) {
             if value.isDefault == false {
                 cssProperties.append("    \(variable.rawValue): \(value)")
-                // Add RGB variables for colors
-                if let color = value as? Color {
-                    cssProperties.append("    \(variable.rawValue)-rgb: \(color.red), \(color.green), \(color.blue)")
-                    // Add emphasis variant for alerts - lighter in dark mode, darker in light mode
-                    let emphasisColor = theme is DarkTheme ? color.weighted(.lighter) : color.weighted(.darker)
+            }
+        }
+
+        // Helper function specifically for color properties
+        func addColor(_ variable: BootstrapVariable, _ color: Color) {
+            if !color.isDefault {
+                cssProperties.append("    \(variable.rawValue): \(color)")
+                cssProperties.append("    \(variable.rawValue)-rgb: \(color.red), \(color.green), \(color.blue)")
+
+                if variable.isThemeColor {
+                    // Generate subtle background, border, and text emphasis variants
+                    let bgSubtleColor = theme is DarkTheme ? color.weighted(.darkest) : color.weighted(.lightest)
+                    var emphasisColor = theme is DarkTheme ? color.weighted(.light) : color.weighted(.darker)
+                    var borderSubtleColor = theme is DarkTheme ? color.weighted(.dark) : color.weighted(.light)
+
+                    // Special handling for dark and light roles to ensure proper border and text visibility
+                    switch variable {
+                    case .dark where theme is DarkTheme:
+                        borderSubtleColor = color.weighted(.semiLight)
+                        emphasisColor = color.weighted(.lightest)
+                    case .light where theme is DarkTheme:
+                        borderSubtleColor = color.weighted(.darker)
+                    case .light:
+                        borderSubtleColor = color.weighted(.semiDark)
+                        emphasisColor = color.weighted(.darkest)
+                    default: break
+                    }
+
                     cssProperties.append("    \(variable.rawValue)-text-emphasis: \(emphasisColor)")
+                    cssProperties.append("    \(variable.rawValue)-bg-subtle: \(bgSubtleColor)")
+                    cssProperties.append("    \(variable.rawValue)-border-subtle: \(borderSubtleColor)")
                 }
             }
         }
@@ -796,35 +789,35 @@ extension PublishingContext {
         }
 
         // Brand colors
-        addProperty(.primary, theme.accent)
-        addProperty(.secondary, theme.secondaryAccent)
-        addProperty(.success, theme.success)
-        addProperty(.info, theme.info)
-        addProperty(.warning, theme.warning)
-        addProperty(.danger, theme.danger)
-        addProperty(.light, theme.light)
-        addProperty(.dark, theme.dark)
+        addColor(.primary, theme.accent)
+        addColor(.secondary, theme.secondaryAccent)
+        addColor(.success, theme.success)
+        addColor(.info, theme.info)
+        addColor(.warning, theme.warning)
+        addColor(.danger, theme.danger)
+        addColor(.light, theme.light)
+        addColor(.dark, theme.dark)
 
         // Body settings
-        addProperty(.bodyColor, theme.primary)
-        addProperty(.bodyBackground, theme.background)
+        addColor(.bodyColor, theme.primary)
+        addColor(.bodyBackground, theme.background)
 
         // Emphasis colors
-        addProperty(.emphasisColor, theme.emphasis)
-        addProperty(.secondaryColor, theme.secondary)
-        addProperty(.tertiaryColor, theme.tertiary)
+        addColor(.emphasisColor, theme.emphasis)
+        addColor(.secondaryColor, theme.secondary)
+        addColor(.tertiaryColor, theme.tertiary)
 
         // Background colors
-        addProperty(.secondaryBackground, theme.secondaryBackground)
-        addProperty(.tertiaryBackground, theme.tertiaryBackground)
+        addColor(.secondaryBackground, theme.secondaryBackground)
+        addColor(.tertiaryBackground, theme.tertiaryBackground)
 
         // Link styles
-        addProperty(.linkColor, theme.link)
-        addProperty(.linkHoverColor, theme.linkHover)
+        addColor(.linkColor, theme.link)
+        addColor(.linkHoverColor, theme.linkHover)
         addProperty(.linkDecoration, theme.linkDecoration)
 
         // Border colors
-        addProperty(.borderColor, theme.border)
+        addColor(.borderColor, theme.border)
 
         // Font families
         addFont(.sansSerifFont, theme.sansSerifFont, defaultFonts: Font.systemFonts)

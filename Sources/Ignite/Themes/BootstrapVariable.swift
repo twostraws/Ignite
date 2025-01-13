@@ -208,4 +208,14 @@ enum BootstrapVariable: String {
 
     /// Extra extra large breakpoint value
     case xxLargeBreakpoint = "--bs-breakpoint-xxl"
+
+    /// Whether this variable has dependent colors.
+    var isThemeColor: Bool {
+        switch self {
+        case .primary, .secondary, .success, .info, .warning, .danger, .light, .dark:
+            return true
+        default:
+            return false
+        }
+    }
 }
