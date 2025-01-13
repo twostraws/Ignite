@@ -169,14 +169,14 @@ public extension Site {
     var favicon: URL? { nil }
 
     /// The syntax highlighting themes from every site theme.
-    internal var allHighlighterThemes: Set<HighlighterTheme> {
-        var themes = Set<HighlighterTheme>()
+    internal var allHighlighterThemes: OrderedSet<HighlighterTheme> {
+        var themes = OrderedSet<HighlighterTheme>()
 
         if let theme = lightTheme?.syntaxHighlighterTheme {
-            themes.insert(theme)
+            themes.append(theme)
         }
         if let darkTheme = darkTheme?.syntaxHighlighterTheme {
-            themes.insert(darkTheme)
+            themes.append(darkTheme)
         }
         themes.formUnion(alternateThemes.compactMap(\.syntaxHighlighterTheme))
         themes.remove(.none)

@@ -34,7 +34,7 @@ public struct CoreAttributes: Sendable {
 
     /// ARIA attributes that add accessibility information.
     /// See https://www.w3.org/TR/html-aria/
-    var aria = Set<AttributeValue>()
+    var aria = OrderedSet<AttributeValue>()
 
     /// CSS classes.
     var classes = OrderedSet<String>()
@@ -43,13 +43,13 @@ public struct CoreAttributes: Sendable {
     var styles = OrderedSet<AttributeValue>()
 
     /// Data attributes.
-    var data = Set<AttributeValue>()
+    var data = OrderedSet<AttributeValue>()
 
     /// JavaScript events, such as onclick.
-    var events = Set<Event>()
+    var events = OrderedSet<Event>()
 
     /// Custom attributes not covered by the above, e.g. loading="lazy"
-    var customAttributes = Set<AttributeValue>()
+    var customAttributes = OrderedSet<AttributeValue>()
 
     /// The HTML tag to use for this element, e.g. "div" or "p".
     var tag: String?
@@ -260,7 +260,7 @@ public struct CoreAttributes: Sendable {
         guard let aria else { return self }
 
         var copy = self
-        copy.aria.insert(aria)
+        copy.aria.append(aria)
         return copy
     }
 
