@@ -16,7 +16,7 @@
 ///         attributes to multiple elements without affecting the document
 ///         structure. If you need a containing `div` element, use
 ///         ``Section`` instead.
-public struct Group: BlockHTML {
+public struct Group: PassthroughHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

@@ -95,11 +95,11 @@ public struct Grid: BlockHTML {
 
         return Section {
             ForEach(items) { item in
-                if let group = item as? Group {
-                    handleGroup(group, attributes: group.attributes)
+                if let passthrough = item as? any PassthroughHTML {
+                    handlePassthrough(passthrough, attributes: passthrough.attributes)
                 } else if let modified = item as? ModifiedHTML,
-                          let group = modified.content as? Group {
-                    handleGroup(group, attributes: modified.attributes)
+                          let passthrough = modified.content as? any PassthroughHTML {
+                    handlePassthrough(passthrough, attributes: modified.attributes)
                 } else if let item = item as? any BlockHTML {
                     Section(item)
                         .class(className(for: item))
@@ -115,19 +115,19 @@ public struct Grid: BlockHTML {
 
     /// Renders a group of HTML elements with consistent styling and attributes.
     /// - Parameters:
-    ///   - group: The group containing the HTML elements to render.
+    ///   - passthrough: The passthrough entity containing the HTML elements to render.
     ///   - attributes: HTML attributes to apply to each element in the group.
     /// - Returns: A view containing the styled group elements.
-    func handleGroup(_ group: Group, attributes: CoreAttributes) -> some HTML {
+    func handlePassthrough(_ passthrough: any PassthroughHTML, attributes: CoreAttributes) -> some HTML {
         let gutterClass = if case .semantic(let amount) = spacingAmount {
             "g-\(amount.rawValue)"
         } else {
             ""
         }
-        return ForEach(group.items) { item in
+        return ForEach(passthrough.items) { item in
             if let item = item as? any BlockHTML {
                 Section(item)
-                    .class(className(for: group))
+                    .class(className(for: passthrough))
                     .class(gutterClass)
                     .attributes(attributes)
             }

@@ -43,8 +43,8 @@ public final class PublishingContext {
     /// All the Markdown content this user has inside their Content folder.
     public private(set) var allContent = [Content]()
 
-    /// An array of syntax highlighters you want to enable for your site.
-    var highlighterLanguages = Set<HighlighterLanguage>()
+    /// An ordered set of syntax highlighters you want to enable for your site.
+    var highlighterLanguages = OrderedSet<HighlighterLanguage>()
 
     /// The sitemap for this site. Yes, using an array is less efficient when
     /// using `contains()`, but it allows us to list pages in a sensible order.
@@ -165,7 +165,7 @@ public final class PublishingContext {
         try copyAssets()
         try copyFonts()
 
-        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/themes.min.css").path()) {
+        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/themes.min.css").path(percentEncoded: false)) {
             try copy(resource: "css/themes.min.css")
         }
 

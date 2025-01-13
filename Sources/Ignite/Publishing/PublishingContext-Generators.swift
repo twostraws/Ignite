@@ -849,6 +849,8 @@ extension PublishingContext {
         addProperty(.xLargeBreakpoint, theme.xLargeBreakpoint)
         addProperty(.xxLargeBreakpoint, theme.xxLargeBreakpoint)
 
+        cssProperties.append("    --syntax-highlight-theme: \"\(theme.syntaxHighlighterTheme.description)\"")
+
         return cssProperties.joined(separator: ";\n") + ";"
     }
     // swiftlint:enable function_body_length
