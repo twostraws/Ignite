@@ -225,7 +225,7 @@ public extension HTML {
     /// - Returns: The modified `HTML` element
     @discardableResult func customAttribute(name: String, value: String) -> Self {
         var attributes = attributes
-        attributes.customAttributes.insert(AttributeValue(name: name, value: value))
+        attributes.customAttributes.append(AttributeValue(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -237,7 +237,7 @@ public extension HTML {
     /// - Returns: The modified HTML element
     func customAttribute(name: Property, value: String) -> Self {
         var attributes = attributes
-        attributes.customAttributes.insert(AttributeValue(name: name, value: value))
+        attributes.customAttributes.append(AttributeValue(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }

@@ -95,7 +95,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
         if let name = target.name {
             var copy = self
             let attribute = AttributeValue(name: "target", value: name)
-            copy.attributes.customAttributes.insert(attribute)
+            copy.attributes.customAttributes.append(attribute)
             return copy
         } else {
             return self
@@ -145,7 +145,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
         var copy = self
         let attributeValue = relationship.map(\.rawValue).joined(separator: " ")
         let attribute = AttributeValue(name: "rel", value: attributeValue)
-        copy.attributes.customAttributes.insert(attribute)
+        copy.attributes.customAttributes.append(attribute)
         return copy
     }
 

@@ -49,7 +49,7 @@ public struct CoreAttributes: Sendable {
     var events = Set<Event>()
 
     /// Custom attributes not covered by the above, e.g. loading="lazy"
-    var customAttributes = Set<AttributeValue>()
+    var customAttributes = OrderedSet<AttributeValue>()
 
     /// The HTML tag to use for this element, e.g. "div" or "p".
     var tag: String?
@@ -115,7 +115,7 @@ public struct CoreAttributes: Sendable {
         if classes.isEmpty {
             ""
         } else {
-            " class=\"\(classes.joined(separator: " "))\""
+            " class=\"\(classes.sorted().joined(separator: " "))\""
         }
     }
 
@@ -164,7 +164,7 @@ public struct CoreAttributes: Sendable {
         } else {
             var output = ""
 
-            for attribute in customAttributes {
+            for attribute in customAttributes.sorted() {
                 output += " \(attribute.name)=\"\(attribute.value)\""
             }
 
