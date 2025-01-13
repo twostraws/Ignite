@@ -23,7 +23,7 @@ struct SyntaxHighlightGenerator {
             let dependencies = highlighters.compactMap(\.dependency)
 
             for dependency in dependencies where highlighters.contains(dependency) == false {
-                highlighters.insert(dependency)
+                highlighters.append(dependency)
             }
         } while highlightersCount != highlighters.count
 
