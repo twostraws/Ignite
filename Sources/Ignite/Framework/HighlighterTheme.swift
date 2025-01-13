@@ -6,7 +6,7 @@
 //
 
 /// Represents different syntax highlighting themes available for code blocks
-public enum HighlighterTheme: CustomStringConvertible, Hashable, Sendable {
+public enum HighlighterTheme: CustomStringConvertible, Hashable, Comparable, Sendable {
     case githubLight
     case githubDark
     case prism
@@ -67,5 +67,9 @@ public enum HighlighterTheme: CustomStringConvertible, Hashable, Sendable {
         case .custom(let name, _): name
         default: "none"
         }
+    }
+
+    public static func < (lhs: HighlighterTheme, rhs: HighlighterTheme) -> Bool {
+        lhs.description < rhs.description
     }
 }

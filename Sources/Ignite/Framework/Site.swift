@@ -180,7 +180,7 @@ public extension Site {
         }
         themes.formUnion(alternateThemes.compactMap(\.syntaxHighlighterTheme))
         themes.remove(.none)
-        return themes
+        return .init(themes.sorted())
     }
 
     /// An array of every site theme.
