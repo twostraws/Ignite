@@ -1,8 +1,8 @@
 //
-//  Test.swift
+//  Attributes.swift
 //  Ignite
-//
-//  Created by Dorian on 13/01/2025.
+//  https://www.github.com/twostraws/Ignite
+//  See LICENSE for license information.
 //
 
 import Testing
