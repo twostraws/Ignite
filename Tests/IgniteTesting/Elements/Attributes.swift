@@ -55,4 +55,17 @@ struct AttributesTest {
             output == "<\(tag) bar=\"alert('bar')\" baz=\"alert('baz')\" foo=\"alert('foo')\" qux=\"alert('qux')\"></\(tag)>"
         )
     }
+    @Test("Checks that aria attributes are sorted", arguments: Self.tags)
+    func test_aria_attributes_are_sorted(tag: String) async throws {
+        let element = Tag(tag) {}
+            .aria("foo", "bar")
+            .aria("baz", "qux")
+            .aria("qux", "foo")
+            .aria("bar", "baz")
+        let output = element.render(context: publishingContext)
+
+        #expect(
+            output == "<\(tag) aria-bar=\"baz\" aria-baz=\"qux\" aria-foo=\"bar\" aria-qux=\"foo\"></\(tag)>"
+        )
+    }
 }

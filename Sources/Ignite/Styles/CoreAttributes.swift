@@ -102,7 +102,7 @@ public struct CoreAttributes: Sendable {
             var output = ""
 
             // Arium? Look, just give me this one…
-            for arium in aria {
+            for arium in aria.sorted() {
                 output += " aria-\(arium.name)=\"\(arium.value)\""
             }
 
@@ -124,7 +124,7 @@ public struct CoreAttributes: Sendable {
         if styles.isEmpty {
             return ""
         } else {
-            let stringified = styles.map { "\($0.name): \($0.value)" }.joined(separator: "; ")
+            let stringified = styles.sorted().map { "\($0.name): \($0.value)" }.joined(separator: "; ")
             return " style=\"\(stringified)\""
         }
     }
