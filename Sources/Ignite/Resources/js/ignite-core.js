@@ -32,21 +32,20 @@
                 const themeID = prefersDark ? darkThemeID : lightThemeID;
                 document.documentElement.setAttribute('data-bs-theme', themeID);
                 document.documentElement.setAttribute('data-theme-state', themeID);
-                igniteApplySyntaxTheme(prefersDark ? 'dark' : 'light');
             } else if (supportsDarkTheme) {
                 document.documentElement.setAttribute('data-bs-theme', darkThemeID);
                 document.documentElement.setAttribute('data-theme-state', darkThemeID);
-                igniteApplySyntaxTheme('dark');
             } else if (supportsLightTheme) {
                 document.documentElement.setAttribute('data-bs-theme', lightThemeID);
                 document.documentElement.setAttribute('data-theme-state', lightThemeID);
-                igniteApplySyntaxTheme('light');
             }
         } else {
             document.documentElement.setAttribute('data-bs-theme', savedTheme);
             document.documentElement.setAttribute('data-theme-state', savedTheme);
-            igniteApplySyntaxTheme(savedTheme);
         }
+
+        // Apply initial syntax theme
+        igniteApplySyntaxTheme();
 
         if (supportsLightTheme && supportsDarkTheme) {
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
@@ -55,7 +54,7 @@
                     const themeID = e.matches ? darkThemeID : lightThemeID;
                     document.documentElement.setAttribute('data-bs-theme', themeID);
                     document.documentElement.setAttribute('data-theme-state', themeID);
-                    igniteApplySyntaxTheme(e.matches ? 'dark' : 'light');
+                    igniteApplySyntaxTheme();
                 }
             });
         }
@@ -79,28 +78,34 @@ function igniteApplyTheme(themeID) {
         const themeID = prefersDark ? darkThemeID : lightThemeID;
         document.documentElement.setAttribute('data-bs-theme', themeID);
         document.documentElement.setAttribute('data-theme-state', themeID);
-        igniteApplySyntaxTheme(prefersDark ? 'dark' : 'light');
     } else {
         document.documentElement.setAttribute('data-bs-theme', themeID);
         document.documentElement.setAttribute('data-theme-state', themeID);
-        igniteApplySyntaxTheme(themeID);
     }
+
+    // Let the CSS update before getting the new syntax theme
+    requestAnimationFrame(() => {
+        igniteApplySyntaxTheme();
+    });
 }
 
 function igniteApplySyntaxTheme() {
     // Get the current syntax theme from CSS variable
     const syntaxTheme = getComputedStyle(document.documentElement)
-        .getPropertyValue('--syntax-highlight-theme').trim();
+        .getPropertyValue('--syntax-highlight-theme').trim().replace(/"/g, '');
 
     // Disable all themes first
-    document.querySelectorAll('link[data-highlight-theme]').forEach(link => {
-        link.disabled = true;
+    const themeLinks = document.querySelectorAll('link[data-highlight-theme]');
+
+    themeLinks.forEach(link => {
+        link.setAttribute('disabled', 'disabled');
     });
 
     // Enable the selected theme
     const themeLink = document.querySelector(`link[data-highlight-theme="${syntaxTheme}"]`);
+
     if (themeLink) {
-        themeLink.disabled = false;
+        themeLink.removeAttribute('disabled');
     }
 }
 
