@@ -136,7 +136,7 @@ public struct CoreAttributes: Sendable {
         } else {
             var output = ""
 
-            for datum in data {
+            for datum in data.sorted() {
                 output += " data-\(datum.name)=\"\(datum.value)\""
             }
 

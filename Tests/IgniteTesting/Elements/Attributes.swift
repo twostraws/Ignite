@@ -92,4 +92,18 @@ struct AttributesTest {
             output == "<\(tag) aria-bar=\"baz\" aria-baz=\"qux\" aria-foo=\"bar\" aria-qux=\"foo\"></\(tag)>"
         )
     }
+
+    @Test("Checks that data attributes are sorted", arguments: Self.tags)
+    func test_data_attributes_are_sorted(tag: String) async throws {
+        let element = Tag(tag) {}
+            .data("foo", "bar")
+            .data("baz", "qux")
+            .data("qux", "foo")
+            .data("bar", "baz")
+        let output = element.render(context: publishingContext)
+
+        #expect(
+            output == "<\(tag) data-bar=\"baz\" data-baz=\"qux\" data-foo=\"bar\" data-qux=\"foo\"></\(tag)>"
+        )
+    }
 }
