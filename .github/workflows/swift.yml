@@ -12,12 +12,9 @@ on:
 jobs:
   build:
 
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
-    - uses: swift-actions/setup-swift@v2
-      with:
-        swift-version: '6.0.0'
     - uses: actions/checkout@v4
     - name: Build
       run: swift build -v
