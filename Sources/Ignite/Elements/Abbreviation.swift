@@ -25,7 +25,7 @@ public struct Abbreviation: InlineHTML {
     public init(_ abbreviation: String, description: String) {
         contents = abbreviation
         let customAttribute = AttributeValue(name: "title", value: description)
-        attributes.customAttributes.insert(customAttribute)
+        attributes.customAttributes.append(customAttribute)
     }
 
     /// Creates a new `Abbreviation` instance using an inline element builder
@@ -34,7 +34,7 @@ public struct Abbreviation: InlineHTML {
     public init(_ description: String, @InlineHTMLBuilder content: () -> some InlineHTML) {
         contents = content()
         let customAttribute = AttributeValue(name: "title", value: description)
-        attributes.customAttributes.insert(customAttribute)
+        attributes.customAttributes.append(customAttribute)
     }
 
     /// Renders this element using publishing context passed in.

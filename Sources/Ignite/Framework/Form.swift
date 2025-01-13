@@ -142,8 +142,8 @@ public struct Form: BlockHTML {
         var attributes = attributes
         attributes.tag = "form"
 
-        attributes.customAttributes.insert(.init(name: "method", value: "post"))
-        attributes.customAttributes.insert(.init(name: "action", value: action.service.endpoint(formID: action.formID)))
+        attributes.customAttributes.append(.init(name: "method", value: "post"))
+        attributes.customAttributes.append(.init(name: "action", value: action.service.endpoint(formID: action.formID)))
         attributes.data.formUnion(action.service.dataAttributes)
 
         if let formClass = action.service.formClass {
@@ -151,7 +151,7 @@ public struct Form: BlockHTML {
         }
 
         if case .mailchimp = action.service {
-            attributes.customAttributes.insert(.init(name: "target", value: "_blank"))
+            attributes.customAttributes.append(.init(name: "target", value: "_blank"))
         }
 
         let wrappedContent = Section {

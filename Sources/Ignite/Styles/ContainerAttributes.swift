@@ -43,7 +43,7 @@ struct ContainerAttributes: Hashable, Sendable {
     var styles = OrderedSet<AttributeValue>()
 
     /// JavaScript events, such as onclick.
-    var events = Set<Event>()
+    var events = OrderedSet<Event>()
 
     /// Whether this container has any classes or styles defined
     var isEmpty: Bool { classes.isEmpty && styles.isEmpty && events.isEmpty }
@@ -63,6 +63,6 @@ struct ContainerAttributes: Hashable, Sendable {
         self.type = type
         self.classes = OrderedSet(classes)
         self.styles = OrderedSet(styles)
-        self.events = Set(events)
+        self.events = OrderedSet(events)
     }
 }

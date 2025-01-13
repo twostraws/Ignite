@@ -6,7 +6,8 @@
 //
 
 /// A simple key-value pair of strings that is able to store custom attributes.
-public struct AttributeValue: Hashable, Equatable, Sendable {
+public struct AttributeValue: Hashable, Equatable, Sendable, Comparable {
+
     /// The attribute's name, e.g. "target" or "rel".
     var name: String
 
@@ -21,5 +22,9 @@ public struct AttributeValue: Hashable, Equatable, Sendable {
     init(name: Property, value: String) {
         self.name = name.rawValue
         self.value = value
+    }
+
+    public static func < (lhs: AttributeValue, rhs: AttributeValue) -> Bool {
+        lhs.name < rhs.name
     }
 }

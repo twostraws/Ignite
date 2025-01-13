@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import OrderedCollections
+
 /// Represents metadata configuration for a website
 public struct SiteConfiguration: Sendable {
     /// The author of the site
@@ -32,7 +34,7 @@ public struct SiteConfiguration: Sendable {
     public let builtInIconsEnabled: BootstrapOptions
 
     /// Array of syntax highlighters enabled for the site
-    let highlighterThemes: Set<HighlighterTheme>
+    let highlighterThemes: OrderedSet<HighlighterTheme>
 
     /// The path to the favicon
     public let favicon: URL?
@@ -49,7 +51,7 @@ public struct SiteConfiguration: Sendable {
         url: URL,
         useDefaultBootstrapURLs: BootstrapOptions = .localBootstrap,
         builtInIconsEnabled: BootstrapOptions = .localBootstrap,
-        highlightThemes: Set<HighlighterTheme> = [],
+        highlightThemes: OrderedSet<HighlighterTheme> = [],
         favicon: URL? = nil,
         alternateThemes: [any Theme] = []
     ) {

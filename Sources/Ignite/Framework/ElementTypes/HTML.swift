@@ -149,7 +149,7 @@ public extension HTML {
     func data(_ name: String, _ value: String?) -> Self {
         guard let value else { return self }
         var attributes = attributes
-        attributes.data.insert(AttributeValue(name: name, value: value))
+        attributes.data.append(AttributeValue(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -162,7 +162,7 @@ public extension HTML {
     func aria(_ key: String, _ value: String?) -> Self {
         guard let value else { return self }
         var attributes = attributes
-        attributes.aria.insert(AttributeValue(name: key, value: value))
+        attributes.aria.append(AttributeValue(name: key, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -213,7 +213,7 @@ public extension HTML {
     @discardableResult func addEvent(name: String, actions: [Action]) -> Self {
         guard !actions.isEmpty else { return self }
         var attributes = attributes
-        attributes.events.insert(Event(name: name, actions: actions))
+        attributes.events.append(Event(name: name, actions: actions))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -225,7 +225,7 @@ public extension HTML {
     /// - Returns: The modified `HTML` element
     @discardableResult func customAttribute(name: String, value: String) -> Self {
         var attributes = attributes
-        attributes.customAttributes.insert(AttributeValue(name: name, value: value))
+        attributes.customAttributes.append(AttributeValue(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -237,7 +237,7 @@ public extension HTML {
     /// - Returns: The modified HTML element
     func customAttribute(name: Property, value: String) -> Self {
         var attributes = attributes
-        attributes.customAttributes.insert(AttributeValue(name: name, value: value))
+        attributes.customAttributes.append(AttributeValue(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }

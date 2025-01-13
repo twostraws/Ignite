@@ -76,14 +76,14 @@ public struct TextField: InlineHTML, BlockHTML {
         var attributes = attributes
         attributes.selfClosingTag = "input"
         attributes.classes.append("form-control")
-        attributes.customAttributes.insert(.init(name: "type", value: type.rawValue))
+        attributes.customAttributes.append(.init(name: "type", value: type.rawValue))
 
         if let placeholder {
-            attributes.customAttributes.insert(.init(name: "placeholder", value: placeholder))
+            attributes.customAttributes.append(.init(name: "placeholder", value: placeholder))
         }
 
         if isRequired {
-            attributes.customAttributes.insert(.init(name: "required", value: ""))
+            attributes.customAttributes.append(.init(name: "required", value: ""))
         }
 
         return attributes.description()
