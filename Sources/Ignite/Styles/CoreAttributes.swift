@@ -34,7 +34,7 @@ public struct CoreAttributes: Sendable {
 
     /// ARIA attributes that add accessibility information.
     /// See https://www.w3.org/TR/html-aria/
-    var aria = Set<AttributeValue>()
+    var aria = OrderedSet<AttributeValue>()
 
     /// CSS classes.
     var classes = OrderedSet<String>()
@@ -43,10 +43,10 @@ public struct CoreAttributes: Sendable {
     var styles = OrderedSet<AttributeValue>()
 
     /// Data attributes.
-    var data = Set<AttributeValue>()
+    var data = OrderedSet<AttributeValue>()
 
     /// JavaScript events, such as onclick.
-    var events = Set<Event>()
+    var events = OrderedSet<Event>()
 
     /// Custom attributes not covered by the above, e.g. loading="lazy"
     var customAttributes = OrderedSet<AttributeValue>()
@@ -201,13 +201,13 @@ public struct CoreAttributes: Sendable {
 
         // Apply containers from inner to outer
         for container in containerAttributes where !container.isEmpty {
-            let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.joined(separator: " "))\""
+            let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.sorted().joined(separator: " "))\""
 
-            let allStyles = container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; ")
+            let allStyles = container.styles.sorted().map { "\($0.name): \($0.value)" }.joined(separator: "; ")
             let styleAttr = container.styles.isEmpty ? "" : " style=\"\(allStyles)\""
 
             var eventAttr = ""
-            for event in container.events where event.actions.isEmpty == false {
+            for event in container.events.sorted() where event.actions.isEmpty == false {
                 let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
                 eventAttr += " \(event.name)=\"\(actions)\""
             }
@@ -260,7 +260,7 @@ public struct CoreAttributes: Sendable {
         guard let aria else { return self }
 
         var copy = self
-        copy.aria.insert(aria)
+        copy.aria.append(aria)
         return copy
     }
 

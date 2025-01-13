@@ -243,7 +243,7 @@ public extension HTML {
                 let newEvent = Event(name: "onclick", actions: [
                     CustomAction("igniteToggleClickAnimation(this)")])
                 modified.type = .click
-                modified.events.insert(newEvent)
+                modified.events.append(newEvent)
                 return modified
             }
 

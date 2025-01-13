@@ -204,7 +204,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
 
         var linkAttributes = attributes.appending(classes: linkClasses)
         linkAttributes.classes.append("protected-link")
-        linkAttributes.data.insert(AttributeValue(name: "encoded-url", value: encodedUrl))
+        linkAttributes.data.append(AttributeValue(name: "encoded-url", value: encodedUrl))
 
         linkAttributes.tag = """
         a href="#"
