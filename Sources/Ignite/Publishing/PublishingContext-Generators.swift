@@ -319,51 +319,83 @@ extension PublishingContext {
 
         /* Alert styles */
         .alert-primary {
-            color: var(--bs-primary-text-emphasis);
-            background-color: rgba(var(--bs-primary-rgb), 0.15);
-            border-color: rgba(var(--bs-primary-rgb), 0.4);
+            --bs-alert-color: var(--bs-primary-text-emphasis);
+            --bs-alert-bg: var(--bs-primary-bg-subtle);
+            --bs-alert-border-color: var(--bs-primary-border-subtle);
+            --bs-alert-link-color: var(--bs-primary-text-emphasis);
+            color: var(--bs-alert-color);
+            background-color: var(--bs-alert-bg);
+            border-color: var(--bs-alert-border-color);
         }
 
         .alert-secondary {
-            color: var(--bs-secondary-text-emphasis);
-            background-color: rgba(var(--bs-secondary-rgb), 0.15);
-            border-color: rgba(var(--bs-secondary-rgb), 0.4);
+            --bs-alert-color: var(--bs-secondary-text-emphasis);
+            --bs-alert-bg: var(--bs-secondary-bg-subtle);
+            --bs-alert-border-color: var(--bs-secondary-border-subtle);
+            --bs-alert-link-color: var(--bs-secondary-text-emphasis);
+            color: var(--bs-alert-color);
+            background-color: var(--bs-alert-bg);
+            border-color: var(--bs-alert-border-color);
         }
 
         .alert-success {
-            color: var(--bs-success-text-emphasis);
-            background-color: rgba(var(--bs-success-rgb), 0.15);
-            border-color: rgba(var(--bs-success-rgb), 0.4);
+            --bs-alert-color: var(--bs-success-text-emphasis);
+            --bs-alert-bg: var(--bs-success-bg-subtle);
+            --bs-alert-border-color: var(--bs-success-border-subtle);
+            --bs-alert-link-color: var(--bs-success-text-emphasis);
+            color: var(--bs-alert-color);
+            background-color: var(--bs-alert-bg);
+            border-color: var(--bs-alert-border-color);
         }
 
         .alert-info {
-            color: var(--bs-info-text-emphasis);
-            background-color: rgba(var(--bs-info-rgb), 0.15);
-            border-color: rgba(var(--bs-info-rgb), 0.4);
+            --bs-alert-color: var(--bs-info-text-emphasis);
+            --bs-alert-bg: var(--bs-info-bg-subtle);
+            --bs-alert-border-color: var(--bs-info-border-subtle);
+            --bs-alert-link-color: var(--bs-info-text-emphasis);
+            color: var(--bs-alert-color);
+            background-color: var(--bs-alert-bg);
+            border-color: var(--bs-alert-border-color);
         }
 
         .alert-warning {
-            color: var(--bs-warning-text-emphasis);
-            background-color: rgba(var(--bs-warning-rgb), 0.15);
-            border-color: rgba(var(--bs-warning-rgb), 0.4);
+            --bs-alert-color: var(--bs-warning-text-emphasis);
+            --bs-alert-bg: var(--bs-warning-bg-subtle);
+            --bs-alert-border-color: var(--bs-warning-border-subtle);
+            --bs-alert-link-color: var(--bs-warning-text-emphasis);
+            color: var(--bs-alert-color);
+            background-color: var(--bs-alert-bg);
+            border-color: var(--bs-alert-border-color);
         }
 
         .alert-danger {
-            color: var(--bs-danger-text-emphasis);
-            background-color: rgba(var(--bs-danger-rgb), 0.15);
-            border-color: rgba(var(--bs-danger-rgb), 0.4);
+            --bs-alert-color: var(--bs-danger-text-emphasis);
+            --bs-alert-bg: var(--bs-danger-bg-subtle);
+            --bs-alert-border-color: var(--bs-danger-border-subtle);
+            --bs-alert-link-color: var(--bs-danger-text-emphasis);
+            color: var(--bs-alert-color);
+            background-color: var(--bs-alert-bg);
+            border-color: var(--bs-alert-border-color);
         }
 
         .alert-light {
-            color: var(--bs-light-text-emphasis);
-            background-color: rgba(var(--bs-light-rgb), 0.15);
-            border-color: rgba(var(--bs-light-rgb), 0.4);
+            --bs-alert-color: var(--bs-light-text-emphasis);
+            --bs-alert-bg: var(--bs-light-bg-subtle);
+            --bs-alert-border-color: var(--bs-light-border-subtle);
+            --bs-alert-link-color: var(--bs-light-text-emphasis);
+            color: var(--bs-alert-color);
+            background-color: var(--bs-alert-bg);
+            border-color: var(--bs-alert-border-color);
         }
 
         .alert-dark {
-            color: var(--bs-dark-text-emphasis);
-            background-color: rgba(var(--bs-dark-rgb), 0.15);
-            border-color: rgba(var(--bs-dark-rgb), 0.4);
+            --bs-alert-color: var(--bs-dark-text-emphasis);
+            --bs-alert-bg: var(--bs-dark-bg-subtle);
+            --bs-alert-border-color: var(--bs-dark-border-subtle);
+            --bs-alert-link-color: var(--bs-dark-text-emphasis);
+            color: var(--bs-alert-color);
+            background-color: var(--bs-alert-bg);
+            border-color: var(--bs-alert-border-color);
         }
 
         /* Subtle backgrounds */
@@ -749,9 +781,9 @@ extension PublishingContext {
                 // Add RGB variables for colors
                 if let color = value as? Color {
                     cssProperties.append("    \(variable.rawValue)-rgb: \(color.red), \(color.green), \(color.blue)")
-                    // Add darker variant for alerts
-                    let darkerColor = color.weighted(.darker)
-                    cssProperties.append("    \(variable.rawValue)-text-emphasis: \(darkerColor)")
+                    // Add emphasis variant for alerts - lighter in dark mode, darker in light mode
+                    let emphasisColor = theme is DarkTheme ? color.weighted(.lighter) : color.weighted(.darker)
+                    cssProperties.append("    \(variable.rawValue)-text-emphasis: \(emphasisColor)")
                 }
             }
         }
