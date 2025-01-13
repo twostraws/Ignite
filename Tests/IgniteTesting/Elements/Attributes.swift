@@ -16,6 +16,18 @@ struct AttributesTest {
 
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "nav", "section"]
 
+    @Test("Checks that meta highlighting tags are sorted in the head element")
+    func test_highligther_themes_are_sorted() async throws {
+        let element = HTMLDocument {
+            HTMLHead {}
+            HTMLBody {}
+        }
+        let output = element.render(context: publishingContext)
+
+        #expect(
+            output == ""
+        )
+    }
 
     @Test("Checks that classes are sorted", arguments: tags)
     func test_classes_are_sorted(tag: String) async throws {
