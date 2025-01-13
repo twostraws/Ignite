@@ -6,7 +6,7 @@
 //
 
 /// A type that represents different media query conditions for applying conditional styles.
-public enum MediaQuery {
+public enum MediaQuery: Equatable, Hashable, Sendable {
     /// Applies styles based on the user's preferred color scheme.
     case colorScheme(ColorScheme)
 
@@ -32,7 +32,7 @@ public enum MediaQuery {
     case breakpoint(Breakpoint)
 
     /// The user's preferred color scheme options.
-    public enum ColorScheme {
+    public enum ColorScheme: CaseIterable, Equatable, Sendable {
         /// Dark mode preference
         case dark
         /// Light mode preference
@@ -40,7 +40,7 @@ public enum MediaQuery {
     }
 
     /// The user's motion preference options.
-    public enum Motion {
+    public enum Motion: CaseIterable, Equatable, Sendable {
         /// Reduced motion preference
         case reduced
         /// Standard motion preference
@@ -48,7 +48,7 @@ public enum MediaQuery {
     }
 
     /// The user's contrast preference options.
-    public enum Contrast {
+    public enum Contrast: CaseIterable, Equatable, Sendable {
         /// Reduced contrast preference
         case reduced
         /// High contrast preference
@@ -58,7 +58,7 @@ public enum MediaQuery {
     }
 
     /// The user's transparency preference options.
-    public enum Transparency {
+    public enum Transparency: CaseIterable, Equatable, Sendable {
         /// Reduced transparency preference
         case reduced
         /// Standard transparency preference
@@ -66,7 +66,7 @@ public enum MediaQuery {
     }
 
     /// The device orientation options.
-    public enum Orientation {
+    public enum Orientation: CaseIterable, Equatable, Sendable {
         /// Portrait orientation
         case portrait
         /// Landscape orientation
@@ -74,7 +74,7 @@ public enum MediaQuery {
     }
 
     /// The web application display mode options.
-    public enum DisplayMode {
+    public enum DisplayMode: CaseIterable, Equatable, Sendable {
         /// Standard browser mode
         case browser
         /// Full screen mode
@@ -90,7 +90,7 @@ public enum MediaQuery {
     }
 
     /// The user's breakpoint preference options.
-    public enum Breakpoint: String {
+    public enum Breakpoint: String, CaseIterable, Equatable, Sendable {
         /// Small breakpoint (typically ≥576px)
         case small = "sm"
         /// Medium breakpoint (typically ≥768px)
@@ -106,7 +106,7 @@ public enum MediaQuery {
     /// Generates the CSS media query string for this condition
     /// - Parameter theme: The theme to use for breakpoint values
     /// - Returns: A CSS media query string
-    @MainActor func query(with theme: Theme) -> String {
+    @MainActor func queryString(with theme: Theme? = nil) -> String {
         switch self {
         case .colorScheme(let scheme):
             return switch scheme {
@@ -153,6 +153,7 @@ public enum MediaQuery {
             return "data-theme-state=\"\(id.kebabCased())\""
 
         case .breakpoint(let breakpoint):
+            guard let theme else { return "" }
             let breakpointValue = switch breakpoint {
             case .small: theme.smallBreakpoint.stringValue
             case .medium: theme.mediumBreakpoint.stringValue

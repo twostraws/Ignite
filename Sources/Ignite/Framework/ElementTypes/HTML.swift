@@ -14,7 +14,7 @@
 /// You typically don't conform to `HTML` directly. Instead, use one of the built-in elements like
 /// `Div`, `Paragraph`, or `Link`, or create custom components by conforming to `HTMLRootElement`.
 @MainActor
-public protocol HTML: Sendable {
+public protocol HTML: Modifiable, Sendable {
     /// A unique identifier used to track this element's state and attributes.
     var id: String { get set }
 
@@ -191,6 +191,16 @@ public extension HTML {
     func style(_ values: AttributeValue?...) -> Self {
         var attributes = attributes
         attributes.styles.formUnion(values.compactMap(\.self))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds inline styles to the element.
+    /// - Parameter values: Variable number of `AttributeValue` objects
+    /// - Returns: The modified `HTML` element
+    func style(_ values: AttributeValue...) -> Self {
+        var attributes = attributes
+        attributes.styles.formUnion(values)
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }

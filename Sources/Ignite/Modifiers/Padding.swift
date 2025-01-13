@@ -28,7 +28,7 @@ public extension HTML {
         modifier(PaddingModifier(length: .px(length)))
     }
 
-    /// Applies padding on all sides of this element. Defaults to 20 pixels.
+    /// Applies padding on all sides of this element.
     /// - Parameter length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
@@ -53,7 +53,7 @@ public extension HTML {
         modifier(PaddingModifier(length: .px(length), edges: edges))
     }
 
-    /// Applies padding on selected sides of this element. Defaults to 20 pixels.
+    /// Applies padding on selected sides of this element.
     /// - Parameters:
     ///   - edges: The edges where this padding should be applied.
     ///   - length: The amount of padding to apply, specified in
@@ -82,7 +82,7 @@ public extension RootHTML {
         modifier(PaddingModifier(length: .px(length)))
     }
 
-    /// Applies padding on all sides of this element. Defaults to 20 pixels.
+    /// Applies padding on all sides of this element.
     /// - Parameter length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
@@ -107,7 +107,7 @@ public extension RootHTML {
         modifier(PaddingModifier(length: .px(length), edges: edges))
     }
 
-    /// Applies padding on selected sides of this element. Defaults to 20 pixels.
+    /// Applies padding on selected sides of this element.
     /// - Parameters:
     ///   - edges: The edges where this padding should be applied.
     ///   - length: The amount of padding to apply, specified in
@@ -125,5 +125,17 @@ public extension RootHTML {
     /// - Returns: A copy of the current element with the new padding applied.
     func padding(_ edges: Edge, _ amount: SpacingAmount) -> some RootHTML {
         modifier(PaddingModifier(amount: amount, edges: edges))
+    }
+}
+
+public extension StyledHTML {
+    /// Applies padding on selected sides of this element. Defaults to 20 pixels.
+    /// - Parameters:
+    ///   - edges: The edges where this padding should be applied.
+    ///   - length: The amount of padding to apply, specified in
+    /// units of your choosing.
+    /// - Returns: A copy of the current element with the new padding applied.
+    func padding(_ edges: Edge, _ length: LengthUnit) -> Self {
+        self.edgeAdjust(prefix: "padding", edges, length.stringValue)
     }
 }

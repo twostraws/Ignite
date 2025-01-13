@@ -60,3 +60,10 @@ public extension HTML {
         modifier(HiddenModifier(queries: queries))
     }
 }
+
+public extension StyledHTML {
+    /// Hides the view in the view hierarchy.
+    func hidden() -> Self {
+        self.style(.init(name: .display, value: "none"))
+    }
+}

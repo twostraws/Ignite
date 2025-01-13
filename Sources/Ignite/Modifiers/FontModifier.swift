@@ -127,3 +127,24 @@ public extension InlineHTML {
         modifier(FontModifier(font: font))
     }
 }
+
+public extension StyledHTML {
+    /// Adjusts the font of this text.
+    /// - Parameters:
+    ///   - name: The name of the font family.
+    ///   - size: The size of the font.
+    ///   - weight: The weight (boldness) of the font. Defaults to `.regular`.
+    /// - Returns: A new instance with the updated font.
+    func font(name: String? = nil, size: LengthUnit? = nil, weight: Font.Weight = .regular) -> Self {
+        var copy = self
+        copy.style(.init(name: .fontWeight, value: String(weight.rawValue)))
+
+        if let name, name.isEmpty == false {
+            copy.style(.init(name: .fontFamily, value: name))
+        }
+        if let size {
+            copy.style(.init(name: .fontSize, value: size.stringValue))
+        }
+        return copy
+    }
+}

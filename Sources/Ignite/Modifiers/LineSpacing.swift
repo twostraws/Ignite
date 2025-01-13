@@ -99,3 +99,12 @@ public enum LineSpacing: String, CaseIterable {
         }
     }
 }
+
+public extension StyledHTML {
+    /// Sets the line height of the element using a custom value.
+    /// - Parameter height: The line height multiplier to use
+    /// - Returns: The modified HTML element
+    func lineSpacing(_ height: Double) -> Self {
+        self.style(.init(name: .lineHeight, value: String(height)))
+    }
+}
