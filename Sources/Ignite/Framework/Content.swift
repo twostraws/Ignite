@@ -180,12 +180,12 @@ public struct Content: Sendable {
         }
 
         if metadata["date"] == nil {
-            metadata["date"] = resourceValues.creationDate?.formatted(.iso8601) ?? Date.now
+            metadata["date"] = resourceValues.creationDate ?? Date.now
             hasAutomaticDate = true
         }
 
-        if metadata["lastModified"] == nil {
-            metadata["lastModified"] = resourceValues.contentModificationDate?.formatted(.iso8601) ?? Date.now
+        if metadata["modified"] == nil {
+            metadata["modified"] = resourceValues.contentModificationDate ?? Date.now
         }
     }
 
