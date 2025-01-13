@@ -6,7 +6,7 @@
 //
 
 /// A structure that creates HTML content by mapping over a sequence of data.
-public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML, ListableElement {
+public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, PassthroughHTML, ListableElement {
     /// The body content created by mapping over the data sequence.
     public var body: some HTML { self }
 
@@ -24,6 +24,9 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, BlockHTML, Lis
 
     /// The closure that transforms each data element into HTML content.
     private let content: (Data.Element) -> Content
+
+    /// The child elements contained within this HTML element.
+    var items: [any HTML] { data.map(content) }
 
     /// Creates a new ForEach instance that generates HTML content from a sequence.
     /// - Parameters:
