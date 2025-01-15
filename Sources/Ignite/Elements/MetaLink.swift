@@ -44,7 +44,7 @@ public struct MetaLink: HeadElement, Sendable {
     static func highlighterThemeMetaLinks(for themes: some Collection<HighlighterTheme>) -> [MetaLink] {
         let hasMultipleThemes = themes.count > 1
 
-        return themes.map { theme in
+        return themes.sorted().map { theme in
             var link = MetaLink(href: "/\(theme.url)", rel: .stylesheet)
 
             if hasMultipleThemes {

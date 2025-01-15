@@ -18,14 +18,15 @@ struct AttributesTest {
 
     @Test("Checks that meta highlighting tags are sorted in the head element")
     func test_highligther_themes_are_sorted() async throws {
-        let element = HTMLDocument {
-            HTMLHead {}
-            HTMLBody {}
-        }
-        let output = element.render(context: publishingContext)
+        let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .githubLight])
+        let output = links.map { $0.render(context:  publishingContext )}
 
         #expect(
-            output == ""
+            output == [
+                "<link disabled=\"\" href=\"/css/prism-github-dark.css\" rel=\"stylesheet\" data-highlight-theme=\"github-dark\" />",
+                "<link disabled=\"\" href=\"/css/prism-github-light.css\" rel=\"stylesheet\" data-highlight-theme=\"github-light\" />",
+                "<link disabled=\"\" href=\"/css/prism-xcode-dark.css\" rel=\"stylesheet\" data-highlight-theme=\"xcode-dark\" />"
+            ]
         )
     }
 
