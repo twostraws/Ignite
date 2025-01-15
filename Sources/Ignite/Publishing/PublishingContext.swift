@@ -294,9 +294,14 @@ public final class PublishingContext {
     /// - Parameter content: The content to render.
     func render(_ content: Content) throws {
         let layout = try layout(for: content)
+        
+        let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+        let layoutBody = EnvironmentStore.update(values) {
+            layout.body
+        }
 
         let body = ContentContext.withCurrentContent(content) {
-            Section(context: self, items: [layout.body])
+            Section(context: self, items: [layoutBody])
         }
 
         currentRenderingPath = content.path
