@@ -6,7 +6,7 @@
 //
 
 import Testing
-import Ignite
+@testable import Ignite
 
 /// Tests for the element's `Attributes`.
 @Suite("Attributes Tests")
