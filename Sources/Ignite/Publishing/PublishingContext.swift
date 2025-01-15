@@ -293,15 +293,13 @@ public final class PublishingContext {
     /// Renders one piece of Markdown content.
     /// - Parameter content: The content to render.
     func render(_ content: Content) throws {
-        let layout = try layout(for: content)
+        var layout = try layout(for: content)
         
         let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        let layoutBody = EnvironmentStore.update(values) {
-            layout.body
-        }
+        layout.environment = values
 
         let body = ContentContext.withCurrentContent(content) {
-            Section(context: self, items: [layoutBody])
+            Section(context: self, items: [layout.body])
         }
 
         currentRenderingPath = content.path
