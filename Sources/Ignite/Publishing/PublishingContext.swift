@@ -131,6 +131,7 @@ public final class PublishingContext {
     /// Performs all steps required to publish a site.
     func publish() async throws {
         try clearBuildFolder()
+        generateEnvironment()
         try await generateContent()
         try copyResources()
         try generateThemes(site.allThemes)
@@ -256,10 +257,7 @@ public final class PublishingContext {
         }
 
         return PageContext.withCurrentPage(page) {
-            let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-            return EnvironmentStore.update(values) {
-                finalLayout.body.render(context: self)
-            }
+            finalLayout.body.render(context: self)
         }
     }
 
@@ -272,17 +270,12 @@ public final class PublishingContext {
         let path = isHomePage ? "" : staticLayout.path
         currentRenderingPath = isHomePage ? "/" : staticLayout.path
 
-        let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        let body = EnvironmentStore.update(values) {
-            staticLayout.body
-        }
-
         let page = Page(
             title: staticLayout.title,
             description: staticLayout.description,
             url: site.url.appending(path: path),
             image: staticLayout.image,
-            body: body
+            body: staticLayout.body
         )
 
         let outputString = render(page, using: staticLayout.parentLayout)
@@ -294,9 +287,6 @@ public final class PublishingContext {
     /// - Parameter content: The content to render.
     func render(_ content: Content) throws {
         var layout = try layout(for: content)
-        
-        let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        layout.environment = values
 
         let body = ContentContext.withCurrentContent(content) {
             Section(context: self, items: [layout.body])
