@@ -131,7 +131,7 @@ public final class PublishingContext {
     /// Performs all steps required to publish a site.
     func publish() async throws {
         try clearBuildFolder()
-        generateEnvironment()
+        await generateEnvironment()
         try await generateContent()
         try copyResources()
         try generateThemes(site.allThemes)

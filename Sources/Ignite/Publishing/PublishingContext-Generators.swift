@@ -36,7 +36,7 @@ extension PublishingContext {
     }
 
     /// Aggregates information from the publishing context into global environment values.
-    func generateEnvironment() {
+    func generateEnvironment() async {
         let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         EnvironmentStore.current = values
     }
