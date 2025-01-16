@@ -27,4 +27,3 @@ struct TestSubsitePage: StaticLayout {
         Text("Example subsite text")
     }
 }
-

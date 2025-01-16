@@ -42,18 +42,9 @@ public struct MetaLink: HeadElement, Sendable {
     /// - Returns: An array of MetaLink elements. If multiple themes are provided,
     /// includes data attributes for theme switching.
     static func highlighterThemeMetaLinks(for themes: some Collection<HighlighterTheme>) -> [MetaLink] {
-        let hasMultipleThemes = themes.count > 1
-
-        return themes.map { theme in
-            var link = MetaLink(href: "/\(theme.url)", rel: .stylesheet)
-
-            if hasMultipleThemes {
-                link = link
-                    .data("highlight-theme", theme.description)
-                    .customAttribute(name: "disabled", value: "")
-            }
-
-            return link
+        themes.sorted().map { theme in
+            MetaLink(href: "/\(theme.url)", rel: .stylesheet)
+                .data("highlight-theme", theme.description)
         }
     }
 

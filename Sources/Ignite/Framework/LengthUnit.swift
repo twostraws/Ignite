@@ -5,6 +5,7 @@
 // See LICENSE for license information.
 //
 
+// swiftlint:disable identifier_name
 /// Represents a CSS length value with its unit of measurement
 public enum LengthUnit: Hashable, Equatable, Sendable, CustomStringConvertible, Defaultable {
     /// Pixels
@@ -46,3 +47,4 @@ public enum LengthUnit: Hashable, Equatable, Sendable, CustomStringConvertible, 
         return false
     }
 }
+// swiftlint:enable identifier_name

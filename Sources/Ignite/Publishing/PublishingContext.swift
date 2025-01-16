@@ -126,6 +126,12 @@ public final class PublishingContext {
                 }
             }
         }
+
+        // Make content be sorted newest first by default.
+        allContent.sort(
+            by: \.date,
+            order: .reverse
+        )
     }
 
     /// Performs all steps required to publish a site.
@@ -165,7 +171,9 @@ public final class PublishingContext {
         try copyAssets()
         try copyFonts()
 
-        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/themes.min.css").path(percentEncoded: false)) {
+        let themesPath = buildDirectory.appending(path: "css/themes.min.css").path(percentEncoded: false)
+
+        if !FileManager.default.fileExists(atPath: themesPath) {
             try copy(resource: "css/themes.min.css")
         }
 
@@ -293,7 +301,10 @@ public final class PublishingContext {
     /// Renders one piece of Markdown content.
     /// - Parameter content: The content to render.
     func render(_ content: Content) throws {
-        let layout = try layout(for: content)
+        var layout = try layout(for: content)
+
+        let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+        layout.environment = values
 
         let body = ContentContext.withCurrentContent(content) {
             Section(context: self, items: [layout.body])

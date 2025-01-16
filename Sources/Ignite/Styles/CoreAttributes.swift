@@ -34,7 +34,7 @@ public struct CoreAttributes: Sendable {
 
     /// ARIA attributes that add accessibility information.
     /// See https://www.w3.org/TR/html-aria/
-    var aria = Set<AttributeValue>()
+    var aria = OrderedSet<AttributeValue>()
 
     /// CSS classes.
     var classes = OrderedSet<String>()
@@ -43,13 +43,13 @@ public struct CoreAttributes: Sendable {
     var styles = OrderedSet<AttributeValue>()
 
     /// Data attributes.
-    var data = Set<AttributeValue>()
+    var data = OrderedSet<AttributeValue>()
 
     /// JavaScript events, such as onclick.
-    var events = Set<Event>()
+    var events = OrderedSet<Event>()
 
     /// Custom attributes not covered by the above, e.g. loading="lazy"
-    var customAttributes = Set<AttributeValue>()
+    var customAttributes = OrderedSet<AttributeValue>()
 
     /// The HTML tag to use for this element, e.g. "div" or "p".
     var tag: String?
@@ -102,7 +102,7 @@ public struct CoreAttributes: Sendable {
             var output = ""
 
             // Arium? Look, just give me this one…
-            for arium in aria {
+            for arium in aria.sorted() {
                 output += " aria-\(arium.name)=\"\(arium.value)\""
             }
 
@@ -115,7 +115,7 @@ public struct CoreAttributes: Sendable {
         if classes.isEmpty {
             ""
         } else {
-            " class=\"\(classes.joined(separator: " "))\""
+            " class=\"\(classes.sorted().joined(separator: " "))\""
         }
     }
 
@@ -124,7 +124,7 @@ public struct CoreAttributes: Sendable {
         if styles.isEmpty {
             return ""
         } else {
-            let stringified = styles.map { "\($0.name): \($0.value)" }.joined(separator: "; ")
+            let stringified = styles.sorted().map { "\($0.name): \($0.value)" }.joined(separator: "; ")
             return " style=\"\(stringified)\""
         }
     }
@@ -136,7 +136,7 @@ public struct CoreAttributes: Sendable {
         } else {
             var output = ""
 
-            for datum in data {
+            for datum in data.sorted() {
                 output += " data-\(datum.name)=\"\(datum.value)\""
             }
 
@@ -148,7 +148,7 @@ public struct CoreAttributes: Sendable {
     var eventString: String {
         var result = ""
 
-        for event in events where event.actions.isEmpty == false {
+        for event in events.sorted() where event.actions.isEmpty == false {
             let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
 
             result += " \(event.name)=\"\(actions)\""
@@ -164,7 +164,7 @@ public struct CoreAttributes: Sendable {
         } else {
             var output = ""
 
-            for attribute in customAttributes {
+            for attribute in customAttributes.sorted() {
                 output += " \(attribute.name)=\"\(attribute.value)\""
             }
 
@@ -201,13 +201,23 @@ public struct CoreAttributes: Sendable {
 
         // Apply containers from inner to outer
         for container in containerAttributes where !container.isEmpty {
-            let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.joined(separator: " "))\""
+            let classAttr = if container.classes.isEmpty {
+                ""
+            } else {
+                " class=\"\(container.classes.sorted().joined(separator: " "))\""
+            }
 
-            let allStyles = container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; ")
-            let styleAttr = container.styles.isEmpty ? "" : " style=\"\(allStyles)\""
+            let allStyles = container.styles.sorted().map { "\($0.name): \($0.value)" }.joined(separator: "; ")
+
+            let styleAttr = if container.styles.isEmpty {
+                ""
+            } else {
+                " style=\"\(allStyles)\""
+            }
 
             var eventAttr = ""
-            for event in container.events where event.actions.isEmpty == false {
+
+            for event in container.events.sorted() where event.actions.isEmpty == false {
                 let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
                 eventAttr += " \(event.name)=\"\(actions)\""
             }
@@ -260,7 +270,7 @@ public struct CoreAttributes: Sendable {
         guard let aria else { return self }
 
         var copy = self
-        copy.aria.insert(aria)
+        copy.aria.append(aria)
         return copy
     }
 

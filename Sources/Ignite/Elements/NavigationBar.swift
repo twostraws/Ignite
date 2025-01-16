@@ -23,7 +23,7 @@ public struct NavigationBar: BlockHTML {
         /// This bar must always be rendered in dark mode.
         case dark
     }
-    
+
     /// The new number of columns to use.
     public enum Width {
         /// Viewport sets column width
@@ -164,8 +164,10 @@ public struct NavigationBar: BlockHTML {
                         Link(logo, target: "/")
                             .class("navbar-brand")
                     }
-                    renderToggleButton()
-                    renderNavItems(context: context)
+                    if !items.isEmpty {
+                        renderToggleButton()
+                        renderNavItems(context: context)
+                    }
                 }
                 .class(widthClasses)
             }
@@ -226,5 +228,3 @@ public struct NavigationBar: BlockHTML {
         .class("nav-item")
     }
 }
-
-

@@ -28,8 +28,7 @@ struct AbbreviationTests {
         "Single Element Abbreviation Test", arguments: ["abbreviation"],
         ["abbr"])
     func test_singleElement(description: String, abbreviation: String)
-        async throws
-    {
+        async throws {
         let element = Abbreviation(description) { Strong(abbreviation) }
         let output = element.render(context: publishingContext)
 

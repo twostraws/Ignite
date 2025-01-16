@@ -25,9 +25,12 @@ import Testing
         let output = element.render(context: publishingContext)
 
         #expect(
-            output
-                == "<body><p>TEXT</p><script src=\"/subsite/js/bootstrap.bundle.min.js\"></script><script src=\"/subsite/js/highlight.min.js\"></script><script>hljs.highlightAll();</script><script src=\"/subsite/js/ignite-core.js\"></script></body>"
+            output == """
+            <body class="container"><p>TEXT</p>\
+            <script src="/subsite/js/bootstrap.bundle.min.js"></script>\
+            <script src="/subsite/js/ignite-core.js"></script>\
+            </body>
+            """
         )
     }
-
 }

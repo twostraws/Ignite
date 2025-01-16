@@ -21,10 +21,16 @@ import Testing
         let output = element.render(context: publishingContext)
 
         #expect(
-            output
-                == "<a href=\"/subsite\(linkTarget)\" class=\"link-underline-opacity-100 link-underline-opacity-100-hover\">Go Home</a>"
+            output == """
+            <a href="/subsite\(linkTarget)\" \
+            class="link-underline link-underline-opacity-100 \
+            link-underline-opacity-100-hover">\
+            Go Home\
+            </a>
+            """
         )
     }
+
     @Test("Page Target Test")
     func test_page_target() async throws {
         let element = Link("This is a test", target: TestPage()).linkStyle(
@@ -36,6 +42,7 @@ import Testing
                 == "<a href=\"/subsite/test-page\" class=\"btn btn-primary\">This is a test</a>"
         )
     }
+
     @Test("Page Content Test")
     func test_page_content() async throws {
         let element = Link(
@@ -47,9 +54,13 @@ import Testing
         let output = element.render(context: publishingContext)
 
         #expect(
-            output
-                == "<a href=\"/subsite/test-page\" class=\"link-plain link-underline-opacity-100 link-underline-opacity-100-hover\">MORE <p>CONTENT</p></a>"
+            output == """
+            <a href="/subsite/test-page" \
+            class="link-plain link-underline link-underline-opacity-100 \
+            link-underline-opacity-100-hover">\
+            MORE <p>CONTENT</p>\
+            </a>
+            """
         )
     }
-
 }

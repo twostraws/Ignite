@@ -19,9 +19,26 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     /// How many columns this should occupy when placed in a grid.
     public var columnWidth: ColumnWidth = .automatic
 
-    /// Allows you to style links as buttons if needed.
-    public enum LinkStyle: String, CaseIterable {
-        case automatic, hover, button
+    /// The visual style to apply to the link.
+    public enum LinkStyle {
+        /// A link with an underline effect.
+        /// - Parameters:
+        ///   - base: The underline prominence in the link's normal state.
+        ///   - hover: The underline prominence when hovering over the link.
+        case underline(_ base: UnderlineProminence, hover: UnderlineProminence)
+
+        /// A link that appears and behaves like a button.
+        case button
+
+        /// Creates an underline-style link with uniform prominence for both normal and hover states.
+        /// - Parameter prominence: The underline prominence to use for both states.
+        /// - Returns: A `LinkStyle` with identical base and hover prominence.
+        public static func underline(_ prominence: UnderlineProminence) -> Self {
+            .underline(prominence, hover: prominence)
+        }
+
+        /// The default link style with heavy underline prominence.
+        public static var automatic: LinkStyle { .underline(.heavy, hover: .heavy) }
     }
 
     /// The content to display inside this link.
@@ -33,12 +50,6 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     /// The style for this link. Defaults to `.default`.
     var style = LinkStyle.automatic
 
-    /// The decoration style of the base link underline. Defaults to `.heavy`.
-    var baseDecoration: UnderlineProminence = .heavy
-
-    /// The decoration style of the link underline when hovering. Defaults to `.heavy`.
-    var hoverDecoration: UnderlineProminence = .heavy
-
     /// When rendered with the `.button` style, this controls the button's size.
     var size = Button.Size.medium
 
@@ -49,9 +60,10 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     var linkClasses: [String] {
         var outputClasses = [String]()
 
-        if style == .button {
+        switch style {
+        case .button:
             outputClasses.append(contentsOf: Button.classes(forRole: role, size: size))
-        } else {
+        case .underline(let baseDecoration, hover: let hoverDecoration):
             if role == .none {
                 outputClasses.append("link-plain")
             } else if role != .default {
@@ -95,7 +107,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
         if let name = target.name {
             var copy = self
             let attribute = AttributeValue(name: "target", value: name)
-            copy.attributes.customAttributes.insert(attribute)
+            copy.attributes.customAttributes.append(attribute)
             return copy
         } else {
             return self
@@ -145,33 +157,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
         var copy = self
         let attributeValue = relationship.map(\.rawValue).joined(separator: " ")
         let attribute = AttributeValue(name: "rel", value: attributeValue)
-        copy.attributes.customAttributes.insert(attribute)
-        return copy
-    }
-
-    /// Adjusts the underline decoration for both the base link and its hover state.
-    /// The underline can be set to various levels of prominence, from `.none` (no underline)
-    /// to `.heavy` (fully opaque), with options like `.faint`, `.light`, and `.bold` in between.
-    /// - Parameters:
-    ///   - base: The `UnderlineProminence` for the base link style.
-    ///   - hover: The `UnderlineProminence` for the hover style.
-    /// - Returns: A new `Link` instance with the updated underline decoration.
-    public func linkDecoration(_ base: UnderlineProminence = .heavy, hover: UnderlineProminence = .heavy) -> Self {
-        var copy = self
-        copy.baseDecoration = base
-        copy.hoverDecoration = hover
-        return copy
-    }
-
-    /// Adjusts the underline decoration for both the base link and its hover state.
-    /// The underline can be set to various levels of prominence, from `.none` (no underline)
-    /// to `.heavy` (fully opaque), with options like `.faint`, `.light`, and `.bold` in between.
-    /// - Parameter prominence: The `UnderlineProminence` for both the base and hover states.
-    /// - Returns: A new `Link` instance with the updated underline decoration.
-    public func linkDecoration(_ prominence: UnderlineProminence) -> Self {
-        var copy = self
-        copy.baseDecoration = prominence
-        copy.hoverDecoration = prominence
+        copy.attributes.customAttributes.append(attribute)
         return copy
     }
 
@@ -204,7 +190,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
 
         var linkAttributes = attributes.appending(classes: linkClasses)
         linkAttributes.classes.append("protected-link")
-        linkAttributes.data.insert(AttributeValue(name: "encoded-url", value: encodedUrl))
+        linkAttributes.data.append(AttributeValue(name: "encoded-url", value: encodedUrl))
 
         linkAttributes.tag = """
         a href="#"
