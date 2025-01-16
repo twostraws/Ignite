@@ -27,8 +27,8 @@ import Testing
         #expect(
             output == """
             <body class="container"><p>TEXT</p>\
-            <script src=\"/subsite/js/bootstrap.bundle.min.js\"></script>\
-            <script src=\"/subsite/js/ignite-core.js\"></script>\
+            <script src="/subsite/js/bootstrap.bundle.min.js"></script>\
+            <script src="/subsite/js/ignite-core.js"></script>\
             </body>
             """
         )
