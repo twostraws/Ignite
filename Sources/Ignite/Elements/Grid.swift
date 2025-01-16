@@ -136,7 +136,8 @@ public struct Grid: BlockHTML {
 
     /// Calculates the appropriate Bootstrap column class name for a block element.
     /// - Parameter item: The block element to calculate the class name for.
-    /// - Returns: A Bootstrap class name that represents the element's width, scaled according to the section's column count if needed.
+    /// - Returns: A Bootstrap class name that represents the element's width,
+    /// scaled according to the section's column count if needed.
     private func className(for item: any BlockHTML) -> String {
         let className: String
         if let columnCount, case .count(let width) = item.columnWidth {
