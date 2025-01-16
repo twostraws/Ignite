@@ -71,6 +71,76 @@ final class StyleManager {
         return cssRulesCache.values.joined(separator: "\n\n")
     }
 
+    /// Analyzes a single environment condition to determine if it produces unique styles.
+    /// - Parameters:
+    ///   - environment: The environment condition to test
+    ///   - styles: The target styles to match
+    ///   - collector: The HTML collector for style testing
+    ///   - style: The style to analyze
+    /// - Returns: The environment condition if it produces matching styles, nil otherwise
+    private func analyzeSingleCondition(
+        from environment: EnvironmentConditions,
+        matchingStyles styles: [AttributeValue],
+        using collector: StyledHTML,
+        style: any Style
+    ) -> EnvironmentConditions? {
+        for query in environment.toMediaQueries() {
+            var testCondition = EnvironmentConditions()
+
+            switch query {
+            case let query as ColorSchemeQuery:
+                testCondition.colorScheme = query
+            case let query as OrientationQuery:
+                testCondition.orientation = query
+            case let query as TransparencyQuery:
+                testCondition.transparency = query
+            case let query as DisplayModeQuery:
+                testCondition.displayMode = query
+            case let query as MotionQuery:
+                testCondition.motion = query
+            case let query as ContrastQuery:
+                testCondition.contrast = query
+            case let query as ThemeQuery:
+                testCondition.theme = query.id
+            default:
+                break
+            }
+
+            let testResult = style.style(content: collector, environment: testCondition)
+            if Array(testResult.attributes.styles) == styles {
+                return testCondition
+            }
+        }
+        return nil
+    }
+
+    /// Analyzes complex environment conditions with multiple properties.
+    /// - Parameters:
+    ///   - environment: The environment condition to analyze
+    ///   - styles: The target styles to match
+    ///   - collector: The HTML collector for style testing
+    ///   - style: The style to analyze
+    ///   - uniqueConditions: Existing unique conditions map
+    /// - Returns: A tuple containing the condition and styles if valid
+    private func analyzeComplexCondition(
+        environment: EnvironmentConditions,
+        styles: [AttributeValue],
+        using collector: StyledHTML,
+        style: any Style,
+        existingConditions uniqueConditions: [EnvironmentConditions: [AttributeValue]]
+    ) -> (EnvironmentConditions, [AttributeValue])? {
+        let testResult = style.style(content: collector, environment: environment)
+        guard Array(testResult.attributes.styles) == styles else { return nil }
+
+        if let existingCondition = uniqueConditions.first(where: { $0.value == styles })?.key {
+            return environment.conditionCount < existingCondition.conditionCount
+                ? (environment, styles)
+                : nil
+        }
+
+        return (environment, styles)
+    }
+
     /// Generates a map of all unique style variations and their minimal required conditions.
     /// - Parameters:
     ///   - style: The style to analyze
@@ -79,80 +149,42 @@ final class StyleManager {
     private func generateStylesMap(for style: any Style, themes: [Theme]) -> StyleMapResult {
         let collector = StyledHTML()
         var tempMap: [EnvironmentConditions: [AttributeValue]] = [:]
+        var uniqueConditions: [EnvironmentConditions: [AttributeValue]] = [:]
 
-        // Get all possible conditions
+        // Get all possible conditions and collect styles
         let allConditions = generateAllPossibleEnvironmentConditions(themes: themes)
-
-        // First pass: collect all styles
         for environment in allConditions {
             let styledHTML = style.style(content: collector, environment: environment)
             tempMap[environment] = Array(styledHTML.attributes.styles)
         }
 
-        // Find the default style (when all conditions are nil)
+        // Find the default style
         let defaultEnvironment = EnvironmentConditions()
         let defaultHTML = style.style(content: collector, environment: defaultEnvironment)
         let defaultStyle = Array(defaultHTML.attributes.styles)
 
-        // Second pass: only keep conditions that produce different styles from default
-        var uniqueConditions: [EnvironmentConditions: [AttributeValue]] = [:]
-        for (environment, styles) in tempMap {
-            if styles != defaultStyle {
-                // Handle conditions with multiple properties
-                if environment.conditionCount > 1 {
-                    // Test each property independently to find OR conditions
-                    var foundSimpleCondition = false
-
-                    // Test each property in isolation
-                    for query in environment.toMediaQueries() {
-                        var testCondition = EnvironmentConditions()
-
-                        switch query {
-                        case let query as ColorSchemeQuery:
-                            testCondition.colorScheme = query
-                        case let query as OrientationQuery:
-                            testCondition.orientation = query
-                        case let query as TransparencyQuery:
-                            testCondition.transparency = query
-                        case let query as DisplayModeQuery:
-                            testCondition.displayMode = query
-                        case let query as MotionQuery:
-                            testCondition.motion = query
-                        case let query as ContrastQuery:
-                            testCondition.contrast = query
-                        case let query as ThemeQuery:
-                            testCondition.theme = query.id
-                        default:
-                            break
-                        }
-
-                        let testResult = style.style(content: collector, environment: testCondition)
-                        if Array(testResult.attributes.styles) == styles {
-                            uniqueConditions[testCondition] = styles
-                            foundSimpleCondition = true
-                        }
-                    }
-
-                    // If no single property matched, this might be an AND condition
-                    if !foundSimpleCondition {
-                        // Test if this is a valid AND condition by checking if it produces unique styles
-                        let testResult = style.style(content: collector, environment: environment)
-                        if Array(testResult.attributes.styles) == styles {
-                            // Check if we already have a simpler condition for these styles
-                            if let existingCondition = uniqueConditions.first(where: { $0.value == styles })?.key {
-                                if environment.conditionCount < existingCondition.conditionCount {
-                                    uniqueConditions.removeValue(forKey: existingCondition)
-                                    uniqueConditions[environment] = styles
-                                }
-                            } else {
-                                uniqueConditions[environment] = styles
-                            }
-                        }
-                    }
-                } else {
-                    // Single property condition
-                    uniqueConditions[environment] = styles
+        // Analyze conditions that produce different styles from default
+        for (environment, styles) in tempMap where styles != defaultStyle {
+            if environment.conditionCount > 1 {
+                // Try to find a simpler condition first
+                if let simpleCondition = analyzeSingleCondition(
+                    from: environment,
+                    matchingStyles: styles,
+                    using: collector,
+                    style: style
+                ) {
+                    uniqueConditions[simpleCondition] = styles
+                } else if let complexResult = analyzeComplexCondition(
+                    environment: environment,
+                    styles: styles,
+                    using: collector,
+                    style: style,
+                    existingConditions: uniqueConditions
+                ) {
+                    uniqueConditions[complexResult.0] = complexResult.1
                 }
+            } else {
+                uniqueConditions[environment] = styles
             }
         }
 
@@ -192,7 +224,7 @@ final class StyleManager {
 
             let mediaConditions = mediaQueries.map { "(\($0.condition)" }.joined(separator: " and ")
 
-            if condition.theme != nil && condition.conditionCount > 1 {
+            if condition.theme != nil, condition.conditionCount > 1 {
                 // Combined theme and media query rule
                 let combinedRule = """
                 @media \(mediaConditions) {

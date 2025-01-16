@@ -91,7 +91,7 @@ public extension StyledHTML {
 }
 
 // A helper method that encapsulates the corner-radius generation logic.
-@MainActor fileprivate func styleCornerRadius<T: Modifiable>(
+@MainActor private func styleCornerRadius<T: Modifiable>(
     content: T,
     edges: DiagonalEdge = .all,
     length: LengthUnit

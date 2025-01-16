@@ -13,7 +13,6 @@ extension Array: HeadElement, HTML, Modifiable, HorizontalAligning where Element
         self.map { $0.render(context: context) }.joined()
     }
 
-
     @MainActor func style(_ property: Property, _ value: String) -> some HTML {
         self.map { $0.style(.init(name: property, value: value)) }
     }

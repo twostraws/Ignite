@@ -22,7 +22,7 @@
 /// }
 /// ```
 @MainActor
-public protocol Style: Hashable, Sendable {
+public protocol Style: Hashable {
     /// Resolves the style for the given HTML content and environment conditions
     /// - Parameters:
     ///   - content: An HTML element to apply styles to
@@ -30,4 +30,3 @@ public protocol Style: Hashable, Sendable {
     /// - Returns: A modified HTML element with the appropriate styles applied
     func style(content: StyledHTML, environment: EnvironmentConditions) -> StyledHTML
 }
-

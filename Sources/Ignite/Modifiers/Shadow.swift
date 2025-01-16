@@ -90,7 +90,7 @@ public extension StyledHTML {
     ///   - x: The X offset for the shadow, specified in pixels. Defaults to 0.
     ///   - y: The Y offset for the shadow, specified in pixels. Defaults to 0.
     /// - Returns: A copy of this element with the updated shadow applied.
-    func innerShadow(_ color: Color = .black.opacity(0.33), radius: Int, x: Int = 0, y: Int = 0) -> Self{
+    func innerShadow(_ color: Color = .black.opacity(0.33), radius: Int, x: Int = 0, y: Int = 0) -> Self {
         let shadow = Shadow(color: color, radius: radius, x: x, y: y, inset: true)
         return self.style(.init(name: .boxShadow, value: shadow.description))
     }

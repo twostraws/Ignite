@@ -115,7 +115,7 @@ public extension StyledHTML {
 }
 
 // A helper method that encapsulates the border generation logic.
-@MainActor fileprivate func styleBorder<T: Modifiable>(
+@MainActor private func styleBorder<T: Modifiable>(
     content: T,
     color: Color,
     width: Double = 1,

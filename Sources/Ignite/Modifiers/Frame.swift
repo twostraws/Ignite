@@ -52,7 +52,8 @@ struct FrameModifier: HTMLModifier {
             height: height,
             minHeight: minHeight,
             maxHeight: maxHeight,
-            alignment: alignment)
+            alignment: alignment
+        )
     }
 }
 
@@ -227,20 +228,29 @@ public extension StyledHTML {
             height: height,
             minHeight: minHeight,
             maxHeight: maxHeight,
-            alignment: alignment)
+            alignment: alignment
+        )
     }
 }
 
-// A helper method that encapsulates the frame generation logic.
-@MainActor fileprivate func styleFrame<T: Modifiable>(
-    content: T,
+/// Applies dimensional constraints to a modifiable element.
+/// - Parameters:
+///   - content: The element to modify
+///   - width: The exact width to apply
+///   - minWidth: The minimum width constraint
+///   - maxWidth: The maximum width constraint
+///   - height: The exact height to apply
+///   - minHeight: The minimum height constraint
+///   - maxHeight: The maximum height constraint
+/// - Returns: The modified element with dimensional constraints applied
+@MainActor private func applyDimensions<T: Modifiable>(
+    to content: T,
     width: LengthUnit? = nil,
     minWidth: LengthUnit? = nil,
     maxWidth: LengthUnit? = nil,
     height: LengthUnit? = nil,
     minHeight: LengthUnit? = nil,
-    maxHeight: LengthUnit? = nil,
-    alignment: Alignment = .center
+    maxHeight: LengthUnit? = nil
 ) -> T {
     if let width {
         content.style(.init(name: .width, value: width.stringValue))
@@ -266,6 +276,18 @@ public extension StyledHTML {
         content.style(.init(name: .maxHeight, value: maxHeight.stringValue))
     }
 
+    return content
+}
+
+/// Configures flex-based alignment for a modifiable element.
+/// - Parameters:
+///   - alignment: The horizontal and vertical alignment to apply
+///   - content: The element to modify
+/// - Returns: The modified element with flex alignment applied
+@MainActor private func applyAlignment<T: Modifiable>(
+    _ alignment: Alignment,
+    to content: T
+) -> T {
     content.style(.init(name: .display, value: "flex"))
 
     switch alignment.horizontal {
@@ -287,4 +309,39 @@ public extension StyledHTML {
     }
 
     return content
+}
+
+/// Applies both dimensional constraints and alignment to a modifiable element.
+/// - Parameters:
+///   - content: The element to modify
+///   - width: The exact width to apply
+///   - minWidth: The minimum width constraint
+///   - maxWidth: The maximum width constraint
+///   - height: The exact height to apply
+///   - minHeight: The minimum height constraint
+///   - maxHeight: The maximum height constraint
+///   - alignment: The horizontal and vertical alignment to apply
+/// - Returns: The modified element with frame constraints applied
+@MainActor private func styleFrame<T: Modifiable>(
+    content: T,
+    width: LengthUnit? = nil,
+    minWidth: LengthUnit? = nil,
+    maxWidth: LengthUnit? = nil,
+    height: LengthUnit? = nil,
+    minHeight: LengthUnit? = nil,
+    maxHeight: LengthUnit? = nil,
+    alignment: Alignment = .center
+) -> T {
+    applyAlignment(
+        alignment,
+        to: applyDimensions(
+            to: content,
+            width: width,
+            minWidth: minWidth,
+            maxWidth: maxWidth,
+            height: height,
+            minHeight: minHeight,
+            maxHeight: maxHeight
+        )
+    )
 }
