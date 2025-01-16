@@ -105,5 +105,59 @@ public struct HTMLHead: RootHTML {
         if let favicon = configuration.favicon {
             MetaLink(href: favicon, rel: .icon)
         }
+
+        themeSwitchingScript
+    }
+
+    /// An inline script that handles theme changes immediately.
+    private static var themeSwitchingScript: Script {
+        Script(code: """
+        (function() {
+            function applyTheme(themeID) {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const lightThemeID = document.documentElement.getAttribute('data-light-theme') || 'light';
+                const darkThemeID = document.documentElement.getAttribute('data-dark-theme') || 'dark';
+                
+                // Determine the actual theme to use
+                let actualThemeID = themeID;
+                if (themeID === 'auto') {
+                    actualThemeID = prefersDark ? darkThemeID : lightThemeID;
+                }
+                
+                // Set the theme immediately
+                document.documentElement.setAttribute('data-bs-theme', actualThemeID);
+                document.documentElement.setAttribute('data-theme-state', themeID);
+
+                // Initialize syntax theme
+                const syntaxTheme = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--syntax-highlight-theme').trim().replace(/"/g, '');
+
+                if (syntaxTheme) {
+                    // Disable all themes first
+                    document.querySelectorAll('link[data-highlight-theme]').forEach(link => {
+                        link.setAttribute('disabled', 'disabled');
+                    });
+
+                    // Enable the selected theme
+                    const themeLink = document.querySelector(`link[data-highlight-theme="${syntaxTheme}"]`);
+                    if (themeLink) {
+                        themeLink.removeAttribute('disabled');
+                    }
+                }
+            }
+
+            // Set up system theme change listener
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                const currentTheme = localStorage.getItem('custom-theme') || 'auto';
+                if (currentTheme === 'auto') {
+                    applyTheme('auto');
+                }
+            });
+
+            // Initial theme application
+            const savedTheme = localStorage.getItem('custom-theme') || 'auto';
+            applyTheme(savedTheme);
+        })();
+        """)
     }
 }

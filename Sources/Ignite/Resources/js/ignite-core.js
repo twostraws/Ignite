@@ -2,6 +2,7 @@
 
 /**
  * Theme Switching Implementation
+ * Initial theme setup is handled in HTMLHead.swift.
  *
  * Bootstrap's theming system only understands explicit themes (light/dark/custom)
  * through data-bs-theme. For "auto" theme support, our JavaScript code must
@@ -18,49 +19,6 @@
  * Bootstrap's theming constraints.
  */
 
-(function() {
-    document.addEventListener('DOMContentLoaded', function() {
-        const savedTheme = localStorage.getItem('custom-theme') || 'auto';
-        const supportsLightTheme = getComputedStyle(document.documentElement).getPropertyValue('--supports-light-theme') === 'true';
-        const supportsDarkTheme = getComputedStyle(document.documentElement).getPropertyValue('--supports-dark-theme') === 'true';
-        const lightThemeID = getComputedStyle(document.documentElement).getPropertyValue('--light-theme-id').trim().replace(/"/g, '') || 'light';
-        const darkThemeID = getComputedStyle(document.documentElement).getPropertyValue('--dark-theme-id').trim().replace(/"/g, '') || 'dark';
-
-        if (savedTheme === 'auto') {
-            if (supportsLightTheme && supportsDarkTheme) {
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const themeID = prefersDark ? darkThemeID : lightThemeID;
-                document.documentElement.setAttribute('data-bs-theme', themeID);
-                document.documentElement.setAttribute('data-theme-state', themeID);
-            } else if (supportsDarkTheme) {
-                document.documentElement.setAttribute('data-bs-theme', darkThemeID);
-                document.documentElement.setAttribute('data-theme-state', darkThemeID);
-            } else if (supportsLightTheme) {
-                document.documentElement.setAttribute('data-bs-theme', lightThemeID);
-                document.documentElement.setAttribute('data-theme-state', lightThemeID);
-            }
-        } else {
-            document.documentElement.setAttribute('data-bs-theme', savedTheme);
-            document.documentElement.setAttribute('data-theme-state', savedTheme);
-        }
-
-        // Apply initial syntax theme
-        igniteApplySyntaxTheme();
-
-        if (supportsLightTheme && supportsDarkTheme) {
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-                const currentTheme = localStorage.getItem('custom-theme');
-                if (currentTheme === 'auto') {
-                    const themeID = e.matches ? darkThemeID : lightThemeID;
-                    document.documentElement.setAttribute('data-bs-theme', themeID);
-                    document.documentElement.setAttribute('data-theme-state', themeID);
-                    igniteApplySyntaxTheme();
-                }
-            });
-        }
-    });
-})();
-
 function igniteApplyTheme(themeID) {
     if (themeID === 'auto') {
         localStorage.removeItem('custom-theme');
@@ -68,42 +26,41 @@ function igniteApplyTheme(themeID) {
         localStorage.setItem('custom-theme', themeID);
     }
 
-    const supportsLightTheme = getComputedStyle(document.documentElement).getPropertyValue('--supports-light-theme') === 'true';
-    const supportsDarkTheme = getComputedStyle(document.documentElement).getPropertyValue('--supports-dark-theme') === 'true';
-    const lightThemeID = getComputedStyle(document.documentElement).getPropertyValue('--light-theme-id').trim().replace(/"/g, '') || 'light';
-    const darkThemeID = getComputedStyle(document.documentElement).getPropertyValue('--dark-theme-id').trim().replace(/"/g, '') || 'dark';
+    const lightThemeID = document.documentElement.getAttribute('data-light-theme') || 'light';
+    const darkThemeID = document.documentElement.getAttribute('data-dark-theme') || 'dark';
 
-    if (themeID === 'auto' && supportsLightTheme && supportsDarkTheme) {
+    if (themeID === 'auto') {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const themeID = prefersDark ? darkThemeID : lightThemeID;
-        document.documentElement.setAttribute('data-bs-theme', themeID);
+        const actualThemeID = prefersDark ? darkThemeID : lightThemeID;
+        document.documentElement.setAttribute('data-bs-theme', actualThemeID);
         document.documentElement.setAttribute('data-theme-state', themeID);
     } else {
         document.documentElement.setAttribute('data-bs-theme', themeID);
         document.documentElement.setAttribute('data-theme-state', themeID);
     }
 
-    // Let the CSS update before getting the new syntax theme
-    requestAnimationFrame(() => {
-        igniteApplySyntaxTheme();
-    });
+    igniteApplySyntaxTheme();
 }
 
 function igniteApplySyntaxTheme() {
-    // Get the current syntax theme from CSS variable
     const syntaxTheme = getComputedStyle(document.documentElement)
         .getPropertyValue('--syntax-highlight-theme').trim().replace(/"/g, '');
 
-    // Disable all themes first
-    const themeLinks = document.querySelectorAll('link[data-highlight-theme]');
+    if (!syntaxTheme) return;
 
-    themeLinks.forEach(link => {
+    // Check if theme has actually changed
+    const currentActiveLink = document.querySelector('link[data-highlight-theme]:not([disabled])');
+    if (currentActiveLink?.getAttribute('data-highlight-theme') === syntaxTheme) {
+        return; // Theme hasn't changed, no need to update
+    }
+
+    // Disable all themes first
+    document.querySelectorAll('link[data-highlight-theme]').forEach(link => {
         link.setAttribute('disabled', 'disabled');
     });
 
     // Enable the selected theme
     const themeLink = document.querySelector(`link[data-highlight-theme="${syntaxTheme}"]`);
-
     if (themeLink) {
         themeLink.removeAttribute('disabled');
     }
@@ -111,21 +68,6 @@ function igniteApplySyntaxTheme() {
 
 function igniteSwitchTheme(themeID) {
     igniteApplyTheme(themeID);
-
-    // Force style recalculation using CSS custom property
-    const timestamp = Date.now();
-    document.documentElement.style.setProperty('--theme-update', `"${timestamp}"`);
-
-    // Additional force reflow with minimal DOM mutation
-    const forceReflow = document.createElement('div');
-    document.body.appendChild(forceReflow);
-    document.body.offsetHeight; // Force reflow
-    document.body.removeChild(forceReflow);
-
-    // Final cleanup
-    requestAnimationFrame(() => {
-        document.documentElement.style.removeProperty('--theme-update');
-    });
 }
 
 // SECTION: Email Protection ------------------------------------------------------------------
