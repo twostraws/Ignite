@@ -15,6 +15,7 @@ on:
 jobs:
 
   build:
+    name: Detect public API changes
     runs-on: macos-14
 
     steps:
