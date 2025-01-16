@@ -318,7 +318,6 @@ public extension HTML {
     }
 }
 
-
 /// Recursively flattens nested `InlineHTML` content into a single array, unwrapping any body properties.
 /// - Parameter content: The content to flatten and unwrap
 /// - Returns: An array of unwrapped `InlineHTML` elements

@@ -35,7 +35,6 @@ public extension HTML {
     }
 }
 
-
 public extension BlockHTML {
     /// Determines whether this element should observe the site
     /// width or extend from one edge of the screen to the other.

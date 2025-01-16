@@ -294,7 +294,7 @@ public final class PublishingContext {
     /// - Parameter content: The content to render.
     func render(_ content: Content) throws {
         var layout = try layout(for: content)
-        
+
         let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         layout.environment = values
 

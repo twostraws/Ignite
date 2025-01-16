@@ -233,7 +233,7 @@ extension PublishingContext {
             color: var(--bs-body-color);
             background-color: var(--bs-body-bg);
         }
-        
+
         /* Link styles */
         a {
             color: var(--bs-link-color);
@@ -472,7 +472,7 @@ extension PublishingContext {
         .border-dark {
             border-color: var(--bs-dark) !important;
         }
-        
+
         /* Paragraph margin */
         p {
             margin-top: 0;
@@ -542,7 +542,7 @@ extension PublishingContext {
         .bg-dark { background-color: var(--bs-dark) !important; }
 
         /* Button rules */
-        .btn-primary { 
+        .btn-primary {
             background-color: var(--bs-primary);
             border-color: var(--bs-primary);
         }

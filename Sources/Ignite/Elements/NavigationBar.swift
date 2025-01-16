@@ -23,7 +23,7 @@ public struct NavigationBar: BlockHTML {
         /// This bar must always be rendered in dark mode.
         case dark
     }
-    
+
     /// The new number of columns to use.
     public enum Width {
         /// Viewport sets column width
@@ -226,5 +226,3 @@ public struct NavigationBar: BlockHTML {
         .class("nav-item")
     }
 }
-
-
