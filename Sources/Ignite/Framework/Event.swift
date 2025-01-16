@@ -7,13 +7,17 @@
 
 /// One event that can trigger a series of actions, such as
 /// an onClick event hiding an element on the page.
-struct Event: Sendable, Hashable {
+struct Event: Sendable, Hashable, Comparable {
     var name: String
     var actions: [any Action]
 
     static func == (lhs: Event, rhs: Event) -> Bool {
         rhs.name == lhs.name &&
         rhs.actions.map { $0.compile() } == lhs.actions.map { $0.compile() }
+    }
+
+    static func < (lhs: Event, rhs: Event) -> Bool {
+        lhs.name < rhs.name
     }
 
     func hash(into hasher: inout Hasher) {
