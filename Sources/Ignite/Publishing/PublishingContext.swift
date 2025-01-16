@@ -149,25 +149,29 @@ final class PublishingContext {
 
     /// Parses all Markdown content in the site's Content folder.
     func parseContent() throws {
-        guard let enumerator = FileManager.default.enumerator(
-            at: contentDirectory,
-            includingPropertiesForKeys: [.contentModificationDateKey, .creationDateKey]
-        ) else {
-            return
-        }
-
-        while let objectURL = enumerator.nextObject() as? URL {
-            guard objectURL.hasDirectoryPath == false else { continue }
-
-            if objectURL.pathExtension == "md" {
-                let values = try objectURL.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey])
-
-                let article = try Content(from: objectURL, resourceValues: values)
-
+        let maxContentErrors = site.maxContentErrors
+        var foundError = 0
+        try ContentFinder.shared.find(root: contentDirectory) { deploy in
+            do {
+                let article = try Content(
+                    from: deploy.url,
+                    in: self,
+                    resourceValues: deploy.resourceValues,
+                    deployPath: deploy.path
+                )
                 if article.isPublished {
                     allContent.append(article)
                 }
+            } catch {
+                if foundError < maxContentErrors {
+                    print(error.localizedDescription)
+                    foundError += 1
+                } else {
+                    throw error
+                }
             }
+
+            return true // always continuing
         }
 
         // Make content be sorted newest first by default.
