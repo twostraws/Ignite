@@ -124,10 +124,17 @@ public struct Content {
     ///   relative path to this content.
     ///   - resourceValues: Resource values that provide the creation and
     ///   last modification date for this content.
+    ///   - deployPath: optional String used as site url path for the content.
+    ///   If nil (default), use `metadata["path"]` or path to content root.
     init(from url: URL, resourceValues: URLResourceValues) throws {
+    init(
+        from url: URL,
+        in context: PublishingContext,
+        resourceValues: URLResourceValues,
+        deployPath: String? = nil
+    ) throws {
         // Use whatever Markdown renderer was configured
         // for the site we're publishing.
-        let context = PublishingContext.default
         let parser = try context.site.markdownRenderer.init(url: url, removeTitleFromBody: true)
 
         body = parser.body
@@ -135,7 +142,9 @@ public struct Content {
         title = parser.title.strippingTags()
         description = parser.description.strippingTags()
 
-        if let customPath = metadata["path"] as? String {
+        if let deployPath, !deployPath.isEmpty {
+            path = deployPath
+        } else if let customPath = metadata["path"] as? String {
             path = customPath
         } else {
             let basePath = context.contentDirectory.path()
@@ -226,6 +235,12 @@ public struct Content {
 
         return nil
     }
+
+    /// Keys for resources required on initialization
+
+    public static nonisolated let resourceKeys: [URLResourceKey]
+        = [.creationDateKey, .contentModificationDateKey]
+
 }
 
 extension Content {
