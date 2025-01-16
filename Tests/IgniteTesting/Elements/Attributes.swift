@@ -23,9 +23,9 @@ struct AttributesTest {
 
         #expect(
             output == [
-                "<link disabled=\"\" href=\"/css/prism-github-dark.css\" rel=\"stylesheet\" data-highlight-theme=\"github-dark\" />",
-                "<link disabled=\"\" href=\"/css/prism-github-light.css\" rel=\"stylesheet\" data-highlight-theme=\"github-light\" />",
-                "<link disabled=\"\" href=\"/css/prism-xcode-dark.css\" rel=\"stylesheet\" data-highlight-theme=\"xcode-dark\" />"
+                "<link href=\"/css/prism-github-dark.css\" rel=\"stylesheet\" data-highlight-theme=\"github-dark\" />",
+                "<link href=\"/css/prism-github-light.css\" rel=\"stylesheet\" data-highlight-theme=\"github-light\" />",
+                "<link href=\"/css/prism-xcode-dark.css\" rel=\"stylesheet\" data-highlight-theme=\"xcode-dark\" />"
             ]
         )
     }
