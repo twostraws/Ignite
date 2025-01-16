@@ -31,8 +31,7 @@ import Testing
         "Multi-file Video Test", arguments: ["/videos/example1.mp4"],
         ["/videos/example1.mov"])
     func test_multiFileVideo(videoFile1: String, videoFile2: String)
-        async throws
-    {
+        async throws {
         let element = Video(videoFile1, videoFile2)
         let output = element.render(context: publishingContext)
         let normalizedOutput = ElementTest.normalizeHTML(output)

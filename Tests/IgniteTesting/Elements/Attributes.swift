@@ -19,7 +19,7 @@ struct AttributesTest {
     @Test("Checks that meta highlighting tags are sorted in the head element")
     func test_highligther_themes_are_sorted() async throws {
         let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .githubLight])
-        let output = links.map { $0.render(context:  publishingContext )}
+        let output = links.map { $0.render(context: publishingContext )}
 
         #expect(
             output == [

@@ -30,8 +30,7 @@ import Testing
         "Multiple File Audio", arguments: ["/audio/example1.mp3"],
         ["/audio/example1.wav"])
     func test_multiFileAudio(audioFile1: String, audioFile2: String)
-        async throws
-    {
+        async throws {
         let element = Audio(audioFile1, audioFile2)
         let output = element.render(context: publishingContext)
 
