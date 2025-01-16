@@ -126,6 +126,12 @@ public final class PublishingContext {
                 }
             }
         }
+
+        // Make content be sorted newest first by default.
+        allContent.sort(
+            by: \.date,
+            order: .reverse
+        )
     }
 
     /// Performs all steps required to publish a site.
@@ -165,7 +171,9 @@ public final class PublishingContext {
         try copyAssets()
         try copyFonts()
 
-        if !FileManager.default.fileExists(atPath: buildDirectory.appending(path: "css/themes.min.css").path(percentEncoded: false)) {
+        let themesPath = buildDirectory.appending(path: "css/themes.min.css").path(percentEncoded: false)
+
+        if !FileManager.default.fileExists(atPath: themesPath) {
             try copy(resource: "css/themes.min.css")
         }
 

@@ -211,6 +211,14 @@ public extension Site {
         return false
     }
 
+    internal var supportsLightTheme: Bool {
+        lightTheme != nil
+    }
+
+    internal var supportsDarkTheme: Bool {
+        darkTheme != nil
+    }
+
     /// Performs the entire publishing flow from a file in user space, e.g. main.swift
     /// or Site.swift.
     /// - Parameters:

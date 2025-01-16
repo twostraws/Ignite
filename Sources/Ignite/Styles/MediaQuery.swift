@@ -109,59 +109,86 @@ public enum MediaQuery {
     @MainActor func query(with theme: Theme) -> String {
         switch self {
         case .colorScheme(let scheme):
-            return switch scheme {
-            case .dark: "prefers-color-scheme: dark"
-            case .light: "prefers-color-scheme: light"
-            }
+            css(for: scheme, using: theme)
 
         case .motion(let motion):
-            return  switch motion {
-            case .reduced: "prefers-reduced-motion: reduce"
-            case .allowed: "prefers-reduced-motion: no-preference"
-            }
+            css(for: motion, using: theme)
 
         case .contrast(let contrast):
-            return switch contrast {
-            case .reduced: "prefers-contrast: less"
-            case .high: "prefers-contrast: more"
-            case .low: "prefers-contrast: less"
-            }
+            css(for: contrast, using: theme)
 
         case .transparency(let transparency):
-            return switch transparency {
-            case .reduced: "prefers-reduced-transparency: reduce"
-            case .normal: "prefers-reduced-transparency: no-preference"
-            }
+            css(for: transparency, using: theme)
 
         case .orientation(let orientation):
-            return switch orientation {
-            case .portrait: "orientation: portrait"
-            case .landscape: "orientation: landscape"
-            }
+            css(for: orientation, using: theme)
 
         case .displayMode(let mode):
-            return switch mode {
-            case .browser: "display-mode: browser"
-            case .fullscreen: "display-mode: fullscreen"
-            case .minimalUI: "display-mode: minimal-ui"
-            case .pip: "display-mode: picture-in-picture"
-            case .standalone: "display-mode: standalone"
-            case .windowControlsOverlay: "display-mode: window-controls-overlay"
-            }
+            css(for: mode, using: theme)
 
         case .theme(let id):
-            return "data-theme-state=\"\(id.kebabCased())\""
+            "data-theme-state=\"\(id.kebabCased())\""
 
         case .breakpoint(let breakpoint):
-            let breakpointValue = switch breakpoint {
-            case .small: theme.smallBreakpoint.stringValue
-            case .medium: theme.mediumBreakpoint.stringValue
-            case .large: theme.largeBreakpoint.stringValue
-            case .xLarge: theme.xLargeBreakpoint.stringValue
-            case .xxLarge: theme.xxLargeBreakpoint.stringValue
-            }
-
-            return "min-width: \(breakpointValue)"
+            css(for: breakpoint, using: theme)
         }
+    }
+
+    @MainActor func css(for scheme: ColorScheme, using theme: Theme) -> String {
+        switch scheme {
+        case .dark: "prefers-color-scheme: dark"
+        case .light: "prefers-color-scheme: light"
+        }
+    }
+
+    @MainActor func css(for motion: Motion, using theme: Theme) -> String {
+        switch motion {
+        case .reduced: "prefers-reduced-motion: reduce"
+        case .allowed: "prefers-reduced-motion: no-preference"
+        }
+    }
+    @MainActor func css(for contrast: Contrast, using theme: Theme) -> String {
+        switch contrast {
+        case .reduced: "prefers-contrast: less"
+        case .high: "prefers-contrast: more"
+        case .low: "prefers-contrast: less"
+        }
+    }
+
+    @MainActor func css(for transparency: Transparency, using theme: Theme) -> String {
+        switch transparency {
+        case .reduced: "prefers-reduced-transparency: reduce"
+        case .normal: "prefers-reduced-transparency: no-preference"
+        }
+    }
+
+    @MainActor func css(for orientation: Orientation, using theme: Theme) -> String {
+        switch orientation {
+        case .portrait: "orientation: portrait"
+        case .landscape: "orientation: landscape"
+        }
+    }
+
+    @MainActor func css(for mode: DisplayMode, using theme: Theme) -> String {
+        switch mode {
+        case .browser: "display-mode: browser"
+        case .fullscreen: "display-mode: fullscreen"
+        case .minimalUI: "display-mode: minimal-ui"
+        case .pip: "display-mode: picture-in-picture"
+        case .standalone: "display-mode: standalone"
+        case .windowControlsOverlay: "display-mode: window-controls-overlay"
+        }
+    }
+
+    @MainActor func css(for breakpoint: Breakpoint, using theme: Theme) -> String {
+        let breakpointValue = switch breakpoint {
+        case .small: theme.smallBreakpoint.stringValue
+        case .medium: theme.mediumBreakpoint.stringValue
+        case .large: theme.largeBreakpoint.stringValue
+        case .xLarge: theme.xLargeBreakpoint.stringValue
+        case .xxLarge: theme.xxLargeBreakpoint.stringValue
+        }
+
+        return "min-width: \(breakpointValue)"
     }
 }

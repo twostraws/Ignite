@@ -54,3 +54,22 @@ extension Sequence {
         }
     }
 }
+
+extension Array {
+    /// Extends `Array` to allow in-place sorting items by a function that
+    /// accepts an item from the sequence and returns a `Comparable` value.
+    /// Particularly useful when used with key paths.
+    /// - Parameters:
+    ///   - function: The function to apply to each element. Must yield a
+    /// `Comparable` value.
+    ///   - order: Whether to sort in forward or reverse order.
+    public mutating func sort<T: Comparable>(by function: (Element) -> T, order: SortOrder = .forward) {
+        self.sort { first, second in
+            if order == .forward {
+                function(first) < function(second)
+            } else {
+                function(first) > function(second)
+            }
+        }
+    }
+}

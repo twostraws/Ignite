@@ -201,12 +201,22 @@ public struct CoreAttributes: Sendable {
 
         // Apply containers from inner to outer
         for container in containerAttributes where !container.isEmpty {
-            let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.sorted().joined(separator: " "))\""
+            let classAttr = if container.classes.isEmpty {
+                ""
+            } else {
+                " class=\"\(container.classes.sorted().joined(separator: " "))\""
+            }
 
             let allStyles = container.styles.sorted().map { "\($0.name): \($0.value)" }.joined(separator: "; ")
-            let styleAttr = container.styles.isEmpty ? "" : " style=\"\(allStyles)\""
+
+            let styleAttr = if container.styles.isEmpty {
+                ""
+            } else {
+                " style=\"\(allStyles)\""
+            }
 
             var eventAttr = ""
+
             for event in container.events.sorted() where event.actions.isEmpty == false {
                 let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
                 eventAttr += " \(event.name)=\"\(actions)\""

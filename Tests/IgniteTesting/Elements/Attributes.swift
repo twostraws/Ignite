@@ -18,13 +18,13 @@ struct AttributesTest {
 
     @Test("Checks that meta highlighting tags are sorted in the head element")
     func test_highligther_themes_are_sorted() async throws {
-        let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .githubLight])
+        let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .twilight])
         let output = links.map { $0.render(context: publishingContext )}
 
         #expect(
             output == [
                 "<link href=\"/css/prism-github-dark.css\" rel=\"stylesheet\" data-highlight-theme=\"github-dark\" />",
-                "<link href=\"/css/prism-github-light.css\" rel=\"stylesheet\" data-highlight-theme=\"github-light\" />",
+                "<link href=\"/css/prism-twilight.css\" rel=\"stylesheet\" data-highlight-theme=\"twilight\" />",
                 "<link href=\"/css/prism-xcode-dark.css\" rel=\"stylesheet\" data-highlight-theme=\"xcode-dark\" />"
             ]
         )
@@ -65,7 +65,9 @@ struct AttributesTest {
         let output = element.render(context: publishingContext)
 
         #expect(
-            output == "<\(tag) bar=\"alert('bar')\" baz=\"alert('baz')\" foo=\"alert('foo')\" qux=\"alert('qux')\"></\(tag)>"
+            output == """
+            <\(tag) bar=\"alert('bar')\" baz=\"alert('baz')\" foo=\"alert('foo')\" qux=\"alert('qux')\"></\(tag)>
+            """
         )
     }
 

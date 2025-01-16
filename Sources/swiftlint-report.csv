@@ -1,0 +1,22 @@
+file,line,character,severity,type,reason,rule_id
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Publishing/PublishingContext-Generators.swift,621,5,Warning,Cyclomatic Complexity,Function should have complexity 10 or less; currently complexity is 11,cyclomatic_complexity
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Publishing/PublishingContext-Generators.swift,882,,Warning,File Length,File should contain 400 lines or less: currently contains 882,file_length
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Publishing/PublishingContext-Generators.swift,621,10,Warning,Function Body Length,Function body should span 50 lines or less excluding comments and whitespace: currently spans 99 lines,function_body_length
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Publishing/PublishingContext-Generators.swift,176,,Warning,Line Length,Line should be 120 characters or less; currently it has 122 characters,line_length
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Publishing/PublishingContext-Generators.swift,230,,Warning,Line Length,Line should be 120 characters or less; currently it has 167 characters,line_length
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Publishing/PublishingContext.swift,168,,Warning,Line Length,Line should be 120 characters or less; currently it has 134 characters,line_length
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Framework/PropertyWrappers/PageContext.swift,12,13,Warning,Redundant Sendable,Sendable conformance is redundant on an actor-isolated type,redundant_sendable
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Framework/ElementTypes/HTML.swift,17,17,Warning,Redundant Sendable,Sendable conformance is redundant on an actor-isolated type,redundant_sendable
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Framework/Environment/EnvironmentKey.swift,18,17,Warning,Redundant Sendable,Sendable conformance is redundant on an actor-isolated type,redundant_sendable
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Framework/Environment/EnvironmentValues.swift,20,15,Warning,Redundant Sendable,Sendable conformance is redundant on an actor-isolated type,redundant_sendable
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Framework/Layout.swift,24,17,Warning,Redundant Sendable,Sendable conformance is redundant on an actor-isolated type,redundant_sendable
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Framework/Site.swift,10,17,Warning,Redundant Sendable,Sendable conformance is redundant on an actor-isolated type,redundant_sendable
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Framework/Content.swift,12,15,Warning,Redundant Sendable,Sendable conformance is redundant on an actor-isolated type,redundant_sendable
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Styles/Alignment.swift,9,26,Warning,Redundant Sendable,Sendable conformance is redundant on an actor-isolated type,redundant_sendable
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Styles/CoreAttributes.swift,204,,Warning,Line Length,Line should be 120 characters or less; currently it has 126 characters,line_length
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Styles/MediaQuery.swift,109,16,Error,Cyclomatic Complexity,Function should have complexity 10 or less; currently complexity is 30,cyclomatic_complexity
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Elements/Grid.swift,139,,Warning,Line Length,Line should be 120 characters or less; currently it has 136 characters,line_length
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/Ignite/Themes/Theme.swift,22,28,Warning,Redundant Sendable,Sendable conformance is redundant on an actor-isolated type,redundant_sendable
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/IgniteCLI/RunCommand.swift,60,31,Warning,Optional Data -> String Conversion,Prefer failable `String(bytes:encoding:)` initializer when converting `Data` to `String`,optional_data_string_conversion
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/IgniteCLI/Process-Execute.swift,70,28,Warning,Optional Data -> String Conversion,Prefer failable `String(bytes:encoding:)` initializer when converting `Data` to `String`,optional_data_string_conversion
+/Users/joshuatoro/Ignite-Framework/Ignite/Sources/IgniteCLI/Process-Execute.swift,71,27,Warning,Optional Data -> String Conversion,Prefer failable `String(bytes:encoding:)` initializer when converting `Data` to `String`,optional_data_string_conversion
