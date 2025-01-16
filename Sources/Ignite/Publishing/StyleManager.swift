@@ -104,18 +104,26 @@ final class StyleManager {
                     var foundSimpleCondition = false
 
                     // Test each property in isolation
-                    for property in environment.toMediaQueries() {
+                    for query in environment.toMediaQueries() {
                         var testCondition = EnvironmentConditions()
 
-                        switch property {
-                        case .colorScheme(let value): testCondition.colorScheme = value
-                        case .orientation(let value): testCondition.orientation = value
-                        case .transparency(let value): testCondition.transparency = value
-                        case .displayMode(let value): testCondition.displayMode = value
-                        case .motion(let value): testCondition.motion = value
-                        case .contrast(let value): testCondition.contrast = value
-                        case .theme(let value): testCondition.theme = value
-                        case .breakpoint: break
+                        switch query {
+                        case let query as ColorSchemeQuery:
+                            testCondition.colorScheme = query
+                        case let query as OrientationQuery:
+                            testCondition.orientation = query
+                        case let query as TransparencyQuery:
+                            testCondition.transparency = query
+                        case let query as DisplayModeQuery:
+                            testCondition.displayMode = query
+                        case let query as MotionQuery:
+                            testCondition.motion = query
+                        case let query as ContrastQuery:
+                            testCondition.contrast = query
+                        case let query as ThemeQuery:
+                            testCondition.theme = query.id
+                        default:
+                            break
                         }
 
                         let testResult = style.style(content: collector, environment: testCondition)
@@ -177,14 +185,15 @@ final class StyleManager {
         for (condition, styles) in stylesMap.uniqueConditions {
             let stylesString = styles.map { "\($0.name): \($0.value)" }.joined(separator: ";\n        ")
 
+            let mediaQueries: [any Query] = condition.toMediaQueries().filter {
+                if $0 is ThemeQuery { return false }
+                return true
+            }
+
+            let mediaConditions = mediaQueries.map { "(\($0.condition)" }.joined(separator: " and ")
+
             if condition.theme != nil && condition.conditionCount > 1 {
                 // Combined theme and media query rule
-                let mediaQueries = condition.toMediaQueries().filter {
-                    if case .theme = $0 { return false }
-                    return true
-                }
-                let mediaConditions = mediaQueries.map { "(\($0.queryString()))" }.joined(separator: " and ")
-
                 let combinedRule = """
                 @media \(mediaConditions) {
                     [data-theme-state="\(condition.theme!.kebabCased())"] .\(className(for: style)) {
@@ -204,7 +213,7 @@ final class StyleManager {
             } else {
                 // Media query-only rule
                 let mediaQueries = condition.toMediaQueries()
-                let mediaConditions = mediaQueries.map { "(\($0.queryString()))" }.joined(separator: " and ")
+                let mediaConditions = mediaQueries.map { "(\($0.condition)" }.joined(separator: " and ")
 
                 let mediaRule = """
                 @media \(mediaConditions) {
@@ -225,13 +234,13 @@ final class StyleManager {
     /// - Returns: An array of all possible `EnvironmentConditions` instances.
     private func generateAllPossibleEnvironmentConditions(themes: [Theme]) -> [EnvironmentConditions] {
         // Define all possible values for each property
-        let colorSchemes: [MediaQuery.ColorScheme?] = [nil] + MediaQuery.ColorScheme.allCases.map { Optional($0) }
-        let orientations: [MediaQuery.Orientation?] = [nil] + MediaQuery.Orientation.allCases.map { Optional($0) }
-        let transparencies: [MediaQuery.Transparency?] = [nil] + MediaQuery.Transparency.allCases.map { Optional($0) }
-        let displayModes: [MediaQuery.DisplayMode?] = [nil] + MediaQuery.DisplayMode.allCases.map { Optional($0) }
-        let motions: [MediaQuery.Motion?] = [nil] + MediaQuery.Motion.allCases.map { Optional($0) }
-        let contrasts: [MediaQuery.Contrast?] = [nil] + MediaQuery.Contrast.allCases.map { Optional($0) }
-        let themeIds: [String?] = [nil] + themes.map { $0.id }
+        let colorSchemes: [ColorSchemeQuery?] = [nil] + ColorSchemeQuery.allCases.map { Optional($0) }
+        let orientations: [OrientationQuery?] = [nil] + OrientationQuery.allCases.map { Optional($0) }
+        let transparencies: [TransparencyQuery?] = [nil] + TransparencyQuery.allCases.map { Optional($0) }
+        let displayModes: [DisplayModeQuery?] = [nil] + DisplayModeQuery.allCases.map { Optional($0) }
+        let motions: [MotionQuery?] = [nil] + MotionQuery.allCases.map { Optional($0) }
+        let contrasts: [ContrastQuery?] = [nil] + ContrastQuery.allCases.map { Optional($0) }
+        let themeIDs: [String?] = [nil] + themes.map { $0.id }
 
         var allConditions: [EnvironmentConditions] = []
 
@@ -242,7 +251,7 @@ final class StyleManager {
                     for displayMode in displayModes {
                         for motion in motions {
                             for contrast in contrasts {
-                                for themeId in themeIds {
+                                for themeId in themeIDs {
                                     var condition = EnvironmentConditions()
                                     condition.colorScheme = colorScheme
                                     condition.orientation = orientation
@@ -262,39 +271,5 @@ final class StyleManager {
         }
 
         return allConditions
-    }
-
-    /// Generates a CSS rule for a specific style and media query
-    /// - Parameters:
-    ///   - className: The CSS class name to use
-    ///   - attributes: The style attributes to apply
-    ///   - query: The media query this rule applies to
-    /// - Returns: A complete CSS rule string
-    private func generateCSSRule(className: String, attributes: CoreAttributes, query: MediaQuery) -> String {
-        var selector = ".\(className)"
-
-        // Convert styles to CSS string
-        let stylesString = attributes.styles
-            .map { "\($0.name): \($0.value)" }
-            .joined(separator: "; ")
-
-        // Handle theme-specific case
-        if case .theme(let id) = query {
-            selector = "[data-theme-state=\"\(id.kebabCased())\"] \(selector)"
-            return """
-            \(selector) {
-                \(stylesString)
-            }
-            """
-        }
-
-        // Handle media query cases
-        return """
-        @media (\(query.queryString())) {
-            \(selector) {
-                \(stylesString)
-            }
-        }
-        """
     }
 }

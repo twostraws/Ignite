@@ -49,7 +49,7 @@ struct FontModifier: HTMLModifier {
             let (breakpoint, value) = size.resolved
             if let breakpoint = breakpoint {
                 CSSManager.default.register(
-                    [.breakpoint(.init(rawValue: breakpoint)!)],
+                    [BreakpointQuery(stringValue: breakpoint)!],
                     properties: [("font-size", value.stringValue)],
                     className: className
                 )
@@ -136,15 +136,14 @@ public extension StyledHTML {
     ///   - weight: The weight (boldness) of the font. Defaults to `.regular`.
     /// - Returns: A new instance with the updated font.
     func font(name: String? = nil, size: LengthUnit? = nil, weight: Font.Weight = .regular) -> Self {
-        var copy = self
-        copy.style(.init(name: .fontWeight, value: String(weight.rawValue)))
+        self.style(.init(name: .fontWeight, value: String(weight.rawValue)))
 
         if let name, name.isEmpty == false {
-            copy.style(.init(name: .fontFamily, value: name))
+            self.style(.init(name: .fontFamily, value: name))
         }
         if let size {
-            copy.style(.init(name: .fontSize, value: size.stringValue))
+            self.style(.init(name: .fontSize, value: size.stringValue))
         }
-        return copy
+        return self
     }
 }

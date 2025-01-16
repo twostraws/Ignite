@@ -13,7 +13,7 @@
     /// Adds inline styles to the element.
     /// - Parameter values: Variable number of `AttributeValue` objects
     /// - Returns: The modified `HTML` element
-    public func style(_ values: AttributeValue...) -> Self {
+    @discardableResult public func style(_ values: AttributeValue...) -> Self {
         var copy = self
         copy.attributes.append(styles: values)
         return copy

@@ -100,23 +100,21 @@ public extension StyledHTML {
         return content.style(.init(name: .borderRadius, value: length.stringValue))
     }
 
-    var modified = content
-
     if edges.contains(.topLeading) {
-        modified.style(.init(name: .borderTopLeftRadius, value: length.stringValue))
+        content.style(.init(name: .borderTopLeftRadius, value: length.stringValue))
     }
 
     if edges.contains(.topTrailing) {
-        modified.style(.init(name: .borderTopRightRadius, value: length.stringValue))
+        content.style(.init(name: .borderTopRightRadius, value: length.stringValue))
     }
 
     if edges.contains(.bottomLeading) {
-        modified.style(.init(name: .borderBottomLeftRadius, value: length.stringValue))
+        content.style(.init(name: .borderBottomLeftRadius, value: length.stringValue))
     }
 
     if edges.contains(.bottomTrailing) {
-        modified.style(.init(name: .borderBottomRightRadius, value: length.stringValue))
+        content.style(.init(name: .borderBottomRightRadius, value: length.stringValue))
     }
 
-    return modified
+    return content
 }

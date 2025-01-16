@@ -15,10 +15,11 @@
 
     /// Queue of registrations waiting for themes to be set
     private struct PendingRegistration {
-        let queries: [MediaQuery]
+        let queries: [any Query]
         let properties: [(String, String)]
         let className: String?
     }
+
     private var pendingRegistrations: [PendingRegistration] = []
 
     /// A mapping of query hashes to their corresponding CSS class names.
@@ -56,7 +57,7 @@
     /// - Returns: The class name used for these styles
     @discardableResult
     func register(
-        _ queries: [MediaQuery],
+        _ queries: [any Query],
         properties: [(String, String)] = [("display", "none")],
         className: String? = nil
     ) -> String {
@@ -84,7 +85,7 @@
     /// Gets the class name for a set of media queries.
     /// - Parameter queries: The media queries to look up.
     /// - Returns: The corresponding CSS class name, or an empty string if not found.
-    func className(for queries: [MediaQuery]) -> String {
+    func className(for queries: [any Query]) -> String {
         let hash = hashForQueries(queries)
         return classNames[hash] ?? ""
     }
@@ -92,7 +93,7 @@
     /// Generates a unique, order-independent hash for a set of media queries.
     /// - Parameter queries: The media queries to hash.
     /// - Returns: A truncated hash string that uniquely identifies this combination of queries.
-    func hashForQueries(_ queries: [MediaQuery]) -> String {
+    func hashForQueries(_ queries: [any Query]) -> String {
         let sortedQueries = queries.sorted { String(describing: $0) < String(describing: $1) }
         return sortedQueries.map { String(describing: $0) }
             .joined()
@@ -106,7 +107,7 @@
     ///   - properties: The CSS properties to apply.
     /// - Returns: A CSS rule string.
     private func generateCSSRule(
-        for queries: [MediaQuery],
+        for queries: [any Query],
         className: String,
         properties: [(String, String)]
     ) -> String {
@@ -154,16 +155,16 @@
     ///   - theme: The theme context for this rule
     /// - Returns: A CSS rule string with theme context
     private func generateThemedRule(
-        for queries: [MediaQuery],
+        for queries: [any Query],
         className: String,
         properties: [(String, String)],
         theme: Theme
     ) -> String {
         let (_, mediaQueries) = queries.reduce(into: (Set<String>(), [String]())) { result, query in
-            if case .theme(let id) = query {
-                result.0.insert(id.kebabCased())
+            if let themeQuery = query as? ThemeQuery {
+                result.0.insert(themeQuery.id.kebabCased())
             } else {
-                result.1.append(query.queryString(with: theme))
+                result.1.append(query.condition(with: theme))
             }
         }
 

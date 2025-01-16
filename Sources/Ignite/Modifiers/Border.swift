@@ -123,39 +123,37 @@ public extension StyledHTML {
     cornerRadii: CornerRadii = CornerRadii(),
     edges: Edge = .all
 ) -> T {
-    var modified = content
-
     // Apply border styles based on edges
     if edges.contains(.all) {
-        modified.style(.init(name: .border, value: "\(width)px \(style.rawValue) \(color)"))
+        content.style(.init(name: .border, value: "\(width)px \(style.rawValue) \(color)"))
     } else {
         if edges.contains(.leading) {
-            modified.style(.init(name: .borderLeft, value: "\(width)px \(style.rawValue) \(color)"))
+            content.style(.init(name: .borderLeft, value: "\(width)px \(style.rawValue) \(color)"))
         }
         if edges.contains(.trailing) {
-            modified.style(.init(name: .borderRight, value: "\(width)px \(style.rawValue) \(color)"))
+            content.style(.init(name: .borderRight, value: "\(width)px \(style.rawValue) \(color)"))
         }
         if edges.contains(.top) {
-            modified.style(.init(name: .borderTop, value: "\(width)px \(style.rawValue) \(color)"))
+            content.style(.init(name: .borderTop, value: "\(width)px \(style.rawValue) \(color)"))
         }
         if edges.contains(.bottom) {
-            modified.style(.init(name: .borderBottom, value: "\(width)px \(style.rawValue) \(color)"))
+            content.style(.init(name: .borderBottom, value: "\(width)px \(style.rawValue) \(color)"))
         }
     }
 
     // Apply corner radii
     if cornerRadii.topLeading > 0 {
-        modified.style(.init(name: .borderTopLeftRadius, value: "\(cornerRadii.topLeading)px"))
+        content.style(.init(name: .borderTopLeftRadius, value: "\(cornerRadii.topLeading)px"))
     }
     if cornerRadii.topTrailing > 0 {
-        modified.style(.init(name: .borderTopRightRadius, value: "\(cornerRadii.topTrailing)px"))
+        content.style(.init(name: .borderTopRightRadius, value: "\(cornerRadii.topTrailing)px"))
     }
     if cornerRadii.bottomLeading > 0 {
-        modified.style(.init(name: .borderBottomLeftRadius, value: "\(cornerRadii.topTrailing)px"))
+        content.style(.init(name: .borderBottomLeftRadius, value: "\(cornerRadii.topTrailing)px"))
     }
     if cornerRadii.bottomTrailing > 0 {
-        modified.style(.init(name: .borderBottomRightRadius, value: "\(cornerRadii.topTrailing)px"))
+        content.style(.init(name: .borderBottomRightRadius, value: "\(cornerRadii.topTrailing)px"))
     }
 
-    return modified
+    return content
 }

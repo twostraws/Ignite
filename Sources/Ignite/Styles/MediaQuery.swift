@@ -5,190 +5,231 @@
 // See LICENSE for license information.
 //
 
-/// A type that represents different media query conditions for applying conditional styles.
-public enum MediaQuery: Equatable, Hashable, Sendable {
-    /// Applies styles based on the user's preferred color scheme.
-    case colorScheme(ColorScheme)
+/// A type that represents a CSS media query condition.
+public protocol Query: Equatable, Hashable, Sendable {
+    /// The raw CSS media feature string.
+    var condition: String { get }
 
-    /// Applies styles based on the user's motion preferences.
-    case motion(Motion)
+    /// Returns the CSS media feature string for this condition using theme-specific values if relevant.
+    /// - Parameter theme: The theme to use for generating the query.
+    /// - Returns: A theme-aware CSS media query string.
+    @MainActor func condition(with theme: Theme) -> String
+}
 
-    /// Applies styles based on the user's contrast preferences.
-    case contrast(Contrast)
+public extension Query {
+    @MainActor func condition(with theme: Theme) -> String {
+        condition
+    }
+}
 
-    /// Applies styles based on the user's transparency preferences.
-    case transparency(Transparency)
+/// Applies styles based on the user's preferred color scheme.
+public enum ColorSchemeQuery: String, Query, CaseIterable {
+    /// Dark mode preference
+    case dark = "prefers-color-scheme: dark"
+    /// Light mode preference
+    case light = "prefers-color-scheme: light"
 
-    /// Applies styles based on the device orientation.
-    case orientation(Orientation)
+    public var condition: String { rawValue }
+}
 
-    /// Applies styles based on the web application's display mode.
-    case displayMode(DisplayMode)
+/// Applies styles based on the user's motion preferences.
+public enum MotionQuery: String, Query, CaseIterable {
+    /// Reduced motion preference
+    case reduced = "prefers-reduced-motion: reduce"
+    /// Standard motion preference
+    case allowed = "prefers-reduced-motion: no-preference"
 
-    /// Applies styles based on the current theme.
-    case theme(String)
+    public var condition: String { rawValue }
+}
 
-    /// Applies styles based on viewport width breakpoints
-    case breakpoint(Breakpoint)
+/// Applies styles based on the user's contrast preferences.
+public enum ContrastQuery: String, Query, CaseIterable {
+    /// Standard contrast preference
+    case normal = "prefers-contrast: no-preference"
+    /// High contrast preference
+    case high = "prefers-contrast: more"
+    /// Low contrast preference
+    case low = "prefers-contrast: less"
 
-    /// The user's preferred color scheme options.
-    public enum ColorScheme: CaseIterable, Equatable, Sendable {
-        /// Dark mode preference
-        case dark
-        /// Light mode preference
-        case light
+    public var condition: String { rawValue }
+}
+
+/// Applies styles based on the user's transparency preferences.
+public enum TransparencyQuery: String, Query, CaseIterable {
+    /// Reduced transparency preference
+    case reduced = "prefers-reduced-transparency: reduce"
+    /// Standard transparency preference
+    case normal = "prefers-reduced-transparency: no-preference"
+
+    public var condition: String { rawValue }
+}
+
+/// Applies styles based on the device orientation.
+public enum OrientationQuery: String, Query, CaseIterable {
+    /// Portrait orientation
+    case portrait = "orientation: portrait"
+    /// Landscape orientation
+    case landscape = "orientation: landscape"
+
+    public var condition: String { rawValue }
+}
+
+/// Applies styles based on the web application's display mode.
+public enum DisplayModeQuery: String, Query, CaseIterable {
+    /// Standard browser mode
+    case browser = "display-mode: browser"
+    /// Full screen mode
+    case fullscreen = "display-mode: fullscreen"
+    /// Minimal UI mode
+    case minimalUI = "display-mode: minimal-ui"
+    /// Picture-in-picture mode
+    case pip = "display-mode: picture-in-picture"
+    /// Standalone application mode
+    case standalone = "display-mode: standalone"
+    /// Window controls overlay mode
+    case windowControlsOverlay = "display-mode: window-controls-overlay"
+
+    public var condition: String { rawValue }
+}
+
+/// Applies styles based on the current theme.
+public struct ThemeQuery: Query {
+    /// The theme identifier
+    let id: String
+
+    public init(_ id: String) {
+        self.id = id
     }
 
-    /// The user's motion preference options.
-    public enum Motion: CaseIterable, Equatable, Sendable {
-        /// Reduced motion preference
-        case reduced
-        /// Standard motion preference
-        case allowed
+    public var condition: String {
+        "data-theme-state=\"\(id.kebabCased())\""
     }
 
-    /// The user's contrast preference options.
-    public enum Contrast: CaseIterable, Equatable, Sendable {
-        /// Reduced contrast preference
-        case reduced
-        /// High contrast preference
-        case high
-        /// Low contrast preference
-        case low
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 
-    /// The user's transparency preference options.
-    public enum Transparency: CaseIterable, Equatable, Sendable {
-        /// Reduced transparency preference
-        case reduced
-        /// Standard transparency preference
-        case normal
+    public static func == (lhs: ThemeQuery, rhs: ThemeQuery) -> Bool {
+        lhs.id == rhs.id
     }
+}
 
-    /// The device orientation options.
-    public enum Orientation: CaseIterable, Equatable, Sendable {
-        /// Portrait orientation
-        case portrait
-        /// Landscape orientation
-        case landscape
-    }
+/// Applies styles based on viewport width breakpoints
+public enum BreakpointQuery: Query, CaseIterable {
+    /// Small breakpoint (typically ≥576px)
+    case small
+    /// Medium breakpoint (typically ≥768px)
+    case medium
+    /// Large breakpoint (typically ≥992px)
+    case large
+    /// Extra large breakpoint (typically ≥1200px)
+    case xLarge
+    /// Extra extra large breakpoint (typically ≥1400px)
+    case xxLarge
 
-    /// The web application display mode options.
-    public enum DisplayMode: CaseIterable, Equatable, Sendable {
-        /// Standard browser mode
-        case browser
-        /// Full screen mode
-        case fullscreen
-        /// Minimal UI mode
-        case minimalUI
-        /// Picture-in-picture mode
-        case pip
-        /// Standalone application mode
-        case standalone
-        /// Window controls overlay mode
-        case windowControlsOverlay
-    }
-
-    /// The user's breakpoint preference options.
-    public enum Breakpoint: String, CaseIterable, Equatable, Sendable {
-        /// Small breakpoint (typically ≥576px)
-        case small = "sm"
-        /// Medium breakpoint (typically ≥768px)
-        case medium = "md"
-        /// Large breakpoint (typically ≥992px)
-        case large = "lg"
-        /// Extra large breakpoint (typically ≥1200px)
-        case xLarge = "xl"
-        /// Extra extra large breakpoint (typically ≥1400px)
-        case xxLarge = "xxl"
-    }
-
-    /// Generates the CSS media query string for this condition
-    /// - Parameter theme: The theme to use for breakpoint values
-    /// - Returns: A CSS media query string
-    @MainActor func queryString(with theme: Theme? = nil) -> String {
-        switch self {
-        case .colorScheme(let scheme):
-            css(for: scheme, using: theme)
-
-        case .motion(let motion):
-            css(for: motion, using: theme)
-
-        case .contrast(let contrast):
-            css(for: contrast, using: theme)
-
-        case .transparency(let transparency):
-            css(for: transparency, using: theme)
-
-        case .orientation(let orientation):
-            css(for: orientation, using: theme)
-
-        case .displayMode(let mode):
-            css(for: mode, using: theme)
-
-        case .theme(let id):
-            "data-theme-state=\"\(id.kebabCased())\""
-
-        case .breakpoint(let breakpoint):
-            css(for: breakpoint, using: theme)
+    /// Creates a breakpoint from a string identifier.
+    public init?(stringValue: String) {
+        switch stringValue.lowercased() {
+        case "sm": self = .small
+        case "md": self = .medium
+        case "lg": self = .large
+        case "xl": self = .xLarge
+        case "xxl": self = .xxLarge
+        default: return nil
         }
     }
 
-    @MainActor func css(for scheme: ColorScheme, using theme: Theme) -> String {
-        switch scheme {
-        case .dark: "prefers-color-scheme: dark"
-        case .light: "prefers-color-scheme: light"
-        }
-    }
-
-    @MainActor func css(for motion: Motion, using theme: Theme) -> String {
-        switch motion {
-        case .reduced: "prefers-reduced-motion: reduce"
-        case .allowed: "prefers-reduced-motion: no-preference"
-        }
-    }
-    @MainActor func css(for contrast: Contrast, using theme: Theme) -> String {
-        switch contrast {
-        case .reduced: "prefers-contrast: less"
-        case .high: "prefers-contrast: more"
-        case .low: "prefers-contrast: less"
-        }
-    }
-
-    @MainActor func css(for transparency: Transparency, using theme: Theme) -> String {
-        switch transparency {
-        case .reduced: "prefers-reduced-transparency: reduce"
-        case .normal: "prefers-reduced-transparency: no-preference"
-        }
-    }
-
-    @MainActor func css(for orientation: Orientation, using theme: Theme) -> String {
-        switch orientation {
-        case .portrait: "orientation: portrait"
-        case .landscape: "orientation: landscape"
-        }
-    }
-
-    @MainActor func css(for mode: DisplayMode, using theme: Theme) -> String {
-        switch mode {
-        case .browser: "display-mode: browser"
-        case .fullscreen: "display-mode: fullscreen"
-        case .minimalUI: "display-mode: minimal-ui"
-        case .pip: "display-mode: picture-in-picture"
-        case .standalone: "display-mode: standalone"
-        case .windowControlsOverlay: "display-mode: window-controls-overlay"
-        }
-    }
-
-    @MainActor func css(for breakpoint: Breakpoint, using theme: Theme) -> String {
-        let breakpointValue = switch breakpoint {
+    /// Returns the CSS media query string for this breakpoint using the provided theme's values.
+    /// - Parameter theme: The theme to use for breakpoint values.
+    /// - Returns: A CSS media query string.
+    @MainActor public func condition(with theme: Theme) -> String {
+        let breakpointValue = switch self {
         case .small: theme.smallBreakpoint.stringValue
         case .medium: theme.mediumBreakpoint.stringValue
         case .large: theme.largeBreakpoint.stringValue
         case .xLarge: theme.xLargeBreakpoint.stringValue
         case .xxLarge: theme.xxLargeBreakpoint.stringValue
         }
-
         return "min-width: \(breakpointValue)"
+    }
+
+    /// The raw CSS media query string.
+    /// - Note: This property requires theme context. Use `css(for:)` instead.
+    public var condition: String {
+        preconditionFailure("This query requires theme context. Use css(for:) instead.")
+    }
+}
+
+// MARK: - Static Factory Methods
+
+public extension Query where Self == ColorSchemeQuery {
+    /// Creates a color scheme media query.
+    /// - Parameter scheme: The color scheme to apply.
+    /// - Returns: A color scheme media query.
+    static func colorScheme(_ scheme: ColorSchemeQuery) -> ColorSchemeQuery {
+        scheme
+    }
+}
+
+public extension Query where Self == MotionQuery {
+    /// Creates a motion preference media query.
+    /// - Parameter motion: The motion preference to apply.
+    /// - Returns: A motion preference media query.
+    static func motion(_ motion: MotionQuery) -> MotionQuery {
+        motion
+    }
+}
+
+public extension Query where Self == ContrastQuery {
+    /// Creates a contrast preference media query.
+    /// - Parameter contrast: The contrast preference to apply.
+    /// - Returns: A contrast preference media query.
+    static func contrast(_ contrast: ContrastQuery) -> ContrastQuery {
+        contrast
+    }
+}
+
+public extension Query where Self == TransparencyQuery {
+    /// Creates a transparency preference media query.
+    /// - Parameter transparency: The transparency preference to apply.
+    /// - Returns: A transparency preference media query.
+    static func transparency(_ transparency: TransparencyQuery) -> TransparencyQuery {
+        transparency
+    }
+}
+
+public extension Query where Self == OrientationQuery {
+    /// Creates an orientation media query.
+    /// - Parameter orientation: The orientation to apply.
+    /// - Returns: An orientation media query.
+    static func orientation(_ orientation: OrientationQuery) -> OrientationQuery {
+        orientation
+    }
+}
+
+public extension Query where Self == DisplayModeQuery {
+    /// Creates a display mode media query.
+    /// - Parameter mode: The display mode to apply.
+    /// - Returns: A display mode media query.
+    static func displayMode(_ mode: DisplayModeQuery) -> DisplayModeQuery {
+        mode
+    }
+}
+
+public extension Query where Self == ThemeQuery {
+    /// Creates a theme media query.
+    /// - Parameter id: The theme identifier.
+    /// - Returns: A theme media query.
+    static func theme(_ id: String) -> ThemeQuery {
+        ThemeQuery(id)
+    }
+}
+
+public extension Query where Self == BreakpointQuery {
+    /// Creates a breakpoint media query.
+    /// - Parameter breakpoint: The breakpoint to apply.
+    /// - Returns: A breakpoint media query.
+    static func breakpoint(_ breakpoint: BreakpointQuery) -> BreakpointQuery {
+        breakpoint
     }
 }

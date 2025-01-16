@@ -10,5 +10,5 @@
     /// Applies style attributes to this instance.
     /// - Parameter values: A variadic list of style attributes to apply.
     /// - Returns: A new instance with the style attributes applied.
-    func style(_ values: AttributeValue...) -> Self
+    @discardableResult func style(_ values: AttributeValue...) -> Self
 }

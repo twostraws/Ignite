@@ -242,51 +242,49 @@ public extension StyledHTML {
     maxHeight: LengthUnit? = nil,
     alignment: Alignment = .center
 ) -> T {
-    var copy = content
-
     if let width {
-        copy.style(.init(name: .width, value: width.stringValue))
+        content.style(.init(name: .width, value: width.stringValue))
     }
 
     if let minWidth {
-        copy.style(.init(name: .minWidth, value: minWidth.stringValue))
+        content.style(.init(name: .minWidth, value: minWidth.stringValue))
     }
 
     if let maxWidth {
-        copy.style(.init(name: .maxWidth, value: maxWidth.stringValue))
+        content.style(.init(name: .maxWidth, value: maxWidth.stringValue))
     }
 
     if let height {
-        copy.style(.init(name: .height, value: height.stringValue))
+        content.style(.init(name: .height, value: height.stringValue))
     }
 
     if let minHeight {
-        copy.style(.init(name: .minHeight, value: minHeight.stringValue))
+        content.style(.init(name: .minHeight, value: minHeight.stringValue))
     }
 
     if let maxHeight {
-        copy.style(.init(name: .maxHeight, value: maxHeight.stringValue))
+        content.style(.init(name: .maxHeight, value: maxHeight.stringValue))
     }
 
-    copy.style(.init(name: .display, value: "flex"))
+    content.style(.init(name: .display, value: "flex"))
 
     switch alignment.horizontal {
     case .center:
-        copy.style(.init(name: .alignItems, value: "center"))
+        content.style(.init(name: .alignItems, value: "center"))
     case .leading:
-        copy.style(.init(name: .alignItems, value: "start"))
+        content.style(.init(name: .alignItems, value: "start"))
     case .trailing:
-        copy.style(.init(name: .alignItems, value: "end"))
+        content.style(.init(name: .alignItems, value: "end"))
     }
 
     switch alignment.vertical {
     case .center:
-        copy.style(.init(name: .justifyContent, value: "center"))
+        content.style(.init(name: .justifyContent, value: "center"))
     case .bottom:
-        copy.style(.init(name: .justifyContent, value: "flex-end"))
+        content.style(.init(name: .justifyContent, value: "flex-end"))
     case .top:
-        copy.style(.init(name: .justifyContent, value: "start"))
+        content.style(.init(name: .justifyContent, value: "start"))
     }
 
-    return copy
+    return content
 }

@@ -20,25 +20,23 @@ extension Modifiable {
             return self.style(.init(name: prefix, value: length))
         }
 
-        var copy = self
-
         if edges.contains(.leading) {
-            copy.style(.init(name: "\(prefix)-left", value: length))
+            self.style(.init(name: "\(prefix)-left", value: length))
         }
 
         if edges.contains(.trailing) {
-            copy.style(.init(name: "\(prefix)-right", value: length))
+            self.style(.init(name: "\(prefix)-right", value: length))
         }
 
         if edges.contains(.top) {
-            copy.style(.init(name: "\(prefix)-top", value: length))
+            self.style(.init(name: "\(prefix)-top", value: length))
         }
 
         if edges.contains(.bottom) {
-            copy.style(.init(name: "\(prefix)-bottom", value: length))
+            self.style(.init(name: "\(prefix)-bottom", value: length))
         }
 
-        return copy
+        return self
     }
 }
 
@@ -54,32 +52,30 @@ extension HTML {
             return self.class("\(prefix)-\(amount.rawValue)")
         }
 
-        var copy = self
-
         if edges.contains(.horizontal) {
-            copy.class("\(prefix)x-\(amount.rawValue)")
+            self.class("\(prefix)x-\(amount.rawValue)")
         } else {
             if edges.contains(.leading) {
-                copy.class("\(prefix)s-\(amount.rawValue)")
+                self.class("\(prefix)s-\(amount.rawValue)")
             }
 
             if edges.contains(.trailing) {
-                copy.class("\(prefix)e-\(amount.rawValue)")
+                self.class("\(prefix)e-\(amount.rawValue)")
             }
         }
 
         if edges.contains(.vertical) {
-            copy.class("\(prefix)y-\(amount.rawValue)")
+            self.class("\(prefix)y-\(amount.rawValue)")
         } else {
             if edges.contains(.top) {
-                copy.class("\(prefix)t-\(amount.rawValue)")
+                self.class("\(prefix)t-\(amount.rawValue)")
             }
 
             if edges.contains(.bottom) {
-                copy.class("\(prefix)b-\(amount.rawValue)")
+                self.class("\(prefix)b-\(amount.rawValue)")
             }
         }
 
-        return copy
+        return self
     }
 }

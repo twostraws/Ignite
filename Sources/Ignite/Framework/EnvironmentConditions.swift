@@ -14,7 +14,7 @@
 /// struct MyStyle: Style {
 ///     func style(content: StyledHTML, environment: EnvironmentConditions) -> StyledHTML {
 ///         if environment.colorScheme == .dark && environment.orientation == .portrait {
-///             content.style(.color, "red")
+///             content.foregroundStyle(.red)
 ///         } else {
 ///             content
 ///         }
@@ -23,22 +23,22 @@
 /// ```
 public struct EnvironmentConditions: Equatable, Hashable, Sendable {
     /// The user's preferred color scheme.
-    public var colorScheme: MediaQuery.ColorScheme?
+    public var colorScheme: ColorSchemeQuery?
 
     /// The user's preferred motion settings.
-    public var motion: MediaQuery.Motion?
+    public var motion: MotionQuery?
 
     /// The user's preferred contrast settings.
-    public var contrast: MediaQuery.Contrast?
+    public var contrast: ContrastQuery?
 
     /// The user's preferred transparency settings.
-    public var transparency: MediaQuery.Transparency?
+    public var transparency: TransparencyQuery?
 
     /// The device's current orientation.
-    public var orientation: MediaQuery.Orientation?
+    public var orientation: OrientationQuery?
 
     /// The web application's display mode.
-    public var displayMode: MediaQuery.DisplayMode?
+    public var displayMode: DisplayModeQuery?
 
     /// The current theme identifier.
     public var theme: String?
@@ -53,12 +53,12 @@ public struct EnvironmentConditions: Equatable, Hashable, Sendable {
     ///   - displayMode: The display mode
     ///   - theme: The theme identifier
     init(
-        colorScheme: MediaQuery.ColorScheme? = nil,
-        motion: MediaQuery.Motion? = nil,
-        contrast: MediaQuery.Contrast? = nil,
-        transparency: MediaQuery.Transparency? = nil,
-        orientation: MediaQuery.Orientation? = nil,
-        displayMode: MediaQuery.DisplayMode? = nil,
+        colorScheme: ColorSchemeQuery? = nil,
+        motion: MotionQuery? = nil,
+        contrast: ContrastQuery? = nil,
+        transparency: TransparencyQuery? = nil,
+        orientation: OrientationQuery? = nil,
+        displayMode: DisplayModeQuery? = nil,
         theme: String? = nil
     ) {
         self.colorScheme = colorScheme
@@ -71,9 +71,9 @@ public struct EnvironmentConditions: Equatable, Hashable, Sendable {
     }
 
     /// Converts the environment conditions to an array of media queries.
-    /// - Returns: An array of ``MediaQuery`` values representing the active conditions.
-    func toMediaQueries() -> [MediaQuery] {
-        var queries: [MediaQuery] = []
+    /// - Returns: An array of ``Query`` values representing the active conditions.
+    func toMediaQueries() -> [any Query] {
+        var queries: [any Query] = []
         if let colorScheme { queries.append(.colorScheme(colorScheme)) }
         if let motion { queries.append(.motion(motion)) }
         if let contrast { queries.append(.contrast(contrast)) }
