@@ -65,7 +65,9 @@ struct AttributesTest {
         let output = element.render(context: publishingContext)
 
         #expect(
-            output == "<\(tag) bar=\"alert('bar')\" baz=\"alert('baz')\" foo=\"alert('foo')\" qux=\"alert('qux')\"></\(tag)>"
+            output == """
+            <\(tag) bar=\"alert('bar')\" baz=\"alert('baz')\" foo=\"alert('foo')\" qux=\"alert('qux')\"></\(tag)>
+            """
         )
     }
 
