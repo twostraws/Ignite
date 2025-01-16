@@ -630,97 +630,16 @@ extension PublishingContext {
             }
         }
 
-        let supportsLightTheme = site.lightTheme != nil
-        let supportsDarkTheme = site.darkTheme != nil
-
-        guard supportsLightTheme || supportsDarkTheme else {
+        guard site.supportsLightTheme || site.supportsDarkTheme else {
             fatalError("Ignite requires that you provide a light or dark theme.")
         }
 
-        // Root variables and default theme (light)
-        if let lightTheme = site.lightTheme {
-            let hasMultipleThemes = supportsDarkTheme || !site.alternateThemes.isEmpty
-            let hasAutoTheme = supportsLightTheme && supportsDarkTheme
-
-            cssContent += """
-            :root {
-                --supports-light-theme: \(supportsLightTheme);
-                --supports-dark-theme: \(supportsDarkTheme);
-                --light-theme-id: "\(site.lightTheme?.id ?? "")";
-                --dark-theme-id: "\(site.darkTheme?.id ?? "")";
-
-                /* Light theme variables (default theme) */
-                \(generateThemeVariables(lightTheme))
-            }
-
-            \(containerDefaults)
-
-            \(generateGlobalRules())
-            """
-
-            if hasMultipleThemes {
-                cssContent += """
-
-                /* Light theme override */
-                [data-bs-theme="\(lightTheme.id)"] {
-                    \(generateThemeVariables(lightTheme))
-                }
-                """
-            }
-
-            if hasAutoTheme {
-                cssContent += """
-
-                /* Auto theme starts with light theme */
-                [data-bs-theme="auto"] {
-                    \(generateThemeVariables(lightTheme))
-                }
-                """
-            }
+        if let theme = site.lightTheme {
+            cssContent += generateLightTheme(using: theme)
         }
 
-        // Dark theme handling
-        if let darkTheme = site.darkTheme {
-            if !supportsLightTheme && site.alternateThemes.isEmpty {
-                // Only dark theme exists and no alternates - use as root
-                cssContent += """
-                :root {
-                    --supports-light-theme: \(supportsLightTheme);
-                    --supports-dark-theme: \(supportsDarkTheme);
-                    --light-theme-id: "\(site.lightTheme?.id ?? "")";
-                    --dark-theme-id: "\(site.darkTheme?.id ?? "")";
-
-                    /* Dark theme variables */
-                    \(generateThemeVariables(darkTheme))
-                }
-
-                \(containerDefaults)
-
-                \(generateGlobalRules())
-                """
-            } else {
-                // Add dark theme override
-                cssContent += """
-
-                /* Explicit dark theme */
-                [data-bs-theme="\(darkTheme.id)"] {
-                    \(generateThemeVariables(darkTheme))
-                }
-                """
-
-                // Only add auto theme dark mode if both themes exist
-                if supportsLightTheme {
-                    cssContent += """
-
-                    /* Dark theme media query for auto theme */
-                    @media (prefers-color-scheme: dark) {
-                        [data-bs-theme="auto"] {
-                            \(generateThemeVariables(darkTheme))
-                        }
-                    }
-                    """
-                }
-            }
+        if let theme = site.darkTheme {
+            cssContent += generateDarkTheme(using: theme)
         }
 
         for theme in site.alternateThemes {
@@ -735,6 +654,99 @@ extension PublishingContext {
 
         let cssPath = buildDirectory.appending(path: "css/themes.min.css")
         try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
+    }
+
+    private func generateLightTheme(using theme: Theme) -> String {
+        var output = ""
+
+        // Root variables and default theme (light)
+        let hasMultipleThemes = site.supportsDarkTheme || !site.alternateThemes.isEmpty
+        let hasAutoTheme = site.supportsLightTheme && site.supportsDarkTheme
+
+        output += """
+        :root {
+            --supports-light-theme: \(site.supportsLightTheme);
+            --supports-dark-theme: \(site.supportsDarkTheme);
+            --light-theme-id: "\(site.lightTheme?.id ?? "")";
+            --dark-theme-id: "\(site.darkTheme?.id ?? "")";
+
+            /* Light theme variables (default theme) */
+            \(generateThemeVariables(theme))
+        }
+
+        \(containerDefaults)
+
+        \(generateGlobalRules())
+        """
+
+        if hasMultipleThemes {
+            output += """
+
+            /* Light theme override */
+            [data-bs-theme="\(theme.id)"] {
+                \(generateThemeVariables(theme))
+            }
+            """
+        }
+
+        if hasAutoTheme {
+            output += """
+
+            /* Auto theme starts with light theme */
+            [data-bs-theme="auto"] {
+                \(generateThemeVariables(theme))
+            }
+            """
+        }
+
+        return output
+    }
+
+    private func generateDarkTheme(using theme: Theme) -> String {
+        var output = ""
+
+        if !site.supportsLightTheme && site.alternateThemes.isEmpty {
+            // Only dark theme exists and no alternates - use as root
+            output += """
+            :root {
+                --supports-light-theme: \(site.supportsLightTheme);
+                --supports-dark-theme: \(site.supportsDarkTheme);
+                --light-theme-id: "\(site.lightTheme?.id ?? "")";
+                --dark-theme-id: "\(site.darkTheme?.id ?? "")";
+
+                /* Dark theme variables */
+                \(generateThemeVariables(theme))
+            }
+
+            \(containerDefaults)
+
+            \(generateGlobalRules())
+            """
+        } else {
+            // Add dark theme override
+            output += """
+
+            /* Explicit dark theme */
+            [data-bs-theme="\(theme.id)"] {
+                \(generateThemeVariables(theme))
+            }
+            """
+
+            // Only add auto theme dark mode if both themes exist
+            if site.supportsLightTheme {
+                output += """
+
+                /* Dark theme media query for auto theme */
+                @media (prefers-color-scheme: dark) {
+                    [data-bs-theme="auto"] {
+                        \(generateThemeVariables(theme))
+                    }
+                }
+                """
+            }
+        }
+
+        return output
     }
 
     // swiftlint:disable function_body_length
