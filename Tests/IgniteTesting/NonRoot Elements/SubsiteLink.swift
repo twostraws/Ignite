@@ -22,7 +22,7 @@ import Testing
 
         #expect(
             output == """
-            <a href="/subsite\(linkTarget)\" class="link-underline-opacity-100 link-underline-opacity-100-hover">\
+            <a href="/subsite\(linkTarget)\" class="link-underline link-underline-opacity-100 link-underline-opacity-100-hover">\
             Go Home\
             </a>
             """
