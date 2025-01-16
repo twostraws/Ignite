@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-
+    name: Build & Test
     runs-on: macos-15
 
     steps:
