@@ -15,7 +15,7 @@ import Testing
 @MainActor struct StrongTests {
     let publishingContext = ElementTest.publishingContext
 
-    @Test("Single Element Test", arguments: ["This is a test", "Another test"])
+    @Test("Single Element Test", arguments: ["This is a test", "Another test", ""])
     func test_singleElement(strongText: String) async throws {
         let element = Strong(strongText)
         let output = element.render(context: publishingContext)
@@ -23,7 +23,7 @@ import Testing
         #expect(output == "<strong>\(strongText)</strong>")
     }
 
-    @Test("Builder Test", arguments: ["This is a test", "Another test"])
+    @Test("Builder Test", arguments: ["This is a test", "Another test", ""])
     func test_builder(strongText: String) async throws {
         let element = Strong { strongText }
         let output = element.render(context: publishingContext)
