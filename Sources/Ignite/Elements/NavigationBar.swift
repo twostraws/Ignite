@@ -164,8 +164,10 @@ public struct NavigationBar: BlockHTML {
                         Link(logo, target: "/")
                             .class("navbar-brand")
                     }
-                    renderToggleButton()
-                    renderNavItems(context: context)
+                    if !items.isEmpty {
+                        renderToggleButton()
+                        renderNavItems(context: context)
+                    }
                 }
                 .class(widthClasses)
             }
