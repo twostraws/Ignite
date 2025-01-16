@@ -126,6 +126,12 @@ public final class PublishingContext {
                 }
             }
         }
+
+        // Make content be sorted newest first by default.
+        allContent.sort(
+            by: \.date,
+            order: .reverse
+        )
     }
 
     /// Performs all steps required to publish a site.
