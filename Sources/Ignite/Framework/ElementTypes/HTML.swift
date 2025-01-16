@@ -146,7 +146,7 @@ public extension HTML {
     ///   - name: The name of the data attribute
     ///   - value: The value of the data attribute
     /// - Returns: The modified `HTML` element
-    func data(_ name: String, _ value: String?) -> Self {
+    @discardableResult func data(_ name: String, _ value: String?) -> Self {
         guard let value else { return self }
         var attributes = attributes
         attributes.data.append(AttributeValue(name: name, value: value))
