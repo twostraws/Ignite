@@ -20,7 +20,7 @@ import Testing
         let element = Strong(strongText)
         let output = element.render(context: publishingContext)
 
-		#expect(output == "<strong>\(strongText)</strong>")
+        #expect(output == "<strong>\(strongText)</strong>")
     }
 
     @Test("Builder Test", arguments: ["This is a test", "Another test"])
