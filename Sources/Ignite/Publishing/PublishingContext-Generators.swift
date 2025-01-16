@@ -164,7 +164,7 @@ extension PublishingContext {
 
             // Skip if it's a system font
             guard !Font.systemFonts.contains(familyName) &&
-                  !Font.monospaceFonts.contains(familyName)
+                !Font.monospaceFonts.contains(familyName)
             else {
                 return []
             }

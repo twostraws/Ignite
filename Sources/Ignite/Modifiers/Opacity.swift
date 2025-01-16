@@ -40,18 +40,18 @@ struct OpacityModifier: HTMLModifier {
     }
 }
 
-extension HTML {
+public extension HTML {
     /// Adjusts the opacity of an element.
     /// - Parameter value: A value between 0% (fully transparent) and 100% (fully opaque).
     /// - Returns: A modified copy of the element with opacity applied
-    public func opacity(_ value: Percentage) -> some HTML {
+    func opacity(_ value: Percentage) -> some HTML {
         modifier(OpacityModifier(value: value))
     }
 
     /// Adjusts the opacity of an element.
     /// - Parameter value: A value between 0 (fully transparent) and 1.0 (fully opaque).
     /// - Returns: A modified copy of the element with opacity applied
-    public func opacity(_ value: Double) -> some HTML {
+    func opacity(_ value: Double) -> some HTML {
         modifier(OpacityModifier(value: value))
     }
 }
