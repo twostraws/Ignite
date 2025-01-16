@@ -129,6 +129,10 @@ public protocol Site: Sendable {
     /// The path to the favicon
     var favicon: URL? { get }
 
+    /// Maximum number of content errors to print before throwing error to halt content generation.
+    /// Used to avoid breaking site build for a content error.
+    var maxContentErrors: Int { get }
+
     /// An array of all the static layouts you want to include in your site.
     @StaticLayoutBuilder var staticLayouts: [any StaticLayout] { get }
 
@@ -205,6 +209,9 @@ public extension Site {
 
     /// The default favicon being nil
     var favicon: URL? { nil }
+
+    /// Default to 0 to throw on first content error
+    var maxContentErrors: Int { 0 }
 
     /// The syntax highlighting themes from every site theme.
     internal var allHighlighterThemes: OrderedSet<HighlighterTheme> {
