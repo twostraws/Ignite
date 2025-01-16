@@ -21,7 +21,7 @@
 /// }
 /// ```
 @MainActor
-public protocol Layout: Sendable {
+public protocol Layout {
     /// The type of HTML content this layout will generate
     associatedtype Body: HTML
 
