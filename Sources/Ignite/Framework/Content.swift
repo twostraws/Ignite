@@ -9,7 +9,7 @@ import Foundation
 
 /// One piece of Markdown content for this site.
 @MainActor
-public struct Content: Sendable {
+public struct Content {
     /// The main title for this content.
     public var title: String
 

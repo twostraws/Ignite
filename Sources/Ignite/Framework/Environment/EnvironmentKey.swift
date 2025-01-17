@@ -15,7 +15,7 @@
 /// }
 /// ```
 @MainActor
-public protocol EnvironmentKey: Sendable {
+public protocol EnvironmentKey {
     /// The type of value associated with this environment key.
     associatedtype Value: Sendable
 

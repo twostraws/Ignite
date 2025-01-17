@@ -9,7 +9,7 @@
 /// This class provides a way to temporarily set the current page
 /// while rendering HTML elements that need access to page-level information.
 @MainActor
-final class PageContext: Sendable {
+final class PageContext {
     /// The current page being rendered. Defaults to an empty page.
     static var current: Page = .empty
 
