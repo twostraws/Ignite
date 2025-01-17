@@ -106,7 +106,9 @@ public struct HTMLHead: RootHTML {
             MetaLink(href: favicon, rel: .icon)
         }
 
-        themeSwitchingScript
+        if configuration.hasMultipleThemes {
+            themeSwitchingScript
+        }
     }
 
     /// An inline script that handles theme changes immediately.
