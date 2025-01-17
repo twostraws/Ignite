@@ -164,7 +164,7 @@ public struct Content {
             // If the date is now nil, their format was bad and
             // needs to be fixed.
             if metadata["date"] == nil {
-                fatalError("Content dates should be provided in the format 2024-05-24 15:30.")
+                throw Error.invalidDateFormat
             }
         }
 
@@ -175,7 +175,7 @@ public struct Content {
             // If last modified is now nil, their format was bad and
             // needs to be fixed.
             if metadata["modified"] == nil {
-                fatalError("Content dates should be provided in the format 2024-05-24 15:30.")
+                throw Error.invalidDateFormat
             }
         }
 
@@ -235,5 +235,13 @@ extension Content {
         self.metadata = [:]
         self.body = ""
         self.hasAutomaticDate = false
+    }
+}
+
+extension Content {
+    public struct Error: Swift.Error {
+        public let message: String
+
+        static let invalidDateFormat = Error(message: "Content dates should be provided in the format 2024-05-24 15:30.")
     }
 }
