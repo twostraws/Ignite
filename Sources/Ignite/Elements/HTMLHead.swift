@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// A group of metadata headers for your page, such as its title,
 /// links to its CSS, and more.
 public struct HTMLHead: RootHTML {
@@ -106,57 +108,18 @@ public struct HTMLHead: RootHTML {
             MetaLink(href: favicon, rel: .icon)
         }
 
-        if configuration.hasMultipleThemes {
+        if configuration.hasMultipleThemes, let themeSwitchingScript {
             themeSwitchingScript
         }
     }
 
     /// An inline script that handles theme changes immediately.
-    private static var themeSwitchingScript: Script {
-        Script(code: """
-        (function() {
-            function getThemePreference() {
-                return localStorage.getItem('custom-theme') || 'auto';
-            }
-
-            function applyTheme(themeID) {
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const lightThemeID = document.documentElement.getAttribute('data-light-theme') || 'light';
-                const darkThemeID = document.documentElement.getAttribute('data-dark-theme') || 'dark';
-                const actualThemeID = themeID === 'auto' ? (prefersDark ? darkThemeID : lightThemeID) : themeID;
-                
-                document.documentElement.setAttribute('data-bs-theme', actualThemeID);
-                document.documentElement.setAttribute('data-theme-state', themeID);
-            }
-
-            function applySyntaxTheme() {
-                const syntaxTheme = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--syntax-highlight-theme').trim().replace(/"/g, '');
-
-                if (!syntaxTheme) return;
-
-                document.querySelectorAll('link[data-highlight-theme]').forEach(link => {
-                    link.setAttribute('disabled', 'disabled');
-                });
-
-                const themeLink = document.querySelector(`link[data-highlight-theme="${syntaxTheme}"]`);
-                if (themeLink) {
-                    themeLink.removeAttribute('disabled');
-                }
-            }
-
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-                const currentTheme = getThemePreference();
-                if (currentTheme === 'auto') {
-                    applyTheme('auto');
-                    applySyntaxTheme();
-                }
-            });
-
-            const savedTheme = getThemePreference();
-            applyTheme(savedTheme);
-            applySyntaxTheme();
-        })();
-        """)
+    private static var themeSwitchingScript: Script? {
+        guard let sourceURL = Bundle.module.url(forResource: "Resources/js/theme-switching", withExtension: "js"),
+              let contents = try? String(contentsOf: sourceURL)
+        else {
+            return nil
+        }
+        return Script(code: contents)
     }
 }

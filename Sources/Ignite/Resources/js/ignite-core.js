@@ -1,23 +1,27 @@
 // SECTION: Theme Switching -----------------------------------------------------------------
 
-/**
- * Theme Switching Implementation
- * Initial theme setup is handled in HTMLHead.swift.
- *
- * Bootstrap's theming system only understands explicit themes (light/dark/custom)
- * through data-bs-theme. For "auto" theme support, our JavaScript code must
- * actively switch data-bs-theme between "light" and "dark" based on the system
- * preference (see lines 31-33, 39-44, and 51-54).
- *
- * This creates a problem: we lose track of the fact that we're in "auto" mode
- * since data-bs-theme can only be "light" or "dark". To solve this, we use:
- *
- * 1. data-bs-theme: Bootstrap's visual theming (always explicit: light/dark)
- * 2. data-theme-state: User's actual theme selection (light/dark/auto/custom)
- *
- * This separation lets us track the true theme state while still working within
- * Bootstrap's theming constraints.
+/*
+ Manual Theme Switching Implementation (ThemeSwitchAction)
+ Automatic theme switching is handled in HTMLHead.swift using the code in theme-switching.js.
+
+ Bootstrap's theming system only understands explicit themes (light/dark/custom)
+ through data-bs-theme. For "auto" theme support, our JavaScript code must
+ actively switch data-bs-theme between "light" and "dark" based on the system
+ preference (see lines 31-33, 39-44, and 51-54).
+
+ This creates a problem: we lose track of the fact that we're in "auto" mode
+ since data-bs-theme can only be "light" or "dark". To solve this, we use:
+
+ 1. data-bs-theme: Bootstrap's visual theming (always explicit: light/dark)
+ 2. data-theme-state: User's actual theme selection (light/dark/auto/custom)
+
+ This separation lets us track the true theme state while still working within
+ Bootstrap's theming constraints.
  */
+
+function igniteSwitchTheme(themeID) {
+    igniteApplyTheme(themeID);
+}
 
 function igniteApplyTheme(themeID) {
     if (themeID === 'auto') {
@@ -64,10 +68,6 @@ function igniteApplySyntaxTheme() {
     if (themeLink) {
         themeLink.removeAttribute('disabled');
     }
-}
-
-function igniteSwitchTheme(themeID) {
-    igniteApplyTheme(themeID);
 }
 
 // SECTION: Email Protection ------------------------------------------------------------------
