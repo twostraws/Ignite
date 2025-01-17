@@ -17,7 +17,7 @@ import Testing
     let publishingContext = ElementTest.publishingContext
 
     @Test("Lone File Video Test", arguments: ["/videos/example.mp4"])
-    func test_loneFileVideo(videoFile: String) async throws {
+    func loneFileVideo(videoFile: String) async throws {
         let element = Video(videoFile)
         let output = element.render(context: publishingContext)
         let normalizedOutput = ElementTest.normalizeHTML(output)
@@ -30,7 +30,7 @@ import Testing
     @Test(
         "Multi-file Video Test", arguments: ["/videos/example1.mp4"],
         ["/videos/example1.mov"])
-    func test_multiFileVideo(videoFile1: String, videoFile2: String)
+    func multiFileVideo(videoFile1: String, videoFile2: String)
         async throws {
         let element = Video(videoFile1, videoFile2)
         let output = element.render(context: publishingContext)

@@ -82,6 +82,5 @@ import XCTest
 
         return normalizedHTML
     }
-
 }
 // swiftlint:enable force_try

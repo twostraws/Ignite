@@ -16,14 +16,14 @@ import Testing
     let publishingContext = ElementTest.publishingContext
 
     @Test("Empty Title Test", arguments: [""])
-    func test_empty(emptyTitleText: String) async throws {
+    func empty(emptyTitleText: String) async throws {
         let element = Title(emptyTitleText)
         let output = element.render(context: publishingContext)
 
         #expect(output == "<title>\(emptyTitleText) - My Test Site</title>")
     }
     @Test("Builder Test", arguments: ["Example Page", "Another Example Page"])
-    func test_builder(titleText: String) async throws {
+    func builder(titleText: String) async throws {
         let element = Title(titleText)
         let output = element.render(context: publishingContext)
 

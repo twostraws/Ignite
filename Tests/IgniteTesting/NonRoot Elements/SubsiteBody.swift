@@ -16,7 +16,7 @@ import Testing
     let publishingContext = ElementTest.publishingSubsiteContext
 
     @Test("Simple Body Test")
-    func test_body_simple() async throws {
+    func simpleBody() async throws {
         let element = HTMLBody(
             for: Page(
                 title: "TITLE", description: "DESCRIPTION",
