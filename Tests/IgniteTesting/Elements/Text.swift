@@ -15,7 +15,7 @@ import Testing
     let publishingContext = ElementTest.publishingContext
 
     @Test("Simple String Test")
-    func test_simpleString() async throws {
+    func simpleString() async throws {
         let element = Text("Hello")
         let output = element.render(context: publishingContext)
 
@@ -32,7 +32,7 @@ import Testing
         #expect(output == "<p>Hello</p>")
     }
     @Test("Builder with Complex String Test")
-    func test_complexBuilderString() {
+    func complexBuilderString() {
         let element = Text {
             "Hello, "
             Emphasis("world")
@@ -59,7 +59,7 @@ import Testing
     @Test(
         "Custom Font Test",
         arguments: Font.Style.allCases)
-    func test_customFont(font: Font.Style) async throws {
+    func customFont(font: Font.Style) async throws {
         let element = Text("Hello").font(font)
         let output = element.render(context: publishingContext)
 
@@ -77,7 +77,7 @@ import Testing
         }
     }
     @Test("Markdown Test")
-    func test_markdown() async throws {
+    func markdown() async throws {
         let element = Text(
             markdown:
                 "Text in *italics*, text in **bold**, and text in ***bold italics***."

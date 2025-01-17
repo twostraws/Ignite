@@ -1,5 +1,5 @@
 //
-// String.swift
+// PlainText.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -10,16 +10,16 @@ import Testing
 
 @testable import Ignite
 
-/// Tests for Strings (aka Plain Text)
-@Suite("String Tests")
-@MainActor struct StringTests {
+/// Tests for plain text.
+@Suite("Plain Text Tests")
+@MainActor struct PlainTextTests {
     let publishingContext = ElementTest.publishingContext
 
-    @Test("Single Element", arguments: ["This is a test", ""])
-    func test_singleElement(element: String) async throws {
+    @Test("Single Element", arguments: ["This is a test"])
+    func singleElement(element: String) async throws {
         let element = element
         let output = element.render(context: publishingContext)
 
-        #expect(output == element)
+        #expect(output == "This is a test")
     }
 }

@@ -16,7 +16,7 @@ import Testing
     let publishingContext = ElementTest.publishingContext
 
     @Test("Single Element Test", arguments: ["This is a test", "Another test", ""])
-    func test_singleElement(strongText: String) async throws {
+    func singleElement(strongText: String) async throws {
         let element = Strong(strongText)
         let output = element.render(context: publishingContext)
 
@@ -24,7 +24,7 @@ import Testing
     }
 
     @Test("Builder Test", arguments: ["This is a test", "Another test", ""])
-    func test_builder(strongText: String) async throws {
+    func builder(strongText: String) async throws {
         let element = Strong { strongText }
         let output = element.render(context: publishingContext)
 
