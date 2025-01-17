@@ -102,6 +102,8 @@ final class StyleManager {
                 testCondition.contrast = query
             case let query as ThemeQuery:
                 testCondition.theme = query.id
+            case let query as BreakpointQuery:
+                testCondition.breakpoint = query
             default:
                 break
             }
@@ -222,7 +224,18 @@ final class StyleManager {
                 return true
             }
 
-            let mediaConditions = mediaQueries.map { "(\($0.condition)" }.joined(separator: " and ")
+            // Process media queries, handling breakpoints specially
+            let mediaConditions = mediaQueries.map { query in
+                if let breakpointQuery = query as? BreakpointQuery {
+                    // If we have a theme, use its breakpoint values
+                    if let theme = themes.first(where: { $0.id == condition.theme }) {
+                        return "(\(breakpointQuery.condition(with: theme)))"
+                    }
+                    // If no theme specified, use default theme's values
+                    return "(\(breakpointQuery.condition(with: themes[0])))"
+                }
+                return "(\(query.condition))"
+            }.joined(separator: " and ")
 
             if condition.theme != nil, condition.conditionCount > 1 {
                 // Combined theme and media query rule
@@ -244,9 +257,6 @@ final class StyleManager {
                 cssRules.append(themeRule)
             } else {
                 // Media query-only rule
-                let mediaQueries = condition.toMediaQueries()
-                let mediaConditions = mediaQueries.map { "(\($0.condition)" }.joined(separator: " and ")
-
                 let mediaRule = """
                 @media \(mediaConditions) {
                     .\(className(for: style)) {
@@ -272,6 +282,7 @@ final class StyleManager {
         let displayModes: [DisplayModeQuery?] = [nil] + DisplayModeQuery.allCases.map { Optional($0) }
         let motions: [MotionQuery?] = [nil] + MotionQuery.allCases.map { Optional($0) }
         let contrasts: [ContrastQuery?] = [nil] + ContrastQuery.allCases.map { Optional($0) }
+        let breakpoints: [BreakpointQuery?] = [nil] + BreakpointQuery.allCases.map { Optional($0) }
         let themeIDs: [String?] = [nil] + themes.map { $0.id }
 
         var allConditions: [EnvironmentConditions] = []
@@ -283,17 +294,20 @@ final class StyleManager {
                     for displayMode in displayModes {
                         for motion in motions {
                             for contrast in contrasts {
-                                for themeId in themeIDs {
-                                    var condition = EnvironmentConditions()
-                                    condition.colorScheme = colorScheme
-                                    condition.orientation = orientation
-                                    condition.transparency = transparency
-                                    condition.displayMode = displayMode
-                                    condition.motion = motion
-                                    condition.contrast = contrast
-                                    condition.theme = themeId
+                                for themeID in themeIDs {
+                                    for breakpoint in breakpoints {
+                                        var condition = EnvironmentConditions()
+                                        condition.colorScheme = colorScheme
+                                        condition.orientation = orientation
+                                        condition.transparency = transparency
+                                        condition.displayMode = displayMode
+                                        condition.motion = motion
+                                        condition.contrast = contrast
+                                        condition.theme = themeID
+                                        condition.breakpoint = breakpoint
 
-                                    allConditions.append(condition)
+                                        allConditions.append(condition)
+                                    }
                                 }
                             }
                         }

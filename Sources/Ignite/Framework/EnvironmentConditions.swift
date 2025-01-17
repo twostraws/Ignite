@@ -40,6 +40,9 @@ public struct EnvironmentConditions: Equatable, Hashable, Sendable {
     /// The web application's display mode.
     public var displayMode: DisplayModeQuery?
 
+    /// The current breakpoint query.
+    public var breakpoint: BreakpointQuery?
+
     /// The current theme identifier.
     public var theme: String?
 
@@ -51,6 +54,7 @@ public struct EnvironmentConditions: Equatable, Hashable, Sendable {
     ///   - transparency: The preferred transparency settings
     ///   - orientation: The device orientation
     ///   - displayMode: The display mode
+    ///   - breakpoint: The breakpoint query
     ///   - theme: The theme identifier
     init(
         colorScheme: ColorSchemeQuery? = nil,
@@ -59,6 +63,7 @@ public struct EnvironmentConditions: Equatable, Hashable, Sendable {
         transparency: TransparencyQuery? = nil,
         orientation: OrientationQuery? = nil,
         displayMode: DisplayModeQuery? = nil,
+        breakpoint: BreakpointQuery? = nil,
         theme: String? = nil
     ) {
         self.colorScheme = colorScheme
@@ -67,6 +72,7 @@ public struct EnvironmentConditions: Equatable, Hashable, Sendable {
         self.transparency = transparency
         self.orientation = orientation
         self.displayMode = displayMode
+        self.breakpoint = breakpoint
         self.theme = theme
     }
 
@@ -81,6 +87,7 @@ public struct EnvironmentConditions: Equatable, Hashable, Sendable {
         if let orientation { queries.append(.orientation(orientation)) }
         if let displayMode { queries.append(.displayMode(displayMode)) }
         if let theme { queries.append(.theme(theme)) }
+        if let breakpoint { queries.append(.breakpoint(breakpoint)) }
         return queries
     }
 
@@ -92,6 +99,7 @@ public struct EnvironmentConditions: Equatable, Hashable, Sendable {
         if displayMode != nil { count += 1 }
         if motion != nil { count += 1 }
         if contrast != nil { count += 1 }
+        if breakpoint != nil { count += 1 }
         if theme != nil { count += 1 }
         return count
     }
