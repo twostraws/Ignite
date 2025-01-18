@@ -161,7 +161,7 @@ public struct Button: BlockHTML, InlineHTML {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         var buttonAttributes = attributes
             .appending(classes: Button.classes(forRole: role, size: size))
             .appending(aria: Button.aria(forRole: role))

@@ -48,7 +48,7 @@ public struct Quote: BlockHTML {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         let renderedContents = contents.render(context: context)
         let renderedCaption = caption.render(context: context)
         var attributes = attributes

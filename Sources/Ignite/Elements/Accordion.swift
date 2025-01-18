@@ -56,7 +56,7 @@ public struct Accordion: BlockHTML {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         // Accordions with an individual open mode must have
         // each element linked back to a unique accordion ID.
         // This is generated below, then passed into individual

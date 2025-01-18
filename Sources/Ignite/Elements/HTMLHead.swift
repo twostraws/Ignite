@@ -48,7 +48,7 @@ public struct HTMLHead: RootHTML {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         var attributes = attributes
         attributes.tag = "head"
         return attributes.description(wrapping: HTMLCollection(items).render(context: context))

@@ -35,7 +35,7 @@ public struct ZStack: BlockHTML {
         self.alignment = alignment
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         var items = [any HTML]()
 
         for item in self.items {

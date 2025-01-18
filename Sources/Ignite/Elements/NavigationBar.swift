@@ -156,7 +156,7 @@ public struct NavigationBar: BlockHTML {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         Tag("header") {
             Tag("nav") {
                 Section {
@@ -191,7 +191,7 @@ public struct NavigationBar: BlockHTML {
         .aria("label", "Toggle navigation")
     }
 
-    private func renderNavItems(context: PublishingContext) -> Section {
+    private func renderNavItems(context: PublishingContext?) -> Section {
         Section {
             List {
                 ForEach(items) { item in
@@ -218,9 +218,9 @@ public struct NavigationBar: BlockHTML {
         .data("bs-theme", "light")
     }
 
-    private func renderLinkItem(_ link: Link, context: PublishingContext) -> ListItem {
+    private func renderLinkItem(_ link: Link, context: PublishingContext?) -> ListItem {
         ListItem {
-            let isActive = context.currentRenderingPath == link.url
+            let isActive = context?.currentRenderingPath == link.url
             link
                 .class("nav-link", isActive ? "active" : nil)
                 .aria("current", isActive ? "page" : nil)

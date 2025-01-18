@@ -29,7 +29,7 @@ public struct Row: HTML {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         let output = columns.map { column in
             if column is Column {
                 column.render(context: context)

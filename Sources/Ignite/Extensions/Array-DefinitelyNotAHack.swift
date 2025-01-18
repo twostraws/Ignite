@@ -9,7 +9,7 @@
 extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
     public var body: some HTML { self }
 
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         self.map { $0.render(context: context) }.joined()
     }
 }
@@ -22,7 +22,7 @@ extension Array: BlockHTML where Element: BlockHTML {
         set {}
     }
 
-    @MainActor public func render(context: PublishingContext) -> String {
+    @MainActor public func render(context: PublishingContext?) -> String {
         self.map { $0.render(context: context) }.joined()
     }
 }
@@ -30,7 +30,7 @@ extension Array: BlockHTML where Element: BlockHTML {
 extension Array: InlineHTML where Element: InlineHTML {
     public var body: some InlineHTML { self }
 
-    @MainActor public func render(context: PublishingContext) -> String {
+    @MainActor public func render(context: PublishingContext?) -> String {
         self.map { $0.render(context: context) }.joined()
     }
 }

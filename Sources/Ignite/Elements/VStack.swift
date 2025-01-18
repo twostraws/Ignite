@@ -53,7 +53,7 @@ public struct VStack: BlockHTML {
         self.spacingAmount = .semantic(spacing)
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         var itemAttributes = CoreAttributes()
         itemAttributes.append(classes: "mb-0")
         var items = [any HTML]()

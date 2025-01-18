@@ -86,7 +86,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         let content = renderDropdownContent(context: context)
         if isNavigationItem {
             return Group(content)
@@ -104,10 +104,10 @@ public struct Dropdown: BlockHTML, NavigationItem {
     /// Creates the internal dropdown structure including the trigger button and menu items.
     /// - Parameter context: The current publishing context.
     /// - Returns: A group containing the dropdown's trigger and menu list.
-    private func renderDropdownContent(context: PublishingContext) -> some HTML {
+    private func renderDropdownContent(context: PublishingContext?) -> some HTML {
         Group {
             if isNavigationItem {
-                let hasActiveItem = items.contains { context.currentRenderingPath == ($0 as? Link)?.url }
+                let hasActiveItem = items.contains { context?.currentRenderingPath == ($0 as? Link)?.url }
 
                 Link(title, target: "#")
                     .customAttribute(name: "role", value: "button")
@@ -127,8 +127,8 @@ public struct Dropdown: BlockHTML, NavigationItem {
                     if let link = item as? Link {
                         ListItem {
                             link.class("dropdown-item")
-                                .class(context.currentRenderingPath == link.url ? "active" : nil)
-                                .aria("current", context.currentRenderingPath == link.url ? "page" : nil)
+                                .class(context?.currentRenderingPath == link.url ? "active" : nil)
+                                .aria("current", context?.currentRenderingPath == link.url ? "page" : nil)
                         }
                     } else if let text = item as? Text {
                         ListItem {

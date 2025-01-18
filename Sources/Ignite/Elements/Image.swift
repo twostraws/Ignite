@@ -85,9 +85,8 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     /// - Parameters:
     ///   - icon: The system image to render.
     ///   - description: The accessibility label to use.
-    ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
-    private func render(icon: String, description: String, into context: PublishingContext) -> String {
+    private func render(icon: String, description: String) -> String {
         var attributes = attributes
         attributes.append(classes: "bi-\(icon)")
         attributes.tag = "i"
@@ -113,20 +112,20 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         if description == nil {
-            context.addWarning("""
+            context?.addWarning("""
             \(name ?? systemImage ?? "Image"): adding images without a description is not recommended. \
             Provide a description or use Image(decorative:) to silence this warning.
             """)
         }
 
         if let systemImage {
-            return render(icon: systemImage, description: description ?? "", into: context)
-        } else if let name {
+            return render(icon: systemImage, description: description ?? "")
+        } else if let name, let context  {
             return render(image: name, description: description ?? "", into: context)
         } else {
-            context.addWarning("""
+            context?.addWarning("""
             Creating an image with no name or icon should not be possible. \
             Please file a bug report on the Ignite project.
             """)

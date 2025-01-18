@@ -49,7 +49,7 @@ public struct AnyHTML: HTML, BlockHTML, InlineHTML {
     /// Renders the wrapped HTML content using the given publishing context
     /// - Parameter context: The context to use for rendering
     /// - Returns: The rendered HTML string
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         wrapped.render(context: context)
     }
 }

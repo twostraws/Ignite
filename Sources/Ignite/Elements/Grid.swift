@@ -68,7 +68,7 @@ public struct Grid: BlockHTML {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         var sectionAttributes = attributes.appending(classes: ["row"])
 
         // If a column count is set, we want to use that for all

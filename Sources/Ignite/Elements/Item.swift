@@ -63,7 +63,7 @@ public struct Item: HTML {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         guard let parentID, let parentOpenMode else {
             fatalError("Accordion sections must not be rendered without a parentID and parentOpenMode in place.")
         }

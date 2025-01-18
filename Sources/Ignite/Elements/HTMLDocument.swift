@@ -23,7 +23,7 @@ public struct HTMLDocument: HTML {
         self.contents = contents()
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         self.customAttribute(name: "lang", value: language.rawValue)
         self.customAttribute(name: "data-bs-theme", value: "auto")
         var output = "<!doctype html>"

@@ -40,7 +40,7 @@ public struct Section: BlockHTML {
         self.items = flatUnwrap(items)
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         let content = items.map { $0.render(context: context) }.joined()
         var attributes = attributes
         attributes.tag = "div"

@@ -39,12 +39,12 @@ public struct CodeBlock: BlockHTML {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
-        guard context.site.allHighlighterThemes.isEmpty == false else {
+    public func render(context: PublishingContext?) -> String {
+        guard context?.site.allHighlighterThemes.isEmpty == false else {
             fatalError("At least one of your themes must specify a syntax highlighter.")
         }
         if let language {
-            context.highlighterLanguages.append(language)
+            context?.highlighterLanguages.append(language)
             return """
             <pre\(attributes.description())>\
             <code class=\"language-\(language)\">\

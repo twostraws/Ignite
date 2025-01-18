@@ -40,7 +40,7 @@ public struct HTMLBody: RootHTML {
         return copy
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         var output = ""
 
         // Render main content
@@ -48,11 +48,11 @@ public struct HTMLBody: RootHTML {
         output = rendered
 
         // Add required scripts
-        if context.site.useDefaultBootstrapURLs == .localBootstrap {
+        if context?.site.useDefaultBootstrapURLs == .localBootstrap {
             output += Script(file: "/js/bootstrap.bundle.min.js").render(context: context)
         }
 
-        if context.highlighterLanguages.isEmpty == false {
+        if context?.highlighterLanguages.isEmpty == false {
             output += Script(file: "/js/syntax-highlighting.js").render(context: context)
         }
 

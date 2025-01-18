@@ -134,7 +134,7 @@ public struct Form: BlockHTML {
         }
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         guard let action = action(attributes.id) as? SubscribeAction else {
             fatalError("Form supports only SubscribeAction at this time.")
         }

@@ -206,7 +206,7 @@ public struct Card: BlockHTML {
         return copy
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         Section {
             if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {

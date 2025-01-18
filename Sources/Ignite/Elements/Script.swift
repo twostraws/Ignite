@@ -46,17 +46,17 @@ public struct Script: BlockHTML, HeadElement {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         var attributes = attributes
         attributes.tag = "script"
 
-        if let file {
+        if let file, let context {
             attributes.append(customAttributes: .init(name: "src", value: "\(context.site.url.path)\(file)"))
             return attributes.description()
         } else if let code {
             return attributes.description(wrapping: code)
         } else {
-            context.addWarning("""
+            context?.addWarning("""
             Creating a script with no source or code should not be possible. \
             Please file a bug report on the Ignite project.
             """)

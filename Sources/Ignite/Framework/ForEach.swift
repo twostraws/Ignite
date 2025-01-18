@@ -40,7 +40,7 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, PassthroughHTM
     /// Renders the ForEach content when this isn't part of a list.
     /// - Parameter context: The current publishing context.
     /// - Returns: The rendered HTML string.
-    public func render(context: PublishingContext) -> String {
+    public func render(context: PublishingContext?) -> String {
         let items = data.map(content)
         return items.map {
             let item: any HTML = $0
@@ -52,7 +52,7 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, PassthroughHTM
     /// Renders the ForEach content when this isn't part of a list.
     /// - Parameter context: The current publishing context.
     /// - Returns: The rendered HTML string.
-    func renderInList(context: PublishingContext) -> String {
+    func renderInList(context: PublishingContext?) -> String {
         // ListableElement conformance ensures other views never wrap ForEach in <li> tags.
         render(context: context)
     }

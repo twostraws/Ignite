@@ -30,7 +30,7 @@ public protocol HTML: Sendable {
     /// Converts this element and its children into an HTML string with attributes.
     /// - Parameter context: The current publishing context
     /// - Returns: A string containing the rendered HTML
-    func render(context: PublishingContext) -> String
+    func render(context: PublishingContext?) -> String
 }
 
 public extension HTML {
@@ -109,7 +109,7 @@ public extension HTML {
 
 // Default implementations
 public extension HTML {
-    func render(context: PublishingContext) -> String {
+    func render(context: PublishingContext?) -> String {
         body.render(context: context)
     }
 }
