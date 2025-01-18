@@ -5,6 +5,7 @@
 // See LICENSE for license information.
 //
 
+import Foundation
 import Markdown
 
 /// A simple Markdown to HTML parser powered by Apple's swift-markdown.
