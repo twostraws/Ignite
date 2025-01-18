@@ -109,4 +109,24 @@ struct AttributesTest {
             output == "<\(tag) data-bar=\"baz\" data-baz=\"qux\" data-foo=\"bar\" data-qux=\"foo\"></\(tag)>"
         )
     }
+
+    struct CustomElement: HTML {
+
+        let title: String
+
+        var body: some HTML {
+            Tag("label") {
+                title
+            }
+        }
+    }
+
+    @Test("Checks that custom HTML render custom attributes")
+    func test_custom_html_render_custom_attributes() async throws {
+        let element = CustomElement(title: "Hello")
+            .customAttribute(name: "for", value: "test")
+        let output = element.render(context: publishingContext)
+        
+        #expect(output == "<label for=\"test\">Hello</label>")
+    }
 }

@@ -110,7 +110,7 @@ public extension HTML {
 // Default implementations
 public extension HTML {
     func render(context: PublishingContext) -> String {
-        body.render(context: context)
+        body.attributes(attributes).render(context: context)
     }
 }
 
