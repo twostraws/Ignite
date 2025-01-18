@@ -49,6 +49,13 @@ public extension HTML {
         }
         set {} // swiftlint:disable:this unused_setter_value
     }
+
+    /// The default status as a primitive element.
+    var isPrimitive: Bool { false }
+
+    func render(context: PublishingContext) -> String {
+        body.render(context: context)
+    }
 }
 
 extension HTML {
@@ -90,10 +97,18 @@ extension HTML {
 
         return false
     }
+
+    /// Checks if this element is an empty HTML element.
+    var isEmptyHTML: Bool {
+        if let collection = self as? HTMLCollection {
+            collection.elements.allSatisfy { $0 is EmptyHTML }
+        } else {
+            self is EmptyHTML
+        }
+    }
 }
 
-// Style modifiers
-public extension HTML {
+extension HTML {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
@@ -105,27 +120,6 @@ public extension HTML {
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
-}
-
-// Default implementations
-public extension HTML {
-    func render(context: PublishingContext) -> String {
-        body.render(context: context)
-    }
-}
-
-public extension HTML {
-    /// Checks if this element is an empty HTML element.
-    var isEmptyHTML: Bool {
-        if let collection = self as? HTMLCollection {
-            collection.elements.allSatisfy { $0 is EmptyHTML }
-        } else {
-            self is EmptyHTML
-        }
-    }
-
-    /// The default status as a primitive element.
-    var isPrimitive: Bool { false }
 
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
@@ -254,7 +248,7 @@ public extension HTML {
     /// Adds a wrapper div with the specified attributes to the element's storage
     /// - Parameter newAttributes: The attributes to apply to the wrapper div
     /// - Returns: The original element
-    internal func containerAttributes(_ newAttributes: ContainerAttributes...) -> Self {
+    func containerAttributes(_ newAttributes: ContainerAttributes...) -> Self {
         var attributes = attributes
         attributes.containerAttributes.formUnion(newAttributes.map { $0 })
         AttributeStore.default.merge(attributes, intoHTML: id)
