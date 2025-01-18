@@ -5,6 +5,7 @@
 // See LICENSE for license information.
 //
 
+import Foundation
 import OrderedCollections
 
 /// Represents metadata configuration for a website
