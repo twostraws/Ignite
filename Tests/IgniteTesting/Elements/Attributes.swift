@@ -32,7 +32,7 @@ struct AttributesTest {
 
     @Test("Checks that classes are sorted", arguments: tags)
     func test_classes_are_sorted(tag: String) async throws {
-        let element = Tag(tag) {}.class("foo", "bar", "baz", "qux")
+        let element = Tag(tag) {}._class("foo", "bar", "baz", "qux")
         let output = element.render(context: publishingContext)
         let expected = "<\(tag) class=\"bar baz foo qux\"></\(tag)>"
 
@@ -85,10 +85,10 @@ struct AttributesTest {
     @Test("Checks that aria attributes are sorted", arguments: Self.tags)
     func test_aria_attributes_are_sorted(tag: String) async throws {
         let element = Tag(tag) {}
-            .aria("foo", "bar")
-            .aria("baz", "qux")
-            .aria("qux", "foo")
-            .aria("bar", "baz")
+            ._aria("foo", "bar")
+            ._aria("baz", "qux")
+            ._aria("qux", "foo")
+            ._aria("bar", "baz")
         let output = element.render(context: publishingContext)
 
         #expect(
@@ -99,10 +99,10 @@ struct AttributesTest {
     @Test("Checks that data attributes are sorted", arguments: Self.tags)
     func test_data_attributes_are_sorted(tag: String) async throws {
         let element = Tag(tag) {}
-            .data("foo", "bar")
-            .data("baz", "qux")
-            .data("qux", "foo")
-            .data("bar", "baz")
+            ._data("foo", "bar")
+            ._data("baz", "qux")
+            ._data("qux", "foo")
+            ._data("bar", "baz")
         let output = element.render(context: publishingContext)
 
         #expect(

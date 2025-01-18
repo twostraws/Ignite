@@ -9,7 +9,7 @@ struct AccessibilityLabelModifier: HTMLModifier {
     var label: String
 
     func body(content: some HTML) -> any HTML {
-        content.aria("label", label)
+        content._aria("label", label)
     }
 }
 

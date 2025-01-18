@@ -15,7 +15,7 @@ public enum TextSelection: String {
 struct TextSelectionModifier: HTMLModifier {
     var selection: TextSelection
     func body(content: some HTML) -> any HTML {
-        content.class("user-select-\(selection)")
+        content._class("user-select-\(selection)")
     }
 }
 

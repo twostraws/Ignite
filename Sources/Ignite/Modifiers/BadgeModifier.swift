@@ -23,7 +23,7 @@ public extension InlineHTML {
             self
             badge
         }
-        .class("d-flex", "justify-content-between", "align-items-center")
+        ._class("d-flex", "justify-content-between", "align-items-center")
     }
 }
 
@@ -43,6 +43,6 @@ public extension ListItem {
     /// - Parameter badge: The badge to display.
     /// - Returns: A modified list item with proper badge styling.
     func badge(_ badge: Badge) -> some HTML {
-        self.class("d-flex", "justify-content-between", "align-items-center")
+        self._class("d-flex", "justify-content-between", "align-items-center")
     }
 }

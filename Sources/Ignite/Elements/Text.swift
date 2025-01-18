@@ -126,7 +126,7 @@ public struct Text: BlockHTML, DropdownElement {
 extension HTML {
     @discardableResult func fontStyle(_ font: Font.Style) -> Self {
         if font == .lead {
-            self.class(font.rawValue)
+            self._class(font.rawValue)
         } else {
             self.tag(font.rawValue)
         }

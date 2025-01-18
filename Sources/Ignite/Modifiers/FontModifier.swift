@@ -79,7 +79,7 @@ struct FontModifier: HTMLModifier {
 
             if !font.responsiveSizes.isEmpty {
                 let classNames = registerResponsiveClasses()
-                content.class(classNames)
+                content._class(classNames)
             } else if let size = font.size {
                 content.style("font-size: \(size.stringValue)")
             }
@@ -105,7 +105,7 @@ struct FontModifier: HTMLModifier {
 
             return content
                 .containerAttributes(containerAttributes)
-                .class("font-inherit")
+                ._class("font-inherit")
         }
     }
 }

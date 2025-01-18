@@ -134,33 +134,33 @@ public struct Modal: HTML {
                         Section {
                             header
                         }
-                        .class("modal-header")
+                        ._class("modal-header")
                     }
 
                     Section {
                         items
                     }
-                    .class("modal-body")
+                    ._class("modal-body")
 
                     if !footer.isEmptyHTML {
                         Section {
                             footer
                         }
-                        .class("modal-footer")
+                        ._class("modal-footer")
                     }
                 }
-                .class("modal-content")
+                ._class("modal-content")
             }
-            .class("modal-dialog")
-            .class(size.htmlClass)
-            .class(position.htmlName)
-            .class(scrollable ? "modal-dialog-scrollable" : nil)
+            ._class("modal-dialog")
+            ._class(size.htmlClass)
+            ._class(position.htmlName)
+            ._class(scrollable ? "modal-dialog-scrollable" : nil)
         }
-        .class(animated ? "modal fade" : "modal")
+        ._class(animated ? "modal fade" : "modal")
         .tabFocus(.focusable)
-        .id(htmlID)
-        .aria("labelledby", "modalLabel")
-        .aria("hidden", "true")
+        ._id(htmlID)
+        ._aria("labelledby", "modalLabel")
+        ._aria("hidden", "true")
         .render(context: context)
     }
 }

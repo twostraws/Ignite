@@ -68,7 +68,7 @@ struct HorizontalAlignmentModifier: HTMLModifier {
         let classes = alignments
             .map(\.breakpointClass)
             .joined(separator: " ")
-        return content.class(classes)
+        return content._class(classes)
     }
 }
 

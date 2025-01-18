@@ -143,7 +143,7 @@ struct FrameModifier: HTMLModifier {
         }
 
         if !classes.isEmpty {
-            modified.class(classes.joined(separator: " "))
+            modified._class(classes.joined(separator: " "))
         }
 
         return modified

@@ -62,50 +62,50 @@ public struct Carousel: BlockHTML {
             Section {
                 ForEach(0..<items.count) { index in
                     Button()
-                        .data("bs-target", "#\(carouselID)")
-                        .data("bs-slide-to", String(index))
-                        .class(index == 0 ? "active" : nil)
-                        .aria("current", index == 0 ? "true" : nil)
-                        .aria("label", "Slide \(index + 1)")
+                        ._data("bs-target", "#\(carouselID)")
+                        ._data("bs-slide-to", String(index))
+                        ._class(index == 0 ? "active" : nil)
+                        ._aria("current", index == 0 ? "true" : nil)
+                        ._aria("label", "Slide \(index + 1)")
                 }
             }
-            .class("carousel-indicators")
+            ._class("carousel-indicators")
 
             Section {
                 ForEach(items.enumerated()) { index, item in
                     item.assigned(at: index, in: context)
                 }
             }
-            .class("carousel-inner")
+            ._class("carousel-inner")
 
             Button {
                 Span()
-                    .class("carousel-control-prev-icon")
-                    .aria("hidden", "true")
+                    ._class("carousel-control-prev-icon")
+                    ._aria("hidden", "true")
 
                 Span("Previous")
-                    .class("visually-hidden")
+                    ._class("visually-hidden")
             }
-            .class("carousel-control-prev")
-            .data("bs-target", "#\(carouselID)")
-            .data("bs-slide", "prev")
+            ._class("carousel-control-prev")
+            ._data("bs-target", "#\(carouselID)")
+            ._data("bs-slide", "prev")
 
             Button {
                 Span()
-                    .class("carousel-control-next-icon")
-                    .aria("hidden", "true")
+                    ._class("carousel-control-next-icon")
+                    ._aria("hidden", "true")
 
                 Span("Next")
-                    .class("visually-hidden")
+                    ._class("visually-hidden")
             }
-            .class("carousel-control-next")
-            .data("bs-target", "#\(carouselID)")
-            .data("bs-slide", "next")
+            ._class("carousel-control-next")
+            ._data("bs-target", "#\(carouselID)")
+            ._data("bs-slide", "next")
         }
         .attributes(attributes)
-        .id(carouselID)
-        .class("carousel", "slide", style == .crossfade ? "carousel-fade" : nil)
-        .data("bs-ride", "carousel")
+        ._id(carouselID)
+        ._class("carousel", "slide", style == .crossfade ? "carousel-fade" : nil)
+        ._data("bs-ride", "carousel")
         .render(context: context)
     }
 }

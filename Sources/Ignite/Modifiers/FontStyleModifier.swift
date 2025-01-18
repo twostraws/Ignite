@@ -24,7 +24,7 @@ struct FontStyleModifier: HTMLModifier {
         } else {
             content
                 .containerClass(style.fontSizeClass)
-                .class("font-inherit")
+                ._class("font-inherit")
         }
     }
 }

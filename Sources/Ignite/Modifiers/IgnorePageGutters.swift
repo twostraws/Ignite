@@ -16,10 +16,10 @@ struct IgnorePageGuttersModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         if shouldIgnore {
             content
-                .class("row justify-content-center")
+                ._class("row justify-content-center")
                 .style("margin-inline: calc(50% - 50vw)")
         } else {
-            content.class("container")
+            content._class("container")
         }
     }
 }

@@ -49,32 +49,32 @@ extension HTML {
     /// - Returns: A copy of the current element with the updated edge adjustment.
     func edgeAdjust(prefix: String, _ edges: Edge = .all, _ amount: SpacingAmount) -> Self {
         if edges.contains(.all) {
-            return self.class("\(prefix)-\(amount.rawValue)")
+            return self._class("\(prefix)-\(amount.rawValue)")
         }
 
         var copy = self
 
         if edges.contains(.horizontal) {
-            copy = copy.class("\(prefix)x-\(amount.rawValue)")
+            copy = copy._class("\(prefix)x-\(amount.rawValue)")
         } else {
             if edges.contains(.leading) {
-                copy = copy.class("\(prefix)s-\(amount.rawValue)")
+                copy = copy._class("\(prefix)s-\(amount.rawValue)")
             }
 
             if edges.contains(.trailing) {
-                copy = copy.class("\(prefix)e-\(amount.rawValue)")
+                copy = copy._class("\(prefix)e-\(amount.rawValue)")
             }
         }
 
         if edges.contains(.vertical) {
-            copy = copy.class("\(prefix)y-\(amount.rawValue)")
+            copy = copy._class("\(prefix)y-\(amount.rawValue)")
         } else {
             if edges.contains(.top) {
-                copy = copy.class("\(prefix)t-\(amount.rawValue)")
+                copy = copy._class("\(prefix)t-\(amount.rawValue)")
             }
 
             if edges.contains(.bottom) {
-                copy = copy.class("\(prefix)b-\(amount.rawValue)")
+                copy = copy._class("\(prefix)b-\(amount.rawValue)")
             }
         }
 

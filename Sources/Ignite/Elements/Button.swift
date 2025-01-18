@@ -179,7 +179,7 @@ extension Button {
     public func width(_ width: Int) -> Self {
         var copy = self
         copy.columnWidth = .count(width)
-        copy.class("w-100")
+        copy._class("w-100")
         return copy
     }
 }

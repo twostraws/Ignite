@@ -31,7 +31,7 @@ import Testing
     @Test("Attributes Test", arguments: ["/code.js"])
     func test_attributes(scriptFile: String) async throws {
         let element = Script(file: scriptFile)
-            .data("key", "value")
+            ._data("key", "value")
             .customAttribute(name: "custom", value: "part")
         let output = element.render(context: publishingContext)
         let normalizedOutput = ElementTest.normalizeHTML(output)

@@ -30,7 +30,7 @@ struct BackgroundModifier: HTMLModifier {
         case .colorString(let colorString):
             content.style("background-color: \(colorString)")
         case .material(let material):
-            content.class(material.className)
+            content._class(material.className)
         }
     }
 }

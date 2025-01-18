@@ -36,7 +36,7 @@ struct LineSpacingModifier: HTMLModifier {
             if let customHeight {
                 content.style("line-height: \(customHeight)")
             } else if let presetHeight {
-                content.class("lh-\(presetHeight.rawValue)")
+                content._class("lh-\(presetHeight.rawValue)")
             }
         }
         content

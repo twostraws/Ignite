@@ -73,26 +73,26 @@ public struct Item: HTML {
         return Section {
             Text {
                 Button(title)
-                    .class("accordion-button", startsOpen ? "" : "collapsed")
-                    .data("bs-toggle", "collapse")
-                    .data("bs-target", "#\(itemID)")
-                    .aria("expanded", startsOpen ? "true" : "false")
-                    .aria("controls", itemID)
+                    ._class("accordion-button", startsOpen ? "" : "collapsed")
+                    ._data("bs-toggle", "collapse")
+                    ._data("bs-target", "#\(itemID)")
+                    ._aria("expanded", startsOpen ? "true" : "false")
+                    ._aria("controls", itemID)
             }
             .font(.title2)
-            .class("accordion-header")
+            ._class("accordion-header")
 
             Section {
                 Section {
                     contents.render(context: context)
                 }
-                .class("accordion-body")
+                ._class("accordion-body")
             }
-            .id(itemID)
-            .class("accordion-collapse", "collapse", startsOpen ? "show" : nil)
-            .data("bs-parent", parentOpenMode == .individual ? "#\(parentID)" : "")
+            ._id(itemID)
+            ._class("accordion-collapse", "collapse", startsOpen ? "show" : nil)
+            ._data("bs-parent", parentOpenMode == .individual ? "#\(parentID)" : "")
         }
-        .class("accordion-item")
+        ._class("accordion-item")
         .render(context: context)
     }
 }

@@ -51,12 +51,12 @@ struct AspectRatioModifier: HTMLModifier {
         if let contentMode {
             if let ratio {
                 Section {
-                    content.class(contentMode.htmlClass)
+                    content._class(contentMode.htmlClass)
                 }
                 .aspectRatio(ratio)
             } else if let customRatio {
                 Section {
-                    content.class(contentMode.htmlClass)
+                    content._class(contentMode.htmlClass)
                 }
                 .aspectRatio(customRatio)
             }
@@ -74,7 +74,7 @@ extension HTML {
     /// - Parameter ratio: The aspect ratio to apply.
     /// - Returns: A new instance of this element with the ratio applied.
     func aspectRatio(_ ratio: AspectRatio) -> Self {
-        self.class("ratio", "ratio-\(ratio.rawValue)")
+        self._class("ratio", "ratio-\(ratio.rawValue)")
     }
 
     /// Applies a custom ratio to the current element.
@@ -84,7 +84,7 @@ extension HTML {
     func aspectRatio(_ aspectRatio: Double) -> Self {
         let percentage = 100 / aspectRatio
         return self
-            .class("ratio")
+            ._class("ratio")
             .style("--bs-aspect-ratio: \(percentage)%")
     }
 }
@@ -113,7 +113,7 @@ public extension Image {
     /// - Returns: A new instance of this element with the ratio and content mode applied.
     func aspectRatio(_ ratio: AspectRatio, contentMode: ContentMode) -> some BlockHTML {
         Section {
-            self.class(contentMode.htmlClass)
+            self._class(contentMode.htmlClass)
         }
         .aspectRatio(ratio)
     }
@@ -125,7 +125,7 @@ public extension Image {
     /// - Returns: A new instance of this element with the ratio and content mode applied.
     func aspectRatio(_ ratio: Double, contentMode: ContentMode) -> some BlockHTML {
         Section {
-            self.class(contentMode.htmlClass)
+            self._class(contentMode.htmlClass)
         }
         .aspectRatio(ratio)
     }

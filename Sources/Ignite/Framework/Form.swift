@@ -178,8 +178,8 @@ public struct Form: BlockHTML {
                 .customAttribute(name: "aria-hidden", value: "true")
             }
         }
-        .class("row", "g-\(horizontalSpacing.rawValue)", "gy-\(verticalSpacing.rawValue)")
-        .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
+        ._class("row", "g-\(horizontalSpacing.rawValue)", "gy-\(verticalSpacing.rawValue)")
+        ._class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
         .render(context: context)
 
         var formOutput = attributes.description(wrapping: wrappedContent)
@@ -200,8 +200,8 @@ public struct Form: BlockHTML {
         }
 
         let sizedTextField = textField
-            .id(action.service.emailFieldID)
-            .class(controlSize.controlClass)
+            ._id(action.service.emailFieldID)
+            ._class(controlSize.controlClass)
             .customAttribute(name: "name", value: action.service.emailFieldName!)
 
         // If no label text, return just the field
@@ -210,7 +210,7 @@ public struct Form: BlockHTML {
         }
 
         let label = Label(text: textLabel)
-            .class(controlSize.labelClass)
+            ._class(controlSize.labelClass)
             .customAttribute(name: "for", value: textField.attributes.id)
 
         return switch labelStyle {
@@ -222,35 +222,35 @@ public struct Form: BlockHTML {
                 sizedTextField
                 label
             }
-            .class("form-floating")
+            ._class("form-floating")
             .containerClass(getColumnClass(for: textField, totalColumns: columnCount))
 
         case .front:
             Section {
-                label.class("col-form-label col-sm-2")
-                Section(sizedTextField).class("col-sm-10")
+                label._class("col-form-label col-sm-2")
+                Section(sizedTextField)._class("col-sm-10")
             }
-            .class("row")
+            ._class("row")
             .containerClass(getColumnClass(for: textField, totalColumns: columnCount))
 
         case .top:
             Section {
-                label.class("form-label")
+                label._class("form-label")
                 sizedTextField
             }
-            .class(getColumnClass(for: textField, totalColumns: columnCount))
+            ._class(getColumnClass(for: textField, totalColumns: columnCount))
         }
     }
 
     private func renderButton(_ button: Button) -> Section {
-        Section(button.class(controlSize.buttonClass))
-            .class(getColumnClass(for: button, totalColumns: columnCount))
-            .class("d-flex", "align-items-stretch")
+        Section(button._class(controlSize.buttonClass))
+            ._class(getColumnClass(for: button, totalColumns: columnCount))
+            ._class("d-flex", "align-items-stretch")
     }
 
     private func renderSimpleItem(_ item: any InlineHTML) -> Section {
         Section(item)
-            .class(getColumnClass(for: item, totalColumns: columnCount))
+            ._class(getColumnClass(for: item, totalColumns: columnCount))
     }
 
     /// Calculates the appropriate Bootstrap column class for an HTML element.

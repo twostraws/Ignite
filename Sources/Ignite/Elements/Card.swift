@@ -211,11 +211,11 @@ public struct Card: BlockHTML {
             if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
-                        .class(contentPosition.imageClass)
+                        ._class(contentPosition.imageClass)
                         .style("opacity: \(imageOpacity)")
                 } else {
                     image
-                        .class(contentPosition.imageClass)
+                        ._class(contentPosition.imageClass)
                 }
             }
 
@@ -228,11 +228,11 @@ public struct Card: BlockHTML {
             if let image, !contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
-                        .class(contentPosition.imageClass)
+                        ._class(contentPosition.imageClass)
                         .style("opacity: \(imageOpacity)")
                 } else {
                     image
-                        .class(contentPosition.imageClass)
+                        ._class(contentPosition.imageClass)
                 }
             }
 
@@ -241,8 +241,8 @@ public struct Card: BlockHTML {
             }
         }
         .attributes(attributes)
-        .class("card")
-        .class(cardClasses)
+        ._class("card")
+        ._class(cardClasses)
         .render(context: context)
     }
 
@@ -252,7 +252,7 @@ public struct Card: BlockHTML {
                 item
             }
         }
-        .class("card-header")
+        ._class("card-header")
     }
 
     private func renderItems() -> Section {
@@ -260,19 +260,19 @@ public struct Card: BlockHTML {
             ForEach(items) { item in
                 switch item {
                 case let text as Text where text.font == .body || text.font == .lead:
-                    text.class("card-text")
+                    text._class("card-text")
                 case let text as Text:
-                    text.class("card-title")
+                    text._class("card-title")
                 case let link as Link:
-                    link.class("card-link")
+                    link._class("card-link")
                 case let image as Image:
-                    image.class("card-img")
+                    image._class("card-img")
                 default:
                     AnyHTML(item)
                 }
             }
         }
-        .class(contentPosition.bodyClasses)
+        ._class(contentPosition.bodyClasses)
     }
 
     private func renderFooter() -> Section {
@@ -281,6 +281,6 @@ public struct Card: BlockHTML {
                 item
             }
         }
-        .class("card-footer", "text-body-secondary")
+        ._class("card-footer", "text-body-secondary")
     }
 }

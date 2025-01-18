@@ -47,8 +47,8 @@ public struct ButtonGroup: BlockHTML {
         Section {
             content.map { $0.render(context: context) }.joined()
         }
-        .class("btn-group")
-        .aria("label", accessibilityLabel)
+        ._class("btn-group")
+        ._aria("label", accessibilityLabel)
         .customAttribute(name: "role", value: "group")
         .render(context: context)
     }

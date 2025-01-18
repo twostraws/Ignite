@@ -65,8 +65,8 @@ public struct Accordion: BlockHTML {
         let assignedItems = items.map { $0.assigned(to: accordionID, openMode: openMode) }
         let output = Section { assignedItems }
             .attributes(attributes)
-            .class("accordion")
-            .id(accordionID)
+            ._class("accordion")
+            ._id(accordionID)
             .render(context: context)
 
         return output

@@ -102,8 +102,8 @@ public struct Grid: BlockHTML {
                     handlePassthrough(passthrough, attributes: modified.attributes)
                 } else if let item = item as? any BlockHTML {
                     Section(item)
-                        .class(className(for: item))
-                        .class(gutterClass)
+                        ._class(className(for: item))
+                        ._class(gutterClass)
                 } else {
                     item
                 }
@@ -127,8 +127,8 @@ public struct Grid: BlockHTML {
         return ForEach(passthrough.items) { item in
             if let item = item as? any BlockHTML {
                 Section(item)
-                    .class(className(for: passthrough))
-                    .class(gutterClass)
+                    ._class(className(for: passthrough))
+                    ._class(gutterClass)
                     .attributes(attributes)
             }
         }

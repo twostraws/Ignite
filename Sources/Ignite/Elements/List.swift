@@ -139,13 +139,13 @@ public struct List: BlockHTML {
             // be allowed to handle that itself.
             if let listableItem = item as? ListableElement {
                 if listStyle != .plain {
-                    item.class("list-group-item")
+                    item._class("list-group-item")
                 }
 
                 output += listableItem.renderInList(context: context)
             } else {
                 let styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
-                item.class("m-0")
+                item._class("m-0")
                 output += "<li\(styleClass)>\(item.render(context: context))</li>"
             }
         }

@@ -68,7 +68,7 @@ public struct Slide: BlockHTML {
         Section {
             if let slideBackground = background {
                 Image(slideBackground, description: "")
-                    .class("d-block", "w-100")
+                    ._class("d-block", "w-100")
                     .style("height: 100%", "object-fit: cover", "opacity: \(backgroundOpacity)")
             }
 
@@ -76,12 +76,12 @@ public struct Slide: BlockHTML {
                 Section {
                     render(context: context)
                 }
-                .class("carousel-caption")
+                ._class("carousel-caption")
             }
-            .class("container")
+            ._class("container")
         }
-        .class("carousel-item")
-        .class(index == 0 ? "active" : nil)
+        ._class("carousel-item")
+        ._class(index == 0 ? "active" : nil)
         .style("background-color: black")
         .render(context: context)
     }

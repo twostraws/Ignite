@@ -113,7 +113,7 @@ extension HTML {
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
     @discardableResult
-    func `class`(_ newClasses: String?...) -> Self {
+    func _class(_ newClasses: String?...) -> Self {
         var attributes = attributes
         let compacted = newClasses.compactMap(\.self)
         attributes.classes.formUnion(compacted)
@@ -124,7 +124,7 @@ extension HTML {
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
     /// - Returns: The modified `HTML` element
-    func `class`(_ newClasses: [String]) -> Self {
+    func _class(_ newClasses: [String]) -> Self {
         var attributes = attributes
         for case let newClass? in newClasses where !attributes.classes.contains(newClass) {
             if !newClass.isEmpty {
@@ -140,7 +140,7 @@ extension HTML {
     ///   - name: The name of the data attribute
     ///   - value: The value of the data attribute
     /// - Returns: The modified `HTML` element
-    @discardableResult func data(_ name: String, _ value: String?) -> Self {
+    @discardableResult func _data(_ name: String, _ value: String?) -> Self {
         guard let value else { return self }
         var attributes = attributes
         attributes.data.append(AttributeValue(name: name, value: value))
@@ -153,7 +153,7 @@ extension HTML {
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
-    func aria(_ key: String, _ value: String?) -> Self {
+    func _aria(_ key: String, _ value: String?) -> Self {
         guard let value else { return self }
         var attributes = attributes
         attributes.aria.append(AttributeValue(name: key, value: value))
@@ -192,7 +192,7 @@ extension HTML {
     /// Sets the `HTML` id attribute of the element.
     /// - Parameter string: The ID value to set
     /// - Returns: The modified `HTML` element
-    func id(_ string: String) -> Self {
+    func _id(_ string: String) -> Self {
         var attributes = attributes
         attributes.id = string
         AttributeStore.default.merge(attributes, intoHTML: id)

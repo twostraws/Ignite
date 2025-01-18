@@ -38,9 +38,9 @@ struct HiddenModifier: HTMLModifier {
             let hash = CSSManager.default.hashForQueries(queries)
             let className = "style-\(hash)"
             CSSManager.default.register(queries)
-            return content.class(className)
+            return content._class(className)
         } else {
-            return content.class(isHidden ? "d-none" : nil)
+            return content._class(isHidden ? "d-none" : nil)
         }
     }
 }

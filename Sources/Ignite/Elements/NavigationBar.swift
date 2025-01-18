@@ -162,18 +162,18 @@ public struct NavigationBar: BlockHTML {
                 Section {
                     if let logo {
                         Link(logo, target: "/")
-                            .class("navbar-brand")
+                            ._class("navbar-brand")
                     }
                     if !items.isEmpty {
                         renderToggleButton()
                         renderNavItems(context: context)
                     }
                 }
-                .class(widthClasses)
+                ._class(widthClasses)
             }
             .attributes(attributes)
-            .class("navbar", "navbar-expand-md")
-            .data("bs-theme", theme(for: style))
+            ._class("navbar", "navbar-expand-md")
+            ._data("bs-theme", theme(for: style))
         }
         .render(context: context)
     }
@@ -181,14 +181,14 @@ public struct NavigationBar: BlockHTML {
     private func renderToggleButton() -> Button {
         Button {
             Span()
-                .class("navbar-toggler-icon")
+                ._class("navbar-toggler-icon")
         }
-        .class("navbar-toggler")
-        .data("bs-toggle", "collapse")
-        .data("bs-target", "#navbarCollapse")
-        .aria("controls", "navbarCollapse")
-        .aria("expanded", "false")
-        .aria("label", "Toggle navigation")
+        ._class("navbar-toggler")
+        ._data("bs-toggle", "collapse")
+        ._data("bs-target", "#navbarCollapse")
+        ._aria("controls", "navbarCollapse")
+        ._aria("expanded", "false")
+        ._aria("label", "Toggle navigation")
     }
 
     private func renderNavItems(context: PublishingContext) -> Section {
@@ -204,27 +204,27 @@ public struct NavigationBar: BlockHTML {
                     }
                 }
             }
-            .class("navbar-nav", "mb-2", "mb-md-0", "col", itemAlignment.rawValue)
+            ._class("navbar-nav", "mb-2", "mb-md-0", "col", itemAlignment.rawValue)
         }
-        .class("collapse", "navbar-collapse")
-        .id("navbarCollapse")
+        ._class("collapse", "navbar-collapse")
+        ._id("navbarCollapse")
     }
 
     private func renderDropdownItem(_ dropdownItem: Dropdown) -> ListItem {
         ListItem {
             dropdownItem.configuredAsNavigationItem()
         }
-        .class("nav-item", "dropdown")
-        .data("bs-theme", "light")
+        ._class("nav-item", "dropdown")
+        ._data("bs-theme", "light")
     }
 
     private func renderLinkItem(_ link: Link, context: PublishingContext) -> ListItem {
         ListItem {
             let isActive = context.currentRenderingPath == link.url
             link
-                .class("nav-link", isActive ? "active" : nil)
-                .aria("current", isActive ? "page" : nil)
+                ._class("nav-link", isActive ? "active" : nil)
+                ._aria("current", isActive ? "page" : nil)
         }
-        .class("nav-item")
+        ._class("nav-item")
     }
 }

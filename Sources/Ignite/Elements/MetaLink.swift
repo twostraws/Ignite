@@ -44,7 +44,7 @@ public struct MetaLink: HeadElement, Sendable {
     static func highlighterThemeMetaLinks(for themes: some Collection<HighlighterTheme>) -> [MetaLink] {
         themes.sorted().map { theme in
             MetaLink(href: "/\(theme.url)", rel: .stylesheet)
-                .data("highlight-theme", theme.description)
+                ._data("highlight-theme", theme.description)
         }
     }
 

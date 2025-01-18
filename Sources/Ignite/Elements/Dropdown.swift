@@ -91,12 +91,12 @@ public struct Dropdown: BlockHTML, NavigationItem {
         if isNavigationItem {
             return Group(content)
                 .attributes(attributes)
-                .class("dropdown")
+                ._class("dropdown")
                 .render(context: context)
         } else {
             return Section(content)
                 .attributes(attributes)
-                .class("dropdown")
+                ._class("dropdown")
                 .render(context: context)
         }
     }
@@ -111,34 +111,34 @@ public struct Dropdown: BlockHTML, NavigationItem {
 
                 Link(title, target: "#")
                     .customAttribute(name: "role", value: "button")
-                    .class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
-                    .data("bs-toggle", "dropdown")
-                    .aria("expanded", "false")
+                    ._class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
+                    ._data("bs-toggle", "dropdown")
+                    ._aria("expanded", "false")
             } else {
                 Button(title)
-                    .class(Button.classes(forRole: role, size: size))
-                    .class("dropdown-toggle")
-                    .data("bs-toggle", "dropdown")
-                    .aria("expanded", "false")
+                    ._class(Button.classes(forRole: role, size: size))
+                    ._class("dropdown-toggle")
+                    ._data("bs-toggle", "dropdown")
+                    ._aria("expanded", "false")
             }
 
             List {
                 ForEach(items) { item in
                     if let link = item as? Link {
                         ListItem {
-                            link.class("dropdown-item")
-                                .class(context.currentRenderingPath == link.url ? "active" : nil)
-                                .aria("current", context.currentRenderingPath == link.url ? "page" : nil)
+                            link._class("dropdown-item")
+                                ._class(context.currentRenderingPath == link.url ? "active" : nil)
+                                ._aria("current", context.currentRenderingPath == link.url ? "page" : nil)
                         }
                     } else if let text = item as? Text {
                         ListItem {
-                            text.class("dropdown-header")
+                            text._class("dropdown-header")
                         }
                     }
                 }
             }
             .listMarkerStyle(.unordered(.automatic))
-            .class("dropdown-menu")
+            ._class("dropdown-menu")
         }
     }
 }

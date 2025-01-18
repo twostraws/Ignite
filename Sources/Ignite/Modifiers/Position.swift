@@ -34,7 +34,7 @@ struct PositionModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with position applied
     func body(content: some HTML) -> any HTML {
-        content.class(position.rawValue)
+        content._class(position.rawValue)
     }
 }
 
