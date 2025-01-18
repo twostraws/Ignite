@@ -119,6 +119,7 @@ struct AttributesTest {
     func test_boolean_attributes_are_sorted(tag: String) async throws {
         let element = Tag(tag) {}
             .disabled()
+            .required()
             .booleanAttribute("foo")
             .booleanAttribute("qux")
             .booleanAttribute("bar")
@@ -126,7 +127,7 @@ struct AttributesTest {
         let output = element.render(context: publishingContext)
 
         #expect(
-            output == "<\(tag) bar baz disabled foo qux></\(tag)>"
+            output == "<\(tag) bar baz disabled foo qux required></\(tag)>"
         )
     }
 
@@ -134,6 +135,7 @@ struct AttributesTest {
     func test_disabled_attributes_are_not_included_in_the_output(tag: String) async throws {
         let element = Tag(tag) {}
             .disabled(false)
+            .required(false)
             .booleanAttribute("foo", isEnabled: false)
             .booleanAttribute("qux", isEnabled: false)
             .booleanAttribute("bar", isEnabled: false)
