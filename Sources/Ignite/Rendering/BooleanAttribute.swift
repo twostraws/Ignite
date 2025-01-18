@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Ignite
 
 /// A value-less attribute that can be enabled or disabled.
 public struct BooleanAttribute: Hashable, Equatable, Sendable, Comparable {
@@ -26,5 +25,4 @@ public struct BooleanAttribute: Hashable, Equatable, Sendable, Comparable {
     public static func < (lhs: BooleanAttribute, rhs: BooleanAttribute) -> Bool {
         lhs.name < rhs.name
     }
-
 }
