@@ -6,7 +6,7 @@
 //
 
 /// A modifier that adds custom attributes to an HTML element.
-struct CustomAttributeModifier: HTMLModifier {
+struct AttributeModifier: HTMLModifier {
     let name: Property
     let value: String
 
@@ -21,8 +21,8 @@ public extension HTML {
     ///   - name: The name of the attribute.
     ///   - value: The value for the attribute.
     /// - Returns: A modified HTML element with the specified attribute.
-    func customAttribute(_ name: Property, _ value: String) -> some HTML {
-        modifier(CustomAttributeModifier(name: name, value: value))
+    func attribute(_ name: Property, _ value: String) -> some HTML {
+        modifier(AttributeModifier(name: name, value: value))
     }
 }
 
@@ -32,8 +32,8 @@ public extension InlineHTML {
     ///   - name: The name of the attribute.
     ///   - value: The value for the attribute.
     /// - Returns: A modified HTML element with the specified attribute.
-    func customAttribute(_ name: Property, _ value: String) -> some InlineHTML {
-        modifier(CustomAttributeModifier(name: name, value: value))
+    func attribute(_ name: Property, _ value: String) -> some InlineHTML {
+        modifier(AttributeModifier(name: name, value: value))
     }
 }
 
@@ -43,7 +43,7 @@ public extension BlockHTML {
     ///   - name: The name of the attribute.
     ///   - value: The value for the attribute.
     /// - Returns: A modified HTML element with the specified attribute.
-    func customAttribute(_ name: Property, _ value: String) -> some BlockHTML {
-        modifier(CustomAttributeModifier(name: name, value: value))
+    func attribute(_ name: Property, _ value: String) -> some BlockHTML {
+        modifier(AttributeModifier(name: name, value: value))
     }
 }
