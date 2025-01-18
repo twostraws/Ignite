@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import OrderedCollections
+
 /// A type that defines a multi-step animation using keyframes.
 ///
 /// `Animation` allows you to create complex animations by defining multiple frames,

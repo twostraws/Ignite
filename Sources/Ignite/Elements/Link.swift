@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// A hyperlink to another resource on this site or elsewhere.
 public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     /// The content and behavior of this HTML.
