@@ -247,6 +247,30 @@ public extension HTML {
         return self
     }
 
+    /// Adds a boolean attribute to the element with the given name.
+    /// - Parameters:
+    ///  - name: The name of the boolean attribute
+    ///  - isEnabled: Whether the attribute is enabled or not
+    /// - Returns: The modified `HTML` element
+    func booleanAttribute(_ name: String, isEnabled: Bool = true) -> Self {
+        var attributes = attributes
+        attributes.booleanAttributes.append(BooleanAttribute(name: name, isEnabled: isEnabled))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds a boolean attribute to the element with the `Property` enum.
+    /// - Parameters:
+    ///  - name: The `Property` enum value representing the attribute name
+    ///  - isEnabled: Whether the attribute is enabled or not
+    /// - Returns: The modified HTML element
+    func booleanAttribute(_ name: Property, isEnabled: Bool = true) -> Self {
+        var attributes = attributes
+        attributes.booleanAttributes.append(BooleanAttribute(name: name, isEnabled: isEnabled))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
     /// Merges a complete set of core attributes into this element.
     /// - Parameter newAttributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified HTML element
