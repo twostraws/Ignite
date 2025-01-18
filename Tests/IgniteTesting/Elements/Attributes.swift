@@ -114,4 +114,19 @@ struct AttributesTest {
             output == "<\(tag) data-bar=\"baz\" data-baz=\"qux\" data-foo=\"bar\" data-qux=\"foo\"></\(tag)>"
         )
     }
+
+    @Test("Checks that boolean attributes are sorted", arguments: Self.tags)
+    func test_boolean_attributes_are_sorted(tag: String) async throws {
+        let element = Tag(tag) {}
+            .disabled()
+            .booleanAttribute("foo")
+            .booleanAttribute("qux")
+            .booleanAttribute("bar")
+            .booleanAttribute("baz")
+        let output = element.render(context: publishingContext)
+
+        #expect(
+            output == "<\(tag) bar baz disabled foo qux></\(tag)>"
+        )
+    }
 }
