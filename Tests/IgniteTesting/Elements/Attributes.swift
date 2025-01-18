@@ -129,4 +129,19 @@ struct AttributesTest {
             output == "<\(tag) bar baz disabled foo qux></\(tag)>"
         )
     }
+
+    @Test("Checks that disabled attributes are not included in the output", arguments: Self.tags)
+    func test_disabled_attributes_are_not_included_in_the_output(tag: String) async throws {
+        let element = Tag(tag) {}
+            .disabled(false)
+            .booleanAttribute("foo", isEnabled: false)
+            .booleanAttribute("qux", isEnabled: false)
+            .booleanAttribute("bar", isEnabled: false)
+            .booleanAttribute("baz", isEnabled: false)
+        let output = element.render(context: publishingContext)
+
+        #expect(
+            output == "<\(tag)></\(tag)>"
+        )
+    }
 }
