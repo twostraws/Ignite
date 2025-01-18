@@ -181,7 +181,7 @@ public struct CoreAttributes: Sendable {
         } else {
             var output = ""
 
-            for attribute in booleanAttributes.sorted() {
+            for attribute in booleanAttributes.sorted() where attribute.isEnabled {
                 output += " \(attribute.name)"
             }
 
