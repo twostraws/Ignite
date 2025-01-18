@@ -42,6 +42,7 @@ public class AttributeStore {
         mergedAttributes.events.formUnion(attributes.events)
         mergedAttributes.containerAttributes.formUnion(attributes.containerAttributes)
         mergedAttributes.customAttributes.formUnion(attributes.customAttributes)
+        mergedAttributes.booleanAttributes.formUnion(attributes.booleanAttributes)
         mergedAttributes.id = attributes.id
 
         if attributes.tag != nil {
