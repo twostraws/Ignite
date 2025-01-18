@@ -154,8 +154,8 @@ public extension HTML {
 
     /// Adds a data attribute to the element.
     /// - Parameters:
-    ///   - name: The name of the data attribute
-    ///   - value: The value of the data attribute
+    ///     - name: The name of the data attribute
+    ///     - value: The value of the data attribute
     /// - Returns: The modified `HTML` element
     @discardableResult func data(_ name: String, _ value: String?) -> Self {
         guard let value else { return self }
@@ -167,8 +167,8 @@ public extension HTML {
 
     /// Adds an ARIA attribute to the element.
     /// - Parameters:
-    ///   - key: The ARIA attribute key
-    ///   - value: The ARIA attribute value
+    ///     - key: The ARIA attribute key
+    ///     - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
     func aria(_ key: AriaType, _ value: String?) -> Self {
         guard let value else { return self }
@@ -224,8 +224,8 @@ public extension HTML {
 
     /// Adds an event handler to the element.
     /// - Parameters:
-    ///   - name: The name of the event (e.g., "click", "mouseover")
-    ///   - actions: Array of actions to execute when the event occurs
+    ///     - name: The name of the event (e.g., "click", "mouseover")
+    ///     - actions: Array of actions to execute when the event occurs
     /// - Returns: The modified `HTML` element
     @discardableResult func addEvent(name: String, actions: [Action]) -> Self {
         guard !actions.isEmpty else { return self }
@@ -237,8 +237,8 @@ public extension HTML {
 
     /// Adds a custom attribute to the element using string name.
     /// - Parameters:
-    ///   - name: The name of the custom attribute
-    ///   - value: The value of the custom attribute
+    ///     - name: The name of the custom attribute
+    ///     - value: The value of the custom attribute
     /// - Returns: The modified `HTML` element
     @discardableResult func customAttribute(name: String, value: String) -> Self {
         var attributes = attributes
@@ -248,9 +248,11 @@ public extension HTML {
     }
 
     /// Adds a boolean attribute to the element with the given name.
+    ///
+    /// Boolean attributes are attributes that are either present or not present on an element, and do not require a value.
     /// - Parameters:
-    ///  - name: The name of the boolean attribute
-    ///  - isEnabled: Whether the attribute is enabled or not
+    ///     - name: The name of the boolean attribute
+    ///     - isEnabled: Whether the attribute is enabled or not
     /// - Returns: The modified `HTML` element
     func booleanAttribute(_ name: String, isEnabled: Bool = true) -> Self {
         var attributes = attributes
@@ -260,9 +262,11 @@ public extension HTML {
     }
 
     /// Adds a boolean attribute to the element with the `Property` enum.
+    ///
+    /// Boolean attributes are attributes that are either present or not present on an element, and do not require a value.
     /// - Parameters:
-    ///  - name: The `Property` enum value representing the attribute name
-    ///  - isEnabled: Whether the attribute is enabled or not
+    ///     - name: The `Property` enum value representing the attribute name
+    ///     - isEnabled: Whether the attribute is enabled or not
     /// - Returns: The modified HTML element
     func booleanAttribute(_ name: Property, isEnabled: Bool = true) -> Self {
         var attributes = attributes
