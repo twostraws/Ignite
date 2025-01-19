@@ -385,7 +385,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     }
 
     /// Processes ordered list markup.
-    /// - Parameter orderedList: The ordered list markup to process.
+    /// - Parameter unorderedList: The unordered list markup to process.
     /// - Returns: A HTML <ul> element with the correct contents.
     public mutating func visitUnorderedList(_ unorderedList: Markdown.UnorderedList) -> String {
         var result = "<ul>"

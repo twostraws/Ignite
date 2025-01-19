@@ -48,9 +48,9 @@ public struct Carousel: BlockHTML {
     /// Adjusts the style of this carousel.
     /// - Parameter style: The new style.
     /// - Returns: A new `Carousel` instance with the updated style.
-    public func carouselStyle(_ newStyle: CarouselStyle) -> Self {
+    public func carouselStyle(_ style: CarouselStyle) -> Self {
         var copy = self
-        copy.style = newStyle
+        copy.style = style
         return copy
     }
 
