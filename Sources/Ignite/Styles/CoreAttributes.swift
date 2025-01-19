@@ -103,7 +103,7 @@ public struct CoreAttributes: Sendable {
 
             // Arium? Look, just give me this one…
             for arium in aria.sorted() {
-                output += " aria-\(arium)\""
+                output += " aria-\(arium)"
             }
 
             return output
@@ -137,7 +137,7 @@ public struct CoreAttributes: Sendable {
             var output = ""
 
             for datum in data.sorted() {
-                output += " data-\(datum)\""
+                output += " data-\(datum)"
             }
 
             return output
@@ -165,7 +165,7 @@ public struct CoreAttributes: Sendable {
             var output = ""
 
             for attribute in customAttributes.sorted() {
-                output += attribute.description
+                output += " " + attribute.description
             }
 
             return output
