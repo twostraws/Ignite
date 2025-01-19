@@ -29,7 +29,7 @@ public class AttributeStore {
     private func mergeAttributes(
         _ attributes: CoreAttributes,
         intoHTML id: String,
-        removedStyles: [AttributeValue]? = nil,
+        removedStyles: [Declaration]? = nil,
         removedClasses: [String]? = nil
     ) -> CoreAttributes {
         let currentAttributes = storage[id] ?? CoreAttributes()
@@ -73,7 +73,7 @@ public class AttributeStore {
     ///   - attributes: The new attributes to merge
     ///   - id: The unique identifier of the HTML element
     ///   - styles: Array of styles to remove after merging
-    func merge(_ attributes: CoreAttributes, intoHTML id: String, removing styles: some Collection<AttributeValue>) {
+    func merge(_ attributes: CoreAttributes, intoHTML id: String, removing styles: some Collection<Declaration>) {
         storage[id] = mergeAttributes(attributes, intoHTML: id, removedStyles: Array(styles))
     }
 

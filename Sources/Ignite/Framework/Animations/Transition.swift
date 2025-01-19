@@ -12,7 +12,7 @@ public struct Transition: Animatable {
     /// The CSS properties being animated and their values
     var data: [AnimatableData]
     /// Additional non-animated CSS properties
-    public var staticProperties: OrderedSet<AttributeValue> = []
+    public var staticProperties: OrderedSet<Attribute> = []
     /// The event that triggers this animation (hover, click, or appear)
     public var trigger: AnimationTrigger = .hover
 

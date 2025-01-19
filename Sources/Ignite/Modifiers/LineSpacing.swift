@@ -28,7 +28,7 @@ struct LineSpacingModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         if content.body.isComposite {
             if let customHeight {
-                content.containerStyle(.init(name: "line-height", value: String(customHeight)))
+                content.containerStyle(.init(property: "line-height", value: String(customHeight)))
             } else if let presetHeight {
                 content.containerClass("lh-\(presetHeight.rawValue)")
             }

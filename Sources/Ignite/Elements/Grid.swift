@@ -87,7 +87,7 @@ public struct Grid: BlockHTML {
         if let spacingAmount {
             switch spacingAmount {
             case .exact(let pixels):
-                sectionAttributes.append(styles: .init(name: .rowGap, value: "\(pixels)px"))
+                sectionAttributes.append(styles: .init(property: .rowGap, value: "\(pixels)px"))
             case .semantic(let amount):
                 gutterClass = "gy-\(amount.rawValue)"
             }

@@ -87,20 +87,20 @@ struct FontModifier: HTMLModifier {
             return content
         } else {
             var containerAttributes = ContainerAttributes(styles: [
-                .init(name: "font-weight", value: String(font.weight.rawValue))
+                .init(property: "font-weight", value: String(font.weight.rawValue))
             ])
 
             if let name = font.name, name.isEmpty == false {
-                containerAttributes.styles.append(AttributeValue(name: "font-family", value: name))
+                containerAttributes.styles.append(Declaration(property: "font-family", value: name))
             }
 
             if font.responsiveSizes.isEmpty == false {
                 let classNames = registerResponsiveClasses()
                 containerAttributes.classes.append(classNames)
             } else if let size = font.size {
-                containerAttributes.styles.append(.init(name: "font-size", value: size.stringValue))
+                containerAttributes.styles.append(.init(property: "font-size", value: size.stringValue))
             } else if let style = font.style {
-                containerAttributes.styles.append(.init(name: "font-size", value: style.sizeVariable))
+                containerAttributes.styles.append(.init(property: "font-size", value: style.sizeVariable))
             }
 
             return content

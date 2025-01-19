@@ -17,8 +17,8 @@ struct ContainerRelativeFrameModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         content
             .containerStyle(
-                .init(name: .display, value: "flex"),
-                .init(name: .justifyContent, value: alignment.justifyContent)
+                .init(property: .display, value: "flex"),
+                .init(property: .justifyContent, value: alignment.justifyContent)
             )
     }
 }

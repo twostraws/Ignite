@@ -63,7 +63,7 @@ struct ForegroundStyleModifier: HTMLModifier {
         case .string(let string):
             if content.body.isComposite {
                 content
-                    .containerStyle(.init(name: "color", value: string))
+                    .containerStyle(.init(property: "color", value: string))
                     .class("color-inherit")
             } else {
                 content.style("color: \(string)")
@@ -71,7 +71,7 @@ struct ForegroundStyleModifier: HTMLModifier {
         case .color(let color):
             if content.body.isComposite {
                 content
-                    .containerStyle(.init(name: "color", value: color.description))
+                    .containerStyle(.init(property: "color", value: color.description))
                     .class("color-inherit")
             } else {
                 content.style("color: \(color.description)")
