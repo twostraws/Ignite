@@ -19,6 +19,11 @@ public struct Attribute: Hashable, Equatable, Sendable, Comparable {
         self.value = value
     }
 
+    init(name: String) {
+        self.name = name
+        self.value = nil
+    }
+
     public var description: String {
         if let value {
             "\(name)=\"\(value)\""
