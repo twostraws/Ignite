@@ -76,8 +76,8 @@ public struct Item: HTML {
                     .class("accordion-button", startsOpen ? "" : "collapsed")
                     .data("bs-toggle", "collapse")
                     .data("bs-target", "#\(itemID)")
-                    .aria("expanded", startsOpen ? "true" : "false")
-                    .aria("controls", itemID)
+                    .aria(.expanded, startsOpen ? "true" : "false")
+                    .aria(.controls, itemID)
             }
             .font(.title2)
             .class("accordion-header")
