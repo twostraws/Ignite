@@ -16,7 +16,7 @@ struct BooleanAttributeModifier: HTMLModifier {
 
     /// Adds the `disabled` boolean attribute to the element.
     func body(content: some HTML) -> any HTML {
-        content.customAttribute(name: "disabled", isEnabled: isEnabled)
+        content.customAttribute(name: name, isEnabled: isEnabled)
     }
 }
 

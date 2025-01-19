@@ -120,10 +120,10 @@ struct AttributesTest {
         let element = Tag(tag) {}
             .disabled()
             .required()
-            .booleanAttribute("foo")
-            .booleanAttribute("qux")
-            .booleanAttribute("bar")
-            .booleanAttribute("baz")
+            .customAttribute(name: "foo")
+            .customAttribute(name: "qux")
+            .customAttribute(name: "bar")
+            .customAttribute(name: "baz")
         let output = element.render(context: publishingContext)
 
         #expect(
@@ -136,10 +136,10 @@ struct AttributesTest {
         let element = Tag(tag) {}
             .disabled(false)
             .required(false)
-            .booleanAttribute("foo", isEnabled: false)
-            .booleanAttribute("qux", isEnabled: false)
-            .booleanAttribute("bar", isEnabled: false)
-            .booleanAttribute("baz", isEnabled: false)
+            .customAttribute(name: "foo", isEnabled: false)
+            .customAttribute(name: "qux", isEnabled: false)
+            .customAttribute(name: "bar", isEnabled: false)
+            .customAttribute(name: "baz", isEnabled: false)
         let output = element.render(context: publishingContext)
 
         #expect(
