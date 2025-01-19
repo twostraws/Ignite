@@ -247,30 +247,26 @@ public extension HTML {
         return self
     }
 
-    /// Adds a boolean attribute to the element with the given name.
-    ///
-    /// Boolean attributes are attributes that are either present or not present on an element, and do not require a value.
+    /// Adds a custom boolean attribute to the element that can be enabled or disabled.
     /// - Parameters:
     ///     - name: The name of the boolean attribute
-    ///     - isEnabled: Whether the attribute is enabled or not
+    ///     - isEnabled: Whether the attribute is enabled (default is `true`)
     /// - Returns: The modified `HTML` element
-    func booleanAttribute(_ name: String, isEnabled: Bool = true) -> Self {
+    func customAttribute(name: String, isEnabled: Bool = true) -> Self {
         var attributes = attributes
         attributes.booleanAttributes.append(BooleanAttribute(name: name, isEnabled: isEnabled))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
 
-    /// Adds a boolean attribute to the element with the `Property` enum.
-    ///
-    /// Boolean attributes are attributes that are either present or not present on an element, and do not require a value.
+    /// Adds a custom boolean attribute to the element using `Property` enum.
     /// - Parameters:
-    ///     - name: The `Property` enum value representing the attribute name
-    ///     - isEnabled: Whether the attribute is enabled or not
-    /// - Returns: The modified HTML element
-    func booleanAttribute(_ name: Property, isEnabled: Bool = true) -> Self {
+    ///    - name: The Property enum value representing the attribute name
+    ///    - isEnabled: Whether the attribute is enabled (default is `true`)
+    ///  - Returns: The modified HTML element
+    func customAttribute(name: Property, isEnabled: Bool = true) -> Self {
         var attributes = attributes
-        attributes.booleanAttributes.append(BooleanAttribute(name: name, isEnabled: isEnabled))
+        attributes.booleanAttributes.append(BooleanAttribute(name: name.rawValue, isEnabled: isEnabled))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
