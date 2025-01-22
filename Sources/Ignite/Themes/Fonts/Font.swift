@@ -19,8 +19,8 @@ public struct Font: Hashable, Equatable, Sendable {
     /// The size of the font, if specified.
     let size: LengthUnit?
 
-    /// The responsive sizes for this font
-    let responsiveSizes: [ResponsiveFontSize]
+    /// The responsive size for this font.
+    let responsiveSize: ResponsiveFontSize?
 
     /// The weight (boldness) of the font.
     let weight: Font.Weight
@@ -84,7 +84,7 @@ public struct Font: Hashable, Equatable, Sendable {
         self.name = name
         self.sources = sources
         self.weight = weight
-        self.responsiveSizes = []
+        self.responsiveSize = nil
         self.size = nil
         self.style = nil
     }
@@ -109,12 +109,12 @@ public struct Font: Hashable, Equatable, Sendable {
     init(
         name: String,
         style: Font.Style = .body,
-        sizes: [ResponsiveFontSize],
+        size: ResponsiveFontSize,
         weight: Weight = .regular
     ) {
         self.name = name
         self.style = style
-        self.responsiveSizes = sizes
+        self.responsiveSize = size
         self.weight = weight
         self.size = nil
         self.sources = []
@@ -131,7 +131,7 @@ public struct Font: Hashable, Equatable, Sendable {
         self.size = size
         self.weight = weight
         self.sources = []
-        self.responsiveSizes = []
+        self.responsiveSize = nil
     }
 
     /// Creates a system font with the specified style.
@@ -173,15 +173,15 @@ public struct Font: Hashable, Equatable, Sendable {
 
     /// Creates a system font with responsive sizing.
     /// - Parameter style: The semantic level of the font. Defaults to `.body`.
-    /// - Parameter sizes: One or more sizes that change at different breakpoints.
+    /// - Parameter size: Responsive sizes for each breakpoint.
     /// - Parameter weight: The font weight to use.
     /// - Returns: A Font instance configured with responsive sizing.
     public static func system(
         _ style: Font.Style = .body,
-        sizes: ResponsiveFontSize...,
+        size: ResponsiveFontSize,
         weight: Font.Weight = .regular
     ) -> Font {
-        Font(name: "", style: style, sizes: sizes, weight: weight)
+        Font(name: "", style: style, size: size, weight: weight)
     }
 
     /// Creates a custom font with the specified name and size.
@@ -220,15 +220,15 @@ public struct Font: Hashable, Equatable, Sendable {
     /// - Parameters:
     ///   - name: The name of the font file including its extension.
     ///   - style: The semantic level of the font. Defaults to `.body`.
-    ///   - sizes: One or more sizes that change at different breakpoints
+    ///   - size: Responsive sizes for each breakpoint.
     ///   - weight: The weight (boldness) of the font.
     /// - Returns: A Font instance configured with the custom font.
     public static func custom(
         _ name: String,
         style: Font.Style = .body,
-        sizes: ResponsiveFontSize...,
+        size: ResponsiveFontSize,
         weight: Font.Weight = .regular
     ) -> Font {
-        Font(name: name, style: style, sizes: sizes, weight: weight)
+        Font(name: name, style: style, size: size, weight: weight)
     }
 }
