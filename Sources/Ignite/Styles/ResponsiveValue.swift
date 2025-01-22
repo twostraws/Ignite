@@ -19,44 +19,74 @@ public protocol Responsive {
 /// ```swift
 /// Text("Hello")
 ///     // Font size changes at different breakpoints
-///     .font(.system(size: .small(12), .medium(14), .large(16)))
+///     .font(.system(size: .responsive(small: 12, medium: 14, large: 16)))
 ///
 ///     // Padding adjusts responsively
-///     .padding(.small(8), .medium(16), .large(24))
+///     .padding(.responsive(small: 4, medium: 6, large: 10)))
 /// ```
-public enum ResponsiveValue<Value>: Hashable, Equatable, Sendable where Value: Equatable & Hashable & Sendable {
-    /// Applies value at the small breakpoint
-    case small(Value)
+public struct ResponsiveValue<Value>: Hashable, Equatable, Sendable where Value: Equatable & Hashable & Sendable {
+    private let small: Value?
+    private let medium: Value?
+    private let large: Value?
+    private let xLarge: Value?
+    private let xxLarge: Value?
 
-    /// Applies value at the medium breakpoint
-    case medium(Value)
+    /// Applies breakpoint-specific values
+    public static func responsive(
+        small: Value? = nil,
+        medium: Value? = nil,
+        large: Value? = nil,
+        xLarge: Value? = nil,
+        xxLarge: Value? = nil
+    ) -> Self {
+        Self(small: small, medium: medium, large: large, xLarge: xLarge, xxLarge: xxLarge)
+    }
 
-    /// Applies value at the large breakpoint
-    case large(Value)
+    private init(
+        small: Value? = nil,
+        medium: Value? = nil,
+        large: Value? = nil,
+        xLarge: Value? = nil,
+        xxLarge: Value? = nil
+    ) {
+        self.small = small
+        self.medium = medium
+        self.large = large
+        self.xLarge = xLarge
+        self.xxLarge = xxLarge
+    }
 
-    /// Applies value at the extra large breakpoint
-    case xLarge(Value)
+    /// Returns an ordered array of breakpoint-value pairs,
+    /// from smallest to largest screen size.
+    var breakpointValues: [(breakpoint: String?, value: Value)] {
+        var results: [(String?, Value)] = []
 
-    /// Applies value at the extra extra large breakpoint
-    case xxLarge(Value)
-
-    /// Returns the breakpoint and value for this responsive value
-    var resolved: (breakpoint: String?, value: Value) {
-        switch self {
-        case .small(let value): (nil, value)
-        case .medium(let value): ("md", value)
-        case .large(let value): ("lg", value)
-        case .xLarge(let value): ("xl", value)
-        case .xxLarge(let value): ("xxl", value)
+        if let small {
+            results.append((nil, small))
         }
+        if let medium {
+            results.append(("md", medium))
+        }
+        if let large {
+            results.append(("lg", large))
+        }
+        if let xLarge {
+            results.append(("xl", xLarge))
+        }
+        if let xxLarge {
+            results.append(("xxl", xxLarge))
+        }
+
+        return results
     }
 }
 
 extension ResponsiveValue where Value: Responsive {
-    /// The corresponding Bootstrap class for this responsive value
-    var breakpointClass: String {
-        let (breakpoint, value) = resolved
-        return value.responsiveClass(for: breakpoint)
+    /// The corresponding Bootstrap classes for this responsive value
+    var breakpointClasses: String {
+        breakpointValues.map { breakpoint, value in
+            value.responsiveClass(for: breakpoint)
+        }.joined(separator: " ")
     }
 }
 

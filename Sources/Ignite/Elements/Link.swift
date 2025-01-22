@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// A hyperlink to another resource on this site or elsewhere.
 public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     /// The content and behavior of this HTML.
@@ -93,7 +95,6 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     /// - Parameters:
     ///  - target: The new target to apply.
     ///  - content: The user-facing content to show inside the `Link`.
-    /// - Returns: A new `Link` instance with the updated target.
     public init(target: any StaticLayout, @HTMLBuilder content: @escaping () -> some HTML) {
         self.content = content()
         self.url = target.path

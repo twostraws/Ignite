@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import OrderedCollections
+
 /// A type that defines a multi-step animation using keyframes.
 ///
 /// `Animation` allows you to create complex animations by defining multiple frames,
@@ -80,9 +82,8 @@ public extension Animation {
     }
 
     /// Configures animation repetition.
-    /// - Parameters:
-    ///   - count: Number of times to repeat. Use `.infinity` for endless repetition.
-    ///   - autoreverses: Whether the animation should play in reverse after completing.
+    /// - Parameter count: Number of times to repeat. Use `.infinity` for endless repetition.
+    /// - Returns: A new animation instance with the updated repeat count
     func repeatCount(_ count: Double) -> Self {
         var copy = self
         copy.repeatCount = count

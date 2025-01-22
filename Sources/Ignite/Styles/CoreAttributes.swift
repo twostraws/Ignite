@@ -103,7 +103,7 @@ public struct CoreAttributes: Sendable {
 
             // Arium? Look, just give me this one…
             for arium in aria.sorted() {
-                output += " aria-\(arium.name)=\"\(arium.value)\""
+                output += " \(arium.name)=\"\(arium.value)\""
             }
 
             return output

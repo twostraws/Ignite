@@ -46,7 +46,9 @@ public struct ShowModal: Action, Sendable {
     let options: [Option]
 
     /// Creates a new ShowModal action from a specific page element ID.
-    /// - Parameter id: The unique identifier of the element we're trying to show as a modal.
+    /// - Parameters:
+    ///   - id: The unique identifier of the element we're trying to show as a modal.
+    ///   - options: An array of modal configuration options.
     public init(id: String, options: [Option] = []) {
         self.id = id
         self.options = options

@@ -159,10 +159,10 @@ public extension HTML {
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
-    func aria(_ key: String, _ value: String?) -> Self {
+    func aria(_ key: AriaType, _ value: String?) -> Self {
         guard let value else { return self }
         var attributes = attributes
-        attributes.aria.append(AttributeValue(name: key, value: value))
+        attributes.aria.append(AttributeValue(name: key.rawValue, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -272,7 +272,7 @@ public extension HTML {
     }
 
     /// Adds a wrapper div with the specified style to the element's storage
-    /// - Parameter className: The class to apply to the wrapper div
+    /// - Parameter styles: The styles to apply to the wrapper div
     /// - Returns: The original element
     func containerStyle(_ styles: AttributeValue...) -> Self {
         var attributes = attributes

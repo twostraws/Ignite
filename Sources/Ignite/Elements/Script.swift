@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// Embeds some JavaScript inside this page, either directly or by
 /// referencing an external file.
 public struct Script: BlockHTML, HeadElement {

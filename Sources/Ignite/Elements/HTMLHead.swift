@@ -34,7 +34,7 @@ public struct HTMLHead: RootHTML {
     /// for a `Page` instance.
     /// - Parameters:
     ///   - page: The `Page` you want to create headers for.
-    ///   - context: The active `PublishingContext`, which includes
+    ///   - configuration: The `SiteConfiguration`, which includes
     ///   information about the site being rendered and more.
     ///   - additionalItems: Additional items to enhance the set of standard headers.
     public init(
@@ -61,7 +61,8 @@ public struct HTMLHead: RootHTML {
     /// This function can be used when defining a custom header based on the standard set of headers.
     /// - Parameters:
     ///   - page: The `Page` you want to create headers for.
-    ///   - context: The active `PublishingContext`, which includes
+    ///   - configuration: The active `SiteConfiguration`, which includes
+    ///   information about the site being rendered and more.
     @HeadElementBuilder
     public static func standardHeaders(for page: Page, with configuration: SiteConfiguration) -> [any HeadElement] {
         MetaTag.utf8

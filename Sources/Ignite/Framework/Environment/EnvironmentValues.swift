@@ -17,7 +17,7 @@
 /// }
 /// ```
 @MainActor
-public struct EnvironmentValues: Sendable {
+public struct EnvironmentValues {
     /// Provides access to the Markdown pages on this site.
     public var content: ContentLoader
 

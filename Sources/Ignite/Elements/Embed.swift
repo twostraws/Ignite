@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// Embeds a custom URL, such as YouTube or Vimeo.
 public struct Embed: BlockHTML, LazyLoadable {
     /// Determines what kind of Spotify embed we have.
@@ -61,8 +63,8 @@ public struct Embed: BlockHTML, LazyLoadable {
 
     /// Creates a new `Embed` instance from the title and Vimeo ID provided.
     /// - Parameters:
+    ///   - vimeoID: The Vimeo ID to use.
     ///   - title: A title suitable for screen readers.
-    ///   - url: The Vimeo ID to use.
     public init(vimeoID: Int, title: String) {
         if let test = URL(string: "https://player.vimeo.com/video/\(vimeoID)") {
             self.url = test.absoluteString
@@ -74,8 +76,8 @@ public struct Embed: BlockHTML, LazyLoadable {
 
     /// Creates a new `Embed` instance from the title and YouTube ID provided.
     /// - Parameters:
+    ///   - youTubeID: The YouTube ID to use.
     ///   - title: A title suitable for screen readers.
-    ///   - url: The YouTube ID to use.
     public init(youTubeID: String, title: String) {
         if let test = URL(string: "https://www.youtube-nocookie.com/embed/\(youTubeID)") {
             self.url = test.absoluteString
@@ -87,8 +89,8 @@ public struct Embed: BlockHTML, LazyLoadable {
 
     /// Creates a new `Embed` instance from the title and Spotify ID provided.
     /// - Parameters:
+    ///   - spotifyID: The Spotify ID to use.
     ///   - title: A title suitable for screen readers.
-    ///   - url: The Spotify ID to use.
     ///   - type: The SpotifyContentType to use.
     ///   - theme: Either 0 or 1, each representing one of the two theme
     ///   options offered by Spotify, which can be found in the code they provide.

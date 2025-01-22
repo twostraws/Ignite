@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import OrderedCollections
+
 /// A protocol that defines the core animation capabilities for Ignite's animation system.
 public protocol Animatable {
     /// The event that triggers the animation.
