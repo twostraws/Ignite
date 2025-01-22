@@ -43,7 +43,7 @@ public struct Content {
     /// The last modified date of this content. This might be the same as
     /// the publication date if the content has not subsequently been changed.
     public var lastModified: Date {
-        metadata["modified"] as? Date ?? date
+        metadata["lastModified"] as? Date ?? date
     }
 
     /// The `ContentLayout` name to use for this content. This should be the name
@@ -154,38 +154,17 @@ public struct Content {
             metadata["type"] = firstSubdirectory
         }
 
-        if let date = metadata["date"] as? String {
-            // The user attempted to set a date. This will
-            // be stored as a string right now, so we need
-            // to extract it, verify it, and put it back as
-            // a date.
-            metadata["date"] = process(date: date)
-
-            // If the date is now nil, their format was bad and
-            // needs to be fixed.
-            if metadata["date"] == nil {
-                fatalError("Content dates should be provided in the format 2024-05-24 15:30.")
-            }
-        }
-
-        if let lastModified = metadata["modified"] as? String {
-            // Same for last modified date.
-            metadata["modified"] = process(date: lastModified)
-
-            // If last modified is now nil, their format was bad and
-            // needs to be fixed.
-            if metadata["modified"] == nil {
-                fatalError("Content dates should be provided in the format 2024-05-24 15:30.")
-            }
-        }
-
-        if metadata["date"] == nil {
-            metadata["date"] = resourceValues.creationDate?.formatted(.iso8601) ?? Date.now
+        if let date = try parseMetadataDate(for: "date") {
+            metadata["date"] = date
+        } else {
+            metadata["date"] = resourceValues.creationDate ?? Date.now
             hasAutomaticDate = true
         }
 
-        if metadata["lastModified"] == nil {
-            metadata["lastModified"] = resourceValues.contentModificationDate?.formatted(.iso8601) ?? Date.now
+        if let lastModified = try parseMetadataDate(for: "modified", "lastModified") {
+            metadata["lastModified"] = lastModified
+        } else {
+            metadata["lastModified"] = resourceValues.contentModificationDate ?? Date.now
         }
     }
 
@@ -222,6 +201,23 @@ public struct Content {
         formatter.timeZone = .gmt
         return formatter.date(from: date)
     }
+
+    private func parseMetadataDate(for ids: String...) throws(Error) -> Date? {
+        var anyError: Error?
+
+        for id in ids {
+            guard let dateString = metadata[id] as? String else { continue }
+            if let date = process(date: dateString) {
+                return date
+            } else {
+                anyError = Error.invalidDateFormat
+                continue
+            }
+        }
+
+        if let anyError { throw anyError }
+        return nil
+    }
 }
 
 extension Content {
@@ -235,5 +231,13 @@ extension Content {
         self.metadata = [:]
         self.body = ""
         self.hasAutomaticDate = false
+    }
+}
+
+extension Content {
+    public struct Error: Swift.Error {
+        public let message: String
+
+        static let invalidDateFormat = Error(message: "Content dates should be provided in the format 2024-05-24 15:30.")
     }
 }
