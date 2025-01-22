@@ -1,5 +1,5 @@
 //
-// SubsiteLink.swift
+// Link.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -11,18 +11,20 @@ import Testing
 @testable import Ignite
 
 /// Tests for the `title` element.
-@Suite("Subscribe Link Tests")
+@Suite("Link Tests")
 @MainActor struct SubsiteLinkTests {
-    let publishingContext = ElementTest.publishingSubsiteContext
+    init() {
+        try! PublishingContext.initialize(for: TestSite(), from: #filePath)
+    }
 
     @Test("String Target Test", arguments: ["/"])
     func stringTarget(linkTarget: String) async throws {
         let element = Link("Go Home", target: linkTarget)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output == """
-            <a href="/subsite\(linkTarget)\" \
+            <a href="\(linkTarget)\" \
             class="link-underline link-underline-opacity-100 \
             link-underline-opacity-100-hover">\
             Go Home\
@@ -33,13 +35,13 @@ import Testing
 
     @Test("Page Target Test")
     func pageTarget() async throws {
-        let element = Link("This is a test", target: TestPage()).linkStyle(
-            .button)
-        let output = element.render(context: publishingContext)
+        let element = Link("This is a test", target: TestPage())
+            .linkStyle(.button)
+        let output = element.render()
 
         #expect(
             output
-                == "<a href=\"/subsite/test-page\" class=\"btn btn-primary\">This is a test</a>"
+                == "<a href=\"/test-page\" class=\"btn btn-primary\">This is a test</a>"
         )
     }
 
@@ -51,11 +53,11 @@ import Testing
                 "MORE "
                 Text("CONTENT")
             })
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output == """
-            <a href="/subsite/test-page" \
+            <a href="/test-page" \
             class="link-plain link-underline link-underline-opacity-100 \
             link-underline-opacity-100-hover">\
             MORE <p>CONTENT</p>\

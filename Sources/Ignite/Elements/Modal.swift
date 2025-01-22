@@ -124,9 +124,8 @@ public struct Modal: HTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         Section {
             Section {
                 Section {
@@ -161,6 +160,6 @@ public struct Modal: HTML {
         .id(htmlID)
         .aria(.labelledBy, "modalLabel")
         .aria(.hidden, "true")
-        .render(context: context)
+        .render()
     }
 }

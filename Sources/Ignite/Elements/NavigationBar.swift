@@ -154,9 +154,8 @@ public struct NavigationBar: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         Tag("header") {
             Tag("nav") {
                 Section {
@@ -166,7 +165,7 @@ public struct NavigationBar: BlockHTML {
                     }
                     if !items.isEmpty {
                         renderToggleButton()
-                        renderNavItems(context: context)
+                        renderNavItems()
                     }
                 }
                 .class(widthClasses)
@@ -175,7 +174,7 @@ public struct NavigationBar: BlockHTML {
             .class("navbar", "navbar-expand-md")
             .data("bs-theme", theme(for: style))
         }
-        .render(context: context)
+        .render()
     }
 
     private func renderToggleButton() -> Button {
@@ -191,14 +190,14 @@ public struct NavigationBar: BlockHTML {
         .aria(.label, "Toggle navigation")
     }
 
-    private func renderNavItems(context: PublishingContext?) -> Section {
+    private func renderNavItems() -> Section {
         Section {
             List {
                 ForEach(items) { item in
                     if let dropdownItem = item as? Dropdown {
                         renderDropdownItem(dropdownItem)
                     } else if let link = item as? Link {
-                        renderLinkItem(link, context: context)
+                        renderLinkItem(link)
                     } else {
                         AnyHTML(item)
                     }
@@ -218,9 +217,9 @@ public struct NavigationBar: BlockHTML {
         .data("bs-theme", "light")
     }
 
-    private func renderLinkItem(_ link: Link, context: PublishingContext?) -> ListItem {
+    private func renderLinkItem(_ link: Link) -> ListItem {
         ListItem {
-            let isActive = context?.currentRenderingPath == link.url
+            let isActive = publishingContext.currentRenderingPath == link.url
             link
                 .class("nav-link", isActive ? "active" : nil)
                 .aria(.current, isActive ? "page" : nil)

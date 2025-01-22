@@ -13,19 +13,22 @@ import Testing
 /// Tests for the `title` element.
 @Suite("Title Tests")
 @MainActor struct TitleTests {
-    let publishingContext = ElementTest.publishingContext
+    init() {
+        try! PublishingContext.initialize(for: TestSite(), from: #filePath)
+    }
 
     @Test("Empty Title Test", arguments: [""])
     func empty(emptyTitleText: String) async throws {
         let element = Title(emptyTitleText)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(output == "<title>\(emptyTitleText) - My Test Site</title>")
     }
+
     @Test("Builder Test", arguments: ["Example Page", "Another Example Page"])
     func builder(titleText: String) async throws {
         let element = Title(titleText)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(output == "<title>\(titleText) - My Test Site</title>")
     }

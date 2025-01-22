@@ -13,12 +13,10 @@ import Testing
 /// Tests for Strings (aka Plain Text)
 @Suite("String Tests")
 @MainActor struct StringTests {
-    let publishingContext = ElementTest.publishingContext
-
     @Test("Single Element", arguments: ["This is a test", ""])
     func singleElement(element: String) async throws {
         let element = element
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(output == element)
     }

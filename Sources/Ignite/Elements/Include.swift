@@ -31,17 +31,15 @@ public struct Include: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext?) -> String {
-        guard let context else { return "" }
-        let fileURL = context.includesDirectory.appending(path: filename)
+    public func render() -> String {
+        let fileURL = publishingContext.includesDirectory.appending(path: filename)
 
         do {
             let string = try String(contentsOf: fileURL)
             return string
         } catch {
-            context.addWarning("""
+            publishingContext.addWarning("""
             Failed to find \(filename) in Includes folder; \
             it has been replaced with an empty string.
             """)

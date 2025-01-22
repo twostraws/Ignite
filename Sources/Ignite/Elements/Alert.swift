@@ -50,11 +50,10 @@ public struct Alert: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         var attributes = attributes
         attributes.append(containerAttributes: .init(classes: alertClasses))
-        return attributes.description(wrapping: content.render(context: context))
+        return attributes.description(wrapping: content.render())
     }
 }

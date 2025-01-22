@@ -43,11 +43,11 @@ public struct Group: PassthroughHTML {
         self.items = flatUnwrap(items)
     }
 
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         return items.map {
             let item: any HTML = $0
             AttributeStore.default.merge(attributes, intoHTML: item.id)
-            return item.render(context: context)
+            return item.render()
         }.joined()
     }
 }

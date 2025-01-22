@@ -44,9 +44,8 @@ public struct HTMLCollection: InlineHTML, BlockHTML, @preconcurrency Sequence {
     }
 
     /// Renders all elements in the sequence into HTML
-    /// - Parameter context: The current publishing context
     /// - Returns: The combined HTML string of all elements
-    public func render(context: PublishingContext?) -> String {
-        elements.map { $0.render(context: context) }.joined()
+    public func render() -> String {
+        elements.map { $0.render() }.joined()
     }
 }

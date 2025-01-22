@@ -106,9 +106,8 @@ public struct Embed: BlockHTML, LazyLoadable {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         // Enough permissions for users to accomplish common
         // tasks safely.
         let allowPermissions = """
@@ -116,7 +115,7 @@ public struct Embed: BlockHTML, LazyLoadable {
             """
 
         if attributes.classes.contains("ratio") == false {
-            context?.addWarning("""
+            publishingContext.addWarning("""
             Embedding \(url) without an aspect ratio will cause it to appear very small. \
             It is recommended to use aspectRatio() so it can scale automatically.
             """)
@@ -126,6 +125,6 @@ public struct Embed: BlockHTML, LazyLoadable {
              #"<iframe src="\#(url)" title="\#(title)" allow="\#(allowPermissions)"></iframe>"#
         }
         .attributes(attributes)
-        .render(context: context)
+        .render()
     }
 }

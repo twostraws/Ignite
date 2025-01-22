@@ -28,9 +28,8 @@ public protocol HTML: Sendable {
     @HTMLBuilder var body: Body { get }
 
     /// Converts this element and its children into an HTML string with attributes.
-    /// - Parameter context: The current publishing context
     /// - Returns: A string containing the rendered HTML
-    func render(context: PublishingContext?) -> String
+    func render() -> String
 }
 
 public extension HTML {
@@ -48,6 +47,11 @@ public extension HTML {
             return (location + description).truncatedHash
         }
         set {} // swiftlint:disable:this unused_setter_value
+    }
+
+    /// The publishing context of this site.
+    var publishingContext: PublishingContext {
+        PublishingContext.default
     }
 }
 
@@ -109,8 +113,8 @@ public extension HTML {
 
 // Default implementations
 public extension HTML {
-    func render(context: PublishingContext?) -> String {
-        body.render(context: context)
+    func render() -> String {
+        body.render()
     }
 }
 

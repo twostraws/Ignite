@@ -50,11 +50,10 @@ public struct Audio: BlockHTML, InlineHTML, LazyLoadable {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         guard let files = files else {
-            context?.addWarning("""
+            publishingContext.addWarning("""
             Creating audio with no name should not be possible. \
             Please file a bug report on the Ignite project.
             """)

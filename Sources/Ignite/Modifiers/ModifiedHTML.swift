@@ -44,14 +44,13 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
     }
 
     /// Renders this element using the provided publishing context.
-    /// - Parameter context: The current publishing context
     /// - Returns: The rendered HTML string
-    func render(context: PublishingContext?) -> String {
+    func render() -> String {
         if content.isPrimitive {
             AttributeStore.default.merge(attributes, intoHTML: content.id)
-            return content.render(context: context)
+            return content.render()
         } else {
-            let rawContent = content.render(context: context)
+            let rawContent = content.render()
             var attrs = attributes
             if attrs.tag == nil { attrs.tag = "div" }
             return attrs.description(wrapping: rawContent)

@@ -14,7 +14,7 @@ public extension InlineHTML {
     /// string interpolation by rendering without a publishing context.
     nonisolated var description: String {
         return MainActor.assumeIsolated {
-            self.render(context: nil)
+            self.render()
         }
     }
 }

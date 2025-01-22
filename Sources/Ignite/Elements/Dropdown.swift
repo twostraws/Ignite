@@ -84,30 +84,30 @@ public struct Dropdown: BlockHTML, NavigationItem {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext?) -> String {
-        let content = renderDropdownContent(context: context)
+    public func render() -> String {
+        let content = renderDropdownContent()
         if isNavigationItem {
             return Group(content)
                 .attributes(attributes)
                 .class("dropdown")
-                .render(context: context)
+                .render()
         } else {
             return Section(content)
                 .attributes(attributes)
                 .class("dropdown")
-                .render(context: context)
+                .render()
         }
     }
 
     /// Creates the internal dropdown structure including the trigger button and menu items.
-    /// - Parameter context: The current publishing context.
     /// - Returns: A group containing the dropdown's trigger and menu list.
-    private func renderDropdownContent(context: PublishingContext?) -> some HTML {
+    private func renderDropdownContent() -> some HTML {
         Group {
             if isNavigationItem {
-                let hasActiveItem = items.contains { context?.currentRenderingPath == ($0 as? Link)?.url }
+                let hasActiveItem = items.contains {
+                    publishingContext.currentRenderingPath == ($0 as? Link)?.url
+                }
 
                 Link(title, target: "#")
                     .customAttribute(name: "role", value: "button")
@@ -127,8 +127,8 @@ public struct Dropdown: BlockHTML, NavigationItem {
                     if let link = item as? Link {
                         ListItem {
                             link.class("dropdown-item")
-                                .class(context?.currentRenderingPath == link.url ? "active" : nil)
-                                .aria(.current, context?.currentRenderingPath == link.url ? "page" : nil)
+                                .class(publishingContext.currentRenderingPath == link.url ? "active" : nil)
+                                .aria(.current, publishingContext.currentRenderingPath == link.url ? "page" : nil)
                         }
                     } else if let text = item as? Text {
                         ListItem {

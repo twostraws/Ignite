@@ -53,7 +53,7 @@ public struct VStack: BlockHTML {
         self.spacingAmount = .semantic(spacing)
     }
 
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         var itemAttributes = CoreAttributes()
         itemAttributes.append(classes: "mb-0")
         var items = [any HTML]()
@@ -82,7 +82,7 @@ public struct VStack: BlockHTML {
 
         AttributeStore.default.merge(attributes, intoHTML: id)
         attributes.tag = "div"
-        let content = items.map { $0.render(context: context) }.joined()
+        let content = items.map { $0.render() }.joined()
 
         return attributes.description(wrapping: content)
     }

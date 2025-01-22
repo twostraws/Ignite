@@ -64,7 +64,7 @@ public struct Slide: BlockHTML {
 
     /// Used during rendering to assign this carousel slide to a particular parent,
     /// so our open paging behavior works correctly.
-    func assigned(at index: Int, in context: PublishingContext?) -> String {
+    func assigned(at index: Int) -> String {
         Section {
             if let slideBackground = background {
                 Image(slideBackground, description: "")
@@ -74,7 +74,7 @@ public struct Slide: BlockHTML {
 
             Section {
                 Section {
-                    render(context: context)
+                    render()
                 }
                 .class("carousel-caption")
             }
@@ -83,13 +83,12 @@ public struct Slide: BlockHTML {
         .class("carousel-item")
         .class(index == 0 ? "active" : nil)
         .style("background-color: black")
-        .render(context: context)
+        .render()
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext?) -> String {
-        items.map { $0.render(context: context) }.joined()
+    public func render() -> String {
+        items.map { $0.render() }.joined()
     }
 }

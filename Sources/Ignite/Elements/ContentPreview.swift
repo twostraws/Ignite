@@ -7,7 +7,7 @@
 
 /// A protocol for customizing the layout of ContentPreview.
 public protocol ContentPreviewStyle {
-    func body(content: Content, context: PublishingContext?) -> any BlockHTML
+    func body(content: Content) -> any BlockHTML
 }
 
 /// A wrapper around Card, specifically aimed at presenting details about
@@ -45,26 +45,24 @@ public struct ContentPreview: BlockHTML {
     }
 
     /// Renders the content preview with either a custom layout or the default card.
-    /// - Parameter context: The publishing context for rendering.
     /// - Returns: A rendered string of HTML.
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         // If custom style is provided, use it; otherwise,
         // fallback to default layout.
         if let style {
-            style.body(content: content, context: context)
+            style.body(content: content)
                 .attributes(attributes)
-                .render(context: context)
+                .render()
         } else {
-            defaultCardLayout(context: context)
+            defaultCardLayout()
                 .attributes(attributes)
-                .render(context: context)
+                .render()
         }
     }
 
     /// Default card layout for rendering the content preview.
-    /// - Parameter context: The publishing context for rendering tag links.
     /// - Returns: A BlockElement representing the card layout.
-    private func defaultCardLayout(context: PublishingContext?) -> some BlockHTML {
+    private func defaultCardLayout() -> some BlockHTML {
         Card(imageName: content.image) {
             Text(content.description)
                 .margin(.bottom, .none)

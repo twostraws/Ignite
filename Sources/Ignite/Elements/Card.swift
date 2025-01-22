@@ -206,7 +206,7 @@ public struct Card: BlockHTML {
         return copy
     }
 
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         Section {
             if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
@@ -243,7 +243,7 @@ public struct Card: BlockHTML {
         .attributes(attributes)
         .class("card")
         .class(cardClasses)
-        .render(context: context)
+        .render()
     }
 
     private func renderHeader() -> Section {

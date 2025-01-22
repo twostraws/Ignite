@@ -21,9 +21,8 @@ public struct EmptyBlockElement: BlockHTML {
     public var isPrimitive: Bool { true }
 
     /// Renders this element as an empty string
-    /// - Parameter context: The current publishing context
     /// - Returns: An empty string
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         ""
     }
 }

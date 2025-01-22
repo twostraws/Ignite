@@ -55,9 +55,8 @@ public struct Carousel: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         Section {
             Section {
                 ForEach(0..<items.count) { index in
@@ -73,7 +72,7 @@ public struct Carousel: BlockHTML {
 
             Section {
                 ForEach(items.enumerated()) { index, item in
-                    item.assigned(at: index, in: context)
+                    item.assigned(at: index)
                 }
             }
             .class("carousel-inner")
@@ -106,6 +105,6 @@ public struct Carousel: BlockHTML {
         .id(carouselID)
         .class("carousel", "slide", style == .crossfade ? "carousel-fade" : nil)
         .data("bs-ride", "carousel")
-        .render(context: context)
+        .render()
     }
 }

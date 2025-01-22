@@ -41,15 +41,14 @@ public struct ButtonGroup: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         Section {
-            content.map { $0.render(context: context) }.joined()
+            content.map { $0.render() }.joined()
         }
         .class("btn-group")
         .aria(.label, accessibilityLabel)
         .customAttribute(name: "role", value: "group")
-        .render(context: context)
+        .render()
     }
 }

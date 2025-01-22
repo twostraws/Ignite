@@ -35,7 +35,7 @@ public struct ZStack: BlockHTML {
         self.alignment = alignment
     }
 
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         var items = [any HTML]()
 
         for item in self.items {
@@ -66,7 +66,7 @@ public struct ZStack: BlockHTML {
         AttributeStore.default.merge(attributes, intoHTML: id)
         attributes.tag = "div"
 
-        let content = items.map { $0.render(context: context) }.joined()
+        let content = items.map { $0.render() }.joined()
         return attributes.description(wrapping: content)
     }
 }

@@ -40,30 +40,30 @@ public struct HTMLBody: RootHTML {
         return copy
     }
 
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         var output = ""
 
         // Render main content
-        let rendered = items.map { $0.render(context: context) }.joined()
+        let rendered = items.map { $0.render() }.joined()
         output = rendered
 
         // Add required scripts
-        if context?.site.useDefaultBootstrapURLs == .localBootstrap {
-            output += Script(file: "/js/bootstrap.bundle.min.js").render(context: context)
+        if publishingContext.site.useDefaultBootstrapURLs == .localBootstrap {
+            output += Script(file: "/js/bootstrap.bundle.min.js").render()
         }
 
-        if context?.hasSyntaxHighlighters == true {
-            output += Script(file: "/js/syntax-highlighting.js").render(context: context)
+        if publishingContext.hasSyntaxHighlighters == true {
+            output += Script(file: "/js/syntax-highlighting.js").render()
         }
 
         if output.contains(#"data-bs-toggle="tooltip""#) {
             output += Script(code: """
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-            """).render(context: context)
+            """).render()
         }
 
-        output += Script(file: "/js/ignite-core.js").render(context: context)
+        output += Script(file: "/js/ignite-core.js").render()
 
         var attributes = attributes
         attributes.tag = "body"

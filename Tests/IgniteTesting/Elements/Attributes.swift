@@ -5,21 +5,23 @@
 //  See LICENSE for license information.
 //
 
-import Testing
 @testable import Ignite
+import Testing
 
 /// Tests for the element's `Attributes`.
 @Suite("Attributes Tests")
 @MainActor
 struct AttributesTest {
-    let publishingContext = ElementTest.publishingContext
+    init() {
+        try! PublishingContext.initialize(for: TestSite(), from: #filePath)
+    }
 
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "nav", "section"]
 
     @Test("Checks that meta highlighting tags are sorted in the head element")
     func highligtherThemes_areSorted() async throws {
         let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .twilight])
-        let output = links.map { $0.render(context: publishingContext )}
+        let output = links.map { $0.render() }
 
         #expect(
             output == [
@@ -33,7 +35,7 @@ struct AttributesTest {
     @Test("Checks that classes are sorted", arguments: tags)
     func classes_areSorted(tag: String) async throws {
         let element = Tag(tag) {}.class("foo", "bar", "baz", "qux")
-        let output = element.render(context: publishingContext)
+        let output = element.render()
         let expected = "<\(tag) class=\"bar baz foo qux\"></\(tag)>"
 
         #expect(
@@ -48,7 +50,7 @@ struct AttributesTest {
             .customAttribute(name: "baz", value: "baz")
             .customAttribute(name: "foo", value: "foo")
             .customAttribute(name: "bar", value: "bar")
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output == "<\(tag) bar=\"bar\" baz=\"baz\" foo=\"foo\" qux=\"qux\"></\(tag)>"
@@ -62,7 +64,7 @@ struct AttributesTest {
             .addEvent(name: "baz", actions: [ShowAlert(message: "baz")])
             .addEvent(name: "qux", actions: [ShowAlert(message: "qux")])
             .addEvent(name: "foo", actions: [ShowAlert(message: "foo")])
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output == """
@@ -75,7 +77,7 @@ struct AttributesTest {
     func styles_areSorted(tag: String) async throws {
         let element = Tag(tag) {}
             .style("foo: bar", "bar: baz", "baz: qux", "qux: foo")
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output == "<\(tag) style=\"bar: baz; baz: qux; foo: bar; qux: foo\"></\(tag)>"
@@ -88,7 +90,7 @@ struct AttributesTest {
             .aria(.atomic, "bar")
             .aria(.checked, "qux")
             .aria(.setSize, "foo")
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output == "<\(tag) aria-atomic=\"bar\" aria-checked=\"qux\" aria-setsize=\"foo\"></\(tag)>"
@@ -102,7 +104,7 @@ struct AttributesTest {
             .data("baz", "qux")
             .data("qux", "foo")
             .data("bar", "baz")
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output == "<\(tag) data-bar=\"baz\" data-baz=\"qux\" data-foo=\"bar\" data-qux=\"foo\"></\(tag)>"

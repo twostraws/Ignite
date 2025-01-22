@@ -99,9 +99,8 @@ public struct Table: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         var tableAttributes = attributes.appending(classes: ["table"])
 
         if hasBorderEnabled {
@@ -125,14 +124,14 @@ public struct Table: BlockHTML {
 
         if let header {
             let headerHTML = header.map {
-                "<th>\($0.render(context: context))</th>"
+                "<th>\($0.render())</th>"
             }.joined()
 
             output += "<thead><tr>\(headerHTML)</tr></thead>"
         }
 
         output += "<tbody>"
-        output += rows.render(context: context)
+        output += rows.render()
         output += "</tbody>"
         output += "</table>"
         return output

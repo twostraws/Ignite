@@ -23,7 +23,7 @@ struct Label: InlineHTML {
         self.text = text
     }
 
-    public func render(context: PublishingContext?) -> String {
+    public func render() -> String {
         var attributes = attributes
         attributes.tag = "label"
         return attributes.description(wrapping: text)

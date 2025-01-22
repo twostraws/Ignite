@@ -12,12 +12,10 @@ import Testing
 /// Tests for the `NavigationBar` element.
 @Suite("Navigation Bar Tests")
 @MainActor struct NavigationBarTests {
-    let publishingContext = ElementTest.publishingContext
-
     @Test("Default Column Width Test")
     func defaultColumnWidth() async throws {
         let element = NavigationBar().width(.viewport)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(output.contains("col container-fluid"))
     }
@@ -25,7 +23,7 @@ import Testing
     @Test("Column With Value Test", arguments: [3, 6, 12])
     func columnWidthValueSet(count: Int) async throws {
         let element = NavigationBar().width(.count(count))
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(output.contains("col-md-\(count) container"))
     }
