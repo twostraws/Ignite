@@ -46,6 +46,11 @@ public final class PublishingContext {
     /// An ordered set of syntax highlighters you want to enable for your site.
     var syntaxHighlighters = OrderedSet<HighlighterLanguage>()
 
+    /// Whether the site uses syntax highlighters.
+    var hasSyntaxHighlighters: Bool {
+        !syntaxHighlighters.isEmpty || !site.syntaxHighlighters.isEmpty
+    }
+
     /// The sitemap for this site. Yes, using an array is less efficient when
     /// using `contains()`, but it allows us to list pages in a sensible order.
     /// (Technically speaking the order doesn't matter, but if the order changed
@@ -197,7 +202,7 @@ public final class PublishingContext {
             try copy(resource: "fonts/bootstrap-icons.woff2")
         }
 
-        if syntaxHighlighters.isEmpty == false {
+        if hasSyntaxHighlighters {
             try copy(resource: "js/prism-core.js")
             try copySyntaxHighlighters()
         }
