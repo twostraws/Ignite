@@ -44,7 +44,7 @@ public final class PublishingContext {
     public private(set) var allContent = [Content]()
 
     /// An ordered set of syntax highlighters you want to enable for your site.
-    var highlighterLanguages = OrderedSet<HighlighterLanguage>()
+    var syntaxHighlighters = OrderedSet<HighlighterLanguage>()
 
     /// The sitemap for this site. Yes, using an array is less efficient when
     /// using `contains()`, but it allows us to list pages in a sensible order.
@@ -197,7 +197,7 @@ public final class PublishingContext {
             try copy(resource: "fonts/bootstrap-icons.woff2")
         }
 
-        if highlighterLanguages.isEmpty == false {
+        if syntaxHighlighters.isEmpty == false {
             try copy(resource: "js/prism-core.js")
             try copySyntaxHighlighters()
         }
