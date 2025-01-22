@@ -127,8 +127,8 @@ public struct Dropdown: BlockHTML, NavigationItem {
                     if let link = item as? Link {
                         ListItem {
                             link.class("dropdown-item")
-                                .class(context.currentRenderingPath == link.url ? "active" : nil)
-                                .aria(.current, context.currentRenderingPath == link.url ? "page" : nil)
+                                .class(context?.currentRenderingPath == link.url ? "active" : nil)
+                                .aria(.current, context?.currentRenderingPath == link.url ? "page" : nil)
                         }
                     } else if let text = item as? Text {
                         ListItem {

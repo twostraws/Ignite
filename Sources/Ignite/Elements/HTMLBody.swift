@@ -52,7 +52,7 @@ public struct HTMLBody: RootHTML {
             output += Script(file: "/js/bootstrap.bundle.min.js").render(context: context)
         }
 
-        if context.hasSyntaxHighlighters {
+        if context?.hasSyntaxHighlighters == true {
             output += Script(file: "/js/syntax-highlighting.js").render(context: context)
         }
 
