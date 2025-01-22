@@ -51,7 +51,7 @@ public struct EmptyHoverEffect: HTML {
 }
 
 private struct ApplyHoverEffects: Action {
-    let styles: OrderedSet<Declaration>
+    let styles: OrderedSet<InlineStyle>
 
     func compile() -> String {
         """

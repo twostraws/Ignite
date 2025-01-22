@@ -11,7 +11,7 @@ struct SmallCapsModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with small caps applied
     func body(content: some HTML) -> any HTML {
-        content.style("font-variant: small-caps")
+        content.style(.fontVariant, "small-caps")
     }
 }
 

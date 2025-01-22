@@ -75,7 +75,7 @@ public struct VStack: BlockHTML {
         attributes.append(classes: "vstack")
 
         if case let .exact(pixels) = spacingAmount {
-            attributes.append(styles: .init(property: .gap, value: "\(pixels)px"))
+            attributes.append(styles: .init(.gap, value: "\(pixels)px"))
         } else if case let .semantic(amount) = spacingAmount {
             attributes.append(classes: "gap-\(amount.rawValue)")
         }

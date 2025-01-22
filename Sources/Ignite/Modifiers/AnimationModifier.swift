@@ -76,7 +76,7 @@ public extension HTML {
         let existingContainers = Set(attributes.containerAttributes.flatMap(\.classes))
 
         // Extract color styles from the element and move them to the animation wrapper
-        var wrapperStyles: OrderedSet<Declaration> = []
+        var wrapperStyles: OrderedSet<InlineStyle> = []
 
         if let backgroundColor = attributes.styles.first(where: { $0.property == "background-color" }) {
             wrapperStyles.append(backgroundColor)
@@ -106,7 +106,7 @@ public extension HTML {
         modifiedAnimation.trigger = trigger
 
         if trigger == .click || trigger == .hover {
-            modifiedAnimation.staticProperties.append(.init(name: "cursor", value: "pointer"))
+            modifiedAnimation.baseStyles.append(.init(.cursor, value: "pointer"))
         }
 
         // Register the combined animation
@@ -165,7 +165,7 @@ public extension HTML {
         triggers: [AnimationTrigger],
         to attributes: inout CoreAttributes,
         in existingContainers: Set<String>,
-        styles wrapperStyles: OrderedSet<Declaration>
+        styles wrapperStyles: OrderedSet<InlineStyle>
     ) {
         let animationName = "animation-\(self.id)"
 
@@ -207,7 +207,7 @@ public extension HTML {
                 attributes.append(containerAttributes: ContainerAttributes(
                     type: .transform,
                     classes: ["\(animationName)-transform"],
-                    styles: [Declaration(property: "transform-style", value: "preserve-3d")]
+                    styles: [InlineStyle(.transformStyle, value: "preserve-3d")]
                 ))
 
                 // Add hover effects container

@@ -50,7 +50,7 @@ public struct Animation: Animatable {
     public var trigger: AnimationTrigger = .hover
 
     /// Additional non-animated CSS properties
-    public var staticProperties: OrderedSet<Attribute> = []
+    public var baseStyles: OrderedSet<InlineStyle> = []
 
     /// Creates a new keyframe animation.
     public init() {
@@ -111,9 +111,9 @@ public extension Animation {
     /// Adds an additional CSS style property to the animation
     /// - Parameter style: The CSS style to add
     /// - Returns: A modified animation with the additional style
-    func baseProperty(_ style: Attribute) -> Self {
+    func baseStyle(_ style: InlineStyle) -> Self {
         var copy = self
-        copy.staticProperties.append(style)
+        copy.baseStyles.append(style)
         return copy
     }
 }

@@ -36,23 +36,23 @@ struct CornerRadiusModifier: HTMLModifier {
     /// - Returns: The modified HTML with corner radius applied
     func body(content: some HTML) -> any HTML {
         if edges.contains(.all) {
-            return content.style("border-radius: \(length)")
+            return content.style(.borderRadius, "\(length)")
         }
 
         if edges.contains(.topLeading) {
-            content.style("border-top-left-radius: \(length)")
+            content.style(.borderTopLeftRadius, "\(length)")
         }
 
         if edges.contains(.topTrailing) {
-            content.style("border-top-right-radius: \(length)")
+            content.style(.borderTopRightRadius, "\(length)")
         }
 
         if edges.contains(.bottomLeading) {
-            content.style("border-bottom-left-radius: \(length)")
+            content.style(.borderBottomLeftRadius, "\(length)")
         }
 
         if edges.contains(.bottomTrailing) {
-            content.style("border-bottom-right-radius: \(length)")
+            content.style(.borderBottomRightRadius, "\(length)")
         }
 
         return content

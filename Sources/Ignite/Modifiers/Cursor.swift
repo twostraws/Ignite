@@ -37,7 +37,7 @@ struct CursorModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with cursor styling applied
     func body(content: some HTML) -> any HTML {
-        content.style("cursor: \(cursor.rawValue)")
+        content.style(.cursor, cursor.rawValue)
     }
 }
 

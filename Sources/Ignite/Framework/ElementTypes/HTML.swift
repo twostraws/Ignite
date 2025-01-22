@@ -162,25 +162,7 @@ public extension HTML {
     func aria(_ key: AriaType, _ value: String?) -> Self {
         guard let value else { return self }
         var attributes = attributes
-        attributes.aria.append(AttributeValue(name: key.rawValue, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds inline styles to the element using string format.
-    /// - Parameter values: Variable number of style strings in "property: value" format
-    /// - Returns: The modified `HTML` element
-    @discardableResult func style(_ values: String...) -> Self {
-        var attributes = attributes
-        let attributeValues: [Declaration] = values.compactMap { value in
-            let parts = value.split(separator: ":")
-            guard parts.count == 2 else { return nil }
-            return Declaration(
-                property: parts[0].trimmingCharacters(in: .whitespaces),
-                value: parts[1].trimmingCharacters(in: .whitespaces)
-            )
-        }
-        attributes.styles.formUnion(attributeValues)
+        attributes.aria.append(Attribute(name: key.rawValue, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -188,9 +170,33 @@ public extension HTML {
     /// Adds inline styles to the element.
     /// - Parameter values: Variable number of `AttributeValue` objects
     /// - Returns: The modified `HTML` element
-    internal func style(_ values: Declaration?...) -> Self {
+    internal func style(_ values: InlineStyle?...) -> Self {
         var attributes = attributes
         attributes.styles.formUnion(values.compactMap(\.self))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds an inline style to the element.
+    /// - Parameters:
+    ///   - property: The CSS property.
+    ///   - value: The value.
+    /// - Returns: The modified `HTML` element
+    @discardableResult internal func style(_ property: Property, _ value: String) -> Self {
+        var attributes = attributes
+        attributes.styles.append(.init(property, value: value))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds an inline style to the element.
+    /// - Parameters:
+    ///   - property: The CSS property.
+    ///   - value: The value.
+    /// - Returns: The modified `HTML` element
+    internal func style(_ property: String, _ value: String) -> Self {
+        var attributes = attributes
+        attributes.styles.append(.init(property, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -262,7 +268,7 @@ public extension HTML {
     /// Adds a wrapper div with the specified style to the element's storage
     /// - Parameter styles: The styles to apply to the wrapper div
     /// - Returns: The original element
-    internal func containerStyle(_ styles: Declaration...) -> Self {
+    internal func containerStyle(_ styles: InlineStyle...) -> Self {
         var attributes = attributes
         attributes.containerAttributes.append(.init(styles: OrderedSet(styles)))
         AttributeStore.default.merge(attributes, intoHTML: id)

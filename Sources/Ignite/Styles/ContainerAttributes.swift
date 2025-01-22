@@ -40,7 +40,7 @@ struct ContainerAttributes: Hashable, Sendable {
     var classes = OrderedSet<String>()
 
     /// The inline styles to apply to the container
-    var styles = OrderedSet<Declaration>()
+    var styles = OrderedSet<InlineStyle>()
 
     /// JavaScript events, such as onclick.
     var events = OrderedSet<Event>()
@@ -57,7 +57,7 @@ struct ContainerAttributes: Hashable, Sendable {
     init(
         type: ContainerType = .regular,
         classes: some RandomAccessCollection<String> = OrderedSet<String>(),
-        styles: some RandomAccessCollection<Declaration> = OrderedSet<Declaration>(),
+        styles: some RandomAccessCollection<InlineStyle> = OrderedSet<InlineStyle>(),
         events: some Collection<Event> = []
     ) {
         self.type = type

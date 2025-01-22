@@ -32,9 +32,9 @@ struct OpacityModifier: HTMLModifier {
     /// - Returns: The modified HTML with opacity applied
     func body(content: some HTML) -> any HTML {
         if let percentage, percentage != 100% {
-            content.style("opacity: \(percentage.value)")
+            content.style(.opacity, percentage.value.formatted())
         } else if let doubleValue, doubleValue != 1 {
-            content.style("opacity: \(doubleValue.formatted())")
+            content.style(.opacity, doubleValue.formatted())
         }
         content
     }

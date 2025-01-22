@@ -40,7 +40,7 @@ public struct CoreAttributes: Sendable {
     var classes = OrderedSet<String>()
 
     /// Inline CSS styles.
-    var styles = OrderedSet<Declaration>()
+    var styles = OrderedSet<InlineStyle>()
 
     /// Data attributes.
     var data = OrderedSet<Attribute>()
@@ -103,7 +103,7 @@ public struct CoreAttributes: Sendable {
 
             // Arium? Look, just give me this one…
             for arium in aria.sorted() {
-                output += " aria-\(arium)"
+                output += " " + arium.description
             }
 
             return output
@@ -276,7 +276,7 @@ public struct CoreAttributes: Sendable {
 
     /// Appends multiple extra inline CSS styles.
     /// - Parameter classes: The inline CSS styles to append.
-    mutating func append(styles: Declaration...) {
+    mutating func append(styles: InlineStyle...) {
         self.styles.formUnion(styles)
     }
 
@@ -284,7 +284,7 @@ public struct CoreAttributes: Sendable {
     ///  - Parameter style: The style name, e.g. background-color
     ///  - Parameter value: The style value, e.g. steelblue
     mutating func append(style: Property, value: String) {
-        styles.append(Declaration(property: style, value: value))
+        styles.append(InlineStyle(style, value: value))
     }
 
     /// Appends a data attribute to the element.
@@ -303,7 +303,7 @@ public struct CoreAttributes: Sendable {
     /// Appends an array of inline CSS styles to the element.
     /// - Parameter newStyles: An array of `AttributeValue` objects representing
     ///   CSS style properties and their values to be added.
-    mutating func append(styles newStyles: [Declaration]) {
+    mutating func append(styles newStyles: [InlineStyle]) {
         var styles = self.styles
         styles.formUnion(newStyles)
         self.styles = styles

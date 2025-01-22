@@ -212,7 +212,7 @@ public struct Card: BlockHTML {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
-                        .style("opacity: \(imageOpacity)")
+                        .style(.opacity, imageOpacity.description)
                 } else {
                     image
                         .class(contentPosition.imageClass)
@@ -229,7 +229,7 @@ public struct Card: BlockHTML {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
-                        .style("opacity: \(imageOpacity)")
+                        .style(.opacity, imageOpacity.description)
                 } else {
                     image
                         .class(contentPosition.imageClass)

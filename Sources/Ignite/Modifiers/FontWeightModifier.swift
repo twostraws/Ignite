@@ -14,7 +14,7 @@ struct FontWeightModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with font weight applied
     func body(content: some HTML) -> any HTML {
-        content.style("font-weight: \(weight.rawValue)")
+        content.style(.fontWeight, weight.rawValue.formatted())
     }
 }
 

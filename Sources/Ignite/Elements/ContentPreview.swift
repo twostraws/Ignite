@@ -80,7 +80,7 @@ public struct ContentPreview: BlockHTML {
                 Section {
                     tagLinks
                 }
-                .style("margin-top: -5px")
+                .style(.marginTop, "-5px")
             }
         }
     }

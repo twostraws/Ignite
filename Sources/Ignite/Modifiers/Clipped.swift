@@ -11,7 +11,7 @@ struct ClippedModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with clipping applied
     func body(content: some HTML) -> any HTML {
-        content.style("overflow: hidden")
+        content.style(.overflow, "hidden")
     }
 }
 

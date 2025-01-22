@@ -6,19 +6,19 @@
 //
 
 /// A simple property-value pair of strings that is able to store inline styles
-struct Declaration: Hashable, Equatable, Sendable, Comparable, CustomStringConvertible {
+public struct InlineStyle: Hashable, Equatable, Sendable, Comparable, CustomStringConvertible {
     /// The property, e.g. `\.color`.
     var property: String
 
     /// The declaration's value, e.g. "blue".
     var value: String
 
-    init(property: Property, value: String) {
+    init(_ property: Property, value: String) {
         self.property = property.rawValue
         self.value = value
     }
 
-    init(property: String, value: String) {
+    init(_ property: String, value: String) {
         self.property = property
         self.value = value
     }
@@ -28,7 +28,7 @@ struct Declaration: Hashable, Equatable, Sendable, Comparable, CustomStringConve
         property + ": " + value
     }
 
-    public static func < (lhs: Declaration, rhs: Declaration) -> Bool {
+    public static func < (lhs: InlineStyle, rhs: InlineStyle) -> Bool {
         lhs.property < rhs.property
     }
 }
