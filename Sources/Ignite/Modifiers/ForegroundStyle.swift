@@ -98,7 +98,7 @@ extension HTML {
     }
 
     /// Applies a foreground color to the current element.
-    /// - Parameter color: The style to apply, specified as a `Color` object.
+    /// - Parameter style: The style to apply, specified as a `Color` object.
     /// - Returns: The current element with the updated color applied.
     public func foregroundStyle(_ style: ForegroundStyle) -> some HTML {
         modifier(ForegroundStyleModifier(style: style))

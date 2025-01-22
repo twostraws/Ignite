@@ -16,7 +16,7 @@ import Testing
     let publishingContext = ElementTest.publishingContext
 
     @Test("Image Test", arguments: ["/images/example.jpg"], ["Example image"])
-    func test_named(image: String, description: String) async throws {
+    func named(image: String, description: String) async throws {
         let element = Image(image, description: description)
         let output = element.render(context: publishingContext)
         let normalizedOutput = ElementTest.normalizeHTML(output)
@@ -26,7 +26,7 @@ import Testing
                 == "<img alt=\"Example image\" src=\"/images/example.jpg\"/>")
     }
     @Test("Icon Image Test", arguments: ["browser-safari"], ["Safari logo"])
-    func test_icon(systemName: String, description: String) async throws {
+    func icon(systemName: String, description: String) async throws {
         let element = Image(
             systemName: systemName, description: description)
         let output = element.render(context: publishingContext)

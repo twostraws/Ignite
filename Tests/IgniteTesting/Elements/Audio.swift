@@ -17,7 +17,7 @@ import Testing
     let publishingContext = ElementTest.publishingContext
 
     @Test("Lone File Audio", arguments: ["/audio/example.mp3"])
-    func test_loneFileAudio(audioFile: String) async throws {
+    func loneFileAudio(audioFile: String) async throws {
         let element = Audio(audioFile)
         let output = element.render(context: publishingContext)
 
@@ -30,7 +30,7 @@ import Testing
     @Test(
         "Multiple File Audio", arguments: ["/audio/example1.mp3"],
         ["/audio/example1.wav"])
-    func test_multiFileAudio(audioFile1: String, audioFile2: String)
+    func multiFileAudio(audioFile1: String, audioFile2: String)
         async throws {
         let element = Audio(audioFile1, audioFile2)
         let output = element.render(context: publishingContext)

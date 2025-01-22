@@ -51,23 +51,21 @@ public protocol HorizontalAligning: HTML { }
 /// A modifier that controls horizontal alignment of HTML elements
 struct HorizontalAlignmentModifier: HTMLModifier {
     /// The alignment to apply
-    let alignments: [ResponsiveAlignment]
+    let alignment: ResponsiveAlignment
 
     init(alignment: HorizontalAlignment) {
-        self.alignments = [.small(alignment)]
+        self.alignment = .responsive(small: alignment)
     }
 
-    init(alignments: [ResponsiveAlignment]) {
-        self.alignments = alignments
+    init(alignment: ResponsiveAlignment) {
+        self.alignment = alignment
     }
 
     /// Applies horizontal alignment to the provided HTML content
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with alignment applied
     func body(content: some HTML) -> any HTML {
-        let classes = alignments
-            .map(\.breakpointClass)
-            .joined(separator: " ")
+        let classes = alignment.breakpointClasses
         return content.class(classes)
     }
 }
@@ -81,9 +79,9 @@ public extension HorizontalAligning {
     }
 
     /// Aligns this element using multiple responsive alignments.
-    /// - Parameter alignments: One or more alignments with optional breakpoints.
+    /// - Parameter alignment: One or more alignments with optional breakpoints.
     /// - Returns: A modified copy of the element with alignments applied
-    func horizontalAlignment(_ alignments: ResponsiveAlignment...) -> some HTML {
-        modifier(HorizontalAlignmentModifier(alignments: alignments))
+    func horizontalAlignment(_ alignment: ResponsiveAlignment) -> some HTML {
+        modifier(HorizontalAlignmentModifier(alignment: alignment))
     }
 }

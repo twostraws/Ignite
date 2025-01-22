@@ -11,14 +11,15 @@ struct FontModifier: HTMLModifier {
     var font: Font
 
     /// Registers CSS classes for responsive font sizes and returns the generated class name.
+    /// - Parameter responsiveSize: The responsive font size.
     /// - Returns: A unique class name that applies the font's responsive size rules.
-    private func registerResponsiveClasses() -> String {
-        let className = "font-" + font.responsiveSizes.description.truncatedHash
+    private func registerClasses(for responsiveSize: ResponsiveFontSize) -> String {
+        let className = "font-" + responsiveSize.breakpointValues.description.truncatedHash
 
         // Sort sizes by breakpoint to ensure proper cascading
-        let sortedSizes = font.responsiveSizes.sorted { size1, size2 in
-            let (bp1, _) = size1.resolved
-            let (bp2, _) = size2.resolved
+        let allSizes = responsiveSize.breakpointValues.sorted { size1, size2 in
+            let bp1 = size1.breakpoint
+            let bp2 = size2.breakpoint
 
             // nil (base size) should come first
             if bp1 == nil { return true }
@@ -27,30 +28,27 @@ struct FontModifier: HTMLModifier {
         }
 
         // Find base size and breakpoint sizes
-        let baseSize = sortedSizes.first { size in
-            let (breakpoint, _) = size.resolved
-            return breakpoint == nil
+        let baseSize = allSizes.first { size in
+            size.breakpoint == nil
         }
 
-        let breakpointSizes = sortedSizes.filter { size in
-            let (breakpoint, _) = size.resolved
-            return breakpoint != nil
+        let breakpointSizes = allSizes.filter { size in
+            size.breakpoint != nil
         }
 
-        if let (_, value) = baseSize?.resolved {
+        if let baseSize {
             CSSManager.default.register(
                 [],
-                properties: [("font-size", value.stringValue)],
+                properties: [("font-size", baseSize.value.stringValue)],
                 className: className
             )
         }
 
         for size in breakpointSizes {
-            let (breakpoint, value) = size.resolved
-            if let breakpoint = breakpoint {
+            if let breakpoint = size.breakpoint {
                 CSSManager.default.register(
                     [.breakpoint(.init(rawValue: breakpoint)!)],
-                    properties: [("font-size", value.stringValue)],
+                    properties: [("font-size", size.value.stringValue)],
                     className: className
                 )
             }
@@ -77,8 +75,8 @@ struct FontModifier: HTMLModifier {
                 content.style("font-family: \(name)")
             }
 
-            if !font.responsiveSizes.isEmpty {
-                let classNames = registerResponsiveClasses()
+            if let responsiveSize = font.responsiveSize {
+                let classNames = registerClasses(for: responsiveSize)
                 content.class(classNames)
             } else if let size = font.size {
                 content.style("font-size: \(size.stringValue)")
@@ -94,8 +92,8 @@ struct FontModifier: HTMLModifier {
                 containerAttributes.styles.append(Declaration(property: "font-family", value: name))
             }
 
-            if font.responsiveSizes.isEmpty == false {
-                let classNames = registerResponsiveClasses()
+            if let responsiveSize = font.responsiveSize {
+                let classNames = registerClasses(for: responsiveSize)
                 containerAttributes.classes.append(classNames)
             } else if let size = font.size {
                 containerAttributes.styles.append(.init(property: "font-size", value: size.stringValue))

@@ -31,7 +31,7 @@ struct FontStyleModifier: HTMLModifier {
 
 public extension HTML {
     /// Adjusts the heading level of this text.
-    /// - Parameter textLevel: The new font level.
+    /// - Parameter style: The new heading level.
     /// - Returns: A new `Text` instance with the updated font style.
     func font(_ style: Font.Style) -> some HTML {
         modifier(FontStyleModifier(style: style))
@@ -40,7 +40,7 @@ public extension HTML {
 
 public extension InlineHTML {
     /// Adjusts the heading level of this text.
-    /// - Parameter textLevel: The new font level.
+    /// - Parameter style: The new heading level.
     /// - Returns: A new `Text` instance with the updated font style.
     func font(_ style: Font.Style) -> some InlineHTML {
         modifier(FontStyleModifier(style: style))

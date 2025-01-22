@@ -44,7 +44,7 @@ public struct CodeBlock: BlockHTML {
             fatalError("At least one of your themes must specify a syntax highlighter.")
         }
         if let language {
-            context.highlighterLanguages.append(language)
+            context.syntaxHighlighters.append(language)
             return """
             <pre\(attributes.description())>\
             <code class=\"language-\(language)\">\

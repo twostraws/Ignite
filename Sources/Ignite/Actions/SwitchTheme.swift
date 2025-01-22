@@ -11,7 +11,7 @@ public struct SwitchTheme: Action {
     let themeID: String
 
     /// Creates a new theme switching action
-    /// - Parameter themeID: The ID of the theme to switch to (will be automatically sanitized)
+    /// - Parameter theme: The ID of the theme to switch to (will be automatically sanitized)
     @MainActor public init(_ theme: any Theme) {
         self.themeID = theme.id
     }

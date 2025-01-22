@@ -23,7 +23,7 @@ public struct ListItem: HTML, ListableElement {
 
     /// Creates a new `ListItem` object using an inline element builder that
     /// returns an array of `HTML` objects to display in the list.
-    /// - Parameter items: The content you want to display in your list.
+    /// - Parameter content: The content you want to display in your list.
     public init(@InlineHTMLBuilder content: () -> some InlineHTML) {
         self.content = content()
     }

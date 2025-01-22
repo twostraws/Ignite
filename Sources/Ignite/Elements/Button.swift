@@ -73,7 +73,9 @@ public struct Button: BlockHTML, InlineHTML {
     }
 
     /// Creates a button with a label.
-    /// - Parameter label: The label text to display on this button.
+    /// - Parameters:
+    ///   - label: The label text to display on this button.
+    ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
     /// - actions: An element builder that returns an array of actions to run when this button is pressed.
     public init(_ label: String, @ActionBuilder actions: () -> [Action]) {
         self.label = label

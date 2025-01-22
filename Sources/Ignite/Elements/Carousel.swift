@@ -48,9 +48,9 @@ public struct Carousel: BlockHTML {
     /// Adjusts the style of this carousel.
     /// - Parameter style: The new style.
     /// - Returns: A new `Carousel` instance with the updated style.
-    public func carouselStyle(_ newStyle: CarouselStyle) -> Self {
+    public func carouselStyle(_ style: CarouselStyle) -> Self {
         var copy = self
-        copy.style = newStyle
+        copy.style = style
         return copy
     }
 
@@ -65,8 +65,8 @@ public struct Carousel: BlockHTML {
                         .data("bs-target", "#\(carouselID)")
                         .data("bs-slide-to", String(index))
                         .class(index == 0 ? "active" : nil)
-                        .aria("current", index == 0 ? "true" : nil)
-                        .aria("label", "Slide \(index + 1)")
+                        .aria(.current, index == 0 ? "true" : nil)
+                        .aria(.label, "Slide \(index + 1)")
                 }
             }
             .class("carousel-indicators")
@@ -81,7 +81,7 @@ public struct Carousel: BlockHTML {
             Button {
                 Span()
                     .class("carousel-control-prev-icon")
-                    .aria("hidden", "true")
+                    .aria(.hidden, "true")
 
                 Span("Previous")
                     .class("visually-hidden")
@@ -93,7 +93,7 @@ public struct Carousel: BlockHTML {
             Button {
                 Span()
                     .class("carousel-control-next-icon")
-                    .aria("hidden", "true")
+                    .aria(.hidden, "true")
 
                 Span("Next")
                     .class("visually-hidden")

@@ -45,15 +45,15 @@ struct LineSpacingModifier: HTMLModifier {
 
 public extension HTML {
     /// Sets the line height of the element using a custom value.
-    /// - Parameter height: The line height multiplier to use
-    /// - Returns: The modified HTML element
+    /// - Parameter spacing: The line height multiplier to use.
+    /// - Returns: The modified HTML element.
     func lineSpacing(_ spacing: Double) -> some HTML {
         modifier(LineSpacingModifier(height: spacing))
     }
 
     /// Sets the line height of the element using a predefined Bootstrap value.
-    /// - Parameter height: The predefined line height to use
-    /// - Returns: The modified HTML element
+    /// - Parameter spacing: The predefined line height to use.
+    /// - Returns: The modified HTML element.
     func lineSpacing(_ spacing: LineSpacing) -> some HTML {
         modifier(LineSpacingModifier(height: spacing))
     }
@@ -61,15 +61,15 @@ public extension HTML {
 
 public extension BlockHTML {
     /// Sets the line height of the element using a custom value.
-    /// - Parameter height: The line height multiplier to use
-    /// - Returns: The modified HTML element
+    /// - Parameter spacing: The line height multiplier to use.
+    /// - Returns: The modified HTML element.
     func lineSpacing(_ spacing: Double) -> some BlockHTML {
         modifier(LineSpacingModifier(height: spacing))
     }
 
     /// Sets the line height of the element using a predefined Bootstrap value.
-    /// - Parameter height: The predefined line height to use
-    /// - Returns: The modified HTML element
+    /// - Parameter spacing: The predefined line height to use.
+    /// - Returns: The modified HTML element.
     func lineSpacing(_ spacing: LineSpacing) -> some BlockHTML {
         modifier(LineSpacingModifier(height: spacing))
     }

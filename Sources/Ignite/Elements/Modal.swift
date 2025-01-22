@@ -159,8 +159,8 @@ public struct Modal: HTML {
         .class(animated ? "modal fade" : "modal")
         .tabFocus(.focusable)
         .id(htmlID)
-        .aria("labelledby", "modalLabel")
-        .aria("hidden", "true")
+        .aria(.labelledBy, "modalLabel")
+        .aria(.hidden, "true")
         .render(context: context)
     }
 }

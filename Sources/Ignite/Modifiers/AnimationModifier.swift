@@ -36,9 +36,9 @@ public extension HTML {
     /// Applies a transition animation to an HTML element.
     ///
     /// - Parameters:
-    ///   - animation: The transition animation to apply
-    ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
-    /// - Returns: A modified HTML element with the animation applied
+    ///   - transition: The transition animation to apply.
+    ///   - trigger: The event that triggers this animation (.hover, .click, or .appear).
+    /// - Returns: A modified HTML element with the animation applied.
     func transition(_ transition: Transition, on trigger: AnimationTrigger) -> some HTML {
         modifier(AnimationModifier(transition: transition, trigger: trigger))
     }
@@ -46,10 +46,10 @@ public extension HTML {
     /// Applies a keyframe animation to an HTML element.
     ///
     /// - Parameters:
-    ///   - animation: The keyframe animation to apply
-    ///   - autoreverses: Whether the animation should play in reverse after completing
-    ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
-    /// - Returns: A modified HTML element with the animation applied
+    ///   - animation: The keyframe animation to apply.
+    ///   - direction: Whether the animation should play in reverse after completing.
+    ///   - trigger: The event that triggers this animation (.hover, .click, or .appear).
+    /// - Returns: A modified HTML element with the animation applied.
     func animation(
         _ animation: Animation,
         direction: AnimationDirection? = nil,
