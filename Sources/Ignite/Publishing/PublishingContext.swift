@@ -43,12 +43,12 @@ public final class PublishingContext {
     /// All the Markdown content this user has inside their Content folder.
     public private(set) var allContent = [Content]()
 
-    /// An ordered set of syntax highlighters you want to enable for your site.
-    var syntaxHighlighters = OrderedSet<HighlighterLanguage>()
+    /// An ordered set of syntax highlighters to use in your site's Markdown content.
+    var markdownSyntaxHighlighters = OrderedSet<HighlighterLanguage>()
 
     /// Whether the site uses syntax highlighters.
     var hasSyntaxHighlighters: Bool {
-        !syntaxHighlighters.isEmpty || !site.syntaxHighlighters.isEmpty
+        !markdownSyntaxHighlighters.isEmpty || !site.syntaxHighlighters.isEmpty
     }
 
     /// The sitemap for this site. Yes, using an array is less efficient when
