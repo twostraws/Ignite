@@ -222,6 +222,7 @@ struct ExampleSite: Site {
 }
 ```
 
+The `Site` protocol provides sensible defaults for most properties, allowing you to focus on implementing only the customizations your site needs. As shown in the above, only a few properties like `name`, `url`, `homePage`, and `layout` require explicit implementation.
 
 ## Using the command-line tool
 

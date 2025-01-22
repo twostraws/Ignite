@@ -64,7 +64,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
     }
 
     /// Adjusts the role of this dropdown
-    /// - Parameter style: The new role.
+    /// - Parameter role: The new role.
     /// - Returns: A new `Dropdown` instance with the updated role.
     public func role(_ role: Role) -> Dropdown {
         var copy = self

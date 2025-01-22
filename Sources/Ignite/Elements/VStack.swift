@@ -36,7 +36,7 @@ public struct VStack: BlockHTML {
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameters:
-    ///   - spacing: The number of pixels between elements.
+    ///   - pixels: The number of pixels between elements.
     ///   - items: The items to use in this section.
     public init(spacing pixels: Int, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())

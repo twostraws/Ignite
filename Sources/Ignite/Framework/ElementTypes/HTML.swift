@@ -272,7 +272,7 @@ public extension HTML {
     }
 
     /// Adds a wrapper div with the specified style to the element's storage
-    /// - Parameter className: The class to apply to the wrapper div
+    /// - Parameter styles: The styles to apply to the wrapper div
     /// - Returns: The original element
     func containerStyle(_ styles: AttributeValue...) -> Self {
         var attributes = attributes
