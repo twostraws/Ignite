@@ -93,9 +93,9 @@ public protocol Site {
     /// Additional themes that can be selected by users beyond light and dark mode.
     var alternateThemes: [any Theme] { get }
 
-    ///  The syntax-highlighter languages used throughout the site. Languages used
-    ///  in code blocks inside Markdown files _must_ be included here. Languages
-    ///  specified in `CodeBlock` will be added automatically.
+    ///  The syntax highlighters used throughout the site. Highlighters used
+    ///  in Markdown files _must_ be included here. Highlighters specified in `CodeBlock`
+    ///  will be added automatically.
     var syntaxHighlighters: [HighlighterLanguage] { get }
 
     /// Controls whether HTML output should be formatted with proper indentation.
