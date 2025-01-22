@@ -17,14 +17,14 @@ import Testing
 
     @Test(
         "Without DateTime Test", arguments: ["This is a test", "Another test"])
-    func test_without_datetime(timeText: String) async throws {
+    func withoutDatetime(timeText: String) async throws {
         let element = Time(timeText)
         let output = element.render(context: publishingContext)
 
         #expect(output == "<time>\(timeText)</time>")
     }
     @Test("Builder Test", arguments: ["This is a test", "Another test"])
-    func test_builder(timeText: String) async throws {
+    func builder(timeText: String) async throws {
         guard
             let customTimeInterval = DateComponents(
                 calendar: .current,

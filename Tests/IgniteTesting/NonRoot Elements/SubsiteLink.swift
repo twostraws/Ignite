@@ -16,7 +16,7 @@ import Testing
     let publishingContext = ElementTest.publishingSubsiteContext
 
     @Test("String Target Test", arguments: ["/"])
-    func test_string_target(linkTarget: String) async throws {
+    func stringTarget(linkTarget: String) async throws {
         let element = Link("Go Home", target: linkTarget)
         let output = element.render(context: publishingContext)
 
@@ -32,7 +32,7 @@ import Testing
     }
 
     @Test("Page Target Test")
-    func test_page_target() async throws {
+    func pageTarget() async throws {
         let element = Link("This is a test", target: TestPage()).linkStyle(
             .button)
         let output = element.render(context: publishingContext)
@@ -44,7 +44,7 @@ import Testing
     }
 
     @Test("Page Content Test")
-    func test_page_content() async throws {
+    func pageContent() async throws {
         let element = Link(
             target: TestPage(),
             content: {
