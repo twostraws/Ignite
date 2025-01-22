@@ -43,7 +43,7 @@ public final class PublishingContext {
     /// All the Markdown content this user has inside their Content folder.
     public private(set) var allContent = [Content]()
 
-    /// An ordered set of syntax highlighters used in code blocks throughout the site.
+    /// An ordered set of syntax highlighters pulled from code blocks throughout the site.
     var syntaxHighlighters = OrderedSet<HighlighterLanguage>()
 
     /// Whether the site uses syntax highlighters.
