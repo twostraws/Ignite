@@ -85,14 +85,13 @@ struct AttributesTest {
     @Test("Checks that aria attributes are sorted", arguments: Self.tags)
     func ariaAttributes_areSorted(tag: String) async throws {
         let element = Tag(tag) {}
-            .aria("foo", "bar")
-            .aria("baz", "qux")
-            .aria("qux", "foo")
-            .aria("bar", "baz")
+            .aria(.atomic, "bar")
+            .aria(.checked, "qux")
+            .aria(.setSize, "foo")
         let output = element.render(context: publishingContext)
 
         #expect(
-            output == "<\(tag) aria-bar=\"baz\" aria-baz=\"qux\" aria-foo=\"bar\" aria-qux=\"foo\"></\(tag)>"
+            output == "<\(tag) aria-atomic=\"bar\" aria-checked=\"qux\" aria-setsize=\"foo\"></\(tag)>"
         )
     }
 
