@@ -95,7 +95,7 @@ public protocol Site {
 
     ///  The syntax-highlighter languages used throughout the site. Languages used
     ///  in code blocks inside Markdown files _must_ be included here. Languages
-    ///  specified in `CodeBlock` will be added here automatically.
+    ///  specified in `CodeBlock` will be added automatically.
     var syntaxHighlighters: [HighlighterLanguage] { get }
 
     /// Controls whether HTML output should be formatted with proper indentation.
