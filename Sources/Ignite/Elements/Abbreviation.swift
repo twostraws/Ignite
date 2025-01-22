@@ -30,7 +30,9 @@ public struct Abbreviation: InlineHTML {
 
     /// Creates a new `Abbreviation` instance using an inline element builder
     /// that returns an array of content to place inside.
-    /// - Parameter description: The description of the abbreviation.
+    /// - Parameters:
+    ///   - description: The description of the abbreviation.
+    ///   - content: The elements to place inside the abbreviation.
     public init(_ description: String, @InlineHTMLBuilder content: () -> some InlineHTML) {
         contents = content()
         let customAttribute = AttributeValue(name: "title", value: description)

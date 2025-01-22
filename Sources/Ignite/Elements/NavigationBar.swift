@@ -186,9 +186,9 @@ public struct NavigationBar: BlockHTML {
         .class("navbar-toggler")
         .data("bs-toggle", "collapse")
         .data("bs-target", "#navbarCollapse")
-        .aria("controls", "navbarCollapse")
-        .aria("expanded", "false")
-        .aria("label", "Toggle navigation")
+        .aria(.controls, "navbarCollapse")
+        .aria(.expanded, "false")
+        .aria(.label, "Toggle navigation")
     }
 
     private func renderNavItems(context: PublishingContext?) -> Section {
@@ -223,7 +223,7 @@ public struct NavigationBar: BlockHTML {
             let isActive = context?.currentRenderingPath == link.url
             link
                 .class("nav-link", isActive ? "active" : nil)
-                .aria("current", isActive ? "page" : nil)
+                .aria(.current, isActive ? "page" : nil)
         }
         .class("nav-item")
     }

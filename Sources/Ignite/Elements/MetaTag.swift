@@ -79,7 +79,7 @@ public struct MetaTag: HeadElement, Sendable {
     /// URL as its content. Creates a new `MetaTag` instance from the property
     /// and URL provided.
     /// - Parameters:
-    ///   - name: The name for the metadata.
+    ///   - property: The name for the metadata.
     ///   - content: The URL value for the metadata.
     public init(property: String, content: URL) {
         self.init(property: property, content: content.absoluteString)
@@ -99,7 +99,7 @@ public struct MetaTag: HeadElement, Sendable {
     /// including the page title, description, and image.
     /// - Parameters:
     ///   - page: The page for which metadata should be rendered.
-    ///   - context: The current publishing context.
+    ///   - configuration: The site configuration.
     /// - Returns: An array of `MetaTag` objects that should be placed
     /// into your page header to enable social sharing.
     @ElementBuilder<MetaTag> public static func socialSharingTags(

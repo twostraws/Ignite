@@ -29,7 +29,7 @@ public struct Emphasis: InlineHTML {
     }
 
     /// Creates a new `Emphasis` instance using a single inline element.
-    /// - Parameter content: The content to render with emphasis.
+    /// - Parameter singleElement: The content to render with emphasis.
     public init(_ singleElement: any InlineHTML) {
         self.content = singleElement
     }

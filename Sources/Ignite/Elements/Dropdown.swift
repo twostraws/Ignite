@@ -64,7 +64,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
     }
 
     /// Adjusts the role of this dropdown
-    /// - Parameter style: The new role.
+    /// - Parameter role: The new role.
     /// - Returns: A new `Dropdown` instance with the updated role.
     public func role(_ role: Role) -> Dropdown {
         var copy = self
@@ -113,13 +113,13 @@ public struct Dropdown: BlockHTML, NavigationItem {
                     .customAttribute(name: "role", value: "button")
                     .class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
                     .data("bs-toggle", "dropdown")
-                    .aria("expanded", "false")
+                    .aria(.expanded, "false")
             } else {
                 Button(title)
                     .class(Button.classes(forRole: role, size: size))
                     .class("dropdown-toggle")
                     .data("bs-toggle", "dropdown")
-                    .aria("expanded", "false")
+                    .aria(.expanded, "false")
             }
 
             List {
@@ -127,8 +127,8 @@ public struct Dropdown: BlockHTML, NavigationItem {
                     if let link = item as? Link {
                         ListItem {
                             link.class("dropdown-item")
-                                .class(context?.currentRenderingPath == link.url ? "active" : nil)
-                                .aria("current", context?.currentRenderingPath == link.url ? "page" : nil)
+                                .class(context.currentRenderingPath == link.url ? "active" : nil)
+                                .aria(.current, context.currentRenderingPath == link.url ? "page" : nil)
                         }
                     } else if let text = item as? Text {
                         ListItem {

@@ -26,10 +26,8 @@ public struct Video: BlockHTML, InlineHTML, LazyLoadable {
     /// Creates one or multiple `Video` instance from the names of
     /// files contained in your site's assets. This should be specified
     /// relative to the root of your site, e.g. /video/outforwalk.mp4.
-    /// - Parameters:
-    ///   - names: The filenames of your video relative to the root of
+    /// - Parameter files: A variable number of filenames, relative to the root of
     ///   your site. e.g. /video/outforwalk.mp4.
-    ///   - fileTypes: The format of the video files.
     public init(_ files: String...) {
         self.files = files
     }

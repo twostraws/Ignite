@@ -16,7 +16,7 @@ import Testing
     let publishingContext = ElementTest.publishingContext
 
     @Test("Single Element", arguments: ["This is a test", ""])
-    func test_singleElement(element: String) async throws {
+    func singleElement(element: String) async throws {
         let element = element
         let output = element.render(context: publishingContext)
 

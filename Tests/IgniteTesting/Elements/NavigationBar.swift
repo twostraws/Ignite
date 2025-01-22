@@ -15,7 +15,7 @@ import Testing
     let publishingContext = ElementTest.publishingContext
 
     @Test("Default Column Width Test")
-    func test_defaultColumnWidth() async throws {
+    func defaultColumnWidth() async throws {
         let element = NavigationBar().width(.viewport)
         let output = element.render(context: publishingContext)
 
@@ -23,7 +23,7 @@ import Testing
     }
 
     @Test("Column With Value Test", arguments: [3, 6, 12])
-    func test_columnWidthValueSet(count: Int) async throws {
+    func columnWidthValueSet(count: Int) async throws {
         let element = NavigationBar().width(.count(count))
         let output = element.render(context: publishingContext)
 

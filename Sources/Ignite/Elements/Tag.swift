@@ -37,7 +37,7 @@ public struct Tag: HTML {
     /// page element to place inside.
     /// - Parameters:
     ///   - name: The name of the HTML tag you want to create.
-    ///   - content: The content to place inside the tag.
+    ///   - singleElement: The content to place inside the tag.
     public init(_ name: String, content singleElement: some HTML) {
         self.name = name
         self.content = singleElement

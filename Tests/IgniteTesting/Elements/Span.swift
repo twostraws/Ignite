@@ -16,14 +16,14 @@ import Testing
     let publishingContext = ElementTest.publishingContext
 
     @Test("Single Element Test", arguments: ["This is a test", "Another test"])
-    func test_singleElement(spanText: String) async throws {
+    func singleElement(spanText: String) async throws {
         let element = Span(spanText)
         let output = element.render(context: publishingContext)
 
         #expect(output == "<span>\(spanText)</span>")
     }
     @Test("Builder Test", arguments: ["This is a test", "Another test"])
-    func test_builder(spanText: String) async throws {
+    func builder(spanText: String) async throws {
         let element = Span { spanText }
         let output = element.render(context: publishingContext)
 

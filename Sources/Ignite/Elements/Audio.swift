@@ -26,9 +26,7 @@ public struct Audio: BlockHTML, InlineHTML, LazyLoadable {
     /// Creates an `Audio` instance from the name of a file contained
     /// in your site's assets. This should be specified relative to the root
     /// of your site, e.g. /audio/bark.mp3.
-    /// - Parameters:
-    ///   - name: The filename of your audio relative to the root of your site. e.g. /audio/bark.mp3
-    ///   - fileType: The format of the audio file.
+    /// - Parameter files: A variable number of filenames, relative to the root of your site. e.g. /audio/bark.mp3
     public init(_ files: String...) {
         self.files = files
     }

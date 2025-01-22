@@ -15,21 +15,21 @@ import Testing
     let publishingContext = ElementTest.publishingContext
 
     @Test("Code Test")
-    func test_code() async throws {
+    func code() async throws {
         let element = Script(code: "javascript code")
         let output = element.render(context: publishingContext)
 
         #expect(output == "<script>javascript code</script>")
     }
     @Test("File Test", arguments: ["/code.js"])
-    func test_file(scriptFile: String) async throws {
+    func file(scriptFile: String) async throws {
         let element = Script(file: scriptFile)
         let output = element.render(context: publishingContext)
 
         #expect(output == "<script src=\"\(scriptFile)\"></script>")
     }
     @Test("Attributes Test", arguments: ["/code.js"])
-    func test_attributes(scriptFile: String) async throws {
+    func attributes(scriptFile: String) async throws {
         let element = Script(file: scriptFile)
             .data("key", "value")
             .customAttribute(name: "custom", value: "part")
