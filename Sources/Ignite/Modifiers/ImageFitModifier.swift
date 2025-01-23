@@ -20,6 +20,6 @@ public extension Image {
 
         return self
             .class("w-100 h-100 object-fit-\(fit.rawValue)")
-            .style("object-position: \(xPercent)% \(yPercent)%")
+            .style(.objectPosition, "\(xPercent)% \(yPercent)%")
     }
 }

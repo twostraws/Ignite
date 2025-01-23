@@ -8,7 +8,7 @@
 // swiftlint:disable file_length type_body_length
 /// Represents CSS properties that can be applied to HTML elements.
 /// These properties control the visual appearance and layout of elements.
-public enum Property: String {
+public enum Property: String, Sendable {
     /// Sets the color of form control elements when in an active/selected state
     case accentColor = "accent-color"
 

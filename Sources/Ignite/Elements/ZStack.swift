@@ -49,19 +49,19 @@ public struct ZStack: BlockHTML {
         items.enumerated().forEach { index, item in
             var elementAttributes = CoreAttributes()
             elementAttributes.append(styles: [
-                .init(name: "grid-area", value: "1/1"),
-                .init(name: "z-index", value: "\(index)"),
-                .init(name: "width", value: "fit-content"),
-                .init(name: "height", value: "fit-content"),
-                .init(name: "justify-self", value: alignment.justifySelf),
-                .init(name: "align-self", value: alignment.alignSelf)
+                .init(.gridArea, value: "1/1"),
+                .init(.zIndex, value: "\(index)"),
+                .init(.width, value: "fit-content"),
+                .init(.height, value: "fit-content"),
+                .init(.justifySelf, value: alignment.justifySelf),
+                .init(.alignSelf, value: alignment.alignSelf)
             ])
 
             AttributeStore.default.merge(elementAttributes, intoHTML: item.id)
         }
 
         var attributes = attributes
-        attributes.append(styles: .init(name: "display", value: "grid"))
+        attributes.append(styles: .init(.display, value: "grid"))
 
         AttributeStore.default.merge(attributes, intoHTML: id)
         attributes.tag = "div"

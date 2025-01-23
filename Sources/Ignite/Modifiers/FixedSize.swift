@@ -11,7 +11,7 @@ struct FixedSizeModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with fixed sizing applied
     func body(content: some HTML) -> any HTML {
-        content.containerStyle(.init(name: "display", value: "inline-block"))
+        content.containerStyle(.init(.display, value: "inline-block"))
     }
 }
 

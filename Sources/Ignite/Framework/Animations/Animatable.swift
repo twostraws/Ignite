@@ -13,7 +13,7 @@ public protocol Animatable {
     var trigger: AnimationTrigger { get set }
 
     /// Additional non-animated CSS properties
-    var staticProperties: OrderedSet<AttributeValue> { get set }
+    var baseStyles: OrderedSet<InlineStyle> { get set }
 
     /// A unique identifier generated from the animation type name
     static var id: String { get }

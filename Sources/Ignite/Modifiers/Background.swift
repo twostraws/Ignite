@@ -24,11 +24,11 @@ struct BackgroundModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         switch background {
         case .gradient(let gradient):
-            content.style("background-image: \(gradient)")
+            content.style(.backgroundImage, gradient.description)
         case .color(let color):
-            content.style("background-color: \(color.description)")
+            content.style(.backgroundColor, color.description)
         case .colorString(let colorString):
-            content.style("background-color: \(colorString)")
+            content.style(.backgroundColor, colorString)
         case .material(let material):
             content.class(material.className)
         }

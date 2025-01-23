@@ -28,34 +28,34 @@ struct BorderModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         // Apply border styles based on edges
         if edges.contains(.all) {
-            content.style("border: \(width)px \(style.rawValue) \(color)")
+            content.style(.border, "\(width)px \(style.rawValue) \(color)")
         } else {
             if edges.contains(.leading) {
-                content.style("border-left: \(width)px \(style.rawValue) \(color)")
+                content.style(.borderLeft, "\(width)px \(style.rawValue) \(color)")
             }
             if edges.contains(.trailing) {
-                content.style("border-right: \(width)px \(style.rawValue) \(color)")
+                content.style(.borderRight, "\(width)px \(style.rawValue) \(color)")
             }
             if edges.contains(.top) {
-                content.style("border-top: \(width)px \(style.rawValue) \(color)")
+                content.style(.borderTop, "\(width)px \(style.rawValue) \(color)")
             }
             if edges.contains(.bottom) {
-                content.style("border-bottom: \(width)px \(style.rawValue) \(color)")
+                content.style(.borderBottom, "\(width)px \(style.rawValue) \(color)")
             }
         }
 
         // Apply corner radii
         if cornerRadii.topLeading > 0 {
-            content.style("border-top-left-radius: \(cornerRadii.topLeading)px")
+            content.style(.borderTopLeftRadius, "\(cornerRadii.topLeading)px")
         }
         if cornerRadii.topTrailing > 0 {
-            content.style("border-top-right-radius: \(cornerRadii.topTrailing)px")
+            content.style(.borderTopRightRadius, "\(cornerRadii.topTrailing)px")
         }
         if cornerRadii.bottomLeading > 0 {
-            content.style("border-bottom-left-radius: \(cornerRadii.bottomLeading)px")
+            content.style(.borderBottomLeftRadius, "\(cornerRadii.bottomLeading)px")
         }
         if cornerRadii.bottomTrailing > 0 {
-            content.style("border-bottom-right-radius: \(cornerRadii.bottomTrailing)px")
+            content.style(.borderBottomRightRadius, "\(cornerRadii.bottomTrailing)px")
         }
 
         return content

@@ -149,7 +149,7 @@ public extension HTML {
     @discardableResult func data(_ name: String, _ value: String?) -> Self {
         guard let value else { return self }
         var attributes = attributes
-        attributes.data.append(AttributeValue(name: name, value: value))
+        attributes.data.append(Attribute(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -162,25 +162,7 @@ public extension HTML {
     func aria(_ key: AriaType, _ value: String?) -> Self {
         guard let value else { return self }
         var attributes = attributes
-        attributes.aria.append(AttributeValue(name: key.rawValue, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds inline styles to the element using string format.
-    /// - Parameter values: Variable number of style strings in "property: value" format
-    /// - Returns: The modified `HTML` element
-    @discardableResult func style(_ values: String...) -> Self {
-        var attributes = attributes
-        let attributeValues: [AttributeValue] = values.compactMap { value in
-            let parts = value.split(separator: ":")
-            guard parts.count == 2 else { return nil }
-            return AttributeValue(
-                name: parts[0].trimmingCharacters(in: .whitespaces),
-                value: parts[1].trimmingCharacters(in: .whitespaces)
-            )
-        }
-        attributes.styles.formUnion(attributeValues)
+        attributes.aria.append(Attribute(name: key.rawValue, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -188,9 +170,33 @@ public extension HTML {
     /// Adds inline styles to the element.
     /// - Parameter values: Variable number of `AttributeValue` objects
     /// - Returns: The modified `HTML` element
-    func style(_ values: AttributeValue?...) -> Self {
+    internal func style(_ values: InlineStyle?...) -> Self {
         var attributes = attributes
         attributes.styles.formUnion(values.compactMap(\.self))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds an inline style to the element.
+    /// - Parameters:
+    ///   - property: The CSS property.
+    ///   - value: The value.
+    /// - Returns: The modified `HTML` element
+    @discardableResult internal func style(_ property: Property, _ value: String) -> Self {
+        var attributes = attributes
+        attributes.styles.append(.init(property, value: value))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds an inline style to the element.
+    /// - Parameters:
+    ///   - property: The CSS property.
+    ///   - value: The value.
+    /// - Returns: The modified `HTML` element
+    internal func style(_ property: String, _ value: String) -> Self {
+        var attributes = attributes
+        attributes.styles.append(.init(property, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -225,19 +231,7 @@ public extension HTML {
     /// - Returns: The modified `HTML` element
     @discardableResult func customAttribute(name: String, value: String) -> Self {
         var attributes = attributes
-        attributes.customAttributes.append(AttributeValue(name: name, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds a custom attribute to the element using `Property` enum.
-    /// - Parameters:
-    ///   - name: The Property enum value representing the attribute name
-    ///   - value: The value of the custom attribute
-    /// - Returns: The modified HTML element
-    func customAttribute(name: Property, value: String) -> Self {
-        var attributes = attributes
-        attributes.customAttributes.append(AttributeValue(name: name, value: value))
+        attributes.customAttributes.append(Attribute(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -274,7 +268,7 @@ public extension HTML {
     /// Adds a wrapper div with the specified style to the element's storage
     /// - Parameter styles: The styles to apply to the wrapper div
     /// - Returns: The original element
-    func containerStyle(_ styles: AttributeValue...) -> Self {
+    internal func containerStyle(_ styles: InlineStyle...) -> Self {
         var attributes = attributes
         attributes.containerAttributes.append(.init(styles: OrderedSet(styles)))
         AttributeStore.default.merge(attributes, intoHTML: id)

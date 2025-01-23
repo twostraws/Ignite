@@ -74,11 +74,15 @@ struct AttributesTest {
     @Test("Checks that styles are sorted", arguments: Self.tags)
     func styles_areSorted(tag: String) async throws {
         let element = Tag(tag) {}
-            .style("foo: bar", "bar: baz", "baz: qux", "qux: foo")
+            .style(
+                .init(.zIndex, value: "1"),
+                .init(.accentColor, value: "red"),
+                .init(.cursor, value: "pointer")
+            )
         let output = element.render(context: publishingContext)
 
         #expect(
-            output == "<\(tag) style=\"bar: baz; baz: qux; foo: bar; qux: foo\"></\(tag)>"
+            output == "<\(tag) style=\"accent-color: red; cursor: pointer; z-index: 1\"></\(tag)>"
         )
     }
 

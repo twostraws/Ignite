@@ -17,25 +17,25 @@ extension HTML {
     /// - Returns: A copy of the current element with the updated edge adjustment.
     func edgeAdjust(prefix: String, _ edges: Edge = .all, _ length: String = "20px") -> Self {
         if edges.contains(.all) {
-            return self.style("\(prefix): \(length)")
+            return self.style("\(prefix)", length)
         }
 
         var copy = self
 
         if edges.contains(.leading) {
-            copy = copy.style("\(prefix)-left: \(length)")
+            copy = copy.style("\(prefix)-left", length)
         }
 
         if edges.contains(.trailing) {
-            copy = copy.style("\(prefix)-right: \(length)")
+            copy = copy.style("\(prefix)-right", length)
         }
 
         if edges.contains(.top) {
-            copy = copy.style("\(prefix)-top: \(length)")
+            copy = copy.style("\(prefix)-top", length)
         }
 
         if edges.contains(.bottom) {
-            copy = copy.style("\(prefix)-bottom: \(length)")
+            copy = copy.style("\(prefix)-bottom", length)
         }
 
         return copy

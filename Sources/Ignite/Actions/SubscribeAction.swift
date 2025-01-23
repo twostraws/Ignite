@@ -37,7 +37,7 @@ public struct SubscribeAction: Action {
             }
         }
 
-        var customAttributes: [AttributeValue] {
+        var customAttributes: [Attribute] {
             switch self {
             case .mailchimp:
                 [.init(name: "method", value: "post"),
@@ -48,7 +48,7 @@ public struct SubscribeAction: Action {
             }
         }
 
-        var dataAttributes: [AttributeValue] {
+        var dataAttributes: [Attribute] {
             switch self {
             case .sendFox:
                 [.init(name: "async", value: "true"),
