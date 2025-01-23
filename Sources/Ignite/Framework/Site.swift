@@ -270,8 +270,8 @@ public extension Site {
 
         if !context.warnings.isEmpty || !context.errors.isEmpty {
             print("📘 Publish completed with exceptions:")
-            print(context.errors.map { "\t📙 \($0)" }.joined(separator: "\n"))
-            print(context.warnings.map { "\t📕 \($0)" }.joined(separator: "\n"))
+            print(context.errors.map { "\t📕 \($0)" }.joined(separator: "\n"))
+            print(context.warnings.map { "\t📙 \($0)" }.joined(separator: "\n"))
         } else {
             print("📗 Publish completed!")
         }
