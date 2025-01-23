@@ -193,16 +193,29 @@ public struct Content {
         }
     }
 
-    // Converts a potentially sketchy date string into
-    // a better `Date` instance.
+    /// Attempts to parse a date string in the format "y-M-d HH:mm" or "y-M-d".
+    /// - Parameter date: The date string to parse
+    /// - Returns: A `Date` if parsing succeeds, `nil` otherwise
     func process(date: String) -> Date? {
         let formatter = DateFormatter()
-        formatter.dateFormat = "y-MM-dd HH:mm"
         formatter.timeZone = .gmt
-        return formatter.date(from: date)
+
+        let formats = ["y-M-d HH:mm", "y-M-d"]
+        for format in formats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: date) {
+                return date
+            }
+        }
+
+        return nil
     }
 
-    private func parseMetadataDate(for ids: String...) throws(Error) -> Date? {
+    /// Extracts and parses a date from metadata using specified identifiers.
+    /// - Parameter ids: The metadata keys to check for date values
+    /// - Returns: A parsed `Date` if found, `nil` otherwise
+    /// - Throws: An error if date parsing fails
+    private func parseMetadataDate(for ids: String...) throws -> Date? {
         var anyError: Error?
 
         for id in ids {
