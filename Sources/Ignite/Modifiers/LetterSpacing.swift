@@ -20,7 +20,7 @@ struct LetterSpacingModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with letter spacing applied
     func body(content: some HTML) -> any HTML {
-        content.style("letter-spacing: \(spacing.stringValue)")
+        content.style(.letterSpacing, spacing.stringValue)
     }
 }
 

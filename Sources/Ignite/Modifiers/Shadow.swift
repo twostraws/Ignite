@@ -54,7 +54,7 @@ struct ShadowModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with box shadow applied
     func body(content: some HTML) -> any HTML {
-        content.style("box-shadow: \(shadow)")
+        content.style(.boxShadow, shadow.description)
     }
 }
 

@@ -65,40 +65,41 @@ struct FontModifier: HTMLModifier {
             (content as? ModifiedHTML)?.content is Text
 
         if isText {
-            content.style("font-weight: \(font.weight.rawValue)")
+            content.style(.fontWeight, font.weight.rawValue.formatted())
 
             if let style = font.style {
                 content.fontStyle(style)
             }
 
             if let name = font.name, name.isEmpty == false {
-                content.style("font-family: \(name)")
+                content.style(.fontFamily, name)
             }
 
             if let responsiveSize = font.responsiveSize {
                 let classNames = registerClasses(for: responsiveSize)
                 content.class(classNames)
             } else if let size = font.size {
-                content.style("font-size: \(size.stringValue)")
+                content.style(.fontSize, size.stringValue)
             }
 
             return content
         } else {
             var containerAttributes = ContainerAttributes(styles: [
-                .init(name: "font-weight", value: String(font.weight.rawValue))
+                .init(.fontWeight, value: String(font.weight.rawValue))
             ])
 
             if let name = font.name, name.isEmpty == false {
-                containerAttributes.styles.append(AttributeValue(name: "font-family", value: name))
+                containerAttributes.styles
+                    .append(InlineStyle(.fontFamily, value: name))
             }
 
             if let responsiveSize = font.responsiveSize {
                 let classNames = registerClasses(for: responsiveSize)
                 containerAttributes.classes.append(classNames)
             } else if let size = font.size {
-                containerAttributes.styles.append(.init(name: "font-size", value: size.stringValue))
+                containerAttributes.styles.append(.init(.fontSize, value: size.stringValue))
             } else if let style = font.style {
-                containerAttributes.styles.append(.init(name: "font-size", value: style.sizeVariable))
+                containerAttributes.styles.append(.init(.fontSize, value: style.sizeVariable))
             }
 
             return content

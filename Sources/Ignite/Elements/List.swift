@@ -120,7 +120,7 @@ public struct List: BlockHTML {
         }
 
         if listMarkerType.isEmpty == false {
-            listAttributes.append(style: "list-style-type", value: listMarkerType)
+            listAttributes.append(style: .listStyleType, value: listMarkerType)
         }
 
         return listAttributes

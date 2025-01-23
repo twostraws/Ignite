@@ -24,10 +24,10 @@ struct BackgroundImageModifier: HTMLModifier {
     /// - Returns: The modified HTML content with background image applied
     func body(content: some HTML) -> any HTML {
         content.style(
-            "background-image: url('\(imagePath)')",
-            "background-size: \(contentMode.css)",
-            "background-repeat: \(repeats ? "repeat" : "no-repeat")",
-            "background-position: \(position.css)"
+            .init(.backgroundImage, value: "url('\(imagePath)')"),
+            .init(.backgroundSize, value: contentMode.css),
+            .init(.backgroundRepeat, value: repeats ? "repeat" : "no-repeat"),
+            .init(.backgroundPosition, value: position.css)
         )
     }
 }

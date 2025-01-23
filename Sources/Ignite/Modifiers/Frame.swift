@@ -15,14 +15,14 @@ struct FrameModifier: HTMLModifier {
         case height, minHeight, maxHeight
 
         /// The CSS property name for this dimension.
-        var cssProperty: String {
+        var cssProperty: Property {
             switch self {
-            case .width: return "width"
-            case .minWidth: return "min-width"
-            case .maxWidth: return "max-width"
-            case .height: return "height"
-            case .minHeight: return "min-height"
-            case .maxHeight: return "max-height"
+            case .width: return .width
+            case .minWidth: return .minWidth
+            case .maxWidth: return .maxWidth
+            case .height: return .height
+            case .minHeight: return .minHeight
+            case .maxHeight: return .maxHeight
             }
         }
 
@@ -123,7 +123,7 @@ struct FrameModifier: HTMLModifier {
             break
 
         default:
-            modified.style("\(dimension.cssProperty): \(value.stringValue)")
+            modified.style(dimension.cssProperty, value.stringValue)
         }
     }
 

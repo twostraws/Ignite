@@ -21,7 +21,7 @@ struct TextDecorationModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with text decoration applied
     func body(content: some HTML) -> any HTML {
-        content.style("text-decoration: \(style)")
+        content.style(.textDecoration, style.rawValue)
     }
 }
 

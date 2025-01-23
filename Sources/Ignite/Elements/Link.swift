@@ -107,7 +107,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     public func target(_ target: Target) -> Self {
         if let name = target.name {
             var copy = self
-            let attribute = AttributeValue(name: "target", value: name)
+            let attribute = Attribute(name: "target", value: name)
             copy.attributes.customAttributes.append(attribute)
             return copy
         } else {
@@ -157,7 +157,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     public func relationship(_ relationship: Relationship...) -> Self {
         var copy = self
         let attributeValue = relationship.map(\.rawValue).joined(separator: " ")
-        let attribute = AttributeValue(name: "rel", value: attributeValue)
+        let attribute = Attribute(name: "rel", value: attributeValue)
         copy.attributes.customAttributes.append(attribute)
         return copy
     }
@@ -190,7 +190,7 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
 
         var linkAttributes = attributes.appending(classes: linkClasses)
         linkAttributes.classes.append("protected-link")
-        linkAttributes.data.append(AttributeValue(name: "encoded-url", value: encodedUrl))
+        linkAttributes.data.append(Attribute(name: "encoded-url", value: encodedUrl))
 
         linkAttributes.tag = """
         a href="#"

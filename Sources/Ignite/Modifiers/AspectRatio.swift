@@ -85,7 +85,7 @@ extension HTML {
         let percentage = 100 / aspectRatio
         return self
             .class("ratio")
-            .style("--bs-aspect-ratio: \(percentage)%")
+            .style("--bs-aspect-ratio", "\(percentage)%")
     }
 }
 

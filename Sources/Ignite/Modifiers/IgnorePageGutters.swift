@@ -17,7 +17,7 @@ struct IgnorePageGuttersModifier: HTMLModifier {
         if shouldIgnore {
             content
                 .class("row justify-content-center")
-                .style("margin-inline: calc(50% - 50vw)")
+                .style(.marginInline, "calc(50% - 50vw)")
         } else {
             content.class("container")
         }
