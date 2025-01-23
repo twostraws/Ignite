@@ -13,6 +13,7 @@ import Testing
 @MainActor
 struct AttributesTest {
     init() {
+        // swiftlint:disable:next force_try
         try! PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
 
