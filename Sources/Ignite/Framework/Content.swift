@@ -251,6 +251,6 @@ extension Content {
     public struct Error: Swift.Error {
         public let message: String
 
-        static let invalidDateFormat = Error(message: "Content dates could not be parsed.")
+        static let invalidDateFormat = Error(message: "Content dates should in the format 2024-05-24 15:30.")
     }
 }
