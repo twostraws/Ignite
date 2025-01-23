@@ -77,22 +77,22 @@ extension PublishingContext {
     }
 
     /// Generates CSS for all themes including font faces, colors, and typography settings, writing to themes.min.css.
-    private func generateGlobalRules() throws -> String {
+    private func generateGlobalRules() -> String {
         guard let sourceURL = Bundle.module.url(forResource: "Resources/css/global-rules", withExtension: "css") else {
-            throw PublishingError.missingSiteResource("css/global-rules.css")
+            fatalError(.missingSiteResource("css/global-rules.css"))
         }
 
         do {
             let contents = try String(contentsOf: sourceURL)
             return contents
         } catch {
-            throw PublishingError.failedToCopySiteResource("css/global-rules.css")
+            fatalError(.failedToCopySiteResource("css/global-rules.css"))
         }
 
     }
 
     /// Generates CSS for all themes including font faces, colors, and typography settings, writing to themes.min.css.
-    func generateThemes(_ themes: [any Theme]) throws {
+    func generateThemes(_ themes: [any Theme]) {
         guard !themes.isEmpty else { return }
         var cssContent = ""
 
@@ -105,15 +105,15 @@ extension PublishingContext {
         }
 
         guard site.supportsLightTheme || site.supportsDarkTheme else {
-            fatalError("Ignite requires that you provide a light or dark theme.")
+            fatalError(.missingDefaultTheme)
         }
 
         if let theme = site.lightTheme {
-            cssContent += try generateLightTheme(using: theme)
+            cssContent += generateLightTheme(using: theme)
         }
 
         if let theme = site.darkTheme {
-            cssContent += try generateDarkTheme(using: theme)
+            cssContent += generateDarkTheme(using: theme)
         }
 
         for theme in site.alternateThemes {
@@ -127,11 +127,15 @@ extension PublishingContext {
         }
 
         let cssPath = buildDirectory.appending(path: "css/themes.min.css")
-        try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
+        do {
+            try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
+        } catch {
+            fatalError(.failedToWriteFile("css/themes.min.css"))
+        }
     }
 
     /// Generates CSS for light theme, returning it to be combined with other theme data.
-    private func generateLightTheme(using theme: Theme) throws -> String {
+    private func generateLightTheme(using theme: Theme) -> String {
         var output = ""
 
         // Root variables and default theme (light)
@@ -151,7 +155,7 @@ extension PublishingContext {
 
         \(containerDefaults)
 
-        \(try generateGlobalRules())
+        \(generateGlobalRules())
         """
 
         if hasMultipleThemes {
@@ -178,7 +182,7 @@ extension PublishingContext {
     }
 
     /// Generates CSS for dark theme, returning it to be combined with other theme data.
-    private func generateDarkTheme(using theme: Theme) throws -> String {
+    private func generateDarkTheme(using theme: Theme) -> String {
         var output = ""
 
         if !site.supportsLightTheme && site.alternateThemes.isEmpty {
@@ -196,7 +200,7 @@ extension PublishingContext {
 
             \(containerDefaults)
 
-            \(try generateGlobalRules())
+            \(generateGlobalRules())
             """
         } else {
             // Add dark theme override

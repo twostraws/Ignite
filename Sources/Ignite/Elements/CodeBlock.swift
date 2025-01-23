@@ -40,7 +40,7 @@ public struct CodeBlock: BlockHTML {
     /// - Returns: The HTML for this element.
     public func render() -> String {
         guard publishingContext.site.allHighlighterThemes.isEmpty == false else {
-            fatalError("At least one of your themes must specify a syntax highlighter.")
+            fatalError(.missingDefaultSyntaxHighlighterTheme)
         }
         if let language {
             publishingContext.syntaxHighlighters.append(language)
