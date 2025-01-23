@@ -27,6 +27,9 @@ enum PublishingError: LocalizedError {
     /// Invalid Markdown was found at the specific URL.
     case badMarkdown(URL)
 
+    /// An incorrectly formatted date was found in a piece of Content.
+    case badContentDateFormat
+
     /// A file cannot be opened (bad encoding, etc).
     case unopenableFile(String)
 
@@ -86,6 +89,8 @@ enum PublishingError: LocalizedError {
             "Unable to locate App sandbox's home directory"
         case .badMarkdown(let url):
             "Markdown could not be parsed: \(url.absoluteString)."
+        case .badContentDateFormat:
+            "Content dates should be in the format 2024-05-24 15:30."
         case .unopenableFile(let reason):
             "Failed to open file: \(reason)."
         case .failedToRemoveBuildDirectory(let url):
