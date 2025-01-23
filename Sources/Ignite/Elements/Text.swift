@@ -116,10 +116,9 @@ public struct Text: BlockHTML, DropdownElement {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
-        attributes.description(wrapping: content.render(context: context))
+    public func render() -> String {
+        attributes.description(wrapping: content.render())
     }
 }
 

@@ -14,12 +14,10 @@ import Testing
 /// Tests for the `Video` element.
 @Suite("Video Tests")
 @MainActor struct VideoTests {
-    let publishingContext = ElementTest.publishingContext
-
     @Test("Lone File Video Test", arguments: ["/videos/example.mp4"])
     func loneFileVideo(videoFile: String) async throws {
         let element = Video(videoFile)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
         let normalizedOutput = ElementTest.normalizeHTML(output)
 
         #expect(
@@ -33,7 +31,7 @@ import Testing
     func multiFileVideo(videoFile1: String, videoFile2: String)
         async throws {
         let element = Video(videoFile1, videoFile2)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
         let normalizedOutput = ElementTest.normalizeHTML(output)
 
         #expect(

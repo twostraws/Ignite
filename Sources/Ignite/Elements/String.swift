@@ -15,9 +15,8 @@ extension String: InlineHTML {
     public var isPrimitive: Bool { true }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         self
     }
 }

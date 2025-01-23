@@ -9,8 +9,8 @@
 extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
     public var body: some HTML { self }
 
-    public func render(context: PublishingContext) -> String {
-        self.map { $0.render(context: context) }.joined()
+    public func render() -> String {
+        self.map { $0.render() }.joined()
     }
 }
 
@@ -22,16 +22,16 @@ extension Array: BlockHTML where Element: BlockHTML {
         set {}
     }
 
-    @MainActor public func render(context: PublishingContext) -> String {
-        self.map { $0.render(context: context) }.joined()
+    @MainActor public func render() -> String {
+        self.map { $0.render() }.joined()
     }
 }
 
 extension Array: InlineHTML where Element: InlineHTML {
     public var body: some InlineHTML { self }
 
-    @MainActor public func render(context: PublishingContext) -> String {
-        self.map { $0.render(context: context) }.joined()
+    @MainActor public func render() -> String {
+        self.map { $0.render() }.joined()
     }
 }
 // swiftlint:enable unused_setter_value

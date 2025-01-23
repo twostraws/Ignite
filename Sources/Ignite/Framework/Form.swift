@@ -134,7 +134,7 @@ public struct Form: BlockHTML {
         }
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         guard let action = action(attributes.id) as? SubscribeAction else {
             fatalError("Form supports only SubscribeAction at this time.")
         }
@@ -180,7 +180,7 @@ public struct Form: BlockHTML {
         }
         .class("row", "g-\(horizontalSpacing.rawValue)", "gy-\(verticalSpacing.rawValue)")
         .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
-        .render(context: context)
+        .render()
 
         var formOutput = attributes.description(wrapping: wrappedContent)
 
@@ -188,7 +188,7 @@ public struct Form: BlockHTML {
         if case .sendFox = action.service {
             formOutput += Script(file: "https://cdn.sendfox.com/js/form.js")
                 .customAttribute(name: "charset", value: "utf-8")
-                .render(context: context)
+                .render()
         }
 
         return formOutput

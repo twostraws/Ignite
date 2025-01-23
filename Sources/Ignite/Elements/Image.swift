@@ -85,9 +85,8 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     /// - Parameters:
     ///   - icon: The system image to render.
     ///   - description: The accessibility label to use.
-    ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
-    private func render(icon: String, description: String, into context: PublishingContext) -> String {
+    private func render(icon: String, description: String) -> String {
         var attributes = attributes
         attributes.append(classes: "bi-\(icon)")
         attributes.tag = "i"
@@ -100,33 +99,32 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     ///   - description: The accessibility label to use.
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
-    private func render(image: String, description: String, into context: PublishingContext) -> String {
+    private func render(image: String, description: String) -> String {
         var attributes = attributes
         attributes.selfClosingTag = "img"
         attributes.append(customAttributes:
-            .init(name: "src", value: "\(context.site.url.path)\(image)"),
+            .init(name: "src", value: "\(publishingContext.site.url.path)\(image)"),
             .init(name: "alt", value: description)
         )
         return attributes.description()
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         if description == nil {
-            context.addWarning("""
+            publishingContext.addWarning("""
             \(name ?? systemImage ?? "Image"): adding images without a description is not recommended. \
             Provide a description or use Image(decorative:) to silence this warning.
             """)
         }
 
         if let systemImage {
-            return render(icon: systemImage, description: description ?? "", into: context)
+            return render(icon: systemImage, description: description ?? "")
         } else if let name {
-            return render(image: name, description: description ?? "", into: context)
+            return render(image: name, description: description ?? "")
         } else {
-            context.addWarning("""
+            publishingContext.addWarning("""
             Creating an image with no name or icon should not be possible. \
             Please file a bug report on the Ignite project.
             """)

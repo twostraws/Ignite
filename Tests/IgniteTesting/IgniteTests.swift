@@ -13,11 +13,8 @@ import XCTest
 /// A base class that sets up an example publishing context for testing purposes.
 @MainActor class ElementTest {
     /// A publishing context with sample values for root site tests.
-    static let publishingContext = try! PublishingContext(
+    static let publishingContext = try! PublishingContext.initialize(
         for: TestSite(), from: #filePath)
-    /// A publishing context with sample values for subsite tests.
-    static let publishingSubsiteContext = try! PublishingContext(
-        for: TestSubsite(), from: #filePath)
 
     public static func normalizeHTML(_ html: String) -> String {
         // Function to sort attributes within a tag

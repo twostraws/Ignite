@@ -66,9 +66,8 @@ public struct Grid: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var sectionAttributes = attributes.appending(classes: ["row"])
 
         // If a column count is set, we want to use that for all
@@ -110,7 +109,7 @@ public struct Grid: BlockHTML {
             }
         }
         .attributes(sectionAttributes)
-        .render(context: context)
+        .render()
     }
 
     /// Renders a group of HTML elements with consistent styling and attributes.

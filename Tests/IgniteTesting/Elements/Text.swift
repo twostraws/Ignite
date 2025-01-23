@@ -12,12 +12,10 @@ import Testing
 /// Tests for the `Text` element.
 @Suite("Text Tests")
 @MainActor struct TextTests {
-    let publishingContext = ElementTest.publishingContext
-
     @Test("Simple String Test")
     func simpleString() async throws {
         let element = Text("Hello")
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(output == "<p>Hello</p>")
     }
@@ -27,7 +25,7 @@ import Testing
             "Hello"
         }
 
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(output == "<p>Hello</p>")
     }
@@ -48,7 +46,7 @@ import Testing
             }
         }
 
-        let output = element.render(context: publishingContext)
+        let output = element.render()
         #expect(
             output
                 == "<p>Hello, <em>world</em><s> - <strong>this <u>is</u> a</strong> test!</s></p>"
@@ -61,7 +59,7 @@ import Testing
         arguments: Font.Style.allCases)
     func customFont(font: Font.Style) async throws {
         let element = Text("Hello").font(font)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         if font == .lead {
             // This applies a paragraph class rather than a different tag.
@@ -82,7 +80,7 @@ import Testing
             markdown:
                 "Text in *italics*, text in **bold**, and text in ***bold italics***."
         )
-        let output = element.render(context: publishingContext)
+        let output = element.render()
         // swiftlint:disable line_length
         #expect(
             output

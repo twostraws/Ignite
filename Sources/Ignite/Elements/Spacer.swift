@@ -38,17 +38,16 @@ public struct Spacer: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         if case let .semantic(spacingAmount) = spacingAmount {
             Section {}
                 .margin(.top, spacingAmount)
-                .render(context: context)
+                .render()
         } else if case let .exact(int) = spacingAmount {
             Section {}
                 .frame(height: .px(int))
-                .render(context: context)
+                .render()
         } else {
             fatalError("Unknown spacing amount: \(String(describing: spacingAmount))")
         }

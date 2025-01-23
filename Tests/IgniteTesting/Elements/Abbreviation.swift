@@ -14,12 +14,10 @@ import Testing
 @Suite("Abbreviation Tests")
 @MainActor
 struct AbbreviationTests {
-    let publishingContext = ElementTest.publishingContext
-
     @Test("Basic Abbreviation Test", arguments: ["abbr"], ["abbreviation"])
     func basic(abbreviation: String, description: String) async throws {
         let element = Abbreviation(abbreviation, description: description)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output == "<abbr title=\"\(description)\">\(abbreviation)</abbr>")
@@ -30,7 +28,7 @@ struct AbbreviationTests {
     func singleElement(description: String, abbreviation: String)
         async throws {
         let element = Abbreviation(description) { Strong(abbreviation) }
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output
@@ -45,7 +43,7 @@ struct AbbreviationTests {
             }
         }
 
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output

@@ -35,9 +35,8 @@ public struct Video: BlockHTML, InlineHTML, LazyLoadable {
     /// Renders user video into the current publishing context.
     /// - Parameters:
     ///   - files: The user videos to render.
-    ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
-    public func render(files: [String], into context: PublishingContext) -> String {
+    public func render(files: [String]) -> String {
         var attributes = attributes
         attributes.tag = "video controls"
         attributes.closingTag = "video"
@@ -57,17 +56,16 @@ public struct Video: BlockHTML, InlineHTML, LazyLoadable {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         guard let files = self.files else {
-            context.addWarning("""
+            publishingContext.addWarning("""
             Creating video with no name should not be possible. \
             Please file a bug report on the Ignite project.
             """)
             return ""
         }
-        return render(files: files, into: context)
+        return render(files: files)
     }
 
     // Dictionary mapping file extensions to VideoType

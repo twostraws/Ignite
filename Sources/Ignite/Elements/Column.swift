@@ -64,9 +64,8 @@ public struct Column: HTML, HorizontalAligning {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var columnAttributes = attributes
 
         if verticalAlignment != .top {
@@ -74,6 +73,6 @@ public struct Column: HTML, HorizontalAligning {
         }
         columnAttributes.tag = "td colspan=\"\(columnSpan)\""
         columnAttributes.closingTag = "td"
-        return columnAttributes.description(wrapping: HTMLCollection(items).render(context: context))
+        return columnAttributes.description(wrapping: HTMLCollection(items).render())
     }
 }

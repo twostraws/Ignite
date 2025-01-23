@@ -53,9 +53,8 @@ public struct Time: InlineHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var attributes = attributes
         attributes.tag = "time"
 
@@ -63,6 +62,6 @@ public struct Time: InlineHTML {
             attributes.append(customAttributes: .init(name: "datetime", value: dateTime.asISO8601))
         }
 
-        return attributes.description(wrapping: contents.render(context: context))
+        return attributes.description(wrapping: contents.render())
     }
 }

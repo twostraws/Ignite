@@ -13,13 +13,10 @@ import Testing
 /// Tests for the `time` element.
 @Suite("Time Tests")
 @MainActor struct TimeTests {
-    let publishingContext = ElementTest.publishingContext
-
-    @Test(
-        "Without DateTime Test", arguments: ["This is a test", "Another test"])
+    @Test("Without DateTime Test", arguments: ["This is a test", "Another test"])
     func withoutDatetime(timeText: String) async throws {
         let element = Time(timeText)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(output == "<time>\(timeText)</time>")
     }
@@ -42,7 +39,7 @@ import Testing
         }
         let dateTime = Date(timeIntervalSince1970: customTimeInterval)
         let element = Time(timeText, dateTime: dateTime)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output

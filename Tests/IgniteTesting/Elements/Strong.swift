@@ -13,12 +13,10 @@ import Testing
 /// Tests for the `Strong` element.
 @Suite("Strong Tests")
 @MainActor struct StrongTests {
-    let publishingContext = ElementTest.publishingContext
-
     @Test("Single Element Test", arguments: ["This is a test", "Another test", ""])
     func singleElement(strongText: String) async throws {
         let element = Strong(strongText)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(output == "<strong>\(strongText)</strong>")
     }
@@ -26,7 +24,7 @@ import Testing
     @Test("Builder Test", arguments: ["This is a test", "Another test", ""])
     func builder(strongText: String) async throws {
         let element = Strong { strongText }
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(output == "<strong>\(strongText)</strong>")
     }

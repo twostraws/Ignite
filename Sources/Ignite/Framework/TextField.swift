@@ -72,7 +72,7 @@ public struct TextField: InlineHTML, BlockHTML {
         return copy
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var attributes = attributes
         attributes.selfClosingTag = "input"
         attributes.classes.append("form-control")

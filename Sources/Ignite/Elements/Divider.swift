@@ -24,9 +24,8 @@ public struct Divider: BlockHTML, DropdownElement {
     public init() {}
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var attributes = attributes
         attributes.selfClosingTag = "hr"
         return attributes.description()

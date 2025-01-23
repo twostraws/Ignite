@@ -13,6 +13,9 @@ import SwiftSoup
 /// build warnings, and more.
 @MainActor
 public final class PublishingContext {
+    /// The shared instance of `PublishingContext`.
+    static var `default`: PublishingContext!
+
     /// The site that is currently being built.
     public var site: any Site
 
@@ -65,7 +68,7 @@ public final class PublishingContext {
     ///   - file: One file from the user's package.
     ///   - buildDirectoryPath: The path where the artifacts are generated.
     ///   The default is "Build".
-    init(for site: any Site, from file: StaticString, buildDirectoryPath: String = "Build") throws {
+    private init(for site: any Site, from file: StaticString, buildDirectoryPath: String = "Build") throws {
         self.site = site
 
         let sourceBuildDirectories = try URL.selectDirectories(from: file)
@@ -78,6 +81,24 @@ public final class PublishingContext {
         includesDirectory = sourceDirectory.appending(path: "Includes")
 
         try parseContent()
+    }
+
+    /// Creates and sets the shared instance of `PublishingContext`
+    /// - Parameters:
+    ///   - site: The site we're currently publishing.
+    ///   - file: One file from the user's package.
+    ///   - buildDirectoryPath: The path where the artifacts are generated.
+    ///   The default is "Build".
+    /// - Returns: The shared `PublishingContext` instance.
+    @discardableResult
+    public static func initialize(
+        for site: any Site,
+        from file: StaticString,
+        buildDirectoryPath: String = "Build"
+    ) throws -> PublishingContext {
+        let context = try PublishingContext(for: site, from: file, buildDirectoryPath: buildDirectoryPath)
+        `default` = context
+        return context
     }
 
     /// Returns all content tagged with the specified tag, or all content if the tag is nil.
@@ -271,7 +292,7 @@ public final class PublishingContext {
         return PageContext.withCurrentPage(page) {
             let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
             return EnvironmentStore.update(values) {
-                finalLayout.body.render(context: self)
+                finalLayout.body.render()
             }
         }
     }
