@@ -81,7 +81,7 @@ struct AttributesTest {
                 .init(.accentColor, value: "red"),
                 .init(.cursor, value: "pointer")
             )
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output == "<\(tag) style=\"accent-color: red; cursor: pointer; z-index: 1\"></\(tag)>"
