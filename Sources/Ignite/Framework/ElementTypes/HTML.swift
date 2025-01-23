@@ -14,7 +14,7 @@
 /// You typically don't conform to `HTML` directly. Instead, use one of the built-in elements like
 /// `Div`, `Paragraph`, or `Link`, or create custom components by conforming to `HTMLRootElement`.
 @MainActor
-public protocol HTML: Sendable {
+public protocol HTML: CustomStringConvertible, Sendable {
     /// A unique identifier used to track this element's state and attributes.
     var id: String { get set }
 
@@ -33,6 +33,13 @@ public protocol HTML: Sendable {
 }
 
 public extension HTML {
+    /// The complete `HTML` string representation of the element.
+    nonisolated var description: String {
+        return MainActor.assumeIsolated {
+            self.render()
+        }
+    }
+
     /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
     var attributes: CoreAttributes {
         get { AttributeStore.default.attributes(for: id) }
