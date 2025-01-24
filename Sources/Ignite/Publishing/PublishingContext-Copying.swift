@@ -31,6 +31,10 @@ extension PublishingContext {
 
     /// Copies all files from the project's "Assets" directory to the build output's root directory.
     func copyAssets() {
+        guard FileManager.default.fileExists(atPath: assetsDirectory.path()) else {
+            return
+        }
+
         do {
             let assets = try FileManager.default.contentsOfDirectory(
                 at: assetsDirectory,
@@ -50,7 +54,9 @@ extension PublishingContext {
 
     /// Copies custom font files from the project's "Fonts" directory to the build output's "fonts" directory.
     func copyFonts() {
-        guard site.usesCustomFonts else { return }
+        guard FileManager.default.fileExists(atPath: fontsDirectory.path()) else {
+            return
+        }
 
         do {
             let fonts = try FileManager.default.contentsOfDirectory(
@@ -58,12 +64,11 @@ extension PublishingContext {
                 includingPropertiesForKeys: nil
             )
 
-            let fontsDestDir = buildDirectory.appending(path: "fonts")
-            try FileManager.default.createDirectory(at: fontsDestDir, withIntermediateDirectories: true)
-
             for font in fonts {
-                let destination = fontsDestDir.appending(path: font.lastPathComponent)
-                try FileManager.default.copyItem(at: font, to: destination)
+                try FileManager.default.copyItem(
+                    at: fontsDirectory.appending(path: font.lastPathComponent),
+                    to: buildDirectory.appending(path: font.lastPathComponent)
+                )
             }
         } catch {
             fatalError(.failedToCopySiteResource("Fonts"))
