@@ -20,7 +20,7 @@ struct AttributesTest {
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "nav", "section"]
 
     @Test("Checks that meta highlighting tags are sorted in the head element")
-    func highligtherThemes_areSorted() async throws {
+    func highlighterThemes_areSorted() async throws {
         let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .twilight])
         let output = links.map { $0.render() }
 
