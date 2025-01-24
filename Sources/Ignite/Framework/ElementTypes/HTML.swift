@@ -243,18 +243,6 @@ extension HTML {
         return self
     }
 
-    /// Adds a custom attribute to the element using string name.
-    /// - Parameters:
-    ///   - name: The name of the custom attribute
-    ///   - value: The value of the custom attribute.
-    /// - Returns: The modified `HTML` element
-    @discardableResult func customAttribute(name: String, value: String) -> Self {
-        var attributes = attributes
-        attributes.customAttributes.append(Attribute(name: name, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
     /// Adds a custom attribute to the element.
     /// - Parameter attribute: The custom attribute.
     /// - Returns: The modified `HTML` element.
