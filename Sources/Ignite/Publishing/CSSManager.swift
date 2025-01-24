@@ -6,7 +6,8 @@
 //
 
 /// A manager that generates and maintains CSS classes for media query-based styling rules.
-@MainActor final class CSSManager {
+@MainActor
+final class CSSManager {
     /// The shared instance used for managing CSS rules across the application.
     static let `default` = CSSManager()
 
@@ -19,6 +20,7 @@
         let properties: [(String, String)]
         let className: String?
     }
+
     private var pendingRegistrations: [PendingRegistration] = []
 
     /// A mapping of query hashes to their corresponding CSS class names.

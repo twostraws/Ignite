@@ -34,14 +34,14 @@ public struct SiteConfiguration: Sendable {
     /// Configuration for Bootstrap icons
     public let builtInIconsEnabled: BootstrapOptions
 
-    /// Array of syntax highlighters enabled for the site
-    let highlighterThemes: OrderedSet<HighlighterTheme>
-
     /// The path to the favicon
     public let favicon: URL?
 
-    /// Additional themes that can be selected by users beyond light and dark mode.
-    public let alternateThemes: [any Theme]
+    /// Array of syntax highlighters enabled for the site
+    let highlighterThemes: OrderedSet<HighlighterTheme>
+
+    /// Whether the site uses multiple themes.
+    let hasMultipleThemes: Bool
 
     public init(
         author: String = "",
@@ -52,9 +52,9 @@ public struct SiteConfiguration: Sendable {
         url: URL,
         useDefaultBootstrapURLs: BootstrapOptions = .localBootstrap,
         builtInIconsEnabled: BootstrapOptions = .localBootstrap,
-        highlightThemes: OrderedSet<HighlighterTheme> = [],
         favicon: URL? = nil,
-        alternateThemes: [any Theme] = []
+        highlightThemes: OrderedSet<HighlighterTheme> = [],
+        hasMultipleThemes: Bool = true
     ) {
         self.author = author
         self.name = name
@@ -66,7 +66,7 @@ public struct SiteConfiguration: Sendable {
         self.builtInIconsEnabled = builtInIconsEnabled
         self.highlighterThemes = highlightThemes
         self.favicon = favicon
-        self.alternateThemes = alternateThemes
+        self.hasMultipleThemes = hasMultipleThemes
     }
 
     init() {
@@ -80,6 +80,6 @@ public struct SiteConfiguration: Sendable {
         self.builtInIconsEnabled = .localBootstrap
         self.highlighterThemes = []
         self.favicon = nil
-        self.alternateThemes = []
+        self.hasMultipleThemes = false
     }
 }

@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// A group of metadata headers for your page, such as its title,
 /// links to its CSS, and more.
 public struct HTMLHead: RootHTML {
@@ -105,5 +107,19 @@ public struct HTMLHead: RootHTML {
         if let favicon = configuration.favicon {
             MetaLink(href: favicon, rel: .icon)
         }
+
+        if configuration.hasMultipleThemes, let themeSwitchingScript {
+            themeSwitchingScript
+        }
+    }
+
+    /// An inline script that handles theme changes immediately.
+    private static var themeSwitchingScript: Script? {
+        guard let sourceURL = Bundle.module.url(forResource: "Resources/js/theme-switching", withExtension: "js"),
+              let contents = try? String(contentsOf: sourceURL)
+        else {
+            return nil
+        }
+        return Script(code: contents)
     }
 }

@@ -88,7 +88,6 @@ extension PublishingContext {
         } catch {
             fatalError(.failedToCopySiteResource("css/global-rules.css"))
         }
-
     }
 
     /// Generates CSS for all themes including font faces, colors, and typography settings, writing to themes.min.css.

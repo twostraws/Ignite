@@ -62,8 +62,9 @@ public struct EnvironmentValues {
             url: site.url,
             useDefaultBootstrapURLs: site.useDefaultBootstrapURLs,
             builtInIconsEnabled: site.builtInIconsEnabled,
+            favicon: site.favicon,
             highlightThemes: site.allHighlighterThemes,
-            favicon: site.favicon
+            hasMultipleThemes: site.allThemes.count > 1
         )
     }
 }
