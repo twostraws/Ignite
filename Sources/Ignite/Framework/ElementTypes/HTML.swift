@@ -56,13 +56,30 @@ public extension HTML {
         set {} // swiftlint:disable:this unused_setter_value
     }
 
+    /// The default status as a primitive element.
+    var isPrimitive: Bool { false }
+
     /// The publishing context of this site.
     var publishingContext: PublishingContext {
         PublishingContext.default
     }
+
+    /// Generates the complete `HTML` string representation of the element.
+    func render() -> String {
+        body.render()
+    }
 }
 
 extension HTML {
+    /// Checks if this element is an empty HTML element.
+    var isEmptyHTML: Bool {
+        if let collection = self as? HTMLCollection {
+            collection.elements.allSatisfy { $0 is EmptyHTML }
+        } else {
+            self is EmptyHTML
+        }
+    }
+
     /// A Boolean value indicating whether this element contains multiple child elements.
     var isComposite: Bool {
         let bodyContent = body
@@ -103,41 +120,67 @@ extension HTML {
     }
 }
 
-// Style modifiers
 public extension HTML {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
-    @discardableResult
-    func `class`(_ newClasses: String?...) -> Self {
+    @discardableResult func `class`(_ newClasses: String?...) -> Self {
         var attributes = attributes
         let compacted = newClasses.compactMap(\.self)
         attributes.classes.formUnion(compacted)
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
-}
 
-// Default implementations
-public extension HTML {
-    func render() -> String {
-        body.render()
+    /// Adds an inline style to the element.
+    /// - Parameters:
+    ///   - property: The CSS property.
+    ///   - value: The value.
+    /// - Returns: The modified `HTML` element
+    @discardableResult func style(_ property: Property, _ value: String) -> Self {
+        var attributes = attributes
+        attributes.styles.append(.init(property, value: value))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Sets the `HTML` id attribute of the element.
+    /// - Parameter string: The ID value to set
+    /// - Returns: The modified `HTML` element
+    func id(_ string: String) -> Self {
+        var attributes = attributes
+        attributes.id = string
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds an ARIA attribute to the element.
+    /// - Parameters:
+    ///   - key: The ARIA attribute key
+    ///   - value: The ARIA attribute value
+    /// - Returns: The modified `HTML` element
+    func aria(_ key: AriaType, _ value: String?) -> Self {
+        guard let value else { return self }
+        var attributes = attributes
+        attributes.aria.append(Attribute(name: key.rawValue, value: value))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds a custom attribute to the element using string name.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    @discardableResult func customAttribute(name: String, value: String) -> Self {
+        var attributes = attributes
+        attributes.customAttributes.append(Attribute(name: name, value: value))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
     }
 }
 
-public extension HTML {
-    /// Checks if this element is an empty HTML element.
-    var isEmptyHTML: Bool {
-        if let collection = self as? HTMLCollection {
-            collection.elements.allSatisfy { $0 is EmptyHTML }
-        } else {
-            self is EmptyHTML
-        }
-    }
-
-    /// The default status as a primitive element.
-    var isPrimitive: Bool { false }
-
+extension HTML {
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
     /// - Returns: The modified `HTML` element
@@ -165,23 +208,10 @@ public extension HTML {
         return self
     }
 
-    /// Adds an ARIA attribute to the element.
-    /// - Parameters:
-    ///   - key: The ARIA attribute key
-    ///   - value: The ARIA attribute value
-    /// - Returns: The modified `HTML` element
-    func aria(_ key: AriaType, _ value: String?) -> Self {
-        guard let value else { return self }
-        var attributes = attributes
-        attributes.aria.append(Attribute(name: key.rawValue, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
     /// Adds inline styles to the element.
     /// - Parameter values: Variable number of `AttributeValue` objects
     /// - Returns: The modified `HTML` element
-    internal func style(_ values: InlineStyle?...) -> Self {
+    func style(_ values: InlineStyle?...) -> Self {
         var attributes = attributes
         attributes.styles.formUnion(values.compactMap(\.self))
         AttributeStore.default.merge(attributes, intoHTML: id)
@@ -193,31 +223,9 @@ public extension HTML {
     ///   - property: The CSS property.
     ///   - value: The value.
     /// - Returns: The modified `HTML` element
-    @discardableResult internal func style(_ property: Property, _ value: String) -> Self {
+    func style(_ property: String, _ value: String) -> Self {
         var attributes = attributes
         attributes.styles.append(.init(property, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds an inline style to the element.
-    /// - Parameters:
-    ///   - property: The CSS property.
-    ///   - value: The value.
-    /// - Returns: The modified `HTML` element
-    internal func style(_ property: String, _ value: String) -> Self {
-        var attributes = attributes
-        attributes.styles.append(.init(property, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Sets the `HTML` id attribute of the element.
-    /// - Parameter string: The ID value to set
-    /// - Returns: The modified `HTML` element
-    func id(_ string: String) -> Self {
-        var attributes = attributes
-        attributes.id = string
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -231,18 +239,6 @@ public extension HTML {
         guard !actions.isEmpty else { return self }
         var attributes = attributes
         attributes.events.append(Event(name: name, actions: actions))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds a custom attribute to the element using string name.
-    /// - Parameters:
-    ///   - name: The name of the custom attribute
-    ///   - value: The value of the custom attribute, if applicable.
-    /// - Returns: The modified `HTML` element
-    @discardableResult func customAttribute(name: String, value: String) -> Self {
-        var attributes = attributes
-        attributes.customAttributes.append(Attribute(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -282,7 +278,7 @@ public extension HTML {
     /// Adds a wrapper div with the specified attributes to the element's storage
     /// - Parameter newAttributes: The attributes to apply to the wrapper div
     /// - Returns: The original element
-    internal func containerAttributes(_ newAttributes: ContainerAttributes...) -> Self {
+    func containerAttributes(_ newAttributes: ContainerAttributes...) -> Self {
         var attributes = attributes
         attributes.containerAttributes.formUnion(newAttributes.map { $0 })
         AttributeStore.default.merge(attributes, intoHTML: id)
@@ -302,7 +298,7 @@ public extension HTML {
     /// Adds a wrapper div with the specified style to the element's storage
     /// - Parameter styles: The styles to apply to the wrapper div
     /// - Returns: The original element
-    internal func containerStyle(_ styles: InlineStyle...) -> Self {
+    func containerStyle(_ styles: InlineStyle...) -> Self {
         var attributes = attributes
         attributes.containerAttributes.append(.init(styles: OrderedSet(styles)))
         AttributeStore.default.merge(attributes, intoHTML: id)
