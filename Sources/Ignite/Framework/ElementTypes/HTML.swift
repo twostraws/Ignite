@@ -124,8 +124,7 @@ public extension HTML {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
-    @discardableResult
-    func `class`(_ newClasses: String?...) -> Self {
+    @discardableResult func `class`(_ newClasses: String?...) -> Self {
         var attributes = attributes
         let compacted = newClasses.compactMap(\.self)
         attributes.classes.formUnion(compacted)
@@ -240,18 +239,6 @@ extension HTML {
         guard !actions.isEmpty else { return self }
         var attributes = attributes
         attributes.events.append(Event(name: name, actions: actions))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds a custom attribute to the element using string name.
-    /// - Parameters:
-    ///   - name: The name of the custom attribute
-    ///   - value: The value of the custom attribute, if applicable.
-    /// - Returns: The modified `HTML` element
-    @discardableResult func customAttribute(name: String, value: String) -> Self {
-        var attributes = attributes
-        attributes.customAttributes.append(Attribute(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
