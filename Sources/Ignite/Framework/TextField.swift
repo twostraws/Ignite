@@ -71,12 +71,14 @@ public struct TextField: InlineHTML, BlockHTML {
         return copy
     }
 
+    /// Disables this field
     public func disabled(_ disabled: Bool = true) -> Self {
         var copy = self
         copy.isDisabled = disabled
         return copy
     }
 
+    /// Makes this field read-only
     public func readOnly(_ readOnly: Bool = true) -> Self {
         var copy = self
         copy.isReadOnly = readOnly

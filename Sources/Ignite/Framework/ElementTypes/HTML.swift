@@ -256,7 +256,7 @@ public extension HTML {
         customAttribute(.init(name: name), isEnabled: isEnabled)
     }
 
-    /// Adds a custom attribute to the element using string name.
+    /// Adds a custom attribute to the element.
     /// - Parameters:
     ///     - attribute: The custom attribute
     ///     - isEnabled: Whether the attribute should be added to the element
