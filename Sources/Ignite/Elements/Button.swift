@@ -124,6 +124,15 @@ public struct Button: BlockHTML, InlineHTML {
         return copy
     }
 
+    /// Disables this button.
+    /// - Parameter disabled: Whether the button should be disabled.
+    /// - Returns: A new `Button` instance with the updated disabled state.
+    public func disabled(_ disabled: Bool = true) -> Self {
+        var copy = self
+        copy.isDisabled = disabled
+        return copy
+    }
+
     /// Returns an array containing the correct CSS classes to style this button
     /// based on the role and size passed in. This is used for buttons, links, and
     /// dropdowns, which is why it's shared.
