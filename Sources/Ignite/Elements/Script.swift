@@ -51,7 +51,7 @@ public struct Script: BlockHTML, HeadElement {
         var attributes = attributes
         attributes.tag = "script"
 
-        if let file{
+        if let file {
             attributes.append(customAttributes: .init(name: "src", value: "\(publishingContext.site.url.path)\(file)"))
             return attributes.description()
         } else if let code {
