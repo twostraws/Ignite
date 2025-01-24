@@ -300,6 +300,14 @@ public struct CoreAttributes: Sendable {
         self.customAttributes.formUnion(customAttributes)
     }
 
+    /// Appends multiple custom attributes to the element.
+    /// - Parameter customAttributes: Variable number of custom attributes to append,
+    ///   where each attribute is an `AttributeValue` containing a name-value pair.
+    mutating func append(customAttributes: BooleanAttribute...) {
+        let attributes = customAttributes.map { Attribute($0) }
+        self.customAttributes.formUnion(attributes)
+    }
+
     /// Appends an array of inline CSS styles to the element.
     /// - Parameter newStyles: An array of `AttributeValue` objects representing
     ///   CSS style properties and their values to be added.

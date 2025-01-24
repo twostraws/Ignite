@@ -170,7 +170,7 @@ public struct Button: BlockHTML, InlineHTML {
             .appending(classes: Button.classes(forRole: role, size: size))
             .appending(aria: Button.aria(forRole: role))
         if isDisabled {
-            buttonAttributes.customAttributes.append(.disabled)
+            buttonAttributes.append(customAttributes: .disabled)
         }
         let output = HTMLCollection(label).render()
         buttonAttributes.tag = "button type=\"\(type.htmlName)\""
