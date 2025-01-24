@@ -244,6 +244,41 @@ extension HTML {
         return self
     }
 
+    /// Adds a custom attribute to the element using string name.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute, if applicable.
+    /// - Returns: The modified `HTML` element
+    @discardableResult func customAttribute(name: String, value: String) -> Self {
+        var attributes = attributes
+        attributes.customAttributes.append(Attribute(name: name, value: value))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds a custom attribute to the element using string name.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - isEnabled: Whether the attribute should be added to the element
+    /// - Returns: The modified `HTML` element
+    @discardableResult func customAttribute(name: String, isEnabled: Bool = true) -> Self {
+        customAttribute(.init(name: name), isEnabled: isEnabled)
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///     - attribute: The custom attribute
+    ///     - isEnabled: Whether the attribute should be added to the element
+    /// - Returns: The modified `HTML` element
+    @discardableResult func customAttribute(_ attribute: Attribute, isEnabled: Bool = true) -> Self {
+        if isEnabled {
+            var attributes = attributes
+            attributes.customAttributes.append(attribute)
+            AttributeStore.default.merge(attributes, intoHTML: id)
+        }
+        return self
+    }
+
     /// Merges a complete set of core attributes into this element.
     /// - Parameter newAttributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified HTML element

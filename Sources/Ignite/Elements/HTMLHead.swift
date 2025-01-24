@@ -118,6 +118,7 @@ public struct HTMLHead: RootHTML {
         guard let sourceURL = Bundle.module.url(forResource: "Resources/js/theme-switching", withExtension: "js"),
               let contents = try? String(contentsOf: sourceURL)
         else {
+            PublishingContext.default.addError(.missingSiteResource("js/theme-switching.js"))
             return nil
         }
         return Script(code: contents)
