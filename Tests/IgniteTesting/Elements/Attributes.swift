@@ -20,7 +20,7 @@ struct AttributesTest {
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "nav", "section"]
 
     @Test("Checks that meta highlighting tags are sorted in the head element")
-    func highligtherThemes_areSorted() async throws {
+    func highlighterThemes_areSorted() async throws {
         let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .twilight])
         let output = links.map { $0.render() }
 
@@ -145,6 +145,31 @@ struct AttributesTest {
 
         #expect(
             output == "<\(tag)></\(tag)>"
+        )
+    }
+
+    @Test("Checks that Button attributes are set and sorted correctly")
+    func test_button_attributes_are_set_and_sorted_correctly() async throws {
+        let button = Button()
+            .disabled()
+            .customAttribute(name: "foo")
+        let output = button.render()
+
+        #expect(
+            output == #"<button type="button" disabled foo class="btn"></button>"#
+        )
+    }
+
+    @Test("Checks that TextField attributes are set and sorted correctly")
+    func test_textField_attributes_are_set_and_sorted_correctly() async throws {
+        let textField = TextField(placeholder: nil)
+            .disabled()
+            .readOnly()
+            .required()
+        let output = textField.render()
+
+        #expect(
+            output == #"<input disabled readonly required type="text" class="form-control" />"#
         )
     }
 }
