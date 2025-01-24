@@ -10,54 +10,65 @@ import Testing
 
 @testable import Ignite
 
+// swiftlint:disable force_try
 /// Tests for the `title` element.
 @Suite("Link Tests")
 @MainActor struct SubsiteLinkTests {
-    init() {
-        try! PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
+    static let sites: [any Site] = [TestSite(), TestSubsite()]
+    static let pages: [any StaticLayout] = [TestLayout(), TestSubsiteLayout()]
 
-    @Test("String Target Test", arguments: ["/"])
-    func stringTarget(linkTarget: String) async throws {
-        let element = Link("Go Home", target: linkTarget)
+    @Test("String Target Test", arguments: [(target: "/", description: "Go Home")], await[any Site](Self.sites))
+    func target(for link: (target: String, description: String), for site: any Site) async throws {
+        try! PublishingContext.initialize(for: site, from: #filePath)
+
+        let element = Link(link.description, target: link.target)
         let output = element.render()
+        let expectedPath = site.url.path == "/" ? link.target : "\(site.url.path)\(link.target)"
 
         #expect(
             output == """
-            <a href="\(linkTarget)\" \
+            <a href="\(expectedPath)" \
             class="link-underline link-underline-opacity-100 \
             link-underline-opacity-100-hover">\
-            Go Home\
+            \(link.description)\
             </a>
             """
         )
     }
 
-    @Test("Page Target Test")
-    func pageTarget() async throws {
-        let element = Link("This is a test", target: TestPage())
-            .linkStyle(.button)
+    @Test("Page Target Test", arguments: zip(await pages, await [any Site](Self.sites)))
+    func target(for page: any StaticLayout, site: any Site) async throws {
+        try! PublishingContext.initialize(for: site, from: #filePath)
+
+        let element = Link("This is a test", target: page).linkStyle(.button)
         let output = element.render()
 
-        #expect(
-            output
-                == "<a href=\"/test-page\" class=\"btn btn-primary\">This is a test</a>"
-        )
+        let expectedPath = site.url.pathComponents.count <= 1 ?
+            "/test-layout" :
+            "\(site.url.path)/test-subsite-layout"
+
+        #expect(output == "<a href=\"\(expectedPath)\" class=\"btn btn-primary\">This is a test</a>")
     }
 
-    @Test("Page Content Test")
-    func pageContent() async throws {
+    @Test("Page Content Test", arguments: zip(await pages, await [any Site](Self.sites)))
+    func content(for page: any StaticLayout, site: any Site) async throws {
+        try! PublishingContext.initialize(for: site, from: #filePath)
+
         let element = Link(
-            target: TestPage(),
+            target: page,
             content: {
                 "MORE "
                 Text("CONTENT")
             })
         let output = element.render()
 
+        let expectedPath = site.url.pathComponents.count <= 1 ?
+            "/test-layout" :
+            "\(site.url.path)/test-subsite-layout"
+
         #expect(
             output == """
-            <a href="/test-page" \
+            <a href="\(expectedPath)" \
             class="link-plain link-underline link-underline-opacity-100 \
             link-underline-opacity-100-hover">\
             MORE <p>CONTENT</p>\
@@ -66,3 +77,4 @@ import Testing
         )
     }
 }
+// swiftlint:enable force_try

@@ -14,6 +14,7 @@ import Testing
 @Suite("Title Tests")
 @MainActor struct TitleTests {
     init() {
+        // swiftlint:disable:next force_try
         try! PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
 

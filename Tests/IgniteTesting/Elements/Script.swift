@@ -9,40 +9,45 @@ import Testing
 
 @testable import Ignite
 
+// swiftlint:disable force_try
 /// Tests for the `Script` element.
 @Suite("Script Tests")
 @MainActor struct ScriptTests {
-    init() {
-        try! PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
+    static let sites: [any Site] = [TestSite(), TestSubsite()]
 
-    @Test("Code Test")
-    func code() async throws {
+    @Test("Code Test", arguments: await[any Site](Self.sites))
+    func code(for site: any Site) async throws {
+        try! PublishingContext.initialize(for: site, from: #filePath)
+
         let element = Script(code: "javascript code")
         let output = element.render()
 
         #expect(output == "<script>javascript code</script>")
     }
 
-    @Test("File Test", arguments: ["/code.js"])
-    func file(scriptFile: String) async throws {
+    @Test("File Test", arguments: ["/code.js"], await[any Site](Self.sites))
+    func file(scriptFile: String, site: any Site) async throws {
+        try! PublishingContext.initialize(for: site, from: #filePath)
+
         let element = Script(file: scriptFile)
         let output = element.render()
 
-        #expect(output == "<script src=\"\(scriptFile)\"></script>")
+        let expectedPath = site.url.pathComponents.count <= 1 ? scriptFile : "\(site.url.path)\(scriptFile)"
+        #expect(output == "<script src=\"\(expectedPath)\"></script>")
     }
 
-    @Test("Attributes Test", arguments: ["/code.js"])
-    func attributes(scriptFile: String) async throws {
+    @Test("Attributes Test", arguments: ["/code.js"], await[any Site](Self.sites))
+    func attributes(scriptFile: String, site: any Site) async throws {
+        try! PublishingContext.initialize(for: site, from: #filePath)
+
         let element = Script(file: scriptFile)
             .data("key", "value")
             .customAttribute(name: "custom", value: "part")
         let output = element.render()
         let normalizedOutput = ElementTest.normalizeHTML(output)
 
-        #expect(
-            normalizedOutput
-                == "<script custom=\"part\" key=\"value\" src=\"\(scriptFile)\"></script>"
-        )
+        let expectedPath = site.url.pathComponents.count <= 1 ? scriptFile : "\(site.url.path)\(scriptFile)"
+        #expect(normalizedOutput == "<script custom=\"part\" key=\"value\" src=\"\(expectedPath)\"></script>")
     }
 }
+// swiftlint:enable force_try
