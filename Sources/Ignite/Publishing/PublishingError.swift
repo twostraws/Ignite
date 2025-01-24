@@ -52,6 +52,9 @@ enum PublishingError: LocalizedError {
     /// A syntax highlighter file resource was not found.
     case missingSyntaxHighlighter(String)
 
+    /// Failed to embed theme-switching JavaScript in `HTMLHead`.
+    case failedToEmbedThemeSwitchingJS
+
     /// The site lacks a default theme.
     case missingDefaultTheme
 
@@ -105,6 +108,8 @@ enum PublishingError: LocalizedError {
             "Failed to copy critical site resource to build folder: \(name)."
         case .missingSyntaxHighlighter(let name):
             "Failed to locate syntax highlighter JavaScript: \(name)."
+        case .failedToEmbedThemeSwitchingJS:
+            "Failed to add theme-switching JavaScript to your site's <head>."
         case .missingDefaultTheme:
             "Ignite requires that you provide either a light or dark theme as the default."
         case .missingDefaultSyntaxHighlighterTheme:
