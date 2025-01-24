@@ -154,14 +154,14 @@ public struct Content {
             metadata["type"] = firstSubdirectory
         }
 
-        if let date = try parseMetadataDate(for: "date") {
+        if let date = parseMetadataDate(for: "date") {
             metadata["date"] = date
         } else {
             metadata["date"] = resourceValues.creationDate ?? Date.now
             hasAutomaticDate = true
         }
 
-        if let lastModified = try parseMetadataDate(for: "modified", "lastModified") {
+        if let lastModified = parseMetadataDate(for: "modified", "lastModified") {
             metadata["lastModified"] = lastModified
         } else {
             metadata["lastModified"] = resourceValues.contentModificationDate ?? Date.now
@@ -215,20 +215,18 @@ public struct Content {
     /// - Parameter ids: The metadata keys to check for date values
     /// - Returns: A parsed `Date` if found, `nil` otherwise
     /// - Throws: An error if date parsing fails
-    private func parseMetadataDate(for ids: String...) throws -> Date? {
-        var anyError: Error?
+    private func parseMetadataDate(for ids: String...) -> Date? {
 
         for id in ids {
             guard let dateString = metadata[id] as? String else { continue }
             if let date = process(date: dateString) {
                 return date
             } else {
-                anyError = Error.invalidDateFormat
+                PublishingContext.default.addError(.badContentDateFormat)
                 continue
             }
         }
 
-        if let anyError { throw anyError }
         return nil
     }
 }
@@ -244,13 +242,5 @@ extension Content {
         self.metadata = [:]
         self.body = ""
         self.hasAutomaticDate = false
-    }
-}
-
-extension Content {
-    public struct Error: Swift.Error {
-        public let message: String
-
-        static let invalidDateFormat = Error(message: "Content dates should in the format 2024-05-24 15:30.")
     }
 }

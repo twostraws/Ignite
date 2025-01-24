@@ -268,9 +268,12 @@ public extension Site {
         )
         try await context.publish()
 
-        if context.warnings.isEmpty == false {
-            print("Publish completed with warnings:")
-            print(context.warnings.map { "\t- \($0)" }.joined(separator: "\n"))
+        if !context.warnings.isEmpty || !context.errors.isEmpty {
+            print("📘 Publish completed with exceptions:")
+            print(context.errors.map { "\t📕 \($0.errorDescription!)" }.joined(separator: "\n"))
+            print(context.warnings.map { "\t📙 \($0)" }.joined(separator: "\n"))
+        } else {
+            print("📗 Publish completed!")
         }
     }
 }

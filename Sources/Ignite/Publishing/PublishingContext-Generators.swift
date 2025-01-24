@@ -11,7 +11,7 @@ extension PublishingContext {
     /// Contains the various snap dimensions for different Bootstrap widths.
     var containerDefaults: String {
         guard let theme = site.lightTheme ?? site.darkTheme else {
-            fatalError("Ignite requires that you provide a light or dark theme.")
+            fatalError(.missingDefaultTheme)
         }
 
         return """
@@ -36,21 +36,21 @@ extension PublishingContext {
     }
 
     /// Renders static pages and content pages, including the homepage.
-    func generateContent() async throws {
-        try render(site.homePage, isHomePage: true)
+    func generateContent() async {
+        render(site.homePage, isHomePage: true)
 
         for page in site.staticLayouts {
-            try render(page)
+            render(page)
         }
 
         for content in allContent {
-            try render(content)
+            render(content)
         }
         currentRenderingPath = nil
     }
 
     /// Generates all tags pages, including the "all tags" page.
-    func generateTagLayouts() async throws {
+    func generateTagLayouts() async {
         if site.tagLayout is EmptyTagLayout { return }
 
         /// Creates a unique list of sorted tags from across the site, starting
@@ -82,12 +82,12 @@ extension PublishingContext {
 
             let outputString = render(page, using: site.tagLayout.parentLayout)
 
-            try write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
+            write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }
     }
 
     /// Generates a sitemap.xml file for this site.
-    func generateSiteMap() throws {
+    func generateSiteMap() {
         let generator = SiteMapGenerator(context: self)
         let siteMap = generator.generateSiteMap()
 
@@ -96,12 +96,12 @@ extension PublishingContext {
         do {
             try siteMap.write(to: outputURL, atomically: true, encoding: .utf8)
         } catch {
-            throw PublishingError.failedToCreateBuildFile(outputURL)
+            fatalError(.failedToCreateBuildFile(outputURL))
         }
     }
 
     /// Generates an RSS feed for this site, if enabled.
-    public func generateFeed() throws {
+    public func generateFeed() {
         guard site.isFeedEnabled else { return }
 
         let content = allContent.sorted(
@@ -116,12 +116,12 @@ extension PublishingContext {
             let destinationURL = buildDirectory.appending(path: site.feedConfiguration.path)
             try result.write(to: destinationURL, atomically: true, encoding: .utf8)
         } catch {
-            throw PublishingError.failedToWriteFeed
+            addError(.failedToWriteFeed)
         }
     }
 
     /// Generates a robots.txt file for this site.
-    public func generateRobots() throws {
+    public func generateRobots() {
         let generator = RobotsGenerator(site: site)
         let result = generator.generateRobots()
 
@@ -129,15 +129,19 @@ extension PublishingContext {
             let destinationURL = buildDirectory.appending(path: "robots.txt")
             try result.write(to: destinationURL, atomically: true, encoding: .utf8)
         } catch {
-            throw PublishingError.failedToWriteFeed
+            addError(.failedToWriteFile("robots.txt"))
         }
     }
 
     /// Generates the CSS file containing all media query rules.
-    func generateMediaQueryCSS() throws {
+    func generateMediaQueryCSS() {
         CSSManager.default.setThemes(site.allThemes)
         let cssPath = buildDirectory.appending(path: "css/media-queries.min.css")
-        try CSSManager.default.allRules.write(to: cssPath, atomically: true, encoding: .utf8)
+        do {
+            try CSSManager.default.allRules.write(to: cssPath, atomically: true, encoding: .utf8)
+        } catch {
+            fatalError(.failedToWriteFile("media-queries.min.css"))
+        }
     }
 
     /// Generates animations for the site.

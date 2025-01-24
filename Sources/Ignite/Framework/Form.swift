@@ -196,7 +196,7 @@ public struct Form: BlockHTML {
 
     private func renderFormField(_ textField: TextField) -> Section {
         guard let action = action(attributes.id) as? SubscribeAction else {
-            fatalError("Forms support only SubscribeAction at the moment.")
+            fatalError("Form supports only SubscribeAction at the moment.")
         }
 
         let sizedTextField = textField

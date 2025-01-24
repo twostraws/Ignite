@@ -10,9 +10,9 @@ import Foundation
 extension PublishingContext {
     /// Copies one file from the Ignite resources into the final build folder.
     /// - Parameters resource: The resource to copy.
-    func copy(resource: String) throws {
+    func copy(resource: String) {
         guard let sourceURL = Bundle.module.url(forResource: "Resources/\(resource)", withExtension: nil) else {
-            throw PublishingError.missingSiteResource(resource)
+            fatalError(.missingSiteResource(resource))
         }
 
         let filename = sourceURL.lastPathComponent
@@ -25,12 +25,12 @@ extension PublishingContext {
             try FileManager.default.createDirectory(at: destinationDirectory, withIntermediateDirectories: true)
             try FileManager.default.copyItem(at: sourceURL, to: destinationFile)
         } catch {
-            throw PublishingError.failedToCopySiteResource(resource)
+            fatalError(.failedToCopySiteResource(resource))
         }
     }
 
     /// Copies all files from the project's "Assets" directory to the build output's root directory.
-    func copyAssets() throws {
+    func copyAssets() {
         do {
             let assets = try FileManager.default.contentsOfDirectory(
                 at: assetsDirectory,
@@ -44,13 +44,12 @@ extension PublishingContext {
                 )
             }
         } catch {
-            print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
-            throw error
+            fatalError(.failedToCopySiteResource("Assets"))
         }
     }
 
     /// Copies custom font files from the project's "Fonts" directory to the build output's "fonts" directory.
-    func copyFonts() throws {
+    func copyFonts() {
         guard site.usesCustomFonts else { return }
 
         do {
@@ -67,26 +66,25 @@ extension PublishingContext {
                 try FileManager.default.copyItem(at: font, to: destination)
             }
         } catch {
-            print("Could not copy assets from \(assetsDirectory) to \(buildDirectory): \(error).")
-            throw error
+            fatalError(.failedToCopySiteResource("Fonts"))
         }
     }
 
     /// Calculates the full list of syntax highlighters need by this site, including
     /// resolving dependencies.
-    func copySyntaxHighlighters() throws {
+    func copySyntaxHighlighters() {
         let generator = SyntaxHighlightGenerator(site: site)
-        let result = try generator.generateSyntaxHighlighters(context: self)
+        let result = generator.generateSyntaxHighlighters(context: self)
 
         do {
             let destinationURL = buildDirectory.appending(path: "js/syntax-highlighting.js")
             try result.write(to: destinationURL, atomically: true, encoding: .utf8)
         } catch {
-            throw PublishingError.failedToWriteSyntaxHighlighters
+            fatalError(.failedToWriteSyntaxHighlighters)
         }
 
         for theme in site.allHighlighterThemes {
-            try copy(resource: theme.url)
+            copy(resource: theme.url)
         }
     }
 
