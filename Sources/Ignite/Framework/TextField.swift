@@ -28,6 +28,12 @@ public struct TextField: InlineHTML, BlockHTML {
     /// Whether the field must have a value before the form can be submitted.
     private var isRequired = false
 
+    /// Whether the field is disabled and cannot be interacted with.
+    private var isDisabled = false
+
+    /// Whether the field is read-only and cannot be edited.
+    private var isReadOnly = false
+
     /// The type of input this text field accepts.
     private var type = TextType.text
 
@@ -65,6 +71,18 @@ public struct TextField: InlineHTML, BlockHTML {
         return copy
     }
 
+    public func disabled(_ disabled: Bool = true) -> Self {
+        var copy = self
+        copy.isDisabled = disabled
+        return copy
+    }
+
+    public func readOnly(_ readOnly: Bool = true) -> Self {
+        var copy = self
+        copy.isReadOnly = readOnly
+        return copy
+    }
+
     /// Sets the input type (e.g., "email", "password")
     public func type(_ type: TextType) -> Self {
         var copy = self
@@ -83,7 +101,15 @@ public struct TextField: InlineHTML, BlockHTML {
         }
 
         if isRequired {
-            attributes.customAttributes.append(.init(name: "required", value: ""))
+            attributes.customAttributes.append(.required)
+        }
+
+        if isDisabled {
+            attributes.customAttributes.append(.disabled)
+        }
+
+        if isReadOnly {
+            attributes.customAttributes.append(.readOnly)
         }
 
         return attributes.description()
