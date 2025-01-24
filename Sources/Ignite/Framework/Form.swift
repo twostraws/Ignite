@@ -270,3 +270,18 @@ public struct Form: BlockHTML {
         }
     }
 }
+
+extension Form {
+    /// The type of HTML this element returns after attributes have been applied.
+    public typealias AttributedHTML = Self
+
+    public func id(_ id: String) -> Self {
+        attributes.id(id)
+        return self
+    }
+
+    public func `class`(_ classes: String...) -> Self {
+        attributes.classes(classes)
+        return self
+    }
+}

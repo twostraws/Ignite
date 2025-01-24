@@ -30,6 +30,19 @@ public protocol HTML: CustomStringConvertible, Sendable {
     /// Converts this element and its children into an HTML string with attributes.
     /// - Returns: A string containing the rendered HTML
     func render() -> String
+
+    /// The type of HTML this element returns after attributes have been applied.
+    associatedtype AttributedHTML = ModifiedHTML
+
+    /// Sets the `HTML` id attribute of the element.
+    /// - Parameter string: The ID value to set
+    /// - Returns: The modified `HTML` element
+    func id(_ id: String) -> AttributedHTML
+
+    /// Adds multiple CSS classes to the element.
+    /// - Parameter classes: Variable number of class names
+    /// - Returns: The modified HTML element
+    @discardableResult func `class`(_ classes: String...) -> AttributedHTML
 }
 
 public extension HTML {
@@ -121,13 +134,10 @@ extension HTML {
 }
 
 public extension HTML {
-    /// Adds multiple optional CSS classes to the element.
-    /// - Parameter newClasses: Variable number of optional class names
-    /// - Returns: The modified HTML element
-    @discardableResult func `class`(_ newClasses: String?...) -> Self {
+    @discardableResult func `class`(_ newClass: String?) -> Self {
+        guard let newClass else { return self }
         var attributes = attributes
-        let compacted = newClasses.compactMap(\.self)
-        attributes.classes.formUnion(compacted)
+        attributes.classes.append(newClass)
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -140,16 +150,6 @@ public extension HTML {
     @discardableResult func style(_ property: Property, _ value: String) -> Self {
         var attributes = attributes
         attributes.styles.append(.init(property, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Sets the `HTML` id attribute of the element.
-    /// - Parameter string: The ID value to set
-    /// - Returns: The modified `HTML` element
-    func id(_ string: String) -> Self {
-        var attributes = attributes
-        attributes.id = string
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }

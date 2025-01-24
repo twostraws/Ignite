@@ -88,10 +88,26 @@ public struct Item: HTML {
                 .class("accordion-body")
             }
             .id(itemID)
-            .class("accordion-collapse", "collapse", startsOpen ? "show" : nil)
+            .class("accordion-collapse", "collapse")
+            .class(startsOpen ? "show" : nil)
             .data("bs-parent", parentOpenMode == .individual ? "#\(parentID)" : "")
         }
         .class("accordion-item")
         .render()
+    }
+}
+
+extension Item {
+    /// The type of HTML this element returns after attributes have been applied.
+    public typealias AttributedHTML = Self
+
+    public func id(_ id: String) -> Self {
+        attributes.id(id)
+        return self
+    }
+
+    @discardableResult public func `class`(_ classes: String...) -> Self {
+        attributes.classes(classes)
+        return self
     }
 }

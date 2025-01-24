@@ -6,18 +6,18 @@
 //
 
 /// A type that wraps HTML content with a modifier, preserving attributes and structure.
-struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
+public struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
     /// The column width to use when this element appears in a grid layout.
-    var columnWidth: ColumnWidth = .automatic
+    public var columnWidth: ColumnWidth = .automatic
 
     /// A unique identifier for this element.
-    var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString.truncatedHash
 
     /// The content and behavior of this HTML element.
-    var body: some HTML { self }
+    public var body: some HTML { self }
 
     /// Whether this HTML belongs to the framework.
-    var isPrimitive: Bool = true
+    public var isPrimitive: Bool = true
 
     /// The underlying HTML content being modified.
     private(set) var content: any HTML
@@ -45,7 +45,7 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
 
     /// Renders this element using the provided publishing context.
     /// - Returns: The rendered HTML string
-    func render() -> String {
+    public func render() -> String {
         if content.isPrimitive {
             AttributeStore.default.merge(attributes, intoHTML: content.id)
             return content.render()
@@ -55,5 +55,20 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
             if attrs.tag == nil { attrs.tag = "div" }
             return attrs.description(wrapping: rawContent)
         }
+    }
+}
+
+extension ModifiedHTML {
+    /// The type of HTML this element returns after attributes have been applied.
+    public typealias AttributedHTML = Self
+    
+    public func id(_ id: String) -> Self {
+        attributes.id(id)
+        return self
+    }
+    
+    @discardableResult public func `class`(_ classes: String...) -> Self {
+        attributes.classes(classes)
+        return self
     }
 }

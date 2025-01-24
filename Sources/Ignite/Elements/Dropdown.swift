@@ -111,7 +111,8 @@ public struct Dropdown: BlockHTML, NavigationItem {
 
                 Link(title, target: "#")
                     .customAttribute(name: "role", value: "button")
-                    .class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
+                    .class("dropdown-toggle", "nav-link")
+                    .class(hasActiveItem ? "active" : nil)
                     .data("bs-toggle", "dropdown")
                     .aria(.expanded, "false")
             } else {
@@ -140,5 +141,20 @@ public struct Dropdown: BlockHTML, NavigationItem {
             .listMarkerStyle(.unordered(.automatic))
             .class("dropdown-menu")
         }
+    }
+}
+
+extension Dropdown {
+    /// The type of HTML this element returns after attributes have been applied.
+    public typealias AttributedHTML = Self
+
+    public func id(_ id: String) -> Self {
+        attributes.id(id)
+        return self
+    }
+
+    @discardableResult public func `class`(_ classes: String...) -> Self {
+        attributes.classes(classes)
+        return self
     }
 }

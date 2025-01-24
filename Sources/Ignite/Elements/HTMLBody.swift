@@ -73,3 +73,18 @@ public struct HTMLBody: RootHTML {
         return attributes.description(wrapping: output)
     }
 }
+
+extension HTMLBody {
+    /// The type of HTML this element returns after attributes have been applied.
+    public typealias AttributedHTML = Self
+
+    public func id(_ id: String) -> Self {
+        attributes.id(id)
+        return self
+    }
+
+    @discardableResult public func `class`(_ classes: String...) -> Self {
+        attributes.classes(classes)
+        return self
+    }
+}

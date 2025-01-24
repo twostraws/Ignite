@@ -53,39 +53,26 @@ struct AspectRatioModifier: HTMLModifier {
                 Section {
                     content.class(contentMode.htmlClass)
                 }
-                .aspectRatio(ratio)
+                .class("ratio", "ratio-\(ratio.rawValue)")
             } else if let customRatio {
+                let percentage = 100 / customRatio
                 Section {
                     content.class(contentMode.htmlClass)
                 }
-                .aspectRatio(customRatio)
+                .class("ratio")
+                .style("--bs-aspect-ratio", "\(percentage)%")
             }
         } else if let ratio {
-            content.aspectRatio(ratio)
+            content
+                .class("ratio")
+                .class("ratio-\(ratio.rawValue)")
         } else if let customRatio {
-            content.aspectRatio(customRatio)
+            let percentage = 100 / customRatio
+            content
+                .class("ratio")
+                .style("--bs-aspect-ratio", "\(percentage)%")
         }
         content
-    }
-}
-
-extension HTML {
-    /// Applies a fixed aspect ratio to the current element.
-    /// - Parameter ratio: The aspect ratio to apply.
-    /// - Returns: A new instance of this element with the ratio applied.
-    func aspectRatio(_ ratio: AspectRatio) -> Self {
-        self.class("ratio", "ratio-\(ratio.rawValue)")
-    }
-
-    /// Applies a custom ratio to the current element.
-    /// - Parameter aspectRatio: The ratio to use, relative to 1.
-    /// For example, specifying 2 here will make a 2:1 aspect ratio.
-    /// - Returns: A new instance of this element with the ratio applied.
-    func aspectRatio(_ aspectRatio: Double) -> Self {
-        let percentage = 100 / aspectRatio
-        return self
-            .class("ratio")
-            .style("--bs-aspect-ratio", "\(percentage)%")
     }
 }
 
@@ -115,7 +102,7 @@ public extension Image {
         Section {
             self.class(contentMode.htmlClass)
         }
-        .aspectRatio(ratio)
+        .class("ratio", "ratio-\(ratio.rawValue)")
     }
 
     /// Applies a fixed aspect ratio to the image element.
@@ -124,9 +111,11 @@ public extension Image {
     ///   - contentMode: The content mode to apply.
     /// - Returns: A new instance of this element with the ratio and content mode applied.
     func aspectRatio(_ ratio: Double, contentMode: ContentMode) -> some BlockHTML {
-        Section {
+        let percentage = 100 / ratio
+        return Section {
             self.class(contentMode.htmlClass)
         }
-        .aspectRatio(ratio)
+        .class("ratio")
+        .style("--bs-aspect-ratio", "\(percentage)%")
     }
 }

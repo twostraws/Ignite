@@ -150,3 +150,18 @@ public struct MetaTag: HeadElement, Sendable {
         return attributes.description()
     }
 }
+
+extension MetaTag {
+    /// The type of HTML this element returns after attributes have been applied.
+    public typealias AttributedHTML = Self
+
+    public func id(_ id: String) -> Self {
+        attributes.id(id)
+        return self
+    }
+
+    public func `class`(_ classes: String...) -> Self {
+        attributes.classes(classes)
+        return self
+    }
+}

@@ -309,3 +309,18 @@ public struct CoreAttributes: Sendable {
         self.styles = styles
     }
 }
+
+@MainActor
+extension CoreAttributes {
+    func id(_ id: String) {
+        var attributes = self
+        attributes.id = id
+        AttributeStore.default.merge(attributes, intoHTML: id)
+    }
+
+    func classes(_ classes: [String]) {
+        var attributes = self
+        attributes.classes.formUnion(classes)
+        AttributeStore.default.merge(attributes, intoHTML: id)
+    }
+}
