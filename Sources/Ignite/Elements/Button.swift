@@ -53,6 +53,9 @@ public struct Button: BlockHTML, InlineHTML {
     /// Elements to render inside this button.
     var label: any HTML
 
+    /// Whether the button is disabled and cannot be interacted with.
+    private var isDisabled = false
+
     /// Creates a button with no label. Used in some situations where
     /// exact styling is performed by Bootstrap, e.g. in Carousel.
     public init() {
@@ -166,6 +169,9 @@ public struct Button: BlockHTML, InlineHTML {
         var buttonAttributes = attributes
             .appending(classes: Button.classes(forRole: role, size: size))
             .appending(aria: Button.aria(forRole: role))
+        if isDisabled {
+            buttonAttributes.customAttributes.append(.disabled)
+        }
         let output = HTMLCollection(label).render()
         buttonAttributes.tag = "button type=\"\(type.htmlName)\""
         buttonAttributes.closingTag = "button"
