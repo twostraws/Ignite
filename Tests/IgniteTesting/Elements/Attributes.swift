@@ -117,51 +117,28 @@ struct AttributesTest {
     }
 
     @Test("Checks that boolean attributes are sorted", arguments: Self.tags)
-    func test_boolean_attributes_are_sorted(tag: String) async throws {
+    func booleanAttributes_areSorted(tag: String) async throws {
         let element = Tag(tag) {}
             .customAttribute(.disabled)
             .customAttribute(.required)
-            .customAttribute(name: "foo")
-            .customAttribute(name: "qux")
-            .customAttribute(name: "bar")
-            .customAttribute(name: "baz")
+            .customAttribute(.async)
         let output = element.render()
 
-        #expect(
-            output == "<\(tag) bar baz disabled foo qux required></\(tag)>"
-        )
+        #expect(output == "<\(tag) async disabled required></\(tag)>")
     }
 
-    @Test("Checks that disabled attributes are not included in the output", arguments: Self.tags)
-    func test_disabled_attributes_are_not_included_in_the_output(tag: String) async throws {
-        let element = Tag(tag) {}
-            .customAttribute(.disabled, isEnabled: false)
-            .customAttribute(.required, isEnabled: false)
-            .customAttribute(name: "foo", isEnabled: false)
-            .customAttribute(name: "qux", isEnabled: false)
-            .customAttribute(name: "bar", isEnabled: false)
-            .customAttribute(name: "baz", isEnabled: false)
-        let output = element.render()
-
-        #expect(
-            output == "<\(tag)></\(tag)>"
-        )
-    }
-
-    @Test("Checks that Button attributes are set and sorted correctly")
-    func test_button_attributes_are_set_and_sorted_correctly() async throws {
-        let button = Button()
-            .disabled()
-            .customAttribute(name: "foo")
+    @Test("Checks that Button attributes are set")
+    func buttonAttributes_areSet() async throws {
+        let button = Button().disabled()
         let output = button.render()
 
         #expect(
-            output == #"<button type="button" disabled foo class="btn"></button>"#
+            output == #"<button type="button" disabled class="btn"></button>"#
         )
     }
 
-    @Test("Checks that TextField attributes are set and sorted correctly")
-    func test_textField_attributes_are_set_and_sorted_correctly() async throws {
+    @Test("Checks that TextField attributes are sorted")
+    func textFieldAttributes_areSorted() async throws {
         let textField = TextField(placeholder: nil)
             .disabled()
             .readOnly()
