@@ -118,13 +118,13 @@ struct AttributesTest {
     @Test("Checks that boolean attributes are sorted", arguments: Self.tags)
     func test_boolean_attributes_are_sorted(tag: String) async throws {
         let element = Tag(tag) {}
-            .disabled()
-            .required()
+            .customAttribute(.disabled)
+            .customAttribute(.required)
             .customAttribute(name: "foo")
             .customAttribute(name: "qux")
             .customAttribute(name: "bar")
             .customAttribute(name: "baz")
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output == "<\(tag) bar baz disabled foo qux required></\(tag)>"
@@ -134,13 +134,13 @@ struct AttributesTest {
     @Test("Checks that disabled attributes are not included in the output", arguments: Self.tags)
     func test_disabled_attributes_are_not_included_in_the_output(tag: String) async throws {
         let element = Tag(tag) {}
-            .disabled(false)
-            .required(false)
+            .customAttribute(.disabled, isEnabled: false)
+            .customAttribute(.required, isEnabled: false)
             .customAttribute(name: "foo", isEnabled: false)
             .customAttribute(name: "qux", isEnabled: false)
             .customAttribute(name: "bar", isEnabled: false)
             .customAttribute(name: "baz", isEnabled: false)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         #expect(
             output == "<\(tag)></\(tag)>"

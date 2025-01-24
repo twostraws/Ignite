@@ -51,9 +51,6 @@ public struct CoreAttributes: Sendable {
     /// Custom attributes not covered by the above, e.g. loading="lazy"
     var customAttributes = OrderedSet<Attribute>()
 
-    /// Boolean attributes that are either present or not.
-    var booleanAttributes = OrderedSet<BooleanAttribute>()
-
     /// The HTML tag to use for this element, e.g. "div" or "p".
     var tag: String?
 
@@ -175,26 +172,12 @@ public struct CoreAttributes: Sendable {
         }
     }
 
-    var booleanAttributesString: String {
-        if booleanAttributes.isEmpty {
-            return ""
-        } else {
-            var output = ""
-
-            for attribute in booleanAttributes.sorted() where attribute.isEnabled {
-                output += " \(attribute.name)"
-            }
-
-            return output
-        }
-    }
-
     /// Generates an HTML string containing all attributes and optionally wraps content.
     /// - Parameter content: Optional content to wrap with opening and closing tags
     /// - Returns: A string containing all attributes and optional content wrapped in tags
     func description(wrapping content: String? = nil) -> String {
         let attributes = idString + customAttributeString + classString + styleString
-                         + dataString + ariaString + eventString + booleanAttributesString
+                         + dataString + ariaString + eventString
 
         var result = content ?? attributes
 
