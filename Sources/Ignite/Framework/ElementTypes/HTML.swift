@@ -32,7 +32,7 @@ public protocol HTML: CustomStringConvertible, Sendable {
     func render() -> String
 
     /// The type of HTML this element returns after attributes have been applied.
-    associatedtype AttributedHTML = ModifiedHTML
+    associatedtype AttributedHTML: HTML
 
     /// Sets the `HTML` id attribute of the element.
     /// - Parameter string: The ID value to set

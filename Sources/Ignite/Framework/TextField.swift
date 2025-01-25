@@ -123,12 +123,12 @@ extension TextField {
     public typealias AttributedHTML = Self
 
     public func id(_ id: String) -> Self {
-        attributes.id(id)
+        attributes.id(id, persistentID: self.id)
         return self
     }
 
-    public func `class`(_ classes: String...) -> Self {
-        attributes.classes(classes)
+    @discardableResult public func `class`(_ classes: String...) -> Self {
+        attributes.classes(classes, persistentID: id)
         return self
     }
 }

@@ -312,15 +312,15 @@ public struct CoreAttributes: Sendable {
 
 @MainActor
 extension CoreAttributes {
-    func id(_ id: String) {
+    func id(_ id: String, persistentID: String) {
         var attributes = self
         attributes.id = id
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        AttributeStore.default.merge(attributes, intoHTML: persistentID)
     }
 
-    func classes(_ classes: [String]) {
+    func classes(_ classes: [String], persistentID: String) {
         var attributes = self
         attributes.classes.formUnion(classes)
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        AttributeStore.default.merge(attributes, intoHTML: persistentID)
     }
 }

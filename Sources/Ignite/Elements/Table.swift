@@ -143,12 +143,12 @@ extension Table {
     public typealias AttributedHTML = Self
 
     public func id(_ id: String) -> Self {
-        attributes.id(id)
+        attributes.id(id, persistentID: self.id)
         return self
     }
 
     @discardableResult public func `class`(_ classes: String...) -> Self {
-        attributes.classes(classes)
+        attributes.classes(classes, persistentID: id)
         return self
     }
 }

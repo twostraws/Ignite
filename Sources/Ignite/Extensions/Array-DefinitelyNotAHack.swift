@@ -17,12 +17,12 @@ extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
     }
 
     public func id(_ id: String) -> Self {
-        attributes.id(id)
+        attributes.id(id, persistentID: self.id)
         return self
     }
 
-    public func `class`(_ classes: String...) -> Self {
-        attributes.classes(classes)
+    @discardableResult public func `class`(_ classes: String...) -> Self {
+        attributes.classes(classes, persistentID: id)
         return self
     }
 }
@@ -43,12 +43,13 @@ extension Array: BlockHTML where Element: BlockHTML {
     }
 
     @MainActor public func id(_ id: String) -> Self {
-        attributes.id(id)
+        attributes.id(id, persistentID: self.id)
         return self
     }
 
+    @discardableResult
     @MainActor public func `class`(_ classes: String...) -> Self {
-        attributes.classes(classes)
+        attributes.classes(classes, persistentID: id)
         return self
     }
 }
@@ -64,12 +65,13 @@ extension Array: InlineHTML where Element: InlineHTML {
     }
 
     @MainActor public func id(_ id: String) -> Self {
-        attributes.id(id)
+        attributes.id(id, persistentID: self.id)
         return self
     }
 
+    @discardableResult
     @MainActor public func `class`(_ classes: String...) -> Self {
-        attributes.classes(classes)
+        attributes.classes(classes, persistentID: id)
         return self
     }
 }
