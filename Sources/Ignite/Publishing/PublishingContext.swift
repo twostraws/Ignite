@@ -12,12 +12,23 @@ import SwiftSoup
 /// elements. This allows any part of the site to reference content, add
 /// build warnings, and more.
 @MainActor
-public final class PublishingContext {
+final class PublishingContext {
     /// The shared instance of `PublishingContext`.
-    static var `default`: PublishingContext!
+    private static var _default: PublishingContext!
+
+    /// The shared instance of `PublishingContext`.
+    static var `default`: PublishingContext {
+        guard let _default else {
+            fatalError("""
+            "PublishingContext.default accessed before being initialized. \
+            Call PublishingContext.initialize() first.
+            """)
+        }
+        return _default
+    }
 
     /// The site that is currently being built.
-    public var site: any Site
+    var site: any Site
 
     /// The root directory for the user's website package.
     var sourceDirectory: URL
@@ -100,7 +111,7 @@ public final class PublishingContext {
         buildDirectoryPath: String = "Build"
     ) throws -> PublishingContext {
         let context = try PublishingContext(for: site, from: file, buildDirectoryPath: buildDirectoryPath)
-        `default` = context
+        _default = context
         return context
     }
 

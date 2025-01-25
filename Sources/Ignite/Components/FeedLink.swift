@@ -8,12 +8,12 @@
 /// Displays a link to your RSS feed, if enabled.
 public struct FeedLink: HTML {
 
-    @Environment(\.siteConfiguration) private var siteConfig
+    @Environment(\.builtInIconsEnabled) private var builtInIconsEnabled
     @Environment(\.feedConfiguration) private var feedConfig
 
     public var body: some HTML {
         Text {
-            if siteConfig.builtInIconsEnabled != .none {
+            if builtInIconsEnabled != .none {
                 Image(systemName: "rss-fill")
                     .foregroundStyle("#f26522")
                     .margin(.trailing, .px(10))
