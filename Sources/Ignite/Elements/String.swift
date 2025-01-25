@@ -42,7 +42,7 @@ public extension String {
         return self
     }
 
-    @MainActor func style(_ property: Property, _ value: String) -> Self {
+    @MainActor @discardableResult func style(_ property: Property, _ value: String) -> Self {
         attributes.style(property, value, persistentID: id)
         return self
     }

@@ -51,7 +51,7 @@ extension Label {
         return self
     }
 
-    public func style(_ property: Property, _ value: String) -> Self {
+    @discardableResult public func style(_ property: Property, _ value: String) -> Self {
         attributes.style(property, value, persistentID: id)
         return self
     }

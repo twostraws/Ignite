@@ -118,7 +118,7 @@ public extension Item {
         return self
     }
 
-    func style(_ property: Property, _ value: String) -> Self {
+    @discardableResult func style(_ property: Property, _ value: String) -> Self {
         attributes.style(property, value, persistentID: id)
         return self
     }

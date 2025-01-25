@@ -7,8 +7,6 @@
 
 // swiftlint:disable unused_setter_value
 extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
-
-
     public var body: some HTML { self }
 
     public func render() -> String {
@@ -21,7 +19,7 @@ extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
     }
 
     @discardableResult public func `class`(_ classes: String...) -> Self {
-        attributes.classes(classes, persistentID: id)
+        attributes.classes(classes, persistentID: self.id)
         return self
     }
 
@@ -35,15 +33,13 @@ extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
         return self
     }
 
-    public func style(_ property: Property, _ value: String) -> Self {
+    @discardableResult public func style(_ property: Property, _ value: String) -> Self {
         attributes.style(property, value, persistentID: self.id)
         return self
     }
 }
 
 extension Array: BlockHTML where Element: BlockHTML {
-
-
     public var body: some BlockHTML { self }
 
     public var columnWidth: ColumnWidth {
@@ -62,7 +58,7 @@ extension Array: BlockHTML where Element: BlockHTML {
 
     @discardableResult
     @MainActor public func `class`(_ classes: String...) -> Self {
-        attributes.classes(classes, persistentID: id)
+        attributes.classes(classes, persistentID: self.id)
         return self
     }
 
@@ -76,15 +72,13 @@ extension Array: BlockHTML where Element: BlockHTML {
         return self
     }
 
-    @MainActor public func style(_ property: Property, _ value: String) -> Self {
+    @MainActor @discardableResult public func style(_ property: Property, _ value: String) -> Self {
         attributes.style(property, value, persistentID: self.id)
         return self
     }
 }
 
 extension Array: InlineHTML where Element: InlineHTML {
-
-
     public var body: some InlineHTML { self }
 
     @MainActor public func render() -> String {
@@ -98,7 +92,7 @@ extension Array: InlineHTML where Element: InlineHTML {
 
     @discardableResult
     @MainActor public func `class`(_ classes: String...) -> Self {
-        attributes.classes(classes, persistentID: id)
+        attributes.classes(classes, persistentID: self.id)
         return self
     }
 
@@ -112,9 +106,10 @@ extension Array: InlineHTML where Element: InlineHTML {
         return self
     }
 
-    @MainActor public func style(_ property: Property, _ value: String) -> Self {
+    @MainActor @discardableResult public func style(_ property: Property, _ value: String) -> Self {
         attributes.style(property, value, persistentID: self.id)
         return self
     }
 }
+
 // swiftlint:enable unused_setter_value
