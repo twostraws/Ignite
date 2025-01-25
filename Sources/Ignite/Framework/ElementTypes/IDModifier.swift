@@ -14,19 +14,19 @@ struct IDModifier: HTMLModifier {
 }
 
 public extension HTML {
-    func id(_ id: String) -> some HTML {
-        modifier(IDModifier(id: id))
+    func id(_ id: String) -> AttributedHTML {
+        modifier(IDModifier(id: id)) as! AttributedHTML
     }
 }
 
 public extension InlineHTML {
-    func id(_ id: String) -> some InlineHTML {
-        modifier(IDModifier(id: id))
+    func id(_ id: String) -> AttributedHTML {
+        modifier(IDModifier(id: id)) as! AttributedHTML
     }
 }
 
 public extension BlockHTML {
-    func id(_ id: String) -> some BlockHTML {
-        modifier(IDModifier(id: id))
+    func id(_ id: String) -> AttributedHTML {
+        modifier(IDModifier(id: id)) as! AttributedHTML
     }
 }

@@ -25,6 +25,21 @@ extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
         attributes.classes(classes, persistentID: id)
         return self
     }
+
+    public func aria(_ key: AriaType, _ value: String) -> Self {
+        attributes.aria(key, value, persistentID: self.id)
+        return self
+    }
+
+    public func data(_ key: String, _ value: String) -> Self {
+        attributes.data(key, value, persistentID: self.id)
+        return self
+    }
+
+    public func style(_ property: Property, _ value: String) -> Self {
+        attributes.style(property, value, persistentID: self.id)
+        return self
+    }
 }
 
 extension Array: BlockHTML where Element: BlockHTML {
@@ -52,6 +67,21 @@ extension Array: BlockHTML where Element: BlockHTML {
         attributes.classes(classes, persistentID: id)
         return self
     }
+
+    @MainActor public func aria(_ key: AriaType, _ value: String) -> Self {
+        attributes.aria(key, value, persistentID: self.id)
+        return self
+    }
+
+    @MainActor public func data(_ key: String, _ value: String) -> Self {
+        attributes.data(key, value, persistentID: self.id)
+        return self
+    }
+
+    @MainActor public func style(_ property: Property, _ value: String) -> Self {
+        attributes.style(property, value, persistentID: self.id)
+        return self
+    }
 }
 
 extension Array: InlineHTML where Element: InlineHTML {
@@ -72,6 +102,21 @@ extension Array: InlineHTML where Element: InlineHTML {
     @discardableResult
     @MainActor public func `class`(_ classes: String...) -> Self {
         attributes.classes(classes, persistentID: id)
+        return self
+    }
+
+    @MainActor public func aria(_ key: AriaType, _ value: String) -> Self {
+        attributes.aria(key, value, persistentID: self.id)
+        return self
+    }
+
+    @MainActor public func data(_ key: String, _ value: String) -> Self {
+        attributes.data(key, value, persistentID: self.id)
+        return self
+    }
+
+    @MainActor public func style(_ property: Property, _ value: String) -> Self {
+        attributes.style(property, value, persistentID: self.id)
         return self
     }
 }

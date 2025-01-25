@@ -32,7 +32,7 @@ public protocol HTML: CustomStringConvertible, Sendable {
     func render() -> String
 
     /// The type of HTML this element returns after attributes have been applied.
-    associatedtype AttributedHTML: HTML
+    associatedtype AttributedHTML: HTML = Self
 
     /// Sets the `HTML` id attribute of the element.
     /// - Parameter string: The ID value to set
@@ -43,6 +43,27 @@ public protocol HTML: CustomStringConvertible, Sendable {
     /// - Parameter classes: Variable number of class names
     /// - Returns: The modified HTML element
     @discardableResult func `class`(_ classes: String...) -> AttributedHTML
+
+    /// Adds an inline style to the element.
+    /// - Parameters:
+    ///   - property: The CSS property.
+    ///   - value: The value.
+    /// - Returns: The modified `HTML` element
+    @discardableResult func style(_ property: Property, _ value: String) -> AttributedHTML
+
+    /// Adds an ARIA attribute to the element.
+    /// - Parameters:
+    ///   - key: The ARIA attribute key
+    ///   - value: The ARIA attribute value
+    /// - Returns: The modified `HTML` element
+    func aria(_ key: AriaType, _ value: String) -> AttributedHTML
+
+    /// Adds a data attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the data attribute
+    ///   - value: The value of the data attribute
+    /// - Returns: The modified `HTML` element
+    func data(_ name: String, _ value: String) -> AttributedHTML
 }
 
 public extension HTML {
@@ -134,39 +155,6 @@ extension HTML {
 }
 
 public extension HTML {
-    @discardableResult func `class`(_ newClass: String?) -> Self {
-        guard let newClass else { return self }
-        var attributes = attributes
-        attributes.classes.append(newClass)
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds an inline style to the element.
-    /// - Parameters:
-    ///   - property: The CSS property.
-    ///   - value: The value.
-    /// - Returns: The modified `HTML` element
-    @discardableResult func style(_ property: Property, _ value: String) -> Self {
-        var attributes = attributes
-        attributes.styles.append(.init(property, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds an ARIA attribute to the element.
-    /// - Parameters:
-    ///   - key: The ARIA attribute key
-    ///   - value: The ARIA attribute value
-    /// - Returns: The modified `HTML` element
-    func aria(_ key: AriaType, _ value: String?) -> Self {
-        guard let value else { return self }
-        var attributes = attributes
-        attributes.aria.append(Attribute(name: key.rawValue, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
     /// Adds a custom attribute to the element using string name.
     /// - Parameters:
     ///   - name: The name of the custom attribute
@@ -181,6 +169,27 @@ public extension HTML {
 }
 
 extension HTML {
+    /// Adds an ARIA attribute to the element.
+    /// - Parameters:
+    ///   - key: The ARIA attribute key
+    ///   - value: The ARIA attribute value
+    /// - Returns: The modified `HTML` element
+    func aria(_ key: AriaType, _ value: String?) -> Self {
+        guard let value else { return self }
+        var attributes = attributes
+        attributes.aria.append(Attribute(name: key.rawValue, value: value))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    @discardableResult func `class`(_ newClass: String?) -> Self {
+        guard let newClass else { return self }
+        var attributes = attributes
+        attributes.classes.append(newClass)
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
     /// - Returns: The modified `HTML` element

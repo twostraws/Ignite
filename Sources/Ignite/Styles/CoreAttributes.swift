@@ -320,7 +320,25 @@ extension CoreAttributes {
 
     func classes(_ classes: [String], persistentID: String) {
         var attributes = self
-        attributes.classes.formUnion(classes)
+        attributes.append(classes: classes)
+        AttributeStore.default.merge(attributes, intoHTML: persistentID)
+    }
+
+    func aria(_ key: AriaType, _ value: String, persistentID: String) {
+        var attributes = self
+        attributes.aria.append(Attribute(name: key.rawValue, value: value))
+        AttributeStore.default.merge(attributes, intoHTML: persistentID)
+    }
+
+    func data(_ key: String, _ value: String, persistentID: String) {
+        var attributes = self
+        attributes.append(dataAttributes: .init(name: key, value: value))
+        AttributeStore.default.merge(attributes, intoHTML: persistentID)
+    }
+
+    func style(_ property: Property, _ value: String, persistentID: String) {
+        var attributes = self
+        attributes.append(styles: .init(property, value: value))
         AttributeStore.default.merge(attributes, intoHTML: persistentID)
     }
 }

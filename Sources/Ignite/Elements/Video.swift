@@ -252,4 +252,19 @@ extension Video {
         attributes.classes(classes, persistentID: id)
         return self
     }
+
+    public func aria(_ key: AriaType, _ value: String) -> Self {
+        attributes.aria(key, value, persistentID: id)
+        return self
+    }
+
+    public func data(_ name: String, _ value: String) -> Self {
+        attributes.data(name, value, persistentID: id)
+        return self
+    }
+
+    public func style(_ property: Property, _ value: String) -> Self {
+        attributes.style(property, value, persistentID: id)
+        return self
+    }
 }

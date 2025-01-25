@@ -15,18 +15,18 @@ struct ClassModifier: HTMLModifier {
 
 public extension HTML {
     @discardableResult func `class`(_ classes: String...) -> AttributedHTML {
-        modifier(ClassModifier(classes: classes)) as! Self.AttributedHTML
+        modifier(ClassModifier(classes: classes)) as! AttributedHTML
     }
 }
 
 public extension InlineHTML {
     @discardableResult func `class`(_ classes: String...) -> AttributedHTML {
-        modifier(ClassModifier(classes: classes)) as! Self.AttributedHTML
+        modifier(ClassModifier(classes: classes)) as! AttributedHTML
     }
 }
 
 public extension BlockHTML {
     @discardableResult func `class`(_ classes: String...) -> AttributedHTML {
-        modifier(ClassModifier(classes: classes)) as! Self.AttributedHTML
+        modifier(ClassModifier(classes: classes)) as! AttributedHTML
     }
 }
