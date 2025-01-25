@@ -89,6 +89,9 @@ public struct VStack: BlockHTML {
 }
 
 public extension VStack {
+    /// The type of HTML this element returns after attributes have been applied.
+    typealias AttributedHTML = Self
+
     func id(_ id: String) -> Self {
         attributes.id(id, persistentID: self.id)
         return self
