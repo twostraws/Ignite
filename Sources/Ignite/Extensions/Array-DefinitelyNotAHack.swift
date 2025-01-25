@@ -7,8 +7,7 @@
 
 // swiftlint:disable unused_setter_value
 extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
-    /// The type of HTML this element returns after attributes have been applied.
-    public typealias AttributedHTML = Self
+
 
     public var body: some HTML { self }
 
@@ -43,8 +42,7 @@ extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
 }
 
 extension Array: BlockHTML where Element: BlockHTML {
-    /// The type of HTML this element returns after attributes have been applied.
-    public typealias AttributedHTML = Self
+
 
     public var body: some BlockHTML { self }
 
@@ -85,8 +83,7 @@ extension Array: BlockHTML where Element: BlockHTML {
 }
 
 extension Array: InlineHTML where Element: InlineHTML {
-    /// The type of HTML this element returns after attributes have been applied.
-    public typealias AttributedHTML = Self
+
 
     public var body: some InlineHTML { self }
 

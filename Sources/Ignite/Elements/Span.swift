@@ -50,9 +50,6 @@ public struct Span: InlineHTML {
 }
 
 extension Span {
-    /// The type of HTML this element returns after attributes have been applied.
-    public typealias AttributedHTML = Self
-
     public func id(_ id: String) -> Self {
         attributes.id(id, persistentID: self.id)
         return self
