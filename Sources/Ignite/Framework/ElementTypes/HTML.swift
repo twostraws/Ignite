@@ -154,7 +154,7 @@ extension HTML {
     }
 }
 
-public extension HTML {
+extension HTML {
     /// Adds a custom attribute to the element using string name.
     /// - Parameters:
     ///   - name: The name of the custom attribute
@@ -166,9 +166,7 @@ public extension HTML {
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
-}
 
-extension HTML {
     /// Adds an ARIA attribute to the element.
     /// - Parameters:
     ///   - key: The ARIA attribute key
