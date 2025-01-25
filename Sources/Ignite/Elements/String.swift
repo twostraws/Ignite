@@ -21,14 +21,29 @@ extension String: InlineHTML {
     }
 }
 
-extension String {
-    @MainActor public func id(_ id: String) -> Self {
+public extension String {
+    @MainActor func id(_ id: String) -> Self {
         attributes.id(id, persistentID: self.id)
         return self
     }
 
-    @MainActor @discardableResult public func `class`(_ classes: String...) -> Self {
+    @MainActor @discardableResult func `class`(_ classes: String...) -> Self {
         attributes.classes(classes, persistentID: id)
+        return self
+    }
+
+    @MainActor func aria(_ key: AriaType, _ value: String) -> Self {
+        attributes.aria(key, value, persistentID: id)
+        return self
+    }
+
+    @MainActor func data(_ name: String, _ value: String) -> Self {
+        attributes.data(name, value, persistentID: id)
+        return self
+    }
+
+    @MainActor func style(_ property: Property, _ value: String) -> Self {
+        attributes.style(property, value, persistentID: id)
         return self
     }
 }

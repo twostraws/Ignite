@@ -188,11 +188,11 @@ public struct Button: BlockHTML, InlineHTML {
     }
 }
 
-extension Button {
+public extension Button {
     /// Adjusts the number of columns assigned to this element.
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A copy of the current element with the adjusted column width.
-    public func width(_ width: Int) -> Self {
+    func width(_ width: Int) -> Self {
         var copy = self
         copy.columnWidth = .count(width)
         copy.class("w-100")
@@ -200,28 +200,28 @@ extension Button {
     }
 }
 
-extension Button {
-    public func id(_ id: String) -> Self {
+public extension Button {
+    func id(_ id: String) -> Self {
         attributes.id(id, persistentID: self.id)
         return self
     }
 
-    @discardableResult public func `class`(_ classes: String...) -> Self {
+    @discardableResult func `class`(_ classes: String...) -> Self {
         attributes.classes(classes, persistentID: id)
         return self
     }
 
-    public func aria(_ key: AriaType, _ value: String) -> Self {
+    func aria(_ key: AriaType, _ value: String) -> Self {
         attributes.aria(key, value, persistentID: id)
         return self
     }
 
-    public func data(_ name: String, _ value: String) -> Self {
+    func data(_ name: String, _ value: String) -> Self {
         attributes.data(name, value, persistentID: id)
         return self
     }
 
-    public func style(_ property: Property, _ value: String) -> Self {
+    func style(_ property: Property, _ value: String) -> Self {
         attributes.style(property, value, persistentID: id)
         return self
     }
