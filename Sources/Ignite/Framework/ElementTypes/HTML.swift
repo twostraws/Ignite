@@ -35,7 +35,7 @@ public protocol HTML: CustomStringConvertible, Sendable {
 public extension HTML {
     /// The complete `HTML` string representation of the element.
     nonisolated var description: String {
-        return MainActor.assumeIsolated {
+        MainActor.assumeIsolated {
             self.render()
         }
     }
@@ -59,11 +59,6 @@ public extension HTML {
     /// The default status as a primitive element.
     var isPrimitive: Bool { false }
 
-    /// The publishing context of this site.
-    var publishingContext: PublishingContext {
-        PublishingContext.default
-    }
-
     /// Generates the complete `HTML` string representation of the element.
     func render() -> String {
         body.render()
@@ -71,6 +66,11 @@ public extension HTML {
 }
 
 extension HTML {
+    /// The publishing context of this site.
+    var publishingContext: PublishingContext {
+        PublishingContext.default
+    }
+
     /// Checks if this element is an empty HTML element.
     var isEmptyHTML: Bool {
         if let collection = self as? HTMLCollection {

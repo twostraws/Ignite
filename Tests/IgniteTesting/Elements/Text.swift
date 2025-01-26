@@ -19,6 +19,7 @@ import Testing
 
         #expect(output == "<p>Hello</p>")
     }
+
     @Test("Builder with Simple String Test")
     @MainActor func test_simpleBuilderString() async throws {
         let element = Text {
@@ -29,6 +30,7 @@ import Testing
 
         #expect(output == "<p>Hello</p>")
     }
+
     @Test("Builder with Complex String Test")
     func complexBuilderString() {
         let element = Text {
@@ -74,6 +76,7 @@ import Testing
             )
         }
     }
+
     @Test("Markdown Test")
     func markdown() async throws {
         let element = Text(

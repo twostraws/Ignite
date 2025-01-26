@@ -18,13 +18,13 @@ import Testing
     func loneFileVideo(videoFile: String) async throws {
         let element = Video(videoFile)
         let output = element.render()
-        let normalizedOutput = ElementTest.normalizeHTML(output)
 
         #expect(
-            normalizedOutput
-                == "<video><source src=\"\(videoFile)\" type=\"video/mp4\"/>Your browser does not support the video tag.</video>"
+            output
+                == "<video controls><source src=\"\(videoFile)\" type=\"video/mp4\" />Your browser does not support the video tag.</video>"
         )
     }
+
     @Test(
         "Multi-file Video Test", arguments: ["/videos/example1.mp4"],
         ["/videos/example1.mov"])
@@ -32,11 +32,10 @@ import Testing
         async throws {
         let element = Video(videoFile1, videoFile2)
         let output = element.render()
-        let normalizedOutput = ElementTest.normalizeHTML(output)
 
         #expect(
-            normalizedOutput
-                == "<video><source src=\"\(videoFile1)\" type=\"video/mp4\"/><source src=\"\(videoFile2)\" type=\"video/quicktime\"/>Your browser does not support the video tag.</video>"
+            output
+                == "<video controls><source src=\"\(videoFile1)\" type=\"video/mp4\" /><source src=\"\(videoFile2)\" type=\"video/quicktime\" />Your browser does not support the video tag.</video>"
         )
     }
 }

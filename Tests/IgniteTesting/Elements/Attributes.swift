@@ -12,9 +12,8 @@ import Testing
 @Suite("Attributes Tests")
 @MainActor
 struct AttributesTest {
-    init() {
-        // swiftlint:disable:next force_try
-        try! PublishingContext.initialize(for: TestSite(), from: #filePath)
+    init() throws {
+        try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
 
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "nav", "section"]

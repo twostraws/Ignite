@@ -10,7 +10,6 @@ import Testing
 
 @testable import Ignite
 
-// swiftlint:disable force_try
 /// Tests for the `title` element.
 @Suite("Body Tests")
 @MainActor struct SubsiteBodyTests {
@@ -18,7 +17,7 @@ import Testing
 
    @Test("Simple Body Test", arguments: await [any Site](Self.sites))
    func simpleBody(for site: any Site) async throws {
-       try! PublishingContext.initialize(for: site, from: #filePath)
+       try PublishingContext.initialize(for: site, from: #filePath)
 
        let element = HTMLBody(
            for: Page(
@@ -38,4 +37,3 @@ import Testing
        )
    }
 }
-// swiftlint:enable force_try

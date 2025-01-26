@@ -10,7 +10,6 @@ import Testing
 
 @testable import Ignite
 
-// swiftlint:disable force_try
 /// Tests for the `title` element.
 @Suite("Link Tests")
 @MainActor struct SubsiteLinkTests {
@@ -19,7 +18,7 @@ import Testing
 
     @Test("String Target Test", arguments: [(target: "/", description: "Go Home")], await[any Site](Self.sites))
     func target(for link: (target: String, description: String), for site: any Site) async throws {
-        try! PublishingContext.initialize(for: site, from: #filePath)
+        try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Link(link.description, target: link.target)
         let output = element.render()
@@ -38,7 +37,7 @@ import Testing
 
     @Test("Page Target Test", arguments: zip(await pages, await [any Site](Self.sites)))
     func target(for page: any StaticLayout, site: any Site) async throws {
-        try! PublishingContext.initialize(for: site, from: #filePath)
+        try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Link("This is a test", target: page).linkStyle(.button)
         let output = element.render()
@@ -52,7 +51,7 @@ import Testing
 
     @Test("Page Content Test", arguments: zip(await pages, await [any Site](Self.sites)))
     func content(for page: any StaticLayout, site: any Site) async throws {
-        try! PublishingContext.initialize(for: site, from: #filePath)
+        try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Link(
             target: page,
@@ -77,4 +76,3 @@ import Testing
         )
     }
 }
-// swiftlint:enable force_try

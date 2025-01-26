@@ -10,7 +10,6 @@ import Testing
 
 @testable import Ignite
 
-// swiftlint:disable force_try
 /// Tests for the `Image` element.
 @Suite("Image Tests")
 @MainActor struct ImageTests {
@@ -20,14 +19,13 @@ import Testing
         [(path: "/images/example.jpg", description: "Example image")],
         await[any Site](Self.sites))
     func named(image: (path: String, description: String), for site: any Site) async throws {
-        try! PublishingContext.initialize(for: site, from: #filePath)
+        try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Image(image.path, description: image.description)
         let output = element.render()
-        let normalizedOutput = ElementTest.normalizeHTML(output)
 
         let expectedPath = site.url.path == "/" ? image.path : "\(site.url.path)\(image.path)"
-        #expect(normalizedOutput == "<img alt=\"Example image\" src=\"\(expectedPath)\"/>")
+        #expect(output == "<img alt=\"Example image\" src=\"\(expectedPath)\" />")
     }
 
     @Test("Icon Image Test", arguments: ["browser-safari"], ["Safari logo"])
@@ -38,4 +36,3 @@ import Testing
         #expect(output == "<i class=\"bi-browser-safari\"></i>")
     }
 }
-// swiftlint:enable force_try

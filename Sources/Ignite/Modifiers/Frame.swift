@@ -17,38 +17,38 @@ struct FrameModifier: HTMLModifier {
         /// The CSS property name for this dimension.
         var cssProperty: Property {
             switch self {
-            case .width: return .width
-            case .minWidth: return .minWidth
-            case .maxWidth: return .maxWidth
-            case .height: return .height
-            case .minHeight: return .minHeight
-            case .maxHeight: return .maxHeight
+            case .width: .width
+            case .minWidth: .minWidth
+            case .maxWidth: .maxWidth
+            case .height: .height
+            case .minHeight: .minHeight
+            case .maxHeight: .maxHeight
             }
         }
 
         /// The Bootstrap class to use when the dimension should fill its container.
         var bootstrapClass: String {
             switch self {
-            case .width, .minWidth, .maxWidth: return "w-100"
-            case .height, .minHeight, .maxHeight: return "h-100"
+            case .width, .minWidth, .maxWidth: "w-100"
+            case .height, .minHeight, .maxHeight: "h-100"
             }
         }
 
         /// The Bootstrap class to use when the dimension should fill the viewport.
         var viewportClass: String {
             switch self {
-            case .width, .maxWidth: return "vw-100"
-            case .minWidth: return "min-vw-100"
-            case .height, .maxHeight: return "vh-100"
-            case .minHeight: return "min-vh-100"
+            case .width, .maxWidth: "vw-100"
+            case .minWidth: "min-vw-100"
+            case .height, .maxHeight: "vh-100"
+            case .minHeight: "min-vh-100"
             }
         }
 
         /// Whether this dimension requires flex alignment when using viewport sizing.
         var needsFlexAlignment: Bool {
             switch self {
-            case .width, .maxWidth, .height, .maxHeight: return true
-            case .minWidth, .minHeight: return false
+            case .width, .maxWidth, .height, .maxHeight: true
+            case .minWidth, .minHeight: false
             }
         }
     }
