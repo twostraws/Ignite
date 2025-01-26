@@ -86,14 +86,13 @@ public struct Dropdown: BlockHTML, NavigationItem {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        let content = renderDropdownContent()
         if isNavigationItem {
-            return Group(content)
+            Group(renderDropdownContent())
                 .attributes(attributes)
                 .class("dropdown")
                 .render()
         } else {
-            return Section(content)
+            Section(renderDropdownContent())
                 .attributes(attributes)
                 .class("dropdown")
                 .render()

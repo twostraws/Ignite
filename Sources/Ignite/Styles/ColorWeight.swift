@@ -37,15 +37,15 @@ public enum ColorWeight: Int {
     /// The percentage of white or black to mix with the base color.
     var mixPercentage: Int {
         switch self {
-        case .lightest: return 80
-        case .lighter: return 60
-        case .light: return 40
-        case .semiLight: return 20
-        case .regular: return 0
-        case .semiDark: return 20
-        case .dark: return 40
-        case .darker: return 60
-        case .darkest: return 80
+        case .lightest: 80
+        case .lighter: 60
+        case .light: 40
+        case .semiLight: 20
+        case .regular: 0
+        case .semiDark: 20
+        case .dark: 40
+        case .darker: 60
+        case .darkest: 80
         }
     }
 

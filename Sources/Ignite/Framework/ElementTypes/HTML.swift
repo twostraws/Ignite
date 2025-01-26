@@ -35,7 +35,7 @@ public protocol HTML: CustomStringConvertible, Sendable {
 public extension HTML {
     /// The complete `HTML` string representation of the element.
     nonisolated var description: String {
-        return MainActor.assumeIsolated {
+        MainActor.assumeIsolated {
             self.render()
         }
     }

@@ -42,6 +42,7 @@ public struct CodeBlock: BlockHTML {
         guard publishingContext.site.allHighlighterThemes.isEmpty == false else {
             fatalError(.missingDefaultSyntaxHighlighterTheme)
         }
+
         if let language {
             publishingContext.syntaxHighlighters.append(language)
             return """
