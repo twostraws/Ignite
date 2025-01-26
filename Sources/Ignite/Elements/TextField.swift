@@ -38,7 +38,7 @@ public struct TextField: InlineHTML, BlockHTML {
     private var type = TextType.text
 
     /// The type of text field
-    public enum TextType: String, Sendable {
+    public enum TextType: String, CaseIterable, Sendable {
         /// Standard text input
         case text
         /// Email address input
