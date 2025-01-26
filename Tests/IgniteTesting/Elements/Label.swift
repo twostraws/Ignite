@@ -15,7 +15,7 @@ import Testing
 @MainActor
 struct LabelTests {
     @Test("Basic Label")
-    func example() async throws {
+    func basicLabel() async throws {
         let element = Label(text: "This is a text for label")
         let output = element.render()
 
