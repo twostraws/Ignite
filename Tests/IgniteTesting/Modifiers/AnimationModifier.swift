@@ -27,11 +27,11 @@ struct AnimationModifierTests {
         let output = element.render()
 
         let pattern = """
-    <div class="animation-([a-zA-Z0-9]{4})-transform" style="transform-style: preserve-3d">\
-    <div class="animation-\\1-hover">\
-    <p><span>This is a Span</span></p>\
-    </div></div>
-    """
+            <div class="animation-([a-zA-Z0-9]{4})-transform" style="transform-style: preserve-3d">\
+            <div class="animation-\\1-hover">\
+            <p><span>This is a Span</span></p>\
+            </div></div>
+            """
 
         // Create a regular expression object with proper error handling
         do {
@@ -47,8 +47,9 @@ struct AnimationModifierTests {
             // Record an issue to fail the test with a descriptive
             Issue.record("Failed to create regular expression: \(error)")
         }
-        // Expected format contains a different value between animation and transform such as:
+        // Example result:
         // <div class="animation-H57c-transform" style="transform-style: preserve-3d">
         // <div class="animation-H57c-hover"><p><span>This is a Span</span></p></div></div>
+        // The 'H57c' is a random element, that varies at runtime but should be the same for both divs
     }
 }
