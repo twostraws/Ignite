@@ -14,8 +14,11 @@ import Testing
 @Suite("Label Tests")
 @MainActor
 struct LabelTests {
-    @Test("ExampleTest")
+    @Test("Basic Label")
     func example() async throws {
+        let element = Label(text: "This is a text for label")
+        let output = element.render()
 
+        #expect(output == "<label>This is a text for label</label>")
     }
 }
