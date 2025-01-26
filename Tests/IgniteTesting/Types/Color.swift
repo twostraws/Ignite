@@ -14,8 +14,18 @@ import Testing
 @Suite("Color Tests")
 @MainActor
 struct ColorTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("foregroundStyleisBlack")
 
+    func foregroundStyleisBlack() async throws {
+        let foregroundStyleisBlack = Text("Hello, world!")
+            .foregroundStyle(.black)
+
+        let output = foregroundStyleisBlack.render()
+
+        #expect(output ==
+        """
+        <p style="color: rgb(0 0 0 / 100%)">Hello, world!</p>
+        """
+        )
     }
 }
