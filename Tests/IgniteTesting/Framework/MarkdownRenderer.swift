@@ -81,9 +81,9 @@ struct MarkdownRendererTests {
     @Test("Markdown list from string")
     func convertListToHTML() async throws {
         let markdown = """
-- Item 1
-- Item 2
-"""
+        - Item 1
+        - Item 2
+        """
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(element.body == "<ul><li>Item 1</li><li>Item 2</li></ul>")
@@ -92,9 +92,9 @@ struct MarkdownRendererTests {
     @Test("Markdown ordered list from string")
     func convertOrderedListToHTML() async throws {
         let markdown = """
-1. Item 1
-2. Item 2
-"""
+        1. Item 1
+        2. Item 2
+        """
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(element.body == "<ol><li>Item 1</li><li>Item 2</li></ol>")
@@ -119,12 +119,12 @@ struct MarkdownRendererTests {
     @Test("Markdown thematic break from string")
     func convertThematicBreakToHTML() async throws {
         let markdown = """
-Text above
+        Text above
 
----
+        ---
 
-Text below
-"""
+        Text below
+        """
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(element.body == "<p>Text above</p><hr /><p>Text below</p>")
