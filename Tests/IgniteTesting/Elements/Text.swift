@@ -88,4 +88,16 @@ import Testing
         )
         // swiftlint:enable line_length
     }
+    @Test("Strikethrough Test")
+    func strikethrough() async throws {
+        let element = Text {
+            Strikethrough {
+                "There will be a few tickets available at the box office tonight."
+            }
+        }
+        let output = element.render()
+        #expect(
+            output == "<p><s>There will be a few tickets available at the box office tonight.</s></p>"
+        )
+    }
 }
