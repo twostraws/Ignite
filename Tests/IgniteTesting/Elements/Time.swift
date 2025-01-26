@@ -20,6 +20,7 @@ import Testing
 
         #expect(output == "<time>\(timeText)</time>")
     }
+
     @Test("Builder Test", arguments: ["This is a test", "Another test"])
     func builder(timeText: String) async throws {
         guard

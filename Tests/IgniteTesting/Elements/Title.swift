@@ -13,9 +13,8 @@ import Testing
 /// Tests for the `title` element.
 @Suite("Title Tests")
 @MainActor struct TitleTests {
-    init() {
-        // swiftlint:disable:next force_try
-        try! PublishingContext.initialize(for: TestSite(), from: #filePath)
+    init() throws {
+        try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
 
     @Test("Empty Title Test", arguments: [""])

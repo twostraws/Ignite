@@ -22,6 +22,7 @@ struct AbbreviationTests {
         #expect(
             output == "<abbr title=\"\(description)\">\(abbreviation)</abbr>")
     }
+
     @Test(
         "Single Element Abbreviation Test", arguments: ["abbreviation"],
         ["abbr"])
@@ -35,6 +36,7 @@ struct AbbreviationTests {
                 == "<abbr title=\"\(description)\"><strong>\(abbreviation)</strong></abbr>"
         )
     }
+
     @Test("Builder Abbreviation Test", arguments: ["abbreviation"], ["abbr"])
     func builder(description: String, abbreviation: String) async throws {
         let element = Abbreviation(description) {
