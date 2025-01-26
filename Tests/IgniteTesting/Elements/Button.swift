@@ -42,6 +42,7 @@ struct ButtonTests {
                 }
                 .role(.primary)
         }
+
         let button2 = Text {
             Button("Show Second Text") {
                 HideElement("FirstText")
@@ -49,6 +50,7 @@ struct ButtonTests {
             }
             .role(.primary)
         }
+
         let text1 = Text("This is the first text.")
             .font(.title3)
             .id("FirstText")
@@ -70,12 +72,16 @@ struct ButtonTests {
                 Text</button></p>
                 """
         )
+
         #expect(outputButton2 == """
-        <p><button type=\"button\" \
-        class=\"btn btn-primary\" onclick=\"document.getElementById('FirstText').classList.add('d-none'); \
-        document.getElementById('SecondText').classList.remove('d-none')\">Show Second Text</button></p>
-        """)
+                <p><button type=\"button\" \
+                class=\"btn btn-primary\" onclick=\"document.getElementById('FirstText').classList.add('d-none'); \
+                document.getElementById('SecondText').classList.remove('d-none')\">Show Second Text</button></p>
+                """
+        )
+
         #expect(outputText1 == "<h3 id=\"FirstText\">This is the first text.</h3>")
+
         #expect(outputText2 == "<h3 id=\"SecondText\" class=\"d-none\">This is the second text.</h3>")
     }
 
@@ -88,9 +94,9 @@ struct ButtonTests {
 
         let output = element.render()
         #expect(output == """
-<p><a href=\"https://www.hackingwithswift.com\" \
-class=\"btn btn-primary\">This is a link button</a></p>
-""")
+        <p><a href=\"https://www.hackingwithswift.com\" \
+        class=\"btn btn-primary\">This is a link button</a></p>
+        """)
     }
 
     // MARK: Targets
