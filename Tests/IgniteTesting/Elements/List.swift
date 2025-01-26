@@ -14,8 +14,24 @@ import Testing
 @Suite("List Tests")
 @MainActor
 struct ListTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Basic Rendering Test")
+    func testEmptyListRendering() async throws {
+        let list = List {}
+        let output = list.render()
 
+        #expect(output == "<ul><li></li></ul>")
     }
+
+    @Test("Basic Unordered List Test")
+       func unorderedList() async throws {
+           let list = List {
+               "Veni"
+               "Vidi"
+               "Vici"
+           }
+           let output = list.render()
+
+           #expect(output == "<ul><li>Veni</li><li>Vidi</li><li>Vici</li></ul>")
+       }
+
 }
