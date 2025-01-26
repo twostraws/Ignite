@@ -36,7 +36,7 @@ public struct Section: BlockHTML {
         self.items = flatUnwrap(items)
     }
 
-    init(context: PublishingContext, items: [any HTML]) {
+    init(items: [any HTML]) {
         self.items = flatUnwrap(items)
     }
 

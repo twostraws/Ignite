@@ -10,7 +10,6 @@ import Testing
 
 @testable import Ignite
 
-// swiftlint:disable line_length
 /// Tests for the `Audio` element.
 @Suite("Audio Tests")
 @MainActor struct AudioTests {
@@ -21,7 +20,9 @@ import Testing
 
         #expect(
             output == """
-            <audio controls><source src="\(audioFile)" type="audio/mpeg">Your browser does not support the audio element.</audio>
+            <audio controls>\
+            <source src="\(audioFile)" type="audio/mpeg">Your browser does not support the audio element.\
+            </audio>
             """)
     }
 
@@ -34,9 +35,10 @@ import Testing
 
         #expect(
             output == """
-            <audio controls><source src="\(audioFile1)" type="audio/mpeg"><source src="\(audioFile2)" type="audio/wav">Your browser does not support the audio element.</audio>
+            <audio controls>\
+            <source src="\(audioFile1)" type="audio/mpeg">\
+            <source src="\(audioFile2)" type="audio/wav">Your browser does not support the audio element.\
+            </audio>
             """)
     }
 }
-
-// swiftlint:enable line_length
