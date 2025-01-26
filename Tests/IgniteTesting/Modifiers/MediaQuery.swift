@@ -107,4 +107,17 @@ struct MediaQueryTests {
             output == testCase.output
         )
     }
+
+    @Test("Test transparency queries", arguments: [
+        (query: MediaQuery.transparency(.normal),
+         output: "prefers-reduced-transparency: no-preference"),
+        (query: MediaQuery.transparency(.reduced),
+            output: "prefers-reduced-transparency: reduce")
+        ])
+    func transparency_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
+        let query = testCase.query
+        let output = query.query(with: .light)
+
+        #expect(output == testCase.output)
+    }
 }
