@@ -15,7 +15,7 @@ import Testing
 @MainActor
 struct IgniteFooterTests {
     @Test("Default Ignite Footer")
-    func deafultIgniteFooter() async throws {
+    func defaultIgniteFooter() async throws {
         let element = IgniteFooter()
         let output = element.render()
 
