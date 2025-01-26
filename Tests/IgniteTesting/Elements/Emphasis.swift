@@ -14,8 +14,11 @@ import Testing
 @Suite("Emphasis Tests")
 @MainActor
 struct EmphasisTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Emphasis Test")
+    func simpleEmphasis() async throws {
+        let element = Emphasis("Although Markdown is still easier, to be honest! ")
+        let output = element.render()
 
+        #expect(output == "<em>Although Markdown is still easier, to be honest! </em>")
     }
 }
