@@ -95,23 +95,23 @@ public struct TextField: InlineHTML, BlockHTML {
     public func render() -> String {
         var attributes = attributes
         attributes.selfClosingTag = "input"
-        attributes.classes.append("form-control")
-        attributes.customAttributes.append(.init(name: "type", value: type.rawValue))
+        attributes.append(classes: "form-control")
+        attributes.append(customAttributes: .init(name: "type", value: type.rawValue))
 
         if let placeholder {
-            attributes.customAttributes.append(.init(name: "placeholder", value: placeholder))
+            attributes.append(customAttributes: .init(name: "placeholder", value: placeholder))
         }
 
         if isRequired {
-            attributes.customAttributes.append(.required)
+            attributes.append(customAttributes: .required)
         }
 
         if isDisabled {
-            attributes.customAttributes.append(.disabled)
+            attributes.append(customAttributes: .disabled)
         }
 
         if isReadOnly {
-            attributes.customAttributes.append(.readOnly)
+            attributes.append(customAttributes: .readOnly)
         }
 
         return attributes.description()
