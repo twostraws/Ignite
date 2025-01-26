@@ -14,8 +14,8 @@ import Testing
 @Suite("Embed Tests")
 @MainActor
 struct EmbedTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Basic Embed")
+    func basicEmbed() async throws {
         let element = Embed(youTubeID: "dQw4w9WgXcQ", title: "There was only ever going to be one video used here.")
         let output = element.render()
 
