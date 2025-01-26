@@ -120,4 +120,19 @@ struct MediaQueryTests {
 
         #expect(output == testCase.output)
     }
+
+    @Test("Test reduced motion queries", arguments: [
+        (query: MediaQuery.motion(.reduced),
+         output: "prefers-reduced-motion: reduce"),
+        (query: MediaQuery.motion(.allowed),
+         output: "prefers-reduced-motion: no-preference")
+    ])
+    func reduced_motion_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
+        let query = testCase.query
+        let output = query.query(with: .light)
+
+        #expect(
+            output == testCase.output
+        )
+    }
 }
