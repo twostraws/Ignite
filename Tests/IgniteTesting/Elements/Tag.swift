@@ -14,8 +14,11 @@ import Testing
 @Suite("Tag Tests")
 @MainActor
 struct TagTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Basic Tag", arguments: ["tag_1", "tag_2", "tag_3"])
+    func basicTag(tagName: String) async throws {
+        let element = Tag(tagName)
+        let output = element.render()
 
+        #expect(output == "<\(tagName)></\(tagName)>")
     }
 }
