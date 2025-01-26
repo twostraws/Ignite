@@ -6,7 +6,7 @@
 //
 
 /// Property sets the appearance of decorative lines on text.
-public enum TextDecoration: String {
+public enum TextDecoration: String, CaseIterable, Sendable {
     case none
     case through = "line-through"
     case underline
