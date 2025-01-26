@@ -135,4 +135,21 @@ struct MediaQueryTests {
             output == testCase.output
         )
     }
+
+    @Test("Test theme queries", arguments: [
+        (query: MediaQuery.theme("dark"),
+         output: "data-theme-state=\"dark\""),
+        (query: MediaQuery.theme("light"),
+         output: "data-theme-state=\"light\""),
+        (query: MediaQuery.theme("auto"),
+            output: "data-theme-state=\"auto\"")
+    ])
+    func theme_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
+        let query = testCase.query
+        let output = query.query(with: .light)
+
+        #expect(
+            output == testCase.output
+        )
+    }
 }
