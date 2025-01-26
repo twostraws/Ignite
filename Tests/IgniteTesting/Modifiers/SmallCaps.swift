@@ -14,8 +14,11 @@ import Testing
 @Suite("SmallCaps Tests")
 @MainActor
 struct SmallCapsTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Basic SmallCaps modifier test")
+    func htmlSmallCaps() async throws {
+        let element = Span("Hello, World!").smallCaps()
+        let output = element.render()
 
+        #expect(output == "<span style=\"font-variant: small-caps\">Hello, World!</span>")
     }
 }
