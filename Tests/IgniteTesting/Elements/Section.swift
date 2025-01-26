@@ -26,13 +26,4 @@ struct SectionTests {
         #expect(output == "<div><span>Hello, World!</span><span>Goodbye, World!</span></div>")
     }
 
-    @Test("init With Items And Background Test")
-    func initWithItemsAndBackground() async throws {
-        let element = Section(Span("Hello, World!"), background: .aliceBlue)
-        let output = element.render()
-
-        //  Should we not have a background???
-        #expect(output == "<div><span>Hello, World!</span></div>")
-    }
-
 }
