@@ -71,7 +71,12 @@ struct MetaTagTests {
 
   @Test("social sharing tags with no image, description, or www")
   func socialSharingTagsWithNoImageDescriptionOrWWW() async throws {
-    let page = Page(title: "My Page Title", description: "", url: URL(string: "https://example.com")!, body: Text("not much contents"))
+    let page = Page(
+      title: "My Page Title",
+      description: "",
+      url: URL(string: "https://example.com")!,
+      body: Text("not much contents")
+    )
 
     let tags = MetaTag.socialSharingTags(for: page)
 
@@ -82,7 +87,7 @@ struct MetaTagTests {
       MetaTag(property: "og:url", content: "https://example.com"),
       MetaTag(property: "twitter:domain", content: "yoursite.com"), // suspicious
       MetaTag(property: "twitter:card", content: "summary_large_image"),
-      MetaTag(property: "twitter:dnt", content: "on"),
+      MetaTag(property: "twitter:dnt", content: "on")
     ]
 
     #expect(tags.count == expectedTags.count)
@@ -119,7 +124,7 @@ struct MetaTagTests {
       MetaTag(property: "og:url", content: "https://www.example.com"),
       MetaTag(property: "twitter:domain", content: "yoursite.com"), // suspicious
       MetaTag(property: "twitter:card", content: "summary_large_image"),
-      MetaTag(property: "twitter:dnt", content: "on"),
+      MetaTag(property: "twitter:dnt", content: "on")
     ]
 
     #expect(actualTags.count == expectedTags.count)
@@ -129,4 +134,3 @@ struct MetaTagTests {
     }
   }
 }
-
