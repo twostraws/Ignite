@@ -100,4 +100,49 @@ struct CardTests {
         <div class="\(expectedClass)"><div class="card-body">Placeholder</div></div>
         """)
     }
+
+    @Test("Card Content Position: Top")
+    func contentPositionTop() async throws {
+        let element = Card(imageName: "image.jpg") {
+            "Placeholder"
+        }
+        .contentPosition(.top)
+
+        let output = element.render()
+
+        #expect(output == """
+        <div class="card"><div class="card-body">Placeholder</div>\
+        <img alt="" src="image.jpg" class="card-img-bottom" /></div>
+        """)
+    }
+
+    @Test("Card Content Position: Bottom")
+    func contentPositionBottom() async throws {
+        let element = Card(imageName: "image.jpg") {
+            "Placeholder"
+        }
+        .contentPosition(.bottom)
+
+        let output = element.render()
+
+        #expect(output == """
+        <div class="card"><img alt="" src="image.jpg" class="card-img-top" />\
+        <div class="card-body">Placeholder</div></div>
+        """)
+    }
+
+    @Test("Card Content Position: Overlay")
+    func contentPositionOverlay() async throws {
+        let element = Card(imageName: "image.jpg") {
+            "Placeholder"
+        }
+        .contentPosition(.overlay)
+
+        let output = element.render()
+
+        #expect(output == """
+        <div class="card"><img alt="" src="image.jpg" class="card-img" />\
+        <div class="align-content-start card-img-overlay text-start">Placeholder</div></div>
+        """)
+    }
 }

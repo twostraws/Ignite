@@ -79,4 +79,25 @@ import Testing
             """
         )
     }
+
+    @Test("Link Warning Role Test", arguments: zip(await pages, await Self.sites))
+    func warningRoleLink(for page: any StaticLayout, site: any Site) async throws {
+        try PublishingContext.initialize(for: site, from: #filePath)
+
+        let element = Link("Link with warning role.", target: page).role(.warning)
+        let output = element.render()
+        let expectedPath = site.url.pathComponents.count <= 1 ?
+        "/test-layout" :
+        "\(site.url.path)/test-subsite-layout"
+
+        #expect(
+            output == """
+            <a href="\(expectedPath)" \
+            class="link-underline link-underline-opacity-100 \
+            link-underline-opacity-100-hover link-warning\">\
+            Link with warning role.\
+            </a>
+            """
+        )
+    }
 }
