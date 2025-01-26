@@ -18,8 +18,8 @@ public struct Attribute: Hashable, Equatable, Sendable, Comparable, CustomString
         self.value = value
     }
 
-    init(_ name: BooleanAttribute) {
-        self.name = name.rawValue
+    init(_ name: String) {
+        self.name = name
         self.value = nil
     }
 

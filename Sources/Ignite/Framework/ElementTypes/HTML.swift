@@ -167,7 +167,7 @@ public extension HTML {
         return self
     }
 
-    /// Adds a custom attribute to the element using string name.
+    /// Adds a custom attribute to the element.
     /// - Parameters:
     ///   - name: The name of the custom attribute
     ///   - value: The value of the custom attribute
@@ -175,6 +175,19 @@ public extension HTML {
     @discardableResult func customAttribute(name: String, value: String) -> Self {
         var attributes = attributes
         attributes.customAttributes.append(Attribute(name: name, value: value))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(_ attribute: Attribute?) -> Self {
+        guard let attribute else { return self }
+        var attributes = attributes
+        attributes.customAttributes.append(attribute)
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -239,16 +252,6 @@ extension HTML {
         guard !actions.isEmpty else { return self }
         var attributes = attributes
         attributes.events.append(Event(name: name, actions: actions))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds a custom attribute to the element.
-    /// - Parameter attribute: The custom attribute.
-    /// - Returns: The modified `HTML` element.
-    @discardableResult internal func customAttribute(_ attribute: BooleanAttribute) -> Self {
-        var attributes = attributes
-        attributes.customAttributes.append(Attribute(attribute))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
