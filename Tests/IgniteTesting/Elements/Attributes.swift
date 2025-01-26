@@ -120,10 +120,10 @@ struct AttributesTest {
         let element = Tag(tag) {}
             .customAttribute(.disabled)
             .customAttribute(.required)
-            .customAttribute(.async)
+            .customAttribute(.selected)
         let output = element.render()
 
-        #expect(output == "<\(tag) async disabled required></\(tag)>")
+        #expect(output == "<\(tag) disabled required selected></\(tag)>")
     }
 
     @Test("Checks that Button attributes are set")
