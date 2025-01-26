@@ -14,8 +14,11 @@ import Testing
 @Suite("Spacer Tests")
 @MainActor
 struct SpacerTests {
-    @Test("ExampleTest")
+    @Test("SpacerTest")
     func example() async throws {
+        let element = Spacer()
+        let output = element.render()
 
+        #expect(output == "<div class=\"justify-content-center align-items-center\" style=\"height: 20px\"></div>")
     }
 }

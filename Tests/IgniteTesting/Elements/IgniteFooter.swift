@@ -14,8 +14,19 @@ import Testing
 @Suite("IgniteFooter Tests")
 @MainActor
 struct IgniteFooterTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Default Ignite Footer")
+    func deafultIgniteFooter() async throws {
+        let element = IgniteFooter()
+        let output = element.render()
 
+        #expect(output == """
+        <p class="mt-5 text-center">Created in Swift with \
+        <a href="https://github.com/twostraws/Ignite" \
+        class="link-underline \
+        link-underline-opacity-100 \
+        link-underline-opacity-100-hover">Ignite\
+        </a>\
+        </p>
+        """)
     }
 }
