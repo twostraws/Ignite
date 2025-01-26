@@ -49,12 +49,14 @@ public enum MediaQuery: Sendable {
 
     /// The user's contrast preference options.
     public enum Contrast: Sendable {
-        /// Reduced contrast preference
-        case reduced
+        /// A custom contrast preference
+        case custom
         /// High contrast preference
         case high
         /// Low contrast preference
         case low
+        /// Unspecified contrast preference
+        case noPreference
     }
 
     /// The user's transparency preference options.
@@ -149,9 +151,10 @@ public enum MediaQuery: Sendable {
     }
     @MainActor func css(for contrast: Contrast, using theme: Theme) -> String {
         switch contrast {
-        case .reduced: "prefers-contrast: less"
+        case .custom: "prefers-contrast: custom"
         case .high: "prefers-contrast: more"
         case .low: "prefers-contrast: less"
+        case .noPreference: "prefers-contrast: no-preference"
         }
     }
 
