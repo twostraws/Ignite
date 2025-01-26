@@ -14,8 +14,11 @@ import Testing
 @Suite("Divider Tests")
 @MainActor
 struct DividerTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Test a single divider")
+    func singleDivider() async throws {
+        let element = Divider()
+        let output = element.render()
 
+        #expect(output == "<hr />")
     }
 }
