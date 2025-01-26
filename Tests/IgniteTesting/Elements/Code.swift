@@ -16,9 +16,7 @@ import Testing
 struct CodeTests {
 	@Test("Test inline code formatting")
     func inlineCode() async throws {
-		let code = "background-color"
-
-		let element = Code(code)
+		let element = Code("background-color")
 		let output = element.render()
 
 		#expect(
