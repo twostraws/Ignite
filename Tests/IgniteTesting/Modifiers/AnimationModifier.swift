@@ -14,8 +14,41 @@ import Testing
 @Suite("AnimationModifier Tests")
 @MainActor
 struct AnimationModifierTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    init() throws {
+        try PublishingContext.initialize(for: TestSite(), from: #filePath)
+    }
 
+    @Test("HMTL Animation should bounce")
+    func htmlAnimationModifier() async throws {
+        let element = Text {
+            Span("This is a Span")
+        }.animation(Animation.bounce, on: .hover)
+
+        let output = element.render()
+
+        let pattern = """
+    <div class="animation-([a-zA-Z0-9]{4})-transform" style="transform-style: preserve-3d">\
+    <div class="animation-\\1-hover">\
+    <p><span>This is a Span</span></p>\
+    </div></div>
+    """
+
+        // Create a regular expression object with proper error handling
+        do {
+            let regex = try NSRegularExpression(pattern: pattern)
+
+            // Check if the output matches the pattern
+            let range = NSRange(location: 0, length: output.utf16.count)
+            let matches = regex.matches(in: output, options: [], range: range)
+
+            // Use #expect to assert that the output matches the pattern
+            #expect(!matches.isEmpty, "Output does not match the expected pattern")
+        } catch {
+            // Record an issue to fail the test with a descriptive
+            Issue.record("Failed to create regular expression: \(error)")
+        }
+        // Expected format contains a different value between animation and transform such as:
+        // <div class="animation-H57c-transform" style="transform-style: preserve-3d">
+        // <div class="animation-H57c-hover"><p><span>This is a Span</span></p></div></div>
     }
 }
