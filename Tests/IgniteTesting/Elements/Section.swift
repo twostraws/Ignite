@@ -13,9 +13,26 @@ import Testing
 /// Tests for the `Section` element.
 @Suite("Section Tests")
 @MainActor
-struct SectionTests {
-    @Test("ExampleTest")
-    func example() async throws {
 
+struct SectionTests {
+    @Test("init With Content Test")
+    func initWithContent() async throws {
+        let element = Section {
+            Span("Hello, World!")
+            Span("Goodbye, World!")
+        }
+        let output = element.render()
+
+        #expect(output == "<div><span>Hello, World!</span><span>Goodbye, World!</span></div>")
     }
+
+    @Test("init With Items And Background Test")
+    func initWithItemsAndBackground() async throws {
+        let element = Section(Span("Hello, World!"), background: .aliceBlue)
+        let output = element.render()
+
+        //  Should we not have a background???
+        #expect(output == "<div><span>Hello, World!</span></div>")
+    }
+
 }
