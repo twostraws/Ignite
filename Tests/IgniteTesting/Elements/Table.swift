@@ -5,17 +5,20 @@
 //  See LICENSE for license information.
 //
 
+
 import Foundation
 import Testing
 
 @testable import Ignite
 
-/// Tests for the `Table` element.
 @Suite("Table Tests")
 @MainActor
-struct TableTests {
-    @Test("ExampleTest")
-    func example() async throws {
-
+struct TableTests{
+    @Test
+    func simpleTable() async throws {
+        let element = Table{}
+        let output = element.render()
+        #expect(output == "<table class=\"table\"><tbody></tbody></table>")
     }
+    
 }
