@@ -16,7 +16,7 @@ import Testing
     static let sites: [any Site] = [TestSite(), TestSubsite()]
     static let pages: [any StaticLayout] = [TestLayout(), TestSubsiteLayout()]
 
-    @Test("String Target Test", arguments: [(target: "/", description: "Go Home")], await[any Site](Self.sites))
+    @Test("String Target Test", arguments: [(target: "/", description: "Go Home")], await Self.sites)
     func target(for link: (target: String, description: String), for site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
@@ -35,7 +35,7 @@ import Testing
         )
     }
 
-    @Test("Page Target Test", arguments: zip(await pages, await [any Site](Self.sites)))
+    @Test("Page Target Test", arguments: zip(await pages, await Self.sites))
     func target(for page: any StaticLayout, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
@@ -49,7 +49,7 @@ import Testing
         #expect(output == "<a href=\"\(expectedPath)\" class=\"btn btn-primary\">This is a test</a>")
     }
 
-    @Test("Page Content Test", arguments: zip(await pages, await [any Site](Self.sites)))
+    @Test("Page Content Test", arguments: zip(await pages, await Self.sites))
     func content(for page: any StaticLayout, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 

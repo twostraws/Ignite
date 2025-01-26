@@ -14,17 +14,18 @@ import SwiftSoup
 @MainActor
 final class PublishingContext {
     /// The shared instance of `PublishingContext`.
-    private static var _default: PublishingContext!
+    private static var defaultContext: PublishingContext!
 
     /// The shared instance of `PublishingContext`.
     static var `default`: PublishingContext {
-        guard let _default else {
+        guard let defaultContext else {
             fatalError("""
             "PublishingContext.default accessed before being initialized. \
             Call PublishingContext.initialize() first.
             """)
         }
-        return _default
+
+        return defaultContext
     }
 
     /// The site that is currently being built.
@@ -111,7 +112,7 @@ final class PublishingContext {
         buildDirectoryPath: String = "Build"
     ) throws -> PublishingContext {
         let context = try PublishingContext(for: site, from: file, buildDirectoryPath: buildDirectoryPath)
-        _default = context
+        defaultContext = context
         return context
     }
 

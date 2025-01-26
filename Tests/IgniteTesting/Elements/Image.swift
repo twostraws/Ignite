@@ -17,7 +17,7 @@ import Testing
 
     @Test("Image Test", arguments:
         [(path: "/images/example.jpg", description: "Example image")],
-        await[any Site](Self.sites))
+        await Self.sites)
     func named(image: (path: String, description: String), for site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 

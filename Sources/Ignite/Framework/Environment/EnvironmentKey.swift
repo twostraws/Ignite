@@ -56,7 +56,7 @@ public struct SiteTitleSuffixKey: EnvironmentKey {
 /// A key for accessing the site description in the environment
 public struct SiteDescriptionKey: EnvironmentKey {
     /// The default nil value for site description
-    public static var defaultValue: String? = nil
+    public static var defaultValue: String?
 }
 
 /// A key for accessing the site language in the environment
@@ -74,7 +74,7 @@ public struct SiteURLKey: EnvironmentKey {
 /// A key for accessing the site favicon in the environment
 public struct FaviconKey: EnvironmentKey {
     /// The default nil value for favicon
-    public static var defaultValue: URL? = nil
+    public static var defaultValue: URL?
 }
 
 /// A key for accessing the Bootstrap icons configuration in the environment
