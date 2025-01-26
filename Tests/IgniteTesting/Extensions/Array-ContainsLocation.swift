@@ -1,8 +1,8 @@
 //
-// File.swift
-// Ignite
-// https://www.github.com/twostraws/Ignite
-// See LICENSE for license information.
+//  Array-ContainsLocation.swift
+//  Ignite
+//  https://www.github.com/twostraws/Ignite
+//  See LICENSE for license information.
 //
 
 import Foundation
@@ -10,10 +10,10 @@ import Testing
 
 @testable import Ignite
 
-/// Tests for the `Array` extension.
-@Suite("Array Extension Tests")
+/// Tests for the `Array-ContainsLocation` extension.
+@Suite("Array-ContainsLocation Tests")
 @MainActor
-struct ArrayExtensionTests {
+struct ArrayContainsLocationTests {
     @Test("Checks if an array of 'Location' types contains a specific path")
     func testIfArrayContainsPath() async throws {
         // Given
