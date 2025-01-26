@@ -27,7 +27,7 @@ struct MediaQueryTests {
         (query: MediaQuery.breakpoint(.xLarge),
          output: "min-width: 1200px"),
         (query: MediaQuery.breakpoint(.xxLarge),
-         output: "min-width: 1400px"),
+         output: "min-width: 1400px")
     ])
     func breakpoint_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
         let query = testCase.query
