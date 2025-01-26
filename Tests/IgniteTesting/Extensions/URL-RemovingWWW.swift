@@ -15,7 +15,7 @@ import Testing
 @MainActor
 struct URLRemovingWWWTests {
     @Test("Test case when URL contains 'www'")
-    func testRemovingWWW_fromURLWithWWW() {
+    func testRemovingWWW_fromURLWithWWW() async throws {
         // Given
         let url = URL(string: "https://www.example.com")!
         // When
