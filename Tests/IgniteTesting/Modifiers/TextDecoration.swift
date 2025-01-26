@@ -13,29 +13,13 @@ import Testing
 /// Tests for the `TextDecoration` modifier.
 @Suite("TextDecoration Tests")
 @MainActor
-struct TextDecorationModifierTests{
-    @Test("TextDecoration modifier test (None)")
-    func textDecorationNone() async throws {
-        let element = Span("Hello, World!").textDecoration(.none)
+struct TextDecorationModifierTests {
+    @Test("TextDecoration modifiers test", arguments: TextDecoration.allCases)
+    func textDecorationNone(_ decoration: TextDecoration) async throws {
+        let element = Span("Hello, World!").textDecoration(decoration)
         let output = element.render()
 
-        #expect(output == "<span style=\"text-decoration: none\">Hello, World!</span>")
+        #expect(output == "<span style=\"text-decoration: \(decoration.rawValue)\">Hello, World!</span>")
     }
 
-    @Test("TextDecoration modifier test (Through)")
-    func textDecorationThrough() async throws {
-        let element = Span("Hello, World!").textDecoration(.through)
-        let output = element.render()
-
-        #expect(output == "<span style=\"text-decoration: line-through\">Hello, World!</span>")
-    }
-
-    @Test("TextDecoration modifier test (Underline)")
-    func textDecorationUnderline() async throws {
-        let element = Span("Hello, World!").textDecoration(.underline)
-        let output = element.render()
-
-        #expect(output == "<span style=\"text-decoration: underline\">Hello, World!</span>")
-    }
 }
-
