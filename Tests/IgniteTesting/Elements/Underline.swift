@@ -14,8 +14,19 @@ import Testing
 @Suite("Underline Tests")
 @MainActor
 struct UnderlineTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Single Element Test", arguments: ["This is a test", "Another test", ""])
+    func singleElement(underlineText: String) async throws {
+        let element = Underline(underlineText)
+        let output = element.render()
 
+        #expect(output == "<u>\(underlineText)</u>")
+    }
+
+    @Test("Builder Test", arguments: ["This is a test", "Another test", ""])
+    func builder(underlineText: String) async throws {
+        let element = Underline { underlineText }
+        let output = element.render()
+
+        #expect(output == "<u>\(underlineText)</u>")
     }
 }
