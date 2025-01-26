@@ -14,8 +14,25 @@ import Testing
 @Suite("CodeBlock Tests")
 @MainActor
 struct CodeBlockTests {
-    @Test("ExampleTest")
-    func example() async throws {
-
+    @Test("Test rendering a code block")
+    func codeBlockTest() {
+        let element = CodeBlock {
+            """
+            import Foundation
+            struct CodeBlockTest {
+                let name: String
+            }
+            let test = CodeBlockTest(name: "Swift")
+            """
+        }
+        let output = element.render()
+        #expect(output ==
+        """
+        <pre><code>import Foundation
+        struct CodeBlockTest {
+            let name: String
+        }
+        let test = CodeBlockTest(name: "Swift")</code></pre>
+        """)
     }
 }
