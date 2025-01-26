@@ -92,4 +92,19 @@ struct MediaQueryTests {
             output == testCase.output
         )
     }
+
+    @Test("Test orientation queries", arguments: [
+        (query: MediaQuery.orientation(.landscape),
+         output: "orientation: landscape"),
+        (query: MediaQuery.orientation(.portrait),
+         output: "orientation: portrait")
+    ])
+    func orientation_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
+        let query = testCase.query
+        let output = query.query(with: .light)
+
+        #expect(
+            output == testCase.output
+        )
+    }
 }
