@@ -31,7 +31,7 @@ struct VStackTests {
         )
     }
 
-    @Test("VStack with elements with spacing")
+    @Test("VStack with elements and spacing")
     func elementsWithSpacingWithinVStack() async throws {
         let element = VStack(spacing: 10) {
             Label(text: "Top Label")
