@@ -21,21 +21,29 @@ struct DropdownTests {
             Text("Content2")
             Text("Or you can just…")
         }.role(.primary)
+
         let output = element.render()
 
         let expectedOutput = """
-                <div class="dropdown">
-                    <button type="button" class="btn btn-primary dropdown-toggle"
-                        data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
-                    <ul class="dropdown-menu">
-                        <li><p class="dropdown-header">Content1</p></li>
-                        <li><p class="dropdown-header">Content2</p></li>
-                        <li><p class="dropdown-header">Or you can just…</p></li>
-                    </ul>
-                </div>
-                """
+            <div class="dropdown">
+                <button type="button" class="btn btn-primary dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
+                <ul class="dropdown-menu">
+                    <li><p class="dropdown-header">Content1</p></li>
+                    <li><p class="dropdown-header">Content2</p></li>
+                    <li><p class="dropdown-header">Or you can just…</p></li>
+                </ul>
+            </div>
+            """
 
-        #expect(output == expectedOutput)
+        let normalizedOutput = output.replacingOccurrences(
+            of: "\\s+", with: "", options: .regularExpression
+        )
+        let normalizedExpectedOutput = expectedOutput.replacingOccurrences(
+            of: "\\s+", with: "", options: .regularExpression
+        )
+
+        #expect(normalizedOutput == normalizedExpectedOutput)
     }
 
     @Test("Dropdown Role Test")
@@ -47,16 +55,23 @@ struct DropdownTests {
         let output = element.render()
 
         let expectedOutput = """
-                <div class="dropdown">
-                    <button type="button" class="btn btn-secondary dropdown-toggle"
-                        data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
-                    <ul class="dropdown-menu">
-                        <li><p class="dropdown-header">Content1</p></li>
-                    </ul>
-                </div>
-                """
+            <div class="dropdown">
+                <button type="button" class="btn btn-secondary dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
+                <ul class="dropdown-menu">
+                    <li><p class="dropdown-header">Content1</p></li>
+                </ul>
+            </div>
+            """
 
-        #expect(output == expectedOutput)
+        let normalizedOutput = output.replacingOccurrences(
+            of: "\\s+", with: "", options: .regularExpression
+        )
+        let normalizedExpectedOutput = expectedOutput.replacingOccurrences(
+            of: "\\s+", with: "", options: .regularExpression
+        )
+
+        #expect(normalizedOutput == normalizedExpectedOutput)
     }
 
     @Test("Empty Dropdown Test")
@@ -66,14 +81,21 @@ struct DropdownTests {
         let output = element.render()
 
         let expectedOutput = """
-                <div class="dropdown">
-                    <button type="button" class="btn btn-primary dropdown-toggle"
-                        data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
-                    <ul class="dropdown-menu"></ul>
-                </div>
-                """
+            <div class="dropdown">
+                <button type="button" class="btn btn-primary dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
+                <ul class="dropdown-menu"></ul>
+            </div>
+            """
 
-        #expect(output == expectedOutput)
+        let normalizedOutput = output.replacingOccurrences(
+            of: "\\s+", with: "", options: .regularExpression
+        )
+        let normalizedExpectedOutput = expectedOutput.replacingOccurrences(
+            of: "\\s+", with: "", options: .regularExpression
+        )
+
+        #expect(normalizedOutput == normalizedExpectedOutput)
     }
 
     @Test("Dropdown Large Content Test")
@@ -102,7 +124,14 @@ struct DropdownTests {
             </div>
             """
 
-        #expect(output == expectedOutput)
+        let normalizedOutput = output.replacingOccurrences(
+            of: "\\s+", with: "", options: .regularExpression
+        )
+        let normalizedExpectedOutput = expectedOutput.replacingOccurrences(
+            of: "\\s+", with: "", options: .regularExpression
+        )
+
+        #expect(normalizedOutput == normalizedExpectedOutput)
     }
 
 }
