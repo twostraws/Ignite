@@ -41,7 +41,7 @@ public struct Form: BlockHTML {
     private var controlSize: FormControlSize = .medium
 
     /// Controls how form labels are displayed
-    public enum LabelStyle {
+    public enum LabelStyle: CaseIterable, Sendable {
         /// Labels appear above their fields
         case top
         /// Labels appear to the left of their fields
@@ -53,7 +53,7 @@ public struct Form: BlockHTML {
     }
 
     /// Controls the size of form controls and labels
-    public enum FormControlSize {
+    public enum FormControlSize: CaseIterable, Sendable {
         case small
         case medium
         case large
