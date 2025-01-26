@@ -6,7 +6,7 @@
 //
 
 /// A type that represents different media query conditions for applying conditional styles.
-public enum MediaQuery {
+public enum MediaQuery: Sendable {
     /// Applies styles based on the user's preferred color scheme.
     case colorScheme(ColorScheme)
 
@@ -32,7 +32,7 @@ public enum MediaQuery {
     case breakpoint(Breakpoint)
 
     /// The user's preferred color scheme options.
-    public enum ColorScheme {
+    public enum ColorScheme: Sendable {
         /// Dark mode preference
         case dark
         /// Light mode preference
@@ -40,7 +40,7 @@ public enum MediaQuery {
     }
 
     /// The user's motion preference options.
-    public enum Motion {
+    public enum Motion: Sendable {
         /// Reduced motion preference
         case reduced
         /// Standard motion preference
@@ -48,7 +48,7 @@ public enum MediaQuery {
     }
 
     /// The user's contrast preference options.
-    public enum Contrast {
+    public enum Contrast: Sendable {
         /// Reduced contrast preference
         case reduced
         /// High contrast preference
@@ -58,7 +58,7 @@ public enum MediaQuery {
     }
 
     /// The user's transparency preference options.
-    public enum Transparency {
+    public enum Transparency: Sendable {
         /// Reduced transparency preference
         case reduced
         /// Standard transparency preference
@@ -66,7 +66,7 @@ public enum MediaQuery {
     }
 
     /// The device orientation options.
-    public enum Orientation {
+    public enum Orientation: Sendable {
         /// Portrait orientation
         case portrait
         /// Landscape orientation
@@ -74,7 +74,7 @@ public enum MediaQuery {
     }
 
     /// The web application display mode options.
-    public enum DisplayMode {
+    public enum DisplayMode: Sendable {
         /// Standard browser mode
         case browser
         /// Full screen mode
@@ -90,7 +90,7 @@ public enum MediaQuery {
     }
 
     /// The user's breakpoint preference options.
-    public enum Breakpoint: String {
+    public enum Breakpoint: String, Sendable {
         /// Small breakpoint (typically ≥576px)
         case small = "sm"
         /// Medium breakpoint (typically ≥768px)
