@@ -109,10 +109,6 @@ struct MetaTagTests {
 
     let actualTags = MetaTag.socialSharingTags(for: page)
 
-    actualTags.forEach {
-      print("\($0.name)")
-    }
-
     let expectedTags: [MetaTag] = [
       MetaTag(property: "og:site_name", content: "My Test Site"),
       MetaTag(property: "og:image", content: "https://example.com/image.png"),
