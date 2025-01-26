@@ -14,6 +14,9 @@ import Testing
 @Suite("Opacity Tests")
 @MainActor
 struct OpacityTests {
+    init() throws {
+        try PublishingContext.initialize(for: TestSite(), from: #filePath)
+    }
 
     @Test("Text Opacity Test", arguments: ["This is a test", "Another test"])
     func textOpacity(text: String) async throws {
