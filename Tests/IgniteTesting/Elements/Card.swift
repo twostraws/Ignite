@@ -40,7 +40,8 @@ struct CardTests {
         let output = element.render()
 
         #expect(output == """
-        <div class="card"><img alt="" src="dog.jpg" class="card-img-top" /><div class="card-body">Some text wrapped in a card</div></div>
+        <div class="card"><img alt="" src="dog.jpg" class="card-img-top" />\
+        <div class="card-body">Some text wrapped in a card</div></div>
         """)
     }
 
@@ -57,7 +58,8 @@ struct CardTests {
         let output = element.render()
 
         #expect(output == """
-        <div class="card"><div class="card-header">Header</div><div class="card-body">Some text wrapped in a card</div><div class="card-footer text-body-secondary">A footer</div></div>
+        <div class="card"><div class="card-header">Header</div><div class="card-body">Some text wrapped in a card</div>\
+        <div class="card-footer text-body-secondary">A footer</div></div>
         """)
     }
 
