@@ -34,73 +34,13 @@ struct TextFieldTests {
         """)
     }
 
-    @Test("TextField with standard text input")
-    func textFieldWithStandardTextInput() async throws {
-        let element = TextField("Paul", placeholder: "Enter your name here")
+    @Test("TextField with Text Type", arguments: TextField.TextType.allCases)
+    func textFieldWithInputTextType(textType: TextField.TextType) async throws {
+        let element = TextField("Paul", placeholder: "Enter your name here").type(textType)
         let output = element.render()
 
         #expect(output == """
-        <input placeholder="Enter your name here" type="text" class="form-control" />
-        """)
-    }
-
-    @Test("TextField with email address input")
-    func textFieldWithEmailAddressInput() async throws {
-        let element = TextField("Paul", placeholder: "Enter your name here").type(.email)
-        let output = element.render()
-
-        #expect(output == """
-        <input placeholder="Enter your name here" type="email" class="form-control" />
-        """)
-    }
-
-    @Test("TextField with password input")
-    func textFieldWithPasswordInput() async throws {
-        let element = TextField("Paul", placeholder: "Enter your name here").type(.password)
-        let output = element.render()
-
-        #expect(output == """
-        <input placeholder="Enter your name here" type="password" class="form-control" />
-        """)
-    }
-
-    @Test("TextField with phone input")
-    func textFieldWithPhoneInput() async throws {
-        let element = TextField("Paul", placeholder: "Enter your name here").type(.phone)
-        let output = element.render()
-
-        #expect(output == """
-        <input placeholder="Enter your name here" type="phone" class="form-control" />
-        """)
-    }
-
-    @Test("TextField with url input")
-    func textFieldWithUrlInput() async throws {
-        let element = TextField("Paul", placeholder: "Enter your name here").type(.url)
-        let output = element.render()
-
-        #expect(output == """
-        <input placeholder="Enter your name here" type="url" class="form-control" />
-        """)
-    }
-
-    @Test("TextField with search input")
-    func textFieldWithSearchInput() async throws {
-        let element = TextField("Paul", placeholder: "Enter your name here").type(.search)
-        let output = element.render()
-
-        #expect(output == """
-        <input placeholder="Enter your name here" type="search" class="form-control" />
-        """)
-    }
-
-    @Test("TextField with number input")
-    func textFieldWithNumberInput() async throws {
-        let element = TextField("Paul", placeholder: "Enter your name here").type(.number)
-        let output = element.render()
-
-        #expect(output == """
-        <input placeholder="Enter your name here" type="number" class="form-control" />
+        <input placeholder="Enter your name here" type="\(textType.rawValue)" class="form-control" />
         """)
     }
 
