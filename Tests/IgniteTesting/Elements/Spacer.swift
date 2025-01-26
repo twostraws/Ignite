@@ -15,7 +15,7 @@ import Testing
 @MainActor
 struct SpacerTests {
     @Test("SpacerTest")
-    func example() async throws {
+    func basicSpacerTest() async throws {
         let element = Spacer()
         let output = element.render()
 
