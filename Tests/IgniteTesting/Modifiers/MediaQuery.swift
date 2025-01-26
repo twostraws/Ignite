@@ -58,8 +58,10 @@ struct MediaQueryTests {
          output: "prefers-contrast: more"),
         (query: MediaQuery.contrast(.low),
          output: "prefers-contrast: less"),
-        (query: MediaQuery.contrast(.reduced),
-         output: "prefers-contrast: less")
+        (query: MediaQuery.contrast(.custom),
+         output: "prefers-contrast: custom"),
+        (query: MediaQuery.contrast(.noPreference),
+         output: "prefers-contrast: no-preference")
     ])
     func contrast_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
         let query = testCase.query
