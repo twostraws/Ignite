@@ -82,4 +82,27 @@ struct CardTests {
         <a href="/" class="btn btn-primary card-link">Back to the homepage</a></div></div>
         """)
     }
+
+    @Test("Card Styles")
+    func cardStyles() async throws {
+        // Card.Style is not sendable… therefore its not a parameterized test
+        let tuples: [(style: Card.Style, expectedClass: String)] = [
+            (.default, "card"),
+            (.bordered, "border-default card"),
+            (.solid, "card text-bg-default")
+        ]
+
+        for (style, expectedClass) in tuples {
+            let element = Card {
+                "Placeholder"
+            }
+            .cardStyle(style)
+
+            let output = element.render()
+
+            #expect(output == """
+            <div class="\(expectedClass)"><div class="card-body">Placeholder</div></div>
+            """)
+        }
+    }
 }
