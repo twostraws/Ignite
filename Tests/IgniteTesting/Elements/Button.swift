@@ -71,10 +71,10 @@ struct ButtonTests {
                 """
         )
         #expect(outputButton2 == """
-        <p><button type=\"button\" class=\"btn btn-primary\" \
-click=\"document.getElementById('FirstText').classList.add('d-none'); \
- document.getElementById('SecondText').classList.remove('d-none')\">Show Second Text</button></p>
-""")
+        <p><button type=\"button\" \
+        class=\"btn btn-primary\" onclick=\"document.getElementById('FirstText').classList.add('d-none'); \
+        document.getElementById('SecondText').classList.remove('d-none')\">Show Second Text</button></p>
+        """)
         #expect(outputText1 == "<h3 id=\"FirstText\">This is the first text.</h3>")
         #expect(outputText2 == "<h3 id=\"SecondText\" class=\"d-none\">This is the second text.</h3>")
     }
@@ -89,7 +89,7 @@ click=\"document.getElementById('FirstText').classList.add('d-none'); \
         let output = element.render()
         #expect(output == """
 <p><a href=\"https://www.hackingwithswift.com\" \
- class=\"btn btn-primary\">This is a link button</a></p>
+class=\"btn btn-primary\">This is a link button</a></p>
 """)
     }
 
