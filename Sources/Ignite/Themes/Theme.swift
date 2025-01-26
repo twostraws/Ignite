@@ -19,7 +19,8 @@
 ///     var fontFamilyBase: Font = .custom("Helvetica")
 /// }
 /// ```
-@MainActor public protocol Theme: Sendable { // swiftlint:disable:this redundant_sendable
+@MainActor
+public protocol Theme: Sendable { // swiftlint:disable:this redundant_sendable
     /// The name of the theme, which must be unique
     static var name: String { get set }
 
