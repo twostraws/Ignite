@@ -15,7 +15,10 @@ import Testing
 @MainActor
 struct MarkdownRendererTests {
 
-    @Test("Markdown headers from string", arguments: ["# Header 1", "## Header 2", "### Header 3", "# Header with a #hashtag"])
+    @Test(
+        "Markdown headers from string",
+        arguments: ["# Header 1", "## Header 2", "### Header 3", "# Header with a #hashtag"]
+    )
     func convertHeadersToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
