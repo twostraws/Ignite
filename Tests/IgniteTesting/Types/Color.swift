@@ -14,13 +14,13 @@ import Testing
 @Suite("Color Tests")
 @MainActor
 struct ColorTests {
-    @Test("foregroundStyleisBlack")
+    @Test("foregroundStyleIsBlack")
 
-    func foregroundStyleisBlack() async throws {
-        let foregroundStyleisBlack = Text("Hello, world!")
+    func foregroundStyleIsBlack() async throws {
+        let foregroundStyleIsBlack = Text("Hello, world!")
             .foregroundStyle(.black)
 
-        let output = foregroundStyleisBlack.render()
+        let output = foregroundStyleIsBlack.render()
 
         #expect(output ==
         """

@@ -14,8 +14,13 @@ import Testing
 @Suite("Code Tests")
 @MainActor
 struct CodeTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Test inline code formatting")
+    func inlineCode() async throws {
+        let element = Code("background-color")
+        let output = element.render()
 
+        #expect(
+            output == "<code>background-color</code>"
+        )
     }
 }

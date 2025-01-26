@@ -82,4 +82,22 @@ struct CardTests {
         <a href="/" class="btn btn-primary card-link">Back to the homepage</a></div></div>
         """)
     }
+
+    @Test("Card Styles", arguments: [
+        (Card.Style.default, "card"),
+        (Card.Style.bordered, "border-default card"),
+        (Card.Style.solid, "card text-bg-default")
+    ])
+    func cardStyles(style: Card.Style, expectedClass: String) async throws {
+        let element = Card {
+            "Placeholder"
+        }
+        .cardStyle(style)
+
+        let output = element.render()
+
+        #expect(output == """
+        <div class="\(expectedClass)"><div class="card-body">Placeholder</div></div>
+        """)
+    }
 }

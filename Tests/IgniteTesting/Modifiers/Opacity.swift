@@ -14,13 +14,16 @@ import Testing
 @Suite("Opacity Tests")
 @MainActor
 struct OpacityTests {
+    init() throws {
+        try PublishingContext.initialize(for: TestSite(), from: #filePath)
+    }
 
     @Test("Text Opacity Test", arguments: ["This is a test", "Another test"])
-    func textOpacity(textText: String) async throws {
-        let element = Text(textText).opacity(0.5)
+    func textOpacity(text: String) async throws {
+        let element = Text(text).opacity(0.5)
         let output = element.render()
 
-        #expect(output == "<p style=\"opacity: 0.5\">\(textText)</p>")
+        #expect(output == "<p style=\"opacity: 0.5\">\(text)</p>")
     }
 
     @Test("Image Opacity Test", arguments: [(path: "/images/example.jpg", description: "Example image")])
