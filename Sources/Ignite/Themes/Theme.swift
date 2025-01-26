@@ -20,7 +20,7 @@
 /// }
 /// ```
 @MainActor
-public protocol Theme: Sendable { // swiftlint:disable:this redundant_sendable
+public protocol Theme: Sendable {
     /// The name of the theme, which must be unique
     static var name: String { get set }
 
