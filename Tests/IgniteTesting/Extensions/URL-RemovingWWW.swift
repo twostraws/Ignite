@@ -25,7 +25,7 @@ struct URLRemovingWWWTests {
     }
 
     @Test("Test case when URL does NOT contain 'www")
-    func testRemovingWWW_fromURLWithoutWWW() {
+    func testRemovingWWW_fromURLWithoutWWW() async throws {
         // Given
         let url = URL(string: "https://example.com")!
         // When
@@ -35,7 +35,7 @@ struct URLRemovingWWWTests {
     }
 
     @Test("Test case when URL contains 'www' in the subdomain")
-    func testRemovingWWW_fromURLWithSubdomain() {
+    func testRemovingWWW_fromURLWithSubdomain() async throws {
         // Given
         let url1 = URL(string: "https://www.blog.example.com")!
         let url2 = URL(string: "https://www.longersubdomain.blog.example.com")!
@@ -48,7 +48,7 @@ struct URLRemovingWWWTests {
     }
 
     @Test("Test case when URL contains 'www' and also contains a path")
-    func testRemovingWWW_fromURLWithPath() {
+    func testRemovingWWW_fromURLWithPath() async throws {
         // Given
         let url = URL(string: "https://www.example.com/path/to/resource")!
         // When
@@ -58,7 +58,7 @@ struct URLRemovingWWWTests {
     }
 
     @Test("Test case when URL has an invalid scheme")
-    func testRemovingWWW_fromURLWithInvalidScheme() {
+    func testRemovingWWW_fromURLWithInvalidScheme() async throws {
         // Given
         let url = URL(string: "htp://www.example.com")! // host extraction will succeed
         // When
@@ -68,7 +68,7 @@ struct URLRemovingWWWTests {
     }
 
     @Test("Test case when URL contains www in domain or subdomain")
-    func testRemovingWWW_fromURLWithWWWInDomainOrSubdomain() {
+    func testRemovingWWW_fromURLWithWWWInDomainOrSubdomain() async throws {
         // Given
         let url1 = URL(string: "https://wwwmywww.example.com")!
         let url2 = URL(string: "https://www.mysecretwww.com")!
@@ -84,7 +84,7 @@ struct URLRemovingWWWTests {
     }
 
     @Test("Test case when URL contains an empty host")
-    func testRemovingWWW_fromURLWithEmptyHost() {
+    func testRemovingWWW_fromURLWithEmptyHost() async throws {
         // Given
         let url = URL(string: "https://www.")!
         // When
