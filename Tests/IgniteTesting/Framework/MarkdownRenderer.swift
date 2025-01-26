@@ -15,13 +15,12 @@ import Testing
 @MainActor
 struct MarkdownRendererTests {
 
-    @Test("Markdown headers from string", arguments: ["# Header 1", "## Header 2", "### Header 3"])
+    @Test("Markdown headers from string", arguments: ["# Header 1", "## Header 2", "### Header 3", "# Header with a #hashtag"])
     func convertHeadersToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         let expectedTag = "h\(numberOfHashtags(in: markdown))"
-        let expectedContent = markdown
-            .replacingOccurrences(of: "#", with: "")
+        let expectedContent = String(markdown.drop(while: { $0 == "#" }))
             .trimmingCharacters(in: .whitespacesAndNewlines)
         #expect(element.body == "<\(expectedTag)>\(expectedContent)</\(expectedTag)>")
     }
@@ -50,6 +49,6 @@ struct MarkdownRendererTests {
 
 extension MarkdownRendererTests {
     private func numberOfHashtags(in markdown: String) -> Int {
-        return markdown.filter { $0 == "#" }.count
+        return markdown.prefix(while: { $0 == "#" }).count
     }
 }
