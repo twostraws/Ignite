@@ -107,6 +107,15 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
+    @Test("Replaces Capitalized Characters with Dash then Lowercase", arguments: [
+        Instance(input: "CARS", expected: "c-a-r-s"),
+        Instance(input: "HELLO", expected: "h-e-l-l-o"),
+    ])
+    func replaces_capitalized_characters_with_dash_then_lowercase(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
+
+    
     @Test("Leaves Existing Dashes when converting to lowercase", arguments: [
         Instance(input: "Hello-world", expected: "hello-world"),
         Instance(input: "Happy-go-lucky", expected: "happy-go-lucky"),
