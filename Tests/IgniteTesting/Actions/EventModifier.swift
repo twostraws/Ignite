@@ -24,7 +24,7 @@ struct EventModifierTests {
         EventType.mouseOver
     ]
 
-    private static let actions: [[any Action]] = [
+    private static let actions: [[Action]] = [
         [ShowAlert(message: "foo")],
         [ShowAlert(message: "qux"), DismissModal(id: "baz")],
         [CustomAction("document.writeline('bar')")],
@@ -32,18 +32,16 @@ struct EventModifierTests {
         [ShowModal(id: "foo"), HideElement("qux")]
     ]
 
-    @Test("Check if events are added correctly", arguments: tags)
-    func onEventAddsEventsCorrectly(tag: String) async throws {
-        zip(Self.events, Self.actions).forEach { event, actions in
-            let element = Tag(tag) {}
-                .onEvent(event, actions)
+    @Test("Check if events are added correctly", arguments: tags, await Array(zip(events, actions)))
+    func onEventAddsEventsCorrectly(tag: String, eventActions: (EventType, [any Action])) async throws {
+        let element = Tag(tag) {}
+            .onEvent(eventActions.0, eventActions.1)
 
-            let output = element.render()
+        let output = element.render()
 
-            let eventOutput = event.rawValue
-            let actionOutput = actions.map { $0.compile() }.joined(separator: "; ")
+        let eventOutput = eventActions.0.rawValue
+        let actionOutput = eventActions.1.map { $0.compile() }.joined(separator: "; ")
 
-            #expect(output == "<\(tag) \(eventOutput)=\"\(actionOutput)\"></\(tag)>")
-        }
+        #expect(output == "<\(tag) \(eventOutput)=\"\(actionOutput)\"></\(tag)>")
     }
 }
