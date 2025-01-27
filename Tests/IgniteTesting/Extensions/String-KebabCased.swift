@@ -55,4 +55,13 @@ struct StringKebabCasedTests {
         #expect(string.kebabCased() == string.lowercased())
     }
 
+    @Test("Concatenates With Dashes", arguments: [
+        "a b",
+        "one two",
+        "buckle my shoe"
+    ])
+    func concatenates_words_with_dashes(string: String) async throws {
+        #expect(string.kebabCased() == string.replacingOccurrences(of: " ", with: "-"))
+    }
+
 }
