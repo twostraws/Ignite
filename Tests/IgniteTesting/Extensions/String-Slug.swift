@@ -79,12 +79,6 @@ struct StringSlugTests {
     }
 
     @Test("Strips Leading and Trailing Punctuation", arguments: [
-        // I've tried to use non-controversial words here
-        // "peace" in two of the scripts
-        // and "oolong tea" in the other two.
-        // these were also just very easy-to-find words online
-        // as I don't speak any of these languages.
-        // No stereotyping or cultural judgment is intended
         Instance(input: "up!", expected: "up"),
         Instance(input: "c.", expected: "c"),
         Instance(input: ".lowercase", expected: "lowercase"),
