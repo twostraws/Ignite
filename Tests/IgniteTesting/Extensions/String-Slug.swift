@@ -107,6 +107,14 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
+    @Test("Leaves Existing Dashes when converting to lowercase", arguments: [
+        Instance(input: "Hello-world", expected: "hello-world"),
+        Instance(input: "Happy-go-lucky", expected: "happy-go-lucky"),
+    ])
+    func respects_existing_dashes_when_converting_to_lowercase(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
+
     @Test("Replaces Underscaore with Dashes", arguments: [
         Instance(input: "hello_world", expected: "hello-world"),
         Instance(input: "hello_happy_world", expected: "hello-happy-world")
