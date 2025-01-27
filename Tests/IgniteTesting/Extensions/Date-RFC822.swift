@@ -36,9 +36,3 @@ struct DateRFC822Tests {
         #expect(instance.input.asRFC822 == instance.expected)
     }
 }
-
-extension Date {
-    static func random() -> Date {
-        Date(timeIntervalSince1970: .random(in: Date.distantPast.timeIntervalSince1970 ... Date.distantFuture.timeIntervalSince1970))
-    }
-}
