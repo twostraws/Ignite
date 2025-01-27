@@ -94,6 +94,14 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
     
+    @Test("Replaces Underscaore with Dashes", arguments: [
+        Instance(input: "hello_world", expected: "hello-world"),
+        Instance(input: "hello_happy_world", expected: "hello-happy-world")
+    ])
+    func reaplces_underscores_with_dashes(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
+
     @Test("Concatenates Lowercase Words With Dashes", arguments: [
         "a b",
         "one two",
