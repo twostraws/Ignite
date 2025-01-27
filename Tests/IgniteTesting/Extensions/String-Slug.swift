@@ -169,6 +169,14 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
+    @Test("Acronyms are lowercased and double-dash-separated", arguments: [
+        Instance(input: "Y.M.C.A.", expected: "y--m--c--a"),
+        Instance(input: "F.B.I.", expected: "f--b--i")
+    ])
+    func acronyms_are_lowercased_and_dash_separated(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
+
     @Test("Converts camelCase to dash-case", arguments: [
         Instance(input: "camelCase", expected: "camel-case"),
         Instance(input: "threeWordExample", expected: "three-word-example"),
