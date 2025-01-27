@@ -28,7 +28,8 @@ struct StringKebabCasedTests {
         "!", // single punctuation
         "up!", // punctuation at end of word
         "c.",
-        "#&?$#+" // group of punctuation together
+        "#&?$#+", // group of punctuation together
+        "already-kebab-cased" // string is already kebab-cased
     ])
     func does_not_change_simple_cases(string: String) async throws {
         #expect(string.kebabCased() == string)
