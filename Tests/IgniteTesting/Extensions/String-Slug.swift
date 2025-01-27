@@ -21,6 +21,7 @@ struct StringSlugTests {
         "a", // single character
         "1", // single digit
         "one", // single word
+        "15-3", // subtraction math expression
         "hello-world", // kebab-cased
         "hello-wonderful-world",
     ])
