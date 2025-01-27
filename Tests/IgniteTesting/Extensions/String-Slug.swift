@@ -74,7 +74,8 @@ struct StringSlugTests {
         Instance(input: "ウーロン茶", expected: "uron-cha"),
         Instance(input: "שָׁלוֹם", expected: "salwom"),
         Instance(input: "שָׁלוֹםسلام", expected: "salwomslam"),
-        Instance(input: "мир" + "שָׁלוֹםسلام" + "שָׁלוֹם" + "烏龍茶" + "ウーロン茶", expected: "mirsalwomslamsalwom-wu-long-chauron-cha")
+        Instance(input: "мир" + "שָׁלוֹםسلام" + "שָׁלוֹם" + "烏龍茶" + "ウーロン茶",
+                 expected: "mirsalwomslamsalwom-wu-long-chauron-cha")
     ])
     func transliterates_characters_in_non_latin_scripts(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
@@ -193,11 +194,11 @@ struct StringSlugTests {
     func converts_camelCase_to_dash_case(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
-    
+
     @Test("Test Against URL Strings", arguments: [
         Instance(input: "https://github.com/twostraws/Ignite", expected: "https-github-com-twostraws--ignite"),
         Instance(input: "https://github.com/twostraws/Ignite/", expected: "https-github-com-twostraws--ignite"),
-        Instance(input: "file:/Users/george/Documents", expected: "file--users-george--documents"),
+        Instance(input: "file:/Users/george/Documents", expected: "file--users-george--documents")
     ])
     func url_strings(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
@@ -207,7 +208,7 @@ struct StringSlugTests {
         Instance(input: "/Users/george/Documents", expected: "-users-george--documents"),
         Instance(input: "/twostraws/Ignite", expected: "twostraws--ignite"),
         Instance(input: "~/Documents", expected: "-documents"),
-        Instance(input: "~/Documents/Resumé", expected: "-documents--resume"),
+        Instance(input: "~/Documents/Resumé", expected: "-documents--resume")
     ])
     func path_strings(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
