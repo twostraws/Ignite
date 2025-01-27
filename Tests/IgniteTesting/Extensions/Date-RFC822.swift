@@ -19,7 +19,7 @@ struct DateRFC822Tests {
         let input: Date
         let expected: String
     }
-    
+
     @Test("Test Against Known Output", arguments: [
         Instance(input: Date(timeIntervalSince1970: 25078421870), expected: "Mon, 14 Sep 2764 08:17:50 -0400"),
         Instance(input: Date(timeIntervalSince1970: -59582421721), expected: "Thu, 29 Nov 0081 10:21:57 -045602"),
@@ -30,7 +30,7 @@ struct DateRFC822Tests {
         Instance(input: Date(timeIntervalSince1970: -32571932192), expected: "Fri, 27 Oct 0937 20:07:26 -045602"),
         Instance(input: Date(timeIntervalSince1970: -3725612248), expected: "Wed, 10 Dec 1851 06:46:30 -045602"),
         Instance(input: Date(timeIntervalSince1970: -38580260670), expected: "Tue, 06 Jun 0747 23:59:28 -045602"),
-        Instance(input: Date(timeIntervalSince1970: 10279542621), expected: "Mon, 30 Sep 2295 00:30:21 -0400"),
+        Instance(input: Date(timeIntervalSince1970: 10279542621), expected: "Mon, 30 Sep 2295 00:30:21 -0400")
     ])
     func outputs_expected_result(instance: Instance) async throws {
         #expect(instance.input.asRFC822 == instance.expected)

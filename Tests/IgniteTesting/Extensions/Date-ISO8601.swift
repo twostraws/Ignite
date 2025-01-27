@@ -14,12 +14,12 @@ import Testing
 @Suite("Date-ISO8601 Tests")
 @MainActor
 struct DateISO8601Tests {
-    
+
     struct Instance {
         let input: Date
         let expected: String
     }
-        
+
     @Test("Test Against Known Output", arguments: [
         Instance(input: Date(timeIntervalSince1970: -40241318220), expected: "0694-10-18T00:03:00Z"),
         Instance(input: Date(timeIntervalSince1970: 36571335925), expected: "3128-11-25T08:25:25Z"),
