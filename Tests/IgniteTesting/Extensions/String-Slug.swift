@@ -178,6 +178,17 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
+    @Test("Replaces All Whitespace Between Lowercase Words With Dashes", arguments: [
+        Instance(input: "a\tb", expected: "a-b"),
+        Instance(input: "one\ntwo", expected: "one-two"),
+        Instance(input: "one\r\ntwo", expected: "one-two"),
+        Instance(input: "buckle\nmy\tshoe", expected: "buckle-my-shoe"),
+        Instance(input: "buckle\n\n\nmy\t\t\tshoe", expected: "buckle-my-shoe")
+    ])
+    func concatenatesa_lowercase_words_with_dashes(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
+
     @Test("Acronyms are lowercased and double-dash-separated", arguments: [
         Instance(input: "Y.M.C.A.", expected: "y--m--c--a"),
         Instance(input: "F.B.I.", expected: "f--b--i")
