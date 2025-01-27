@@ -14,7 +14,7 @@ import Testing
 @Suite("Date-ISO8601 Tests")
 @MainActor
 struct DateISO8601Tests {
-            
+
     let exampleISO8601Strings = """
 0563-05-30T21:58:41Z
 3907-04-07T17:49:01Z
@@ -120,12 +120,11 @@ struct DateISO8601Tests {
 
     @Test("Test Against 100 ISO8601 Strings")
     func asISO8601_outputs_proper_string() async throws {
-        
+
         let formatter = ISO8601DateFormatter()
-        
+
         for dateString in exampleISO8601Strings {
             let date = formatter.date(from: dateString)
-            
             #expect(date?.asISO8601 == dateString)
         }
     }
