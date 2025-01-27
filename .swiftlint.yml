@@ -14,3 +14,10 @@ identifier_name:
     - id
     - to
     - up
+
+# Case-sensitive paths to include during linting. Directory paths supplied on the
+# command line will be ignored.
+included:
+    - Sources
+    - Tests
+
