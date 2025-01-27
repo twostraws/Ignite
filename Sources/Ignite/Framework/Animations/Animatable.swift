@@ -8,7 +8,7 @@
 import OrderedCollections
 
 /// A protocol that defines the core animation capabilities for Ignite's animation system.
-public protocol Animatable {
+public protocol Animatable: Hashable {
     /// The event that triggers the animation.
     var trigger: AnimationTrigger { get set }
 
@@ -36,6 +36,10 @@ public protocol Animatable {
 }
 
 public extension Animatable {
+    var id: String {
+        Self.id
+    }
+
     static var id: String {
         String(describing: self).truncatedHash
     }
