@@ -29,4 +29,15 @@ struct StringKebabCasedTests {
     func does_not_change_simple_cases(string: String) async throws {
         #expect(string.kebabCased() == string)
     }
+    
+    @Test("Converts to Dashes", arguments: [
+        " ",
+        "  ",
+        "\t",
+        "\n",
+        "\n\n"
+    ])
+    func converts_whitespaces_to_dashes(string: String) async throws {
+        #expect(string.kebabCased() == "-")
+    }
 }
