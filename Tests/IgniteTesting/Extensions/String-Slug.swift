@@ -81,6 +81,7 @@ struct StringSlugTests {
     @Test("Strips Leading and Trailing Punctuation", arguments: [
         Instance(input: "up!", expected: "up"),
         Instance(input: "c.", expected: "c"),
+        Instance(input: "15!", expected: "15"),
         Instance(input: ".lowercase", expected: "lowercase"),
 
     ])
