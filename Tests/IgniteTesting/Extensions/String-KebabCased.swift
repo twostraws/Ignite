@@ -40,4 +40,15 @@ struct StringKebabCasedTests {
     func converts_whitespaces_to_dashes(string: String) async throws {
         #expect(string.kebabCased() == "-")
     }
+    
+    @Test("Converts Single Words To Lowercase", arguments: [
+        "A",
+        "CARS",
+        "Cars",
+        "Hollywood"
+    ])
+    func converts_capitals_to_lowercase(string: String) async throws {
+        #expect(string.kebabCased() == string.lowercased())
+    }
+
 }
