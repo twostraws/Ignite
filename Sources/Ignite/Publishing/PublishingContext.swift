@@ -216,14 +216,14 @@ final class PublishingContext {
         copyAssets()
         copyFonts()
 
-        let themesPath = buildDirectory.appending(path: "css/themes.min.css").path(percentEncoded: false)
+        let themesPath = buildDirectory.appending(path: "css/themes.min.css").decodedPath
 
         if !FileManager.default.fileExists(atPath: themesPath) {
             copy(resource: "css/themes.min.css")
         }
 
         if AnimationManager.default.hasAnimations {
-            let animationsPath = buildDirectory.appending(path: "css/animations.min.css").path()
+            let animationsPath = buildDirectory.appending(path: "css/animations.min.css").decodedPath
             if !FileManager.default.fileExists(atPath: animationsPath) {
                 copy(resource: "css/animations.min.css")
             }
