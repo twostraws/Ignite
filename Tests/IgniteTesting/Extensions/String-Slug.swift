@@ -94,7 +94,7 @@ struct StringSlugTests {
         Instance(input: "this, that, and the other thing", expected: "this-that-and-the-other-thing"),
         Instance(input: "planes, trains & automobiles", expected: "planes-trains-automobiles")
     ])
-    func removed_punctuation_between_words(instance: Instance) async throws {
+    func removes_punctuation_between_words(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
