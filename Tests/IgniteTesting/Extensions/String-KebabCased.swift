@@ -24,7 +24,11 @@ struct StringKebabCasedTests {
         "1", // single digit
         "one", // single word
         "hello_world", // words connected by underscores
-        "hello_happy_world" // words connected by underscores
+        "hello_happy_world", // words connected by underscores
+        "!", // single punctuation
+        "up!", // punctuation at end of word
+        "c.",
+        "#&?$#+" // group of punctuation together
     ])
     func does_not_change_simple_cases(string: String) async throws {
         #expect(string.kebabCased() == string)
