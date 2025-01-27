@@ -14,8 +14,7 @@ import Testing
 @Suite("String-KebabCased Tests")
 @MainActor
 struct StringKebabCasedTests {
-    
-    
+
     /// Some types of string will have an output that's the same as their input.
     /// Test examples of each of those cases
     @Test("Noop Cases", arguments: [
@@ -34,7 +33,7 @@ struct StringKebabCasedTests {
     func does_not_change_simple_cases(string: String) async throws {
         #expect(string.kebabCased() == string)
     }
-    
+
     @Test("Converts Whitespace to Dashes", arguments: [
         " ",
         "  ",
@@ -45,7 +44,7 @@ struct StringKebabCasedTests {
     func converts_whitespaces_to_dashes(string: String) async throws {
         #expect(string.kebabCased() == "-")
     }
-    
+
     @Test("Converts Single Words To Lowercase", arguments: [
         "A",
         "CARS",
@@ -70,24 +69,29 @@ struct StringKebabCasedTests {
         let input: String
         let expected: String
     }
-    
+
     @Test("Converts camelCase to words-separated-by-dashes", arguments: [
         Instance(input: "camelCase", expected: "camel-case"),
         Instance(input: "threeWordExample", expected: "three-word-example"),
         Instance(input: "aLongerExampleWithSixWords", expected: "a-longer-example-with-six-words")
-        
     ])
     func converts_camelCase_to_words_separated_by_dashes(instance: Instance) async throws {
         #expect(instance.input.kebabCased() == instance.expected)
     }
 
-    @Test("Complex Examples", arguments: [
-        Instance(input: "keepsPunctuation!", expected: "keeps-punctuation!"),
-        Instance(input: "Lowercases Capitals and Replaces Spaces", expected: "lowercases-capitals-and-replaces-spaces"),
-        Instance(input: "ignores_underscores-and-dashes and replaces spaces", expected: "ignores_underscores-and-dashes-and-replaces-spaces"),
-        Instance(input: "retains commas, and follows them with dashes", expected: "retains-commas,-and-follows-them-with-dashes")
-        
-    ])
+    @Test(
+        "Complex Examples",
+        arguments: [
+            Instance(input: "keepsPunctuation!",
+                     expected: "keeps-punctuation!"),
+            Instance(input: "Lowercases Capitals and Replaces Spaces",
+                     expected: "lowercases-capitals-and-replaces-spaces"),
+            Instance(input: "ignores_underscores-and-dashes and replaces spaces",
+                     expected: "ignores_underscores-and-dashes-and-replaces-spaces"),
+            Instance(input: "retains commas, and follows them with dashes",
+                     expected: "retains-commas,-and-follows-them-with-dashes")
+        ]
+    )
     func complex_examples(instance: Instance) async throws {
         #expect(instance.input.kebabCased() == instance.expected)
     }
