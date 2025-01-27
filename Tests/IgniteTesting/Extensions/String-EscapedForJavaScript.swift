@@ -55,4 +55,26 @@ struct StringEscapedForJavaScriptTests {
         #expect(instance.input.escapedForJavascript() == instance.expected)
     }
 
+    @Test("Replaces Quotation Marks", arguments: [
+        Instance(input: "\"",
+                 expected: "&quot;"),
+        Instance(input: "\"whole string has quotation marks\"",
+                 expected: "&quot;whole string has quotation marks&quot;"),
+        Instance(input: "quotation marks \"appear\" within \"string\"",
+                 expected: "quotation marks &quot;appear&quot; within &quot;string&quot;")
+    ])
+    func replaces_quotation_marks_with_html_escaped_quot_sequence(instance: Instance) async throws {
+        #expect(instance.input.escapedForJavascript() == instance.expected)
+    }
+
+    @Test("Combined Examples", arguments: [
+        Instance(input: "\"a quote 'string' with 'single quotes' within it\"",
+                 expected: "&quot;a quote \\'string\\' with \\'single quotes\\' within it&quot;"),
+        Instance(input: "Jay's example of a string with \"quotation\" marks and an apostrophe",
+                 expected: "Jay\\'s example of a string with &quot;quotation&quot; marks and an apostrophe")
+    ])
+    func combined_examples(instance: Instance) async throws {
+        #expect(instance.input.escapedForJavascript() == instance.expected)
+    }
+
 }
