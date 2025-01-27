@@ -36,12 +36,12 @@ struct StringEscapedForJavaScriptTests {
     func does_not_change_simple_cases(string: String) async throws {
         #expect(string.escapedForJavascript() == string)
     }
-    
+
     struct Instance {
         let input: String
         let expected: String
     }
-    
+
     @Test("Replaces Single Quotes", arguments: [
         Instance(input: "'",
                  expected: "\\'"),
