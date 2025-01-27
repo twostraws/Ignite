@@ -129,8 +129,6 @@ Fri, 31 Oct 1597 06:38:21 -045602
             let date = formatter.date(from: dateString)
 
             #expect(date?.asRFC822 == dateString)
-
         }
     }
 }
-
