@@ -19,22 +19,7 @@ struct DateRFC822Tests {
         let input: Date
         let expected: String
     }
-    
-    // use this to output a list of strings to the console that we can use as input in a test
-    @Test
-    func convertToInstance() {
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss Z"
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-
-        let dates = (0 ..< 10).map { _ in Date.random() }
-        for date in dates {
-            let time = date.timeIntervalSince1970
-            print("Instance(input: Date(timeIntervalSince1970: \(time)), expected: \"\(date.asRFC822)\"),")
-        }
-    }
-    
     @Test("Test Against Known Output", arguments: [
         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 04:21:41 +0000"),
         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 14:08:38 +0000"),
@@ -45,7 +30,7 @@ struct DateRFC822Tests {
         Instance(input: Date(timeIntervalSince1970: 9676773717.779556), expected: "Wed, 23 Aug 2276 16:41:57 +0000"),
         Instance(input: Date(timeIntervalSince1970: -46716978084.27513), expected: "Sat, 05 Aug 0489 05:38:35 +0000"),
         Instance(input: Date(timeIntervalSince1970: 60228133082.71135), expected: "Sun, 21 Jul 3878 20:58:02 +0000"),
-        Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 14:23:25 +0000"),
+        Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 14:23:25 +0000")
     ])
     func outputs_expected_result(instance: Instance) async throws {
         #expect(instance.input.asRFC822 == instance.expected)
