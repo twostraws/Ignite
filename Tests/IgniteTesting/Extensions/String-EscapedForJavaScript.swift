@@ -71,10 +71,10 @@ struct StringEscapedForJavaScriptTests {
     @Test("Combined Examples", arguments: [
         Instance(input: "\"a quote 'string' with 'single quotes' within it\"",
                  expected: "&quot;a quote \\'string\\' with \\'single quotes\\' within it&quot;"),
-        Instance(input: "Jay's example of a string with \"quotation\" marks and an apostrophe",
-                 expected: "Jay\\'s example of a string with &quot;quotation&quot; marks and an apostrophe"),
-        Instance(input: "Jay`s example of a string with \"quotation\" marks and a left single apostrophe",
-                 expected: "Jay`s example of a string with &quot;quotation&quot; marks and a left single apostrophe")
+        Instance(input: "programmer's example of a string with \"quotation\" marks and an apostrophe",
+                 expected: "programmer\\'s example of a string with &quot;quotation&quot; marks and an apostrophe"),
+        Instance(input: "programmer`s example of a string with \"quotation\" marks and a left single apostrophe",
+                 expected: "programmer`s example of a string with &quot;quotation&quot; marks and a left single apostrophe")
     ])
     func combined_examples(instance: Instance) async throws {
         #expect(instance.input.escapedForJavascript() == instance.expected)
