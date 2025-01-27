@@ -24,7 +24,7 @@ struct StringKebabCasedTests {
         "1", // single digit
         "one", // single word
         "hello_world", // words connected by underscores
-        "hello_happy_world", // words connected by underscores
+        "hello_happy_world", 
         "!", // single punctuation
         "up!", // punctuation at end of word
         "c.",
