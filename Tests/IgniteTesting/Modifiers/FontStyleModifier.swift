@@ -14,17 +14,13 @@ import Testing
 @Suite("FontStyleModifier Tests")
 @MainActor
 struct FontStyleModifierTests {
-    @Test("Font Style Test")
-    func fontStyleExcludingLead() async throws {
-        for font in Font.Style.allCases {
-            if font != .lead {
-                let element = Text("Hello").font(font)
+    @Test("Font Style Test", arguments: await Font.Style.tagCases)
+    func fontStyle(style: Font.Style) async throws {
+        let element = Text("Hello").font(style)
 
-                let output = element.render()
+        let output = element.render()
 
-                #expect(
-                    output == "<\(font.description)>Hello</\(font.description)>")
-            }
-        }
+        #expect(
+            output == "<\(style.description)>Hello</\(style.description)>")
     }
 }
