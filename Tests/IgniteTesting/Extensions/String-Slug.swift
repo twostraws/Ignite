@@ -40,7 +40,9 @@ struct StringSlugTests {
         "\n",
         "\n\n",
         "😄", // single emoji
-        "🤞👍😄" // multiple emoji
+        "🤞👍😄", // multiple emoji
+        "~", // home path in the shell
+        "/" // empty path
     ])
     func returns_nil_for_strings_with_no_latin_characters(string: String) async throws {
         #expect(string.convertedToSlug() == nil)
