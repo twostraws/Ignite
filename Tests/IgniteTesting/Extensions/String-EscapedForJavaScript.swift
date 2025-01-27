@@ -35,4 +35,24 @@ struct StringEscapedForJavaScriptTests {
     func does_not_change_simple_cases(string: String) async throws {
         #expect(string.escapedForJavascript() == string)
     }
+    
+    struct Instance {
+        let input: String
+        let expected: String
+    }
+    
+    @Test("Replaces Single Quotes", arguments: [
+        Instance(input: "'",
+                 expected: "\\'"),
+        Instance(input: "'whole string is single quoted'",
+                 expected: "\\'whole string is single quoted\\'"),
+        Instance(input: "word's shortened with apostrophe",
+                 expected: "word\\'s shortened with apostrophe"),
+        Instance(input: "single quotes 'appear' within 'string'",
+                 expected: "single quotes \\'appear\\' within \\'string\\'")
+    ])
+    func replaces_single_quotes_with_escaped_quotes(instance: Instance) async throws {
+        #expect(instance.input.escapedForJavascript() == instance.expected)
+    }
+
 }
