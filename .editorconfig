@@ -3,20 +3,6 @@
 # top-most EditorConfig file
 root = true
 
-[*]
-end_of_line = lf
-charset = utf-8
-trim_trailing_whitespace = false
-insert_final_newline = false
-
 [*.swift]
-indent_style = space
-indent_size = 4
-
-[*.{h, m, mm}]
-indent_style = space
-indent_size = 4
-
-[*.metal]
 indent_style = space
 indent_size = 4
