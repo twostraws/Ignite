@@ -93,4 +93,24 @@ struct StringSlugTests {
     func strips_punctuation_from_ends_of_string(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
+    
+    @Test("Concatenates Lowercase Words With Dashes", arguments: [
+        "a b",
+        "one two",
+        "buckle my shoe"
+    ])
+    func concatenates_lowercase_words_with_dashes(string: String) async throws {
+        #expect(string.convertedToSlug() == string.replacingOccurrences(of: " ", with: "-"))
+    }
+
+    /// Simple type meant to represent input paired with expected output
+
+    @Test("Converts camelCase to dash-case", arguments: [
+        Instance(input: "camelCase", expected: "camel-case"),
+        Instance(input: "threeWordExample", expected: "three-word-example"),
+        Instance(input: "aLongerExampleWithSixWords", expected: "a-longer-example-with-six-words")
+    ])
+    func converts_camelCase_to_dash_case(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
 }
