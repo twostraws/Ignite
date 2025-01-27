@@ -18,11 +18,11 @@ struct StringSlugTests {
     /// Some types of string will have an output that's the same as their input.
     /// Test examples of each of those cases
     @Test("Noop Cases", arguments: [
-                "a", // single character
-                "1", // single digit
-                "one", // single word
-                "hello-world", // kebab-cased
-                "hello-wonderful-world",
+        "a", // single character
+        "1", // single digit
+        "one", // single word
+        "hello-world", // kebab-cased
+        "hello-wonderful-world",
     ])
     func does_not_change_simple_cases(string: String) async throws {
         #expect(string.convertedToSlug() == string)
