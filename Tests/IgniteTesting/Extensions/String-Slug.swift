@@ -32,6 +32,16 @@ struct StringSlugTests {
         #expect(string.convertedToSlug() == nil)
     }
     
+    @Test("Converts Title-Cased Single Words To Lowercase", arguments: [
+        "A",
+        "Cars",
+        "Hollywood"
+    ])
+    func converts_title_case_to_lowercase(string: String) async throws {
+        #expect(string.convertedToSlug() == string.lowercased())
+    }
+
+    
     struct Instance {
         let input: String
         let expected: String
