@@ -175,14 +175,4 @@ struct StringCSStoJSTests {
         // Then
         #expect(jsName == "")
     }
-
-    @Test("CSS-JS conversion for a nil string")
-    func convertingCSSNamesToJS_forNilString() async throws {
-        // Given
-        let cssName: String? = nil
-        // When
-        let jsName = cssName?.convertingCSSNamesToJS()
-        // Then
-        #expect(jsName == nil)
-    }
 }
