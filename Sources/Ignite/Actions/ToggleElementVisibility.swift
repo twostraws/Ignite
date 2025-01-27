@@ -22,4 +22,3 @@ public struct ToggleElementVisibility: Action {
         "document.getElementById('\(id)').classList.toggle('d-none')"
     }
 }
-
