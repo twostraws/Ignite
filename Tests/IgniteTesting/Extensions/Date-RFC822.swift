@@ -14,12 +14,12 @@ import Testing
 @Suite("Date-RFC822 Tests")
 @MainActor
 struct DateRFC822Tests {
-    
+
     struct Instance {
         let input: Date
         let expected: String
     }
-        
+
     @Test("Test Against Known Output", arguments: [
         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 04:21:41 +0000"),
         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 14:08:38 +0000"),
