@@ -14,8 +14,25 @@ import Testing
 @Suite("String-EscapedForJavaScript Tests")
 @MainActor
 struct StringEscapedForJavaScriptTests {
-    @Test("ExampleTest")
-    func example() async throws {
-
+    /// Some types of string will have an output that's the same as their input.
+    /// Test examples of each of those cases
+    @Test("Noop Cases", arguments: [
+        "", // empty string
+        "a", // single character
+        "1", // single digit
+        "one", // single word
+        "hello_world", // words connected by underscores
+        "hello_happy_world",
+        "!", // single punctuation
+        "up!", // punctuation at end of word
+        "c.",
+        "#&?$#+", // group of punctuation together
+        "already-kebab-cased", // string is already kebab-cased
+        "Hello World!",
+        "camelCased",
+        "kebab-cased"
+    ])
+    func does_not_change_simple_cases(string: String) async throws {
+        #expect(string.escapedForJavascript() == string)
     }
 }
