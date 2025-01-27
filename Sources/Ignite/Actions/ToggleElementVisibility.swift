@@ -1,8 +1,8 @@
 //
-//  ToggleElementVisiblity.swift
-//  Ignite
-//
-//  Created by Dorian on 27/01/2025.
+// ToggleElementVisiblity.swift
+// Ignite
+// https://www.github.com/twostraws/Ignite
+// See LICENSE for license information.
 //
 
 import Foundation
