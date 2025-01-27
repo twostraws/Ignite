@@ -84,7 +84,7 @@ struct StringSlugTests {
         Instance(input: "días", expected: "dias"),
         Instance(input: "baño", expected: "bano"),
         Instance(input: "çest", expected: "cest"),
-        Instance(input: "Straße", expected: "strasse"),
+        Instance(input: "Straße", expected: "strasse")
     ])
     func strips_diacritics(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
