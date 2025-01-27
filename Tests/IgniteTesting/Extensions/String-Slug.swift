@@ -98,6 +98,15 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
+    @Test("Removes emoji leaving other words", arguments: [
+        Instance(input: "😄smiley", expected: "smiley"),
+        Instance(input: "smiley😄", expected: "smiley"),
+        Instance(input: "this😄and😄that😄", expected: "this-and-that"),
+    ])
+    func removes_emoji_between_words(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
+
     @Test("Replaces Underscaore with Dashes", arguments: [
         Instance(input: "hello_world", expected: "hello-world"),
         Instance(input: "hello_happy_world", expected: "hello-happy-world")
