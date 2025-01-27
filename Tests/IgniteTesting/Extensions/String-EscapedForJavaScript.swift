@@ -30,7 +30,8 @@ struct StringEscapedForJavaScriptTests {
         "already-kebab-cased", // string is already kebab-cased
         "Hello World!",
         "camelCased",
-        "kebab-cased"
+        "kebab-cased",
+        "`" // left single quotation mark is not escaped
     ])
     func does_not_change_simple_cases(string: String) async throws {
         #expect(string.escapedForJavascript() == string)
@@ -71,7 +72,9 @@ struct StringEscapedForJavaScriptTests {
         Instance(input: "\"a quote 'string' with 'single quotes' within it\"",
                  expected: "&quot;a quote \\'string\\' with \\'single quotes\\' within it&quot;"),
         Instance(input: "Jay's example of a string with \"quotation\" marks and an apostrophe",
-                 expected: "Jay\\'s example of a string with &quot;quotation&quot; marks and an apostrophe")
+                 expected: "Jay\\'s example of a string with &quot;quotation&quot; marks and an apostrophe"),
+        Instance(input: "Jay`s example of a string with \"quotation\" marks and a left single apostrophe",
+                 expected: "Jay`s example of a string with &quot;quotation&quot; marks and a left single apostrophe")
     ])
     func combined_examples(instance: Instance) async throws {
         #expect(instance.input.escapedForJavascript() == instance.expected)
