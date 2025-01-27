@@ -20,9 +20,11 @@ struct StringSlugTests {
         "", // empty string
         "!", // single punctuation
         "#&?$#+", // group of punctuation together
-        "ウィキペディア", // katakana
-        "燒賣", // chinese writing
-        "燒賣\n燒賣\tウィキペディア", // non-latin scripts with whitespace
+        " ", // whitespace
+        "  ",
+        "\t",
+        "\n",
+        "\n\n",
         "😄", // single emoji
         "🤞👍😄" // multiple emoji
     ])
