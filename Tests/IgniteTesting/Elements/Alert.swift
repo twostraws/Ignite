@@ -14,8 +14,22 @@ import Testing
 @Suite("Alert Tests")
 @MainActor
 struct AlertTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("All Alert roles are correctly set", arguments: zip(await Role.badgeRoles, [
+        "alert-primary",
+        "alert-secondary",
+        "alert-success",
+        "alert-danger",
+        "alert-warning",
+        "alert-info",
+        "alert-light",
+        "alert-dark"
+    ]))
+    func allRolesForAlertVariant(role: Role, cssAppliedClass: String) async throws {
+        let element = Alert {
+            Text("This is not an exercice")
+        }.role(role)
+        let output = element.render()
 
+        #expect(output == "<div class=\"alert \(cssAppliedClass)\"><p>This is not an exercice</p></div>")
     }
 }
