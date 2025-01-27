@@ -63,6 +63,7 @@ public struct HTMLHead: RootHTML {
     ///   information about the site being rendered and more.
     @HeadElementBuilder
     public static func standardHeaders(for page: Page) -> [any HeadElement] {
+        // swiftlint:disable:previous cyclomatic_complexity
         MetaTag.utf8
         MetaTag.flexibleViewport
 
