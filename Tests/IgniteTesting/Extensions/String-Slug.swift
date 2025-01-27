@@ -115,6 +115,19 @@ struct StringSlugTests {
     func replaces_capitalized_characters_with_dash_then_lowercase(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
+    
+    @Test("Replaces Common Math Operators with Dashes", arguments: [
+        Instance(input: "15+3", expected: "15-3"),
+        Instance(input: "15-3=12", expected: "15-3-12"), // math expressions expected: ""),
+        Instance(input: "15+3=18", expected: "15-3-18"),
+        Instance(input: "15÷3=5", expected: "15-3-5"),
+        Instance(input: "15/3=5", expected: "15-3-5"),
+        Instance(input: "15 / 3 = 5", expected: "15-3-5"),
+    ])
+    func replaces_common_math_operators_with_dash(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
+
 
     
     @Test("Leaves Existing Dashes when converting to lowercase", arguments: [
