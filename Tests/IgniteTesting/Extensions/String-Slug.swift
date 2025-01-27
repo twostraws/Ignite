@@ -156,9 +156,9 @@ struct StringSlugTests {
         #expect(string.convertedToSlug() == string.replacingOccurrences(of: " ", with: "-"))
     }
 
-//    in the case where there's a dash followed by an uppercase letter
-//    a second dash is inserted and the uppercase letter is converted to lowercase.
-//    which results in two dashes in a row
+    //    in the case where there's a dash followed by an uppercase letter
+    //    a second dash is inserted and the uppercase letter is converted to lowercase.
+    //    which results in two dashes in a row
     @Test("Replaces dash before uppercase letter with two dashes before lowercase letter", arguments: [
         Instance(input: "hello-World", expected: "hello--world"),
         Instance(input: "Hello-World", expected: "hello--world"),
