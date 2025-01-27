@@ -182,4 +182,24 @@ struct StringSlugTests {
     func converts_camelCase_to_dash_case(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
+    
+    @Test("Test Against URL Strings", arguments: [
+        Instance(input: "https://github.com/twostraws/Ignite", expected: "https-github-com-twostraws--ignite"),
+        Instance(input: "https://github.com/twostraws/Ignite/", expected: "https-github-com-twostraws--ignite"),
+        Instance(input: "file:/Users/george/Documents", expected: "file--users-george--documents"),
+    ])
+    func url_strings(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
+
+    @Test("Test Against paths", arguments: [
+        Instance(input: "/Users/george/Documents", expected: "-users-george--documents"),
+        Instance(input: "/twostraws/Ignite", expected: "twostraws--ignite"),
+        Instance(input: "~/Documents", expected: "-documents"),
+        Instance(input: "~/Documents/Resumé", expected: "-documents--resume"),
+    ])
+    func path_strings(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
+
 }
