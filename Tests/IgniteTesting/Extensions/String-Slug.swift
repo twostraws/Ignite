@@ -129,7 +129,8 @@ struct StringSlugTests {
 //    which results in two dashes in a row
     @Test("Replaces dash before uppercase letter with two dashes before lowercase letter", arguments: [
         Instance(input: "hello-World", expected: "hello--world"),
-        Instance(input: "Hello-World", expected: "hello--world")
+        Instance(input: "Hello-World", expected: "hello--world"),
+        Instance(input: "Happy-Go-Lucky", expected: "happy--go--lucky"),
     ])
     func double_dash_for_dash_then_uppercase(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
