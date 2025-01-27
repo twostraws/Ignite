@@ -35,7 +35,7 @@ struct StringKebabCasedTests {
         #expect(string.kebabCased() == string)
     }
     
-    @Test("Converts to Dashes", arguments: [
+    @Test("Converts Whitespace to Dashes", arguments: [
         " ",
         "  ",
         "\t",
