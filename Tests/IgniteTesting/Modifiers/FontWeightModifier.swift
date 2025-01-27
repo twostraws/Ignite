@@ -14,8 +14,12 @@ import Testing
 @Suite("FontWeightModifier Tests")
 @MainActor
 struct FontWeightModifierTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Font Weight Modifier", arguments: Font.Weight.allCases)
+    func fontWeight(weight: Font.Weight) async throws {
+        let element = Text("Hello").fontWeight(weight)
 
+        let output = element.render()
+
+        #expect(output == "<p style=\"font-weight: \(weight.rawValue)\">Hello</p>")
     }
 }
