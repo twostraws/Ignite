@@ -88,6 +88,16 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
     
+    @Test("Replaces Punctuation between words with dash", arguments: [
+        Instance(input: "y.m.c.a.", expected: "y-m-c-a"),
+        Instance(input: "here, there and everywhere", expected: "here-there-and-everywhere"),
+        Instance(input: "this, that, and the other thing", expected: "this-that-and-the-other-thing"),
+        Instance(input: "planes, trains & automobiles", expected: "planes-trains-automobiles")
+    ])
+    func removed_punctuation_between_words(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
+
     @Test("Replaces Underscaore with Dashes", arguments: [
         Instance(input: "hello_world", expected: "hello-world"),
         Instance(input: "hello_happy_world", expected: "hello-happy-world")
