@@ -53,6 +53,7 @@ struct FormTests {
             """)
     }
 
+    // swiftlint:disable function_body_length
     @Test("Form with Label Style", arguments: Form.LabelStyle.allCases)
     func form_withLabelStyle(style: Form.LabelStyle) async throws {
         let element = Form {
@@ -115,6 +116,7 @@ struct FormTests {
         <script charset="utf-8" src="https://cdn.sendfox.com/js/form.js"></script>
         """)
     }
+    // swiftlint:enable function_body_length
 
     @Test("Form with Control Size", arguments: Form.FormControlSize.allCases)
     func form_withControlSize(controlSize: Form.FormControlSize) async throws {
