@@ -79,6 +79,16 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
+    @Test("Strips Diacritivs", arguments: [
+        Instance(input: "días", expected: "dias"),
+        Instance(input: "baño", expected: "bano"),
+        Instance(input: "çest", expected: "cest"),
+        Instance(input: "Straße", expected: "strasse"),
+    ])
+    func strips_diacritics(instance: Instance) async throws {
+        #expect(instance.input.convertedToSlug() == instance.expected)
+    }
+
     @Test("Strips Leading and Trailing Punctuation", arguments: [
         Instance(input: "up!", expected: "up"),
         Instance(input: "c.", expected: "c"),
