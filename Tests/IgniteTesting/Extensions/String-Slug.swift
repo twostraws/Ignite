@@ -103,8 +103,6 @@ struct StringSlugTests {
         #expect(string.convertedToSlug() == string.replacingOccurrences(of: " ", with: "-"))
     }
 
-    /// Simple type meant to represent input paired with expected output
-
     @Test("Converts camelCase to dash-case", arguments: [
         Instance(input: "camelCase", expected: "camel-case"),
         Instance(input: "threeWordExample", expected: "three-word-example"),
