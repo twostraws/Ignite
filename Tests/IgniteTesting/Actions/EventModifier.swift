@@ -32,6 +32,10 @@ struct EventModifierTests {
         [ShowModal(id: "foo"), HideElement("qux")]
     ]
 
+    init() throws {
+        try PublishingContext.initialize(for: TestSite(), from: #filePath)
+    }
+
     @Test("Check if events are added correctly", arguments: tags, await Array(zip(events, actions)))
     func onEventAddsEventsCorrectly(tag: String, eventActions: (EventType, [any Action])) async throws {
         let element = Tag(tag) {}
