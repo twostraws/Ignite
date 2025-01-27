@@ -14,7 +14,7 @@ import Testing
 @Suite("String-Slug Tests")
 @MainActor
 struct StringSlugTests {
-    
+
     /// Some types of string will have an output that's the same as their input.
     /// Test examples of each of those cases
     @Test("Noop Cases", arguments: [
@@ -23,7 +23,7 @@ struct StringSlugTests {
         "one", // single word
         "15-3", // subtraction math expression
         "hello-world", // kebab-cased
-        "hello-wonderful-world",
+        "hello-wonderful-world"
     ])
     func does_not_change_simple_cases(string: String) async throws {
         #expect(string.convertedToSlug() == string)
@@ -45,7 +45,7 @@ struct StringSlugTests {
     func returns_nil_for_strings_with_no_latin_characters(string: String) async throws {
         #expect(string.convertedToSlug() == nil)
     }
-    
+
     @Test("Converts Title-Cased Single Words To Lowercase", arguments: [
         "A",
         "Cars",
@@ -55,7 +55,6 @@ struct StringSlugTests {
         #expect(string.convertedToSlug() == string.lowercased())
     }
 
-    
     struct Instance {
         let input: String
         let expected: String
@@ -72,8 +71,7 @@ struct StringSlugTests {
         Instance(input: "ウーロン茶", expected: "uron-cha"),
         Instance(input: "שָׁלוֹם", expected: "salwom"),
         Instance(input: "שָׁלוֹםسلام", expected: "salwomslam"),
-        Instance(input: "שָׁלוֹםسلام" + "שָׁלוֹם" + "烏龍茶" + "ウーロン茶", expected: "salwomslamsalwom-wu-long-chauron-cha"),
-
+        Instance(input: "שָׁלוֹםسلام" + "שָׁלוֹם" + "烏龍茶" + "ウーロン茶", expected: "salwomslamsalwom-wu-long-chauron-cha")
     ])
     func transliterates_characters_in_non_latin_scripts(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
@@ -83,13 +81,12 @@ struct StringSlugTests {
         Instance(input: "up!", expected: "up"),
         Instance(input: "c.", expected: "c"),
         Instance(input: "15!", expected: "15"),
-        Instance(input: ".lowercase", expected: "lowercase"),
-
+        Instance(input: ".lowercase", expected: "lowercase")
     ])
     func strips_punctuation_from_ends_of_string(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
-    
+
     @Test("Replaces Punctuation between words with dash", arguments: [
         Instance(input: "y.m.c.a.", expected: "y-m-c-a"),
         Instance(input: "here, there and everywhere", expected: "here-there-and-everywhere"),
@@ -103,7 +100,7 @@ struct StringSlugTests {
     @Test("Removes emoji leaving other words", arguments: [
         Instance(input: "😄smiley", expected: "smiley"),
         Instance(input: "smiley😄", expected: "smiley"),
-        Instance(input: "this😄and😄that😄", expected: "this-and-that"),
+        Instance(input: "this😄and😄that😄", expected: "this-and-that")
     ])
     func removes_emoji_between_words(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
@@ -117,24 +114,22 @@ struct StringSlugTests {
     func replaces_capitalized_characters_with_dash_then_lowercase(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
-    
+
     @Test("Replaces Common Math Operators with Dashes", arguments: [
         Instance(input: "15+3", expected: "15-3"),
         Instance(input: "15-3=12", expected: "15-3-12"), // math expressions expected: ""),
         Instance(input: "15+3=18", expected: "15-3-18"),
         Instance(input: "15÷3=5", expected: "15-3-5"),
         Instance(input: "15/3=5", expected: "15-3-5"),
-        Instance(input: "15 / 3 = 5", expected: "15-3-5"),
+        Instance(input: "15 / 3 = 5", expected: "15-3-5")
     ])
     func replaces_common_math_operators_with_dash(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-
-    
     @Test("Leaves Existing Dashes when converting to lowercase", arguments: [
         Instance(input: "Hello-world", expected: "hello-world"),
-        Instance(input: "Happy-go-lucky", expected: "happy-go-lucky"),
+        Instance(input: "Happy-go-lucky", expected: "happy-go-lucky")
     ])
     func respects_existing_dashes_when_converting_to_lowercase(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
@@ -163,7 +158,7 @@ struct StringSlugTests {
     @Test("Replaces dash before uppercase letter with two dashes before lowercase letter", arguments: [
         Instance(input: "hello-World", expected: "hello--world"),
         Instance(input: "Hello-World", expected: "hello--world"),
-        Instance(input: "Happy-Go-Lucky", expected: "happy--go--lucky"),
+        Instance(input: "Happy-Go-Lucky", expected: "happy--go--lucky")
     ])
     func double_dash_for_dash_then_uppercase(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
