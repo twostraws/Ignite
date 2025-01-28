@@ -248,4 +248,25 @@ struct DateRFC822Tests {
         #expect(instance.input.asRFC822(timeZone: timezone) == instance.expected)
     }
 
+    @Test("Test Against Known Output for Asia/Jakarta Time", arguments: [
+        Instance(input: Date(timeIntervalSince1970: 20012346618.957466), expected: "Fri, 02 Mar 2604 16:10:18 +0700"),
+        Instance(input: Date(timeIntervalSince1970: 56076958399.89086), expected: "Wed, 04 Jan 3747 03:53:19 +0700"),
+        Instance(input: Date(timeIntervalSince1970: 43889947931.30432), expected: "Sat, 25 Oct 3360 19:12:11 +0700"),
+        Instance(input: Date(timeIntervalSince1970: 60401587537.13003), expected: "Sat, 19 Jan 3884 17:45:37 +0700"),
+        Instance(input: Date(timeIntervalSince1970: 2887257381.52073), expected: "Wed, 29 Jun 2061 14:56:21 +0700"),
+        Instance(input: Date(timeIntervalSince1970: 15764928045.389473), expected: "Sat, 27 Jul 2469 17:40:45 +0700"),
+        Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 11:59:34 +0700"),
+        Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 14:08:04 +0700"),
+        Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Fri, 12 Jul 2261 00:55:33 +0700"),
+        Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 21:31:51 +0700")
+    ])
+    func outputs_expected_result_for_jakarta_time(instance: Instance) async throws {
+
+        // WIT - Asia/Jakarta
+        // eastern hemisphere
+        // 7 hours before GMT
+        let timezone = TimeZone(abbreviation: "WIT")
+        #expect(instance.input.asRFC822(timeZone: timezone) == instance.expected)
+    }
+
 }
