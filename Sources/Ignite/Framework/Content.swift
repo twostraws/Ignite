@@ -126,12 +126,11 @@ public struct Content {
     ///   last modification date for this content.
     ///   - deployPath: optional String used as site url path for the content.
     ///   If nil (default), use `metadata["path"]` or path to content root.
-    init(from url: URL, resourceValues: URLResourceValues) throws {
     init(
         from url: URL,
         in context: PublishingContext,
         resourceValues: URLResourceValues,
-        deployPath: String? = nil
+        deployPath: String
     ) throws {
         // Use whatever Markdown renderer was configured
         // for the site we're publishing.
@@ -141,23 +140,11 @@ public struct Content {
         metadata = parser.metadata
         title = parser.title.strippingTags()
         description = parser.description.strippingTags()
+        path = metadata["path"] as? String ?? deployPath
 
-        if let deployPath, !deployPath.isEmpty {
-            path = deployPath
-        } else if let customPath = metadata["path"] as? String {
-            path = customPath
-        } else {
-            let basePath = context.contentDirectory.path()
-            let thisPath = url.deletingPathExtension().path()
-            path = String(thisPath.trimmingPrefix(basePath))
-        }
-
-        // Save the article's type as being the first subfolder
-        // of this article inside the Content folder.
-        let distinctComponents = url.pathComponents.dropFirst(context.contentDirectory.pathComponents.count)
-
-        if let firstSubdirectory = distinctComponents.first {
-            metadata["type"] = firstSubdirectory
+        // Save the first subfolder in the path as the article's type
+        if let slash = path.firstIndex(of: "/") {
+            metadata["type"] = String(path[path.startIndex..<slash])
         }
 
         if let date = parseMetadataDate(for: "date") {
