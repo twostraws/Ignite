@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Creates a 4-character hash string that persists between app launches (e.g. "Hello World" -> "5eb2")
+/// Creates a 5-character hash string that persists between app launches (e.g. "Hello World" -> "5eb21")
 extension String {
    var truncatedHash: String {
        let hash = strHash(self)
