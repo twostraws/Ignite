@@ -69,8 +69,8 @@ struct URLRelativeTests {
         #expect(relativePath == "subfolder/file.html")
     }
 
-    @Test("When URL has no scheme")
-    func relativePath_forFullURLWithoutScheme() async throws {
+    @Test("When URLs with NO scheme")
+    func relativePath_forURLsWithNoScheme() async throws {
         // Given
         let fullURL1 = URL(string: "/folder/file.html")! // with leading slash
         let fullURL2 = URL(string: "folder/file.html")! // without leading slash
