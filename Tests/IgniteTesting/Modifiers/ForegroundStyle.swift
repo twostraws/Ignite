@@ -32,15 +32,16 @@ struct ForegroundStyleTests {
                  .blue
                 ],
                 [
-                 "rgb(255 255 255 / 100%)",
-                 "rgb(0 0 0 / 100%)",
-                 "rgb(255 0 0 / 100%)",
-                 "rgb(0 128 0 / 100%)",
-                 "rgb(0 0 255 / 100%)"
+                    "rgb(255 255 255 / 100%)",
+                    "rgb(0 0 0 / 100%)",
+                    "rgb(255 0 0 / 100%)",
+                    "rgb(0 128 0 / 100%)",
+                    "rgb(0 0 255 / 100%)"
                 ]
-               )
+            )
     )
-          func colorForegroundStyle(color: Color, value: String) async throws {
+
+    func colorForegroundStyle(color: Color, value: String) async throws {
         let element = Text("Hello").foregroundStyle(color)
 
         let output = element.render()
@@ -49,12 +50,13 @@ struct ForegroundStyleTests {
     }
 
     @Test("String Foreground Styles Test", arguments: ["white",
-                                                      "black",
-                                                      "red",
-                                                      "blue"
-                                                     ]
+                                                       "black",
+                                                       "red",
+                                                       "blue"
+                                                      ]
     )
-          func stringForegroundStyle(string: String) async throws {
+
+    func stringForegroundStyle(string: String) async throws {
         let element = Text("Hello").foregroundStyle(string)
 
         let output = element.render()
