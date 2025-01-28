@@ -41,6 +41,24 @@ struct DateRFC822Tests {
         #expect(instance.input.asRFC822() == instance.expected)
     }
     
+    @Test("Test Against Known Output for Greenwich Mean Time", arguments: [
+        Instance(input: Date(timeIntervalSince1970: 20012346618.957466), expected: "Fri, 02 Mar 2604 09:10:18 +0000"),
+        Instance(input: Date(timeIntervalSince1970: 56076958399.89086), expected: "Tue, 03 Jan 3747 20:53:19 +0000"),
+        Instance(input: Date(timeIntervalSince1970: 43889947931.30432), expected: "Sat, 25 Oct 3360 12:12:11 +0000"),
+        Instance(input: Date(timeIntervalSince1970: 60401587537.13003), expected: "Sat, 19 Jan 3884 10:45:37 +0000"),
+        Instance(input: Date(timeIntervalSince1970: 2887257381.52073), expected: "Wed, 29 Jun 2061 07:56:21 +0000"),
+        Instance(input: Date(timeIntervalSince1970: 15764928045.389473), expected: "Sat, 27 Jul 2469 10:40:45 +0000"),
+        Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 04:59:34 +0000"),
+        Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 07:08:04 +0000"),
+        Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Thu, 11 Jul 2261 17:55:33 +0000"),
+        Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 14:31:51 +0000"),
+    ])
+    func outputs_expected_result_for_greenwich_mean_time(instance: Instance) async throws {
+        // GMT
+        let timezone = TimeZone(abbreviation: "GMT")
+        #expect(instance.input.asRFC822(timeZone: timezone) == instance.expected)
+    }
+
     @Test("Test Against Known Output for New York Time", arguments: [
         Instance(input: Date(timeIntervalSince1970: 20012346618.957466), expected: "Fri, 02 Mar 2604 04:10:18 -0500"),
         Instance(input: Date(timeIntervalSince1970: 56076958399.89086), expected: "Tue, 03 Jan 3747 15:53:19 -0500"),
