@@ -186,7 +186,7 @@ public struct Form: BlockHTML {
 
         // Add custom SendFox JavaScript if needed.
         if case .sendFox = action.service {
-            formOutput += Script(file: "https://cdn.sendfox.com/js/form.js")
+            formOutput += Script(file: URL(static: "https://cdn.sendfox.com/js/form.js"))
                 .customAttribute(name: "charset", value: "utf-8")
                 .render()
         }

@@ -24,7 +24,7 @@ import Testing
         let element = Image(image.path, description: image.description)
         let output = element.render()
 
-        let expectedPath = site.url.path == "/" ? image.path : "\(site.url.path)\(image.path)"
+        let expectedPath = site.url.appending(path: image.path).decodedPath
         #expect(output == "<img alt=\"Example image\" src=\"\(expectedPath)\" />")
     }
 

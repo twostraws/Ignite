@@ -40,7 +40,7 @@ struct CardTests {
         let output = element.render()
 
         #expect(output == """
-        <div class="card"><img alt="" src="dog.jpg" class="card-img-top" />\
+        <div class="card"><img alt="" src="/dog.jpg" class="card-img-top" />\
         <div class="card-body">Some text wrapped in a card</div></div>
         """)
     }
@@ -112,7 +112,7 @@ struct CardTests {
 
         #expect(output == """
         <div class="card"><div class="card-body">Placeholder</div>\
-        <img alt="" src="image.jpg" class="card-img-bottom" /></div>
+        <img alt="" src="/image.jpg" class="card-img-bottom" /></div>
         """)
     }
 
@@ -126,7 +126,7 @@ struct CardTests {
         let output = element.render()
 
         #expect(output == """
-        <div class="card"><img alt="" src="image.jpg" class="card-img-top" />\
+        <div class="card"><img alt="" src="/image.jpg" class="card-img-top" />\
         <div class="card-body">Placeholder</div></div>
         """)
     }
@@ -141,7 +141,7 @@ struct CardTests {
         let output = element.render()
 
         #expect(output == """
-        <div class="card"><img alt="" src="image.jpg" class="card-img" />\
+        <div class="card"><img alt="" src="/image.jpg" class="card-img" />\
         <div class="align-content-start card-img-overlay text-start">Placeholder</div></div>
         """)
     }

@@ -56,8 +56,9 @@ public struct Script: BlockHTML, HeadElement {
         attributes.tag = "script"
 
         if let file {
+            let safePath = String(file.trimmingPrefix("/"))
             let filePath = isRemoteFile ?
-                file : publishingContext.site.url.appending(path: file).decodedPath
+            safePath : publishingContext.site.url.appending(path: safePath).decodedPath
             attributes.append(customAttributes: .init(name: "src", value: filePath))
             return attributes.description()
         } else if let code {

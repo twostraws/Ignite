@@ -95,7 +95,7 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
 
     /// Renders a user image into the current publishing context.
     /// - Parameters:
-    ///   - icon: The user image to render.
+    ///   - image: The user image to render.
     ///   - description: The accessibility label to use.
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
@@ -122,8 +122,8 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
 
         if let systemImage {
             return render(icon: systemImage, description: description ?? "")
-        } else if let name {
-            return render(image: name, description: description ?? "")
+        } else if let name = name?.trimmingPrefix("/") {
+            return render(image: String(name), description: description ?? "")
         } else {
             publishingContext.addWarning("""
             Creating an image with no name or icon should not be possible. \
