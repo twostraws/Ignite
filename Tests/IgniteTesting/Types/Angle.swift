@@ -14,8 +14,24 @@ import Testing
 @Suite("Angle Tests")
 @MainActor
 struct AngleTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Degrees Test")
+    func degreesTest() async throws {
+        let angle = Angle.degrees(180)
+        let output = angle.value
+        #expect(output == "180.0deg")
+    }
 
+    @Test("Radians Test")
+    func radiansTest() async throws {
+        let angle = Angle.radians(.pi)
+        let output = angle.value
+        #expect(output == "\(Double.pi)rad")
+    }
+
+    @Test("Turns Test")
+    func turnsTest() async throws {
+        let angle = Angle.turns(0.5)
+        let output = angle.value
+        #expect(output == "0.5turn")
     }
 }

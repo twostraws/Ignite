@@ -6,7 +6,7 @@
 //
 
 /// Specifies how values persist before and after an animation
-public enum FillMode: String, Sendable {
+public enum FillMode: String, Hashable, Sendable {
     /// No fill mode needed
     case none
     /// Retains the values set by the last keyframe

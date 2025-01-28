@@ -37,7 +37,7 @@ extension AnimationClassGenerator {
             }
         }
 
-        return buildClickOutput(properties)
+        return buildClickOutput(properties, id: transition.id)
     }
 
     /// Generates CSS classes for appear-triggered transitions
@@ -54,8 +54,10 @@ extension AnimationClassGenerator {
             "\(data.property.rawValue): \(data.final)"
         }
 
+        let baseClass = "animation-" + transition.id
+
         return """
-        .\(name).appeared {
+        .\(baseClass).appeared {
             transition: \(transitions.joined(separator: ", "));
             \(properties.joined(separator: ";\n        "));
         }
@@ -96,13 +98,15 @@ extension AnimationClassGenerator {
             "\(data.property.rawValue): \(data.final)"
         }
 
+        let baseClass = "animation-" + transition.id
+
         return """
-        .\(name)-transform {
+        .\(baseClass)-transform {
             transform-style: preserve-3d;
             transition: \(transitions.joined(separator: ", "));
         }
 
-        .\(name)-transform:hover {
+        .\(baseClass)-transform:hover {
             \(hoverProperties.joined(separator: ";\n        "));
         }
         """

@@ -9,7 +9,7 @@ public typealias AnimationFrame = Animation.Frame
 
 public extension Animation {
     /// A single keyframe in an animation sequence.
-    struct Frame {
+    struct Frame: Hashable {
         /// The position in the animation timeline, between `0%` and `100%`
         let position: Percentage
 

@@ -6,7 +6,7 @@
 //
 
 /// Defines the events that can trigger an animation on an HTML element.
-public enum AnimationTrigger: String {
+public enum AnimationTrigger: String, Hashable {
     /// Animation triggers when the element is clicked/tapped
     /// - Note: Adds cursor: pointer and click event listener
     case click

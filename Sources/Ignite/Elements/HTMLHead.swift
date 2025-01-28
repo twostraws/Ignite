@@ -1,5 +1,5 @@
 //
-// Head.swift
+// HTMLHead.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -63,6 +63,7 @@ public struct HTMLHead: RootHTML {
     ///   information about the site being rendered and more.
     @HeadElementBuilder
     public static func standardHeaders(for page: Page) -> [any HeadElement] {
+        // swiftlint:disable:previous cyclomatic_complexity
         MetaTag.utf8
         MetaTag.flexibleViewport
 
@@ -87,7 +88,7 @@ public struct HTMLHead: RootHTML {
             MetaLink.remoteIconCSS
         }
 
-        if site.allHighlighterThemes.isEmpty == false {
+        if context.hasSyntaxHighlighters, site.allHighlighterThemes.isEmpty == false {
             MetaLink.highlighterThemeMetaLinks(for: site.allHighlighterThemes)
         }
 
@@ -102,7 +103,10 @@ public struct HTMLHead: RootHTML {
         }
 
         MetaLink.themeCSS
-        MetaLink.mediaQueryCSS
+
+        if CSSManager.default.hasCSS {
+            MetaLink.mediaQueryCSS
+        }
 
         MetaLink(href: page.url, rel: "canonical")
 
