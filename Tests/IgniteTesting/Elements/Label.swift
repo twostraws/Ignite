@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Label` element.
 @Suite("Label Tests")
 @MainActor
-struct LabelTests {
+class LabelTests: UITestSuite {
     @Test("Basic Label")
     func basicLabel() async throws {
         let element = Label(text: "This is a text for label")

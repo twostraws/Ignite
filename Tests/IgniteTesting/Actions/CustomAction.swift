@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `CustomAction` action.
 @Suite("CustomAction Tests")
 @MainActor
-struct CustomActionTests {
+class CustomActionTests: UITestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

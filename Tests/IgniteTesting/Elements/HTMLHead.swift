@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `HTMLHead` element.
 @Suite("HTMLHead Tests")
 @MainActor
-struct HTMLHeadTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class HTMLHeadTests: UITestSuite {
     @Test("Highlighting meta tags are sorted")
     func highlighterThemesAreSorted() async throws {
         let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .twilight])

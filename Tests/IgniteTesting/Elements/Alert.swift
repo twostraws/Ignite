@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Alert` element.
 @Suite("Alert Tests")
 @MainActor
-struct AlertTests {
+class AlertTests: UITestSuite {
     @Test("All Alert roles are correctly set", arguments: zip(await Role.badgeRoles, [
         "alert-primary",
         "alert-secondary",

@@ -12,9 +12,8 @@ import Testing
 
 @Suite("Table Tests")
 @MainActor
-struct TableTests {
-    @Test
-    func simpleTable() async throws {
+class TableTests: UITestSuite {
+    @Test func simpleTable() async throws {
         let element = Table { }
         let output = element.render()
         #expect(output == "<table class=\"table\"><tbody></tbody></table>")

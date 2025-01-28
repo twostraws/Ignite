@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `Form` element.
 @Suite("Form Tests")
 @MainActor
-struct FormTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class FormTests: UITestSuite {
     @Test("Basic Form")
     func form() async throws {
         let element = Form {

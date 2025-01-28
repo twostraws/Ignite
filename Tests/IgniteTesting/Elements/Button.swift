@@ -14,7 +14,7 @@ import Testing
 /// Tests for the `Button` element.
 @Suite("Button Tests")
 @MainActor
-struct ButtonTests {
+class ButtonTests: UITestSuite {
     @Test("Button Test")
     func button() async throws {
         let element = Text {
@@ -88,7 +88,7 @@ struct ButtonTests {
     @Test("Link Button Test")
     func linkButton() async throws {
         let element = Text {
-            Link("This is a link button", target: contentExamples())
+            Link("This is a link button", target: self.contentExamples())
                 .linkStyle(.button)
         }
 

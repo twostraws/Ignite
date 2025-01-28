@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `ShowAlert` action.
 @Suite("ShowAlert Tests")
 @MainActor
-struct ShowAlertTests {
+class ShowAlertTests: UITestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

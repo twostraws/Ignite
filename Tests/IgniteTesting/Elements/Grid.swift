@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `Grid` element.
 @Suite("Grid Tests")
 @MainActor
-struct GridTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class GridTests: UITestSuite {
     @Test("List with three images")
     func gridWithThreeImages() async throws {
         let element = Grid {

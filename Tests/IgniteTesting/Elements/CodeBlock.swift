@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `CodeBlock` element.
 @Suite("CodeBlock Tests")
 @MainActor
-struct CodeBlockTests {
+class CodeBlockTests: UITestSuite {
     @Test("Test rendering a code block")
     func codeBlockTest() {
         let element = CodeBlock {

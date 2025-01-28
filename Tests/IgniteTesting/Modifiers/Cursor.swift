@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Cursor` modifier.
 @Suite("Cursor Tests")
 @MainActor
-struct CursorTests {
+class CursorTests: UITestSuite {
     @Test("Cursor Modifiers Test", arguments: Cursor.allCases)
     func cursorModifier(_ cursor: Cursor) async throws {
         let element = Span("Hello, World!").cursor(cursor)

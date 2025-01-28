@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `MetaLink` element.
 @Suite("MetaLink Tests")
 @MainActor
-struct MetaLinkTests {
+class MetaLinkTests: UITestSuite {
     @Test("Test with href string and rel string")
     func hrefStringAndRelString() async throws {
         let element = MetaLink(href: "https://www.example.com", rel: "canonical")

@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Accordion` element.
 @Suite("Accordion Tests")
 @MainActor
-struct AccordionTests {
+class AccordionTests: UITestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

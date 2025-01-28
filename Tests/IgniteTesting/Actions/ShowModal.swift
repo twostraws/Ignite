@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `ShowModal` action.
 @Suite("ShowModal Tests")
 @MainActor
-struct ShowModalTests {
+class ShowModalTests: UITestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

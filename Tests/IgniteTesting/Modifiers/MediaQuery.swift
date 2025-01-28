@@ -13,8 +13,7 @@ import Testing
 /// Tests for the `Margin` modifier.
 @Suite("MediaQuery Tests")
 @MainActor
-struct MediaQueryTests {
-
+class MediaQueryTests: UITestSuite {
     typealias MediaQueryTestCase = (query: MediaQuery, output: String)
 
     @Test("Test breakpoint queries", arguments: [
@@ -32,10 +31,7 @@ struct MediaQueryTests {
     func breakpoint_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
         let query = testCase.query
         let output = query.query(with: .light)
-
-        #expect(
-            output == testCase.output
-        )
+        #expect(output == testCase.output)
     }
 
     @Test("Test color scheme queries", arguments: [
@@ -47,10 +43,7 @@ struct MediaQueryTests {
     func color_scheme_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
         let query = testCase.query
         let output = query.query(with: .light)
-
-        #expect(
-            output == testCase.output
-        )
+        #expect(output == testCase.output)
     }
 
     @Test("Test contrast queries", arguments: [
@@ -66,10 +59,7 @@ struct MediaQueryTests {
     func contrast_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
         let query = testCase.query
         let output = query.query(with: .light)
-
-        #expect(
-            output == testCase.output
-        )
+        #expect(output == testCase.output)
     }
 
     @Test("Test display mode queries", arguments: [
@@ -89,10 +79,7 @@ struct MediaQueryTests {
     func display_mode_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
         let query = testCase.query
         let output = query.query(with: .light)
-
-        #expect(
-            output == testCase.output
-        )
+        #expect(output == testCase.output)
     }
 
     @Test("Test orientation queries", arguments: [
@@ -105,21 +92,18 @@ struct MediaQueryTests {
         let query = testCase.query
         let output = query.query(with: .light)
 
-        #expect(
-            output == testCase.output
-        )
+        #expect(output == testCase.output)
     }
 
     @Test("Test transparency queries", arguments: [
         (query: MediaQuery.transparency(.normal),
          output: "prefers-reduced-transparency: no-preference"),
         (query: MediaQuery.transparency(.reduced),
-            output: "prefers-reduced-transparency: reduce")
-        ])
+         output: "prefers-reduced-transparency: reduce")
+    ])
     func transparency_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
         let query = testCase.query
         let output = query.query(with: .light)
-
         #expect(output == testCase.output)
     }
 
@@ -132,10 +116,7 @@ struct MediaQueryTests {
     func reduced_motion_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
         let query = testCase.query
         let output = query.query(with: .light)
-
-        #expect(
-            output == testCase.output
-        )
+        #expect(output == testCase.output)
     }
 
     @Test("Test theme queries", arguments: [
@@ -144,14 +125,12 @@ struct MediaQueryTests {
         (query: MediaQuery.theme("light"),
          output: "data-theme-state=\"light\""),
         (query: MediaQuery.theme("auto"),
-            output: "data-theme-state=\"auto\"")
+         output: "data-theme-state=\"auto\"")
     ])
     func theme_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
         let query = testCase.query
         let output = query.query(with: .light)
 
-        #expect(
-            output == testCase.output
-        )
+        #expect(output == testCase.output)
     }
 }

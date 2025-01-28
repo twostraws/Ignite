@@ -12,7 +12,8 @@ import Testing
 
 /// Tests for the `time` element.
 @Suite("Time Tests")
-@MainActor struct TimeTests {
+@MainActor
+class TimeTests: UITestSuite {
     @Test("Without DateTime Test", arguments: ["This is a test", "Another test"])
     func withoutDatetime(timeText: String) async throws {
         let element = Time(timeText)

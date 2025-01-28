@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Shadow` modifier.
 @Suite("Shadow Tests")
 @MainActor
-struct ShadowTests {
+class ShadowTests: UITestSuite {
     @Test("ShadowModifierTest")
     func radiusFiveSpanShadowTest() async throws {
         let element = Span("Hello").shadow(radius: 5)

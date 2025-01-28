@@ -23,63 +23,54 @@ struct UnitPointTests {
     @Test("Test the top leading unit point.")
     func topLeadingUnitPoint() async throws {
         let element = UnitPoint.topLeading
-
         #expect(element.justifySelf == "start" && element.alignSelf == "start")
     }
 
     @Test("Test the top unit point.")
     func topUnitPoint() async throws {
         let element = UnitPoint.top
-
         #expect(element.justifySelf == "center" && element.alignSelf == "start")
     }
 
     @Test("Test the top trailing unit point.")
     func topTrailingUnitPoint() async throws {
         let element = UnitPoint.topTrailing
-
         #expect(element.justifySelf == "end" && element.alignSelf == "start")
     }
 
     @Test("Test the leading unit point.")
     func leadingUnitPoint() async throws {
         let element = UnitPoint.leading
-
         #expect(element.justifySelf == "start" && element.alignSelf == "center")
     }
 
     @Test("Test the center unit point.")
     func centerUnitPoint() async throws {
         let element = UnitPoint.center
-
         #expect(element.justifySelf == "center" && element.alignSelf == "center")
     }
 
     @Test("Test the trailing unit point.")
     func trailingUnitPoint() async throws {
         let element = UnitPoint.trailing
-
         #expect(element.justifySelf == "end" && element.alignSelf == "center")
     }
 
     @Test("Test the bottom leading unit point.")
     func bottomLeadingUnitPoint() async throws {
         let element = UnitPoint.bottomLeading
-
         #expect(element.justifySelf == "start" && element.alignSelf == "end")
     }
 
     @Test("Test the bottom unit point.")
     func bottomUnitPoint() async throws {
         let element = UnitPoint.bottom
-
         #expect(element.justifySelf == "center" && element.alignSelf == "end")
     }
 
     @Test("Test the bottom trailing unit point.")
     func bottomTrailingUnitPoint() async throws {
         let element = UnitPoint.bottomTrailing
-
         #expect(element.justifySelf == "end" && element.alignSelf == "end")
     }
 
@@ -95,7 +86,6 @@ struct UnitPointTests {
     ])
     func degrees(params: UnitPointTestParams) async throws {
         let element = params.start.degrees(to: params.end)
-
         #expect(element == params.expected)
     }
 
@@ -111,7 +101,6 @@ struct UnitPointTests {
     ])
     func radians(params: UnitPointTestParams) async throws {
         let element = params.start.radians(to: params.end)
-
         #expect(element == params.expected)
     }
 }

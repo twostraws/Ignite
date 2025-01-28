@@ -13,14 +13,11 @@ import Testing
 /// Tests for the `FontStyleModifier` modifier.
 @Suite("FontStyleModifier Tests")
 @MainActor
-struct FontStyleModifierTests {
+class FontStyleModifierTests: UITestSuite {
     @Test("Font Style Test", arguments: await Font.Style.tagCases)
     func fontStyle(style: Font.Style) async throws {
         let element = Text("Hello").font(style)
-
         let output = element.render()
-
-        #expect(
-            output == "<\(style.description)>Hello</\(style.description)>")
+        #expect(output == "<\(style.description)>Hello</\(style.description)>")
     }
 }

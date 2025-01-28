@@ -12,11 +12,8 @@ import Testing
 
 /// Tests for the `title` element.
 @Suite("Title Tests")
-@MainActor struct TitleTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+@MainActor
+class TitleTests: UITestSuite {
     @Test("Empty Title Test", arguments: [""])
     func empty(emptyTitleText: String) async throws {
         let element = Title(emptyTitleText)

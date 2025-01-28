@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Include` element.
 @Suite("Include Tests")
 @MainActor
-struct IncludeTests {
+class IncludeTests: UITestSuite {
     @Test("Basic Include")
     func basicInclude() async throws {
         let element = Include("important.html")

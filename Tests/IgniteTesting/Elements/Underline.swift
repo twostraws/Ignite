@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Underline` element.
 @Suite("Underline Tests")
 @MainActor
-struct UnderlineTests {
+class UnderlineTests: UITestSuite {
     @Test("Single Element Test", arguments: ["This is a test", "Another test", ""])
     func singleElement(underlineText: String) async throws {
         let element = Underline(underlineText)

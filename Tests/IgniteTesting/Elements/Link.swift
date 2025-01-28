@@ -12,19 +12,13 @@ import Testing
 
 /// Tests for the `title` element.
 @Suite("Link Tests")
-@MainActor struct SubsiteLinkTests {
+@MainActor class SubsiteLinkTests: UITestSuite {
     static let sites: [any Site] = [TestSite(), TestSubsite()]
     static let pages: [any StaticLayout] = [TestLayout(), TestSubsiteLayout()]
 
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
-    @Test("String Target Test", arguments: [(target: "/", description: "Go Home")], await Self.sites)
+    @Test("String Target Test", arguments: [(target: "/", description: "Go Home")], await sites)
     func target(for link: (target: String, description: String), for site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-
-        let element = Link(link.description, target: link.target)
+        @SiteDependent(site) var element = Link(link.description, target: link.target)
         let output = element.render()
         let expectedPath = site.url.path == "/" ? link.target : "\(site.url.path)\(link.target)"
 
@@ -39,11 +33,9 @@ import Testing
         )
     }
 
-    @Test("Page Target Test", arguments: zip(await pages, await Self.sites))
+    @Test("Page Target Test", arguments: zip(await pages, await sites))
     func target(for page: any StaticLayout, site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-
-        let element = Link("This is a test", target: page).linkStyle(.button)
+        @SiteDependent(site) var element = Link("This is a test", target: page).linkStyle(.button)
         let output = element.render()
 
         let expectedPath = site.url.pathComponents.count <= 1 ?
@@ -53,11 +45,9 @@ import Testing
         #expect(output == "<a href=\"\(expectedPath)\" class=\"btn btn-primary\">This is a test</a>")
     }
 
-    @Test("Page Content Test", arguments: zip(await pages, await Self.sites))
+    @Test("Page Content Test", arguments: zip(await pages, await sites))
     func content(for page: any StaticLayout, site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-
-        let element = Link(
+        @SiteDependent(site) var element = Link(
             target: page,
             content: {
                 "MORE "
@@ -80,11 +70,9 @@ import Testing
         )
     }
 
-    @Test("Link Warning Role Test", arguments: zip(await pages, await Self.sites))
+    @Test("Link Warning Role Test", arguments: zip(await pages, await sites))
     func warningRoleLink(for page: any StaticLayout, site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-
-        let element = Link("Link with warning role.", target: page).role(.warning)
+        @SiteDependent(site) var element = Link("Link with warning role.", target: page).role(.warning)
         let output = element.render()
         let expectedPath = site.url.pathComponents.count <= 1 ?
         "/test-layout" :

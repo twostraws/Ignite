@@ -13,8 +13,7 @@ import Testing
 /// Tests for the `Section` element.
 @Suite("Section Tests")
 @MainActor
-
-struct SectionTests {
+class SectionTests: UITestSuite {
     @Test("init With Content Test")
     func initWithContent() async throws {
         let element = Section {

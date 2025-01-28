@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Carousel` element.
 @Suite("Carousel Tests")
 @MainActor
-struct CarouselTests {
+class CarouselTests: UITestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

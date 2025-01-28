@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `Embed` element.
 @Suite("Embed Tests")
 @MainActor
-struct EmbedTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class EmbedTests: UITestSuite {
     @Test("Basic Embed")
     func basicEmbed() async throws {
         let element = Embed(youTubeID: "dQw4w9WgXcQ", title: "There was only ever going to be one video used here.")

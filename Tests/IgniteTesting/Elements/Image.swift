@@ -12,16 +12,15 @@ import Testing
 
 /// Tests for the `Image` element.
 @Suite("Image Tests")
-@MainActor struct ImageTests {
+@MainActor
+class ImageTests: UITestSuite {
     static let sites: [any Site] = [TestSite(), TestSubsite()]
 
     @Test("Image Test", arguments:
         [(path: "/images/example.jpg", description: "Example image")],
-        await Self.sites)
+        await sites)
     func named(image: (path: String, description: String), for site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-
-        let element = Image(image.path, description: image.description)
+        @SiteDependent(site) var element = Image(image.path, description: image.description)
         let output = element.render()
 
         let expectedPath = site.url.path == "/" ? image.path : "\(site.url.path)\(image.path)"

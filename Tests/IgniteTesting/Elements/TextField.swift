@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `TextField` element.
 @Suite("TextField Tests")
 @MainActor
-struct TextFieldTests {
+class TextFieldTests: UITestSuite {
     @Test("TextField With Placeholder")
     func textFieldWithPlaceholder() async throws {
         let element = TextField(placeholder: "Enter your name here")

@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Badge` element.
 @Suite("Badge Tests")
 @MainActor
-struct BadgeTests {
+class BadgeTests: UITestSuite {
     @Test("All roles for default badge variant rendered correctly", arguments: zip(await Role.badgeRoles, [
         "text-bg-primary",
         "text-bg-secondary",

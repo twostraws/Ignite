@@ -15,17 +15,14 @@ import Testing
 @MainActor
 struct ColorTests {
     @Test("foregroundStyleIsBlack")
-
     func foregroundStyleIsBlack() async throws {
         let foregroundStyleIsBlack = Text("Hello, world!")
             .foregroundStyle(.black)
 
         let output = foregroundStyleIsBlack.render()
 
-        #expect(output ==
-        """
+        #expect(output == """
         <p style="color: rgb(0 0 0 / 100%)">Hello, world!</p>
-        """
-        )
+        """)
     }
 }

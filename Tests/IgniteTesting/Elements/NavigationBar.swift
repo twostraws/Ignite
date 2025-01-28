@@ -11,7 +11,8 @@ import Testing
 
 /// Tests for the `NavigationBar` element.
 @Suite("Navigation Bar Tests")
-@MainActor struct NavigationBarTests {
+@MainActor
+class NavigationBarTests: UITestSuite {
     @Test("Default Column Width Test")
     func defaultColumnWidth() async throws {
         let element = NavigationBar().width(.viewport)

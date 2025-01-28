@@ -12,7 +12,8 @@ import Testing
 
 /// Tests for the `Span` element.
 @Suite("Span Tests")
-@MainActor struct SpanTests {
+@MainActor
+class SpanTests: UITestSuite {
     @Test("Single Element Test", arguments: ["This is a test", "Another test"])
     func singleElement(spanText: String) async throws {
         let element = Span(spanText)

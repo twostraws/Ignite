@@ -11,7 +11,8 @@ import Testing
 
 /// Tests for the `Text` element.
 @Suite("Text Tests")
-@MainActor struct TextTests {
+@MainActor
+class TextTests: UITestSuite {
     @Test("Simple String Test")
     func simpleString() async throws {
         let element = Text("Hello")
@@ -53,12 +54,12 @@ import Testing
             output
                 == "<p>Hello, <em>world</em><s> - <strong>this <u>is</u> a</strong> test!</s></p>"
         )
-
     }
 
     @Test(
         "Custom Font Test",
-        arguments: Font.Style.allCases)
+        arguments: Font.Style.allCases
+    )
     func customFont(font: Font.Style) async throws {
         let element = Text("Hello").font(font)
         let output = element.render()
@@ -72,7 +73,7 @@ import Testing
         } else {
             #expect(
                 output
-                == "<\(font.rawValue)>Hello</\(font.rawValue)>"
+                    == "<\(font.rawValue)>Hello</\(font.rawValue)>"
             )
         }
     }
@@ -81,7 +82,7 @@ import Testing
     func markdown() async throws {
         let element = Text(
             markdown:
-                "Text in *italics*, text in **bold**, and text in ***bold italics***."
+            "Text in *italics*, text in **bold**, and text in ***bold italics***."
         )
         let output = element.render()
         // swiftlint:disable line_length
@@ -91,6 +92,7 @@ import Testing
         )
         // swiftlint:enable line_length
     }
+
     @Test("Strikethrough Test")
     func strikethrough() async throws {
         // Given
