@@ -62,7 +62,7 @@ struct ModalTests {
     }
 
     @Test("Modal Size Test",
-          arguments: [Modal.Size.small, Modal.Size.medium, Modal.Size.large, Modal.Size.xLarge, Modal.Size.fullscreen])
+          arguments: Modal.Size.allCases)
     func checkModalSizes(sizeOption: Modal.Size) async throws {
         let element = Modal(id: "ModalId") {
             Text(markdown: "Modal with size")
@@ -84,7 +84,7 @@ struct ModalTests {
         }
     }
 
-    @Test("Modal Position Test", arguments: [Modal.Position.top, Modal.Position.center])
+    @Test("Modal Position Test", arguments: Modal.Position.allCases)
     func checkModalPosition(positionOption: Modal.Position) async throws {
         let element = Modal(id: "topModalId") {
             Text(markdown: "Modal with `Position`")
