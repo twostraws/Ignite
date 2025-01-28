@@ -63,4 +63,17 @@ struct TextFieldTests {
         <input placeholder="Enter your name here" readonly type="text" class="form-control" />
         """)
     }
+
+    @Test("TextField attributes are sorted")
+    func textFieldAttributesAreSorted() async throws {
+        let textField = TextField(placeholder: nil)
+            .disabled()
+            .readOnly()
+            .required()
+        let output = textField.render()
+
+        #expect(
+            output == #"<input disabled readonly required type="text" class="form-control" />"#
+        )
+    }
 }

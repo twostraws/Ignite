@@ -15,8 +15,8 @@ import Testing
 @Suite("Button Tests")
 @MainActor
 struct ButtonTests {
-    @Test("Say Hello Button")
-    func sayHelloButton() async throws {
+    @Test("Button Test")
+    func button() async throws {
         let element = Text {
             Button("Say Hello") {
                 ShowAlert(message: "Hello, world!")
@@ -33,14 +33,14 @@ struct ButtonTests {
         )
     }
 
-    @Test("Show Text tests")
+    @Test("Show Text Test")
     func showText() async throws {
         let button1 = Text {
             Button("Show First Text") {
-                    ShowElement("FirstText")
-                    HideElement("SecondText")
-                }
-                .role(.primary)
+                ShowElement("FirstText")
+                HideElement("SecondText")
+            }
+            .role(.primary)
         }
 
         let button2 = Text {
@@ -66,18 +66,18 @@ struct ButtonTests {
         let outputText2 = text2.render()
 
         #expect(outputButton1 == """
-                <p><button type=\"button\" class=\"btn btn-primary\" \
-                onclick=\"document.getElementById('FirstText').classList.remove('d-none'); \
-                document.getElementById('SecondText').classList.add('d-none')\">Show First \
-                Text</button></p>
-                """
+            <p><button type=\"button\" class=\"btn btn-primary\" \
+            onclick=\"document.getElementById('FirstText').classList.remove('d-none'); \
+            document.getElementById('SecondText').classList.add('d-none')\">Show First \
+            Text</button></p>
+            """
         )
 
         #expect(outputButton2 == """
-                <p><button type=\"button\" \
-                class=\"btn btn-primary\" onclick=\"document.getElementById('FirstText').classList.add('d-none'); \
-                document.getElementById('SecondText').classList.remove('d-none')\">Show Second Text</button></p>
-                """
+            <p><button type=\"button\" \
+            class=\"btn btn-primary\" onclick=\"document.getElementById('FirstText').classList.add('d-none'); \
+            document.getElementById('SecondText').classList.remove('d-none')\">Show Second Text</button></p>
+            """
         )
 
         #expect(outputText1 == "<h3 id=\"FirstText\">This is the first text.</h3>")
@@ -97,6 +97,14 @@ struct ButtonTests {
         <p><a href=\"https://www.hackingwithswift.com\" \
         class=\"btn btn-primary\">This is a link button</a></p>
         """)
+    }
+
+    @Test("Disabled Button Test")
+    func disabledButton() async throws {
+        let button = Button().disabled()
+        let output = button.render()
+
+        #expect(output == #"<button type="button" disabled class="btn"></button>"#)
     }
 
     // MARK: Targets
