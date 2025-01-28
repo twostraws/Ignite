@@ -208,18 +208,21 @@ struct DateRFC822Tests {
     }
     
     @Test("Test Against Known Output for New York Time", arguments: [
-        Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 00:21:41 -0400"),
-        Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 10:08:38 -0400"),
-        Instance(input: Date(timeIntervalSince1970: -3284356034.069809), expected: "Sun, 03 Dec 1865 09:56:43 -045602"),
-        Instance(input: Date(timeIntervalSince1970: 17552683531.75113), expected: "Fri, 22 Mar 2526 21:25:31 -0400"),
-        Instance(input: Date(timeIntervalSince1970: 52184037958.68115), expected: "Thu, 24 Aug 3623 18:05:58 -0400"),
-        Instance(input: Date(timeIntervalSince1970: -46964633818.02554), expected: "Tue, 29 Sep 0481 15:26:59 -045602"),
-        Instance(input: Date(timeIntervalSince1970: 9676773717.779556), expected: "Wed, 23 Aug 2276 12:41:57 -0400"),
-        Instance(input: Date(timeIntervalSince1970: -46716978084.27513), expected: "Sat, 05 Aug 0489 00:42:33 -045602"),
-        Instance(input: Date(timeIntervalSince1970: 60228133082.71135), expected: "Sun, 21 Jul 3878 16:58:02 -0400"),
-        Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 09:27:23 -045602"),
+        Instance(input: Date(timeIntervalSince1970: 20012346618.957466), expected: "Fri, 02 Mar 2604 04:10:18 -0500"),
+        Instance(input: Date(timeIntervalSince1970: 56076958399.89086), expected: "Tue, 03 Jan 3747 15:53:19 -0500"),
+        Instance(input: Date(timeIntervalSince1970: 43889947931.30432), expected: "Sat, 25 Oct 3360 08:12:11 -0400"),
+        Instance(input: Date(timeIntervalSince1970: 60401587537.13003), expected: "Sat, 19 Jan 3884 05:45:37 -0500"),
+        Instance(input: Date(timeIntervalSince1970: 2887257381.52073), expected: "Wed, 29 Jun 2061 03:56:21 -0400"),
+        Instance(input: Date(timeIntervalSince1970: 15764928045.389473), expected: "Sat, 27 Jul 2469 06:40:45 -0400"),
+        Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 00:59:34 -0400"),
+        Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 03:08:04 -0400"),
+        Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Thu, 11 Jul 2261 13:55:33 -0400"),
+        Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 09:31:51 -0500"),
     ])
     func outputs_expected_result_for_new_york_time(instance: Instance) async throws {
+        // EDT - America/New_York
+        // western hemisphere
+        // 5 hours behind GMT
         let timezone = TimeZone(abbreviation: "EDT")
         #expect(instance.input.asRFC822(timeZone: timezone) == instance.expected)
     }
