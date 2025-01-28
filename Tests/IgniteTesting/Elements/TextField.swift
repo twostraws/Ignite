@@ -24,16 +24,6 @@ struct TextFieldTests {
         """)
     }
 
-    @Test("TextField with Placeholder and Label")
-    func textFieldWithPlaceholderAndLabel() async throws {
-        let element = TextField("Paul", placeholder: "Enter your name here")
-        let output = element.render()
-
-        #expect(output == """
-        <input placeholder="Enter your name here" type="text" class="form-control" />
-        """)
-    }
-
     @Test("TextField with Text Type", arguments: TextField.TextType.allCases)
     func textFieldWithInputTextType(textType: TextField.TextType) async throws {
         let element = TextField("Paul", placeholder: "Enter your name here").type(textType)

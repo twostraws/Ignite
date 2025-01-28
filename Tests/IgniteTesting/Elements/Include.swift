@@ -14,8 +14,12 @@ import Testing
 @Suite("Include Tests")
 @MainActor
 struct IncludeTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Basic Include")
+    func basicInclude() async throws {
+        let element = Include("important.html")
+        let output = element.render()
 
+        #expect(
+            output == "")
     }
 }

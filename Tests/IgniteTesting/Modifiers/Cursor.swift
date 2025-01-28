@@ -14,8 +14,11 @@ import Testing
 @Suite("Cursor Tests")
 @MainActor
 struct CursorTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Cursor Modifiers Test", arguments: Cursor.allCases)
+    func cursorModifier(_ cursor: Cursor) async throws {
+        let element = Span("Hello, World!").cursor(cursor)
+        let output = element.render()
 
+        #expect(output == "<span style=\"cursor: \(cursor.rawValue)\">Hello, World!</span>")
     }
 }

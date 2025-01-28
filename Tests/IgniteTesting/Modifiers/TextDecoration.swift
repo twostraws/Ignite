@@ -13,9 +13,13 @@ import Testing
 /// Tests for the `TextDecoration` modifier.
 @Suite("TextDecoration Tests")
 @MainActor
-struct TextDecorationTests {
-    @Test("ExampleTest")
-    func example() async throws {
+struct TextDecorationModifierTests {
+    @Test("TextDecoration modifiers test", arguments: TextDecoration.allCases)
+    func textDecorationNone(_ decoration: TextDecoration) async throws {
+        let element = Span("Hello, World!").textDecoration(decoration)
+        let output = element.render()
 
+        #expect(output == "<span style=\"text-decoration: \(decoration.rawValue)\">Hello, World!</span>")
     }
+
 }

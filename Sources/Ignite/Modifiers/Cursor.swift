@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public enum Cursor: String {
+public enum Cursor: String, CaseIterable, Sendable {
     /// The cursor to display based on the current context. E.g., equivalent to text when hovering text.
     case auto
 

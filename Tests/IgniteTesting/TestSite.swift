@@ -18,6 +18,11 @@ struct TestSite: Site {
 
     var homePage = TestLayout()
     var layout = EmptyLayout()
+    var feedConfiguration = FeedConfiguration(
+        mode: .descriptionOnly,
+        contentCount: 20,
+        image: .init(url: "path/to/image.png", width: 100, height: 100)
+    )
 }
 
 /// An example page  used in tests.

@@ -15,17 +15,43 @@ import Testing
 @MainActor
 struct MarkdownRendererTests {
 
+    @Test("Markdown metadata is processed")
+    func metadataIsProcessed() async throws {
+        let element = MarkdownToHTML(
+            markdown: """
+            ---
+            title: Example Title
+            ---
+            Test content
+            """,
+            removeTitleFromBody: false
+        )
+
+        #expect(element.body == "<p>Test content</p>")
+        #expect(element.metadata["title"] == "Example Title")
+    }
+
     @Test(
-        "Markdown headers from string",
-        arguments: ["# Header 1", "## Header 2", "### Header 3", "# Header with a #hashtag"]
+        "Markdown headings from string",
+        arguments: ["# Heading 1", "## Heading 2", "### Heading 3", "# Heading with a #hashtag"]
     )
-    func convertHeadersToHTML(markdown: String) async throws {
+    func convertHeadingsToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         let expectedTag = "h\(numberOfHashtags(in: markdown))"
         let expectedContent = String(markdown.drop(while: { $0 == "#" }))
             .trimmingCharacters(in: .whitespacesAndNewlines)
         #expect(element.body == "<\(expectedTag)>\(expectedContent)</\(expectedTag)>")
+    }
+
+    @Test("Markdown heading remove title from body")
+    func removeTitleFromBody() async throws {
+        let element = MarkdownToHTML(
+            markdown: "# Test Heading\n\nTest content",
+            removeTitleFromBody: true
+        )
+
+        #expect(element.body == "<p>Test content</p>")
     }
 
     @Test("Markdown paragraphs from string", arguments: ["Paragraph one\n\nParagraph two"])
@@ -114,6 +140,31 @@ struct MarkdownRendererTests {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(element.body == "<p>Example of <strong>strong</strong> text</p>")
+    }
+
+    @Test("Markdown table from string")
+    func convertTableToHTML() async throws {
+        let markdown = """
+        | Title 1 | Title 2 |
+        | --- | --- |
+        | Content 1 | Content 2|
+        """
+        let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
+
+        #expect(element.body == """
+        <table>\
+        <thead>\
+        <th>Title 1</th>\
+        <th>Title 2</th>\
+        </thead>\
+        <tbody>\
+        <tr>\
+        <td>Content 1</td>\
+        <td>Content 2</td>\
+        </tr>\
+        </tbody>\
+        </table>
+        """)
     }
 
     @Test("Markdown thematic break from string")

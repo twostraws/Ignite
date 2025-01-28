@@ -65,7 +65,7 @@ public extension HTML {
     ///   - direction: Optional direction for keyframe animations (e.g., alternate, reverse)
     ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
     /// - Returns: The modified HTML element with animation containers and classes applied
-    internal func applyAnimation(
+    fileprivate func applyAnimation(
         _ animation: some Animatable,
         direction: AnimationDirection?,
         trigger: AnimationTrigger
@@ -128,10 +128,10 @@ public extension HTML {
         return self
     }
 
-    func createBaseAnimation(
+    private func createBaseAnimation(
         for animation: any Animatable,
         direction: AnimationDirection?,
-        existingAnimation: Animatable?
+        existingAnimation: (any Animatable)?
     ) -> any Animatable {
         if let basicAnim = animation as? Transition {
             var copy = basicAnim
@@ -167,11 +167,11 @@ public extension HTML {
         in existingContainers: Set<String>,
         styles wrapperStyles: OrderedSet<InlineStyle>
     ) {
-        let animationName = "animation-\(self.id)"
+        let animationName = "animation-\(animation.id)"
 
         for trigger in triggers {
             switch trigger {
-            case .click where !existingContainers.contains("click-\(self.id)"):
+            case .click where !existingContainers.contains("click-\(animation.id)"):
                 // Add click handler to a new container, or the appear container
                 // if it exists to avoid duplicate class assignments
                 if !existingContainers.contains(animationName) {
@@ -199,7 +199,7 @@ public extension HTML {
                 // Inner click-specific container
                 attributes.append(containerAttributes: ContainerAttributes(
                     type: .animation,
-                    classes: ["click-\(self.id)"]
+                    classes: ["click-\(animation.id)"]
                 ))
 
             case .hover where !existingContainers.contains("\(animationName)-hover"):
@@ -215,7 +215,7 @@ public extension HTML {
 
                 if let animation = animation as? Animation,
                    animation.fillMode == .backwards || animation.fillMode == .both {
-                    classes.append("fill-\(self.id)-\(animation.fillMode.rawValue)")
+                    classes.append("fill-\(animation.id)-\(animation.fillMode.rawValue)")
                 }
 
                 attributes.append(containerAttributes: ContainerAttributes(

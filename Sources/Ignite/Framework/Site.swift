@@ -31,7 +31,7 @@ import Foundation
 ///   ensure the return type exactly matches the protocol requirement, e.g., `(any Theme)?`.
 ///   Swift's type system requires this exact match.
 @MainActor
-public protocol Site: Sendable { // swiftlint:disable:this redundant_sendable
+public protocol Site: Sendable {
     /// The type of your homepage. Required.
     associatedtype HomePageLayout: StaticLayout
 

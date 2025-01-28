@@ -8,7 +8,7 @@
 import OrderedCollections
 
 /// The main animation configuration type that provides a flexible way to define CSS animations
-public struct Transition: Animatable {
+public struct Transition: Animatable, Hashable {
     /// The CSS properties being animated and their values
     var data: [AnimatableData]
     /// Additional non-animated CSS properties
