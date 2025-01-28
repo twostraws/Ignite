@@ -227,4 +227,25 @@ struct DateRFC822Tests {
         #expect(instance.input.asRFC822(timeZone: timezone) == instance.expected)
     }
 
+    @Test("Test Against Known Output for America/St Johns Time", arguments: [
+        Instance(input: Date(timeIntervalSince1970: 20012346618.957466), expected: "Fri, 02 Mar 2604 05:40:18 -0330"),
+        Instance(input: Date(timeIntervalSince1970: 56076958399.89086), expected: "Tue, 03 Jan 3747 17:23:19 -0330"),
+        Instance(input: Date(timeIntervalSince1970: 43889947931.30432), expected: "Sat, 25 Oct 3360 09:42:11 -0230"),
+        Instance(input: Date(timeIntervalSince1970: 60401587537.13003), expected: "Sat, 19 Jan 3884 07:15:37 -0330"),
+        Instance(input: Date(timeIntervalSince1970: 2887257381.52073), expected: "Wed, 29 Jun 2061 05:26:21 -0230"),
+        Instance(input: Date(timeIntervalSince1970: 15764928045.389473), expected: "Sat, 27 Jul 2469 08:10:45 -0230"),
+        Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 02:29:34 -0230"),
+        Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 04:38:04 -0230"),
+        Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Thu, 11 Jul 2261 15:25:33 -0230"),
+        Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 11:01:51 -0330"),
+    ])
+    func outputs_expected_result_for_st_johns_time(instance: Instance) async throws {
+
+        // NDT - America/St_Johns
+        // western hemisphere
+        // 3.5 hours behind GMT
+        let timezone = TimeZone(abbreviation: "NDT")
+        #expect(instance.input.asRFC822(timeZone: timezone) == instance.expected)
+    }
+
 }
