@@ -27,8 +27,8 @@ public struct ShowModal: Action, Sendable {
 
         var htmlOption: String {
             switch self {
-            case .backdrop(let dismissable):
-                "backdrop: \(dismissable ? "true" : "'static'")"
+            case .backdrop(let dismissible):
+                "backdrop: \(dismissible ? "true" : "'static'")"
             case .noBackdrop:
                 "backdrop: false"
             case .focus(let bool):
