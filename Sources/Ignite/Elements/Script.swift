@@ -25,10 +25,13 @@ public struct Script: BlockHTML, HeadElement {
     /// The external file to load.
     private var file: String?
 
+    /// Whether the external file is local or remote.
+    private var isRemoteFile = false
+
     /// Direct, inline JavaScript code to execute.
     private var code: String?
 
-    /// Creates a new script that references an external file.
+    /// Creates a new script that references a local file.
     /// - Parameter file: The URL of the file to load.
     public init(file: String) {
         self.file = file
@@ -38,6 +41,7 @@ public struct Script: BlockHTML, HeadElement {
     /// - Parameter file: The URL of the file to load.
     public init(file: URL) {
         self.file = file.absoluteString
+        self.isRemoteFile = !file.isFileURL
     }
 
     /// Embeds some custom, inline JavaScript on this page.
@@ -52,7 +56,9 @@ public struct Script: BlockHTML, HeadElement {
         attributes.tag = "script"
 
         if let file {
-            attributes.append(customAttributes: .init(name: "src", value: "\(publishingContext.site.url.path)\(file)"))
+            let filePath = isRemoteFile ?
+                file : publishingContext.site.url.appending(path: file).decodedPath
+            attributes.append(customAttributes: .init(name: "src", value: filePath))
             return attributes.description()
         } else if let code {
             return attributes.description(wrapping: code)

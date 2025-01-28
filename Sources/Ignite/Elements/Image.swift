@@ -102,8 +102,9 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     private func render(image: String, description: String) -> String {
         var attributes = attributes
         attributes.selfClosingTag = "img"
+        let path = publishingContext.site.url.appending(path: image).decodedPath
         attributes.append(customAttributes:
-            .init(name: "src", value: "\(publishingContext.site.url.path)\(image)"),
+            .init(name: "src", value: path),
             .init(name: "alt", value: description)
         )
         return attributes.description()
