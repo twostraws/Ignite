@@ -343,7 +343,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
         var output = ""
 
         for child in tableHead.children {
-            output += "<th>"
+            output += "<th scope=\"col\">"
             output += visit(child)
             output += "</th>"
         }
