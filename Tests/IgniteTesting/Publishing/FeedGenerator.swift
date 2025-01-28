@@ -51,7 +51,7 @@ struct FeedGeneratorTests {
         <title>\(exampleContent.title)</title>\
         <link>\(exampleContent.path(in: site))</link>\
         <description><![CDATA[\(exampleContent.description)]]></description>\
-        <pubDate>\(exampleContent.date.asRFC822)</pubDate>\
+        <pubDate>\(exampleContent.date.asRFC822())</pubDate>\
         </item>\
         </channel>\
         </rss>

@@ -9,10 +9,10 @@ import Foundation
 
 extension Date {
     /// Converts `Date` objects to RFC-822 format, which is used by RSS.
-    public var asRFC822: String {
+    public func asRFC822(timeZone: TimeZone? = nil) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss Z"
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.timeZone = timeZone ?? TimeZone(secondsFromGMT: 0)
         return formatter.string(from: self)
     }
 }

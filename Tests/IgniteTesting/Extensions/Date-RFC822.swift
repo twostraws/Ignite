@@ -33,6 +33,6 @@ struct DateRFC822Tests {
         Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 14:23:25 +0000")
     ])
     func outputs_expected_result(instance: Instance) async throws {
-        #expect(instance.input.asRFC822 == instance.expected)
+        #expect(instance.input.asRFC822() == instance.expected)
     }
 }

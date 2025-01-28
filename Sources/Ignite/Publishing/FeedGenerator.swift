@@ -45,7 +45,7 @@ struct FeedGenerator {
             <title>\(item.title)</title>\
             <link>\(item.path(in: site))</link>\
             <description><![CDATA[\(item.description)]]></description>\
-            <pubDate>\(item.date.asRFC822)</pubDate>
+            <pubDate>\(item.date.asRFC822())</pubDate>
             """
 
                 let authorName = item.author ?? site.author
