@@ -167,7 +167,7 @@ struct DateRFC822Tests {
     }
 
 
-    @Test("Test Against Known Output", arguments: [
+    @Test("Test Against Known Output for Default Time Zone", arguments: [
         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 04:21:41 +0000"),
         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 14:08:38 +0000"),
         Instance(input: Date(timeIntervalSince1970: -3284356034.069809), expected: "Sun, 03 Dec 1865 14:52:45 +0000"),
