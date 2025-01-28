@@ -152,10 +152,10 @@ struct MarkdownRendererTests {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(element.body == """
-        <table>\
+        <table class="table">\
         <thead>\
-        <th>Title 1</th>\
-        <th>Title 2</th>\
+        <th scope="col">Title 1</th>\
+        <th scope="col">Title 2</th>\
         </thead>\
         <tbody>\
         <tr>\
