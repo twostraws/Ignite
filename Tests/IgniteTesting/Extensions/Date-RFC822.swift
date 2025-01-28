@@ -124,7 +124,7 @@ struct DateRFC822Tests {
         let timezones: [TimeZone] = [
             TimeZone(abbreviation: "EDT"), // north america, daylight savings
             TimeZone(abbreviation: "NDT"), // americas, off by 30 min from most timezones
-            TimeZone(abbreviation: "WIT"), // asica, ahead of GMT
+            TimeZone(abbreviation: "WIT"), // asia, ahead of GMT
             TimeZone(abbreviation: "IST") // asia, ahead of GMT, off by 30 min from most timezones
         ].compactMap(\.self)
         
