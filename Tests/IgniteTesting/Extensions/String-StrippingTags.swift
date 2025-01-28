@@ -23,7 +23,7 @@ struct StringStrippingTagsTests {
         // Then
         #expect(result == "Hello, Swift developer!")
     }
-    
+
     @Test("When string contains multiple HTML tags")
     func strippingTags_fromStringWithMultipleTags() async throws {
         // Given
@@ -33,7 +33,7 @@ struct StringStrippingTagsTests {
         // Then
         #expect(result == "Hello, Swift! Welcome to HTML.")
     }
-    
+
     @Test("When string contains nested HTML tags")
     func strippingTags_fromStringWithNestedTags() async throws {
         // Given
@@ -43,7 +43,7 @@ struct StringStrippingTagsTests {
         // Then
         #expect(result == "This is a very important message.")
     }
-    
+
     @Test("When string contains self-closing tags")
     func strippingTags_fromStringWithSelfClosingTags() async throws {
         // Given
@@ -53,7 +53,7 @@ struct StringStrippingTagsTests {
         // Then
         #expect(result == "Here’s a list of characters: TomJerryNibbles")
     }
-    
+
     @Test("When string contains unclosed tags")
     func strippingTags_fromStringWithUnclosedTags() async throws {
         // Given
@@ -63,7 +63,7 @@ struct StringStrippingTagsTests {
         // Then
         #expect(result == "This is an unclosed bold text.")
     }
-    
+
     @Test("When string contains HTML tags with attributes")
     func strippingTags_fromStringWithTagsWithAttributes() async throws {
         // Given
@@ -76,7 +76,7 @@ struct StringStrippingTagsTests {
         #expect(result1 == "Click here!")
         #expect(result2 == "Click here!")
     }
-    
+
     @Test("When string does NOT contain HTML tags")
     func strippingTags_fromStringWithoutHTMLTags() async throws {
         // Given
@@ -86,7 +86,7 @@ struct StringStrippingTagsTests {
         // Then
         #expect(result == "Plain text without HTML tags")
     }
-    
+
     @Test("When string is empty")
     func strippingTags_fromEmptyString() async throws {
         // Given
@@ -96,7 +96,7 @@ struct StringStrippingTagsTests {
         // Then
         #expect(result == "")
     }
-    
+
     @Test("When string contains only HTML tags")
     func strippingTags_fromStringWithOnlyHTMLTags() async throws {
         // Given
@@ -106,7 +106,7 @@ struct StringStrippingTagsTests {
         // Then
         #expect(result == "")
     }
-    
+
     @Test("When string contains special characters within tags")
     func strippingTags_fromStringWithSpecialCharactersInTags() async throws {
         // Given
@@ -116,7 +116,7 @@ struct StringStrippingTagsTests {
         // Then
         #expect(result == "&lt;Special&gt; &amp; Characters")
     }
-    
+
     @Test("When string contains invalid HTML structure")
     func strippingTags_fromStringWithInvalidHTML() async throws {
         // Given
@@ -126,7 +126,7 @@ struct StringStrippingTagsTests {
         // Then
         #expect(result == "Invalid HTML structure")
     }
-    
+
     @Test("When string contains multiple lines with tags")
     func strippingTags_fromMultiLineStringWithTags() async throws {
         // Given (notice one 'space' before each name)
@@ -142,7 +142,7 @@ struct StringStrippingTagsTests {
         // Then
         #expect(result == "\n Tom\n Jerry\n Nibbles\n")
     }
-    
+
     @Test("When string contains script or style tags")
     func strippingTags_fromStringWithScriptOrStyleTags() async throws {
         // Given
