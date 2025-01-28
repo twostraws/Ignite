@@ -14,6 +14,12 @@ import Testing
 @Suite("Include Tests")
 @MainActor
 struct IncludeTests {
+    
+    init() throws {
+        try PublishingContext.initialize(for: TestSite(), from: #filePath)
+    }
+
+    
     @Test("Basic Include")
     func basicInclude() async throws {
         let element = Include("important.html")
