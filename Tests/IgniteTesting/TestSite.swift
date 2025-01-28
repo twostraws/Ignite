@@ -16,6 +16,8 @@ struct TestSite: Site {
 
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
 
+    var timeZone: TimeZone? = nil
+    
     var homePage = TestLayout()
     var layout = EmptyLayout()
     var feedConfiguration = FeedConfiguration(
@@ -23,6 +25,13 @@ struct TestSite: Site {
         contentCount: 20,
         image: .init(url: "path/to/image.png", width: 100, height: 100)
     )
+    
+    func withTimeZone(_ timeZone: TimeZone) -> TestSite {
+        var site = self
+        site.timeZone = timeZone
+        
+        return site
+    }
 }
 
 /// An example page  used in tests.
