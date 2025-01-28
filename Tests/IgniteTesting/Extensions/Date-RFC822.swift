@@ -20,6 +20,68 @@ struct DateRFC822Tests {
         let expected: String
     }
 
+    @Test("Print Out supported timezones with abbreviations")
+    func reportTimeZoneInfo() async throws {
+        for (abbreviation, identifier) in TimeZone.abbreviationDictionary {
+            guard let timezone = TimeZone(identifier: identifier) else { continue }
+            
+            print("\(abbreviation)\t\(Double(timezone.secondsFromGMT())/3600)\t\(identifier)")
+        }
+        /* Output:
+         PET    -5.0    America/Lima
+         EST    -5.0    America/New_York
+         PDT    -8.0    America/Los_Angeles
+         KST    9.0    Asia/Seoul
+         MST    -7.0    America/Phoenix
+         WET    0.0    Europe/Lisbon
+         BDT    6.0    Asia/Dhaka
+         EEST    2.0    Europe/Athens
+         SGT    8.0    Asia/Singapore
+         CLST    -3.0    America/Santiago
+         BRST    -3.0    America/Sao_Paulo
+         CDT    -6.0    America/Chicago
+         CEST    1.0    Europe/Paris
+         EAT    3.0    Africa/Addis_Ababa
+         CST    -6.0    America/Chicago
+         UTC    0.0    UTC
+         WEST    0.0    Europe/Lisbon
+         PHT    8.0    Asia/Manila
+         GMT    0.0    GMT
+         MSK    3.0    Europe/Moscow
+         NDT    -3.5    America/St_Johns
+         IRST    3.5    Asia/Tehran
+         AKST    -9.0    America/Juneau
+         ICT    7.0    Asia/Bangkok
+         AKDT    -9.0    America/Juneau
+         EET    2.0    Europe/Athens
+         CLT    -3.0    America/Santiago
+         PST    -8.0    America/Los_Angeles
+         TRT    3.0    Europe/Istanbul
+         BRT    -3.0    America/Sao_Paulo
+         COT    -5.0    America/Bogota
+         NZST    13.0    Pacific/Auckland
+         CET    1.0    Europe/Paris
+         NST    -3.5    America/St_Johns
+         WAT    1.0    Africa/Lagos
+         NZDT    13.0    Pacific/Auckland
+         PKT    5.0    Asia/Karachi
+         CAT    2.0    Africa/Harare
+         ADT    -4.0    America/Halifax
+         HST    -10.0    Pacific/Honolulu
+         AST    -4.0    America/Halifax
+         GST    4.0    Asia/Dubai
+         MSD    3.0    Europe/Moscow
+         EDT    -5.0    America/New_York
+         JST    9.0    Asia/Tokyo
+         HKT    8.0    Asia/Hong_Kong
+         MDT    -7.0    America/Denver
+         BST    0.0    Europe/London
+         WIT    7.0    Asia/Jakarta
+         ART    -3.0    America/Argentina/Buenos_Aires
+         IST    5.5    Asia/Kolkata
+         */
+    }
+    
     @Test("Test Against Known Output", arguments: [
         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 04:21:41 +0000"),
         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 14:08:38 +0000"),
