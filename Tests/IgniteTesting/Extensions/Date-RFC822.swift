@@ -14,7 +14,7 @@ import Testing
 ///
 /// NOTE: These tests only test against dates in the Unix Epoch
 /// (since January 1, 1970, see https://en.wikipedia.org/wiki/Unix_time)
-/// testing time zone output against historical times (times before standardized time zones)
+/// Testing time zone output against historical times (times before standardized time zones)
 /// is tricky and beyond the scope of what this project needs.
 @Suite("Date-RFC822 Tests")
 @MainActor
