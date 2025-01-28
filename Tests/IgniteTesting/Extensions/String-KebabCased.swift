@@ -79,6 +79,16 @@ struct StringKebabCasedTests {
         #expect(instance.input.kebabCased() == instance.expected)
     }
 
+    @Test("Converts words-separated-by-dashes to all lowercase", arguments: [
+        Instance(input: "Hello-World", expected: "hello-world"),
+        Instance(input: "Hello-world", expected: "hello-world"),
+        Instance(input: "hello-World", expected: "hello-world"),
+        Instance(input: "HELLO-WORLD", expected: "hello-world")
+    ])
+    func converts_to_lowercase_leaving_dashes (instance: Instance) async throws {
+        #expect(instance.input.kebabCased() == instance.expected)
+    }
+
     @Test(
         "Complex Examples",
         arguments: [

@@ -14,8 +14,12 @@ import Testing
 @Suite("ListItem Tests")
 @MainActor
 struct ListItemTests {
-    @Test("ExampleTest")
-    func example() async throws {
-
+    @Test("Standalone ListItem Test")
+    func standAlone() async throws {
+        let element = ListItem {
+            "Standalone List Item"
+        }
+        let output = element.render()
+        #expect(output == "<li>Standalone List Item</li>")
     }
 }
