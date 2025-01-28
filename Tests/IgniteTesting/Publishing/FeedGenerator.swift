@@ -16,7 +16,9 @@ import Testing
 struct FeedGeneratorTests {
     
     static let sites: [any Site] = [
-        TestSite()
+        TestSite(),
+        TestSite().withTimeZone(.init(abbreviation: "GMT")!),
+        TestSite().withTimeZone(.init(abbreviation: "EST")!),
     ]
     
     @Test("Test generateFeed", arguments: await sites)
@@ -55,7 +57,7 @@ struct FeedGeneratorTests {
         <title>\(exampleContent.title)</title>\
         <link>\(exampleContent.path(in: site))</link>\
         <description><![CDATA[\(exampleContent.description)]]></description>\
-        <pubDate>\(exampleContent.date.asRFC822())</pubDate>\
+        <pubDate>\(exampleContent.date.asRFC822(timeZone: site.timeZone))</pubDate>\
         </item>\
         </channel>\
         </rss>
