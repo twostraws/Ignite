@@ -109,16 +109,16 @@ struct DateRFC822Tests {
     @Test("Generate Instances in other time zones")
     func generate_EDT_rfc822() async throws {
         let times: [TimeInterval] = [
-            60228332501.13208,
-            27871740518.22975,
-            -3284356034.069809,
-            17552683531.75113,
-            52184037958.68115,
-            -46964633818.02554,
-            9676773717.779556,
-            -46716978084.27513,
-            60228133082.71135,
-            -37373736994.632614
+            20012346618.957466,
+            56076958399.89086,
+            43889947931.30432,
+            60401587537.13003,
+            2887257381.52073,
+            15764928045.389473,
+            30573435574.337566,
+            2818825684.6154914,
+            9199677333.36627,
+            53706378711.11124
         ]
                 
         let timezones: [TimeZone] = [
@@ -137,55 +137,55 @@ struct DateRFC822Tests {
         }
         /* Output:
          Optional("EST")
-         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 00:21:41 -0400"),
-         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 10:08:38 -0400"),
-         Instance(input: Date(timeIntervalSince1970: -3284356034.069809), expected: "Sun, 03 Dec 1865 09:56:43 -045602"),
-         Instance(input: Date(timeIntervalSince1970: 17552683531.75113), expected: "Fri, 22 Mar 2526 21:25:31 -0400"),
-         Instance(input: Date(timeIntervalSince1970: 52184037958.68115), expected: "Thu, 24 Aug 3623 18:05:58 -0400"),
-         Instance(input: Date(timeIntervalSince1970: -46964633818.02554), expected: "Tue, 29 Sep 0481 15:26:59 -045602"),
-         Instance(input: Date(timeIntervalSince1970: 9676773717.779556), expected: "Wed, 23 Aug 2276 12:41:57 -0400"),
-         Instance(input: Date(timeIntervalSince1970: -46716978084.27513), expected: "Sat, 05 Aug 0489 00:42:33 -045602"),
-         Instance(input: Date(timeIntervalSince1970: 60228133082.71135), expected: "Sun, 21 Jul 3878 16:58:02 -0400"),
-         Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 09:27:23 -045602"),
-         
+         Instance(input: Date(timeIntervalSince1970: 20012346618.957466), expected: "Fri, 02 Mar 2604 04:10:18 -0500"),
+         Instance(input: Date(timeIntervalSince1970: 56076958399.89086), expected: "Tue, 03 Jan 3747 15:53:19 -0500"),
+         Instance(input: Date(timeIntervalSince1970: 43889947931.30432), expected: "Sat, 25 Oct 3360 08:12:11 -0400"),
+         Instance(input: Date(timeIntervalSince1970: 60401587537.13003), expected: "Sat, 19 Jan 3884 05:45:37 -0500"),
+         Instance(input: Date(timeIntervalSince1970: 2887257381.52073), expected: "Wed, 29 Jun 2061 03:56:21 -0400"),
+         Instance(input: Date(timeIntervalSince1970: 15764928045.389473), expected: "Sat, 27 Jul 2469 06:40:45 -0400"),
+         Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 00:59:34 -0400"),
+         Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 03:08:04 -0400"),
+         Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Thu, 11 Jul 2261 13:55:33 -0400"),
+         Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 09:31:51 -0500"),
+
          NDT
          Optional("GMT-3:30")
-         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 01:51:41 -0230"),
-         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 11:38:38 -0230"),
-         Instance(input: Date(timeIntervalSince1970: -3284356034.069809), expected: "Sun, 03 Dec 1865 11:21:53 -033052"),
-         Instance(input: Date(timeIntervalSince1970: 17552683531.75113), expected: "Fri, 22 Mar 2526 22:55:31 -0230"),
-         Instance(input: Date(timeIntervalSince1970: 52184037958.68115), expected: "Thu, 24 Aug 3623 19:35:58 -0230"),
-         Instance(input: Date(timeIntervalSince1970: -46964633818.02554), expected: "Tue, 29 Sep 0481 16:52:09 -033052"),
-         Instance(input: Date(timeIntervalSince1970: 9676773717.779556), expected: "Wed, 23 Aug 2276 14:11:57 -0230"),
-         Instance(input: Date(timeIntervalSince1970: -46716978084.27513), expected: "Sat, 05 Aug 0489 02:07:43 -033052"),
-         Instance(input: Date(timeIntervalSince1970: 60228133082.71135), expected: "Sun, 21 Jul 3878 18:28:02 -0230"),
-         Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 10:52:33 -033052"),
-         
+         Instance(input: Date(timeIntervalSince1970: 20012346618.957466), expected: "Fri, 02 Mar 2604 05:40:18 -0330"),
+         Instance(input: Date(timeIntervalSince1970: 56076958399.89086), expected: "Tue, 03 Jan 3747 17:23:19 -0330"),
+         Instance(input: Date(timeIntervalSince1970: 43889947931.30432), expected: "Sat, 25 Oct 3360 09:42:11 -0230"),
+         Instance(input: Date(timeIntervalSince1970: 60401587537.13003), expected: "Sat, 19 Jan 3884 07:15:37 -0330"),
+         Instance(input: Date(timeIntervalSince1970: 2887257381.52073), expected: "Wed, 29 Jun 2061 05:26:21 -0230"),
+         Instance(input: Date(timeIntervalSince1970: 15764928045.389473), expected: "Sat, 27 Jul 2469 08:10:45 -0230"),
+         Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 02:29:34 -0230"),
+         Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 04:38:04 -0230"),
+         Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Thu, 11 Jul 2261 15:25:33 -0230"),
+         Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 11:01:51 -0330"),
+
          WIT
          Optional("GMT+7")
-         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 11:21:41 +0700"),
-         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 21:08:38 +0700"),
-         Instance(input: Date(timeIntervalSince1970: -3284356034.069809), expected: "Sun, 03 Dec 1865 21:59:57 +070712"),
-         Instance(input: Date(timeIntervalSince1970: 17552683531.75113), expected: "Sat, 23 Mar 2526 08:25:31 +0700"),
-         Instance(input: Date(timeIntervalSince1970: 52184037958.68115), expected: "Fri, 25 Aug 3623 05:05:58 +0700"),
-         Instance(input: Date(timeIntervalSince1970: -46964633818.02554), expected: "Wed, 30 Sep 0481 03:30:13 +070712"),
-         Instance(input: Date(timeIntervalSince1970: 9676773717.779556), expected: "Wed, 23 Aug 2276 23:41:57 +0700"),
-         Instance(input: Date(timeIntervalSince1970: -46716978084.27513), expected: "Sat, 05 Aug 0489 12:45:47 +070712"),
-         Instance(input: Date(timeIntervalSince1970: 60228133082.71135), expected: "Mon, 22 Jul 3878 03:58:02 +0700"),
-         Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 21:30:37 +070712"),
-         
+         Instance(input: Date(timeIntervalSince1970: 20012346618.957466), expected: "Fri, 02 Mar 2604 16:10:18 +0700"),
+         Instance(input: Date(timeIntervalSince1970: 56076958399.89086), expected: "Wed, 04 Jan 3747 03:53:19 +0700"),
+         Instance(input: Date(timeIntervalSince1970: 43889947931.30432), expected: "Sat, 25 Oct 3360 19:12:11 +0700"),
+         Instance(input: Date(timeIntervalSince1970: 60401587537.13003), expected: "Sat, 19 Jan 3884 17:45:37 +0700"),
+         Instance(input: Date(timeIntervalSince1970: 2887257381.52073), expected: "Wed, 29 Jun 2061 14:56:21 +0700"),
+         Instance(input: Date(timeIntervalSince1970: 15764928045.389473), expected: "Sat, 27 Jul 2469 17:40:45 +0700"),
+         Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 11:59:34 +0700"),
+         Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 14:08:04 +0700"),
+         Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Fri, 12 Jul 2261 00:55:33 +0700"),
+         Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 21:31:51 +0700"),
+
          IST
          Optional("GMT+5:30")
-         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 09:51:41 +0530"),
-         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 19:38:38 +0530"),
-         Instance(input: Date(timeIntervalSince1970: -3284356034.069809), expected: "Sun, 03 Dec 1865 20:46:05 +055320"),
-         Instance(input: Date(timeIntervalSince1970: 17552683531.75113), expected: "Sat, 23 Mar 2526 06:55:31 +0530"),
-         Instance(input: Date(timeIntervalSince1970: 52184037958.68115), expected: "Fri, 25 Aug 3623 03:35:58 +0530"),
-         Instance(input: Date(timeIntervalSince1970: -46964633818.02554), expected: "Wed, 30 Sep 0481 02:16:29 +055328"),
-         Instance(input: Date(timeIntervalSince1970: 9676773717.779556), expected: "Wed, 23 Aug 2276 22:11:57 +0530"),
-         Instance(input: Date(timeIntervalSince1970: -46716978084.27513), expected: "Sat, 05 Aug 0489 11:32:03 +055328"),
-         Instance(input: Date(timeIntervalSince1970: 60228133082.71135), expected: "Mon, 22 Jul 3878 02:28:02 +0530"),
-         Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 20:16:53 +055328"),
+         Instance(input: Date(timeIntervalSince1970: 20012346618.957466), expected: "Fri, 02 Mar 2604 14:40:18 +0530"),
+         Instance(input: Date(timeIntervalSince1970: 56076958399.89086), expected: "Wed, 04 Jan 3747 02:23:19 +0530"),
+         Instance(input: Date(timeIntervalSince1970: 43889947931.30432), expected: "Sat, 25 Oct 3360 17:42:11 +0530"),
+         Instance(input: Date(timeIntervalSince1970: 60401587537.13003), expected: "Sat, 19 Jan 3884 16:15:37 +0530"),
+         Instance(input: Date(timeIntervalSince1970: 2887257381.52073), expected: "Wed, 29 Jun 2061 13:26:21 +0530"),
+         Instance(input: Date(timeIntervalSince1970: 15764928045.389473), expected: "Sat, 27 Jul 2469 16:10:45 +0530"),
+         Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 10:29:34 +0530"),
+         Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 12:38:04 +0530"),
+         Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Thu, 11 Jul 2261 23:25:33 +0530"),
+         Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 20:01:51 +0530"),
 
          */
     }
@@ -266,6 +266,27 @@ struct DateRFC822Tests {
         // eastern hemisphere
         // 7 hours before GMT
         let timezone = TimeZone(abbreviation: "WIT")
+        #expect(instance.input.asRFC822(timeZone: timezone) == instance.expected)
+    }
+
+    @Test("Test Against Known Output for Asia/Kolkata Time", arguments: [
+        Instance(input: Date(timeIntervalSince1970: 20012346618.957466), expected: "Fri, 02 Mar 2604 14:40:18 +0530"),
+        Instance(input: Date(timeIntervalSince1970: 56076958399.89086), expected: "Wed, 04 Jan 3747 02:23:19 +0530"),
+        Instance(input: Date(timeIntervalSince1970: 43889947931.30432), expected: "Sat, 25 Oct 3360 17:42:11 +0530"),
+        Instance(input: Date(timeIntervalSince1970: 60401587537.13003), expected: "Sat, 19 Jan 3884 16:15:37 +0530"),
+        Instance(input: Date(timeIntervalSince1970: 2887257381.52073), expected: "Wed, 29 Jun 2061 13:26:21 +0530"),
+        Instance(input: Date(timeIntervalSince1970: 15764928045.389473), expected: "Sat, 27 Jul 2469 16:10:45 +0530"),
+        Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 10:29:34 +0530"),
+        Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 12:38:04 +0530"),
+        Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Thu, 11 Jul 2261 23:25:33 +0530"),
+        Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 20:01:51 +0530")
+    ])
+    func outputs_expected_result_for_kolkata_time(instance: Instance) async throws {
+
+        // IST - Asia/Kolkata
+        // eastern hemisphere
+        // 5.5 hours before GMT
+        let timezone = TimeZone(abbreviation: "IST")
         #expect(instance.input.asRFC822(timeZone: timezone) == instance.expected)
     }
 
