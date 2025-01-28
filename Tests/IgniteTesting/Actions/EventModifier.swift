@@ -36,8 +36,8 @@ struct EventModifierTests {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
 
-    @Test("Check if events are added correctly", arguments: tags, await Array(zip(events, actions)))
-    func onEventAddsEventsCorrectly(tag: String, eventActions: (EventType, [any Action])) async throws {
+    @Test("Events are added", arguments: tags, await Array(zip(events, actions)))
+    func eventsAdded(tag: String, eventActions: (EventType, [any Action])) async throws {
         let element = Tag(tag) {}
             .onEvent(eventActions.0, eventActions.1)
 
