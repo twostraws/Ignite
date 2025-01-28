@@ -1,5 +1,5 @@
 //
-// File.swift
+// PublishingContext-Finding.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -8,8 +8,8 @@
 import Foundation
 
 /// Recurse content root, resolving symbolic links and selecting files by suffix.
-struct ContentFinder {
-    // package clients & no configuration, so no need for alternative instances
+struct ContentFinder: Sendable {
+    // no configuration, so no need for alternative instances
     static let shared = ContentFinder()
 
     private let isLinkKey = Set([URLResourceKey.isSymbolicLinkKey])
@@ -21,36 +21,55 @@ struct ContentFinder {
       .skipsSubdirectoryDescendants // one directory level per enumerator
     ]
 
-    /// Find content input for a  content maker (and manage deploy path):
-    /// recurse from content root, resolve symbolic links, forward files matching any suffix.
+    /// Find content input for a  content maker: recurse from content root, resolve symbolic links,
+    /// and make content for any file matching a suffix (case-insensitively).
     ///
+    /// The content maker gets a `DeployContent` with the logical deployment path:
+    /// - A deploy path is relative to the root and uses `/` as the name separator (like a URL path)
     /// - For symbolic links, use the link name for constructing the deploy path and checking suffixes.
-    /// - The name used for the file deploy path is exclusive of the suffix matched.
+    /// - The name used for a content file deploy path is exclusive of the suffix matched.
     ///
     /// Limitations:
-    /// - Does not detect or avoid symbolic-link cycles
-    /// - Mixing errors for input, url/resource, and contentMaker
+    /// - Does not detect duplicate deploy-paths (because content might use metadata path)
     ///
     /// - Parameters:
-    ///   - root: URL for readable directory
-    ///   - suffixes: non-empty Array of non-empty String; one must be the suffix of the filename
+    ///   - root: URL for readable directory (with `file:` scheme)
+    ///   - suffixes: non-empty Array of non-empty String; content name must end with a suffix
     ///   - contentMaker: closure taking ``DeployContent`` and returning false to halt
+    /// - Throws: when root is not a `file:` scheme URL, when suffixes array or values are empty,
+    ///   when URL operations fail, or when a directory is encountered again (due to symbolic links)
     func find(
         root: URL,
-        suffixes: [String] = [".md", ".MD"],
+        suffixes: [String] = [".md"],
         contentMaker: (DeployContent) throws -> Bool
     ) throws {
-        enum ProgramError: Error {
-            case notFileUrl, noSuffixes, emptySuffix
+        enum ParameterError: Error {
+            case notFileUrl(URL), noSuffixes, emptySuffix
+            case directorySeen(next: DeployPath, prior: DeployPath)
         }
-        guard root.isFileURL else { throw ProgramError.notFileUrl }
-        guard !suffixes.isEmpty else { throw ProgramError.noSuffixes }
+        guard root.isFileURL else { throw ParameterError.notFileUrl(root) }
+        guard !suffixes.isEmpty else { throw ParameterError.noSuffixes }
         guard nil == suffixes.first(where: {$0.isEmpty}) else {
-            throw ProgramError.emptySuffix
+            throw ParameterError.emptySuffix
         }
-        // Manage recursion directly to manage logical paths via links
-        var roots = [DeployPath]() // one per directory
+        // Manage recursion directly, produce logical paths for symbolic links.
+        // One element per directory remaining to traverse
+        var roots = [DeployPath]()
 
+        // Avoid infinite loops by not adding roots already seen
+        // One element per dir added in roots
+        var dirsSeen = Dictionary<URL, DeployPath>()
+
+        func addRootIfUnseen(_ root: DeployPath) throws {
+            let key = root.url.standardizedFileURL
+            if let prior = dirsSeen[key] {
+                throw ParameterError.directorySeen(next: root, prior: prior)
+            }
+            dirsSeen[key] = root
+            roots.append(root)
+        }
+
+        // pop last root and make directory enumerator, if available
         func nextDeployEnumerator(
         ) -> (deploy: DeployPath, FileManager.DirectoryEnumerator)? {
           guard !roots.isEmpty else { return nil }
@@ -62,7 +81,15 @@ struct ContentFinder {
           ).map { (deploy, $0) }
         }
 
-        roots.append(.init(root, path: ""))
+        // Verify name ends with suffix (case-insensitively) and strip suffix.
+        // non-nil result is not empty.
+        func makeDeployName(_ name: String) -> String? {
+            Self.suffixStart(name: name, suffixes: suffixes).map {
+                String(name[name.startIndex ..< $0])
+            }
+        }
+
+        try addRootIfUnseen(.init(root, path: ""))
 
         let resrcSet = Set(resourceKeys)
         outer:
@@ -78,14 +105,13 @@ struct ContentFinder {
                 // add to roots/enumerator if directory
                 let resources = try next.resourceValues(forKeys: resrcSet)
                 if let isDir = resources.isDirectory, isDir {
-                    roots.append(deploy.child(next, name: name))
+                    try addRootIfUnseen(deploy.child(next, name: name))
                     continue
                 }
-                // skip unless suffix, then strip suffix from name
-                let suffix = suffixes.first { name.hasSuffix($0) }
-                guard let suffix else { continue }
-                let end = name.index(name.endIndex, offsetBy: -suffix.count)
-                let deployName = String(name[name.startIndex ..< end])
+                // skip unless it ends with suffix, and strip suffix from name
+                guard let deployName = makeDeployName(name) else {
+                    continue
+                }
 
                 let content = DeployContent(
                     url: next,
@@ -99,15 +125,41 @@ struct ContentFinder {
         }
     }
 
-    public struct DeployContent {
-        public let url: URL
-        public let path: String
-        public let resourceValues: URLResourceValues
+    /// Find start index of first matching suffix, ignoring case (if any)
+    /// - Parameters:
+    ///   - name: String to search in
+    ///   - suffixes: Array of String suffixes to search
+    /// - Returns: String.Index into name of first character of first suffix to match
+    static func suffixStart(
+        name: String,
+        suffixes: [String]
+    ) -> String.Index? {
+        let options: String.CompareOptions
+            = [.backwards, .anchored, .caseInsensitive]
+        for suffix in suffixes {
+            let range = name.range(of: suffix, options: options)
+            if let range, range.upperBound == name.endIndex,
+               range.lowerBound > name.startIndex { // not empty
+               return range.lowerBound
+            }
+        }
+        return nil
     }
 
-    private struct DeployPath {
+    struct DeployContent {
         let url: URL
         let path: String
+        let resourceValues: URLResourceValues
+    }
+
+    struct DeployPath: Sendable, CustomStringConvertible {
+        let url: URL
+        /// Deploy paths start with the root name
+        /// and use `/` as the name/segment separator (like URL path)
+        let path: String
+        var description: String {
+            "\n-  url: \(url.absoluteString)\n- path: \(path)"
+        }
         init(_ url: URL, path: String) {
             self.url = url
             self.path = path
@@ -122,3 +174,4 @@ struct ContentFinder {
         }
     }
 }
+
