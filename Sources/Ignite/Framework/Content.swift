@@ -143,8 +143,9 @@ public struct Content {
         path = metadata["path"] as? String ?? deployPath
 
         // Save the first subfolder in the path as the article's type
-        if let slash = path.firstIndex(of: "/") {
-            metadata["type"] = String(path[path.startIndex..<slash])
+        let pathParts = path.split(separator: "/") // removes empty
+        if 1 < pathParts.count { // no type if not in subdirectory
+            metadata["type"] = pathParts[0]
         }
 
         if let date = parseMetadataDate(for: "date") {
