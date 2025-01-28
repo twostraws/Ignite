@@ -33,17 +33,12 @@ struct OpacityModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with opacity applied
     func body(content: some HTML) -> any HTML {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "en-US")
-        formatter.maximumFractionDigits = 1
         if let percentage, percentage != 100% {
-            let formattedNumber = formatter.string(for: percentage) ?? percentage.value.formatted()
-            return content.style(.opacity, formattedNumber)
+            content.style(.opacity, NumberFormatter.format(percentage))
         } else if let doubleValue, doubleValue != 1 {
-            let formattedNumber = formatter.string(for: doubleValue) ?? doubleValue.formatted()
-            return content.style(.opacity, formattedNumber)
+            content.style(.opacity, NumberFormatter.format(doubleValue))
         }
-        return content
+        content
     }
 }
 
