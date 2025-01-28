@@ -17,8 +17,8 @@ extension String {
        var result = ""
        var remainingHash = hash
 
-       // Generate exactly 4 characters
-       for _ in 0..<4 {
+       // Generate exactly 5 characters
+       for _ in 0..<5 {
            let index = Int(remainingHash % UInt64(charset.count))
            result.append(charset[index])
            remainingHash /= UInt64(charset.count)
