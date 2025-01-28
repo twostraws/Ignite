@@ -181,4 +181,22 @@ struct DateRFC822Tests {
     func outputs_expected_result(instance: Instance) async throws {
         #expect(instance.input.asRFC822() == instance.expected)
     }
+    
+    @Test("Test Against Known Output for New York Time", arguments: [
+        Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 00:21:41 -0400"),
+        Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 10:08:38 -0400"),
+        Instance(input: Date(timeIntervalSince1970: -3284356034.069809), expected: "Sun, 03 Dec 1865 09:56:43 -045602"),
+        Instance(input: Date(timeIntervalSince1970: 17552683531.75113), expected: "Fri, 22 Mar 2526 21:25:31 -0400"),
+        Instance(input: Date(timeIntervalSince1970: 52184037958.68115), expected: "Thu, 24 Aug 3623 18:05:58 -0400"),
+        Instance(input: Date(timeIntervalSince1970: -46964633818.02554), expected: "Tue, 29 Sep 0481 15:26:59 -045602"),
+        Instance(input: Date(timeIntervalSince1970: 9676773717.779556), expected: "Wed, 23 Aug 2276 12:41:57 -0400"),
+        Instance(input: Date(timeIntervalSince1970: -46716978084.27513), expected: "Sat, 05 Aug 0489 00:42:33 -045602"),
+        Instance(input: Date(timeIntervalSince1970: 60228133082.71135), expected: "Sun, 21 Jul 3878 16:58:02 -0400"),
+        Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 09:27:23 -045602"),
+    ])
+    func outputs_expected_result_for_new_york_time(instance: Instance) async throws {
+        let timezone = TimeZone(abbreviation: "EDT")
+        #expect(instance.input.asRFC822(timeZone: timezone) == instance.expected)
+    }
+
 }
