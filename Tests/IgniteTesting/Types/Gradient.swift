@@ -30,7 +30,7 @@ struct GradientTests {
         """
         )
     }
-    
+
     @Test("radialGradient")
     func radialGradient() async throws {
         let element = Gradient.radialGradient(colors: .red, .blue)
@@ -43,7 +43,7 @@ struct GradientTests {
         """
         )
     }
-    
+
     @Test("conicGradient should default to 0deg")
     func conicGradient() async throws {
         let element = Gradient.conicGradient(colors: .red, .blue)
@@ -56,12 +56,11 @@ struct GradientTests {
         """
         )
     }
-    
+
     @Test("conicGradient should use correct angles", arguments: [45, 90, 180])
     func conicGradient(angle: Int) async throws {
         let element = Gradient.conicGradient(colors: .red, .blue, angle: angle)
         let output = element.description
-        
 
         #expect(output ==
         """
