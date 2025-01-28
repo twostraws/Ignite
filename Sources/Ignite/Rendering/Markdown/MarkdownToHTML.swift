@@ -317,7 +317,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     /// - Returns: A HTML <table> element, with <thead> and
     /// <tbody> if they are provided.
     public mutating func visitTable(_ table: Markdown.Table) -> String {
-        var output = "<table>"
+        var output = "<table class=\"table\">"
 
         if table.head.childCount > 0 {
             output += "<thead>"
