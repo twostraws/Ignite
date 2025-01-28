@@ -161,7 +161,7 @@ struct URLRelativeTests {
         #expect(relativePath == "%20")
         // empty input results in empty output;
         // %20 is the URL-encoded representation
-        // of a space character
+        // of a space character.
     }
 
     @Test("For a blank base URL")
