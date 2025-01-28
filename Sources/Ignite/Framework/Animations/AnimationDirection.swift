@@ -6,7 +6,7 @@
 //
 
 /// Specifies the direction of an animation's playback.
-public enum AnimationDirection: String, Sendable {
+public enum AnimationDirection: String, Hashable, Sendable {
     /// Plays the animation normally from start to finish.
     case automatic = "normal"
 
