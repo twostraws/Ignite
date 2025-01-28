@@ -40,7 +40,7 @@ struct DateRFC822Tests {
     func outputs_expected_result(instance: Instance) async throws {
         #expect(instance.input.asRFC822() == instance.expected)
     }
-    
+
     @Test("Test Against Known Output for Greenwich Mean Time", arguments: [
         Instance(input: Date(timeIntervalSince1970: 20012346618.957466), expected: "Fri, 02 Mar 2604 09:10:18 +0000"),
         Instance(input: Date(timeIntervalSince1970: 56076958399.89086), expected: "Tue, 03 Jan 3747 20:53:19 +0000"),
@@ -51,7 +51,7 @@ struct DateRFC822Tests {
         Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 04:59:34 +0000"),
         Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 07:08:04 +0000"),
         Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Thu, 11 Jul 2261 17:55:33 +0000"),
-        Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 14:31:51 +0000"),
+        Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 14:31:51 +0000")
     ])
     func outputs_expected_result_for_greenwich_mean_time(instance: Instance) async throws {
         // GMT
@@ -69,7 +69,7 @@ struct DateRFC822Tests {
         Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 00:59:34 -0400"),
         Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 03:08:04 -0400"),
         Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Thu, 11 Jul 2261 13:55:33 -0400"),
-        Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 09:31:51 -0500"),
+        Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 09:31:51 -0500")
     ])
     func outputs_expected_result_for_new_york_time(instance: Instance) async throws {
         // EDT - America/New_York
@@ -89,7 +89,7 @@ struct DateRFC822Tests {
         Instance(input: Date(timeIntervalSince1970: 30573435574.337566), expected: "Sat, 01 Nov 2938 02:29:34 -0230"),
         Instance(input: Date(timeIntervalSince1970: 2818825684.6154914), expected: "Tue, 29 Apr 2059 04:38:04 -0230"),
         Instance(input: Date(timeIntervalSince1970: 9199677333.36627), expected: "Thu, 11 Jul 2261 15:25:33 -0230"),
-        Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 11:01:51 -0330"),
+        Instance(input: Date(timeIntervalSince1970: 53706378711.11124), expected: "Fri, 20 Nov 3671 11:01:51 -0330")
     ])
     func outputs_expected_result_for_st_johns_time(instance: Instance) async throws {
 
