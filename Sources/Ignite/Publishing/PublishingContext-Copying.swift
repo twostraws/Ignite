@@ -31,7 +31,7 @@ extension PublishingContext {
 
     /// Copies all files from the project's "Assets" directory to the build output's root directory.
     func copyAssets() {
-        guard FileManager.default.fileExists(atPath: assetsDirectory.path()) else {
+        guard FileManager.default.fileExists(atPath: assetsDirectory.decodedPath) else {
             return
         }
 
@@ -54,7 +54,7 @@ extension PublishingContext {
 
     /// Copies custom font files from the project's "Fonts" directory to the build output's "fonts" directory.
     func copyFonts() {
-        guard FileManager.default.fileExists(atPath: fontsDirectory.path()) else {
+        guard FileManager.default.fileExists(atPath: fontsDirectory.decodedPath) else {
             return
         }
 
