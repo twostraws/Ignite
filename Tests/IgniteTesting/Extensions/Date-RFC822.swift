@@ -11,6 +11,10 @@ import Testing
 @testable import Ignite
 
 /// Tests for the `Date-RFC822` extension.
+///
+/// NOTE: These tests only test against dates in the Unix Epoch (since January 1, 1970, see https://en.wikipedia.org/wiki/Unix_time)
+/// testing time zone output against historical times (times before standardized time zones)
+/// is tricky and beyond the scope of what this project needs.
 @Suite("Date-RFC822 Tests")
 @MainActor
 struct DateRFC822Tests {
@@ -20,6 +24,27 @@ struct DateRFC822Tests {
         let expected: String
     }
 
+    @Test("Generate Example Dates")
+    func generateExampleDatesForTesting() {
+        for _ in 0 ..< 10 {
+            let time = TimeInterval.random(in: 0 ..< Date.distantFuture.timeIntervalSince1970)
+            print(time)
+        }
+        
+        /* Output
+         20012346618.957466
+         56076958399.89086
+         43889947931.30432
+         60401587537.13003
+         2887257381.52073
+         15764928045.389473
+         30573435574.337566
+         2818825684.6154914
+         9199677333.36627
+         53706378711.11124
+         */
+    }
+    
     @Test("Print Out supported timezones with abbreviations")
     func reportTimeZoneInfo() async throws {
         for (abbreviation, identifier) in TimeZone.abbreviationDictionary {
