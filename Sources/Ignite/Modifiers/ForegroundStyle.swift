@@ -6,7 +6,7 @@
 //
 
 /// Common foreground styles that allow for clear readability.
-public enum ForegroundStyle: String {
+public enum ForegroundStyle: String, Sendable, CaseIterable {
     case primary = "text-primary"
     case primaryEmphasis = "text-primary-emphasis"
     case secondary = "text-body-secondary"
