@@ -14,7 +14,7 @@ import Testing
 @Suite("CodeBlock Tests")
 @MainActor
 struct CodeBlockTests {
-    
+
     init() throws {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
