@@ -14,7 +14,7 @@ import Testing
 @Suite("ForegroundStyle Tests")
 @MainActor
 struct ForegroundStyleTests {
-    @Test("Common foreground styles Test", arguments: ForegroundStyle.allCases)
+    @Test("Common Foreground Styles Test", arguments: ForegroundStyle.allCases)
     func commonForegroundStyle(style: ForegroundStyle) async throws {
         let element = Text("Hello").foregroundStyle(style)
 
@@ -23,7 +23,7 @@ struct ForegroundStyleTests {
         #expect(output == "<p class=\"\(style.rawValue)\">Hello</p>")
     }
 
-    @Test("Color foreground styles Test", arguments:
+    @Test("Color Foreground Styles Test", arguments:
             zip(
                 [Color.white,
                  .black,
@@ -48,7 +48,7 @@ struct ForegroundStyleTests {
         #expect(output == "<p style=\"color: \(value)\">Hello</p>")
     }
 
-    @Test("Color foreground styles Test", arguments: ["white",
+    @Test("String Foreground Styles Test", arguments: ["white",
                                                       "black",
                                                       "red",
                                                       "blue"
@@ -59,6 +59,6 @@ struct ForegroundStyleTests {
 
         let output = element.render()
 
-              #expect(output == "<p style=\"color: \(string)\">Hello</p>")
+        #expect(output == "<p style=\"color: \(string)\">Hello</p>")
     }
 }
