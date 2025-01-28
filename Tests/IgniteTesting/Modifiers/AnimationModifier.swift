@@ -27,11 +27,9 @@ struct AnimationModifierTests {
         let output = element.render()
 
         // Example output:
-        // <div class="animation-H57c-transform" style="transform-style: preserve-3d">
-        // <div class="animation-H57c-hover"><p><span>This is a Span</span></p></div></div>
-        // The 'H57c' is a random element, that varies at runtime but should be the same for both divs
-        // (?<code>[a-zA-Z0-9]{5}) matches that and names it `code`; \k<code> re-uses that value
-        // to ensure that the same random part is used in both div's
+        // <div class="animation-H57c1-transform" style="transform-style: preserve-3d">
+        // <div class="animation-H57c1-hover"><p><span>This is a Span</span></p></div></div>
+        // Where 'H57c1' is the stable ID of the animation, used to generate the CSS class name
         let pattern = #"""
             <div class="animation-(?<code>[a-zA-Z0-9]{5})-transform" style="transform-style: preserve-3d">\
             <div class="animation-\k<code>-hover">\
