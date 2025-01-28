@@ -18,6 +18,15 @@ struct MetaTagTests {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
 
+    @Test("Meta tag with type enum and content a URL")
+    func withEnumAndContentURL() async throws {
+        let element = MetaTag(.twitterDomain, content: URL(string: "https://example.com?s=searching#target")!)
+
+        let output = element.render()
+
+        #expect(output == "<meta content=\"https://example.com?s=searching#target\" name=\"twitter:domain\" />")
+    }
+
     @Test("Meta tag with name and content both strings")
     func withNameAndContentBothStrings() async throws {
         let element = MetaTag(name: "tagname", content: "my content")
@@ -27,15 +36,6 @@ struct MetaTagTests {
         #expect(output == "<meta content=\"my content\" name=\"tagname\" />")
     }
 
-    @Test("Meta tag with name a string and content a URL")
-    func withNameStringAndContentURL() async throws {
-        let element = MetaTag(name: "tagname", content: URL(string: "https://example.com?s=searching#target")!)
-
-        let output = element.render()
-
-        #expect(output == "<meta content=\"https://example.com?s=searching#target\" name=\"tagname\" />")
-    }
-
     @Test("Meta tag with property and content both strings")
     func withPropertyAndContentBothStrings() async throws {
         let element = MetaTag(property: "unique", content: "my value")
@@ -43,15 +43,6 @@ struct MetaTagTests {
         let output = element.render()
 
         #expect(output == "<meta content=\"my value\" property=\"unique\" />")
-    }
-
-    @Test("Meta tag with property a string and content as URL")
-    func withPropertyStringAndContentURL() async throws {
-        let element = MetaTag(property: "different", content: URL(string: "https://example.com?s=searching#target")!)
-
-        let output = element.render()
-
-        #expect(output == "<meta content=\"https://example.com?s=searching#target\" property=\"different\" />")
     }
 
     @Test("Meta tag with character set only")
@@ -64,7 +55,7 @@ struct MetaTagTests {
     }
 
     func metaTagCoreFieldsMatch(_ actual: MetaTag, _ expected: MetaTag) -> Bool {
-        actual.name == expected.name && actual.content == expected.content && actual.charset == expected.charset
+        actual.value == expected.value && actual.content == expected.content && actual.charset == expected.charset
     }
 
     @Test("Social sharing tags with no image, description, or www")
@@ -79,13 +70,13 @@ struct MetaTagTests {
         let tags = MetaTag.socialSharingTags(for: page)
 
         let expectedTags: [MetaTag] = [
-            MetaTag(property: "og:site_name", content: "My Test Site"),
-            MetaTag(property: "og:title", content: "My Page Title"),
-            MetaTag(property: "twitter:title", content: "My Page Title"),
-            MetaTag(property: "og:url", content: "https://example.com"),
-            MetaTag(property: "twitter:domain", content: "example.com"),
-            MetaTag(property: "twitter:card", content: "summary_large_image"),
-            MetaTag(property: "twitter:dnt", content: "on")
+            MetaTag(.openGraphSiteName, content: "My Test Site"),
+            MetaTag(.openGraphTitle, content: "My Page Title"),
+            MetaTag(.twitterTitle, content: "My Page Title"),
+            MetaTag(.openGraphURL, content: "https://example.com"),
+            MetaTag(.twitterDomain, content: "example.com"),
+            MetaTag(.twitterCard, content: "summary_large_image"),
+            MetaTag(.twitterDoNotTrack, content: "on")
         ]
 
         #expect(tags.count == expectedTags.count)
@@ -108,17 +99,17 @@ struct MetaTagTests {
         let actualTags = MetaTag.socialSharingTags(for: page)
 
         let expectedTags: [MetaTag] = [
-            MetaTag(property: "og:site_name", content: "My Test Site"),
-            MetaTag(property: "og:image", content: "https://example.com/image.png"),
-            MetaTag(property: "twitter:image", content: "https://example.com/image.png"),
-            MetaTag(property: "og:title", content: "My Page Title"),
-            MetaTag(property: "twitter:title", content: "My Page Title"),
-            MetaTag(property: "og:description", content: "describing the page"),
-            MetaTag(property: "twitter:description", content: "describing the page"),
-            MetaTag(property: "og:url", content: "https://www.example.com"),
-            MetaTag(property: "twitter:domain", content: "example.com"),
-            MetaTag(property: "twitter:card", content: "summary_large_image"),
-            MetaTag(property: "twitter:dnt", content: "on")
+            MetaTag(.openGraphSiteName, content: "My Test Site"),
+            MetaTag(.openGraphImage, content: "https://example.com/image.png"),
+            MetaTag(.twitterImage, content: "https://example.com/image.png"),
+            MetaTag(.openGraphTitle, content: "My Page Title"),
+            MetaTag(.twitterTitle, content: "My Page Title"),
+            MetaTag(.openGraphDescription, content: "describing the page"),
+            MetaTag(.twitterDescription, content: "describing the page"),
+            MetaTag(.openGraphURL, content: "https://www.example.com"),
+            MetaTag(.twitterDomain, content: "example.com"),
+            MetaTag(.twitterCard, content: "summary_large_image"),
+            MetaTag(.twitterDoNotTrack, content: "on")
         ]
 
         #expect(actualTags.count == expectedTags.count)
