@@ -107,62 +107,61 @@ struct DateRFC822Tests {
             print(timezone.abbreviation())
             for time in times {
                 let date = Date(timeIntervalSince1970: time)
-                print("Instance(input: Date(timeIntervalSince1970: \(time), expected: \"\(date.asRFC822(timeZone: timezone))\"),")
+                print("Instance(input: Date(timeIntervalSince1970: \(time)), expected: \"\(date.asRFC822(timeZone: timezone))\"),")
             }
         }
         /* Output:
          Optional("EST")
-         Instance(input: Date(timeIntervalSince1970: 60228332501.13208, expected: "Wed, 24 Jul 3878 00:21:41 -0400"),
-         Instance(input: Date(timeIntervalSince1970: 27871740518.22975, expected: "Fri, 21 Mar 2853 10:08:38 -0400"),
-         Instance(input: Date(timeIntervalSince1970: -3284356034.069809, expected: "Sun, 03 Dec 1865 09:56:43 -045602"),
-         Instance(input: Date(timeIntervalSince1970: 17552683531.75113, expected: "Fri, 22 Mar 2526 21:25:31 -0400"),
-         Instance(input: Date(timeIntervalSince1970: 52184037958.68115, expected: "Thu, 24 Aug 3623 18:05:58 -0400"),
-         Instance(input: Date(timeIntervalSince1970: -46964633818.02554, expected: "Tue, 29 Sep 0481 15:26:59 -045602"),
-         Instance(input: Date(timeIntervalSince1970: 9676773717.779556, expected: "Wed, 23 Aug 2276 12:41:57 -0400"),
-         Instance(input: Date(timeIntervalSince1970: -46716978084.27513, expected: "Sat, 05 Aug 0489 00:42:33 -045602"),
-         Instance(input: Date(timeIntervalSince1970: 60228133082.71135, expected: "Sun, 21 Jul 3878 16:58:02 -0400"),
-         Instance(input: Date(timeIntervalSince1970: -37373736994.632614, expected: "Tue, 30 Aug 0785 09:27:23 -045602"),
+         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 00:21:41 -0400"),
+         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 10:08:38 -0400"),
+         Instance(input: Date(timeIntervalSince1970: -3284356034.069809), expected: "Sun, 03 Dec 1865 09:56:43 -045602"),
+         Instance(input: Date(timeIntervalSince1970: 17552683531.75113), expected: "Fri, 22 Mar 2526 21:25:31 -0400"),
+         Instance(input: Date(timeIntervalSince1970: 52184037958.68115), expected: "Thu, 24 Aug 3623 18:05:58 -0400"),
+         Instance(input: Date(timeIntervalSince1970: -46964633818.02554), expected: "Tue, 29 Sep 0481 15:26:59 -045602"),
+         Instance(input: Date(timeIntervalSince1970: 9676773717.779556), expected: "Wed, 23 Aug 2276 12:41:57 -0400"),
+         Instance(input: Date(timeIntervalSince1970: -46716978084.27513), expected: "Sat, 05 Aug 0489 00:42:33 -045602"),
+         Instance(input: Date(timeIntervalSince1970: 60228133082.71135), expected: "Sun, 21 Jul 3878 16:58:02 -0400"),
+         Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 09:27:23 -045602"),
          
          NDT
          Optional("GMT-3:30")
-         Instance(input: Date(timeIntervalSince1970: 60228332501.13208, expected: "Wed, 24 Jul 3878 01:51:41 -0230"),
-         Instance(input: Date(timeIntervalSince1970: 27871740518.22975, expected: "Fri, 21 Mar 2853 11:38:38 -0230"),
-         Instance(input: Date(timeIntervalSince1970: -3284356034.069809, expected: "Sun, 03 Dec 1865 11:21:53 -033052"),
-         Instance(input: Date(timeIntervalSince1970: 17552683531.75113, expected: "Fri, 22 Mar 2526 22:55:31 -0230"),
-         Instance(input: Date(timeIntervalSince1970: 52184037958.68115, expected: "Thu, 24 Aug 3623 19:35:58 -0230"),
-         Instance(input: Date(timeIntervalSince1970: -46964633818.02554, expected: "Tue, 29 Sep 0481 16:52:09 -033052"),
-         Instance(input: Date(timeIntervalSince1970: 9676773717.779556, expected: "Wed, 23 Aug 2276 14:11:57 -0230"),
-         Instance(input: Date(timeIntervalSince1970: -46716978084.27513, expected: "Sat, 05 Aug 0489 02:07:43 -033052"),
-         Instance(input: Date(timeIntervalSince1970: 60228133082.71135, expected: "Sun, 21 Jul 3878 18:28:02 -0230"),
-         Instance(input: Date(timeIntervalSince1970: -37373736994.632614, expected: "Tue, 30 Aug 0785 10:52:33 -033052"),
+         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 01:51:41 -0230"),
+         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 11:38:38 -0230"),
+         Instance(input: Date(timeIntervalSince1970: -3284356034.069809), expected: "Sun, 03 Dec 1865 11:21:53 -033052"),
+         Instance(input: Date(timeIntervalSince1970: 17552683531.75113), expected: "Fri, 22 Mar 2526 22:55:31 -0230"),
+         Instance(input: Date(timeIntervalSince1970: 52184037958.68115), expected: "Thu, 24 Aug 3623 19:35:58 -0230"),
+         Instance(input: Date(timeIntervalSince1970: -46964633818.02554), expected: "Tue, 29 Sep 0481 16:52:09 -033052"),
+         Instance(input: Date(timeIntervalSince1970: 9676773717.779556), expected: "Wed, 23 Aug 2276 14:11:57 -0230"),
+         Instance(input: Date(timeIntervalSince1970: -46716978084.27513), expected: "Sat, 05 Aug 0489 02:07:43 -033052"),
+         Instance(input: Date(timeIntervalSince1970: 60228133082.71135), expected: "Sun, 21 Jul 3878 18:28:02 -0230"),
+         Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 10:52:33 -033052"),
          
          WIT
          Optional("GMT+7")
-         Instance(input: Date(timeIntervalSince1970: 60228332501.13208, expected: "Wed, 24 Jul 3878 11:21:41 +0700"),
-         Instance(input: Date(timeIntervalSince1970: 27871740518.22975, expected: "Fri, 21 Mar 2853 21:08:38 +0700"),
-         Instance(input: Date(timeIntervalSince1970: -3284356034.069809, expected: "Sun, 03 Dec 1865 21:59:57 +070712"),
-         Instance(input: Date(timeIntervalSince1970: 17552683531.75113, expected: "Sat, 23 Mar 2526 08:25:31 +0700"),
-         Instance(input: Date(timeIntervalSince1970: 52184037958.68115, expected: "Fri, 25 Aug 3623 05:05:58 +0700"),
-         Instance(input: Date(timeIntervalSince1970: -46964633818.02554, expected: "Wed, 30 Sep 0481 03:30:13 +070712"),
-         Instance(input: Date(timeIntervalSince1970: 9676773717.779556, expected: "Wed, 23 Aug 2276 23:41:57 +0700"),
-         Instance(input: Date(timeIntervalSince1970: -46716978084.27513, expected: "Sat, 05 Aug 0489 12:45:47 +070712"),
-         Instance(input: Date(timeIntervalSince1970: 60228133082.71135, expected: "Mon, 22 Jul 3878 03:58:02 +0700"),
-         Instance(input: Date(timeIntervalSince1970: -37373736994.632614, expected: "Tue, 30 Aug 0785 21:30:37 +070712"),
+         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 11:21:41 +0700"),
+         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 21:08:38 +0700"),
+         Instance(input: Date(timeIntervalSince1970: -3284356034.069809), expected: "Sun, 03 Dec 1865 21:59:57 +070712"),
+         Instance(input: Date(timeIntervalSince1970: 17552683531.75113), expected: "Sat, 23 Mar 2526 08:25:31 +0700"),
+         Instance(input: Date(timeIntervalSince1970: 52184037958.68115), expected: "Fri, 25 Aug 3623 05:05:58 +0700"),
+         Instance(input: Date(timeIntervalSince1970: -46964633818.02554), expected: "Wed, 30 Sep 0481 03:30:13 +070712"),
+         Instance(input: Date(timeIntervalSince1970: 9676773717.779556), expected: "Wed, 23 Aug 2276 23:41:57 +0700"),
+         Instance(input: Date(timeIntervalSince1970: -46716978084.27513), expected: "Sat, 05 Aug 0489 12:45:47 +070712"),
+         Instance(input: Date(timeIntervalSince1970: 60228133082.71135), expected: "Mon, 22 Jul 3878 03:58:02 +0700"),
+         Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 21:30:37 +070712"),
          
          IST
          Optional("GMT+5:30")
-         Instance(input: Date(timeIntervalSince1970: 60228332501.13208, expected: "Wed, 24 Jul 3878 09:51:41 +0530"),
-         Instance(input: Date(timeIntervalSince1970: 27871740518.22975, expected: "Fri, 21 Mar 2853 19:38:38 +0530"),
-         Instance(input: Date(timeIntervalSince1970: -3284356034.069809, expected: "Sun, 03 Dec 1865 20:46:05 +055320"),
-         Instance(input: Date(timeIntervalSince1970: 17552683531.75113, expected: "Sat, 23 Mar 2526 06:55:31 +0530"),
-         Instance(input: Date(timeIntervalSince1970: 52184037958.68115, expected: "Fri, 25 Aug 3623 03:35:58 +0530"),
-         Instance(input: Date(timeIntervalSince1970: -46964633818.02554, expected: "Wed, 30 Sep 0481 02:16:29 +055328"),
-         Instance(input: Date(timeIntervalSince1970: 9676773717.779556, expected: "Wed, 23 Aug 2276 22:11:57 +0530"),
-         Instance(input: Date(timeIntervalSince1970: -46716978084.27513, expected: "Sat, 05 Aug 0489 11:32:03 +055328"),
-         Instance(input: Date(timeIntervalSince1970: 60228133082.71135, expected: "Mon, 22 Jul 3878 02:28:02 +0530"),
-         Instance(input: Date(timeIntervalSince1970: -37373736994.632614, expected: "Tue, 30 Aug 0785 20:16:53 +055328"),
+         Instance(input: Date(timeIntervalSince1970: 60228332501.13208), expected: "Wed, 24 Jul 3878 09:51:41 +0530"),
+         Instance(input: Date(timeIntervalSince1970: 27871740518.22975), expected: "Fri, 21 Mar 2853 19:38:38 +0530"),
+         Instance(input: Date(timeIntervalSince1970: -3284356034.069809), expected: "Sun, 03 Dec 1865 20:46:05 +055320"),
+         Instance(input: Date(timeIntervalSince1970: 17552683531.75113), expected: "Sat, 23 Mar 2526 06:55:31 +0530"),
+         Instance(input: Date(timeIntervalSince1970: 52184037958.68115), expected: "Fri, 25 Aug 3623 03:35:58 +0530"),
+         Instance(input: Date(timeIntervalSince1970: -46964633818.02554), expected: "Wed, 30 Sep 0481 02:16:29 +055328"),
+         Instance(input: Date(timeIntervalSince1970: 9676773717.779556), expected: "Wed, 23 Aug 2276 22:11:57 +0530"),
+         Instance(input: Date(timeIntervalSince1970: -46716978084.27513), expected: "Sat, 05 Aug 0489 11:32:03 +055328"),
+         Instance(input: Date(timeIntervalSince1970: 60228133082.71135), expected: "Mon, 22 Jul 3878 02:28:02 +0530"),
+         Instance(input: Date(timeIntervalSince1970: -37373736994.632614), expected: "Tue, 30 Aug 0785 20:16:53 +055328"),
 
-         
          */
     }
 
