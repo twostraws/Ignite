@@ -40,13 +40,13 @@ struct FeedGenerator {
             .prefix(site.feedConfiguration.contentCount)
             .map { item in
                 var itemXML = """
-                <item>\
-                <guid isPermaLink="true">\(item.path(in: site))</guid>\
-                <title>\(item.title)</title>\
-                <link>\(item.path(in: site))</link>\
-                <description><![CDATA[\(item.description)]]></description>\
-                <pubDate>\(item.date.asRFC822)</pubDate>
-                """
+            <item>\
+            <guid isPermaLink="true">\(item.path(in: site))</guid>\
+            <title>\(item.title)</title>\
+            <link>\(item.path(in: site))</link>\
+            <description><![CDATA[\(item.description)]]></description>\
+            <pubDate>\(item.date.asRFC822())</pubDate>
+            """
 
                 let authorName = item.author ?? site.author
 
