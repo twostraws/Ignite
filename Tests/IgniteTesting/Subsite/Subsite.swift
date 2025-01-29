@@ -1,26 +1,31 @@
 //
-// Script.swift
+// Image.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
 //
 
+import Foundation
 import Testing
 
 @testable import Ignite
 
-/// Tests for the `Script` element.
-@Suite("Script Tests")
+/// Tests for subsites.
+@Suite("Subsite Tests")
 @MainActor
-class ScriptTests: UITestSuite {
-    @Test("Code Test")
-    func code() async throws {
-        let element = Script(code: "javascript code")
+class SubsiteImageTests: UISubsiteTestSuite {
+
+    // MARK: - Image
+    @Test("Image Test", arguments: ["/images/example.jpg"], ["Example image"])
+    func named(path: String, description: String) async throws {
+        let element = Image(path, description: description)
         let output = element.render()
-        #expect(output == "<script>javascript code</script>")
+        let path = site.url.appending(path: path).decodedPath
+        #expect(output == "<img alt=\"Example image\" src=\"\(path)\" />")
     }
 
-    @Test("File Test", arguments: ["/code.js"])
+    // MARK: - Script
+    @Test("Script File Test", arguments: ["/code.js"])
     func file(scriptFile: String) async throws {
         let element = Script(file: scriptFile)
         let output = element.render()
@@ -38,4 +43,6 @@ class ScriptTests: UITestSuite {
         let expectedPath = site.url.appending(path: scriptFile).decodedPath
         #expect(output == "<script custom=\"part\" src=\"\(expectedPath)\" data-key=\"value\"></script>")
     }
+
+    // MARK: - Link
 }

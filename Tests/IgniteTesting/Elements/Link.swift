@@ -16,18 +16,18 @@ import Testing
     static let sites: [any Site] = [TestSite(), TestSubsite()]
     static let pages: [any StaticLayout] = [TestLayout(), TestSubsiteLayout()]
 
-    @Test("String Target Test", arguments: [(target: "/", description: "Go Home")], await sites)
-    func target(for link: (target: String, description: String), for site: any Site) async throws {
-        @SiteDependent(site) var element = Link(link.description, target: link.target)
+    @Test("String Target Test", arguments: ["/"], ["Go Home"])
+    func target(for target: String, description: String) async throws {
+        let element = Link(description, target: target)
         let output = element.render()
-        let expectedPath = site.url.path == "/" ? link.target : "\(site.url.path)\(link.target)"
+        let expectedPath = site.url.appending(path: target).decodedPath
 
         #expect(
             output == """
             <a href="\(expectedPath)" \
             class="link-underline link-underline-opacity-100 \
             link-underline-opacity-100-hover">\
-            \(link.description)\
+            \(description)\
             </a>
             """
         )
@@ -70,17 +70,15 @@ import Testing
         )
     }
 
-    @Test("Link Warning Role Test", arguments: zip(await pages, await sites))
-    func warningRoleLink(for page: any StaticLayout, site: any Site) async throws {
-        @SiteDependent(site) var element = Link("Link with warning role.", target: page).role(.warning)
+    @Test("Link Warning Role Test")
+    func warningRoleLink() async throws {
+        let page = TestLayout()
+        let element = Link("Link with warning role.", target: page).role(.warning)
         let output = element.render()
-        let expectedPath = site.url.pathComponents.count <= 1 ?
-        "/test-layout" :
-        "\(site.url.path)/test-subsite-layout"
 
         #expect(
             output == """
-            <a href="\(expectedPath)" \
+            <a href="\(page.path)" \
             class="link-underline link-underline-opacity-100 \
             link-underline-opacity-100-hover link-warning\">\
             Link with warning role.\

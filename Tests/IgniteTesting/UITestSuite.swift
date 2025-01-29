@@ -14,6 +14,8 @@ import Foundation
 /// and cleanup, ensuring each test starts with a fresh context.
 @MainActor
 class UITestSuite {
+    var site: any Site { TestSite() }
+
     /// Creates a new test instance and initializes the publishing context.
     init() throws {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
@@ -24,5 +26,13 @@ class UITestSuite {
         Task { @MainActor in
             try? PublishingContext.initialize(for: TestSite(), from: #filePath)
         }
+    }
+}
+
+class UISubsiteTestSuite: UITestSuite {
+    override var site: any Site { TestSubsite() }
+
+    override init() throws {
+        try PublishingContext.initialize(for: TestSubsite(), from: #filePath)
     }
 }
