@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Image` element.
 @Suite("Image Tests")
 @MainActor
-class ImageTests: SiteTestSuite {
+class ImageTests: IgniteSuite {
     @Test("Image Test", arguments: ["/images/example.jpg"], ["Example image"])
     func named(path: String, description: String) async throws {
         let element = Image(path, description: description)
