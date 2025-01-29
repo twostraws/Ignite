@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `DoubleClickModifier` modifier.
 @Suite("DoubleClickModifier Tests")
 @MainActor
-class DoubleClickModifierTests: UITestSuite {
+class DoubleClickModifierTests: IgniteSuite {
     @Test("ExampleTest")
     func example() async throws {
 

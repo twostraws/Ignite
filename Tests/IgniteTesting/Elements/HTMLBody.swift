@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `title` element.
 @Suite("Body Tests")
 @MainActor
-class SubsiteBodyTests: UITestSuite {
+class SubsiteBodyTests: IgniteSuite {
     static let sites: [any Site] = [TestSite(), TestSubsite()]
 
     @Test("Simple Body Test", arguments: await sites)

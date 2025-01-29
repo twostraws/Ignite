@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Audio` element.
 @Suite("Audio Tests")
 @MainActor
-class AudioTests: UITestSuite {
+class AudioTests: IgniteSuite {
     @Test("Lone File Audio", arguments: ["/audio/example.mp3"])
     func loneFileAudio(audioFile: String) async throws {
         let element = Audio(audioFile)

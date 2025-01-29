@@ -12,8 +12,10 @@ import Foundation
 ///
 /// This class automatically initializes the publishing context with a test site during initialization
 /// and cleanup, ensuring each test starts with a fresh context.
+///
+/// - Important: Subclassing is required for suites that test `HTML` elements or modifiers.
 @MainActor
-class UITestSuite {
+class IgniteSuite {
     var site: any Site { TestSite() }
 
     /// Creates a new test instance and initializes the publishing context.
@@ -29,7 +31,7 @@ class UITestSuite {
     }
 }
 
-class UISubsiteTestSuite: UITestSuite {
+class IgniteSubsiteSuite: IgniteSuite {
     override var site: any Site { TestSubsite() }
 
     override init() throws {

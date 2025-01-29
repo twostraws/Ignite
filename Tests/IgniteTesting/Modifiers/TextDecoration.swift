@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `TextDecoration` modifier.
 @Suite("TextDecoration Tests")
 @MainActor
-class TextDecorationModifierTests: UITestSuite {
+class TextDecorationModifierTests: IgniteSuite {
     @Test("TextDecoration modifiers test", arguments: TextDecoration.allCases)
     func textDecorationNone(_ decoration: TextDecoration) async throws {
         let element = Span("Hello, World!").textDecoration(decoration)

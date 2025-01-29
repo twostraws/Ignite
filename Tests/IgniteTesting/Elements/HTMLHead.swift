@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `HTMLHead` element.
 @Suite("HTMLHead Tests")
 @MainActor
-class HTMLHeadTests: UITestSuite {
+class HTMLHeadTests: IgniteSuite {
     @Test("Highlighting meta tags are sorted")
     func highlighterThemesAreSorted() async throws {
         let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .twilight])

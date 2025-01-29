@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `EventModifier` action.
 @Suite("EventModifier Tests")
 @MainActor
-class EventModifierTests: UITestSuite {
+class EventModifierTests: IgniteSuite {
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "section"]
 
     private static let events: [EventType] = [

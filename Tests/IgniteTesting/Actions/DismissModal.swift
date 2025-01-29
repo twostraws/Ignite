@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `DismissModal` action.
 @Suite("DismissModal Tests")
 @MainActor
-class DismissModalTests: UITestSuite {
+class DismissModalTests: IgniteSuite {
     @Test("ExampleTest")
     func example() async throws {
 

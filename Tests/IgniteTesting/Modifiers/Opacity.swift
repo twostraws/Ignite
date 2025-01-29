@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Opacity` modifier.
 @Suite("Opacity Tests")
 @MainActor
-class OpacityTests: UITestSuite {
+class OpacityTests: IgniteSuite {
     @Test("Text Opacity Test", arguments: ["This is a test", "Another test"])
     func textOpacity(text: String) async throws {
         let element = Text(text).opacity(0.5)

@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Include` element.
 @Suite("Include Tests")
 @MainActor
-class IncludeTests: UITestSuite {
+class IncludeTests: IgniteSuite {
     @Test("Basic Include")
     func basicInclude() async throws {
         let element = Include("important.html")

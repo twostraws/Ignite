@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Hint` modifier.
 @Suite("Hint Tests")
 @MainActor
-class HintTests: UITestSuite {
+class HintTests: IgniteSuite {
     @Test("Markdown Hint")
     func markdownHint() async throws {
         let element = Text {

@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `ClickModifier` modifier.
 @Suite("ClickModifier Tests")
 @MainActor
-class ClickModifierTests: UITestSuite {
+class ClickModifierTests: IgniteSuite {
     @Test("ExampleTest")
     func example() async throws {
 

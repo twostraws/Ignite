@@ -13,7 +13,7 @@ import Testing
 /// Tests for Strings (aka Plain Text)
 @Suite("String Tests")
 @MainActor
-class StringTests: UITestSuite {
+class StringTests: IgniteSuite {
     @Test("Single Element", arguments: ["This is a test", ""])
     func singleElement(element: String) async throws {
         let element = element

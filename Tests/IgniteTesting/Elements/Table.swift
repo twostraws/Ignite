@@ -12,7 +12,7 @@ import Testing
 
 @Suite("Table Tests")
 @MainActor
-class TableTests: UITestSuite {
+class TableTests: IgniteSuite {
     @Test func simpleTable() async throws {
         let element = Table { }
         let output = element.render()

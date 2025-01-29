@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `ShowElement` action.
 @Suite("ShowElement Tests")
 @MainActor
-class ShowElementTests: UITestSuite {
+class ShowElementTests: IgniteSuite {
     @Test("ExampleTest")
     func example() async throws {
 

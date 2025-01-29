@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Divider` element.
 @Suite("Divider Tests")
 @MainActor
-class DividerTests: UITestSuite {
+class DividerTests: IgniteSuite {
     @Test("Test a single divider")
     func singleDivider() async throws {
         let element = Divider()

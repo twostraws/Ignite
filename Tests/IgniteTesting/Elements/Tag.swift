@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Tag` element.
 @Suite("Tag Tests")
 @MainActor
-class TagTests: UITestSuite {
+class TagTests: IgniteSuite {
     @Test("Basic Tag", arguments: ["tag_1", "tag_2", "tag_3"])
     func basicTag(tagName: String) async throws {
         // Given

@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `HoverModifier` modifier.
 @Suite("HoverModifier Tests")
 @MainActor
-class HoverModifierTests: UITestSuite {
+class HoverModifierTests: SiteTestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

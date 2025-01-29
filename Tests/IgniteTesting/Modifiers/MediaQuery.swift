@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Margin` modifier.
 @Suite("MediaQuery Tests")
 @MainActor
-class MediaQueryTests: UITestSuite {
+class MediaQueryTests: IgniteSuite {
     typealias MediaQueryTestCase = (query: MediaQuery, output: String)
 
     @Test("Test breakpoint queries", arguments: [

@@ -14,7 +14,7 @@ import Testing
 /// Tests for the `Button` element.
 @Suite("Button Tests")
 @MainActor
-class ButtonTests: UITestSuite {
+class ButtonTests: IgniteSuite {
     @Test("Button Test")
     func button() async throws {
         let element = Text {

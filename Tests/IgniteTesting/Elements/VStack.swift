@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `VStack` element.
 @Suite("VStack Tests")
 @MainActor
-class VStackTests: UITestSuite {
+class VStackTests: IgniteSuite {
     @Test("VStack with elements")
     func basicVStack() async throws {
         let element = VStack {

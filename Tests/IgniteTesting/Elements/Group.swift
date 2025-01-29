@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Group` element.
 @Suite("Group Tests")
 @MainActor
-class GroupTests: UITestSuite {
+class GroupTests: IgniteSuite {
     @Test("Group does not change HTML structure")
     func groupDoesNotAddAnyAdditionalHTML() async throws {
         let element = Group {

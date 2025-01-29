@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Quote` element.
 @Suite("Quote Tests")
 @MainActor
-class QuoteTests: UITestSuite {
+class QuoteTests: IgniteSuite {
     @Test("Plain Quote Test", arguments: ["""
     It is a truth universally acknowledged \
     that all good Swift projects must be in need of result builders.
