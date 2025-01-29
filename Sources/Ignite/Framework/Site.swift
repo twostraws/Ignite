@@ -155,7 +155,7 @@ public extension Site {
 
     /// by default, time zone is nil
     /// which means that date output is considered to be GMT
-    var timeZone: TimeZone? { nil }
+    var timeZone: TimeZone? { .gmt }
 
     /// Uses the default light theme based on Bootstrap.
     var lightTheme: (any Theme)? { DefaultLightTheme() }
