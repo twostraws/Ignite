@@ -204,9 +204,9 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     private func renderStandardLink() -> String {
         var linkAttributes = attributes.appending(classes: linkClasses)
 
-        // char[0] of the 'url' is '/' for an asset; not for a site URL
-        let basePath = url.starts(with: "/") ? publishingContext.site.url.path : ""
-        linkAttributes.tag = "a href=\"\(basePath)\(url)\""
+        let url = String(url.trimmingPrefix("/"))
+        let path = publishingContext.site.url.appending(path: url).decodedPath
+        linkAttributes.tag = "a href=\"\(path)\""
         linkAttributes.closingTag = "a"
         return linkAttributes.description(wrapping: content.render())
     }
