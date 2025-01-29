@@ -90,4 +90,21 @@ struct LengthUnitTests {
 
         #expect(element.description == unit)
     }
+
+    @Test("Test default value.")
+    func defaultValue() {
+        let element = LengthUnit.default.stringValue
+
+        #expect(element.description == "infem")
+    }
+
+    @Test("Test is default value.", arguments: [
+        (LengthUnit.em(20), false),
+        (LengthUnit.default, true),
+        (LengthUnit.percent(Percentage(.infinity)), false),
+        (LengthUnit.em(.infinity), true)
+    ])
+    func isDefault(unit: LengthUnit, expected: Bool) {
+        #expect(unit.isDefault == expected)
+    }
 }
