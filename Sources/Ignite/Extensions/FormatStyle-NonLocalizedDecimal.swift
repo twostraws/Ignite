@@ -8,7 +8,8 @@
 import Foundation
 
 extension FormatStyle where Self == FloatingPointFormatStyle<Double>, FormatInput == Double {
-    /// A format style that displays a floating point number with one decimal place, enforcing the use of a `.` as the decimal separator.
+    /// A format style that displays a floating point number with one decimal place,
+    /// enforcing the use of a `.` as the decimal separator.
     static var nonLocalizedDecimal: Self {
         nonLocalizedDecimal(places: 1)
     }
@@ -24,7 +25,8 @@ extension FormatStyle where Self == FloatingPointFormatStyle<Double>, FormatInpu
 }
 
 extension FormatStyle where Self == FloatingPointFormatStyle<Float>, FormatInput == Float {
-    /// A format style that displays a floating point number with one decimal place, enforcing the use of a `.` as the decimal separator.
+    /// A format style that displays a floating point number with one decimal place,
+    /// enforcing the use of a `.` as the decimal separator.
     static var nonLocalizedDecimal: Self {
         nonLocalizedDecimal(places: 1)
     }
