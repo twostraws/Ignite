@@ -7,28 +7,53 @@
 
 import Foundation
 
-extension [String] {
-    func mdLine(
-        head: String? = nil,
-        hn: Int = 2,
-        ul: String = "\n- ",
-        sort: Bool = false,
-        skipHeadIfEmpty: Bool = true
-    ) -> String {
-        if isEmpty && skipHeadIfEmpty { return "" }
-        var out = ""
-        if let head, !head.isEmpty {
-            let h = hn < 1 ? 1 : hn > 6 ? 6 : hn
-            out += "\n"
-            out += String(repeating: "#", count: h)
-            out += " "
-            out += head
+@testable import Ignite
+
+extension ContentFinderTests {
+
+    enum MdHeaderList {
+        case head(level: Int, sort: Bool, skipEmpty: Bool)
+        case h2Quiet
+        case h2SortQuiet
+
+        func md<T: StringProtocol>(
+            _ header: T? = nil,
+            _ list: [T]
+        ) -> String {
+            let (_, sort, skipEmpty) = lvlSrtSkp
+            if list.isEmpty && skipEmpty { return "" }
+            let (headPrefix, listPrefix) = prefixes(header, list.isEmpty)
+            var out = ""
+            if let headPrefix, let header {
+                out += headPrefix
+                out += header
+            }
+            guard let listPrefix, !list.isEmpty else { return out }
+            out += listPrefix // initial
+            let target = sort ? list.sorted() : list
+            out += target.joined(separator: listPrefix)
+            return out
         }
-        if isEmpty { return out }
-        out += ul
-        let target = sort ? sorted() : self
-        out += target.joined(separator: ul)
-        return out
+        // swiftlint:disable:next large_tuple
+        private var lvlSrtSkp: (level: Int, sort: Bool, skipEmpty: Bool) {
+            switch self {
+            case let .head(level, sort, skip): (level, sort, skip)
+            case .h2Quiet: (2, false, true)
+            case .h2SortQuiet: (2, true, true)
+            }
+        }
+        private func prefixes<T: StringProtocol>(
+            _ header: T?,
+            _ hasList: Bool
+        ) -> (head: String?, list: String?) {
+            let (level, _, skipEmpty) = lvlSrtSkp
+            if skipEmpty && !hasList { return (nil, nil) }
+            var head: String?
+            if let header, !header.isEmpty {
+                head = "\n\(String(repeating: "#", count: level)) "
+            }
+            return (head, hasList ? "\n- " : nil)
+        }
     }
 }
 extension ContentFinderTests {
@@ -48,9 +73,9 @@ extension ContentFinderTests {
                 return try Files.makeDir(url: url)
             case let .link(source, dest):
                 let src = Files.makeUrlToFile(baseDir, path: source.path)
-                let d = Files.makeUrlToFile(baseDir, path: dest.path)
+                let dst = Files.makeUrlToFile(baseDir, path: dest.path)
                 do {
-                    try Files.createSymlink(source: src, dest: d)
+                    try Files.createSymlink(source: src, dest: dst)
                 } catch Files.SymlinkErr.symlinkError(let src, _, _) {
                     return (true, src)
                 }
@@ -62,19 +87,19 @@ extension ContentFinderTests {
 
 extension ContentFinderTests.FileItem: CustomStringConvertible {
     var description: String {
-        "\(label)(\(name)\(parent.map{" in: \($0.path)"} ?? ""))"
+        "\(label)(\(name)\(parent.map {" in: \($0.path)"} ?? ""))"
     }
 }
 extension ContentFinderTests.FileItem {
-    var isFile: Bool { Self.fn == index0 }
-    static let (rn, fn, dn, ln) = (0, 1, 2, 3)
+    var isFile: Bool { Self.fileN == index0 }
+    static let (rootN, fileN, dirN, linkN) = (0, 1, 2, 3)
     static let labels = ["root", "file", "dir", "link"]
     private var index0: Int {
         switch self {
-        case .root: Self.rn
-        case .file: Self.fn
-        case .dir: Self.dn
-        case .link: Self.ln
+        case .root: Self.rootN
+        case .file: Self.fileN
+        case .dir: Self.dirN
+        case .link: Self.linkN
         }
     }
 
@@ -82,24 +107,30 @@ extension ContentFinderTests.FileItem {
     var parent: Self? { nameParent.parent }
     var nameParent: (name: String, parent: Self?) {
         switch self {
-        case .root(let n): (n, nil)
-        case let .file(n, p), let .dir(n, p): (n, p)
+        case .root(let name): (name, nil)
+        case let .file(name, parnt), let .dir(name, parnt): (name, parnt)
         case .link(let source, _): source.nameParent
         }
     }
     var label: String { Self.labels[index0] }
 
     func firstMatchingFileSuffix(_ suffixes: [String]) -> String? {
-        !isFile ? nil : suffixes.first { hasFileSuffix($0) }
+        guard
+            isFile,
+            let index = ContentFinder.suffixStart(
+                name: nameParent.name,
+                suffixes: suffixes)
+        else {
+            return nil
+        }
+        return String(nameParent.name[index...])
     }
-    func hasFileSuffix(_ suffix: String) -> Bool {
-        isFile && nameParent.name.hasSuffix(suffix)
-        // TODO add case-insensitive check
-    }
+
     var path: String {
         switch self {
-        case .root(let n): n
-        case let .file(n, p), let .dir(n, p): "\(p.path)/\(n)"
+        case .root(let name): name
+        case let .file(name, parent): "\(parent.path)/\(name)"
+        case let .dir(name, parent): "\(parent.path)/\(name)"
         case let .link(source, _): source.path
         }
     }
@@ -107,6 +138,7 @@ extension ContentFinderTests.FileItem {
 
 extension ContentFinderTests {
     enum Files {
+        // swiftlint:disable:next nesting
         typealias FoundURL = (found: Bool, url: URL)
 
         static func isReachable(_ url: URL, check: Bool = true) -> Bool {
@@ -172,6 +204,7 @@ extension ContentFinderTests {
             return try makeDir(url: url)
         }
         static func createSymlink(source: URL, dest: URL) throws {
+            // swiftlint:disable:next nesting
             typealias Err = SymlinkErr
             if !source.isFileURL {
                 throw Err.sourceNotFileScheme(source)
@@ -192,6 +225,7 @@ extension ContentFinderTests {
                 throw Err.symlinkError(source: source, dest: dest, error: error)
             }
         }
+        // swiftlint:disable:next nesting
         enum SymlinkErr: Error {
             case sourceNotFileScheme(URL), destNotFileScheme(URL)
             case sourceExists(URL), destNotReachable(URL)

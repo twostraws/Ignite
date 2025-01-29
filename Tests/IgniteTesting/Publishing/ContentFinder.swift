@@ -19,8 +19,8 @@ actor ContentFinderTests {
             try run(test)
         } catch {
             if let exp = test.expectError {
-                let m = "\(error)"
-                #expect(m.contains(exp))
+                let message = "\(error)"
+                #expect(message.contains(exp))
             } else {
                 #expect(Bool(false), "\(error)")
             }
@@ -28,15 +28,15 @@ actor ContentFinderTests {
     }
 
     func run(_ test: Tst) throws {
-        guard let baseDir = try Self.makeSuiteBaseDir(test.i) else {
+        guard let baseDir = try Self.makeSuiteBaseDir(test.index) else {
             #expect(Bool(false), "Unable to make suite base dir")
             return
         }
         defer { Self.removeSuiteBaseDir(baseDir) }
 
         // Configure directory tree
-        let root = try test.setupRootPath(baseDir, index: test.i)
-        //defer { try? test.tearDown(baseDir: root) } // deleting suiteDir above
+        let root = try test.setupRootPath(baseDir, index: test.index)
+        // defer { try? test.tearDown(baseDir: root) }  // deleted baseDir above
 
         // Visit directory tree
         var found = [ContentFinder.DeployContent]()
@@ -56,28 +56,30 @@ actor ContentFinderTests {
         let extra = ("extra", foundPaths.subtracting(both.1))
         let missing = ("missing", expectPaths.subtracting(both.1))
         let all = [extra, missing, both]
-        let alls = all.map { Array($0.1).mdLine(head: $0.0, sort: true) }
-        let m = "\n# \(test.i)/\(test.makeRoots)\(alls.joined(separator: ""))"
+        let emit = MdHeaderList.h2SortQuiet
+        let alls = all.map { emit.md($0.0, Array($0.1)) }
+        let allsJoined = alls.joined(separator: "")
+        let message = "\n# \(test.index)/\(test.makeRoots)\(allsJoined)"
         enum Err: Error, CustomStringConvertible {
-            case m(String)
+            case message(String)
             var description: String {
                 switch self {
-                case .m(let s): s
+                case .message(let result): result
                 }
             }
         }
-        Issue.record(Err.m(m))
+        Issue.record(Err.message(message))
     }
 
-    static func makeSuiteBaseDir(_ i: Int) throws -> URL? {
-        let name = "ContentFinder.find_\(i)"
-        var r = try Files.makeTempDir(name: name)
-        if !r.found {
-            return r.url
+    static func makeSuiteBaseDir(_ index: Int) throws -> URL? {
+        let name = "ContentFinder.find_\(index)"
+        var foundUrl = try Files.makeTempDir(name: name)
+        if !foundUrl.found {
+            return foundUrl.url
         }
-        try Files.delete(url: r.url)
-        r = try Files.makeTempDir(name: name)
-        return r.found ? nil : r.url
+        try Files.delete(url: foundUrl.url)
+        foundUrl = try Files.makeTempDir(name: name)
+        return foundUrl.found ? nil : foundUrl.url
     }
 
     static func removeSuiteBaseDir(_ baseDir: URL, caller: String = #function) {
@@ -96,7 +98,7 @@ actor ContentFinderTests {
     }
 
     struct Tst: CustomStringConvertible {
-        let i: Int
+        let index: Int
         let suffixes: [String]
         let items: [FileItem]
         let makeRoots: [String]
@@ -105,14 +107,14 @@ actor ContentFinderTests {
         let expectError: String?  // urk: very weak check for errors
         let inputError: InputError?
         init(
-            _ i: Int,
+            _ index: Int,
             _ makeRoots: [String],
             suffixes: [String] = [".md"],
             items: [FileItem],
             expect: [String]? = nil,
             expectError: String? = nil
         ) {
-            var err: InputError? = nil
+            var err: InputError?
             if makeRoots.isEmpty {
                 err = .emptyRoots
             } else if let index = makeRoots.firstIndex(where: { $0.isEmpty }) {
@@ -122,7 +124,7 @@ actor ContentFinderTests {
             } else if let index = suffixes.firstIndex(where: { $0.isEmpty }) {
                 err = .emptySuffix(index)
             }
-            self.i = i
+            self.index = index
             self.makeRoots = makeRoots
             self.suffixes = suffixes
             self.items = items
@@ -151,12 +153,15 @@ actor ContentFinderTests {
         /// - Parameter suiteBaseDir: Parent directory for test directory
         /// - Returns: URL for test directory, populated per ``items`` ``FileItem``
         func setupRootPath(_ suiteBaseDir: URL, index: Int) throws -> URL {
+            // swiftlint:disable:next nesting
             typealias ItemURL = (item: FileItem, url: URL)
+            // swiftlint:disable:next nesting
             enum Err: Error {
                 case foundTarget(_ url: URL, item: FileItem)
                 case foundTestBaseDir(URL)
                 case duplicateTargetFindDir(path: String, next: URL, prior: URL)
-                case noTargetFindDir(path: String, itemUrls: [ItemURL])
+                case noTargetFindDir(path: String,
+                    itemUrls: [ItemURL])
             }
             let testBaseDir = try makeTestBaseDir(suiteBaseDir, index: index)
             guard !testBaseDir.found else {
@@ -164,7 +169,7 @@ actor ContentFinderTests {
             }
             let maker = FileItemMaker(baseDir: testBaseDir.url)
             let targetPath = makeRoots.first ?? "Never have no roots"
-            var targetFindDir: URL? = nil
+            var targetFindDir: URL?
             var itemUrls = [ItemURL]()
             for item in items {
                 let foundUrl = try maker.make(item)
@@ -205,19 +210,19 @@ actor ContentFinderTests {
 
         var description: String {  // terrible labels
             let root = 1 == makeRoots.count ? makeRoots.first! : "\(makeRoots)"
-            let prefix = "[\(i)] \(root)"
-            let n = " "
+            let prefix = "[\(index)] \(root)"
+            let eol = " " // single-line (test label); use "\n" when debugging
             if let inErr = inputError {
-                return "\(prefix) input error:\(n)\(inErr)"
+                return "\(prefix) input error:\(eol)\(inErr)"
             }
             if let err = expectError {
                 return "\(prefix) error: \(err)"
             }
-            let sf = suffixes == [".md"] ? "" : " suffixes: \(suffixes)"
-            let ep = expectPathsWereDerived ? " expect(derived)" : "expect"
-            let (pre, sep) = " " == n ? (" ", ", ") : ("\n- ", "\n- ")
+            let sfx = suffixes == [".md"] ? "" : " suffixes: \(suffixes)"
+            let exp = expectPathsWereDerived ? " expect(derived)" : "expect"
+            let (pre, sep) = " " == eol ? (" ", ", ") : ("\n- ", "\n- ")
             let eps = Array(expectPaths).sorted().joined(separator: sep)
-            return "\(prefix) \(sf)\(ep)\(pre)\(eps)"
+            return "\(prefix) \(sfx)\(exp)\(pre)\(eps)"
         }
 
         /// Expected deploy path removes the ``findRootPath`` prefix
@@ -239,6 +244,7 @@ actor ContentFinderTests {
             return String(path[start..<end])
         }
 
+        // swiftlint:disable:next nesting
         enum InputError: Error {
             case emptyRoots
             case emptyRoot(Int)
