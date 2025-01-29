@@ -19,9 +19,9 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
 
-    /// The name of the image to display. This should be specified relative to the
-    /// root of your site, e.g. /images/dog.jpg.
-    var name: String?
+    /// The path of the image, either relative to the
+    /// root of your site, e.g. /images/dog.jpg., or as a web address.
+    var path: URL?
 
     /// Loads an image from one of the built-in icons. See
     /// https://icons.getbootstrap.com for the list.
@@ -30,15 +30,15 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     /// An accessibility label for this image, suitable for screen readers.
     var description: String?
 
-    /// Creates a new `Image` instance from the name of an image contained
-    /// in your site's assets. This should be specified relative to the root of your
+    /// Creates a new `Image` instance from the specified path. For an image contained
+    /// in your site's assets, this should be specified relative to the root of your
     /// site, e.g. /images/dog.jpg.
     /// - Parameters:
     ///   - name: The filename of your image relative to the root of your site.
     ///   e.g. /images/welcome.jpg.
     ///   - description: An description of your image suitable for screen readers.
-    public init(_ name: String, description: String? = nil) {
-        self.name = name
+    public init(_ path: String, description: String? = nil) {
+        self.path = URL(string: path)
         self.description = description
     }
 
@@ -58,7 +58,7 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     /// - Parameter name: The filename of your image relative to the root
     /// of your site, e.g. /images/dog.jpg.
     public init(decorative name: String) {
-        self.name = name
+        self.path = URL(string: name)
         self.description = ""
     }
 
@@ -95,14 +95,13 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
 
     /// Renders a user image into the current publishing context.
     /// - Parameters:
-    ///   - image: The user image to render.
+    ///   - path: The user image to render.
     ///   - description: The accessibility label to use.
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
-    private func render(image: String, description: String) -> String {
+    private func render(path: String, description: String) -> String {
         var attributes = attributes
         attributes.selfClosingTag = "img"
-        let path = publishingContext.site.url.appending(path: image).decodedPath
         attributes.append(customAttributes:
             .init(name: "src", value: path),
             .init(name: "alt", value: description)
@@ -115,15 +114,16 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     public func render() -> String {
         if description == nil {
             publishingContext.addWarning("""
-            \(name ?? systemImage ?? "Image"): adding images without a description is not recommended. \
+            \(path?.relativePath ?? systemImage ?? "Image"): adding images without a description is not recommended. \
             Provide a description or use Image(decorative:) to silence this warning.
             """)
         }
 
         if let systemImage {
             return render(icon: systemImage, description: description ?? "")
-        } else if let name = name?.trimmingPrefix("/") {
-            return render(image: String(name), description: description ?? "")
+        } else if let path {
+            let resolvedPath = publishingContext.path(for: path)
+            return render(path: resolvedPath, description: description ?? "")
         } else {
             publishingContext.addWarning("""
             Creating an image with no name or icon should not be possible. \

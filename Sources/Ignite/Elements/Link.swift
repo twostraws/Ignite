@@ -204,8 +204,12 @@ public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownElement {
     private func renderStandardLink() -> String {
         var linkAttributes = attributes.appending(classes: linkClasses)
 
-        let url = String(url.trimmingPrefix("/"))
-        let path = publishingContext.site.url.appending(path: url).decodedPath
+        guard let url = URL(string: url) else {
+            publishingContext.addWarning("One of your links uses an invalid URL.")
+            return ""
+        }
+
+        let path = publishingContext.path(for: url)
         linkAttributes.tag = "a href=\"\(path)\""
         linkAttributes.closingTag = "a"
         return linkAttributes.description(wrapping: content.render())
