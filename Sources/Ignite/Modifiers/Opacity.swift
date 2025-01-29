@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// A modifier that applies opacity styling to HTML elements
 struct OpacityModifier: HTMLModifier {
     /// The opacity value between 0% (transparent) and 100% (opaque)
@@ -32,9 +34,9 @@ struct OpacityModifier: HTMLModifier {
     /// - Returns: The modified HTML with opacity applied
     func body(content: some HTML) -> any HTML {
         if let percentage, percentage != 100% {
-            content.style(.opacity, percentage.value.formatted())
+            content.style(.opacity, percentage.value.formatted(.nonLocalizedDecimal(places: 3)))
         } else if let doubleValue, doubleValue != 1 {
-            content.style(.opacity, doubleValue.formatted())
+            content.style(.opacity, doubleValue.formatted(.nonLocalizedDecimal(places: 3)))
         }
         content
     }
