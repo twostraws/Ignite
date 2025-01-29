@@ -1,5 +1,5 @@
 //
-//  Color.swift
+//  Gradient.swift
 //  Ignite
 //  https://www.github.com/twostraws/Ignite
 //  See LICENSE for license information.
@@ -10,7 +10,7 @@ import Testing
 
 @testable import Ignite
 
-/// Tests for the `Color` type.
+/// Tests for the `Gradient` type.
 @Suite("Gradient Tests")
 @MainActor
 struct GradientTests {
