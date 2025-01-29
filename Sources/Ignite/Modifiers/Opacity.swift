@@ -34,9 +34,9 @@ struct OpacityModifier: HTMLModifier {
     /// - Returns: The modified HTML with opacity applied
     func body(content: some HTML) -> any HTML {
         if let percentage, percentage != 100% {
-            content.style(.opacity, percentage.value.formatted(.nonLocalizedDecimal(decimalPlaces: 3)))
+            content.style(.opacity, percentage.value.formatted(.nonLocalizedDecimal(places: 3)))
         } else if let doubleValue, doubleValue != 1 {
-            content.style(.opacity, doubleValue.formatted(.nonLocalizedDecimal(decimalPlaces: 3)))
+            content.style(.opacity, doubleValue.formatted(.nonLocalizedDecimal(places: 3)))
         }
         content
     }
