@@ -47,7 +47,7 @@ struct StringStrippingTagsTests {
     @Test("When string contains self-closing tags")
     func strippingTags_fromStringWithSelfClosingTags() async throws {
         // Given
-        let input = "<p>Here’s a list of characters: <ul><li>Tom</li><li>Jerry</li><li>Nibbles</li></ul><hr /></p>"
+        let input = "<p>Here’s a list of characters: <ul><li>Tom</li><li>Jerry</li><li>Nibbles</li></ul><hr/></p>"
         // When
         let result = input.strippingTags()
         // Then
