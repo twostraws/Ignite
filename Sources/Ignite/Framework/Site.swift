@@ -72,7 +72,7 @@ public protocol Site: Sendable {
     var url: URL { get }
 
     /// the time zone used to do date output for your site. Defaults to nil
-    /// if nil, then date output will be assume a GMT time zone
+    /// if nil, then date output will assume a GMT time zone
     var timeZone: TimeZone? { get }
 
     /// Choose whether to use a local version of Bootstrap, a remote version,
