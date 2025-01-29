@@ -133,12 +133,11 @@ final class PublishingContext {
     /// - Returns: A string path, either preserving remote URLs or
     /// making local URLs relative to the site root.
     func path(for url: URL) -> String {
-        let isRemote = !url.isFileURL
         let path = String(url.relativeString)
-        return if isRemote {
-            path
-        } else {
+        return if url.isFileURL {
             site.url.appending(path: path).decodedPath
+        } else {
+            path
         }
     }
 
