@@ -8,7 +8,7 @@
 import Foundation
 @testable import Ignite
 
-/// A base class for Ignite tests that manages the publishing context lifecycle.
+/// A base class for Ignite tests that manages the lifecycle of `TestSite`'s publishing context.
 ///
 /// This class automatically initializes the publishing context with a test site during initialization
 /// and cleanup, ensuring each test starts with a fresh context.
@@ -16,25 +16,10 @@ import Foundation
 /// - Important: Subclassing is required for suites that test `HTML` elements or modifiers.
 @MainActor
 class IgniteSuite {
-    var site: any Site { TestSite() }
+    let site: any Site = TestSite()
 
-    /// Creates a new test instance and initializes the publishing context.
+    /// Creates a new test instance and initializes the publishing context for `TestSite`.
     init() throws {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
-    /// Resets the publishing context when the test is deallocated.
-    deinit {
-        Task { @MainActor in
-            try? PublishingContext.initialize(for: TestSite(), from: #filePath)
-        }
-    }
-}
-
-class IgniteSubsiteSuite: IgniteSuite {
-    override var site: any Site { TestSubsite() }
-
-    override init() throws {
-        try PublishingContext.initialize(for: TestSubsite(), from: #filePath)
     }
 }
