@@ -14,8 +14,10 @@ import Testing
 @Suite("Clipped Tests")
 @MainActor
 struct ClippedTests {
-    @Test("ExampleTest")
-    func example() async throws {
-
+    @Test("Clipped Modifier")
+    func clippedModifier() async throws {
+        let element = Text("Hello").clipped()
+        let output = element.render()
+        #expect(output == "<p style=\"overflow: hidden\">Hello</p>")
     }
 }

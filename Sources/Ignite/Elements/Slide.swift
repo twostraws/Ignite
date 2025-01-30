@@ -72,7 +72,7 @@ public struct Slide: BlockHTML {
                     .style(
                         .init(.height, value: "100%"),
                         .init(.objectFit, value: "cover"),
-                        .init(.opacity, value: backgroundOpacity.formatted())
+                        .init(.opacity, value: backgroundOpacity.formatted(.nonLocalizedDecimal))
                     )
             }
 

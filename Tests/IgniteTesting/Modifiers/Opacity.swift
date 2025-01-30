@@ -29,4 +29,26 @@ class OpacityTests: IgniteTestSuite {
 
         #expect(output == "<img alt=\"\(image.description)\" src=\"\(image.path)\" style=\"opacity: 0.2\" />")
     }
+
+    @Test("Checks that the opacity value is correctly formatted", arguments: [
+        (value: 0.123456, expected: "0.123"),
+        (value: 0.15, expected: "0.15"),
+        (value: 0.1, expected: "0.1"),
+        (value: 0.45678, expected: "0.457"),
+        (value: 0, expected: "0")
+    ])
+    func opacityFormatting(testCase: (value: Double, expected: String)) async throws {
+        let element = Text("Test").opacity(testCase.value)
+        let output = element.render()
+
+        #expect(output == "<p style=\"opacity: \(testCase.expected)\">Test</p>")
+    }
+
+    @Test("Checks that full opacity is not rendered")
+    func fullOpacity() async throws {
+        let element = Text("Test").opacity(1)
+        let output = element.render()
+
+        #expect(output == "<p>Test</p>")
+    }
 }

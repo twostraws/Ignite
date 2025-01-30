@@ -14,9 +14,14 @@ import Testing
 @Suite("FeedGenerator Tests")
 @MainActor
 struct FeedGeneratorTests {
-    @Test("Test generateFeed")
-    func generateFeed() async throws {
-        let site = TestSite()
+    static let sites: [any Site] = [
+        TestSite(),
+        TestSite(timeZone: .init(abbreviation: "GMT")!),
+        TestSite(timeZone: .init(abbreviation: "EST")!)
+    ]
+
+    @Test("Test generateFeed", arguments: await sites)
+    func generateFeed(for site: any Site) async throws {
         let feedHref = site.url.appending(path: site.feedConfiguration.path).absoluteString
         var exampleContent = Content()
         exampleContent.title = "Example Title"
@@ -51,7 +56,7 @@ struct FeedGeneratorTests {
         <title>\(exampleContent.title)</title>\
         <link>\(exampleContent.path(in: site))</link>\
         <description><![CDATA[\(exampleContent.description)]]></description>\
-        <pubDate>\(exampleContent.date.asRFC822)</pubDate>\
+        <pubDate>\(exampleContent.date.asRFC822(timeZone: site.timeZone))</pubDate>\
         </item>\
         </channel>\
         </rss>
