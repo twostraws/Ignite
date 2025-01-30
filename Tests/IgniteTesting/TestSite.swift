@@ -13,24 +13,22 @@ struct TestSite: Site {
     var name = "My Test Site"
     var titleSuffix = " - My Test Site"
     var url = URL(static: "https://www.yoursite.com")
+    var timeZone: TimeZone?
 
-    var builtInIconsEnabled: BootstrapOptions = .localBootstrap
-
-    var timeZone: TimeZone? = nil
-    
     var homePage = TestLayout()
     var layout = EmptyLayout()
+    var builtInIconsEnabled: BootstrapOptions = .localBootstrap
+
     var feedConfiguration = FeedConfiguration(
         mode: .descriptionOnly,
         contentCount: 20,
         image: .init(url: "path/to/image.png", width: 100, height: 100)
     )
-    
-    func withTimeZone(_ timeZone: TimeZone) -> TestSite {
-        var site = self
-        site.timeZone = timeZone
-        
-        return site
+
+    init() {}
+
+    init(timeZone: TimeZone) {
+        self.timeZone = timeZone
     }
 }
 
