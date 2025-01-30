@@ -12,7 +12,7 @@ extension Date {
     public func asRFC822(timeZone: TimeZone? = nil) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss Z"
-        formatter.timeZone = timeZone ?? TimeZone(secondsFromGMT: 0)
+        if let timeZone { formatter.timeZone = timeZone }
         return formatter.string(from: self)
     }
 }
