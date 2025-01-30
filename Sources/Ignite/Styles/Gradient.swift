@@ -6,9 +6,9 @@
 //
 
 /// A gradient that transitions between colors.
-public struct Gradient: CustomStringConvertible {
+public struct Gradient: CustomStringConvertible, Sendable {
     /// The type of gradient to render
-    public enum GradientType {
+    public enum GradientType: Sendable {
         /// A linear gradient that transitions between colors along a line
         case linear(angle: Int)
 
