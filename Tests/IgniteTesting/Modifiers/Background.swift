@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Background` modifier.
 @Suite("Background Tests")
 @MainActor
-struct BackgroundTests {
+class BackgroundTests: IgniteTestSuite {
     @Test("Background modifier with Color on Text")
     func textWithColorBackground() async throws {
         let element = Text("Hello, world!").background(.teal)

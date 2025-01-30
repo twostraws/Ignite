@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `ForegroundStyle` modifier.
 @Suite("ForegroundStyle Tests")
 @MainActor
-struct ForegroundStyleTests {
+class ForegroundStyleTests: IgniteTestSuite {
     static let testColorNames = ["white", "black", "red", "green", "blue"]
     static let testColors: [Color] = [.white, .black, .red, .green, .blue]
 
