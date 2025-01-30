@@ -2,6 +2,8 @@
 Package.resolved
 /.build
 /Packages
+Tests/IgniteTesting/TestWebsitePackage/Build
+Tests/IgniteTesting/TestWebsitePackage/Content/*.md
 xcuserdata/
 DerivedData/
 .swiftpm/configuration/registries.json
