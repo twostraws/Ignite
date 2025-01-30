@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// A type that stores global configuration and Layout settings for your site.
 ///
 /// Environment values are propagated through your site's view hierarchy and can be accessed
@@ -51,6 +53,9 @@ public struct EnvironmentValues {
     /// The language the site is published in
     public let language: Language
 
+    /// The time zone used in date outputs.
+    public let timeZone: TimeZone?
+
     /// The path to the favicon
     public let favicon: URL?
 
@@ -71,6 +76,7 @@ public struct EnvironmentValues {
         self.siteURL = SiteURLKey.defaultValue
         self.favicon = FaviconKey.defaultValue
         self.builtInIconsEnabled = BuiltInIconsKey.defaultValue
+        self.timeZone = .gmt
     }
 
     init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
@@ -87,5 +93,6 @@ public struct EnvironmentValues {
         self.siteURL = site.url
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
+        self.timeZone = site.timeZone
     }
 }
