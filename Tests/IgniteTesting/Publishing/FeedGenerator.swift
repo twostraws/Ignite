@@ -14,13 +14,12 @@ import Testing
 @Suite("FeedGenerator Tests")
 @MainActor
 struct FeedGeneratorTests {
-    
     static let sites: [any Site] = [
         TestSite(),
-        TestSite().withTimeZone(.init(abbreviation: "GMT")!),
-        TestSite().withTimeZone(.init(abbreviation: "EST")!),
+        TestSite(timeZone: .init(abbreviation: "GMT")!),
+        TestSite(timeZone: .init(abbreviation: "EST")!)
     ]
-    
+
     @Test("Test generateFeed", arguments: await sites)
     func generateFeed(for site: any Site) async throws {
         let feedHref = site.url.appending(path: site.feedConfiguration.path).absoluteString

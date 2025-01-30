@@ -47,10 +47,9 @@ struct BackgroundTests {
         let output = element.render()
 
         #expect(output == """
-					<p style=\"background-image: linear-gradient(90deg, \
-					rgb(255 0 0 / 100%) 0.0%, rgb(0 128 0 / 100%) 50.0%, \
-					rgb(255 255 0 / 100%) 100.0%)\">Hello, world!</p>
-					""")
+        <p style=\"background-image: linear-gradient(90deg, \
+        rgb(255 0 0 / 100%) 0.0%, rgb(0 128 0 / 100%) 50.0%, \
+        rgb(255 255 0 / 100%) 100.0%)\">Hello, world!</p>
+        """)
     }
-
 }
