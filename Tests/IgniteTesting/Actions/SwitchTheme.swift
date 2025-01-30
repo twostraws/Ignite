@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `SwitchTheme` action.
 @Suite("SwitchTheme Tests")
 @MainActor
-class SwitchThemeTests: IgniteSuite {
+class SwitchThemeTests: IgniteTestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

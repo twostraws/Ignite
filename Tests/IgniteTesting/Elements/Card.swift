@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Card` element.
 @Suite("Card Tests")
 @MainActor
-class CardTests: IgniteSuite {
+class CardTests: IgniteTestSuite {
     @Test("Basic Card")
     func basicCard() async throws {
         let element = Card {

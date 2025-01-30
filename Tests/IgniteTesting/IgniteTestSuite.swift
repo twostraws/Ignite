@@ -15,7 +15,7 @@ import Foundation
 ///
 /// - Important: Subclassing is required for suites that test `HTML` elements or modifiers.
 @MainActor
-class IgniteSuite {
+class IgniteTestSuite {
     let site: any Site = TestSite()
 
     /// Creates a new test instance and initializes the publishing context for `TestSite`.

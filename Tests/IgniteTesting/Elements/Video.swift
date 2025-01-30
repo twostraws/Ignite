@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Video` element.
 @Suite("Video Tests")
 @MainActor
-class VideoTests: IgniteSuite {
+class VideoTests: IgniteTestSuite {
     @Test("Lone File Video Test", arguments: ["/videos/example.mp4"])
     func loneFileVideo(videoFile: String) async throws {
         let element = Video(videoFile)

@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `HoverModifier` modifier.
 @Suite("HoverModifier Tests")
 @MainActor
-class HoverModifierTests: IgniteSuite {
+class HoverModifierTests: IgniteTestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

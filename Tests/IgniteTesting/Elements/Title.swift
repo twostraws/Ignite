@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `title` element.
 @Suite("Title Tests")
 @MainActor
-class TitleTests: IgniteSuite {
+class TitleTests: IgniteTestSuite {
     @Test("Empty Title Test", arguments: [""])
     func empty(emptyTitleText: String) async throws {
         let element = Title(emptyTitleText)

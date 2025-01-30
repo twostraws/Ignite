@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Embed` element.
 @Suite("Embed Tests")
 @MainActor
-class EmbedTests: IgniteSuite {
+class EmbedTests: IgniteTestSuite {
     @Test("Basic Embed")
     func basicEmbed() async throws {
         let element = Embed(youTubeID: "dQw4w9WgXcQ", title: "There was only ever going to be one video used here.")

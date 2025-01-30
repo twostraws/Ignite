@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Form` element.
 @Suite("Form Tests")
 @MainActor
-class FormTests: IgniteSuite {
+class FormTests: IgniteTestSuite {
     @Test("Basic Form")
     func form() async throws {
         let element = Form {

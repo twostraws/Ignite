@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Cursor` modifier.
 @Suite("Cursor Tests")
 @MainActor
-class CursorTests: IgniteSuite {
+class CursorTests: IgniteTestSuite {
     @Test("Cursor Modifiers Test", arguments: Cursor.allCases)
     func cursorModifier(_ cursor: Cursor) async throws {
         let element = Span("Hello, World!").cursor(cursor)

@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `ButtonGroup` element.
 @Suite("ButtonGroup Tests")
 @MainActor
-class ButtonGroupTests: IgniteSuite {
+class ButtonGroupTests: IgniteTestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Grid` element.
 @Suite("Grid Tests")
 @MainActor
-class GridTests: IgniteSuite {
+class GridTests: IgniteTestSuite {
     @Test("List with three images")
     func gridWithThreeImages() async throws {
         let element = Grid {

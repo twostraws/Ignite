@@ -11,7 +11,7 @@ import Testing
 /// Tests for the element's `Attributes`.
 @Suite("Attributes Tests")
 @MainActor
-class AttributesTest: IgniteSuite {
+class AttributesTest: IgniteTestSuite {
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "nav", "section"]
 
     @Test("Classes are sorted", arguments: tags)

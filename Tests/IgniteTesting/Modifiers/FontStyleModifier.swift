@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `FontStyleModifier` modifier.
 @Suite("FontStyleModifier Tests")
 @MainActor
-class FontStyleModifierTests: IgniteSuite {
+class FontStyleModifierTests: IgniteTestSuite {
     @Test("Font Style Test", arguments: await Font.Style.tagCases)
     func fontStyle(style: Font.Style) async throws {
         let element = Text("Hello").font(style)

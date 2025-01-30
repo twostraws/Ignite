@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `TextField` element.
 @Suite("TextField Tests")
 @MainActor
-class TextFieldTests: IgniteSuite {
+class TextFieldTests: IgniteTestSuite {
     @Test("TextField With Placeholder")
     func textFieldWithPlaceholder() async throws {
         let element = TextField(placeholder: "Enter your name here")

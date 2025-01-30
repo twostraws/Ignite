@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Code` element.
 @Suite("Code Tests")
 @MainActor
-class CodeTests: IgniteSuite {
+class CodeTests: IgniteTestSuite {
     @Test("Test inline code formatting")
     func inlineCode() async throws {
         let element = Code("background-color")

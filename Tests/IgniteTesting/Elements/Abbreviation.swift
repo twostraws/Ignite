@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Abbreviation` element.
 @Suite("Abbreviation Tests")
 @MainActor
-class AbbreviationTests: IgniteSuite {
+class AbbreviationTests: IgniteTestSuite {
     @Test("Basic Abbreviation Test", arguments: ["abbr"], ["abbreviation"])
     func basic(abbreviation: String, description: String) async throws {
         let element = Abbreviation(abbreviation, description: description)

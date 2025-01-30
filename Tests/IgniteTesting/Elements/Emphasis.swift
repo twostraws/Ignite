@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Emphasis` element.
 @Suite("Emphasis Tests")
 @MainActor
-class EmphasisTests: IgniteSuite {
+class EmphasisTests: IgniteTestSuite {
     @Test("Emphasis Test")
     func simpleEmphasis() async throws {
         let element = Emphasis("Although Markdown is still easier, to be honest! ")

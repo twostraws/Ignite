@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Column` element.
 @Suite("Column Tests")
 @MainActor
-class ColumnTests: IgniteSuite {
+class ColumnTests: IgniteTestSuite {
     static let columnSpans: [Int] = [0, 1, 10, 100]
 
     @Test("Column with items")

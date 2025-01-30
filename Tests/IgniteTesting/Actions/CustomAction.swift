@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `CustomAction` action.
 @Suite("CustomAction Tests")
 @MainActor
-class CustomActionTests: IgniteSuite {
+class CustomActionTests: IgniteTestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

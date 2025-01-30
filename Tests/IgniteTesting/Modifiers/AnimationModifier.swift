@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `AnimationModifier` modifier.
 @Suite("AnimationModifier Tests")
 @MainActor
-class AnimationModifierTests: IgniteSuite {
+class AnimationModifierTests: IgniteTestSuite {
     @Test("HMTL Animation should bounce")
     func htmlAnimationModifierBounce() async throws {
         let element = Text {

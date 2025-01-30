@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `SmallCaps` modifier.
 @Suite("SmallCaps Tests")
 @MainActor
-class SmallCapsTests: IgniteSuite {
+class SmallCapsTests: IgniteTestSuite {
     @Test("Basic SmallCaps modifier test")
     func htmlSmallCaps() async throws {
         let element = Span("Hello, World!").smallCaps()

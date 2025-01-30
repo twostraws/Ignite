@@ -11,7 +11,7 @@ import Foundation
 /// A base class for Ignite tests that manages the lifecycle of `TestSubsite`'s publishing context.
 /// - Important: Subclassing is required for suites that test `HTML` elements or modifiers.
 @MainActor
-class IgniteSubsiteSuite {
+class IgniteSubsiteTestSuite {
     let site: any Site = TestSubsite()
 
     /// Creates a new test instance and initializes the publishing context for `TestSubsite`.

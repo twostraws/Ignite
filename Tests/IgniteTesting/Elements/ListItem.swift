@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `ListItem` element.
 @Suite("ListItem Tests")
 @MainActor
-class ListItemTests: IgniteSuite {
+class ListItemTests: IgniteTestSuite {
     @Test("Standalone ListItem Test")
     func standAlone() async throws {
         let element = ListItem {

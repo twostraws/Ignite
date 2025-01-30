@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Carousel` element.
 @Suite("Carousel Tests")
 @MainActor
-class CarouselTests: IgniteSuite {
+class CarouselTests: IgniteTestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

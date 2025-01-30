@@ -13,7 +13,7 @@ import Testing
 /// Tests for subsites.
 @Suite("Subsite Tests")
 @MainActor
-class SubsiteTests: IgniteSubsiteSuite {
+class SubsiteTests: IgniteSubsiteTestSuite {
     // MARK: - Image
 
     @Test("Image Test", arguments: ["/images/example.jpg"], ["Example image"])

@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Label` element.
 @Suite("Label Tests")
 @MainActor
-class LabelTests: IgniteSuite {
+class LabelTests: IgniteTestSuite {
     @Test("Basic Label")
     func basicLabel() async throws {
         let element = Label(text: "This is a text for label")

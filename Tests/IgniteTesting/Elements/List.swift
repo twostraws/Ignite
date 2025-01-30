@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `List` element.
 @Suite("List Tests")
 @MainActor
-class ListTests: IgniteSuite {
+class ListTests: IgniteTestSuite {
     @Test("Basic Rendering Test")
     func testEmptyListRendering() async throws {
         let list = List {}

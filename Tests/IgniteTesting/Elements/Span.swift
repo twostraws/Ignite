@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Span` element.
 @Suite("Span Tests")
 @MainActor
-class SpanTests: IgniteSuite {
+class SpanTests: IgniteTestSuite {
     @Test("Single Element Test", arguments: ["This is a test", "Another test"])
     func singleElement(spanText: String) async throws {
         let element = Span(spanText)

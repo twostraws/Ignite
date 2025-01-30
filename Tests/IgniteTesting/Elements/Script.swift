@@ -12,7 +12,7 @@ import Testing
 /// Tests for the `Script` element.
 @Suite("Script Tests")
 @MainActor
-class ScriptTests: IgniteSuite {
+class ScriptTests: IgniteTestSuite {
     @Test("Code Test")
     func code() async throws {
         let element = Script(code: "javascript code")

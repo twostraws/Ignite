@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `title` element.
 @Suite("Body Tests")
 @MainActor
-class BodyTests: IgniteSuite {
+class BodyTests: IgniteTestSuite {
     @Test("Body Test")
     func body() async throws {
         let element = HTMLBody(

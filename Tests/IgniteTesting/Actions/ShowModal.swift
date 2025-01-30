@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `ShowModal` action.
 @Suite("ShowModal Tests")
 @MainActor
-class ShowModalTests: IgniteSuite {
+class ShowModalTests: IgniteTestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

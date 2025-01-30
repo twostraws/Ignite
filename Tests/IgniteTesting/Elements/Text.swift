@@ -12,7 +12,7 @@ import Testing
 /// Tests for the `Text` element.
 @Suite("Text Tests")
 @MainActor
-class TextTests: IgniteSuite {
+class TextTests: IgniteTestSuite {
     @Test("Simple String Test")
     func simpleString() async throws {
         let element = Text("Hello")

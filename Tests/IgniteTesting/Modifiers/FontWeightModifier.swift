@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `FontWeightModifier` modifier.
 @Suite("FontWeightModifier Tests")
 @MainActor
-class FontWeightModifierTests: IgniteSuite {
+class FontWeightModifierTests: IgniteTestSuite {
     @Test("Font Weight Modifier", arguments: Font.Weight.allCases)
     func fontWeight(weight: Font.Weight) async throws {
         let element = Text("Hello").fontWeight(weight)

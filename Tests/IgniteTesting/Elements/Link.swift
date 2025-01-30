@@ -12,7 +12,7 @@ import Testing
 
 /// Tests for the `title` element.
 @Suite("Link Tests")
-@MainActor class LinkTests: IgniteSuite {
+@MainActor class LinkTests: IgniteTestSuite {
     @Test("String Target Test", arguments: ["/"], ["Go Home"])
     func target(for target: String, description: String) async throws {
         let element = Link(description, target: target)

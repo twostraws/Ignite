@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `ShowAlert` action.
 @Suite("ShowAlert Tests")
 @MainActor
-class ShowAlertTests: IgniteSuite {
+class ShowAlertTests: IgniteTestSuite {
     @Test("ExampleTest")
     func example() async throws {
 
