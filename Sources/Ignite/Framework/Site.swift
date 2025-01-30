@@ -71,6 +71,10 @@ public protocol Site: Sendable {
     /// The base URL for your site, e.g. https://www.example.com
     var url: URL { get }
 
+    /// the time zone used to do date output for your site. Defaults to GMT
+    /// (nil is equivalent to GMT)
+    var timeZone: TimeZone? { get }
+
     /// Choose whether to use a local version of Bootstrap, a remote version,
     /// or none at all
     var useDefaultBootstrapURLs: BootstrapOptions { get }
@@ -148,6 +152,9 @@ public extension Site {
 
     /// English as default language.
     var language: Language { .english }
+
+    /// Uses gmt as the default
+    var timeZone: TimeZone? { .gmt }
 
     /// Uses the default light theme based on Bootstrap.
     var lightTheme: (any Theme)? { DefaultLightTheme() }
