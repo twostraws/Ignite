@@ -42,9 +42,7 @@ struct CustomActionTests {
 
     @Test("Verify compile action returns escaped code", arguments: zip(inputCode, outputCode))
     func compile(input: String, output: String) async throws {
-        print(input, output)
         let action = CustomAction(input)
-        
         #expect(action.compile() == output)
     }
 }
