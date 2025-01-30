@@ -18,7 +18,10 @@ struct BadgeModifierTests {
     func badgeModifierForInlineHTML() async throws {
         let element = Text("Notifications").badge(Badge("3"))
         let output = element.render()
-        #expect(output == "<li class=\"align-items-center d-flex justify-content-between\"><p>Notifications</p><span class=\"badge rounded-pill\">3</span></li>")
+        #expect(
+            output == "<li class=\"align-items-center d-flex justify-content-between\">" +
+            "<p>Notifications</p><span class=\"badge rounded-pill\">3</span></li>"
+        )
     }
 
     @Test("Badge Modifier for ListItem")
@@ -27,6 +30,9 @@ struct BadgeModifierTests {
             Text("Messages")
         }.badge(Badge("5"))
         let output = element.render()
-        #expect(output == "<li class=\"align-items-center d-flex justify-content-between\"><p>Messages</p></li>")
+        #expect(
+            output == "<li class=\"align-items-center d-flex justify-content-between\">" +
+            "<p>Messages</p></li>"
+        )
     }
 }
