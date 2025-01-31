@@ -94,8 +94,6 @@ final class PublishingContext {
         fontsDirectory = sourceDirectory.appending(path: "Fonts")
         contentDirectory = sourceDirectory.appending(path: "Content")
         includesDirectory = sourceDirectory.appending(path: "Includes")
-
-        try parseContent()
     }
 
     /// Creates and sets the shared instance of `PublishingContext`
@@ -181,6 +179,7 @@ final class PublishingContext {
 
     /// Performs all steps required to publish a site.
     func publish() async throws {
+        try parseContent()
         clearBuildFolder()
         await generateContent()
         copyResources()
