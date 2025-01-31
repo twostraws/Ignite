@@ -11,29 +11,20 @@ import Testing
 @testable import Ignite
 
 /// Tests for the `Color` type.
-@Suite("Color Type Tests")
+@Suite("Tests for the `Color` type")
 @MainActor
 struct ColorTypeTests {
-    @Test("black and white via parameters",
+    @Test("CSS values via parameters",
           arguments: zip(
             [Color.black, .white],
             ["0 0 0", "255 255 255"]
           )
     )
-    func makeColor(forgroundStyle: Color, rgbValues: String) async throws {
-        let coloredText = Text("Hello, world!")
-            .foregroundStyle(forgroundStyle)
-
-        let output = coloredText.render()
-
-        #expect(output ==
-        """
-        <p style="color: rgb(\(rgbValues) / 100%)">Hello, world!</p>
-        """
-        )
+    func makeColor(color: Color, rgbValues: String) async throws {
+        #expect(color.description == "rgb(" + rgbValues + " / 100%)")
     }
 
-    @Test("Initialize Color with Int values")
+    @Test("Color init with Int values")
     func testInitializeWithIntValues() async throws {
         let color = Color(red: 255, green: 0, blue: 0)
         #expect(color == .red)
@@ -42,7 +33,7 @@ struct ColorTypeTests {
         #expect(color.blue == 0)
     }
 
-    @Test("Return CSS value of color")
+    @Test("CSS color value")
     func testReturnCSSValueOfColor() async throws {
         let red = 255
         let green = 0
@@ -52,5 +43,16 @@ struct ColorTypeTests {
         #expect(color.description == "rgb(\(red) \(blue) \(green) / 100%)")
     }
 
-    // TODO: test opacity and remove use of foregroundStyle
+    @Test("Opacity")
+    func testReturnCSSColorValueWithOpacity() async throws {
+        let red = 255
+        let green = 0
+        let blue = 0
+        let opacity = 50%
+
+        let color = Color(red: red, green: green, blue: blue, opacity: opacity)
+        #expect(
+            color.description == "rgb(\(red) \(blue) \(green) / \(opacity.roundedValue)%)"
+        )
+    }
 }
