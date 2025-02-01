@@ -50,7 +50,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
         do {
             markdown = try String(contentsOf: url)
         } catch {
-            throw PublishingError.unopenableFile(error.localizedDescription)
+            fatalError(.unopenableFile(error.localizedDescription))
         }
 
         let processed = processMetadata(for: markdown)

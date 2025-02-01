@@ -25,7 +25,7 @@ extension URL {
             }
         }
 
-        throw PublishingError.missingPackageDirectory
+        fatalError(.missingPackageDirectory)
     }
 }
 

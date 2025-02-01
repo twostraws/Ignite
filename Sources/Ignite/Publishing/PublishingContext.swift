@@ -56,7 +56,7 @@ final class PublishingContext {
     private(set) var warnings = OrderedSet<String>()
 
     /// Any errors that have been issued during a build.
-    private(set) var errors = [PublishingError]()
+    private(set) var errors = [String]()
 
     /// All the Markdown content this user has inside their Content folder.
     public private(set) var allContent = [Content]()
@@ -133,9 +133,9 @@ final class PublishingContext {
     }
 
     /// Adds an error during a site build.
-    /// - Parameter error: The error to add.
-    func addError(_ error: PublishingError) {
-        errors.append(error)
+    /// - Parameter message: The error to add.
+    func addError(_ message: String) {
+        errors.append(message)
     }
 
     /// Adds one path to the sitemap.
@@ -272,13 +272,13 @@ final class PublishingContext {
         let relativePath = directory.relative(to: buildDirectory)
 
         if siteMap.contains(relativePath) {
-            errors.append(PublishingError.duplicateDirectory(directory))
+            errors.append(.duplicateDirectory(directory))
         }
 
         do {
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         } catch {
-            errors.append(PublishingError.failedToCreateBuildDirectory(directory))
+            errors.append(.failedToCreateBuildDirectory(directory))
         }
 
         let outputURL = directory.appending(path: "index.html")
@@ -292,7 +292,7 @@ final class PublishingContext {
             try html.write(to: outputURL, atomically: true, encoding: .utf8)
             addToSiteMap(relativePath, priority: priority)
         } catch {
-            errors.append(PublishingError.failedToCreateBuildFile(outputURL))
+            errors.append(.failedToCreateBuildFile(outputURL))
         }
     }
 
