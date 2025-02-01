@@ -17,7 +17,7 @@ struct MediaQueryTests {
 
     typealias MediaQueryTestCase = (query: MediaQuery, output: String)
 
-    @Test("Test breakpoint queries", arguments: [
+    @Test("Breakpoint queries", arguments: [
         (query: MediaQuery.breakpoint(.small),
          output: "min-width: 576px"),
         (query: MediaQuery.breakpoint(.medium),
@@ -38,7 +38,7 @@ struct MediaQueryTests {
         )
     }
 
-    @Test("Test color scheme queries", arguments: [
+    @Test("Color scheme queries", arguments: [
         (query: MediaQuery.colorScheme(.light),
          output: "prefers-color-scheme: light"),
         (query: MediaQuery.colorScheme(.dark),
@@ -53,7 +53,7 @@ struct MediaQueryTests {
         )
     }
 
-    @Test("Test contrast queries", arguments: [
+    @Test("Contrast queries", arguments: [
         (query: MediaQuery.contrast(.high),
          output: "prefers-contrast: more"),
         (query: MediaQuery.contrast(.low),
@@ -72,7 +72,7 @@ struct MediaQueryTests {
         )
     }
 
-    @Test("Test display mode queries", arguments: [
+    @Test("Display mode queries", arguments: [
         (query: MediaQuery.displayMode(.fullscreen),
          output: "display-mode: fullscreen"),
         (query: MediaQuery.displayMode(.browser),
@@ -95,7 +95,7 @@ struct MediaQueryTests {
         )
     }
 
-    @Test("Test orientation queries", arguments: [
+    @Test("Orientation queries", arguments: [
         (query: MediaQuery.orientation(.landscape),
          output: "orientation: landscape"),
         (query: MediaQuery.orientation(.portrait),
@@ -110,7 +110,7 @@ struct MediaQueryTests {
         )
     }
 
-    @Test("Test transparency queries", arguments: [
+    @Test("Transparency queries", arguments: [
         (query: MediaQuery.transparency(.normal),
          output: "prefers-reduced-transparency: no-preference"),
         (query: MediaQuery.transparency(.reduced),
@@ -123,7 +123,7 @@ struct MediaQueryTests {
         #expect(output == testCase.output)
     }
 
-    @Test("Test reduced motion queries", arguments: [
+    @Test("Reduced motion queries", arguments: [
         (query: MediaQuery.motion(.reduced),
          output: "prefers-reduced-motion: reduce"),
         (query: MediaQuery.motion(.allowed),
@@ -138,7 +138,7 @@ struct MediaQueryTests {
         )
     }
 
-    @Test("Test theme queries", arguments: [
+    @Test("Theme queries", arguments: [
         (query: MediaQuery.theme("dark"),
          output: "data-theme-state=\"dark\""),
         (query: MediaQuery.theme("light"),
