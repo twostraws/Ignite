@@ -37,7 +37,7 @@ struct NewCommand: ParsableCommand {
         }
 
         // Clone from remote Git repository
-        print("⚙️  Creating a new Ignite site in '\(name)'...")
+        print("⚙️ Creating a new Ignite site in '\(name)'...")
         let result = try Process.execute(command: "git clone \(template) \(name)")
 
         if result.error.contains("fatal") {
