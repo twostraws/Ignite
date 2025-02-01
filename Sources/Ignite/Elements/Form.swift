@@ -32,7 +32,7 @@ public struct Form: BlockHTML {
     private var items: [any InlineHTML]
 
     /// The action to perform when the form is submitted.
-    private var action: (String) -> any Action
+    private var action: any Action
 
     /// The style of labels in the form
     private var labelStyle: LabelStyle = .floating
@@ -121,13 +121,13 @@ public struct Form: BlockHTML {
         horizontalSpacing: SpacingAmount = .medium,
         verticalSpacing: SpacingAmount = .medium,
         @InlineHTMLBuilder content: () -> some InlineHTML,
-        onSubmit: @escaping (String) -> any Action
+        onSubmit: () -> any Action
     ) {
         self.items = flatUnwrap(content())
-        self.action = onSubmit
+        self.action = onSubmit()
         self.verticalSpacing = verticalSpacing
         self.horizontalSpacing = horizontalSpacing
-        if let action = action(attributes.id) as? SubscribeAction, case .mailchimp = action.service {
+        if let action = action as? SubscribeAction, case .mailchimp = action.service {
             attributes.id = "mc-embedded-subscribe-form"
         } else {
             attributes.id = UUID().uuidString.truncatedHash
@@ -135,9 +135,11 @@ public struct Form: BlockHTML {
     }
 
     public func render() -> String {
-        guard let action = action(attributes.id) as? SubscribeAction else {
+        guard var action = action as? SubscribeAction else {
             fatalError("Form supports only SubscribeAction at this time.")
         }
+
+        action = action.setFormID(attributes.id)
 
         var attributes = attributes
         attributes.tag = "form"
@@ -195,9 +197,11 @@ public struct Form: BlockHTML {
     }
 
     private func renderFormField(_ textField: TextField) -> Section {
-        guard let action = action(attributes.id) as? SubscribeAction else {
+        guard var action = action as? SubscribeAction else {
             fatalError("Form supports only SubscribeAction at the moment.")
         }
+
+        action = action.setFormID(attributes.id)
 
         let sizedTextField = textField
             .id(action.service.emailFieldID)

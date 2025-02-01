@@ -20,7 +20,7 @@ struct DateISO8601Tests {
         let expected: String
     }
 
-    @Test("Test Against Known Output", arguments: [
+    @Test("Known Output", arguments: [
         Instance(input: Date(timeIntervalSince1970: -40241318220), expected: "0694-10-18T00:03:00Z"),
         Instance(input: Date(timeIntervalSince1970: 36571335925), expected: "3128-11-25T08:25:25Z"),
         Instance(input: Date(timeIntervalSince1970: 18980973526), expected: "2571-06-26T04:38:46Z"),

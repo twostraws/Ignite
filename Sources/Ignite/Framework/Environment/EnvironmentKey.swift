@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// A protocol that defines how environment values are stored and accessed.
 ///
 /// Environment keys provide default values for environment settings. For example:
@@ -81,4 +83,10 @@ public struct FaviconKey: EnvironmentKey {
 public struct BuiltInIconsKey: EnvironmentKey {
     /// The default local Bootstrap configuration for built-in icons
     public static var defaultValue: BootstrapOptions = .localBootstrap
+}
+
+/// A key for accessing the site time zone in the environment
+public struct SiteTimeZoneKey: EnvironmentKey {
+    /// The default time zone for the site
+    public static var defaultValue: TimeZone? = .gmt
 }
