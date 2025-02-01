@@ -19,23 +19,19 @@ import Testing
 @Suite("Site Tests", .serialized)
 @MainActor
 struct SiteTests {
-    
     private let package = TestPackage()
     
     init() {
         try? package.clearBuildFolderAndTestContent()
     }
     
-    @Test(
-        "Site published when Markdown content contains invalid lastModified date",
-        .bug("https://github.com/twostraws/Ignite/issues/445")
-    )
+    @Test("Site published when Markdown content contains invalid lastModified date")
     func publishingWithInvalidLastModifiedDate() async throws {
         let markdownFileURL = package.contentDirectoryURL.appending(path: "story-with-invalid-lastModified.md")
         let markdownContent = """
         ---
         layout: TestStory
-        lastModified: 2020-03-30 16:37:21
+        lastModified: 03-30-2020 16:37:21
         ---
         
         # Story with invalid lastModified
@@ -73,7 +69,6 @@ struct SiteTests {
 }
 
 private struct TestPackage {
-    
     let packageBaseURL: URL
     let buildDirectoryURL: URL
     let contentDirectoryURL: URL
