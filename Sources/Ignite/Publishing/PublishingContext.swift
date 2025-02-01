@@ -162,7 +162,7 @@ final class PublishingContext {
             if objectURL.pathExtension == "md" {
                 let values = try objectURL.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey])
 
-                let article = try Content(from: objectURL, in: self, resourceValues: values)
+                let article = try Content(from: objectURL, resourceValues: values)
 
                 if article.isPublished {
                     allContent.append(article)
