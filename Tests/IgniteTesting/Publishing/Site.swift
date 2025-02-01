@@ -11,35 +11,25 @@ import Testing
 @testable import Ignite
 
 /// Tests for the `Site` type.
+///
+/// > Warning: Calling `PublishingContext.initialize` as a part of the suite set-up
+/// can lead to false positive results because these tests are calling `TestSite/publish`
+/// that includes the `PublishingContext.initialize` call.
+/// **Workaround:** Run this suite in isolation.
 @Suite("Site Tests", .serialized)
 @MainActor
 struct SiteTests {
     
     private let package = TestPackage()
     
-    @Test("Site published given there is no Markdown content")
-    func publishingWithNoMarkdownContent() async throws {
-        let markdownFileURL = package.contentDirectoryURL.appending(path: "story-with-valid-metadata.md")
-        let markdownContent = """
-        ---
-        layout: TestStory
-        lastModified: 2020-03-30 16:37
-        ---
-        
-        # Story with valid metadata
-        """
-        
-        try markdownContent.write(to: markdownFileURL, atomically: false, encoding: .utf8)
-        
-        try await TestSitePublisher().publish()
-        
-        #expect(package.checkIndexFileExists() == true)
-        
-        try FileManager.default.removeItem(at: markdownFileURL)
-        try FileManager.default.removeItem(at: package.buildDirectoryURL)
+    init() {
+        try? package.clearBuildFolderAndTestContent()
     }
     
-    @Test("Site published when Markdown content contains invalid lastModified date")
+    @Test(
+        "Site published when Markdown content contains invalid lastModified date",
+        .bug("https://github.com/twostraws/Ignite/issues/445")
+    )
     func publishingWithInvalidLastModifiedDate() async throws {
         let markdownFileURL = package.contentDirectoryURL.appending(path: "story-with-invalid-lastModified.md")
         let markdownContent = """
@@ -57,8 +47,28 @@ struct SiteTests {
         
         #expect(package.checkIndexFileExists() == true)
         
-        try FileManager.default.removeItem(at: markdownFileURL)
-        try FileManager.default.removeItem(at: package.buildDirectoryURL)
+        try package.clearBuildFolderAndTestContent()
+    }
+    
+    @Test("Site published given Markdown content with valid metadata")
+    func publishingWithMarkdownContent() async throws {
+        let markdownFileURL = package.contentDirectoryURL.appending(path: "story-with-valid-metadata.md")
+        let markdownContent = """
+        ---
+        layout: TestStory
+        lastModified: 2020-03-30 16:37
+        ---
+        
+        # Story with valid metadata
+        """
+        
+        try markdownContent.write(to: markdownFileURL, atomically: false, encoding: .utf8)
+        
+        try await TestSitePublisher().publish()
+        
+        #expect(package.checkIndexFileExists() == true)
+        
+        try package.clearBuildFolderAndTestContent()
     }
 }
 
@@ -79,5 +89,14 @@ private struct TestPackage {
     
     func checkIndexFileExists() -> Bool {
         (try? buildDirectoryURL.appending(path: "index.html").checkPromisedItemIsReachable()) ?? false
+    }
+    
+    func clearBuildFolderAndTestContent() throws {
+        try FileManager.default.removeItem(at: buildDirectoryURL)
+        let enumerator = FileManager.default.enumerator(at: contentDirectoryURL, includingPropertiesForKeys: nil)
+        while let fileURL = enumerator?.nextObject() as? URL {
+            guard fileURL.isFileURL, fileURL.pathExtension == "md" else { continue }
+            try FileManager.default.removeItem(at: fileURL)
+        }
     }
 }
