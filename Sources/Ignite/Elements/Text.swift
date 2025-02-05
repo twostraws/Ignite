@@ -10,7 +10,7 @@
 /// just use a simple string. Using `Text` is required if you want a specific paragraph
 /// of text with some styling, or a header of a particular size.
 @MainActor
-public struct Text: BlockHTML, DropdownElement {
+public struct Text: HTML, HorizontalAligning, DropdownElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -19,9 +19,6 @@ public struct Text: BlockHTML, DropdownElement {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The font style to use for this text.
     var font: Font.Style {

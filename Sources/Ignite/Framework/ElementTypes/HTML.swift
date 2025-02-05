@@ -21,6 +21,9 @@ public protocol HTML: CustomStringConvertible, Sendable {
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { get }
 
+    /// The default display type associated with this HTML element.
+    var displayType: DisplayType { get set }
+
     /// The type of HTML content this element contains.
     associatedtype Body: HTML
 
@@ -55,6 +58,12 @@ public extension HTML {
     /// The default status as a primitive element.
     var isPrimitive: Bool { false }
 
+    /// The default display type associated with this HTML element.
+    var displayType: DisplayType {
+        get { .block }
+        set {} // swiftlint:disable:this unused_setter_value
+    }
+
     /// Generates the complete `HTML` string representation of the element.
     func render() -> String {
         body.render()
@@ -74,6 +83,11 @@ extension HTML {
         } else {
             self is EmptyHTML
         }
+    }
+
+    /// How many columns this should occupy when placed in a grid.
+    var columnWidth: ColumnWidth {
+        attributes.columnWidth
     }
 
     /// A Boolean value indicating whether this element contains multiple child elements.
@@ -305,6 +319,16 @@ extension HTML {
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
+
+    /// Adjusts the number of columns assigned to this element.
+    /// - Parameter width: The new number of columns to use.
+    /// - Returns: A copy of the current element with the adjusted column width.
+    @discardableResult func columnWidth(_ width: ColumnWidth) -> Self {
+        var attributes = attributes
+        attributes.columnWidth = width
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
 }
 
 // MARK: - Helper Methods
@@ -363,4 +387,10 @@ extension HTML {
     }
 
     return EmptyHTML()
+}
+
+public enum DisplayType {
+    case inline
+    case block
+    case other
 }

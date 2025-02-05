@@ -6,23 +6,10 @@
 //
 
 // swiftlint:disable unused_setter_value
-extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
+extension Array: HeadElement, HTML where Element: HTML {
     public var body: some HTML { self }
 
     public func render() -> String {
-        self.map { $0.render() }.joined()
-    }
-}
-
-extension Array: BlockHTML where Element: BlockHTML {
-    public var body: some BlockHTML { self }
-
-    public var columnWidth: ColumnWidth {
-        get { .automatic }
-        set {}
-    }
-
-    @MainActor public func render() -> String {
         self.map { $0.render() }.joined()
     }
 }

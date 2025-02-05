@@ -6,7 +6,7 @@
 //
 
 /// A group of information placed inside a gently rounded
-public struct Card: BlockHTML {
+public struct Card: HTML {
     /// Styling for this card.
     public enum Style: CaseIterable, Sendable {
         /// Default styling.
@@ -126,9 +126,6 @@ public struct Card: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     var role = Role.default
     var style = Style.default

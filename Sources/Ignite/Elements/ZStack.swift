@@ -7,7 +7,7 @@
 
 /// Creates a container that stacks its children along the z-axis (depth),
 /// with each subsequent child appearing in front of the previous one.
-public struct ZStack: BlockHTML {
+public struct ZStack: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -16,9 +16,6 @@ public struct ZStack: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth: ColumnWidth = .automatic
 
     /// The alignment point for positioning elements within the stack.
     private var alignment: UnitPoint

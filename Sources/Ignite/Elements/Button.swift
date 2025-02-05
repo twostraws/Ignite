@@ -6,10 +6,7 @@
 //
 
 /// A clickable button with a label and styling.
-public struct Button: BlockHTML, InlineHTML {
-    /// How many columns this should occupy when placed in a section or form.
-    public var columnWidth: ColumnWidth = .automatic
-
+public struct Button: InlineHTML {
     /// Controls the display size of buttons. Medium is the default.
     public enum Size: String, CaseIterable {
         case small, medium, large
@@ -40,6 +37,9 @@ public struct Button: BlockHTML, InlineHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
+
+    /// The default display type associated with this HTML element.
+    public var displayType: DisplayType = .inline
 
     /// Whether this button should submit a form or not. Defaults to `.plain`.
     var type = Type.plain
@@ -193,8 +193,8 @@ extension Button {
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A copy of the current element with the adjusted column width.
     public func width(_ width: Int) -> Self {
-        var copy = self
-        copy.columnWidth = .count(width)
+        let copy = self
+        copy.columnWidth(.count(width))
         copy.class("w-100")
         return copy
     }

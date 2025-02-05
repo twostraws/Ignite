@@ -6,7 +6,7 @@
 //
 
 /// A column inside a table row.
-public struct Column: HTML, HorizontalAligning {
+public struct Column: HTML {
     /// How to vertically align the contents of this column.
     public enum VerticalAlignment: String, Sendable, CaseIterable {
         /// Align contents to the top of the column.

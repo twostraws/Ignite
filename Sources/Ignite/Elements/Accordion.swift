@@ -7,7 +7,7 @@
 
 /// A control that displays a list of section titles that can be folded out to
 /// display more content.
-public struct Accordion: BlockHTML {
+public struct Accordion: HTML {
     /// Controls what happens when a section is opened.
     public enum OpenMode {
         /// Opening one accordion section automatically closes all others.
@@ -25,9 +25,6 @@ public struct Accordion: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// A collection of sections you want to show inside this accordion.
     var items: [Item]

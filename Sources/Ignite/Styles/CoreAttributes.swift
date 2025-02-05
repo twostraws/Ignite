@@ -60,6 +60,9 @@ public struct CoreAttributes: Sendable {
     /// The tag to use for self-closing elements like "meta" or "img".
     var selfClosingTag: String?
 
+    /// How many columns this should occupy when placed in a grid.
+    var columnWidth: ColumnWidth = .automatic
+
     /// CSS classes that should be applied to a wrapper div around this element.
     /// Each `ContainerAttributes` represents a wrapper div with styling
     var containerAttributes = OrderedSet<ContainerAttributes>() {

@@ -16,9 +16,6 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineHTML, PassthroughHTM
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth: ColumnWidth = .automatic
-
     /// The sequence of data to iterate over.
     private let data: Data
 

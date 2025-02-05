@@ -37,13 +37,3 @@ struct PositionModifier: HTMLModifier {
         content.class(position.rawValue)
     }
 }
-
-public extension BlockHTML {
-    /// Adjusts the rendering position for this element, using a handful of
-    /// specific, known position values.
-    /// - Parameter newPosition: A `Position` case to use for this element.
-    /// - Returns: A copy of this element with the new position applied.
-    func position(_ newPosition: Position) -> some BlockHTML {
-        modifier(PositionModifier(position: newPosition))
-    }
-}

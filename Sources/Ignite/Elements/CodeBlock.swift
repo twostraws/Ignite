@@ -7,7 +7,7 @@
 
 /// An separated section of programming code. For inline code that sit along other
 /// text on your page, use `Code` instead.
-public struct CodeBlock: BlockHTML {
+public struct CodeBlock: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -16,9 +16,6 @@ public struct CodeBlock: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The code to display.
     var content: String

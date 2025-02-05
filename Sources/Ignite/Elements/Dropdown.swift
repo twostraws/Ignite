@@ -12,7 +12,7 @@ public protocol DropdownElement: InlineHTML {}
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
-public struct Dropdown: BlockHTML, NavigationItem {
+public struct Dropdown: HTML, NavigationItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -21,9 +21,6 @@ public struct Dropdown: BlockHTML, NavigationItem {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The title for this `Dropdown`.
     var title: any InlineHTML

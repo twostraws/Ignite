@@ -30,11 +30,3 @@ public extension InlineHTML {
         modifier(SmallCapsModifier())
     }
 }
-
-public extension BlockHTML {
-    /// Converts lowercase letters to small capitals while leaving uppercase letters unchanged.
-    /// - Returns: A modified copy of the element with small caps applied
-    func smallCaps() -> some BlockHTML {
-        modifier(SmallCapsModifier())
-    }
-}

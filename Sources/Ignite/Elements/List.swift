@@ -6,7 +6,7 @@
 //
 
 /// Creates a list of items, either ordered or unordered.
-public struct List: BlockHTML {
+public struct List: HTML {
     /// Controls whether this list contains items in a specific order or not.
     public enum ListMarkerStyle {
         /// This list contains items that are ordered, which normally means
@@ -31,9 +31,6 @@ public struct List: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The current style for this list. Defaults to `.plain`.
     private var listStyle: ListStyle = .plain

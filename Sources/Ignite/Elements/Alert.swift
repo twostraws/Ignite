@@ -7,7 +7,7 @@
 
 /// Shows a clearly delineated box on your page, providing important information
 /// or warnings to users.
-public struct Alert: BlockHTML {
+public struct Alert: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -16,9 +16,6 @@ public struct Alert: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     var content: any HTML
 

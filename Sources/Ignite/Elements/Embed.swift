@@ -8,7 +8,7 @@
 import Foundation
 
 /// Embeds a custom URL, such as YouTube or Vimeo.
-public struct Embed: BlockHTML, LazyLoadable {
+public struct Embed: HTML, LazyLoadable {
     /// Determines what kind of Spotify embed we have.
     public enum SpotifyContentType: String {
         /// Creates interactive item for a single Spotify track
@@ -33,9 +33,6 @@ public struct Embed: BlockHTML, LazyLoadable {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The URL we're embedding inside our page.
     let url: String

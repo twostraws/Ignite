@@ -6,10 +6,7 @@
 //
 
 /// A text input field with support for various states
-public struct TextField: InlineHTML, BlockHTML {
-    /// How many columns this should occupy when placed in a section or form.
-    public var columnWidth: ColumnWidth = .automatic
-
+public struct TextField: InlineHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -18,6 +15,9 @@ public struct TextField: InlineHTML, BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
+
+    /// The default display type associated with this HTML element.
+    public var displayType: DisplayType = .inline
 
     /// The label text for the field
     var label: String?
