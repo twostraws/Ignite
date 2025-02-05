@@ -18,7 +18,7 @@ public struct HTMLDocument: HTML {
     private let language: Language
     private let contents: [any RootElement]
 
-    public init(language: Language = .english, @RootHTMLBuilder contents: () -> [any RootElement]) {
+    public init(language: Language = .english, @RootElementBuilder contents: () -> [any RootElement]) {
         self.language = language
         self.contents = contents()
     }
