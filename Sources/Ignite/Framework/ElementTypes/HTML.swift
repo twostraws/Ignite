@@ -21,9 +21,6 @@ public protocol HTML: CustomStringConvertible, Sendable {
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { get }
 
-    /// The default display type associated with this HTML element.
-    var displayType: DisplayType { get set }
-
     /// The type of HTML content this element contains.
     associatedtype Body: HTML
 
@@ -57,12 +54,6 @@ public extension HTML {
 
     /// The default status as a primitive element.
     var isPrimitive: Bool { false }
-
-    /// The default display type associated with this HTML element.
-    var displayType: DisplayType {
-        get { .block }
-        set {} // swiftlint:disable:this unused_setter_value
-    }
 
     /// Generates the complete `HTML` string representation of the element.
     func render() -> String {

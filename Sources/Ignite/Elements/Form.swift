@@ -260,8 +260,7 @@ public struct Form: HTML {
     ///   - totalColumns: The total number of columns in the form's grid.
     /// - Returns: A string containing the appropriate Bootstrap column class.
     private func getColumnClass(for item: any HTML, totalColumns: Int) -> String {
-        if item.displayType == .block,
-           case .count(let width) = item.columnWidth {
+        if case .count(let width) = item.columnWidth {
             // Convert the width from form columns to Bootstrap columns
             let bootstrapColumns = 12 * width / totalColumns
             return "col-md-\(bootstrapColumns)"

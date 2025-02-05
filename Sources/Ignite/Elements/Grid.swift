@@ -94,7 +94,8 @@ public struct Grid: HTML {
                 if let passthrough = item as? any PassthroughHTML {
                     handlePassthrough(passthrough, attributes: passthrough.attributes)
                 } else if let modified = item as? ModifiedHTML,
-                          let passthrough = modified.content as? any PassthroughHTML {
+                          let passthrough = modified.content as? any PassthroughHTML
+                {
                     handlePassthrough(passthrough, attributes: modified.attributes)
                 } else {
                     Section(item)
@@ -119,10 +120,10 @@ public struct Grid: HTML {
             ""
         }
         return ForEach(passthrough.items) { item in
-                Section(item)
-                    .class(className(for: passthrough))
-                    .class(gutterClass)
-                    .attributes(attributes)
+            Section(item)
+                .class(className(for: passthrough))
+                .class(gutterClass)
+                .attributes(attributes)
         }
     }
 

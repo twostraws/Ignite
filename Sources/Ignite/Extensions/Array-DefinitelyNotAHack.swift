@@ -5,7 +5,6 @@
 // See LICENSE for license information.
 //
 
-// swiftlint:disable unused_setter_value
 extension Array: HeadElement, HTML where Element: HTML {
     public var body: some HTML { self }
 
@@ -21,4 +20,3 @@ extension Array: InlineHTML where Element: InlineHTML {
         self.map { $0.render() }.joined()
     }
 }
-// swiftlint:enable unused_setter_value
