@@ -7,7 +7,7 @@
 
 /// Elements that conform to `DropdownElement` can be shown inside
 /// Dropdown objects.
-public protocol DropdownElement: InlineHTML {}
+public protocol DropdownItem: InlineHTML {}
 
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
@@ -29,7 +29,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
     var title: any InlineHTML
 
     /// The array of items to shown in this `Dropdown`.
-    var items: [any DropdownElement]
+    var items: [any DropdownItem]
 
     /// How large this dropdown should be drawn. Defaults to `.medium`.
     var size = Button.Size.medium
@@ -48,7 +48,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
     ///   - items: The elements to place inside the dropdown menu.
     public init(
         _ title: any InlineHTML,
-        @ElementBuilder<any DropdownElement> items: () -> [any DropdownElement]
+        @ElementBuilder<any DropdownItem> items: () -> [any DropdownItem]
     ) {
         self.title = title
         self.items = items()

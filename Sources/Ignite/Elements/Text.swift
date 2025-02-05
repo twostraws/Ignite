@@ -10,7 +10,7 @@
 /// just use a simple string. Using `Text` is required if you want a specific paragraph
 /// of text with some styling, or a header of a particular size.
 @MainActor
-public struct Text: BlockHTML, DropdownElement {
+public struct Text: BlockHTML, DropdownItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
