@@ -44,11 +44,11 @@ public extension HTML where Self: BlockHTML {
     }
 }
 
-public extension HTML where Self: RootHTML {
+public extension HTML where Self: RootElement {
     /// Applies a modifier to this HTML root element while preserving its block nature.
     /// - Parameter modifier: The modifier to apply to this element
     /// - Returns: A modified copy of the element with changes applied, maintaining block status
-    func modifier<M: HTMLModifier>(_ modifier: M) -> some RootHTML {
+    func modifier<M: HTMLModifier>(_ modifier: M) -> some RootElement {
         ModifiedHTML(self, modifier: modifier)
     }
 }

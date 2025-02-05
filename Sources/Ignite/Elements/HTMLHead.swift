@@ -9,7 +9,7 @@ import Foundation
 
 /// A group of metadata headers for your page, such as its title,
 /// links to its CSS, and more.
-public struct HTMLHead: RootHTML {
+public struct HTMLHead: RootElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
