@@ -351,7 +351,7 @@ final class PublishingContext {
         layout.environment = values
 
         let body = ContentContext.withCurrentContent(content) {
-            Section(items: [layout.body])
+            Section(layout.body)
         }
 
         currentRenderingPath = content.path
