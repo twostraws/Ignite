@@ -331,13 +331,13 @@ extension HTML {
 /// Recursively flattens nested `InlineHTML` content into a single array, unwrapping any body properties.
 /// - Parameter content: The content to flatten and unwrap
 /// - Returns: An array of unwrapped `InlineHTML` elements
-@MainActor func flatUnwrap(_ content: Any) -> [any InlineHTML] {
+@MainActor func flatUnwrap(_ content: Any) -> [any InlineElement] {
     if let array = content as? [Any] {
         array.flatMap { flatUnwrap($0) }
-    } else if let html = content as? any InlineHTML {
-        if let anyHTML = html as? AnyHTML, let wrapped = anyHTML.unwrapped.body as? (any InlineHTML) {
+    } else if let html = content as? any InlineElement {
+        if let anyHTML = html as? AnyHTML, let wrapped = anyHTML.unwrapped.body as? (any InlineElement) {
             flatUnwrap([wrapped])
-        } else if let collection = html as? HTMLCollection, let elements = collection.elements as? [any InlineHTML] {
+        } else if let collection = html as? HTMLCollection, let elements = collection.elements as? [any InlineElement] {
             flatUnwrap(elements)
         } else {
             [html]

@@ -26,11 +26,11 @@ public extension HTML {
     }
 }
 
-public extension HTML where Self: InlineHTML {
+public extension HTML where Self: InlineElement {
     /// Applies a modifier to this inline HTML element while preserving its inline nature.
     /// - Parameter modifier: The modifier to apply to this element
     /// - Returns: A modified copy of the element with changes applied, maintaining inline status
-    func modifier<M: HTMLModifier>(_ modifier: M) -> some InlineHTML {
+    func modifier<M: HTMLModifier>(_ modifier: M) -> some InlineElement {
         ModifiedHTML(self, modifier: modifier)
     }
 }

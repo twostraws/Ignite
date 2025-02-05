@@ -8,7 +8,7 @@
 /// An inline snippet of programming code, embedded inside a larger part
 /// of your page. For dedicated code blocks that sit on their own line, use
 /// `CodeBlock` instead.
-public struct Code: InlineHTML {
+public struct Code: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

@@ -6,7 +6,7 @@
 //
 
 /// An image on your page. Can be vector (SVG) or raster (JPG, PNG, GIF).
-public struct Image: BlockHTML, InlineHTML, LazyLoadable {
+public struct Image: BlockHTML, InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
