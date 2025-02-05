@@ -37,10 +37,6 @@ struct ModifiedHTML: HTML, InlineHTML, RootHTML, NavigationItem {
 
         let modifiedContent: any HTML = modifier.body(content: self)
         AttributeStore.default.merge(modifiedContent.attributes, intoHTML: id)
-
-        if self.content.displayType == .block {
-            self.columnWidth = self.content.columnWidth
-        }
     }
 
     /// Renders this element using the provided publishing context.

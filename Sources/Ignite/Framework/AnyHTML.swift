@@ -27,10 +27,6 @@ public struct AnyHTML: HTML, InlineHTML {
         } else {
             self.wrapped = content
         }
-
-        if wrapped.displayType == .block {
-            self.columnWidth(wrapped.columnWidth)
-        }
     }
 
     /// Helper property that recursively unwraps nested AnyHTML instances
