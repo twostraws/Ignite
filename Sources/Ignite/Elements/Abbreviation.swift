@@ -16,9 +16,6 @@ public struct Abbreviation: InlineHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// The default display type associated with this HTML element.
-    public var displayType: DisplayType = .inline
-
     /// The contents of this abbreviation.
     public var contents: any InlineHTML
 

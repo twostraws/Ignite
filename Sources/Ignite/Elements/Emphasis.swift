@@ -16,9 +16,6 @@ public struct Emphasis: InlineHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// The default display type associated with this HTML element.
-    public var displayType: DisplayType = .inline
-
     /// The content you want to render with emphasis.
     var content: any InlineHTML
 

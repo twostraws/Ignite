@@ -18,9 +18,6 @@ public struct Link: HTML, InlineHTML, NavigationItem, DropdownElement {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// The default display type associated with this HTML element.
-    public var displayType: DisplayType = .inline
-
     /// The visual style to apply to the link.
     public enum LinkStyle {
         /// A link with an underline effect.

@@ -38,9 +38,6 @@ public struct Button: InlineHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// The default display type associated with this HTML element.
-    public var displayType: DisplayType = .inline
-
     /// Whether this button should submit a form or not. Defaults to `.plain`.
     var type = Type.plain
 
