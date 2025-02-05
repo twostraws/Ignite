@@ -31,7 +31,6 @@ struct AspectRatioTests {
         }
     }
 
-
     @Test("Verify Content Modes")
     func verifyContentModes() async throws {
         let testCases: [(ContentMode, String)] = [
