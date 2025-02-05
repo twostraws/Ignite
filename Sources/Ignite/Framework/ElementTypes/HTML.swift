@@ -48,11 +48,7 @@ public extension HTML {
 
     /// A unique identifier generated from the element's type and source location.
     var id: String {
-        get {
-            let location = #filePath + #line.description
-            let description = String(describing: self)
-            return (location + description).truncatedHash
-        }
+        get { String(describing: self).truncatedHash }
         set {} // swiftlint:disable:this unused_setter_value
     }
 
