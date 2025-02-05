@@ -379,9 +379,3 @@ extension HTML {
 
     return EmptyHTML()
 }
-
-public enum DisplayType {
-    case inline
-    case block
-    case other
-}
