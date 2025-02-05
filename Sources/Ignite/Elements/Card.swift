@@ -8,7 +8,7 @@
 /// A group of information placed inside a gently rounded
 public struct Card: BlockHTML {
     /// Styling for this card.
-    public enum Style: CaseIterable {
+    public enum Style: CaseIterable, Sendable {
         /// Default styling.
         case `default`
 
@@ -70,13 +70,13 @@ public struct Card: BlockHTML {
         }
     }
 
-    enum TextAlignment: String, CaseIterable {
+    enum TextAlignment: String, CaseIterable, Sendable {
         case start = "text-start"
         case center = "text-center"
         case end = "text-end"
     }
 
-    enum VerticalAlignment: String, CaseIterable {
+    enum VerticalAlignment: String, CaseIterable, Sendable {
         case start = "align-content-start"
         case center = "align-content-center"
         case end = "align-content-end"

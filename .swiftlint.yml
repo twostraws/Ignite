@@ -1,0 +1,23 @@
+disabled_rules:
+- optional_data_string_conversion
+
+identifier_name:
+  excluded:
+    - x
+    - y
+    - x1
+    - x2
+    - y1
+    - y2
+    - i
+    - j
+    - id
+    - to
+    - up
+
+# Case-sensitive paths to include during linting. Directory paths supplied on the
+# command line will be ignored.
+included:
+    - Sources
+    - Tests
+

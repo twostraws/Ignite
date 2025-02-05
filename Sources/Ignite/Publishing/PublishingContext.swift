@@ -12,12 +12,24 @@ import SwiftSoup
 /// elements. This allows any part of the site to reference content, add
 /// build warnings, and more.
 @MainActor
-public final class PublishingContext {
+final class PublishingContext {
     /// The shared instance of `PublishingContext`.
-    static var `default`: PublishingContext!
+    private static var defaultContext: PublishingContext!
+
+    /// The shared instance of `PublishingContext`.
+    static var `default`: PublishingContext {
+        guard let defaultContext else {
+            fatalError("""
+            "PublishingContext.default accessed before being initialized. \
+            Call PublishingContext.initialize() first.
+            """)
+        }
+
+        return defaultContext
+    }
 
     /// The site that is currently being built.
-    public var site: any Site
+    var site: any Site
 
     /// The root directory for the user's website package.
     var sourceDirectory: URL
@@ -82,8 +94,6 @@ public final class PublishingContext {
         fontsDirectory = sourceDirectory.appending(path: "Fonts")
         contentDirectory = sourceDirectory.appending(path: "Content")
         includesDirectory = sourceDirectory.appending(path: "Includes")
-
-        try parseContent()
     }
 
     /// Creates and sets the shared instance of `PublishingContext`
@@ -100,7 +110,7 @@ public final class PublishingContext {
         buildDirectoryPath: String = "Build"
     ) throws -> PublishingContext {
         let context = try PublishingContext(for: site, from: file, buildDirectoryPath: buildDirectoryPath)
-        `default` = context
+        defaultContext = context
         return context
     }
 
@@ -152,7 +162,7 @@ public final class PublishingContext {
             if objectURL.pathExtension == "md" {
                 let values = try objectURL.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey])
 
-                let article = try Content(from: objectURL, in: self, resourceValues: values)
+                let article = try Content(from: objectURL, resourceValues: values)
 
                 if article.isPublished {
                     allContent.append(article)
@@ -169,6 +179,7 @@ public final class PublishingContext {
 
     /// Performs all steps required to publish a site.
     func publish() async throws {
+        try parseContent()
         clearBuildFolder()
         await generateContent()
         copyResources()
@@ -204,14 +215,14 @@ public final class PublishingContext {
         copyAssets()
         copyFonts()
 
-        let themesPath = buildDirectory.appending(path: "css/themes.min.css").path(percentEncoded: false)
+        let themesPath = buildDirectory.appending(path: "css/themes.min.css").decodedPath
 
         if !FileManager.default.fileExists(atPath: themesPath) {
             copy(resource: "css/themes.min.css")
         }
 
         if AnimationManager.default.hasAnimations {
-            let animationsPath = buildDirectory.appending(path: "css/animations.min.css").path()
+            let animationsPath = buildDirectory.appending(path: "css/animations.min.css").decodedPath
             if !FileManager.default.fileExists(atPath: animationsPath) {
                 copy(resource: "css/animations.min.css")
             }
@@ -340,7 +351,7 @@ public final class PublishingContext {
         layout.environment = values
 
         let body = ContentContext.withCurrentContent(content) {
-            Section(context: self, items: [layout.body])
+            Section(items: [layout.body])
         }
 
         currentRenderingPath = content.path

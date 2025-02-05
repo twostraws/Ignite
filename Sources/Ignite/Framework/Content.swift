@@ -124,13 +124,10 @@ public struct Content {
     ///   relative path to this content.
     ///   - resourceValues: Resource values that provide the creation and
     ///   last modification date for this content.
-    init(
-        from url: URL,
-        in context: PublishingContext,
-        resourceValues: URLResourceValues
-    ) throws {
+    init(from url: URL, resourceValues: URLResourceValues) throws {
         // Use whatever Markdown renderer was configured
         // for the site we're publishing.
+        let context = PublishingContext.default
         let parser = try context.site.markdownRenderer.init(url: url, removeTitleFromBody: true)
 
         body = parser.body
@@ -200,7 +197,7 @@ public struct Content {
         let formatter = DateFormatter()
         formatter.timeZone = .gmt
 
-        let formats = ["y-M-d HH:mm", "y-M-d"]
+        let formats = ["y-M-d", "y-M-d HH:mm", "y-M-d H:m", "y-M-d HH:mm:ss", "y-M-d H:m:s"]
         for format in formats {
             formatter.dateFormat = format
             if let date = formatter.date(from: date) {

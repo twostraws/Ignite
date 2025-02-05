@@ -44,7 +44,7 @@ public struct Group: PassthroughHTML {
     }
 
     public func render() -> String {
-        return items.map {
+        items.map {
             let item: any HTML = $0
             AttributeStore.default.merge(attributes, intoHTML: item.id)
             return item.render()

@@ -19,6 +19,7 @@ import Testing
 
         #expect(output == "<p>Hello</p>")
     }
+
     @Test("Builder with Simple String Test")
     @MainActor func test_simpleBuilderString() async throws {
         let element = Text {
@@ -29,6 +30,7 @@ import Testing
 
         #expect(output == "<p>Hello</p>")
     }
+
     @Test("Builder with Complex String Test")
     func complexBuilderString() {
         let element = Text {
@@ -74,6 +76,7 @@ import Testing
             )
         }
     }
+
     @Test("Markdown Test")
     func markdown() async throws {
         let element = Text(
@@ -87,5 +90,20 @@ import Testing
                 == "<p>Text in <em>italics</em>, text in <strong>bold</strong>, and text in <em><strong>bold italics</strong></em>.</p>"
         )
         // swiftlint:enable line_length
+    }
+    @Test("Strikethrough Test")
+    func strikethrough() async throws {
+        // Given
+        let element = Text {
+            Strikethrough {
+                "There will be a few tickets available at the box office tonight."
+            }
+        }
+        // When
+        let output = element.render()
+        // Then
+        #expect(
+            output == "<p><s>There will be a few tickets available at the box office tonight.</s></p>"
+        )
     }
 }

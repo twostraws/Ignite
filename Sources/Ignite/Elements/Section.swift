@@ -32,11 +32,11 @@ public struct Section: BlockHTML {
         self.items = flatUnwrap(content())
     }
 
-    public init(_ items: any HTML, background: Color? = nil) {
+    public init(_ items: any HTML) {
         self.items = flatUnwrap(items)
     }
 
-    init(context: PublishingContext, items: [any HTML]) {
+    init(items: [any HTML]) {
         self.items = flatUnwrap(items)
     }
 

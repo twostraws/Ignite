@@ -19,7 +19,8 @@
 ///     var fontFamilyBase: Font = .custom("Helvetica")
 /// }
 /// ```
-@MainActor public protocol Theme: Sendable {
+@MainActor
+public protocol Theme: Sendable {
     /// The name of the theme, which must be unique
     static var name: String { get set }
 

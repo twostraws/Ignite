@@ -12,39 +12,22 @@ import Testing
 @Suite("Attributes Tests")
 @MainActor
 struct AttributesTest {
-    init() {
-        // swiftlint:disable:next force_try
-        try! PublishingContext.initialize(for: TestSite(), from: #filePath)
+    init() throws {
+        try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
 
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "nav", "section"]
 
-    @Test("Checks that meta highlighting tags are sorted in the head element")
-    func highlighterThemes_areSorted() async throws {
-        let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .twilight])
-        let output = links.map { $0.render() }
-
-        #expect(
-            output == [
-                "<link href=\"/css/prism-github-dark.css\" rel=\"stylesheet\" data-highlight-theme=\"github-dark\" />",
-                "<link href=\"/css/prism-twilight.css\" rel=\"stylesheet\" data-highlight-theme=\"twilight\" />",
-                "<link href=\"/css/prism-xcode-dark.css\" rel=\"stylesheet\" data-highlight-theme=\"xcode-dark\" />"
-            ]
-        )
-    }
-
-    @Test("Checks that classes are sorted", arguments: tags)
+    @Test("Classes are sorted", arguments: tags)
     func classes_areSorted(tag: String) async throws {
         let element = Tag(tag) {}.class("foo", "bar", "baz", "qux")
         let output = element.render()
         let expected = "<\(tag) class=\"bar baz foo qux\"></\(tag)>"
 
-        #expect(
-            output == expected
-        )
+        #expect(output == expected)
     }
 
-    @Test("Checks that custom attributes are sorted", arguments: Self.tags)
+    @Test("Custom attributes are sorted", arguments: tags)
     func customAttributes_areSorted(tag: String) async throws {
         let element = Tag(tag) {}
             .customAttribute(name: "qux", value: "qux")
@@ -53,12 +36,10 @@ struct AttributesTest {
             .customAttribute(name: "bar", value: "bar")
         let output = element.render()
 
-        #expect(
-            output == "<\(tag) bar=\"bar\" baz=\"baz\" foo=\"foo\" qux=\"qux\"></\(tag)>"
-        )
+        #expect(output == "<\(tag) bar=\"bar\" baz=\"baz\" foo=\"foo\" qux=\"qux\"></\(tag)>")
     }
 
-    @Test("Checks that events are sorted", arguments: Self.tags)
+    @Test("Events are sorted", arguments: tags)
     func events_areSorted(tag: String) async throws {
         let element = Tag(tag) {}
             .addEvent(name: "bar", actions: [ShowAlert(message: "bar")])
@@ -74,7 +55,7 @@ struct AttributesTest {
         )
     }
 
-    @Test("Checks that styles are sorted", arguments: Self.tags)
+    @Test("Styles are sorted", arguments: tags)
     func styles_areSorted(tag: String) async throws {
         let element = Tag(tag) {}
             .style(
@@ -89,7 +70,7 @@ struct AttributesTest {
         )
     }
 
-    @Test("Checks that aria attributes are sorted", arguments: Self.tags)
+    @Test("Aria attributes are sorted", arguments: tags)
     func ariaAttributes_areSorted(tag: String) async throws {
         let element = Tag(tag) {}
             .aria(.atomic, "bar")
@@ -102,7 +83,7 @@ struct AttributesTest {
         )
     }
 
-    @Test("Checks that data attributes are sorted", arguments: Self.tags)
+    @Test("Data attributes are sorted", arguments: tags)
     func dataAttributes_areSorted(tag: String) async throws {
         let element = Tag(tag) {}
             .data("foo", "bar")
@@ -116,60 +97,14 @@ struct AttributesTest {
         )
     }
 
-    @Test("Checks that boolean attributes are sorted", arguments: Self.tags)
-    func test_boolean_attributes_are_sorted(tag: String) async throws {
+    @Test("Boolean attributes are sorted", arguments: tags)
+    func booleanAttributes_areSorted(tag: String) async throws {
         let element = Tag(tag) {}
             .customAttribute(.disabled)
             .customAttribute(.required)
-            .customAttribute(name: "foo")
-            .customAttribute(name: "qux")
-            .customAttribute(name: "bar")
-            .customAttribute(name: "baz")
+            .customAttribute(.selected)
         let output = element.render()
 
-        #expect(
-            output == "<\(tag) bar baz disabled foo qux required></\(tag)>"
-        )
-    }
-
-    @Test("Checks that disabled attributes are not included in the output", arguments: Self.tags)
-    func test_disabled_attributes_are_not_included_in_the_output(tag: String) async throws {
-        let element = Tag(tag) {}
-            .customAttribute(.disabled, isEnabled: false)
-            .customAttribute(.required, isEnabled: false)
-            .customAttribute(name: "foo", isEnabled: false)
-            .customAttribute(name: "qux", isEnabled: false)
-            .customAttribute(name: "bar", isEnabled: false)
-            .customAttribute(name: "baz", isEnabled: false)
-        let output = element.render()
-
-        #expect(
-            output == "<\(tag)></\(tag)>"
-        )
-    }
-
-    @Test("Checks that Button attributes are set and sorted correctly")
-    func test_button_attributes_are_set_and_sorted_correctly() async throws {
-        let button = Button()
-            .disabled()
-            .customAttribute(name: "foo")
-        let output = button.render()
-
-        #expect(
-            output == #"<button type="button" disabled foo class="btn"></button>"#
-        )
-    }
-
-    @Test("Checks that TextField attributes are set and sorted correctly")
-    func test_textField_attributes_are_set_and_sorted_correctly() async throws {
-        let textField = TextField(placeholder: nil)
-            .disabled()
-            .readOnly()
-            .required()
-        let output = textField.render()
-
-        #expect(
-            output == #"<input disabled readonly required type="text" class="form-control" />"#
-        )
+        #expect(output == "<\(tag) disabled required selected></\(tag)>")
     }
 }

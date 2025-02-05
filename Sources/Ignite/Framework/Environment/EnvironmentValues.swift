@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// A type that stores global configuration and Layout settings for your site.
 ///
 /// Environment values are propagated through your site's view hierarchy and can be accessed
@@ -30,20 +32,51 @@ public struct EnvironmentValues {
     /// Available themes for the site, including light, dark, and any alternates.
     public var themes: [any Theme] = []
 
-    /// Global site configuration settings.
-    public var siteConfiguration: SiteConfiguration
-
     /// Locates, loads, and decodes a JSON file in your Resources folder.
     public var decode: DecodeAction
 
-    /// Creates environment values with default settings.
+    /// The name of the site
+    public let siteName: String
+
+    /// A string to append to the end of page titles
+    public let siteTitleSuffix: String
+
+    /// An optional description for the site
+    public let siteDescription: String?
+
+    /// The base URL for the site
+    public let siteURL: URL
+
+    /// The author of the site
+    public let author: String
+
+    /// The language the site is published in
+    public let language: Language
+
+    /// The time zone used in date outputs.
+    public let timeZone: TimeZone?
+
+    /// The path to the favicon
+    public let favicon: URL?
+
+    /// Configuration for Bootstrap icons
+    public let builtInIconsEnabled: BootstrapOptions
+
     public init() {
         self.content = ContentLoader(content: [])
         self.feedConfiguration = FeedConfiguration(mode: .full, contentCount: 0)
         self.isFeedEnabled = false
         self.themes = []
-        self.siteConfiguration = SiteConfiguration()
         self.decode = .init(sourceDirectory: URL(filePath: ""))
+        self.author = SiteAuthorKey.defaultValue
+        self.siteName = SiteNameKey.defaultValue
+        self.siteTitleSuffix = SiteTitleSuffixKey.defaultValue
+        self.siteDescription = SiteDescriptionKey.defaultValue
+        self.language = SiteLanguageKey.defaultValue
+        self.siteURL = SiteURLKey.defaultValue
+        self.favicon = FaviconKey.defaultValue
+        self.builtInIconsEnabled = BuiltInIconsKey.defaultValue
+        self.timeZone = .gmt
     }
 
     init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
@@ -52,19 +85,14 @@ public struct EnvironmentValues {
         self.feedConfiguration = site.feedConfiguration
         self.isFeedEnabled = site.isFeedEnabled
         self.themes = site.allThemes
-        // Initialize metadata with all head-related configuration
-        self.siteConfiguration = SiteConfiguration(
-            author: site.author,
-            name: site.name,
-            titleSuffix: site.titleSuffix,
-            description: site.description,
-            language: site.language,
-            url: site.url,
-            useDefaultBootstrapURLs: site.useDefaultBootstrapURLs,
-            builtInIconsEnabled: site.builtInIconsEnabled,
-            favicon: site.favicon,
-            highlightThemes: site.allHighlighterThemes,
-            hasMultipleThemes: site.allThemes.count > 1
-        )
+        self.author = site.author
+        self.siteName = site.name
+        self.siteTitleSuffix = site.titleSuffix
+        self.siteDescription = site.description
+        self.language = site.language
+        self.siteURL = site.url
+        self.favicon = site.favicon
+        self.builtInIconsEnabled = site.builtInIconsEnabled
+        self.timeZone = site.timeZone
     }
 }

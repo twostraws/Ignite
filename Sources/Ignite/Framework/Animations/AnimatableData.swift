@@ -6,7 +6,7 @@
 //
 
 /// A basic animation type that transitions a single CSS property from one value to another.
-public struct AnimatableData {
+public struct AnimatableData: Hashable {
     /// The starting value for the animated property
     var initial: String
 

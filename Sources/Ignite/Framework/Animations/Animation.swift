@@ -24,7 +24,7 @@ import OrderedCollections
 ///        animation.color(.foreground, to: .white)
 ///    }
 /// ```
-public struct Animation: Animatable {
+public struct Animation: Animatable, Hashable {
     /// The collection of frames that define the animation sequence
     var frames: [Frame]
 

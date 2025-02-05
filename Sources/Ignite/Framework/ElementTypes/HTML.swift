@@ -69,7 +69,7 @@ public protocol HTML: CustomStringConvertible, Sendable {
 public extension HTML {
     /// The complete `HTML` string representation of the element.
     nonisolated var description: String {
-        return MainActor.assumeIsolated {
+        MainActor.assumeIsolated {
             self.render()
         }
     }
@@ -82,21 +82,12 @@ public extension HTML {
 
     /// A unique identifier generated from the element's type and source location.
     var id: String {
-        get {
-            let location = #filePath + #line.description
-            let description = String(describing: self)
-            return (location + description).truncatedHash
-        }
+        get { String(describing: self).truncatedHash }
         set {} // swiftlint:disable:this unused_setter_value
     }
 
     /// The default status as a primitive element.
     var isPrimitive: Bool { false }
-
-    /// The publishing context of this site.
-    var publishingContext: PublishingContext {
-        PublishingContext.default
-    }
 
     /// Generates the complete `HTML` string representation of the element.
     func render() -> String {
@@ -105,6 +96,11 @@ public extension HTML {
 }
 
 extension HTML {
+    /// The publishing context of this site.
+    var publishingContext: PublishingContext {
+        PublishingContext.default
+    }
+
     /// Checks if this element is an empty HTML element.
     var isEmptyHTML: Bool {
         if let collection = self as? HTMLCollection {
@@ -250,35 +246,12 @@ extension HTML {
         return self
     }
 
-    /// Adds a custom attribute to the element using string name.
-    /// - Parameters:
-    ///   - name: The name of the custom attribute
-    ///   - isEnabled: Whether the attribute should be added to the element
-    /// - Returns: The modified `HTML` element
-    @discardableResult func customAttribute(name: String, isEnabled: Bool = true) -> Self {
-        customAttribute(.init(name: name), isEnabled: isEnabled)
-    }
-
-    /// Adds a custom attribute to the element.
-    /// - Parameters:
-    ///     - attribute: The custom attribute
-    ///     - isEnabled: Whether the attribute should be added to the element
-    /// - Returns: The modified `HTML` element
-    @discardableResult func customAttribute(_ attribute: Attribute, isEnabled: Bool = true) -> Self {
-        if isEnabled {
-            var attributes = attributes
-            attributes.customAttributes.append(attribute)
-            AttributeStore.default.merge(attributes, intoHTML: id)
-        }
-        return self
-    }
-
     /// Merges a complete set of core attributes into this element.
-    /// - Parameter newAttributes: The CoreAttributes to merge with existing attributes
+    /// - Parameter attributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified HTML element
     /// - Note: Uses AttributeStore for persistent storage and merging
-    func attributes(_ newAttributes: CoreAttributes) -> Self {
-        AttributeStore.default.merge(newAttributes, intoHTML: id)
+    func attributes(_ attributes: CoreAttributes) -> Self {
+        AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
 

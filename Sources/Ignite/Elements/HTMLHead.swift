@@ -1,5 +1,5 @@
 //
-// Head.swift
+// HTMLHead.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -39,11 +39,10 @@ public struct HTMLHead: RootHTML {
     ///   - additionalItems: Additional items to enhance the set of standard headers.
     public init(
         for page: Page,
-        with configuration: SiteConfiguration,
         @HeadElementBuilder additionalItems: () -> [any HeadElement] = { [] }
     ) {
-        items = HTMLHead.standardHeaders(for: page, with: configuration)
-        items += MetaTag.socialSharingTags(for: page, with: configuration)
+        items = HTMLHead.standardHeaders(for: page)
+        items += MetaTag.socialSharingTags(for: page)
         items += additionalItems()
     }
 
@@ -63,7 +62,8 @@ public struct HTMLHead: RootHTML {
     ///   - configuration: The active `SiteConfiguration`, which includes
     ///   information about the site being rendered and more.
     @HeadElementBuilder
-    public static func standardHeaders(for page: Page, with configuration: SiteConfiguration) -> [any HeadElement] {
+    public static func standardHeaders(for page: Page) -> [any HeadElement] {
+        // swiftlint:disable:previous cyclomatic_complexity
         MetaTag.utf8
         MetaTag.flexibleViewport
 
@@ -71,27 +71,30 @@ public struct HTMLHead: RootHTML {
             MetaTag(name: "description", content: page.description)
         }
 
-        if configuration.author.isEmpty == false {
-            MetaTag(name: "author", content: configuration.author)
+        let context = PublishingContext.default
+        let site = context.site
+
+        if site.author.isEmpty == false {
+            MetaTag(name: "author", content: site.author)
         }
 
         MetaTag.generator
 
         Title(page.title)
 
-        if configuration.useDefaultBootstrapURLs == .localBootstrap {
+        if site.useDefaultBootstrapURLs == .localBootstrap {
             MetaLink.standardCSS
-        } else if configuration.useDefaultBootstrapURLs == .remoteBootstrap {
+        } else if site.useDefaultBootstrapURLs == .remoteBootstrap {
             MetaLink.remoteIconCSS
         }
 
-        if configuration.highlighterThemes.isEmpty == false {
-            MetaLink.highlighterThemeMetaLinks(for: configuration.highlighterThemes)
+        if context.hasSyntaxHighlighters, site.allHighlighterThemes.isEmpty == false {
+            MetaLink.highlighterThemeMetaLinks(for: site.allHighlighterThemes)
         }
 
-        if configuration.builtInIconsEnabled == .localBootstrap {
+        if site.builtInIconsEnabled == .localBootstrap {
             MetaLink.iconCSS
-        } else if configuration.builtInIconsEnabled == .remoteBootstrap {
+        } else if site.builtInIconsEnabled == .remoteBootstrap {
             MetaLink.remoteIconCSS
         }
 
@@ -100,15 +103,18 @@ public struct HTMLHead: RootHTML {
         }
 
         MetaLink.themeCSS
-        MetaLink.mediaQueryCSS
+
+        if CSSManager.default.hasCSS {
+            MetaLink.mediaQueryCSS
+        }
 
         MetaLink(href: page.url, rel: "canonical")
 
-        if let favicon = configuration.favicon {
+        if let favicon = site.favicon {
             MetaLink(href: favicon, rel: .icon)
         }
 
-        if configuration.hasMultipleThemes, let themeSwitchingScript {
+        if site.allThemes.count > 1, let themeSwitchingScript {
             themeSwitchingScript
         }
     }

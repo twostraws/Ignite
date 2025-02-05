@@ -20,6 +20,7 @@ import Testing
 
         #expect(output == "<span>\(spanText)</span>")
     }
+
     @Test("Builder Test", arguments: ["This is a test", "Another test"])
     func builder(spanText: String) async throws {
         let element = Span { spanText }

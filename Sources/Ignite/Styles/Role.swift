@@ -8,7 +8,7 @@
 /// Roles let us attach semantic meaning to various elements, which Bootstrap
 /// uses to add specific styling. For example, `.danger` elements will be
 /// colored some shade of red.
-public enum Role: String, CaseIterable {
+public enum Role: String, CaseIterable, Sendable {
     /// No specific role has been attached.
     case `default`
 
