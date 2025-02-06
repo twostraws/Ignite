@@ -25,6 +25,21 @@ struct HTMLHeadTests {
         #expect(contents.isEmpty)
         #expect(attributes.isEmpty)
     }
+
+    @Test func outputs_items_passed_on_init() throws {
+        func exampleHeaderItems() -> [any HeadElement] { [
+            Title("Hello, World"),
+            Script(file: "../script.js"),
+            MetaTag(.openGraphTitle, content: "hello")
+        ] }
+        let sut = HTMLHead(items: exampleHeaderItems)
+        
+        let contents = try #require(sut.render().htmlTagWithCloseTag("head")?.contents)
+        
+        for item in exampleHeaderItems() {
+            #expect(contents.contains(item.render()))
+        }
+    }
     
     @Test func print_head() {
         let sut = HTMLHead {
