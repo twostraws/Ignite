@@ -41,7 +41,6 @@ public struct CodeBlock: BlockHTML {
     /// - Returns: A copy of this code block with the specified lines highlighted.
     public func highlightedLines(_ lines: Int...) -> Self {
         var copy = self
-        let lineCount = content.components(separatedBy: .newlines).count
 
         let highlights = lines.map { "\($0)" }
         let dataLine = highlights.joined(separator: ",")
@@ -54,7 +53,6 @@ public struct CodeBlock: BlockHTML {
     /// - Returns: A copy of this code block with the specified line ranges highlighted.
     public func highlightedRanges(_ ranges: ClosedRange<Int>...) -> Self {
         var copy = self
-        let lineCount = content.components(separatedBy: .newlines).count
 
         let highlights = ranges.map { "\($0.lowerBound)-\($0.upperBound)" }
         let dataLine = highlights.joined(separator: ",")
@@ -69,7 +67,6 @@ public struct CodeBlock: BlockHTML {
     /// - Returns: A copy of this code block with the specified lines highlighted.
     public func highlightedLines(_ lines: Int..., ranges: ClosedRange<Int>...) -> Self {
         var copy = self
-        let lineCount = content.components(separatedBy: .newlines).count
 
         let singleLines = lines.map { "\($0)" }
         let rangeLines = ranges.map { "\($0.lowerBound)-\($0.upperBound)" }
