@@ -14,7 +14,7 @@ import Testing
 @Suite("HTMLDocument Tests")
 @MainActor
 struct HTMLDocumentTests {
-    
+
     init() throws {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
@@ -23,15 +23,15 @@ struct HTMLDocumentTests {
     func containsHTMLDoctype() {
         let sut = HTMLDocument {}
         let output = sut.render()
-        
+
         #expect(output.hasPrefix("<!doctype html>"))
     }
-    
+
     @Test("Contains html tag")
     func containsHTMLTag() {
         let sut = HTMLDocument {}
         let output = sut.render()
-        
+
         #expect(nil != output.htmlTagWithCloseTag("html"))
     }
 
@@ -39,11 +39,11 @@ struct HTMLDocumentTests {
     func theme_is_auto() throws {
         let sut = HTMLDocument {}
         let output = sut.render()
-        
+
         let theme = try #require(output.htmlTagWithCloseTag("html")?.attributes
             .htmlAttribute(named: "data-bs-theme")
         )
-        
+
         #expect(theme == "auto")
     }
 
@@ -51,11 +51,11 @@ struct HTMLDocumentTests {
     func language_attribute_defaults_to_en() throws {
         let sut = HTMLDocument {}
         let output = sut.render()
-        
+
         let language = try #require(output.htmlTagWithCloseTag("html")?.attributes
             .htmlAttribute(named: "lang")
         )
-        
+
         #expect(language == "en")
     }
 
@@ -63,11 +63,11 @@ struct HTMLDocumentTests {
     func language_property_determines_lang_attribute(_ language: Language) throws {
         let sut = HTMLDocument(language: language) {}
         let output = sut.render()
-        
+
         let langAttribute = try #require(output.htmlTagWithCloseTag("html")?.attributes
             .htmlAttribute(named: "lang")
         )
-        
+
         #expect(langAttribute == language.rawValue)
     }
 
@@ -77,18 +77,18 @@ struct HTMLDocumentTests {
         let output = sut.render()
 
         let htmlContents = try #require(output.htmlTagWithCloseTag("html")?.contents)
-        
+
         #expect(htmlContents.isEmpty)
     }
-    
+
     @Test("places output of contents into contents of html tag")
     func html_tag_contents_are_taken_from_contents_property() async throws {
-        
+
         let body = HTMLBody { "Hello World" }
         let sut = HTMLDocument { body }
 
         let expected = body.render()
-        
+
         let htmlContents = try #require(sut.render().htmlTagWithCloseTag("html")?.contents)
 
         #expect(htmlContents == expected)
