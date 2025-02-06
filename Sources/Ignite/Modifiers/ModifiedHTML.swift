@@ -35,8 +35,7 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
             AttributeStore.default.merge(content.attributes, intoHTML: id)
         }
 
-        let modifiedContent: any HTML = modifier.body(content: self)
-        AttributeStore.default.merge(modifiedContent.attributes, intoHTML: id)
+        _ = modifier.body(content: self)
 
         if let block = self.content as? (any BlockHTML) {
             self.columnWidth = block.columnWidth
