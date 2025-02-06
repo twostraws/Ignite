@@ -15,6 +15,10 @@ import Testing
 @MainActor
 struct HTMLHeadTests {
     
+    init() throws {
+        try PublishingContext.initialize(for: TestSite(), from: #filePath)
+    }
+
     @Test("Defaults to empty head tag")
     func default_is_empty_head_tag() throws {
         let sut = HTMLHead {}
