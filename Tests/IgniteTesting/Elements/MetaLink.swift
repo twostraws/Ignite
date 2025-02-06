@@ -14,6 +14,11 @@ import Testing
 @Suite("MetaLink Tests")
 @MainActor
 struct MetaLinkTests {
+
+    init() throws {
+        try PublishingContext.initialize(for: TestSite(), from: #filePath)
+    }
+
     @Test("href string and rel string")
     func hrefStringAndRelString() async throws {
         let element = MetaLink(href: "https://www.example.com", rel: "canonical")
@@ -46,14 +51,6 @@ struct MetaLinkTests {
         let output = element.render()
 
         #expect(output == "<link href=\"https://www.example.com\" rel=\"alternate\" />")
-    }
-}
-
-@Suite("MetaLink.highlighterThemeMetaLinks Tests")
-@MainActor
-struct MetaLink_highlighterThemeMetaLinksTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
 
     @Test("Highlighting meta tags are sorted")
