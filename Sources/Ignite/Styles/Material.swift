@@ -8,7 +8,7 @@
 /// A type that represents different material effects that can be applied to views.
 /// Material effects combine translucency, blur, and color to create the appearance
 /// of frosted glass. The effect automatically adapts to light and dark color schemes.
-public struct Material {
+public struct Material: Sendable {
     /// The type of material effect
     private let type: MaterialType
     /// Optional color scheme override
@@ -23,7 +23,7 @@ public struct Material {
     }
 
     /// The available color schemes for material effects
-    public enum ColorScheme: String {
+    public enum ColorScheme: String, Sendable {
         case light
         case dark
     }

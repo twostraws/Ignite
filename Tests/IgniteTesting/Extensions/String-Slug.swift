@@ -206,7 +206,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Test Against URL Strings", arguments: [
+    @Test("URL Strings", arguments: [
         Instance(input: "https://github.com/twostraws/Ignite", expected: "https-github-com-twostraws--ignite"),
         Instance(input: "https://github.com/twostraws/Ignite/", expected: "https-github-com-twostraws--ignite"),
         Instance(input: "file:/Users/george/Documents", expected: "file--users-george--documents")
@@ -215,7 +215,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Test Against paths", arguments: [
+    @Test("Paths", arguments: [
         Instance(input: "/Users/george/Documents", expected: "-users-george--documents"),
         Instance(input: "/twostraws/Ignite", expected: "twostraws--ignite"),
         Instance(input: "~/Documents", expected: "-documents"),
