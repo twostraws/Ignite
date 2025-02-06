@@ -51,7 +51,7 @@ struct MetaLinkTests {
 
 @Suite("MetaLink.highlighterThemeMetaLinks Tests")
 @MainActor
-struct highlighterThemeMetaLinksTests {
+struct MetaLink_highlighterThemeMetaLinksTests {
     init() throws {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
