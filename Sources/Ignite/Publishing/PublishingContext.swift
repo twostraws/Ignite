@@ -66,7 +66,7 @@ final class PublishingContext {
 
     /// Whether the site uses syntax highlighters.
     var hasSyntaxHighlighters: Bool {
-        !syntaxHighlighters.isEmpty || !site.syntaxHighlighters.isEmpty
+        !syntaxHighlighters.isEmpty || !site.syntaxHighlighterConfiguration.languages.isEmpty
     }
 
     /// The sitemap for this site. Yes, using an array is less efficient when
@@ -243,6 +243,7 @@ final class PublishingContext {
 
         if hasSyntaxHighlighters {
             copy(resource: "js/prism-core.js")
+            copy(resource: "css/prism-plugins.css")
             copySyntaxHighlighters()
         }
     }

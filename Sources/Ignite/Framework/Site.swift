@@ -118,10 +118,10 @@ public protocol Site: Sendable {
     /// Additional themes that can be selected by users beyond light and dark mode.
     var alternateThemes: [any Theme] { get }
 
-    ///  The syntax highlighters used throughout the site. Highlighters used
-    ///  in Markdown files _must_ be included here. Highlighters specified in `CodeBlock`
+    ///  Controls how syntax highlighting behaves throughout your site. Languages used
+    ///  in Markdown files _must_ be included here. Languages specified in `CodeBlock`
     ///  will be added automatically.
-    var syntaxHighlighters: [HighlighterLanguage] { get }
+    var syntaxHighlighterConfiguration: SyntaxHighlighterConfiguration { get }
 
     /// Controls whether HTML output should be formatted with proper indentation.
     var prettifyHTML: Bool { get }
@@ -167,8 +167,8 @@ public extension Site {
     /// Formats HTML output with proper indentation by default.
     var prettifyHTML: Bool { true }
 
-    /// No syntax highlighter languages by default.
-    var syntaxHighlighters: [HighlighterLanguage] { [] }
+    /// No syntax highlighters by default.
+    var syntaxHighlighterConfiguration: SyntaxHighlighterConfiguration { .automatic }
 
     /// Enable local Bootstrap files by default
     var useDefaultBootstrapURLs: BootstrapOptions { .localBootstrap }
