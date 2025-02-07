@@ -9,7 +9,7 @@ import Foundation
 
 /// A group of metadata headers for your page, such as its title,
 /// links to its CSS, and more.
-public struct HTMLHead: RootHTML {
+public struct Head: RootHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -20,15 +20,7 @@ public struct HTMLHead: RootHTML {
     public var isPrimitive: Bool { true }
 
     /// The metadata elements for this page.
-    var items: [any HeadElement]
-
-    /// Creates a new `Head` instance using an element builder that returns
-    /// an array of `HeadElement` objects.
-    /// - Parameter items: The `HeadElement` items you want to
-    /// include for this page.
-    public init(@HeadElementBuilder items: () -> [any HeadElement]) {
-        self.items = items()
-    }
+    var items: [any HeadElement] = []
 
     /// A convenience initializer that creates a standard set of headers to use
     /// for a `Page` instance.
@@ -37,13 +29,19 @@ public struct HTMLHead: RootHTML {
     ///   - configuration: The `SiteConfiguration`, which includes
     ///   information about the site being rendered and more.
     ///   - additionalItems: Additional items to enhance the set of standard headers.
-    public init(
-        for page: Page,
-        @HeadElementBuilder additionalItems: () -> [any HeadElement] = { [] }
-    ) {
-        items = HTMLHead.standardHeaders(for: page)
-        items += MetaTag.socialSharingTags(for: page)
+    public init(@HeadElementBuilder additionalItems: () -> [any HeadElement] = { [] }) {
+        items = Head.standardHeaders(for: environment.page)
+        items += MetaTag.socialSharingTags(for: environment.page)
         items += additionalItems()
+    }
+
+    /// Creates a new `Head` instance using an element builder that returns
+    /// an array of `HeadElement` objects.
+    /// - Parameter items: The `HeadElement` items you want to
+    /// include for this page.
+    public init() {
+        self.items = Head.standardHeaders(for: environment.page)
+        self.items += MetaTag.socialSharingTags(for: environment.page)
     }
 
     /// Renders this element using publishing context passed in.

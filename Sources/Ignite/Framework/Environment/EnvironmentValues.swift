@@ -62,6 +62,9 @@ public struct EnvironmentValues {
     /// Configuration for Bootstrap icons
     public let builtInIconsEnabled: BootstrapOptions
 
+    /// The current page being rendered.
+    let page: Page
+
     public init() {
         self.content = ContentLoader(content: [])
         self.feedConfiguration = FeedConfiguration(mode: .full, contentCount: 0)
@@ -77,9 +80,10 @@ public struct EnvironmentValues {
         self.favicon = FaviconKey.defaultValue
         self.builtInIconsEnabled = BuiltInIconsKey.defaultValue
         self.timeZone = .gmt
+        self.page = .empty
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
+    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent], currentPage: Page) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.content = ContentLoader(content: allContent)
         self.feedConfiguration = site.feedConfiguration
@@ -94,5 +98,10 @@ public struct EnvironmentValues {
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
         self.timeZone = site.timeZone
+        self.page = currentPage
+    }
+
+    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent]) {
+        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent, currentPage: .empty)
     }
 }

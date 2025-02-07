@@ -28,7 +28,7 @@ public protocol EnvironmentKey {
 /// A key for accessing all markdown content in the environment.
 public enum AllContentKey: EnvironmentKey {
     /// The default empty array of markdown content.
-    public static let defaultValue: [Content] = []
+    public static let defaultValue: [MarkdownContent] = []
 }
 
 /// A key for accessing available themes in the environment.

@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public struct HTMLBody: RootHTML {
+public struct Body: RootHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -18,14 +18,14 @@ public struct HTMLBody: RootHTML {
     /// Whether this HTML uses Bootstrap's `container` class to determine page width.
     var isBoundByContainer: Bool = true
 
-    var items: [any HTML]
+    var items: [any HTML] = []
 
     public init(@HTMLBuilder _ items: () -> some HTML) {
         self.items = flatUnwrap(items())
     }
 
-    public init(for page: Page) {
-        self.items = flatUnwrap(page.body)
+    public init() {
+        self.items = flatUnwrap(environment.page.body)
     }
 
     /// Removes the Bootstrap `container` class from the body element.

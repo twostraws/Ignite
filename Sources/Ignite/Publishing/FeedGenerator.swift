@@ -8,7 +8,7 @@
 @MainActor
 struct FeedGenerator {
     var site: any Site
-    var content: [Content]
+    var content: [MarkdownContent]
 
     func generateFeed() -> String {
         let contentXML = generateContentXML()

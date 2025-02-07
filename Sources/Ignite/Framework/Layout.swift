@@ -14,7 +14,7 @@
 ///     var body: some HTML {
 ///         HTMLDocument {
 ///             Header("My Blog")
-///             HTMLBody(for: page)
+///             HTMLBody()
 ///             Footer()
 ///         }
 ///     }
@@ -26,7 +26,7 @@ public protocol Layout {
     associatedtype Body: HTML
 
     /// The main content of the layout, built using the HTML DSL
-    var body: Body { get }
+    @LayoutBuilder var body: Body { get }
 
     /// A unique identifier for this layout instance
     var id: String { get set }
@@ -35,15 +35,13 @@ public protocol Layout {
 public extension Layout {
     /// The current page being rendered.
     var page: Page {
-        PageContext.current
+        EnvironmentStore.current.page
     }
 
     /// Generates a unique identifier for this layout based on its file location and type.
     /// The identifier is used internally for tracking and caching purposes.
     var id: String {
-        get {
-            String(describing: self).truncatedHash
-        }
+        get { String(describing: self).truncatedHash }
         set {} // swiftlint:disable:this unused_setter_value
     }
 }

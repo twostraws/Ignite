@@ -19,7 +19,7 @@
 /// }
 /// ```
 @MainActor
-public protocol ContentLayout: EnvironmentReader {
+public protocol ContentLayout: Layoutable {
     /// The type of HTML content this layout will generate
     associatedtype Body: HTML
 
@@ -29,7 +29,7 @@ public protocol ContentLayout: EnvironmentReader {
 
 public extension ContentLayout {
     /// The current Markdown content being rendered.
-    var content: Content {
+    var content: MarkdownContent {
         ContentContext.current
     }
 }

@@ -20,7 +20,7 @@
 /// }
 /// ```
 @MainActor
-public protocol TagLayout: EnvironmentReader {
+public protocol TagLayout: Layoutable {
     /// The type of HTML content this layout will generate
     associatedtype Body: HTML
 
@@ -34,7 +34,7 @@ extension TagLayout {
         TagContext.current
     }
 
-    public var content: [Content] {
+    public var content: [MarkdownContent] {
         TagContext.content
     }
 }

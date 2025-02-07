@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public struct HTMLDocument: HTML {
+struct HTMLDocument: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

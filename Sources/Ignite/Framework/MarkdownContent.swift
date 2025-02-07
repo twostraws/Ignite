@@ -9,7 +9,7 @@ import Foundation
 
 /// One piece of Markdown content for this site.
 @MainActor
-public struct Content {
+public struct MarkdownContent {
     /// The main title for this content.
     public var title: String
 
@@ -228,8 +228,8 @@ public struct Content {
     }
 }
 
-extension Content {
-    static let empty = Content()
+extension MarkdownContent {
+    static let empty = MarkdownContent()
 
     /// Creates an empty markdown content instance with default values.
     init() {
