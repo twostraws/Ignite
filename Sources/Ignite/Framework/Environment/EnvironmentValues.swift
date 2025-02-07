@@ -63,7 +63,7 @@ public struct EnvironmentValues {
     public let builtInIconsEnabled: BootstrapOptions
 
     /// The current page being rendered.
-    var currentPage: Page = .empty
+    var currentPage: PageContent = .empty
 
     /// The current Markdown content being rendered.
     var currentContent: Content = .empty
@@ -95,7 +95,7 @@ public struct EnvironmentValues {
         sourceDirectory: URL,
         site: any Site,
         allContent: [Content],
-        currentPage: Page
+        currentPage: PageContent
     ) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         self.currentPage = currentPage

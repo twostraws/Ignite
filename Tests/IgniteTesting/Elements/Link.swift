@@ -14,7 +14,7 @@ import Testing
 @Suite("Link Tests")
 @MainActor struct SubsiteLinkTests {
     static let sites: [any Site] = [TestSite(), TestSubsite()]
-    static let pages: [any StaticLayout] = [TestLayout(), TestSubsiteLayout()]
+    static let pages: [any Page] = [TestLayout(), TestSubsiteLayout()]
 
     init() throws {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
@@ -40,7 +40,7 @@ import Testing
     }
 
     @Test("Page Target Test", arguments: zip(await pages, await Self.sites))
-    func target(for page: any StaticLayout, site: any Site) async throws {
+    func target(for page: any Page, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Link("This is a test", target: page).linkStyle(.button)
@@ -54,7 +54,7 @@ import Testing
     }
 
     @Test("Page Content Test", arguments: zip(await pages, await Self.sites))
-    func content(for page: any StaticLayout, site: any Site) async throws {
+    func content(for page: any Page, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Link(
@@ -81,7 +81,7 @@ import Testing
     }
 
     @Test("Link Warning Role Test", arguments: zip(await pages, await Self.sites))
-    func warningRoleLink(for page: any StaticLayout, site: any Site) async throws {
+    func warningRoleLink(for page: any Page, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Link("Link with warning role.", target: page).role(.warning)

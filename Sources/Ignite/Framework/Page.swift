@@ -10,15 +10,15 @@ import Foundation
 /// One static layout in your site, where the content is entirely standalone rather
 /// than being produced in conjunction with an external Markdown file.
 @MainActor
-public protocol StaticLayout: Layoutable {
-    /// All layouts have a default path generated for them by Ignite, but you can
+public protocol Page: ContentLayout {
+    /// All layout have a default path generated for them by Ignite, but you can
     /// override that here if you wish.
     var path: String { get }
 
     /// The title for this layout.
     var title: String { get }
 
-    /// The image for sharing the layout
+    /// The image for sharing the layout.
     var image: URL? { get }
 
     /// A plain-text description for this layout. Defaults to an empty string.
@@ -31,7 +31,7 @@ public protocol StaticLayout: Layoutable {
     @HTMLBuilder var body: Body { get }
 }
 
-public extension StaticLayout {
+public extension Page {
     /// A default description for this layout, which is just an empty string.
     var description: String { "" }
 

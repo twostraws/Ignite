@@ -34,7 +34,7 @@ public protocol Layout {
 
 public extension Layout {
     /// The current page being rendered.
-    var page: Page {
+    var page: PageContent {
         EnvironmentStore.current.currentPage
     }
 

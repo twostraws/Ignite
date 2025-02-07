@@ -60,7 +60,7 @@ public struct Head: RootHTML {
     ///   - configuration: The active `SiteConfiguration`, which includes
     ///   information about the site being rendered and more.
     @HeadElementBuilder
-    public static func standardHeaders(for page: Page) -> [any HeadElement] {
+    public static func standardHeaders(for page: PageContent) -> [any HeadElement] {
         // swiftlint:disable:previous cyclomatic_complexity
         MetaTag.utf8
         MetaTag.flexibleViewport

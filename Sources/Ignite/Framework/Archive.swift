@@ -20,7 +20,7 @@
 /// }
 /// ```
 @MainActor
-public protocol TagLayout: Layoutable {
+public protocol Archive: ContentLayout {
     /// The type of HTML content this layout will generate
     associatedtype Body: HTML
 
@@ -28,7 +28,7 @@ public protocol TagLayout: Layoutable {
     @HTMLBuilder var body: Body { get }
 }
 
-extension TagLayout {
+extension Archive {
     /// The current tag during page generation.
     public var tag: String? {
         EnvironmentStore.current.currentTag

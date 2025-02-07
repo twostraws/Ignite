@@ -9,7 +9,7 @@ import Foundation
 
 /// A single flattened page from any source – static or dynamic – ready to be
 /// passed through a theme.
-public struct Page: Sendable {
+public struct PageContent: Sendable {
     private(set) public var title: String
     private(set) public var description: String
     private(set) public var url: URL
@@ -17,9 +17,9 @@ public struct Page: Sendable {
     private(set) public var body: any HTML
 }
 
-extension Page {
+extension PageContent {
     /// Creates an empty page for use as a default value
-    @MainActor static let empty = Page(
+    @MainActor static let empty = PageContent(
         title: "",
         description: "",
         url: URL(string: "about:blank")!,

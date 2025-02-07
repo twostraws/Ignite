@@ -39,7 +39,7 @@ extension PublishingContext {
     func generateContent() async {
         render(site.homePage, isHomePage: true)
 
-        for page in site.staticLayouts {
+        for page in site.pages {
             render(page)
         }
 
@@ -50,8 +50,8 @@ extension PublishingContext {
     }
 
     /// Generates all tags pages, including the "all tags" page.
-    func generateTagLayouts() async {
-        if site.tagLayout is EmptyTagLayout { return }
+    func generateArchivePages() async {
+        if site.archivePage is EmptyArchive { return }
 
         /// Creates a unique list of sorted tags from across the site, starting
         /// with `nil` for the "all tags" page.
@@ -76,17 +76,17 @@ extension PublishingContext {
                 taggedContent: content(tagged: tag))
 
             let body = EnvironmentStore.update(values) {
-                Section(site.tagLayout.body)
+                Section(site.archivePage.body)
             }
 
-            let page = Page(
+            let page = PageContent(
                 title: "Tags",
                 description: "Tags",
                 url: site.url.appending(path: path),
                 body: body
             )
 
-            let outputString = render(page, using: site.tagLayout.parentLayout)
+            let outputString = render(page, using: site.archivePage.parentLayout)
 
             write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }

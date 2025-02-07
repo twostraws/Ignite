@@ -186,7 +186,7 @@ final class PublishingContext {
         generateThemes(site.allThemes)
         generateMediaQueryCSS()
         generateAnimations()
-        await generateTagLayouts()
+        await generateArchivePages()
         generateSiteMap()
         generateFeed()
         generateRobots()
@@ -298,7 +298,7 @@ final class PublishingContext {
 
     /// Renders one static page using the correct theme, which is taken either from the
     /// provided them or from the main site theme.
-    func render(_ page: Page, using layout: any Layout) -> String {
+    func render(_ page: PageContent, using layout: any Layout) -> String {
         let finalLayout: any Layout
 
         if layout is MissingLayout {
@@ -323,24 +323,24 @@ final class PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render(_ staticLayout: any StaticLayout, isHomePage: Bool = false) {
-        let path = isHomePage ? "" : staticLayout.path
-        currentRenderingPath = isHomePage ? "/" : staticLayout.path
+    func render(_ page: any Page, isHomePage: Bool = false) {
+        let path = isHomePage ? "" : page.path
+        currentRenderingPath = isHomePage ? "/" : page.path
 
         let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         let body = EnvironmentStore.update(values) {
-            staticLayout.body
+            page.body
         }
 
-        let page = Page(
-            title: staticLayout.title,
-            description: staticLayout.description,
+        let pageContent = PageContent(
+            title: page.title,
+            description: page.description,
             url: site.url.appending(path: path),
-            image: staticLayout.image,
+            image: page.image,
             body: body
         )
 
-        let outputString = render(page, using: staticLayout.parentLayout)
+        let outputString = render(pageContent, using: page.parentLayout)
         let outputDirectory = buildDirectory.appending(path: path)
         write(outputString, to: outputDirectory, priority: isHomePage ? 1 : 0.9)
     }
@@ -348,7 +348,7 @@ final class PublishingContext {
     /// Renders one piece of Markdown content.
     /// - Parameter content: The content to render.
     func render(_ content: Content) {
-        let layout = layout(for: content)
+        let contentLayout = layout(for: content)
 
         let values = EnvironmentValues(
             sourceDirectory: sourceDirectory,
@@ -357,12 +357,12 @@ final class PublishingContext {
             currentContent: content)
 
         let body = EnvironmentStore.update(values) {
-            Section(layout.body)
+            Section(contentLayout.body)
         }
 
         currentRenderingPath = content.path
 
-        let page = Page(
+        let page = PageContent(
             title: content.title,
             description: content.description,
             url: site.url.appending(path: content.path),
@@ -370,7 +370,7 @@ final class PublishingContext {
             body: body
         )
 
-        let outputString = render(page, using: layout.parentLayout)
+        let outputString = render(page, using: contentLayout.parentLayout)
         let outputDirectory = buildDirectory.appending(path: content.path)
         write(outputString, to: outputDirectory, priority: 0.8)
     }
@@ -380,9 +380,9 @@ final class PublishingContext {
     /// layout in your site's `layouts` property is used.
     /// - Parameter content: The content that is being rendered.
     /// - Returns: The correct `ContentPage` instance to use for this content.
-    func layout(for content: Content) -> any ContentLayout {
+    func layout(for content: Content) -> any Article {
         if let contentLayout = content.layout {
-            for layout in site.contentLayouts {
+            for layout in site.articles {
                 let layoutName = String(describing: type(of: layout))
 
                 if layoutName == contentLayout {
@@ -391,7 +391,7 @@ final class PublishingContext {
             }
 
             fatalError(.missingNamedLayout(contentLayout))
-        } else if let defaultLayout = site.contentLayouts.first {
+        } else if let defaultLayout = site.articles.first {
             return defaultLayout
         } else {
             fatalError(.missingDefaultLayout)
