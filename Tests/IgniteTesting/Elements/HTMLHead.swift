@@ -14,7 +14,7 @@ import Testing
 @Suite("HTMLHead Tests")
 @MainActor
 struct HTMLHeadTests {
-    
+
     init() throws {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
@@ -23,9 +23,9 @@ struct HTMLHeadTests {
     func default_is_empty_head_tag() throws {
         let sut = HTMLHead {}
         let output = sut.render()
-        
+
         let (attributes, contents) = try #require(output.htmlTagWithCloseTag("head"))
-        
+
         #expect(contents.isEmpty)
         #expect(attributes.isEmpty)
     }
@@ -38,9 +38,9 @@ struct HTMLHeadTests {
             MetaTag(.openGraphTitle, content: "hello")
         ] }
         let sut = HTMLHead(items: exampleHeaderItems)
-        
+
         let contents = try #require(sut.render().htmlTagWithCloseTag("head")?.contents)
-        
+
         for item in exampleHeaderItems() {
             #expect(contents.contains(item.render()))
         }
@@ -62,7 +62,7 @@ struct HTMLHeadTests {
         let expected = HTMLCollection(MetaTag.socialSharingTags(for: examplePage)).render()
 
         let output = sut.render()
-                        
+
         #expect(output.contains(expected))
     }
 
@@ -71,9 +71,9 @@ struct HTMLHeadTests {
         let additionalItem = Script(file: "somefile.js")
         let sut = HTMLHead(for: examplePage) { additionalItem }
         let expected = additionalItem.render()
-        
+
         let output = sut.render()
-                        
+
         #expect(output.contains(expected))
     }
 
