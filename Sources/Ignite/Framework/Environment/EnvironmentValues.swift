@@ -68,6 +68,12 @@ public struct EnvironmentValues {
     /// The current Markdown content being rendered.
     var currentContent: MarkdownContent = .empty
 
+    /// The current tag for the page being rendered.
+    var currentTag: String?
+
+    /// All Markdown content with the current tag.
+    var taggedContent = [MarkdownContent]()
+
     public init() {
         self.content = ContentLoader(content: [])
         self.feedConfiguration = FeedConfiguration(mode: .full, contentCount: 0)
@@ -85,14 +91,36 @@ public struct EnvironmentValues {
         self.timeZone = .gmt
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent], currentPage: Page) {
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [MarkdownContent],
+        currentPage: Page
+    ) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         self.currentPage = currentPage
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent], currentContent: MarkdownContent) {
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [MarkdownContent],
+        currentContent: MarkdownContent
+    ) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         self.currentContent = currentContent
+    }
+
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [MarkdownContent],
+        currentTag: String?,
+        taggedContent: [MarkdownContent]
+    ) {
+        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+        self.currentTag = currentTag
+        self.taggedContent = taggedContent
     }
 
     init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent]) {
