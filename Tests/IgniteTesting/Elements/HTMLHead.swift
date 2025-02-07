@@ -45,11 +45,41 @@ struct HTMLHeadTests {
         }
     }
     
-    @Test func print_head() {
-        let sut = HTMLHead {
-            
-        }
+    @Test func output_contains_standard_headers_for_page() throws {
+        let sut = HTMLHead(for: examplePage)
+        let expected = HTMLCollection(HTMLHead.standardHeaders(for: examplePage)).render()
+
+        let output = sut.render()
+
+        #expect(output.contains(expected))
+    }
+    
+    @Test func output_contains_social_sharing_tags() throws {
+        let sut = HTMLHead(for: examplePage)
+        let expected = HTMLCollection(MetaTag.socialSharingTags(for: examplePage)).render()
+
+        let output = sut.render()
+                        
+        #expect(output.contains(expected))
+    }
+
+    @Test func output_contains_additional_items() throws {
+        let additionalItem = Script(file: "somefile.js")
+        let sut = HTMLHead(for: examplePage) { additionalItem }
+        let expected = additionalItem.render()
         
-        print(sut.render())
+        let output = sut.render()
+                        
+        #expect(output.contains(expected))
+    }
+
+    
+    private var examplePage: Page {
+        Page(
+            title: "Example Page",
+            description: "This is just an example page",
+            url: URL(string: "https://github.com/twostraws/Ignite")!,
+            body: "Just some text"
+        )
     }
 }
