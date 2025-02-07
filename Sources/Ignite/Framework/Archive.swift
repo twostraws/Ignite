@@ -20,7 +20,7 @@
 /// }
 /// ```
 @MainActor
-public protocol Archive: ContentLayout {
+public protocol Archive: PageContent {
     /// The type of HTML content this layout will generate
     associatedtype Body: HTML
 

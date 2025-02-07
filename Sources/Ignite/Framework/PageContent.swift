@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public protocol ContentLayout: Sendable {
+public protocol PageContent: Sendable {
     /// The type of layout you want this page to use.
     associatedtype LayoutType: Layout
 
@@ -13,7 +13,7 @@ public protocol ContentLayout: Sendable {
     var layout: LayoutType { get }
 }
 
-public extension ContentLayout {
+public extension PageContent {
     // Default to `MissingLayout`, which will cause the main
     // site layout to be used instead.
     var layout: MissingLayout { MissingLayout() }

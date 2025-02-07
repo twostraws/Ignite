@@ -34,8 +34,8 @@ public protocol Layout {
 
 public extension Layout {
     /// The current page being rendered.
-    var content: PageContent {
-        EnvironmentStore.current.pageContent
+    var content: some HTML {
+        Group(EnvironmentStore.current.pageContent)
     }
 
     /// Generates a unique identifier for this layout based on its file location and type.

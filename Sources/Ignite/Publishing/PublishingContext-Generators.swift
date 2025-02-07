@@ -71,22 +71,19 @@ extension PublishingContext {
             let values = EnvironmentValues(
                 sourceDirectory: sourceDirectory,
                 site: site,
+                allContent: allContent,
+                pageTitle: "Tags",
+                pageDescription: "Tags",
+                pageURL: site.url.appending(path: path),
                 tag: tag,
-                taggedContent: content(tagged: tag),
-                allContent: allContent)
+                archiveContent: content(tagged: tag))
 
-            let body = EnvironmentStore.update(values) {
-                Section(site.archivePage.body)
+            let archive = site.archivePage
+            let finalLayout: any Layout = archive.layout is MissingLayout ? site.layout : archive.layout
+
+            let outputString = EnvironmentStore.update(values) {
+                finalLayout.body.render()
             }
-
-            let pageContent = PageContent(
-                title: "Tags",
-                description: "Tags",
-                url: site.url.appending(path: path),
-                body: body
-            )
-
-            let outputString = render(pageContent, using: site.archivePage.layout)
 
             write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }

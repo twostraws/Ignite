@@ -10,7 +10,7 @@ import Foundation
 /// One static layout in your site, where the content is entirely standalone rather
 /// than being produced in conjunction with an external Markdown file.
 @MainActor
-public protocol Page: ContentLayout {
+public protocol Page: PageContent {
     /// All layout have a default path generated for them by Ignite, but you can
     /// override that here if you wish.
     var path: String { get }

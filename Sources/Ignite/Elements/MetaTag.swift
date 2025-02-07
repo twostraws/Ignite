@@ -147,26 +147,29 @@ public struct MetaTag: HeadElement, Sendable {
     ///   - configuration: The site configuration.
     /// - Returns: An array of `MetaTag` objects that should be placed
     /// into your page header to enable social sharing.
-    @ElementBuilder<MetaTag> static func socialSharingTags(for page: PageContent) -> [MetaTag] {
+    @ElementBuilder<MetaTag> static func socialSharingTags() -> [MetaTag] {
         let site = PublishingContext.default.site
         MetaTag(.openGraphSiteName, content: site.name)
 
-        if let image = page.image {
+        if let image = environment.pageImage {
             MetaTag(.openGraphImage, content: image)
             MetaTag(.twitterImage, content: image)
         }
 
-        MetaTag(.openGraphTitle, content: page.title)
-        MetaTag(.twitterTitle, content: page.title)
+        let pageTitle = environment.pageTitle
+        MetaTag(.openGraphTitle, content: pageTitle)
+        MetaTag(.twitterTitle, content: pageTitle)
 
-        if page.description.isEmpty == false {
-            MetaTag(.openGraphDescription, content: page.description)
-            MetaTag(.twitterDescription, content: page.description)
+        let pageDescription = environment.pageDescription
+        if pageDescription.isEmpty == false {
+            MetaTag(.openGraphDescription, content: pageDescription)
+            MetaTag(.twitterDescription, content: pageDescription)
         }
 
-        MetaTag(.openGraphURL, content: page.url)
+        let pageURL = environment.pageURL
+        MetaTag(.openGraphURL, content: pageURL)
 
-        if let domain = page.url.removingWWW {
+        if let domain = pageURL.removingWWW {
             MetaTag(.twitterDomain, content: domain)
         }
 

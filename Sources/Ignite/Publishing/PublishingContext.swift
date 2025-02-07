@@ -296,28 +296,6 @@ final class PublishingContext {
         }
     }
 
-    /// Renders page content using the correct layout, which is taken either from the
-    /// provided layout or from the main site layout.
-    func render(_ pageContent: PageContent, using layout: any Layout) -> String {
-        let finalLayout: any Layout
-
-        if layout is MissingLayout {
-            finalLayout = site.layout
-        } else {
-            finalLayout = layout
-        }
-
-        let values = EnvironmentValues(
-            sourceDirectory: sourceDirectory,
-            site: site,
-            content: pageContent,
-            allContent: allContent)
-
-        return EnvironmentStore.update(values) {
-            finalLayout.body.render()
-        }
-    }
-
     /// Renders a static page.
     /// - Parameters:
     ///   - page: The page to render.
@@ -327,20 +305,22 @@ final class PublishingContext {
         let path = isHomePage ? "" : page.path
         currentRenderingPath = isHomePage ? "/" : page.path
 
-        let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        let body = EnvironmentStore.update(values) {
-            page.body
+        let values = EnvironmentValues(
+            sourceDirectory: sourceDirectory,
+            site: site,
+            allContent: allContent,
+            pageTitle: page.title,
+            pageDescription: page.description,
+            pageURL: site.url.appending(path: path),
+            pageImage: page.image,
+            pageContent: page.body)
+
+        let finalLayout: any Layout = page.layout is MissingLayout ? site.layout : page.layout
+
+        let outputString = EnvironmentStore.update(values) {
+            finalLayout.body.render()
         }
 
-        let pageContent = PageContent(
-            title: page.title,
-            description: page.description,
-            url: site.url.appending(path: path),
-            image: page.image,
-            body: body
-        )
-
-        let outputString = render(pageContent, using: page.layout)
         let outputDirectory = buildDirectory.appending(path: path)
         write(outputString, to: outputDirectory, priority: isHomePage ? 1 : 0.9)
     }
@@ -350,27 +330,24 @@ final class PublishingContext {
     func render(_ content: Content) {
         let article = layout(for: content)
 
+        currentRenderingPath = content.path
+
         let values = EnvironmentValues(
             sourceDirectory: sourceDirectory,
             site: site,
-            content: content,
-            allContent: allContent)
+            allContent: allContent,
+            pageTitle: content.title,
+            pageDescription: content.description,
+            pageURL: site.url.appending(path: content.path),
+            pageImage: content.image.flatMap { URL(string: $0) },
+            content: content)
 
-        let body = EnvironmentStore.update(values) {
-            Section(article.body)
+        let finalLayout: any Layout = article.layout is MissingLayout ? site.layout : article.layout
+
+        let outputString = EnvironmentStore.update(values) {
+            finalLayout.body.render()
         }
 
-        currentRenderingPath = content.path
-
-        let pageContent = PageContent(
-            title: content.title,
-            description: content.description,
-            url: site.url.appending(path: content.path),
-            image: content.image.flatMap { URL(string: $0) },
-            body: body
-        )
-
-        let outputString = render(pageContent, using: article.layout)
         let outputDirectory = buildDirectory.appending(path: content.path)
         write(outputString, to: outputDirectory, priority: 0.8)
     }

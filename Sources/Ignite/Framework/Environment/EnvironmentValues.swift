@@ -62,8 +62,16 @@ public struct EnvironmentValues {
     /// Configuration for Bootstrap icons
     public let builtInIconsEnabled: BootstrapOptions
 
+    public let pageTitle: String
+
+    public let pageDescription: String
+
+    public let pageURL: URL
+
+    public let pageImage: URL?
+
     /// The current page being rendered.
-    var pageContent: PageContent = .empty
+    var pageContent: any HTML = EmptyHTML()
 
     /// The current Markdown content being rendered.
     var articleContent: Content = .empty
@@ -89,41 +97,85 @@ public struct EnvironmentValues {
         self.favicon = nil
         self.builtInIconsEnabled = .localBootstrap
         self.timeZone = .gmt
+        self.pageTitle = ""
+        self.pageDescription = ""
+        self.pageURL = URL(static: "https://example.com")
+        self.pageImage = nil
     }
 
     init(
         sourceDirectory: URL,
         site: any Site,
-        content: PageContent,
-        allContent: [Content]
+        allContent: [Content],
+        pageTitle: String,
+        pageDescription: String,
+        pageURL: URL,
+        pageImage: URL?,
+        pageContent: any HTML
     ) {
-        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        self.pageContent = content
+        self.init(
+            sourceDirectory: sourceDirectory,
+            site: site,
+            allContent: allContent,
+            pageTitle: pageTitle,
+            pageDescription: pageDescription,
+            pageURL: pageURL,
+            pageImage: pageImage)
+        self.pageContent = pageContent
     }
 
     init(
         sourceDirectory: URL,
         site: any Site,
-        content: Content,
-        allContent: [Content]
+        allContent: [Content],
+        pageTitle: String,
+        pageDescription: String,
+        pageURL: URL,
+        pageImage: URL?,
+        content: Content
     ) {
-        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+        self.init(
+            sourceDirectory: sourceDirectory,
+            site: site,
+            allContent: allContent,
+            pageTitle: pageTitle,
+            pageDescription: pageDescription,
+            pageURL: pageURL,
+            pageImage: pageImage)
         self.articleContent = content
     }
 
     init(
         sourceDirectory: URL,
         site: any Site,
+        allContent: [Content],
+        pageTitle: String,
+        pageDescription: String,
+        pageURL: URL,
         tag: String?,
-        taggedContent: [Content],
-        allContent: [Content]
+        archiveContent: [Content]
     ) {
-        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+        self.init(
+            sourceDirectory: sourceDirectory,
+            site: site,
+            allContent: allContent,
+            pageTitle: pageTitle,
+            pageDescription: pageDescription,
+            pageURL: pageURL,
+            pageImage: nil)
         self.tag = tag
-        self.archiveContent = taggedContent
+        self.archiveContent = archiveContent
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [Content],
+        pageTitle: String,
+        pageDescription: String,
+        pageURL: URL,
+        pageImage: URL?
+    ) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.content = ContentLoader(content: allContent)
         self.feedConfiguration = site.feedConfiguration
@@ -138,5 +190,10 @@ public struct EnvironmentValues {
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
         self.timeZone = site.timeZone
+
+        self.pageTitle = pageTitle
+        self.pageDescription = pageDescription
+        self.pageURL = pageURL
+        self.pageImage = pageImage
     }
 }

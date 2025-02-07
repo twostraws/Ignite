@@ -25,7 +25,7 @@ public struct Body: RootHTML {
     }
 
     public init() {
-        self.items = flatUnwrap(environment.pageContent.body)
+        self.items = flatUnwrap(Self.environment.pageContent.body)
     }
 
     /// Removes the Bootstrap `container` class from the body element.

@@ -30,8 +30,8 @@ public struct Head: RootHTML {
     ///   information about the site being rendered and more.
     ///   - additionalItems: Additional items to enhance the set of standard headers.
     public init(@HeadElementBuilder additionalItems: () -> [any HeadElement] = { [] }) {
-        items = Head.standardHeaders(for: environment.pageContent)
-        items += MetaTag.socialSharingTags(for: environment.pageContent)
+        items = Head.standardHeaders()
+        items += MetaTag.socialSharingTags()
         items += additionalItems()
     }
 
@@ -40,8 +40,8 @@ public struct Head: RootHTML {
     /// - Parameter items: The `HeadElement` items you want to
     /// include for this page.
     public init() {
-        self.items = Head.standardHeaders(for: environment.pageContent)
-        self.items += MetaTag.socialSharingTags(for: environment.pageContent)
+        self.items = Head.standardHeaders()
+        self.items += MetaTag.socialSharingTags()
     }
 
     /// Renders this element using publishing context passed in.
@@ -60,13 +60,14 @@ public struct Head: RootHTML {
     ///   - configuration: The active `SiteConfiguration`, which includes
     ///   information about the site being rendered and more.
     @HeadElementBuilder
-    public static func standardHeaders(for page: PageContent) -> [any HeadElement] {
+    public static func standardHeaders() -> [any HeadElement] {
         // swiftlint:disable:previous cyclomatic_complexity
         MetaTag.utf8
         MetaTag.flexibleViewport
 
-        if page.description.isEmpty == false {
-            MetaTag(name: "description", content: page.description)
+        let pageDescription = environment.pageDescription
+        if pageDescription.isEmpty == false {
+            MetaTag(name: "description", content: pageDescription)
         }
 
         let context = PublishingContext.default
@@ -78,7 +79,7 @@ public struct Head: RootHTML {
 
         MetaTag.generator
 
-        Title(page.title)
+        Title(environment.pageTitle)
 
         if site.useDefaultBootstrapURLs == .localBootstrap {
             MetaLink.standardCSS
@@ -106,7 +107,7 @@ public struct Head: RootHTML {
             MetaLink.mediaQueryCSS
         }
 
-        MetaLink(href: page.url, rel: "canonical")
+        MetaLink(href: environment.pageURL, rel: "canonical")
 
         if let favicon = site.favicon {
             MetaLink(href: favicon, rel: .icon)

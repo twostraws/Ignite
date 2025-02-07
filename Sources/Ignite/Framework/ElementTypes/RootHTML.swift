@@ -10,7 +10,7 @@ public protocol RootHTML: HTML {}
 
 extension RootHTML {
     /// The current environment values.
-    var environment: EnvironmentValues {
+    static var environment: EnvironmentValues {
         EnvironmentStore.current
     }
 }

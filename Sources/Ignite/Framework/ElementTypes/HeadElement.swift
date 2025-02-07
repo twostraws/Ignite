@@ -7,3 +7,10 @@
 
 /// A metadata element that can exist in the `HTMLHead` struct.
 public protocol HeadElement: HTML {}
+
+extension HeadElement {
+    /// The current environment values.
+    static var environment: EnvironmentValues {
+        EnvironmentStore.current
+    }
+}
