@@ -100,9 +100,7 @@ public struct Image: BlockHTML, InlineHTML, LazyLoadable {
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
     private func render(image: String, description: String) -> String {
-        // char[0] of the 'url' is '/' for an asset; not for a site URL
         let basePath = image.starts(with: "/") ? publishingContext.site.url.path : ""
-
         var attributes = attributes
         attributes.selfClosingTag = "img"
         attributes.append(customAttributes:
