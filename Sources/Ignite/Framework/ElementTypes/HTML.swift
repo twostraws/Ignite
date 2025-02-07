@@ -22,10 +22,10 @@ public protocol HTML: CustomStringConvertible, Sendable {
     var isPrimitive: Bool { get }
 
     /// The type of HTML content this element contains.
-    associatedtype Content: HTML
+    associatedtype Body: HTML
 
     /// The content and behavior of this `HTML` element.
-    @HTMLBuilder var body: Content { get }
+    @HTMLBuilder var body: Body { get }
 
     /// Converts this element and its children into an HTML string with attributes.
     /// - Returns: A string containing the rendered HTML
