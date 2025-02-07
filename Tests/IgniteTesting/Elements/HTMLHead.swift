@@ -30,7 +30,8 @@ struct HTMLHeadTests {
         #expect(attributes.isEmpty)
     }
 
-    @Test func outputs_items_passed_on_init() throws {
+    @Test("Output contains items passed in on init")
+    func outputs_items_passed_on_init() throws {
         func exampleHeaderItems() -> [any HeadElement] { [
             Title("Hello, World"),
             Script(file: "../script.js"),
@@ -44,8 +45,9 @@ struct HTMLHeadTests {
             #expect(contents.contains(item.render()))
         }
     }
-    
-    @Test func output_contains_standard_headers_for_page() throws {
+
+    @Test("Output contains standard headers for page passed in on init")
+    func output_contains_standard_headers_for_page() throws {
         let sut = HTMLHead(for: examplePage)
         let expected = HTMLCollection(HTMLHead.standardHeaders(for: examplePage)).render()
 
@@ -53,8 +55,9 @@ struct HTMLHeadTests {
 
         #expect(output.contains(expected))
     }
-    
-    @Test func output_contains_social_sharing_tags() throws {
+
+    @Test("Output contains soccial sharing tags for page passed in on init")
+    func output_contains_social_sharing_tags() throws {
         let sut = HTMLHead(for: examplePage)
         let expected = HTMLCollection(MetaTag.socialSharingTags(for: examplePage)).render()
 
@@ -63,7 +66,8 @@ struct HTMLHeadTests {
         #expect(output.contains(expected))
     }
 
-    @Test func output_contains_additional_items() throws {
+    @Test("Output contains any additional items passed in on init")
+    func output_contains_additional_items() throws {
         let additionalItem = Script(file: "somefile.js")
         let sut = HTMLHead(for: examplePage) { additionalItem }
         let expected = additionalItem.render()
@@ -73,7 +77,6 @@ struct HTMLHeadTests {
         #expect(output.contains(expected))
     }
 
-    
     private var examplePage: Page {
         Page(
             title: "Example Page",
