@@ -30,6 +30,6 @@ public protocol ContentLayout: Layoutable {
 public extension ContentLayout {
     /// The current Markdown content being rendered.
     var content: MarkdownContent {
-        ContentContext.current
+        EnvironmentStore.current.currentContent
     }
 }
