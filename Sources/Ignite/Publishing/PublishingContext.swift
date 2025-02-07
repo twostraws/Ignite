@@ -296,9 +296,9 @@ final class PublishingContext {
         }
     }
 
-    /// Renders one static page using the correct theme, which is taken either from the
-    /// provided them or from the main site theme.
-    func render(_ page: PageContent, using layout: any Layout) -> String {
+    /// Renders page content using the correct layout, which is taken either from the
+    /// provided layout or from the main site layout.
+    func render(_ pageContent: PageContent, using layout: any Layout) -> String {
         let finalLayout: any Layout
 
         if layout is MissingLayout {
@@ -310,8 +310,8 @@ final class PublishingContext {
         let values = EnvironmentValues(
             sourceDirectory: sourceDirectory,
             site: site,
-            allContent: allContent,
-            currentPage: page)
+            content: pageContent,
+            allContent: allContent)
 
         return EnvironmentStore.update(values) {
             finalLayout.body.render()
@@ -340,7 +340,7 @@ final class PublishingContext {
             body: body
         )
 
-        let outputString = render(pageContent, using: page.parentLayout)
+        let outputString = render(pageContent, using: page.layout)
         let outputDirectory = buildDirectory.appending(path: path)
         write(outputString, to: outputDirectory, priority: isHomePage ? 1 : 0.9)
     }
@@ -348,21 +348,21 @@ final class PublishingContext {
     /// Renders one piece of Markdown content.
     /// - Parameter content: The content to render.
     func render(_ content: Content) {
-        let contentLayout = layout(for: content)
+        let article = layout(for: content)
 
         let values = EnvironmentValues(
             sourceDirectory: sourceDirectory,
             site: site,
-            allContent: allContent,
-            currentContent: content)
+            content: content,
+            allContent: allContent)
 
         let body = EnvironmentStore.update(values) {
-            Section(contentLayout.body)
+            Section(article.body)
         }
 
         currentRenderingPath = content.path
 
-        let page = PageContent(
+        let pageContent = PageContent(
             title: content.title,
             description: content.description,
             url: site.url.appending(path: content.path),
@@ -370,7 +370,7 @@ final class PublishingContext {
             body: body
         )
 
-        let outputString = render(page, using: contentLayout.parentLayout)
+        let outputString = render(pageContent, using: article.layout)
         let outputDirectory = buildDirectory.appending(path: content.path)
         write(outputString, to: outputDirectory, priority: 0.8)
     }

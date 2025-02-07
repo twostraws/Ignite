@@ -30,6 +30,6 @@ public protocol Article: ContentLayout {
 public extension Article {
     /// The current Markdown content being rendered.
     var content: Content {
-        EnvironmentStore.current.currentContent
+        EnvironmentStore.current.articleContent
     }
 }

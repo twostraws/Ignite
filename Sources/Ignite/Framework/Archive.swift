@@ -31,10 +31,10 @@ public protocol Archive: ContentLayout {
 extension Archive {
     /// The current tag during page generation.
     public var tag: String? {
-        EnvironmentStore.current.currentTag
+        EnvironmentStore.current.tag
     }
 
     public var content: [Content] {
-        EnvironmentStore.current.taggedContent
+        EnvironmentStore.current.archiveContent
     }
 }

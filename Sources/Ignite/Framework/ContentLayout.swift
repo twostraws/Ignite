@@ -10,11 +10,11 @@ public protocol ContentLayout: Sendable {
     associatedtype LayoutType: Layout
 
     /// The layout to apply around this page.
-    var parentLayout: LayoutType { get }
+    var layout: LayoutType { get }
 }
 
 public extension ContentLayout {
     // Default to `MissingLayout`, which will cause the main
     // site layout to be used instead.
-    var parentLayout: MissingLayout { MissingLayout() }
+    var layout: MissingLayout { MissingLayout() }
 }

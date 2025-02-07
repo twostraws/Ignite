@@ -20,7 +20,7 @@ import Foundation
 /// ```
 @MainActor
 public struct EnvironmentValues {
-    /// Provides access to the Markdown pages on this site.
+    /// Provides access to all Markdown pages on this site.
     public var content: ContentLoader
 
     /// Configuration for RSS/Atom feed generation.
@@ -63,16 +63,16 @@ public struct EnvironmentValues {
     public let builtInIconsEnabled: BootstrapOptions
 
     /// The current page being rendered.
-    var currentPage: PageContent = .empty
+    var pageContent: PageContent = .empty
 
     /// The current Markdown content being rendered.
-    var currentContent: Content = .empty
+    var articleContent: Content = .empty
 
     /// The current tag for the page being rendered.
-    var currentTag: String?
+    var tag: String?
 
     /// All Markdown content with the current tag.
-    var taggedContent = [Content]()
+    var archiveContent = [Content]()
 
     public init() {
         self.content = ContentLoader(content: [])
@@ -80,47 +80,47 @@ public struct EnvironmentValues {
         self.isFeedEnabled = false
         self.themes = []
         self.decode = .init(sourceDirectory: URL(filePath: ""))
-        self.author = SiteAuthorKey.defaultValue
-        self.siteName = SiteNameKey.defaultValue
-        self.siteTitleSuffix = SiteTitleSuffixKey.defaultValue
-        self.siteDescription = SiteDescriptionKey.defaultValue
-        self.language = SiteLanguageKey.defaultValue
-        self.siteURL = SiteURLKey.defaultValue
-        self.favicon = FaviconKey.defaultValue
-        self.builtInIconsEnabled = BuiltInIconsKey.defaultValue
+        self.author = ""
+        self.siteName = ""
+        self.siteTitleSuffix = ""
+        self.siteDescription = nil
+        self.language = .english
+        self.siteURL = URL(static: "https://example.com")
+        self.favicon = nil
+        self.builtInIconsEnabled = .localBootstrap
         self.timeZone = .gmt
     }
 
     init(
         sourceDirectory: URL,
         site: any Site,
-        allContent: [Content],
-        currentPage: PageContent
+        content: PageContent,
+        allContent: [Content]
     ) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        self.currentPage = currentPage
+        self.pageContent = content
     }
 
     init(
         sourceDirectory: URL,
         site: any Site,
-        allContent: [Content],
-        currentContent: Content
+        content: Content,
+        allContent: [Content]
     ) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        self.currentContent = currentContent
+        self.articleContent = content
     }
 
     init(
         sourceDirectory: URL,
         site: any Site,
-        allContent: [Content],
-        currentTag: String?,
-        taggedContent: [Content]
+        tag: String?,
+        taggedContent: [Content],
+        allContent: [Content]
     ) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        self.currentTag = currentTag
-        self.taggedContent = taggedContent
+        self.tag = tag
+        self.archiveContent = taggedContent
     }
 
     init(sourceDirectory: URL, site: any Site, allContent: [Content]) {

@@ -30,8 +30,8 @@ public struct Head: RootHTML {
     ///   information about the site being rendered and more.
     ///   - additionalItems: Additional items to enhance the set of standard headers.
     public init(@HeadElementBuilder additionalItems: () -> [any HeadElement] = { [] }) {
-        items = Head.standardHeaders(for: environment.currentPage)
-        items += MetaTag.socialSharingTags(for: environment.currentPage)
+        items = Head.standardHeaders(for: environment.pageContent)
+        items += MetaTag.socialSharingTags(for: environment.pageContent)
         items += additionalItems()
     }
 
@@ -40,8 +40,8 @@ public struct Head: RootHTML {
     /// - Parameter items: The `HeadElement` items you want to
     /// include for this page.
     public init() {
-        self.items = Head.standardHeaders(for: environment.currentPage)
-        self.items += MetaTag.socialSharingTags(for: environment.currentPage)
+        self.items = Head.standardHeaders(for: environment.pageContent)
+        self.items += MetaTag.socialSharingTags(for: environment.pageContent)
     }
 
     /// Renders this element using publishing context passed in.
