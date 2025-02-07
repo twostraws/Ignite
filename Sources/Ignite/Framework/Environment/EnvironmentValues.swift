@@ -63,7 +63,10 @@ public struct EnvironmentValues {
     public let builtInIconsEnabled: BootstrapOptions
 
     /// The current page being rendered.
-    let page: Page
+    var currentPage: Page = .empty
+
+    /// The current Markdown content being rendered.
+    var currentContent: MarkdownContent = .empty
 
     public init() {
         self.content = ContentLoader(content: [])
@@ -80,10 +83,19 @@ public struct EnvironmentValues {
         self.favicon = FaviconKey.defaultValue
         self.builtInIconsEnabled = BuiltInIconsKey.defaultValue
         self.timeZone = .gmt
-        self.page = .empty
     }
 
     init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent], currentPage: Page) {
+        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+        self.currentPage = currentPage
+    }
+
+    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent], currentContent: MarkdownContent) {
+        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+        self.currentContent = currentContent
+    }
+
+    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent]) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.content = ContentLoader(content: allContent)
         self.feedConfiguration = site.feedConfiguration
@@ -98,10 +110,5 @@ public struct EnvironmentValues {
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
         self.timeZone = site.timeZone
-        self.page = currentPage
-    }
-
-    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent]) {
-        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent, currentPage: .empty)
     }
 }
