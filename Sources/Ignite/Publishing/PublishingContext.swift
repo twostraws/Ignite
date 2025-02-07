@@ -59,7 +59,7 @@ final class PublishingContext {
     private(set) var errors = [PublishingError]()
 
     /// All the Markdown content this user has inside their Content folder.
-    public private(set) var allContent = [MarkdownContent]()
+    public private(set) var allContent = [Content]()
 
     /// An ordered set of syntax highlighters pulled from code blocks throughout the site.
     var syntaxHighlighters = OrderedSet<HighlighterLanguage>()
@@ -118,7 +118,7 @@ final class PublishingContext {
     /// - Parameter tag: The tag to filter by, or nil for all content.
     /// - Returns: An array of content matching the specified tag, or all content
     /// if no tag was specified.
-    func content(tagged tag: String?) -> [MarkdownContent] {
+    func content(tagged tag: String?) -> [Content] {
         if let tag {
             allContent.filter { $0.tags.contains(tag) }
         } else {
@@ -162,7 +162,7 @@ final class PublishingContext {
             if objectURL.pathExtension == "md" {
                 let values = try objectURL.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey])
 
-                let article = try MarkdownContent(from: objectURL, resourceValues: values)
+                let article = try Content(from: objectURL, resourceValues: values)
 
                 if article.isPublished {
                     allContent.append(article)
@@ -347,7 +347,7 @@ final class PublishingContext {
 
     /// Renders one piece of Markdown content.
     /// - Parameter content: The content to render.
-    func render(_ content: MarkdownContent) {
+    func render(_ content: Content) {
         let layout = layout(for: content)
 
         let body = ContentContext.withCurrentContent(content) {
@@ -377,7 +377,7 @@ final class PublishingContext {
     /// layout in your site's `layouts` property is used.
     /// - Parameter content: The content that is being rendered.
     /// - Returns: The correct `ContentPage` instance to use for this content.
-    func layout(for content: MarkdownContent) -> any ContentLayout {
+    func layout(for content: Content) -> any ContentLayout {
         if let contentLayout = content.layout {
             for layout in site.contentLayouts {
                 let layoutName = String(describing: type(of: layout))

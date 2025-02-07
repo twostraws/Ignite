@@ -23,10 +23,10 @@
 @MainActor
 public protocol Layout {
     /// The type of HTML content this layout will generate
-    associatedtype Content: HTML
+    associatedtype Elements: HTML
 
     /// The main content of the layout, built using the HTML DSL
-    @LayoutBuilder var body: Content { get }
+    @LayoutBuilder var body: Elements { get }
 
     /// A unique identifier for this layout instance
     var id: String { get set }

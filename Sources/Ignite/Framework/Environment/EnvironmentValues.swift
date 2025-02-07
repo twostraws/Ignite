@@ -83,7 +83,7 @@ public struct EnvironmentValues {
         self.page = .empty
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent], currentPage: Page) {
+    init(sourceDirectory: URL, site: any Site, allContent: [Content], currentPage: Page) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.content = ContentLoader(content: allContent)
         self.feedConfiguration = site.feedConfiguration
@@ -101,7 +101,7 @@ public struct EnvironmentValues {
         self.page = currentPage
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent]) {
+    init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent, currentPage: .empty)
     }
 }
