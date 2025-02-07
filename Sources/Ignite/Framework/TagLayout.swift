@@ -34,7 +34,7 @@ extension TagLayout {
         TagContext.current
     }
 
-    public var content: [MarkdownContent] {
+    public var content: [Content] {
         TagContext.content
     }
 }

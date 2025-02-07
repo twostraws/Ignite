@@ -7,17 +7,17 @@
 
 @MainActor
 public struct ContentLoader {
-    public var all: [MarkdownContent]
+    public var all: [Content]
 
-    init(content: [MarkdownContent]) {
+    init(content: [Content]) {
         all = content
     }
 
-    public func typed(_ type: String) -> [MarkdownContent] {
+    public func typed(_ type: String) -> [Content] {
         all.filter { $0.type == type }
     }
 
-    public func tagged(_ tag: String) -> [MarkdownContent] {
+    public func tagged(_ tag: String) -> [Content] {
         all.filter { $0.tags.contains(tag) }
     }
 }

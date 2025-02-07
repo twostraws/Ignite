@@ -23,7 +23,7 @@ struct FeedGeneratorTests {
     @Test("generateFeed()", arguments: await sites)
     func generateFeed(for site: any Site) async throws {
         let feedHref = site.url.appending(path: site.feedConfiguration.path).absoluteString
-        var exampleContent = MarkdownContent()
+        var exampleContent = Content()
         exampleContent.title = "Example Title"
         exampleContent.description = "Example Description"
 

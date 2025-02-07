@@ -66,7 +66,7 @@ public struct EnvironmentValues {
     var currentPage: Page = .empty
 
     /// The current Markdown content being rendered.
-    var currentContent: MarkdownContent = .empty
+    var currentContent: Content = .empty
 
     public init() {
         self.content = ContentLoader(content: [])
@@ -85,17 +85,17 @@ public struct EnvironmentValues {
         self.timeZone = .gmt
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent], currentPage: Page) {
+    init(sourceDirectory: URL, site: any Site, allContent: [Content], currentPage: Page) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         self.currentPage = currentPage
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent], currentContent: MarkdownContent) {
+    init(sourceDirectory: URL, site: any Site, allContent: [Content], currentContent: Content) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         self.currentContent = currentContent
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent]) {
+    init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.content = ContentLoader(content: allContent)
         self.feedConfiguration = site.feedConfiguration
