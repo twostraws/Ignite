@@ -47,7 +47,7 @@ struct SiteTests {
     }
 
     @Test("Site published given Markdown content with valid metadata")
-    func publishingWithMarkdownContent() async throws {
+    func publishingWithContent() async throws {
         let markdownFileURL = package.contentDirectoryURL.appending(path: "story-with-valid-metadata.md")
         let markdownContent = """
         ---

@@ -7,7 +7,7 @@
 
 /// A protocol for customizing the layout of ContentPreview.
 public protocol ContentPreviewStyle {
-    func body(content: MarkdownContent) -> any BlockHTML
+    func body(content: Content) -> any BlockHTML
 }
 
 /// A wrapper around Card, specifically aimed at presenting details about
@@ -23,7 +23,7 @@ public struct ContentPreview: BlockHTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    var content: MarkdownContent
+    var content: Content
 
     /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
@@ -34,7 +34,7 @@ public struct ContentPreview: BlockHTML {
     /// Initializes the content preview
     /// - Parameters:
     ///   - content: The content to display.
-    public init(for content: MarkdownContent) {
+    public init(for content: Content) {
         self.content = content
     }
 

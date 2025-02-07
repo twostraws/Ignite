@@ -66,13 +66,13 @@ public struct EnvironmentValues {
     var currentPage: Page = .empty
 
     /// The current Markdown content being rendered.
-    var currentContent: MarkdownContent = .empty
+    var currentContent: Content = .empty
 
     /// The current tag for the page being rendered.
     var currentTag: String?
 
     /// All Markdown content with the current tag.
-    var taggedContent = [MarkdownContent]()
+    var taggedContent = [Content]()
 
     public init() {
         self.content = ContentLoader(content: [])
@@ -94,7 +94,7 @@ public struct EnvironmentValues {
     init(
         sourceDirectory: URL,
         site: any Site,
-        allContent: [MarkdownContent],
+        allContent: [Content],
         currentPage: Page
     ) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
@@ -104,8 +104,8 @@ public struct EnvironmentValues {
     init(
         sourceDirectory: URL,
         site: any Site,
-        allContent: [MarkdownContent],
-        currentContent: MarkdownContent
+        allContent: [Content],
+        currentContent: Content
     ) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         self.currentContent = currentContent
@@ -114,16 +114,16 @@ public struct EnvironmentValues {
     init(
         sourceDirectory: URL,
         site: any Site,
-        allContent: [MarkdownContent],
+        allContent: [Content],
         currentTag: String?,
-        taggedContent: [MarkdownContent]
+        taggedContent: [Content]
     ) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         self.currentTag = currentTag
         self.taggedContent = taggedContent
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [MarkdownContent]) {
+    init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.content = ContentLoader(content: allContent)
         self.feedConfiguration = site.feedConfiguration

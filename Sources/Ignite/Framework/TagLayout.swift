@@ -34,7 +34,7 @@ extension TagLayout {
         EnvironmentStore.current.currentTag
     }
 
-    public var content: [MarkdownContent] {
+    public var content: [Content] {
         EnvironmentStore.current.taggedContent
     }
 }
