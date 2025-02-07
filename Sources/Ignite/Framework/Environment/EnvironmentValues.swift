@@ -80,14 +80,14 @@ public struct EnvironmentValues {
         self.isFeedEnabled = false
         self.themes = []
         self.decode = .init(sourceDirectory: URL(filePath: ""))
-        self.author = SiteAuthorKey.defaultValue
-        self.siteName = SiteNameKey.defaultValue
-        self.siteTitleSuffix = SiteTitleSuffixKey.defaultValue
-        self.siteDescription = SiteDescriptionKey.defaultValue
-        self.language = SiteLanguageKey.defaultValue
-        self.siteURL = SiteURLKey.defaultValue
-        self.favicon = FaviconKey.defaultValue
-        self.builtInIconsEnabled = BuiltInIconsKey.defaultValue
+        self.author = ""
+        self.siteName = ""
+        self.siteTitleSuffix = ""
+        self.siteDescription = nil
+        self.language = .english
+        self.siteURL = URL(static: "https://example.com")
+        self.favicon = nil
+        self.builtInIconsEnabled = .localBootstrap
         self.timeZone = .gmt
     }
 
