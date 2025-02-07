@@ -23,12 +23,6 @@ public protocol Page: PageContent {
 
     /// A plain-text description for this layout. Defaults to an empty string.
     var description: String { get }
-
-    /// The type of HTML content this element contains.
-    associatedtype Body: HTML
-
-    /// The content and behavior of this `HTML` element.
-    @HTMLBuilder var body: Body { get }
 }
 
 public extension Page {

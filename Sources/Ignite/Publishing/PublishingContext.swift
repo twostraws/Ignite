@@ -313,7 +313,7 @@ final class PublishingContext {
             pageDescription: page.description,
             pageURL: site.url.appending(path: path),
             pageImage: page.image,
-            pageContent: page.body)
+            pageContent: page)
 
         let finalLayout: any Layout = page.layout is MissingLayout ? site.layout : page.layout
 
@@ -340,6 +340,7 @@ final class PublishingContext {
             pageDescription: content.description,
             pageURL: site.url.appending(path: content.path),
             pageImage: content.image.flatMap { URL(string: $0) },
+            pageContent: article,
             content: content)
 
         let finalLayout: any Layout = article.layout is MissingLayout ? site.layout : article.layout

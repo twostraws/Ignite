@@ -62,25 +62,29 @@ public struct EnvironmentValues {
     /// Configuration for Bootstrap icons
     public let builtInIconsEnabled: BootstrapOptions
 
+    /// The title of the current page being rendered.
     public let pageTitle: String
 
+    /// A brief description of the current page, used for SEO and social sharing.
     public let pageDescription: String
 
+    /// The full URL where this page will be published.
     public let pageURL: URL
 
+    /// An optional image URL used when sharing this page on social media.
     public let pageImage: URL?
 
     /// The current page being rendered.
     var pageContent: any HTML = EmptyHTML()
 
     /// The current Markdown content being rendered.
-    var articleContent: Content = .empty
+    let articleContent: Content
 
     /// The current tag for the page being rendered.
-    var tag: String?
+    let tag: String?
 
     /// All Markdown content with the current tag.
-    var archiveContent = [Content]()
+    let archiveContent: [Content]
 
     public init() {
         self.content = ContentLoader(content: [])
@@ -97,10 +101,16 @@ public struct EnvironmentValues {
         self.favicon = nil
         self.builtInIconsEnabled = .localBootstrap
         self.timeZone = .gmt
+        
         self.pageTitle = ""
         self.pageDescription = ""
         self.pageURL = URL(static: "https://example.com")
         self.pageImage = nil
+
+        self.articleContent = .empty
+        self.pageContent = EmptyHTML()
+        self.archiveContent = []
+        self.tag = nil
     }
 
     init(
@@ -110,61 +120,37 @@ public struct EnvironmentValues {
         pageTitle: String,
         pageDescription: String,
         pageURL: URL,
-        pageImage: URL?,
-        pageContent: any HTML
-    ) {
-        self.init(
-            sourceDirectory: sourceDirectory,
-            site: site,
-            allContent: allContent,
-            pageTitle: pageTitle,
-            pageDescription: pageDescription,
-            pageURL: pageURL,
-            pageImage: pageImage)
-        self.pageContent = pageContent
-    }
-
-    init(
-        sourceDirectory: URL,
-        site: any Site,
-        allContent: [Content],
-        pageTitle: String,
-        pageDescription: String,
-        pageURL: URL,
-        pageImage: URL?,
-        content: Content
-    ) {
-        self.init(
-            sourceDirectory: sourceDirectory,
-            site: site,
-            allContent: allContent,
-            pageTitle: pageTitle,
-            pageDescription: pageDescription,
-            pageURL: pageURL,
-            pageImage: pageImage)
-        self.articleContent = content
-    }
-
-    init(
-        sourceDirectory: URL,
-        site: any Site,
-        allContent: [Content],
-        pageTitle: String,
-        pageDescription: String,
-        pageURL: URL,
+        pageContent: any PageContent,
         tag: String?,
         archiveContent: [Content]
     ) {
-        self.init(
-            sourceDirectory: sourceDirectory,
-            site: site,
-            allContent: allContent,
-            pageTitle: pageTitle,
-            pageDescription: pageDescription,
-            pageURL: pageURL,
-            pageImage: nil)
+        self.decode = DecodeAction(sourceDirectory: sourceDirectory)
+        self.content = ContentLoader(content: allContent)
+        self.feedConfiguration = site.feedConfiguration
+        self.isFeedEnabled = site.isFeedEnabled
+        self.themes = site.allThemes
+        self.author = site.author
+        self.siteName = site.name
+        self.siteTitleSuffix = site.titleSuffix
+        self.siteDescription = site.description
+        self.language = site.language
+        self.siteURL = site.url
+        self.favicon = site.favicon
+        self.builtInIconsEnabled = site.builtInIconsEnabled
+        self.timeZone = site.timeZone
+
+        self.pageTitle = pageTitle
+        self.pageDescription = pageDescription
+        self.pageURL = pageURL
+        self.pageImage = nil
+
         self.tag = tag
         self.archiveContent = archiveContent
+        self.articleContent = .empty
+
+        self.pageContent = EnvironmentStore.update(self) {
+            pageContent.body
+        }
     }
 
     init(
@@ -174,7 +160,8 @@ public struct EnvironmentValues {
         pageTitle: String,
         pageDescription: String,
         pageURL: URL,
-        pageImage: URL?
+        pageImage: URL?,
+        pageContent: any PageContent
     ) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.content = ContentLoader(content: allContent)
@@ -195,5 +182,53 @@ public struct EnvironmentValues {
         self.pageDescription = pageDescription
         self.pageURL = pageURL
         self.pageImage = pageImage
+
+        self.tag = nil
+        self.archiveContent = []
+        self.articleContent = .empty
+
+        self.pageContent = EnvironmentStore.update(self) {
+            pageContent.body
+        }
+    }
+
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [Content],
+        pageTitle: String,
+        pageDescription: String,
+        pageURL: URL,
+        pageImage: URL?,
+        pageContent: any PageContent,
+        content: Content
+    ) {
+        self.decode = DecodeAction(sourceDirectory: sourceDirectory)
+        self.content = ContentLoader(content: allContent)
+        self.feedConfiguration = site.feedConfiguration
+        self.isFeedEnabled = site.isFeedEnabled
+        self.themes = site.allThemes
+        self.author = site.author
+        self.siteName = site.name
+        self.siteTitleSuffix = site.titleSuffix
+        self.siteDescription = site.description
+        self.language = site.language
+        self.siteURL = site.url
+        self.favicon = site.favicon
+        self.builtInIconsEnabled = site.builtInIconsEnabled
+        self.timeZone = site.timeZone
+
+        self.pageTitle = pageTitle
+        self.pageDescription = pageDescription
+        self.pageURL = pageURL
+        self.pageImage = pageImage
+
+        self.tag = nil
+        self.archiveContent = []
+        self.articleContent = content
+
+        self.pageContent = EnvironmentStore.update(self) {
+            pageContent.body
+        }
     }
 }

@@ -19,14 +19,7 @@
 ///     }
 /// }
 /// ```
-@MainActor
-public protocol Archive: PageContent {
-    /// The type of HTML content this layout will generate
-    associatedtype Body: HTML
-
-    /// The main content of the layout
-    @HTMLBuilder var body: Body { get }
-}
+public protocol Archive: PageContent {}
 
 extension Archive {
     /// The current tag during page generation.

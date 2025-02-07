@@ -67,6 +67,7 @@ extension PublishingContext {
             }
 
             let outputDirectory = buildDirectory.appending(path: path)
+            let archive = site.archivePage
 
             let values = EnvironmentValues(
                 sourceDirectory: sourceDirectory,
@@ -75,10 +76,10 @@ extension PublishingContext {
                 pageTitle: "Tags",
                 pageDescription: "Tags",
                 pageURL: site.url.appending(path: path),
+                pageContent: archive,
                 tag: tag,
                 archiveContent: content(tagged: tag))
 
-            let archive = site.archivePage
             let finalLayout: any Layout = archive.layout is MissingLayout ? site.layout : archive.layout
 
             let outputString = EnvironmentStore.update(values) {

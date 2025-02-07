@@ -10,6 +10,6 @@ public struct EmptyArchive: Archive {
     public init() {}
 
     public var body: some HTML {
-        EmptyBlockElement()
+        EmptyHTML()
     }
 }
