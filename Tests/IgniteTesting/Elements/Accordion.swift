@@ -14,7 +14,7 @@ import Testing
 @Suite("Accordion Tests")
 @MainActor
 struct AccordionTests {
-    
+
     init() throws {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
@@ -25,10 +25,10 @@ struct AccordionTests {
 
         let attributes = try #require(sut.render().htmlTagWithCloseTag("div")?.attributes)
         let classAttribute = try #require(attributes.htmlAttribute(named: "class"))
-        
+
         #expect(classAttribute == "accordion")
     }
-    
+
     @Test("Provides a Unique id")
     func outputs_div_with_unique_id() async throws {
         let sut = Accordion {}
@@ -52,7 +52,7 @@ struct AccordionTests {
         let sut = Accordion(items)
             .openMode(openMode)
         let output = sut.render()
-                        
+
         let accordionID = try #require(output.htmlTagWithCloseTag("div")?.attributes.htmlAttribute(named: "id"))
 
         // the item id will be unique
@@ -61,16 +61,16 @@ struct AccordionTests {
         let deterministicOutput = output
             .clearingItemIDs()
             .clearingAccordionIDs()
-        
+
         for item in items() {
             let itemoutput = item
                 .assigned(to: accordionID, openMode: openMode)
                 .render()
-            
+
             let expected = itemoutput
                 .clearingItemIDs()
                 .clearingAccordionIDs()
-            
+
             #expect(deterministicOutput.contains(expected))
         }
     }
@@ -85,22 +85,30 @@ struct AccordionTests {
         let sut = Accordion(items)
             .openMode(openMode)
         let output = sut.render()
-        
+
         let accordionID = try #require(output.htmlTagWithCloseTag("div")?.attributes.htmlAttribute(named: "id"))
-        
+
         let pattern = /accordion[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]/
-        
+
         for match in output.matches(of: pattern) {
             #expect(String(match.0) == accordionID)
         }
     }
+}
 
-    @Test("ExampleTest")
-    func print_example() async throws {
-        let sut = Accordion {}
-            .openMode(.all)
-        let output = sut.render()
-        
-        print(output)
+// MARK: - Helpers
+
+fileprivate extension String {
+
+    func clearingItemIDs() -> String {
+        let toReplace = /item[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]/
+
+        return replacing(toReplace, with: "-----")
+    }
+
+    func clearingAccordionIDs() -> String {
+        let toReplace = /accordion[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]/
+
+        return replacing(toReplace, with: "-----")
     }
 }
