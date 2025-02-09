@@ -12,7 +12,7 @@
 /// ```swift
 /// struct BlogLayout: Layout {
 ///     var body: some HTML {
-///         HTMLDocument {
+///         Root {
 ///             Header("My Blog")
 ///             HTMLBody()
 ///             Footer()

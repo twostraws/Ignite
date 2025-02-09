@@ -4,7 +4,7 @@
 @resultBuilder
 public struct LayoutBuilder {
     public static func buildBlock(_ components: any RootHTML...) -> some HTML {
-        HTMLDocument {
+        Root {
             // If no HTMLHead is provided, add a default one
             if !components.contains(where: { $0 is Head }) {
                 Head()
@@ -19,7 +19,7 @@ public struct LayoutBuilder {
 
     // Support empty layouts
     public static func buildBlock() -> some HTML {
-        HTMLDocument {
+        Root {
             Head()
             Body()
         }
