@@ -25,7 +25,7 @@ public struct NavigationBar: BlockHTML {
     }
 
     /// The new number of columns to use.
-    public enum Width {
+    public enum Width: Sendable {
         /// Viewport sets column width
         case viewport
         /// Specific count sets column width
