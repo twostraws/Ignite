@@ -40,12 +40,6 @@ public extension HTML {
         }
     }
 
-    /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
-    var attributes: CoreAttributes {
-        get { AttributeStore.default.attributes(for: id) }
-        set { AttributeStore.default.merge(newValue, intoHTML: id) }
-    }
-
     /// A unique identifier generated from the element's type and source location.
     var id: String {
         get { String(describing: self).truncatedHash }
@@ -62,6 +56,12 @@ public extension HTML {
 }
 
 extension HTML {
+    /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
+    var attributes: CoreAttributes {
+        get { AttributeStore.default.attributes(for: id) }
+        set { AttributeStore.default.merge(newValue, intoHTML: id) }
+    }
+
     /// The publishing context of this site.
     var publishingContext: PublishingContext {
         PublishingContext.default
