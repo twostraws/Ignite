@@ -8,6 +8,11 @@
 /// An inline snippet of programming code, embedded inside a larger part
 /// of your page. For dedicated code blocks that sit on their own line, use
 /// `CodeBlock` instead.
+///
+/// - Important: If your code contains angle brackets (`<`...`>`), such as Swift generics,
+/// the prettifier will interpret these as HTML tags and break the code's formatting.
+/// To avoid this issue, either set your site’s `shouldPrettify` property to `false`,
+/// or replace `<` and `>` with their character entity references, `&lt;` and `&gt;` respectively.
 public struct Code: InlineHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
