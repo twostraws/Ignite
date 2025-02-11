@@ -16,7 +16,7 @@
 @MainActor
 public protocol HTML: CustomStringConvertible, Sendable {
     /// A unique identifier used to track this element's state and attributes.
-    var id: String { get set }
+    var id: String { get }
 
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { get }
@@ -42,8 +42,7 @@ public extension HTML {
 
     /// A unique identifier generated from the element's type and source location.
     var id: String {
-        get { String(describing: self).truncatedHash }
-        set {} // swiftlint:disable:this unused_setter_value
+        String(describing: self).truncatedHash
     }
 
     /// The default status as a primitive element.
