@@ -27,11 +27,11 @@ public extension HTML {
     }
 }
 
-public extension InlineHTML {
+public extension InlineElement {
     /// Adjusts the font weight (boldness) of this font.
     /// - Parameter newWeight: The new font weight.
     /// - Returns: A new `Text` instance with the updated weight.
-    func fontWeight(_ newWeight: Font.Weight) -> some InlineHTML {
+    func fontWeight(_ newWeight: Font.Weight) -> some InlineElement {
         modifier(FontWeightModifier(weight: newWeight))
     }
 }

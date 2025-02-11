@@ -6,7 +6,7 @@
 //
 
 /// A small, capsule-shaped piece of information, such as a tag.
-public struct Badge: InlineHTML {
+public struct Badge: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -21,7 +21,7 @@ public struct Badge: InlineHTML {
         case `default`, subtle, subtleBordered
     }
 
-    private var text: any InlineHTML
+    private var text: any InlineElement
     private var style = Style.default
     private var role = Role.default
 
@@ -70,7 +70,7 @@ public struct Badge: InlineHTML {
         return outputClasses
     }
 
-    public init(_ text: any InlineHTML) {
+    public init(_ text: any InlineElement) {
         self.text = text
     }
 

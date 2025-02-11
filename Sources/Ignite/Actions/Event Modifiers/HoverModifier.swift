@@ -29,11 +29,11 @@ public extension HTML {
     }
 }
 
-public extension InlineHTML {
+public extension InlineElement {
     /// Adds "onmouseover" and "onmouseout" JavaScript events to this inline element.
     /// - Parameter actions: A closure that takes a Boolean indicating hover state and returns actions to execute.
     /// - Returns: A modified inline HTML element with the hover event handlers attached.
-    func onHover(@ActionBuilder actions: (_ isHovering: Bool) -> [Action]) -> some InlineHTML {
+    func onHover(@ActionBuilder actions: (_ isHovering: Bool) -> [Action]) -> some InlineElement {
         modifier(HoverModifier(
             hoverActions: actions(true),
             unhoverActions: actions(false)

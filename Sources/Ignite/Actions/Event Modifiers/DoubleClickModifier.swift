@@ -23,11 +23,11 @@ public extension HTML {
     }
 }
 
-public extension InlineHTML {
+public extension InlineElement {
     /// Adds an "ondblclick" JavaScript event to this inline element.
     /// - Parameter actions: A closure that returns the actions to execute when double-clicked.
     /// - Returns: A modified inline HTML element with the double click event handler attached.
-    func onDoubleClick(@ActionBuilder actions: () -> [Action]) -> some InlineHTML {
+    func onDoubleClick(@ActionBuilder actions: () -> [Action]) -> some InlineElement {
         modifier(DoubleClickModifier(actions: actions()))
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 /// A hyperlink to another resource on this site or elsewhere.
-public struct Link: BlockHTML, InlineHTML, NavigationItem, DropdownItem {
+public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -229,7 +229,7 @@ public extension Link {
     /// - Parameters:
     ///   - content: The user-facing content to show inside the `Link`.
     ///   - target: The `Page` you want to link to.
-    init(_ content: some InlineHTML, target: any StaticLayout) {
+    init(_ content: some InlineElement, target: any StaticLayout) {
         self.content = content
         self.url = target.path
     }

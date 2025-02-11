@@ -35,18 +35,18 @@ public struct Text: BlockHTML, DropdownItem {
     }
 
     /// The content to place inside the text.
-    var content: any InlineHTML
+    var content: any InlineElement
 
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
     /// - Parameter content: An array of the content to place into the text.
-    public init(@InlineHTMLBuilder content: @escaping () -> any InlineHTML) {
+    public init(@InlineHTMLBuilder content: @escaping () -> any InlineElement) {
         self.content = content()
         self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new `Text` instance from one inline element.
-    public init(_ string: any InlineHTML) {
+    public init(_ string: any InlineElement) {
         self.content = string
         self.tag(Font.Style.body.rawValue)
     }

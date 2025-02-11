@@ -6,7 +6,7 @@
 //
 
 /// Renders an abbreviation.
-public struct Abbreviation: InlineHTML {
+public struct Abbreviation: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -17,7 +17,7 @@ public struct Abbreviation: InlineHTML {
     public var isPrimitive: Bool { true }
 
     /// The contents of this abbreviation.
-    public var contents: any InlineHTML
+    public var contents: any InlineElement
 
     /// Creates a new `Abbreviation` instance.
     /// - Parameter abbreviation: The abbreviation.
@@ -33,7 +33,7 @@ public struct Abbreviation: InlineHTML {
     /// - Parameters:
     ///   - description: The description of the abbreviation.
     ///   - content: The elements to place inside the abbreviation.
-    public init(_ description: String, @InlineHTMLBuilder content: () -> some InlineHTML) {
+    public init(_ description: String, @InlineHTMLBuilder content: () -> some InlineElement) {
         contents = content()
         let customAttribute = Attribute(name: "title", value: description)
         attributes.customAttributes.append(customAttribute)
