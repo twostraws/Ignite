@@ -124,6 +124,17 @@ public protocol Site: Sendable {
     var syntaxHighlighters: [HighlighterLanguage] { get }
 
     /// Controls whether HTML output should be formatted with proper indentation.
+    ///
+    /// - Important: Set this property to `false` if your site has code blocks
+    /// containing angle brackets (`<`...`>`), such as Swift generics. The prettifier
+    /// may interpret these as HTML tags and break code formatting.
+    ///
+    /// ```swift
+    /// // Example code misinterpreted by prettifier:
+    /// struct Generic<T>: Codable where T: Codable {
+    ///     let value: T
+    /// }
+    /// ```
     var prettifyHTML: Bool { get }
 
     /// The path to the favicon
