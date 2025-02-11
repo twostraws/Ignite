@@ -6,7 +6,7 @@
 //
 
 /// A type that wraps HTML content with a modifier, preserving attributes and structure.
-struct ModifiedHTML: HTML, InlineElement, BlockHTML, RootHTML, NavigationItem {
+struct ModifiedHTML: HTML, InlineElement, BlockHTML, RootElement, NavigationItem {
     /// The column width to use when this element appears in a grid layout.
     var columnWidth: ColumnWidth = .automatic
 
@@ -35,8 +35,7 @@ struct ModifiedHTML: HTML, InlineElement, BlockHTML, RootHTML, NavigationItem {
             AttributeStore.default.merge(content.attributes, intoHTML: id)
         }
 
-        let modifiedContent: any HTML = modifier.body(content: self)
-        AttributeStore.default.merge(modifiedContent.attributes, intoHTML: id)
+        _ = modifier.body(content: self)
 
         if let block = self.content as? (any BlockHTML) {
             self.columnWidth = block.columnWidth

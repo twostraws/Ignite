@@ -14,8 +14,36 @@ import Testing
 @Suite("Item Tests")
 @MainActor
 struct ItemTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Basic accordian item test with default open mode .individual")
+    func basicItemWithParentAccordianOpenModeIndividual() async throws {
+        var element = Item("First item") {
+            Text("This is an accordion item.")
+        }
 
+        // set required values passed from parent accordian
+        let accordianID = "accordion\(UUID().uuidString.truncatedHash)"
+        element.parentID = accordianID
+        element.parentOpenMode = .individual
+
+        let output = element.render()
+
+        // extract the itemID
+        let startIndex = output.firstIndex(of: "#")!
+        let itemIDStringRange =  output.index(after: startIndex)..<output.index(startIndex, offsetBy: 25)
+        let itemID = output[itemIDStringRange]
+
+        #expect(output ==
+        """
+        <div class="accordion-item">\
+        <h2 class="accordion-header">\
+        <button type="button" class="accordion-button btn collapsed" data-bs-target="#\(itemID)" \
+        data-bs-toggle="collapse" aria-controls="\(itemID)" aria-expanded="false">First item</button>\
+        </h2>\
+        <div id="\(itemID)" class="accordion-collapse collapse" data-bs-parent="#\(accordianID)">\
+        <div class="accordion-body">\
+        <p>This is an accordion item.</p>\
+        </div></div></div>
+        """
+        )
     }
 }

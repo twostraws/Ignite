@@ -29,7 +29,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
     var title: any InlineElement
 
     /// The array of items to shown in this `Dropdown`.
-    var items: [any DropdownElement]
+    var items: [any DropdownItem]
 
     /// How large this dropdown should be drawn. Defaults to `.medium`.
     var size = Button.Size.medium
@@ -48,7 +48,7 @@ public struct Dropdown: BlockHTML, NavigationItem {
     ///   - items: The elements to place inside the dropdown menu.
     public init(
         _ title: any InlineElement,
-        @ElementBuilder<any DropdownElement> items: () -> [any DropdownElement]
+        @ElementBuilder<any DropdownItem> items: () -> [any DropdownItem]
     ) {
         self.title = title
         self.items = items()

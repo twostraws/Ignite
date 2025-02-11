@@ -8,7 +8,7 @@
 import Foundation
 
 /// A hyperlink to another resource on this site or elsewhere.
-public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownElement {
+public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

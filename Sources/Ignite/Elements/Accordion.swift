@@ -9,7 +9,7 @@
 /// display more content.
 public struct Accordion: BlockHTML {
     /// Controls what happens when a section is opened.
-    public enum OpenMode {
+    public enum OpenMode: Sendable {
         /// Opening one accordion section automatically closes all others.
         case individual
 

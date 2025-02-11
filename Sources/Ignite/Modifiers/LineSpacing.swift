@@ -76,7 +76,7 @@ public extension BlockHTML {
 }
 
 /// Predefined line height values that match Bootstrap's spacing system.
-public enum LineSpacing: String, CaseIterable {
+public enum LineSpacing: String, CaseIterable, Sendable {
     /// Single line height (1.0)
     case xSmall = "1"
 

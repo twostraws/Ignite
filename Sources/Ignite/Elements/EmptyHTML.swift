@@ -7,7 +7,7 @@
 
 /// A placeholder HTML element that renders nothing
 /// Used as a default or fallback when no content is needed
-public struct EmptyHTML: HTML, InlineElement, RootHTML {
+public struct EmptyHTML: HTML, InlineElement, RootElement {
     /// Creates a new empty HTML element
     public init() {}
 
