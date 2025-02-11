@@ -118,11 +118,11 @@ public extension HTML {
     }
 }
 
-public extension InlineHTML {
+public extension InlineElement {
     /// Adjusts the font of this text.
     /// - Parameter font: The font configuration to apply.
     /// - Returns: A new instance with the updated font.
-    func font(_ font: Font) -> some InlineHTML {
+    func font(_ font: Font) -> some InlineElement {
         modifier(FontModifier(font: font))
     }
 }

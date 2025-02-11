@@ -7,6 +7,11 @@
 
 /// An separated section of programming code. For inline code that sit along other
 /// text on your page, use `Code` instead.
+///
+/// - Important: If your code contains angle brackets (`<`...`>`), such as Swift generics,
+/// the prettifier will interpret these as HTML tags and break the code's formatting.
+/// To avoid this issue, either set your site’s `shouldPrettify` property to `false`,
+/// or replace `<` and `>` with their character entity references, `&lt;` and `&gt;` respectively.
 public struct CodeBlock: BlockHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }

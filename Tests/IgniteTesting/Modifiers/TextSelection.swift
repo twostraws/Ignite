@@ -14,8 +14,27 @@ import Testing
 @Suite("TextSelection Tests")
 @MainActor
 struct TextSelectionTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Automatic Text Selection")
+    func automaticTextSelection() async throws {
+        let element = Text("Hello").textSelection(.automatic)
+        let output = element.render()
 
+        #expect(output == "<p class=\"user-select-automatic\">Hello</p>")
+    }
+
+    @Test("All Text Selection")
+    func allTextSelection() async throws {
+        let element = Text("Hello").textSelection(.all)
+        let output = element.render()
+
+        #expect(output == "<p class=\"user-select-all\">Hello</p>")
+    }
+
+    @Test("None Text Selection")
+    func noneTextSelection() async throws {
+        let element = Text("Hello").textSelection(.none)
+        let output = element.render()
+
+        #expect(output == "<p class=\"user-select-none\">Hello</p>")
     }
 }

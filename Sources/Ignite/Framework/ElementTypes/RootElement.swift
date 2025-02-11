@@ -6,4 +6,4 @@
 //
 
 /// Describes elements that can exist directly inside a HTML container.
-public protocol RootHTML: HTML {}
+public protocol RootElement: HTML {}

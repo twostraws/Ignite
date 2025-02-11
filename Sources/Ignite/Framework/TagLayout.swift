@@ -20,7 +20,7 @@
 /// }
 /// ```
 @MainActor
-public protocol TagLayout: EnvironmentReader {
+public protocol TagLayout: Layoutable {
     /// The type of HTML content this layout will generate
     associatedtype Body: HTML
 

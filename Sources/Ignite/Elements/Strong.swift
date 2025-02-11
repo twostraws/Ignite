@@ -6,7 +6,7 @@
 //
 
 /// Renders text with a strong text effect, which usually means bold.
-public struct Strong: InlineHTML {
+public struct Strong: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -17,18 +17,18 @@ public struct Strong: InlineHTML {
     public var isPrimitive: Bool { true }
 
     /// The content that should be strengthened.
-    var content: any InlineHTML
+    var content: any InlineElement
 
     /// Creates a new `Strong` instance using an inline element builder
     /// that returns an array of content to place inside.
-    public init(@InlineHTMLBuilder content: () -> some InlineHTML) {
+    public init(@InlineHTMLBuilder content: () -> some InlineElement) {
         self.content = content()
     }
 
     /// Creates a new `Strong` instance using one `InlineElement`
     /// that should be rendered with a strong effect.
     /// - Parameter singleElement: The element to strengthen.
-    public init(_ singleElement: any InlineHTML) {
+    public init(_ singleElement: any InlineElement) {
         self.content = singleElement
     }
 

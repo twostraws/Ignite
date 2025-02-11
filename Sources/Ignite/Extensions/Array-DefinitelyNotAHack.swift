@@ -27,8 +27,8 @@ extension Array: BlockHTML where Element: BlockHTML {
     }
 }
 
-extension Array: InlineHTML where Element: InlineHTML {
-    public var body: some InlineHTML { self }
+extension Array: InlineElement where Element: InlineElement {
+    public var body: some InlineElement { self }
 
     @MainActor public func render() -> String {
         self.map { $0.render() }.joined()

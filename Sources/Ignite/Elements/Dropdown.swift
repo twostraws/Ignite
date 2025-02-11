@@ -1,13 +1,13 @@
 //
-// Dropdown.swift
+// DropdownItem.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
 //
 
-/// Elements that conform to `DropdownElement` can be shown inside
+/// Elements that conform to `DropdownItem` can be shown inside
 /// Dropdown objects.
-public protocol DropdownElement: InlineHTML {}
+public protocol DropdownItem: InlineElement {}
 
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
@@ -26,10 +26,10 @@ public struct Dropdown: BlockHTML, NavigationItem {
     public var columnWidth = ColumnWidth.automatic
 
     /// The title for this `Dropdown`.
-    var title: any InlineHTML
+    var title: any InlineElement
 
     /// The array of items to shown in this `Dropdown`.
-    var items: [any DropdownElement]
+    var items: [any DropdownItem]
 
     /// How large this dropdown should be drawn. Defaults to `.medium`.
     var size = Button.Size.medium
@@ -42,13 +42,13 @@ public struct Dropdown: BlockHTML, NavigationItem {
     private var isNavigationItem = false
 
     /// Creates a new dropdown button using a title and an element that builder
-    /// that returns an array of types conforming to `DropdownElement`.
+    /// that returns an array of types conforming to `DropdownItem`.
     /// - Parameters:
     ///   - title: The title to show on this dropdown button.
     ///   - items: The elements to place inside the dropdown menu.
     public init(
-        _ title: any InlineHTML,
-        @ElementBuilder<any DropdownElement> items: () -> [any DropdownElement]
+        _ title: any InlineElement,
+        @ElementBuilder<any DropdownItem> items: () -> [any DropdownItem]
     ) {
         self.title = title
         self.items = items()
