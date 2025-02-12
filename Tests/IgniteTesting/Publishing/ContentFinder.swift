@@ -13,10 +13,16 @@ import Testing
 @Suite("ContentFinder")
 actor ContentFinderTests {
 
+    /// Run each ``Tst`` defined in the ``ContentFinderSuite`` using ``run(_:)``.
+    ///
+    /// Verify any error thrown is expected.
     @Test("find", arguments: ContentFinderSuite.tests)
     func find(test: Tst) async throws {
         do {
             try run(test)
+            if let expectError = test.expectError, !expectError.isEmpty {
+                #expect(Bool(false), "Expected error: \(expectError)")
+            }
         } catch {
             if let exp = test.expectError {
                 let message = "\(error)"
@@ -27,7 +33,15 @@ actor ContentFinderTests {
         }
     }
 
+    /// Run a test case declared in ``Tst``:
+    /// - Set up the directory tree specified by the test ``FileItem`` array
+    /// - Run ``ContentFinder/find()``, looking for the ``Tst`` suffixes.
+    /// - If ok, compare with expected list of deploy paths specified in ``Tst``
+    /// - If error thrown, caller will compare with expected error text
     func run(_ test: Tst) throws {
+        if let inputError = test.inputError {
+            throw inputError // configuration failure
+        }
         guard let baseDir = try Self.makeSuiteBaseDir(test.index) else {
             #expect(Bool(false), "Unable to make suite base dir")
             return
@@ -51,15 +65,19 @@ actor ContentFinderTests {
         // #expect(expectPaths == foundPaths)
         guard expectPaths != foundPaths else { return }  // <------ success
 
-        // fail: report difference
+        // fail: report difference as markdown list of common, added, missing
+        // Get label and array for each header/list
         let both = ("both", foundPaths.intersection(expectPaths))
         let extra = ("extra", foundPaths.subtracting(both.1))
         let missing = ("missing", expectPaths.subtracting(both.1))
+        
+        // Create each section, join them all, and prefix with test label
         let all = [extra, missing, both]
-        let emit = MdHeaderList.h2SortQuiet
-        let alls = all.map { emit.md($0.0, Array($0.1)) }
+        let alls = all.map { MdHeaderList.h2SortQuiet.md($0.0, Array($0.1)) }
         let allsJoined = alls.joined(separator: "")
         let message = "\n# \(test.index)/\(test.makeRoots)\(allsJoined)"
+        
+        // Emit error
         enum Err: Error, CustomStringConvertible {
             case message(String)
             var description: String {
@@ -71,6 +89,9 @@ actor ContentFinderTests {
         Issue.record(Err.message(message))
     }
 
+    /// Make the temporary base directory of the test case, deleting any existing one.
+    /// - Parameter index: Int id for test (if duplicate, parallel tests will conflict with each other)
+    /// - Returns: file: URL to writable temporary directory, if successful.
     static func makeSuiteBaseDir(_ index: Int) throws -> URL? {
         let name = "ContentFinder.find_\(index)"
         var foundUrl = try Files.makeTempDir(name: name)
@@ -82,6 +103,9 @@ actor ContentFinderTests {
         return foundUrl.found ? nil : foundUrl.url
     }
 
+    /// Delete the temporary base directory of the test case.
+    ///
+    /// This prints but otherwise ignores errors.
     static func removeSuiteBaseDir(_ baseDir: URL, caller: String = #function) {
         do {
             try Files.delete(url: baseDir)
@@ -90,22 +114,50 @@ actor ContentFinderTests {
         }
     }
 
+    /// Specify directory root, files/dirs, and links for ``Tst`` filesystem setup.
     indirect enum FileItem {
         case root(_ name: String)
         case file(_ name: String, _ parent: FileItem)
         case dir(_ name: String, _ parent: FileItem)
+        /// Link from a non-existing source symlink to an existing item.
         case link(source: FileItem, dest: FileItem)
     }
 
+    /// A ``ContentFinder`` test case specifies the filesystem items to set up the test
+    /// and expected results from running
+    /// ``ContentFinder.find(root:, suffixes:, contentMaker:)``
+    /// (either a set of paths or some error text).
     struct Tst: CustomStringConvertible {
+        /// User-defined but unique value to keep parallel test temp directories distinct.
         let index: Int
+        
+        /// ``ContentFinder.find(root:, suffixes:, contentMaker:)``
+        /// parameter for file suffixes
         let suffixes: [String]
+        
+        /// ``FileItem``'s to set up before running `find`.
+        /// Items are created in order specified (not recursing into parents)
+        /// so the user must ensure parents are specified before children
+        /// and link destinations are specified before links.
         let items: [FileItem]
+
+        /// Names of directory roots configured in test.
+        /// If the expected deploy paths are not specified explicitly,
+        /// derive them by using the first name as the prefix to remove from the file-item's.
         let makeRoots: [String]
-        let expectPaths: Set<String>
+        
+        /// Expected deploy paths from running find (possibly derived from ``items``)
+        let expectDeployPaths: Set<String>
+        
+        /// True when ``expectPaths`` were not specified but calculated.
         let expectPathsWereDerived: Bool
-        let expectError: String?  // urk: very weak check for errors
+        
+        /// If specified, expect an error message containing this.
+        let expectError: String?
+        
+        /// Save ``InputError`` at init-time to throw at run-time, for configuration errors.
         let inputError: InputError?
+
         init(
             _ index: Int,
             _ makeRoots: [String],
@@ -114,15 +166,16 @@ actor ContentFinderTests {
             expect: [String]? = nil,
             expectError: String? = nil
         ) {
-            var err: InputError?
             if makeRoots.isEmpty {
-                err = .emptyRoots
+                inputError = .emptyRoots
             } else if let index = makeRoots.firstIndex(where: { $0.isEmpty }) {
-                err = .emptyRoot(index)
+                inputError = .emptyRoot(index)
             } else if suffixes.isEmpty {
-                err = .emptySuffixes
+                inputError = .emptySuffixes
             } else if let index = suffixes.firstIndex(where: { $0.isEmpty }) {
-                err = .emptySuffix(index)
+                inputError = .emptySuffix(index)
+            } else {
+                inputError = nil
             }
             self.index = index
             self.makeRoots = makeRoots
@@ -130,11 +183,11 @@ actor ContentFinderTests {
             self.items = items
             self.expectError = expectError
             if let expect {
-                self.expectPaths = Set(expect)
+                self.expectDeployPaths = Set(expect)
                 expectPathsWereDerived = false
             } else {
                 expectPathsWereDerived = true
-                self.expectPaths = Set(
+                self.expectDeployPaths = Set(
                     items.compactMap {
                         Self.expectDeployPath(
                             path: $0.path,
@@ -144,10 +197,7 @@ actor ContentFinderTests {
                     }
                 )
             }
-            self.inputError = err
         }
-
-        var expectDeployPaths: Set<String> { expectPaths }
 
         /// Setup directory tree for test
         /// - Parameter suiteBaseDir: Parent directory for test directory
@@ -200,6 +250,7 @@ actor ContentFinderTests {
             }
         }
 
+        /// Both test base-dir and suite base-dir used the test index to avoid conflict with other tests.
         private func makeTestBaseDir(
             _ suiteBaseDir: URL,
             index: Int
@@ -208,7 +259,7 @@ actor ContentFinderTests {
             return try Files.makeDir(url: url)
         }
 
-        var description: String {  // terrible labels
+        var description: String {
             let root = 1 == makeRoots.count ? makeRoots.first! : "\(makeRoots)"
             let prefix = "[\(index)] \(root)"
             let eol = " " // single-line (test label); use "\n" when debugging
@@ -221,11 +272,11 @@ actor ContentFinderTests {
             let sfx = suffixes == [".md"] ? "" : " suffixes: \(suffixes)"
             let exp = expectPathsWereDerived ? " expect(derived)" : "expect"
             let (pre, sep) = " " == eol ? (" ", ", ") : ("\n- ", "\n- ")
-            let eps = Array(expectPaths).sorted().joined(separator: sep)
+            let eps = Array(expectDeployPaths).sorted().joined(separator: sep)
             return "\(prefix) \(sfx)\(exp)\(pre)\(eps)"
         }
 
-        /// Expected deploy path removes the ``findRootPath`` prefix
+        /// Expected deploy path removes the root prefix
         /// and the first-found suffix from ``suffixes``
         /// - Parameter path: String full deploy path
         /// - Returns: path without prefix or suffix, or nil if prefix or suffix not found
@@ -244,8 +295,9 @@ actor ContentFinderTests {
             return String(path[start..<end])
         }
 
-        // swiftlint:disable:next nesting
+        /// ``Tst`` configuration errors
         enum InputError: Error {
+            // swiftlint:disable:previous nesting
             case emptyRoots
             case emptyRoot(Int)
             case emptySuffixes
