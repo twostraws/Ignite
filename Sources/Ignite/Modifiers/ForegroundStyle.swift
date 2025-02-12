@@ -109,14 +109,14 @@ extension HTML where Self == Image {
     /// Applies a foreground color to the current element.
     /// - Parameter color: The style to apply, specified as a `Color` object.
     /// - Returns: The current element with the updated color applied.
-    public func foregroundStyle(_ color: Color) -> some InlineHTML {
+    public func foregroundStyle(_ color: Color) -> some InlineElement {
         modifier(ForegroundStyleModifier(color: color))
     }
 
     /// Applies a foreground color to the current element.
     /// - Parameter color: The style to apply, specified as a string.
     /// - Returns: The current element with the updated color applied.
-    public func foregroundStyle(_ color: String) -> some InlineHTML {
+    public func foregroundStyle(_ color: String) -> some InlineElement {
         modifier(ForegroundStyleModifier(string: color))
     }
 }

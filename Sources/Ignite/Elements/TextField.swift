@@ -6,7 +6,7 @@
 //
 
 /// A text input field with support for various states
-public struct TextField: InlineHTML, BlockHTML {
+public struct TextField: InlineElement, BlockHTML {
     /// How many columns this should occupy when placed in a section or form.
     public var columnWidth: ColumnWidth = .automatic
 
