@@ -16,7 +16,7 @@ extension ContentFinderTests {
         case head(level: Int, sort: Bool, skipEmpty: Bool)
         case h2Quiet
         case h2SortQuiet
-        
+
         /// Generates markdown header and bullet list per specification.
         /// - Parameters:
         ///   - header: optional string-like thing to use as header
@@ -40,7 +40,7 @@ extension ContentFinderTests {
             out += target.joined(separator: listPrefix)
             return out
         }
-        
+
         /// Tuple of header level, sort-list, and skip all if list is empty
         private var lvlSrtSkp: (level: Int, sort: Bool, skipEmpty: Bool) {
             // swiftlint:disable:previous large_tuple
@@ -50,7 +50,7 @@ extension ContentFinderTests {
             case .h2SortQuiet: (2, true, true)
             }
         }
-        
+
         /// Tuple of String prefixes for header or bullet list items (empty to skip)
         private func prefixes<T: StringProtocol>(
             _ header: T?,
@@ -71,7 +71,7 @@ extension ContentFinderTests {
     struct FileItemMaker {
         /// Root directory for all items made
         let baseDir: URL
-        
+
         /// Set up``FileItem`` in filesystem using ``Files``
         /// - Parameter item: ``FileItem`` to create
         /// - Returns: ``Files/FoundURL`` indicating made, found, blocked, etc.
@@ -133,7 +133,6 @@ extension ContentFinderTests.FileItem {
     }
     var label: String { Self.labels[index0] }
 
-    
     /// Detect first matching suffix (if any), using the same implementation as ``ContentFinder``,
     /// in order to predict deploy paths discovered during content-finding.
     ///
@@ -253,10 +252,10 @@ extension ContentFinderTests {
                 throw Err.symlinkError(source: source, dest: dest, error: error)
             }
         }
-        
+
         /// Thrown by ``createSymlink(source:, dest:)``
         enum SymlinkErr: Error {
-            // swiftlint:disable:next nesting
+            // swiftlint:disable:previous nesting
             case sourceNotFileScheme(URL), destNotFileScheme(URL)
             case sourceExists(URL), destNotReachable(URL)
             case symlinkError(source: URL, dest: URL, error: any Error)

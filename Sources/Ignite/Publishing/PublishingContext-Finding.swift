@@ -39,6 +39,8 @@ struct ContentFinder: Sendable {
     /// - Throws: when root is not a `file:` scheme URL, when suffixes array or values are empty,
     ///   when URL operations fail, or when a directory is encountered again (due to symbolic links)
     func find(
+        // swiftlint:disable:previous function_body_length
+        // lint exception: using local closures to break up logic
         root: URL,
         suffixes: [String] = [".md"],
         contentMaker: (DeployContent) throws -> Bool
@@ -58,7 +60,7 @@ struct ContentFinder: Sendable {
 
         // Avoid infinite loops by not adding roots already seen
         // One element per dir added in roots
-        var dirsSeen = Dictionary<URL, DeployPath>()
+        var dirsSeen = [URL: DeployPath]()
 
         func addRootIfUnseen(_ root: DeployPath) throws {
             let key = root.url.standardizedFileURL
@@ -174,4 +176,3 @@ struct ContentFinder: Sendable {
         }
     }
 }
-

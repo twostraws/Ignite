@@ -24,13 +24,13 @@ enum ContentFinderSuite {
     /// and Tst derives the expected deploy-paths from the file-items,
     /// but linking directories requires specifying expected deploy path's.
     static let tests = allTests
-    
+
     private static let allTests: [Tst] = [
         // Tst(id, [root-names], file-items{, deploy-paths})
-        
+
         // Normal files (no links)
         Tst(0, [normal], items: Alt.allWithNorm),
-        
+
         // link to file
         Tst(1, [normal], items: Norm.all + NormFileLinksToAlt.all),
 
@@ -49,12 +49,12 @@ enum ContentFinderSuite {
     ]
 
     // swiftlint:disable identifier_name
-    
+
     // MARK: file-item directory groups: normal, alternate, error (parent/dup)
 
     // We use 3 groups with distinct root dirs to test links (to avoid false
     // positive if a link target is in the same root dir as the link).
-    
+
     // How to interpret the ``FileItem`` declarations like
     // `static let d_rNorm_da_de = FIT.dir("de", d_rNorm_da)`?
     //
@@ -80,7 +80,7 @@ enum ContentFinderSuite {
     // The `Tst` file-items must include the target item before the link item,
     // but must not include the item representing the link source file,
     // and only use it in the link to specify the source.
-    
+
     // Normal group files     # deploy path
     // - normal/fa.md         # /fa
     // - normal/da/fbb.md     # /da/fbb

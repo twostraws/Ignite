@@ -70,13 +70,13 @@ actor ContentFinderTests {
         let both = ("both", foundPaths.intersection(expectPaths))
         let extra = ("extra", foundPaths.subtracting(both.1))
         let missing = ("missing", expectPaths.subtracting(both.1))
-        
+
         // Create each section, join them all, and prefix with test label
         let all = [extra, missing, both]
         let alls = all.map { MdHeaderList.h2SortQuiet.md($0.0, Array($0.1)) }
         let allsJoined = alls.joined(separator: "")
         let message = "\n# \(test.index)/\(test.makeRoots)\(allsJoined)"
-        
+
         // Emit error
         enum Err: Error, CustomStringConvertible {
             case message(String)
@@ -130,11 +130,11 @@ actor ContentFinderTests {
     struct Tst: CustomStringConvertible {
         /// User-defined but unique value to keep parallel test temp directories distinct.
         let index: Int
-        
+
         /// ``ContentFinder.find(root:, suffixes:, contentMaker:)``
         /// parameter for file suffixes
         let suffixes: [String]
-        
+
         /// ``FileItem``'s to set up before running `find`.
         /// Items are created in order specified (not recursing into parents)
         /// so the user must ensure parents are specified before children
@@ -145,19 +145,27 @@ actor ContentFinderTests {
         /// If the expected deploy paths are not specified explicitly,
         /// derive them by using the first name as the prefix to remove from the file-item's.
         let makeRoots: [String]
-        
+
         /// Expected deploy paths from running find (possibly derived from ``items``)
         let expectDeployPaths: Set<String>
-        
+
         /// True when ``expectPaths`` were not specified but calculated.
         let expectPathsWereDerived: Bool
-        
+
         /// If specified, expect an error message containing this.
         let expectError: String?
-        
+
         /// Save ``InputError`` at init-time to throw at run-time, for configuration errors.
         let inputError: InputError?
 
+        /// Initialize ``Tst`` with suffixes, file-items, and optional expected deploy paths.
+        /// - Parameters:
+        ///   - index: Unique Int for distinguishing parallel tests
+        ///   - makeRoots: Array of String names of directory roots in test
+        ///   - suffixes: Array of String file suffixes to pass to find
+        ///   - items: Array of ``FileItem`` to set up before calling find
+        ///   - expect: Optional Array of String deploy paths (derived if nil)
+        ///   - expectError: Optional String for content of error-throwing tests
         init(
             _ index: Int,
             _ makeRoots: [String],
