@@ -10,7 +10,7 @@ enum ContentFinderSuite {
     typealias FIT = ContentFinderTests.FileItem
     typealias Tst = ContentFinderTests.Tst
 
-    // setup directory root names
+    // group directory root names, where normal is the base case for all
     private static let (normal, alt, err) = ("normal", "alt", "err")
 
     /// ``Tst`` test cases:
@@ -54,6 +54,7 @@ enum ContentFinderSuite {
 
     // We use 3 groups with distinct root dirs to test links (to avoid false
     // positive if a link target is in the same root dir as the link).
+    // The normal group is the base case for all (working) groups.
 
     // How to interpret the ``FileItem`` declarations like
     // `static let d_rNorm_da_de = FIT.dir("de", d_rNorm_da)`?
@@ -64,21 +65,23 @@ enum ContentFinderSuite {
     // - So `/normal/da/fa.md` gets the name `f_rNorm_da_faMd`
     // - Links specify the linking file TO the target/destination path:
     // -   l_{link-source}_TO_{link-destination}
-    // - So `l_rErr_dir0_TO_d_rErr_dir1`
-    // - would mean `err/dir0` is a symlink to `err/dir1`
+    // - So `l_rErr_d0_TO_d_rErr_d1`
+    // - would mean `err/d0` is a symlink to `err/d1`
     //
     // Normal names are alphabetic, while error and alternate are numeric,
     // so the deploy path indicates if the item was in the normal tree.
+    // In most cases, a filename will also indicate its depth via duplication
+    // (`/fa.md`, `d0/gbb.md`, `d0/d11/fccc.md`), but dirs might not do this.
     //
     // The FIT (FileItem) factories generally take the name and the parent:
-    // `FIT.dir("da", rNorm)` produces `{rNorm}/da/` directory.
+    // `FIT.dir("da", rNorm)` produces directory `.../normal/da/`.
     // The factories run in the order specified;
     // any parent dir has to be listed before any child dir/file,
     // and a link target has to be listed before any link.
     //
     // The FIT link factory will create the link file, but requires the target.
     // The `Tst` file-items must include the target item before the link item,
-    // but must not include the item representing the link source file,
+    // but must not include the file-item representing the link source file,
     // and only use it in the link to specify the source.
 
     // Normal group files     # deploy path
@@ -108,13 +111,13 @@ enum ContentFinderSuite {
     // - alt/d0/d11/g333.md # /d0/d11/g333
     enum Alt {
         static let rAlt = FIT.root(alt)
-        static let d_rAlt_dir0 = FIT.dir("d0", rAlt)
-        static let d_rAlt_dir0_dir11 = FIT.dir("d11", d_rAlt_dir0)
+        static let d_rAlt_d0 = FIT.dir("d0", rAlt)
+        static let d_rAlt_d0_dir11 = FIT.dir("d11", d_rAlt_d0)
         static let f_rAlt_g1Md = FIT.file("g1.md", rAlt)
-        static let f_rAlt_dir0_g22Md = FIT.file("g22.md", d_rAlt_dir0)
-        static let f_rAlt_dir0_dir11_g333Md = FIT.file(
+        static let f_rAlt_d0_g22Md = FIT.file("g22.md", d_rAlt_d0)
+        static let f_rAlt_d0_dir11_g333Md = FIT.file(
             "g333.md",
-            d_rAlt_dir0_dir11
+            d_rAlt_d0_dir11
         )
         // This is used for the entire alt directory tree
         static let all = d0Tree + [f_rAlt_g1Md]
@@ -123,8 +126,8 @@ enum ContentFinderSuite {
         // When d0 is linked, resulting deploy-path's should not include
         // file outside d0 (i.e., `f_rAlt_g1Md`: `alt/g1.md`)
         static let d0Tree = [
-            rAlt, d_rAlt_dir0, d_rAlt_dir0_dir11,  //
-            f_rAlt_dir0_g22Md, f_rAlt_dir0_dir11_g333Md
+            rAlt, d_rAlt_d0, d_rAlt_d0_dir11,  //
+            f_rAlt_d0_g22Md, f_rAlt_d0_dir11_g333Md
         ]
         // test setup requires both this and normal tree
         static let allWithNorm = all + Norm.all
@@ -134,18 +137,18 @@ enum ContentFinderSuite {
     // d1/d22/l2dir1 links to d1, its own parent
     enum ParentErr {
         static let rErr = FIT.root(err)
-        static let d_rErr_dir1 = FIT.dir("d1", rErr)
-        static let d_rErr_dir1_dir22 = FIT.dir("d22", d_rErr_dir1)
-        static let f_rErr_dir1_dir22_l2d1 = FIT.file("l2d1", d_rErr_dir1_dir22)
-        static let l_rErr_dir1_dir22_l_TO_d1_TO_rErr_dir1 = FIT.link(
-            source: f_rErr_dir1_dir22_l2d1,
-            dest: d_rErr_dir1
+        static let d_rErr_d1 = FIT.dir("d1", rErr)
+        static let d_rErr_d1_d22 = FIT.dir("d22", d_rErr_d1)
+        static let f_rErr_d1_d22_l2d1 = FIT.file("l2d1", d_rErr_d1_d22)
+        static let l_rErr_d1_d22_l_TO_d1_TO_rErr_d1 = FIT.link(
+            source: f_rErr_d1_d22_l2d1,
+            dest: d_rErr_d1
         )
         static let all = [
-            rErr, d_rErr_dir1, d_rErr_dir1_dir22,
+            rErr, d_rErr_d1, d_rErr_d1_d22,
             // Don't include link file itself (f_rErr_dir1_dir22_l2d1)
             // The link will create it.
-            l_rErr_dir1_dir22_l_TO_d1_TO_rErr_dir1
+            l_rErr_d1_d22_l_TO_d1_TO_rErr_d1
         ]
         // Very minimal check of the content of the expected error message
         static let message = "directorySeen"
@@ -155,20 +158,20 @@ enum ContentFinderSuite {
     // d0/l2dir12 links to d1, but d1 already included via normal traversal
     enum DupErr {
         static let rErr = FIT.root(err)
-        static let d_rErr_dir0 = FIT.dir("d0", rErr)
-        static let d_rErr_dir1 = FIT.dir("d1", rErr)
-        static let d_rErr_dir1_dir22 = FIT.dir("d22", d_rErr_dir1)
-        static let f_rErr_dir0_l2 = FIT.file("l2dir12", d_rErr_dir0)
-        static let l_rErr_dir0_l_TO_dir12rErr_dir1 = FIT.link(
-            source: f_rErr_dir0_l2,
-            dest: d_rErr_dir1
+        static let d_rErr_d0 = FIT.dir("d0", rErr)
+        static let d_rErr_d1 = FIT.dir("d1", rErr)
+        static let d_rErr_d1_d22 = FIT.dir("d22", d_rErr_d1)
+        static let f_rErr_d0_l2 = FIT.file("l2dir12", d_rErr_d0)
+        static let l_rErr_d0_l_TO_d12rErr_d1 = FIT.link(
+            source: f_rErr_d0_l2,
+            dest: d_rErr_d1
         )
 
         // link creates extra visit for a directory, causing error
         static let all = [
-            rErr, d_rErr_dir0, d_rErr_dir1, d_rErr_dir1_dir22,  //
+            rErr, d_rErr_d0, d_rErr_d1, d_rErr_d1_d22,  //
             // don't include link file (f_rErr_dir0_l2); link factory creates it
-            l_rErr_dir0_l_TO_dir12rErr_dir1
+            l_rErr_d0_l_TO_d12rErr_d1
         ]
         // expected error message
         static let message = "directorySeen"
@@ -178,11 +181,11 @@ enum ContentFinderSuite {
     // Expect normal deploy paths, plus one for the alt file.
     enum NormFileLinksToAlt {
         static let f_rNorm_la = FIT.file("la.md", Norm.rNorm)
-        static let l_f_rNorm_la_TO_f_rAlt_dir0_g22Md = FIT.link(
+        static let l_f_rNorm_la_TO_f_rAlt_d0_g22Md = FIT.link(
             source: f_rNorm_la,
-            dest: Alt.f_rAlt_dir0_g22Md
+            dest: Alt.f_rAlt_d0_g22Md
         )
-        static let all = [l_f_rNorm_la_TO_f_rAlt_dir0_g22Md]
+        static let all = [l_f_rNorm_la_TO_f_rAlt_d0_g22Md]
     }
 
     // ok: normal link to dir in alt/d0.
@@ -191,11 +194,11 @@ enum ContentFinderSuite {
     enum NormDirLinksToAlt {
         static let linkNameToD0 = "ld-alt_d0"
         static let d_rNorm_ldAltD0 = FIT.file(linkNameToD0, Norm.rNorm)
-        static let l_f_rNorm_la_TO_f_rAlt_dir0 = FIT.link(
+        static let l_f_rNorm_la_TO_f_rAlt_d0 = FIT.link(
             source: d_rNorm_ldAltD0,
-            dest: Alt.d_rAlt_dir0
+            dest: Alt.d_rAlt_d0
         )
-        static let all = Alt.d0Tree + [l_f_rNorm_la_TO_f_rAlt_dir0]
+        static let all = Alt.d0Tree + [l_f_rNorm_la_TO_f_rAlt_d0]
         // d0 tree has d0/g22.md and d0/d11/g333.md
         // but d0 path is set by the link name
         static let content = [
