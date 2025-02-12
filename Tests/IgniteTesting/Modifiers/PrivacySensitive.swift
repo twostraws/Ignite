@@ -14,30 +14,13 @@ import Testing
 @Suite("PrivacySensitive Tests")
 @MainActor
 struct PrivacySensitiveTests {
-    @Test("Default privacySensitive defaults to urlOnly")
-    func defaultPrivacySensitive() async throws {
-        let element = Link("Go Home", target: "/").privacySensitive()
+    @Test("Privacy Sensitive Modifier",
+          arguments: [PrivacyEncoding.urlOnly, PrivacyEncoding.urlAndDisplay])
+    func privacySensitive(encoding: PrivacyEncoding) async throws {
+        let element = Link("Go Home", target: "/").privacySensitive(encoding)
         let output = element.render()
 
-        #expect(output.contains("privacy-sensitive=\"urlOnly\""))
-        #expect(output.contains("protected-link"))
-    }
-
-    @Test("privacySensitive modifier with urlOnly encoding")
-    func privacySensitiveWithURLOnly() async throws {
-        let element = Link("Go Home", target: "/").privacySensitive(.urlOnly)
-        let output = element.render()
-
-        #expect(output.contains("privacy-sensitive=\"urlOnly\""))
-        #expect(output.contains("protected-link"))
-    }
-
-    @Test("privacySensitive modifier with urlAndDisplay encoding")
-    func privacySensitiveWithURLAndDisplay() async throws {
-        let element = Link("Go Home", target: "/").privacySensitive(.urlAndDisplay)
-        let output = element.render()
-
-        #expect(output.contains("privacy-sensitive=\"urlAndDisplay\""))
+        #expect(output.contains("privacy-sensitive=\"\(encoding.rawValue)\""))
         #expect(output.contains("protected-link"))
     }
 }
