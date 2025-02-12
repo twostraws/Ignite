@@ -11,11 +11,17 @@ import Foundation
 
 extension ContentFinderTests {
 
+    /// Generates markdown header and bullet list per specification.
     enum MdHeaderList {
         case head(level: Int, sort: Bool, skipEmpty: Bool)
         case h2Quiet
         case h2SortQuiet
-
+        
+        /// Generates markdown header and bullet list per specification.
+        /// - Parameters:
+        ///   - header: optional string-like thing to use as header
+        ///   - list: items to print as bullet list
+        /// - Returns:
         func md<T: StringProtocol>(
             _ header: T? = nil,
             _ list: [T]
@@ -34,14 +40,18 @@ extension ContentFinderTests {
             out += target.joined(separator: listPrefix)
             return out
         }
-        // swiftlint:disable:next large_tuple
+        
+        /// Tuple of header level, sort-list, and skip all if list is empty
         private var lvlSrtSkp: (level: Int, sort: Bool, skipEmpty: Bool) {
+            // swiftlint:disable:previous large_tuple
             switch self {
             case let .head(level, sort, skip): (level, sort, skip)
             case .h2Quiet: (2, false, true)
             case .h2SortQuiet: (2, true, true)
             }
         }
+        
+        /// Tuple of String prefixes for header or bullet list items (empty to skip)
         private func prefixes<T: StringProtocol>(
             _ header: T?,
             _ hasList: Bool
@@ -57,8 +67,14 @@ extension ContentFinderTests {
     }
 }
 extension ContentFinderTests {
+    /// Set up``FileItem`` in filesystem using ``Files``
     struct FileItemMaker {
+        /// Root directory for all items made
         let baseDir: URL
+        
+        /// Set up``FileItem`` in filesystem using ``Files``
+        /// - Parameter item: ``FileItem`` to create
+        /// - Returns: ``Files/FoundURL`` indicating made, found, blocked, etc.
         @discardableResult
         func make(_ item: FileItem) throws -> Files.FoundURL {
             switch item {
@@ -92,8 +108,11 @@ extension ContentFinderTests.FileItem: CustomStringConvertible {
 }
 extension ContentFinderTests.FileItem {
     var isFile: Bool { Self.fileN == index0 }
+    /// Constants for ``index0`` also track ``labels``
     static let (rootN, fileN, dirN, linkN) = (0, 1, 2, 3)
+
     static let labels = ["root", "file", "dir", "link"]
+
     private var index0: Int {
         switch self {
         case .root: Self.rootN
@@ -114,6 +133,12 @@ extension ContentFinderTests.FileItem {
     }
     var label: String { Self.labels[index0] }
 
+    
+    /// Detect first matching suffix (if any), using the same implementation as ``ContentFinder``,
+    /// in order to predict deploy paths discovered during content-finding.
+    ///
+    /// - Parameter suffixes: Array of String possible suffixes
+    /// - Returns: First matchin input, if any.
     func firstMatchingFileSuffix(_ suffixes: [String]) -> String? {
         guard
             isFile,
@@ -126,6 +151,7 @@ extension ContentFinderTests.FileItem {
         return String(nameParent.name[index...])
     }
 
+    // full deploy path
     var path: String {
         switch self {
         case .root(let name): name
@@ -137,6 +163,7 @@ extension ContentFinderTests.FileItem {
 }
 
 extension ContentFinderTests {
+    /// Implement filesystem as required to set up ``FileItem``
     enum Files {
         // swiftlint:disable:next nesting
         typealias FoundURL = (found: Bool, url: URL)
@@ -203,6 +230,7 @@ extension ContentFinderTests {
             )
             return try makeDir(url: url)
         }
+
         static func createSymlink(source: URL, dest: URL) throws {
             // swiftlint:disable:next nesting
             typealias Err = SymlinkErr
@@ -225,8 +253,10 @@ extension ContentFinderTests {
                 throw Err.symlinkError(source: source, dest: dest, error: error)
             }
         }
-        // swiftlint:disable:next nesting
+        
+        /// Thrown by ``createSymlink(source:, dest:)``
         enum SymlinkErr: Error {
+            // swiftlint:disable:next nesting
             case sourceNotFileScheme(URL), destNotFileScheme(URL)
             case sourceExists(URL), destNotReachable(URL)
             case symlinkError(source: URL, dest: URL, error: any Error)
