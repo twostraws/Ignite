@@ -7,6 +7,7 @@
 
 /// Describes a HTML element that is rendered in block style, i.e. that it occupies the
 /// full width of the page by default.
+@MainActor
 public protocol BlockHTML: HTML, HorizontalAligning {
     /// How many columns this should occupy when placed in a grid.
     var columnWidth: ColumnWidth { get set }
