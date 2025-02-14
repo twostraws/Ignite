@@ -149,28 +149,16 @@ final class PublishingContext {
 
     /// Parses all Markdown content in the site's Content folder.
     func parseContent() throws {
-        let maxContentErrors = site.maxContentErrors
-        var foundError = 0
         try ContentFinder.shared.find(root: contentDirectory) { deploy in
-            do {
-                let article = try Content(
-                    from: deploy.url,
-                    in: self,
-                    resourceValues: deploy.resourceValues,
-                    deployPath: deploy.path
-                )
-                if article.isPublished {
-                    allContent.append(article)
-                }
-            } catch {
-                if foundError < maxContentErrors {
-                    print(error.localizedDescription)
-                    foundError += 1
-                } else {
-                    throw error
-                }
+            let article = try Content(
+                from: deploy.url,
+                in: self,
+                resourceValues: deploy.resourceValues,
+                deployPath: deploy.path
+            )
+            if article.isPublished {
+                allContent.append(article)
             }
-
             return true // always continuing
         }
 
