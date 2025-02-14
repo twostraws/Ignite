@@ -30,14 +30,21 @@ struct GridTests {
             Image("/images/photos/wind.jpg", description: "A windy day.")
                 .resizable()
         }
+
         let output = element.render()
 
-        #expect(output ==
-        """
-        <div class="row"><div class=" col"><img alt="A pair of sunglasses." src="/images/photos/shades.jpg" \
-        class="img-fluid" /></div><div class=" col"><img alt="A door partly open." src="/images/photos/stack.jpg" \
-        class="img-fluid" /></div><div class=" col"><img alt="A windy day." src="/images/photos/wind.jpg" \
-        class="img-fluid" /></div></div>
+        #expect(output == """
+        <div class="row">\
+        <div class="col">\
+        <img alt="A pair of sunglasses." src="/images/photos/shades.jpg" class="img-fluid" />\
+        </div>\
+        <div class="col">\
+        <img alt="A door partly open." src="/images/photos/stack.jpg" class="img-fluid" />\
+        </div>\
+        <div class="col">\
+        <img alt="A windy day." src="/images/photos/wind.jpg" class="img-fluid" />\
+        </div>\
+        </div>
         """)
     }
 
@@ -59,12 +66,17 @@ struct GridTests {
 
         let output = element.render()
 
-        #expect(output ==
-        """
-        <div class="row"><div class=" col-md-4"><img alt="A pair of sunglasses." src="/images/photos/shades.jpg" \
-        class="img-fluid" /></div><div class=" col-md-4"><img alt="A door partly open." \
-        src="/images/photos/stack.jpg" class="img-fluid" /></div><div class=" col-md-4">\
-        <img alt="A windy day." src="/images/photos/wind.jpg" class="img-fluid" /></div></div>
+        #expect(output == """
+        <div class="row">\
+        <div class="col-md-4">\
+        <img alt="A pair of sunglasses." src="/images/photos/shades.jpg" class="img-fluid" />\
+        </div>\
+        <div class="col-md-4"><img alt="A door partly open." src="/images/photos/stack.jpg" class="img-fluid" />\
+        </div>\
+        <div class="col-md-4">\
+        <img alt="A windy day." src="/images/photos/wind.jpg" class="img-fluid" />\
+        </div>\
+        </div>
         """)
     }
 
@@ -90,13 +102,20 @@ struct GridTests {
 
         let output = element.render()
 
-        #expect(output ==
-        """
-        <div class="row"><div class=" col-md-4"><img alt="A pair of sunglasses." src="/images/photos/shades.jpg" \
-        class="img-fluid" /></div><div class=" col-md-4"><img alt="A door partly open." src="/images/photos/stack.jpg" \
-        class="img-fluid" /></div><div class=" col-md-4"><img alt="A nice rug." src="/images/photos/rug.jpg" \
-        class="img-fluid" /></div><div class=" col-md-4"><img alt="The window of a car." src="/images/photos/car.jpg" \
-        class="img-fluid" /></div></div>
+        #expect(output == """
+        <div class="row">\
+        <div class="col-md-4">\
+        <img alt="A pair of sunglasses." src="/images/photos/shades.jpg" class="img-fluid" />\
+        </div>\
+        <div class="col-md-4">\
+        <img alt="A door partly open." src="/images/photos/stack.jpg" class="img-fluid" />\
+        </div>\
+        <div class="col-md-4"><img alt="A nice rug." src="/images/photos/rug.jpg" class="img-fluid" />\
+        </div>\
+        <div class="col-md-4">\
+        <img alt="The window of a car." src="/images/photos/car.jpg" class="img-fluid" />\
+        </div>\
+        </div>
         """)
     }
 
@@ -119,13 +138,20 @@ struct GridTests {
 
         let output = element.render()
 
-        #expect(output ==
-        """
-        <div class="row row-cols-1 row-cols-md-2"><div class=" col"><img alt="A pair of sunglasses." \
-        src="/images/photos/shades.jpg" class="img-fluid" /></div><div class=" col"><img alt="A door partly open." \
-        src="/images/photos/stack.jpg" class="img-fluid" /></div><div class=" col"><img alt="A nice rug." \
-        src="/images/photos/rug.jpg" class="img-fluid" /></div><div class=" col"><img alt="The window of a car." \
-        src="/images/photos/car.jpg" class="img-fluid" /></div></div>
+        #expect(output == """
+        <div class="row row-cols-1 row-cols-md-2">\
+        <div class="col">\
+        <img alt="A pair of sunglasses." src="/images/photos/shades.jpg" class="img-fluid" />\
+        </div>\
+        <div class="col">\
+        <img alt="A door partly open." src="/images/photos/stack.jpg" class="img-fluid" />\
+        </div>\
+        <div class="col">\
+        <img alt="A nice rug." src="/images/photos/rug.jpg" class="img-fluid" />\
+        </div>\
+        <div class="col"><img alt="The window of a car." src="/images/photos/car.jpg" class="img-fluid" />\
+        </div>\
+        </div>
         """)
     }
 }

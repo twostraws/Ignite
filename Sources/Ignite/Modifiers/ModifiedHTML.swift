@@ -27,6 +27,10 @@ struct ModifiedHTML: HTML, InlineElement, RootElement, NavigationItem {
     ///   - content: The HTML content to modify
     ///   - modifier: The modifier to apply to the content
     init(_ content: any HTML, modifier: any HTMLModifier) {
+        if content.isPrimitive {
+            self.id = content.id
+        }
+
         if let modified = content as? ModifiedHTML {
             self.content = modified.content
             AttributeStore.default.merge(modified.attributes, intoHTML: id)

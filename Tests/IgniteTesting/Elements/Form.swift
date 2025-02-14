@@ -62,8 +62,8 @@ struct FormTests {
         } onSubmit: {
             SubscribeAction(.sendFox("myListID"))
         }
-        .id("myID")
         .labelStyle(style)
+        .id("myID")
 
         let output = element.render()
 
@@ -126,8 +126,8 @@ struct FormTests {
         } onSubmit: {
             SubscribeAction(.sendFox("myID"))
         }
-        .id("myID")
         .controlSize(controlSize)
+        .id("myID")
 
         let output = element.render()
 
