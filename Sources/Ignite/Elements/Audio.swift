@@ -6,7 +6,7 @@
 //
 
 /// Plays Audio on your page.
-public struct Audio: InlineHTML, LazyLoadable {
+public struct Audio: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

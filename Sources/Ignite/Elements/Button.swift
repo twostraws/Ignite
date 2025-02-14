@@ -6,7 +6,7 @@
 //
 
 /// A clickable button with a label and styling.
-public struct Button: InlineHTML {
+public struct Button: InlineElement {
     /// Controls the display size of buttons. Medium is the default.
     public enum Size: String, CaseIterable {
         case small, medium, large
@@ -61,14 +61,14 @@ public struct Button: InlineHTML {
 
     /// Creates a button with a label.
     /// - Parameter label: The label text to display on this button.
-    public init(_ label: some InlineHTML) {
+    public init(_ label: some InlineElement) {
         self.label = label
     }
 
     /// Creates a button from a more complex piece of HTML.
     /// - Parameter label: An inline element builder of all the content
     /// for this button.
-    public init(@InlineHTMLBuilder label: @escaping () -> some InlineHTML) {
+    public init(@InlineHTMLBuilder label: @escaping () -> some InlineElement) {
         self.label = label()
     }
 
@@ -87,7 +87,7 @@ public struct Button: InlineHTML {
     ///   - label: The label text to display on this button.
     ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
     public init(
-        @InlineHTMLBuilder _ label: @escaping () -> some InlineHTML,
+        @InlineHTMLBuilder _ label: @escaping () -> some InlineElement,
         @ActionBuilder actions: () -> [Action]
     ) {
         self.label = label()

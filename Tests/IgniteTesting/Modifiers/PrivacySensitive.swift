@@ -14,8 +14,13 @@ import Testing
 @Suite("PrivacySensitive Tests")
 @MainActor
 struct PrivacySensitiveTests {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("Privacy Sensitive Modifier",
+          arguments: [PrivacyEncoding.urlOnly, PrivacyEncoding.urlAndDisplay])
+    func privacySensitive(encoding: PrivacyEncoding) async throws {
+        let element = Link("Go Home", target: "/").privacySensitive(encoding)
+        let output = element.render()
 
+        #expect(output.contains("privacy-sensitive=\"\(encoding.rawValue)\""))
+        #expect(output.contains("protected-link"))
     }
 }

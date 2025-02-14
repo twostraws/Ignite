@@ -7,7 +7,7 @@
 
 /// A small String extension that allows strings to be used directly inside HTML.
 /// Useful when you don't want your text to be wrapped in a paragraph or similar.
-extension String: InlineHTML {
+extension String: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

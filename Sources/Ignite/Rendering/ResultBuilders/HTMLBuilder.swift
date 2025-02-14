@@ -117,7 +117,7 @@ public struct HTMLBuilder {
     /// Handles inline elements that conform to HTML protocol.
     /// - Parameter content: The inline HTML element
     /// - Returns: The same element unchanged
-    public static func buildExpression<Content: InlineHTML>(_ content: Content) -> some HTML {
+    public static func buildExpression<Content: InlineElement>(_ content: Content) -> some HTML {
         content
     }
 

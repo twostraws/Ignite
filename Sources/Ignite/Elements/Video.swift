@@ -6,7 +6,7 @@
 //
 
 /// Shows a Video player on your page.
-public struct Video: InlineHTML, LazyLoadable {
+public struct Video: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

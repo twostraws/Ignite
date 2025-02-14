@@ -16,7 +16,7 @@
 @MainActor
 public protocol HTML: CustomStringConvertible, Sendable {
     /// A unique identifier used to track this element's state and attributes.
-    var id: String { get set }
+    var id: String { get }
 
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { get }
@@ -40,16 +40,9 @@ public extension HTML {
         }
     }
 
-    /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
-    var attributes: CoreAttributes {
-        get { AttributeStore.default.attributes(for: id) }
-        set { AttributeStore.default.merge(newValue, intoHTML: id) }
-    }
-
     /// A unique identifier generated from the element's type and source location.
     var id: String {
-        get { String(describing: self).truncatedHash }
-        set {} // swiftlint:disable:this unused_setter_value
+        String(describing: self).truncatedHash
     }
 
     /// The default status as a primitive element.
@@ -62,6 +55,12 @@ public extension HTML {
 }
 
 extension HTML {
+    /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
+    var attributes: CoreAttributes {
+        get { AttributeStore.default.attributes(for: id) }
+        set { AttributeStore.default.merge(newValue, intoHTML: id) }
+    }
+
     /// The publishing context of this site.
     var publishingContext: PublishingContext {
         PublishingContext.default
@@ -346,13 +345,13 @@ extension HTML {
 /// Recursively flattens nested `InlineHTML` content into a single array, unwrapping any body properties.
 /// - Parameter content: The content to flatten and unwrap
 /// - Returns: An array of unwrapped `InlineHTML` elements
-@MainActor func flatUnwrap(_ content: Any) -> [any InlineHTML] {
+@MainActor func flatUnwrap(_ content: Any) -> [any InlineElement] {
     if let array = content as? [Any] {
         array.flatMap { flatUnwrap($0) }
-    } else if let html = content as? any InlineHTML {
-        if let anyHTML = html as? AnyHTML, let wrapped = anyHTML.unwrapped.body as? (any InlineHTML) {
+    } else if let html = content as? any InlineElement {
+        if let anyHTML = html as? AnyHTML, let wrapped = anyHTML.unwrapped.body as? (any InlineElement) {
             flatUnwrap([wrapped])
-        } else if let collection = html as? HTMLCollection, let elements = collection.elements as? [any InlineHTML] {
+        } else if let collection = html as? HTMLCollection, let elements = collection.elements as? [any InlineElement] {
             flatUnwrap(elements)
         } else {
             [html]

@@ -6,7 +6,7 @@
 //
 
 /// A text input field with support for various states
-public struct TextField: InlineHTML {
+public struct TextField: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

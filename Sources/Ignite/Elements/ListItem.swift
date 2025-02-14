@@ -19,12 +19,12 @@ public struct ListItem: HTML, ListableElement {
     public var isPrimitive: Bool { true }
 
     /// The content of this list item.
-    var content: any InlineHTML
+    var content: any InlineElement
 
     /// Creates a new `ListItem` object using an inline element builder that
     /// returns an array of `HTML` objects to display in the list.
     /// - Parameter content: The content you want to display in your list.
-    public init(@InlineHTMLBuilder content: () -> some InlineHTML) {
+    public init(@InlineHTMLBuilder content: () -> some InlineElement) {
         self.content = content()
     }
 

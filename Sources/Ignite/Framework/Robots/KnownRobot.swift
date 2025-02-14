@@ -6,7 +6,7 @@
 //
 
 /// A collection of known robots.
-public enum KnownRobot: String {
+public enum KnownRobot: String, CaseIterable, Sendable {
     /// Apple's robot.
     case apple = "Applebot"
 

@@ -6,7 +6,7 @@
 //
 
 /// An image on your page. Can be vector (SVG) or raster (JPG, PNG, GIF).
-public struct Image: InlineHTML, LazyLoadable {
+public struct Image: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -97,10 +97,11 @@ public struct Image: InlineHTML, LazyLoadable {
     ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
     private func render(image: String, description: String) -> String {
+        let basePath = image.starts(with: "/") ? publishingContext.site.url.path : ""
         var attributes = attributes
         attributes.selfClosingTag = "img"
         attributes.append(customAttributes:
-            .init(name: "src", value: "\(publishingContext.site.url.path)\(image)"),
+            .init(name: "src", value: "\(basePath)\(image)"),
             .init(name: "alt", value: description)
         )
         return attributes.description()

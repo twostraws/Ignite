@@ -7,7 +7,7 @@
 
 /// A type-erasing wrapper that can hold any HTML content while maintaining protocol conformance.
 /// This wrapper also handles unwrapping nested AnyHTML instances to prevent unnecessary wrapping layers.
-public struct AnyHTML: HTML, InlineHTML {
+public struct AnyHTML: HTML, InlineElement {
     /// The body of this HTML element, which is itself
     public var body: some HTML { self }
 
