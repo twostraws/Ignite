@@ -9,7 +9,7 @@
 /// Used as a default or fallback when no content is needed
 public struct EmptyHTML: HTML, InlineElement, RootElement {
     /// Creates a new empty HTML element
-    public init() {}
+    public nonisolated init() {}
 
     /// Returns self as the body content since this is an empty element
     public var body: some HTML { self }
