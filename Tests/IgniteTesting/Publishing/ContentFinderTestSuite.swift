@@ -10,7 +10,7 @@ enum ContentFinderTestCases {
     typealias TestCase = ContentFinderTests.TestCase
 
     // Directory root names for different test scenarios
-    private static let (source, target, error) = ("normal", "alt", "error")
+    private static let (source, target, error) = ("source", "target", "error")
 
     /// ``TestCase``:
     /// - 0 (ok): Base directory structure with no symlinks
@@ -21,9 +21,7 @@ enum ContentFinderTestCases {
     ///
     /// Most test cases only need root names and file items.
     /// Directory symlink tests also require explicit deploy paths.
-    static let tests = allTests
-
-    private static let allTests: [TestCase] = [
+    static let tests: [TestCase] = [
         // Base directory structure
         TestCase(0, [source], items: SymlinkTargetDirectory.allWithNorm),
 
@@ -80,7 +78,7 @@ enum ContentFinderTestCases {
     // - source/fa.md         # /fa
     // - source/da/fbb.md     # /da/fbb
     // - source/da/de/feee.md # /da/de/feee
-    enum SymlinkSourceDirectory {
+    private enum SymlinkSourceDirectory {
         static let rNorm = FileItem.root(source)
         static let d_rNorm_da = FileItem.directory("da", rNorm)
         static let d_rNorm_da_de = FileItem.directory("de", d_rNorm_da)
@@ -101,7 +99,7 @@ enum ContentFinderTestCases {
     // - target/g1.md          # /g1
     // - target/d0/g22.md      # /d0/g22
     // - target/d0/d11/g333.md # /d0/d11/g333
-    enum SymlinkTargetDirectory {
+    private enum SymlinkTargetDirectory {
         static let rAlt = FileItem.root(target)
         static let d_rAlt_d0 = FileItem.directory("d0", rAlt)
         static let d_rAlt_d0_dir11 = FileItem.directory("d11", d_rAlt_d0)
@@ -127,7 +125,7 @@ enum ContentFinderTestCases {
 
     // Test circular symlink error:
     // Create symlink from d1/d22/l2dir1 to d1 (its own parent)
-    enum CircularSymlinkError {
+    private enum CircularSymlinkError {
         static let rErr = FileItem.root(error)
         static let d_rErr_d1 = FileItem.directory("d1", rErr)
         static let d_rErr_d1_d22 = FileItem.directory("d22", d_rErr_d1)
@@ -147,7 +145,7 @@ enum ContentFinderTestCases {
 
     // Test duplicate traversal error:
     // Create symlink from d0/l2dir12 to d1, where d1 was already visited
-    enum DuplicateSymlinkTraversalError {
+    private enum DuplicateSymlinkTraversalError {
         static let rErr = FileItem.root(error)
         static let d_rErr_d0 = FileItem.directory("d0", rErr)
         static let d_rErr_d1 = FileItem.directory("d1", rErr)
@@ -169,7 +167,7 @@ enum ContentFinderTestCases {
 
     // Test creating symlink from source file to target file:
     // source/la.md -> target/d0/g22.md
-    enum FileSymlinkCreation {
+    private enum FileSymlinkCreation {
         static let f_rNorm_la = FileItem.file("la.md", SymlinkSourceDirectory.rNorm)
         static let l_f_rNorm_la_TO_f_rAlt_d0_g22Md = FileItem.link(
             source: f_rNorm_la,
@@ -180,7 +178,7 @@ enum ContentFinderTestCases {
 
     // Test creating symlink from source directory to target directory:
     // Create symlink to target/d0 and verify correct deploy paths
-    enum DirectorySymlinkCreation {
+    private enum DirectorySymlinkCreation {
         static let linkNameToD0 = "ld-alt_d0"
         static let d_rNorm_ldAltD0 = FileItem.file(linkNameToD0, SymlinkSourceDirectory.rNorm)
         static let l_f_rNorm_la_TO_f_rAlt_d0 = FileItem.link(

@@ -15,8 +15,8 @@ actor ContentFinderTests {
     /// Run each ``TestCase`` defined in the ``ContentFinderTestCases`` using ``run(_:)``.
     ///
     /// Verify any error thrown is expected.
-    @Test("find", arguments: ContentFinderTestCases.tests)
-    func find(test: TestCase) async throws {
+    @Test("Find Content", arguments: ContentFinderTestCases.tests)
+    func findContent(test: TestCase) async throws {
         do {
             try run(test)
             if let expectError = test.expectError, !expectError.isEmpty {
