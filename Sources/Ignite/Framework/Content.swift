@@ -130,31 +130,28 @@ public struct Content {
     ///   relative path to this content.
     ///   - resourceValues: Resource values that provide the creation and
     ///   last modification date for this content.
-    init(from url: URL, resourceValues: URLResourceValues) throws {
+    ///   - deployPath: optional String used as site url path for the content.
+    ///   If nil (default), use `metadata["path"]` or path to content root.
+    init(
+        from url: URL,
+        in context: PublishingContext,
+        resourceValues: URLResourceValues,
+        deployPath: String
+    ) throws {
         // Use whatever Markdown renderer was configured
         // for the site we're publishing.
-        let context = PublishingContext.default
         let parser = try context.site.markdownRenderer.init(url: url, removeTitleFromBody: true)
 
         body = parser.body
         metadata = parser.metadata
         title = parser.title.strippingTags()
         description = parser.description.strippingTags()
+        path = metadata["path"] as? String ?? deployPath
 
-        if let customPath = metadata["path"] as? String {
-            path = customPath
-        } else {
-            let basePath = context.contentDirectory.path()
-            let thisPath = url.deletingPathExtension().path()
-            path = String(thisPath.trimmingPrefix(basePath))
-        }
-
-        // Save the article's type as being the first subfolder
-        // of this article inside the Content folder.
-        let distinctComponents = url.pathComponents.dropFirst(context.contentDirectory.pathComponents.count)
-
-        if let firstSubdirectory = distinctComponents.first {
-            metadata["type"] = firstSubdirectory
+        // Save the first subfolder in the path as the article's type
+        let pathParts = path.split(separator: "/") // removes empty
+        if 1 < pathParts.count { // no type if not in subdirectory
+            metadata["type"] = pathParts[0]
         }
 
         if let date = parseMetadataDate(for: "date") {
@@ -232,6 +229,12 @@ public struct Content {
 
         return nil
     }
+
+    /// Keys for resources required on initialization
+
+    public static nonisolated let resourceKeys: [URLResourceKey]
+        = [.creationDateKey, .contentModificationDateKey]
+
 }
 
 extension Content {

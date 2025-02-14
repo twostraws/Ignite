@@ -6,6 +6,7 @@
 //
 
 /// A protocol that allows pages of any type to use a layout.
+@MainActor
 public protocol Layoutable: Sendable {
     /// The type of layout you want this page to use.
     associatedtype LayoutType: Layout

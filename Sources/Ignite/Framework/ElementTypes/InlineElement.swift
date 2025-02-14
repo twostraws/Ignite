@@ -7,4 +7,5 @@
 
 /// An element that exists inside a block element, such as an emphasized
 /// piece of text.
+@MainActor
 public protocol InlineElement: HTML {}

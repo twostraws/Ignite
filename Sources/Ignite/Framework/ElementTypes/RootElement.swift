@@ -6,4 +6,5 @@
 //
 
 /// Describes elements that can exist directly inside a HTML container.
+@MainActor
 public protocol RootElement: HTML {}
