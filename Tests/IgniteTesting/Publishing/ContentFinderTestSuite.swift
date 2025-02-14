@@ -5,202 +5,192 @@
 // See LICENSE for license information.
 //
 
-// MARK: ContentFinder Tst case initializers
-enum ContentFinderSuite {
-    typealias FIT = ContentFinderTests.FileItem
-    typealias Tst = ContentFinderTests.Tst
+enum ContentFinderTestCases {
+    typealias FileItem = ContentFinderTests.FileItem
+    typealias TestCase = ContentFinderTests.TestCase
 
-    // group directory root names, where normal is the base case for all
-    private static let (normal, alt, err) = ("normal", "alt", "err")
+    // Directory root names for different test scenarios
+    private static let (source, target, error) = ("normal", "alt", "error")
 
-    /// ``Tst`` test cases:
-    /// - 0 (ok): normal files, no links (and basis for all other tests)
-    /// - 1 (ok): link to file alt/d0 file
-    /// - 2 (err): link to another directory in same root
-    /// - 3 (err): link to a parent directory
-    /// - 4 (ok): link to dir in alt (specify expected deploy path's)
+    /// ``TestCase``:
+    /// - 0 (ok): Base directory structure with no symlinks
+    /// - 1 (ok): Create symlink from source file to target file
+    /// - 2 (err): Detect duplicate directory traversal via symlink
+    /// - 3 (err): Detect circular symlink to parent directory
+    /// - 4 (ok): Create symlink from source directory to target directory
     ///
-    /// Tst specifications normally just require the root names and file-item's,
-    /// and Tst derives the expected deploy-paths from the file-items,
-    /// but linking directories requires specifying expected deploy path's.
+    /// Most test cases only need root names and file items.
+    /// Directory symlink tests also require explicit deploy paths.
     static let tests = allTests
 
-    private static let allTests: [Tst] = [
-        // Tst(id, [root-names], file-items{, deploy-paths})
+    private static let allTests: [TestCase] = [
+        // Base directory structure
+        TestCase(0, [source], items: SymlinkTargetDirectory.allWithNorm),
 
-        // Normal files (no links)
-        Tst(0, [normal], items: Alt.allWithNorm),
+        // Create file symlink
+        TestCase(1, [source], items: SymlinkSourceDirectory.all + FileSymlinkCreation.all),
 
-        // link to file
-        Tst(1, [normal], items: Norm.all + NormFileLinksToAlt.all),
+        // Error cases
+        TestCase(2, [error], items: DuplicateSymlinkTraversalError.all, expectError: DuplicateSymlinkTraversalError.message),
+        TestCase(3, [error], items: CircularSymlinkError.all, expectError: CircularSymlinkError.message),
 
-        // Detect duplicates and cycles from misconfigured links
-        Tst(2, [err], items: DupErr.all, expectError: DupErr.message),
-        Tst(3, [err], items: ParentErr.all, expectError: ParentErr.message),
-
-        // link to directory
-        Tst(
+        // Create directory symlink
+        TestCase(
             4,
-            [normal, alt],
-            items: Norm.all + NormDirLinksToAlt.all,
-            // Dir links require explicit `expect:` deploy paths.
-            expect: Norm.content + NormDirLinksToAlt.content
+            [source, target],
+            items: SymlinkSourceDirectory.all + DirectorySymlinkCreation.all,
+            // Directory symlinks require explicit deploy paths
+            expect: SymlinkSourceDirectory.content + DirectorySymlinkCreation.content
         )
     ]
 
-    // swiftlint:disable identifier_name
-
-    // MARK: file-item directory groups: normal, alternate, error (parent/dup)
-
-    // We use 3 groups with distinct root dirs to test links (to avoid false
-    // positive if a link target is in the same root dir as the link).
-    // The normal group is the base case for all (working) groups.
+    // We use separate source and target directories to avoid false positives
+    // when testing symlinks. The source directory provides the base structure
+    // for all working test cases.
 
     // How to interpret the ``FileItem`` declarations like
-    // `static let d_rNorm_da_de = FIT.dir("de", d_rNorm_da)`?
+    // `static let d_rNorm_da_de = FileItem.directory("de", d_rNorm_da)`?
     //
-    // Member names reflect their path, with `FileItem` type as a prefix.
+    // Member names reflect their path, with `FileItem` type as a prefix:
     // - type: d/directory, f/file, l/link, r/root-directory
     // - Path segments use _ separator
-    // - So `/normal/da/fa.md` gets the name `f_rNorm_da_faMd`
-    // - Links specify the linking file TO the target/destination path:
-    // -   l_{link-source}_TO_{link-destination}
+    // - So `/source/da/fa.md` gets the name `f_rNorm_da_faMd`
+    // - Symlinks specify the source TO the target/destination path:
+    // -   l_{source}_TO_{destination}
     // - So `l_rErr_d0_TO_d_rErr_d1`
     // - would mean `err/d0` is a symlink to `err/d1`
     //
-    // Normal names are alphabetic, while error and alternate are numeric,
-    // so the deploy path indicates if the item was in the normal tree.
-    // In most cases, a filename will also indicate its depth via duplication
-    // (`/fa.md`, `d0/gbb.md`, `d0/d11/fccc.md`), but dirs might not do this.
+    // Source paths use alphabetic names while target/error paths use numeric names,
+    // making it clear which tree an item belongs to.
+    // Files often indicate depth via name duplication
+    // (`/fa.md`, `d0/gbb.md`, `d0/d11/fccc.md`), but directories may not.
     //
-    // The FIT (FileItem) factories generally take the name and the parent:
-    // `FIT.dir("da", rNorm)` produces directory `.../normal/da/`.
-    // The factories run in the order specified;
-    // any parent dir has to be listed before any child dir/file,
-    // and a link target has to be listed before any link.
+    // The FileItem factories take the name and parent:
+    // `FileItem.directory("da", rNorm)` produces directory `.../source/da/`.
+    // Items must be created in order - parents before children,
+    // symlink targets before symlinks.
     //
-    // The FIT link factory will create the link file, but requires the target.
-    // The `Tst` file-items must include the target item before the link item,
-    // but must not include the file-item representing the link source file,
-    // and only use it in the link to specify the source.
+    // The symlink factory creates the link file but requires the target.
+    // Include the target item before the symlink, but not the source file.
+    // Only use the source file in the symlink to specify its location.
 
-    // Normal group files     # deploy path
-    // - normal/fa.md         # /fa
-    // - normal/da/fbb.md     # /da/fbb
-    // - normal/da/de/feee.md # /da/de/feee
-    enum Norm {
-        static let rNorm = FIT.root(normal)
-        static let d_rNorm_da = FIT.dir("da", rNorm)
-        static let d_rNorm_da_de = FIT.dir("de", d_rNorm_da)
-        static let f_rNorm_faMd = FIT.file("fa.md", rNorm)
-        static let f_rNorm_da_fbbMd = FIT.file("fbb.md", d_rNorm_da)
-        static let f_rNorm_da_de_feeeMd = FIT.file("feee.md", d_rNorm_da_de)
+    // swiftlint:disable identifier_name
 
-        // `FileItem`s to set up before the test for the normal group
+    // Source directory structure:
+    // - source/fa.md         # /fa
+    // - source/da/fbb.md     # /da/fbb
+    // - source/da/de/feee.md # /da/de/feee
+    enum SymlinkSourceDirectory {
+        static let rNorm = FileItem.root(source)
+        static let d_rNorm_da = FileItem.directory("da", rNorm)
+        static let d_rNorm_da_de = FileItem.directory("de", d_rNorm_da)
+        static let f_rNorm_faMd = FileItem.file("fa.md", rNorm)
+        static let f_rNorm_da_fbbMd = FileItem.file("fbb.md", d_rNorm_da)
+        static let f_rNorm_da_de_feeeMd = FileItem.file("feee.md", d_rNorm_da_de)
+
+        // FileItems to set up before the test
         static let all = [
-            rNorm, d_rNorm_da, d_rNorm_da_de,  // dirs
-            f_rNorm_faMd, f_rNorm_da_fbbMd, f_rNorm_da_de_feeeMd  // files
+            rNorm, d_rNorm_da, d_rNorm_da_de, // dirs
+            f_rNorm_faMd, f_rNorm_da_fbbMd, f_rNorm_da_de_feeeMd // files
         ]
-        // fyi, expected deploy paths (strip root prefix and file suffix)
+        // Expected deploy paths (strip root prefix and file suffix)
         static let content = ["/fa", "/da/fbb", "/da/de/feee"]
     }
 
-    // Alternate files      # deploy path
-    // - alt/g1.md          # /g1
-    // - alt/d0/g22.md      # /d0/g22
-    // - alt/d0/d11/g333.md # /d0/d11/g333
-    enum Alt {
-        static let rAlt = FIT.root(alt)
-        static let d_rAlt_d0 = FIT.dir("d0", rAlt)
-        static let d_rAlt_d0_dir11 = FIT.dir("d11", d_rAlt_d0)
-        static let f_rAlt_g1Md = FIT.file("g1.md", rAlt)
-        static let f_rAlt_d0_g22Md = FIT.file("g22.md", d_rAlt_d0)
-        static let f_rAlt_d0_dir11_g333Md = FIT.file(
+    // Target directory structure:
+    // - target/g1.md          # /g1
+    // - target/d0/g22.md      # /d0/g22
+    // - target/d0/d11/g333.md # /d0/d11/g333
+    enum SymlinkTargetDirectory {
+        static let rAlt = FileItem.root(target)
+        static let d_rAlt_d0 = FileItem.directory("d0", rAlt)
+        static let d_rAlt_d0_dir11 = FileItem.directory("d11", d_rAlt_d0)
+        static let f_rAlt_g1Md = FileItem.file("g1.md", rAlt)
+        static let f_rAlt_d0_g22Md = FileItem.file("g22.md", d_rAlt_d0)
+        static let f_rAlt_d0_dir11_g333Md = FileItem.file(
             "g333.md",
             d_rAlt_d0_dir11
         )
-        // This is used for the entire alt directory tree
+        // Complete target directory tree
         static let all = d0Tree + [f_rAlt_g1Md]
 
-        // alt/d0 is also a link target, so specify its content separately.
-        // When d0 is linked, resulting deploy-path's should not include
-        // file outside d0 (i.e., `f_rAlt_g1Md`: `alt/g1.md`)
+        // d0 subtree is used as a symlink target separately
+        // When d0 is linked, resulting deploy paths exclude files outside d0
+        // (i.e., exclude f_rAlt_g1Md: target/g1.md)
         static let d0Tree = [
-            rAlt, d_rAlt_d0, d_rAlt_d0_dir11,  //
+            rAlt, d_rAlt_d0, d_rAlt_d0_dir11, //
             f_rAlt_d0_g22Md, f_rAlt_d0_dir11_g333Md
         ]
-        // test setup requires both this and normal tree
-        static let allWithNorm = all + Norm.all
+        // Test setup requires both target and source trees
+        static let allWithNorm = all + SymlinkSourceDirectory.all
     }
 
-    // parent-error files:
-    // d1/d22/l2dir1 links to d1, its own parent
-    enum ParentErr {
-        static let rErr = FIT.root(err)
-        static let d_rErr_d1 = FIT.dir("d1", rErr)
-        static let d_rErr_d1_d22 = FIT.dir("d22", d_rErr_d1)
-        static let f_rErr_d1_d22_l2d1 = FIT.file("l2d1", d_rErr_d1_d22)
-        static let l_rErr_d1_d22_l_TO_d1_TO_rErr_d1 = FIT.link(
+    // Test circular symlink error:
+    // Create symlink from d1/d22/l2dir1 to d1 (its own parent)
+    enum CircularSymlinkError {
+        static let rErr = FileItem.root(error)
+        static let d_rErr_d1 = FileItem.directory("d1", rErr)
+        static let d_rErr_d1_d22 = FileItem.directory("d22", d_rErr_d1)
+        static let f_rErr_d1_d22_l2d1 = FileItem.file("l2d1", d_rErr_d1_d22)
+        static let l_rErr_d1_d22_l_TO_d1_TO_rErr_d1 = FileItem.link(
             source: f_rErr_d1_d22_l2d1,
             dest: d_rErr_d1
         )
         static let all = [
             rErr, d_rErr_d1, d_rErr_d1_d22,
-            // Don't include link file itself (f_rErr_dir1_dir22_l2d1)
-            // The link will create it.
+            // Symlink factory creates the source file
             l_rErr_d1_d22_l_TO_d1_TO_rErr_d1
         ]
-        // Very minimal check of the content of the expected error message
+        // Expected error message
         static let message = "directorySeen"
     }
 
-    // duplicate-error files
-    // d0/l2dir12 links to d1, but d1 already included via normal traversal
-    enum DupErr {
-        static let rErr = FIT.root(err)
-        static let d_rErr_d0 = FIT.dir("d0", rErr)
-        static let d_rErr_d1 = FIT.dir("d1", rErr)
-        static let d_rErr_d1_d22 = FIT.dir("d22", d_rErr_d1)
-        static let f_rErr_d0_l2 = FIT.file("l2dir12", d_rErr_d0)
-        static let l_rErr_d0_l_TO_d12rErr_d1 = FIT.link(
+    // Test duplicate traversal error:
+    // Create symlink from d0/l2dir12 to d1, where d1 was already visited
+    enum DuplicateSymlinkTraversalError {
+        static let rErr = FileItem.root(error)
+        static let d_rErr_d0 = FileItem.directory("d0", rErr)
+        static let d_rErr_d1 = FileItem.directory("d1", rErr)
+        static let d_rErr_d1_d22 = FileItem.directory("d22", d_rErr_d1)
+        static let f_rErr_d0_l2 = FileItem.file("l2dir12", d_rErr_d0)
+        static let l_rErr_d0_l_TO_d12rErr_d1 = FileItem.link(
             source: f_rErr_d0_l2,
             dest: d_rErr_d1
         )
 
-        // link creates extra visit for a directory, causing error
         static let all = [
-            rErr, d_rErr_d0, d_rErr_d1, d_rErr_d1_d22,  //
-            // don't include link file (f_rErr_dir0_l2); link factory creates it
+            rErr, d_rErr_d0, d_rErr_d1, d_rErr_d1_d22, //
+            // Symlink factory creates the source file
             l_rErr_d0_l_TO_d12rErr_d1
         ]
-        // expected error message
+        // Expected error message
         static let message = "directorySeen"
     }
 
-    // ok: normal link to file in alt/ (normal/la.md -> alt/d0/g22.md)
-    // Expect normal deploy paths, plus one for the alt file.
-    enum NormFileLinksToAlt {
-        static let f_rNorm_la = FIT.file("la.md", Norm.rNorm)
-        static let l_f_rNorm_la_TO_f_rAlt_d0_g22Md = FIT.link(
+    // Test creating symlink from source file to target file:
+    // source/la.md -> target/d0/g22.md
+    enum FileSymlinkCreation {
+        static let f_rNorm_la = FileItem.file("la.md", SymlinkSourceDirectory.rNorm)
+        static let l_f_rNorm_la_TO_f_rAlt_d0_g22Md = FileItem.link(
             source: f_rNorm_la,
-            dest: Alt.f_rAlt_d0_g22Md
+            dest: SymlinkTargetDirectory.f_rAlt_d0_g22Md
         )
         static let all = [l_f_rNorm_la_TO_f_rAlt_d0_g22Md]
     }
 
-    // ok: normal link to dir in alt/d0.
-    // Expect normal deploy paths, plus files in the tree from alt/d0,
-    // but nothing else from alt/
-    enum NormDirLinksToAlt {
+    // Test creating symlink from source directory to target directory:
+    // Create symlink to target/d0 and verify correct deploy paths
+    enum DirectorySymlinkCreation {
         static let linkNameToD0 = "ld-alt_d0"
-        static let d_rNorm_ldAltD0 = FIT.file(linkNameToD0, Norm.rNorm)
-        static let l_f_rNorm_la_TO_f_rAlt_d0 = FIT.link(
+        static let d_rNorm_ldAltD0 = FileItem.file(linkNameToD0, SymlinkSourceDirectory.rNorm)
+        static let l_f_rNorm_la_TO_f_rAlt_d0 = FileItem.link(
             source: d_rNorm_ldAltD0,
-            dest: Alt.d_rAlt_d0
+            dest: SymlinkTargetDirectory.d_rAlt_d0
         )
-        static let all = Alt.d0Tree + [l_f_rNorm_la_TO_f_rAlt_d0]
-        // d0 tree has d0/g22.md and d0/d11/g333.md
-        // but d0 path is set by the link name
+        static let all = SymlinkTargetDirectory.d0Tree + [l_f_rNorm_la_TO_f_rAlt_d0]
+        // Expected deploy paths use the symlink name:
+        // - /ld-alt_d0/g22
+        // - /ld-alt_d0/d11/g333
         static let content = [
             "/\(linkNameToD0)/g22",
             "/\(linkNameToD0)/d11/g333"

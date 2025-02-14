@@ -10,40 +10,42 @@ import Foundation
 @testable import Ignite
 
 extension ContentFinderTests {
-
     /// Generates markdown header and bullet list per specification.
     enum MdHeaderList {
         case head(level: Int, sort: Bool, skipEmpty: Bool)
         case h2Quiet
         case h2SortQuiet
 
-        /// Generates markdown header and bullet list per specification.
+        /// Generates a markdown section with an optional header and bullet list.
         /// - Parameters:
-        ///   - header: optional string-like thing to use as header
-        ///   - list: items to print as bullet list
-        /// - Returns:
-        func md<T: StringProtocol>(
-            _ header: T? = nil,
-            _ list: [T]
+        ///   - header: Optional section header text
+        ///   - items: List items to format as bullets
+        /// - Returns: Formatted markdown string
+        func generateMarkdownSection<T: StringProtocol>(
+            header: T? = nil,
+            items: [T]
         ) -> String {
-            let (_, sort, skipEmpty) = lvlSrtSkp
-            if list.isEmpty && skipEmpty { return "" }
-            let (headPrefix, listPrefix) = prefixes(header, list.isEmpty)
-            var out = ""
-            if let headPrefix, let header {
-                out += headPrefix
-                out += header
+            let (_, shouldSort, shouldSkipEmpty) = headerConfiguration
+            if items.isEmpty && shouldSkipEmpty { return "" }
+
+            let (headerPrefix, bulletPrefix) = generatePrefixes(header: header, hasItems: !items.isEmpty)
+            var output = ""
+
+            if let headerPrefix, let header {
+                output += headerPrefix
+                output += header
             }
-            guard let listPrefix, !list.isEmpty else { return out }
-            out += listPrefix // initial
-            let target = sort ? list.sorted() : list
-            out += target.joined(separator: listPrefix)
-            return out
+
+            guard let bulletPrefix, !items.isEmpty else { return output }
+            output += bulletPrefix
+
+            let formattedItems = shouldSort ? items.sorted() : items
+            output += formattedItems.joined(separator: bulletPrefix)
+            return output
         }
 
-        /// Tuple of header level, sort-list, and skip all if list is empty
-        private var lvlSrtSkp: (level: Int, sort: Bool, skipEmpty: Bool) {
-            // swiftlint:disable:previous large_tuple
+        /// Configuration for header level, sorting, and empty list handling
+        private var headerConfiguration: (level: Int, shouldSort: Bool, shouldSkipEmpty: Bool) {
             switch self {
             case let .head(level, sort, skip): (level, sort, skip)
             case .h2Quiet: (2, false, true)
@@ -51,26 +53,29 @@ extension ContentFinderTests {
             }
         }
 
-        /// Tuple of String prefixes for header or bullet list items (empty to skip)
-        private func prefixes<T: StringProtocol>(
-            _ header: T?,
-            _ hasList: Bool
-        ) -> (head: String?, list: String?) {
-            let (level, _, skipEmpty) = lvlSrtSkp
-            if skipEmpty && !hasList { return (nil, nil) }
-            var head: String?
+        /// Generates markdown prefixes for header and bullet list
+        private func generatePrefixes<T: StringProtocol>(
+            header: T?,
+            hasItems: Bool
+        ) -> (header: String?, bullet: String?) {
+            let (level, _, shouldSkipEmpty) = headerConfiguration
+            if shouldSkipEmpty, !hasItems { return (nil, nil) }
+
+            var headerPrefix: String?
             if let header, !header.isEmpty {
-                head = "\n\(String(repeating: "#", count: level)) "
+                headerPrefix = "\n\(String(repeating: "#", count: level)) "
             }
-            return (head, hasList ? "\n- " : nil)
+
+            return (headerPrefix, hasItems ? "\n- " : nil)
         }
     }
 }
+
 extension ContentFinderTests {
     /// Set up``FileItem`` in filesystem using ``Files``
     struct FileItemMaker {
         /// Root directory for all items made
-        let baseDir: URL
+        let baseDirectory: URL
 
         /// Set up``FileItem`` in filesystem using ``Files``
         /// - Parameter item: ``FileItem`` to create
@@ -78,24 +83,24 @@ extension ContentFinderTests {
         @discardableResult
         func make(_ item: FileItem) throws -> Files.FoundURL {
             switch item {
-            case .root(let name):
-                let url = Files.makeUrlToDir(baseDir, path: name)
-                return try Files.makeDir(url: url)
+            case let .root(name):
+                let url = Files.makeDirectoryURL(baseDirectory, path: name)
+                return try Files.makeDirectory(at: url)
             case .file:
-                let url = Files.makeUrlToFile(baseDir, path: item.path)
-                return try Files.makeFile(file: url)
-            case .dir:
-                let url = Files.makeUrlToDir(baseDir, path: item.path)
-                return try Files.makeDir(url: url)
-            case let .link(source, dest):
-                let src = Files.makeUrlToFile(baseDir, path: source.path)
-                let dst = Files.makeUrlToFile(baseDir, path: dest.path)
+                let url = Files.makeFileURL(baseDirectory, path: item.path)
+                return try Files.makeFile(at: url)
+            case .directory:
+                let url = Files.makeDirectoryURL(baseDirectory, path: item.path)
+                return try Files.makeDirectory(at: url)
+            case let .link(source, destination):
+                let source = Files.makeFileURL(baseDirectory, path: source.path)
+                let destination = Files.makeFileURL(baseDirectory, path: destination.path)
                 do {
-                    try Files.createSymlink(source: src, dest: dst)
-                } catch Files.SymlinkErr.symlinkError(let src, _, _) {
-                    return (true, src)
+                    try Files.createSymlink(source: source, destination: destination)
+                } catch let Files.SymlinkError.symlinkCreationFailed(source, _, _) {
+                    return (true, source)
                 }
-                return (false, src)
+                return (false, source)
             }
         }
     }
@@ -103,9 +108,10 @@ extension ContentFinderTests {
 
 extension ContentFinderTests.FileItem: CustomStringConvertible {
     var description: String {
-        "\(label)(\(name)\(parent.map {" in: \($0.path)"} ?? ""))"
+        "\(label)(\(name)\(parent.map { " in: \($0.path)" } ?? ""))"
     }
 }
+
 extension ContentFinderTests.FileItem {
     var isFile: Bool { Self.fileN == index0 }
     /// Constants for ``index0`` also track ``labels``
@@ -117,20 +123,27 @@ extension ContentFinderTests.FileItem {
         switch self {
         case .root: Self.rootN
         case .file: Self.fileN
-        case .dir: Self.dirN
+        case .directory: Self.dirN
         case .link: Self.linkN
         }
     }
 
-    var name: String { nameParent.name }
-    var parent: Self? { nameParent.parent }
-    var nameParent: (name: String, parent: Self?) {
+    var name: String {
         switch self {
-        case .root(let name): (name, nil)
-        case let .file(name, parnt), let .dir(name, parnt): (name, parnt)
-        case .link(let source, _): source.nameParent
+        case let .root(name): name
+        case let .file(name, _), let .directory(name, _): name
+        case let .link(source, _): source.name
         }
     }
+
+    var parent: Self? {
+        switch self {
+        case .root: nil
+        case let .file(_, parent), let .directory(_, parent): parent
+        case let .link(source, _): source.parent
+        }
+    }
+
     var label: String { Self.labels[index0] }
 
     /// Detect first matching suffix (if any), using the same implementation as ``ContentFinder``,
@@ -142,20 +155,21 @@ extension ContentFinderTests.FileItem {
         guard
             isFile,
             let index = ContentFinder.suffixStart(
-                name: nameParent.name,
-                suffixes: suffixes)
+                name: name,
+                suffixes: suffixes
+            )
         else {
             return nil
         }
-        return String(nameParent.name[index...])
+        return String(name[index...])
     }
 
     // full deploy path
     var path: String {
         switch self {
-        case .root(let name): name
+        case let .root(name): name
         case let .file(name, parent): "\(parent.path)/\(name)"
-        case let .dir(name, parent): "\(parent.path)/\(name)"
+        case let .directory(name, parent): "\(parent.path)/\(name)"
         case let .link(source, _): source.path
         }
     }
@@ -174,91 +188,91 @@ extension ContentFinderTests {
             return false
         }
 
-        static func makeFile(file: URL) throws -> FoundURL {
-            if isReachable(file) { return (true, file) }
-            try "".write(to: file, atomically: true, encoding: .utf8)
-            return (false, file)
+        static func makeFile(at url: URL) throws -> FoundURL {
+            if isReachable(url) { return (true, url) }
+            try "".write(to: url, atomically: true, encoding: .utf8)
+            return (false, url)
         }
 
-        static func makeDir(url: URL, clear: Bool = true) throws -> FoundURL {
-            let mgr = FileManager.default
+        static func makeDirectory(at url: URL, clear: Bool = true) throws -> FoundURL {
+            let manager = FileManager.default
             var reachable = isReachable(url)
             if reachable {
                 if clear {
-                    try delete(url: url)
+                    try delete(url)
                     reachable = isReachable(url)
                 }
                 if reachable {
                     return (true, url)
                 }
             }
-            try mgr.createDirectory(at: url, withIntermediateDirectories: false)
+            try manager.createDirectory(at: url, withIntermediateDirectories: false)
             return (false, url)
         }
 
-        static func makeUrlToDir(_ baseDir: URL, path: String) -> URL {
-            makeURL(baseDir, path, isFile: false)
+        static func makeDirectoryURL(_ baseDirectory: URL, path: String) -> URL {
+            makeURL(baseDirectory, path, isFile: false)
         }
 
-        static func makeUrlToFile(_ baseDir: URL, path: String) -> URL {
-            makeURL(baseDir, path, isFile: true)
+        static func makeFileURL(_ baseDirectory: URL, path: String) -> URL {
+            makeURL(baseDirectory, path, isFile: true)
         }
 
         private static func makeURL(
-            _ dir: URL,
+            _ directory: URL,
             _ path: String,
             isFile: Bool
         ) -> URL {
-            dir.appending(
+            directory.appending(
                 components: path,
                 directoryHint: isFile ? .isDirectory : .notDirectory
             )
         }
 
-        static func delete(url: URL) throws {
+        static func delete(_ url: URL) throws {
             try FileManager.default.removeItem(at: url)
         }
 
-        static func makeTempDir(
+        static func makeTempDirectory(
             name: String
         ) throws -> FoundURL {
-            let mgr = FileManager.default
-            let url = mgr.temporaryDirectory.appending(
+            let manager = FileManager.default
+            let url = manager.temporaryDirectory.appending(
                 component: name,
                 directoryHint: .isDirectory
             )
-            return try makeDir(url: url)
+            return try makeDirectory(at: url)
         }
 
-        static func createSymlink(source: URL, dest: URL) throws {
-            // swiftlint:disable:next nesting
-            typealias Err = SymlinkErr
+        static func createSymlink(source: URL, destination: URL) throws {
             if !source.isFileURL {
-                throw Err.sourceNotFileScheme(source)
+                throw SymlinkError.sourceNotFileURL(source)
             }
-            if !dest.isFileURL {
-                throw Err.destNotFileScheme(dest)
+            if !destination.isFileURL {
+                throw SymlinkError.destinationNotFileURL(destination)
             }
-            if isReachable(dest, check: false) {
-                throw Err.destNotReachable(dest)
+            if isReachable(destination, check: false) {
+                throw SymlinkError.destinationDoesNotExist(destination)
             }
             if isReachable(source) {
-                throw Err.sourceExists(source)
+                throw SymlinkError.sourceAlreadyExists(source)
             }
             do {
-                let mgr = FileManager.default
-                try mgr.createSymbolicLink(at: source, withDestinationURL: dest)
+                let manager = FileManager.default
+                try manager.createSymbolicLink(at: source, withDestinationURL: destination)
             } catch {
-                throw Err.symlinkError(source: source, dest: dest, error: error)
+                throw SymlinkError.symlinkCreationFailed(source: source, destination: destination, error: error)
             }
         }
 
-        /// Thrown by ``createSymlink(source:, dest:)``
-        enum SymlinkErr: Error {
+        /// Thrown by ``createSymlink(source:, destination:)``
+        enum SymlinkError: Error {
             // swiftlint:disable:previous nesting
-            case sourceNotFileScheme(URL), destNotFileScheme(URL)
-            case sourceExists(URL), destNotReachable(URL)
-            case symlinkError(source: URL, dest: URL, error: any Error)
+            case sourceNotFileURL(URL)
+            case destinationNotFileURL(URL)
+            case sourceAlreadyExists(URL)
+            case destinationDoesNotExist(URL)
+            case symlinkCreationFailed(source: URL, destination: URL, error: any Error)
         }
     }
 }
