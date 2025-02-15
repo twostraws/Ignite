@@ -6,7 +6,7 @@
 //
 
 /// A simple key-value pair of strings that is able to store custom attributes.
-public struct Attribute: Hashable, Equatable, Sendable, Comparable, CustomStringConvertible {
+struct Attribute: Hashable, Equatable, Sendable, Comparable, CustomStringConvertible {
     /// The attribute's name, e.g. "target" or "rel".
     var name: String
 
