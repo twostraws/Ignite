@@ -73,11 +73,11 @@ public struct InlineHTMLBuilder {
 }
 
 /// Extension providing result builder functionality for combining multiple HTML elements
-extension InlineHTMLBuilder {
+public extension InlineHTMLBuilder {
     /// Loads a single piece of HTML to be combined with others.
     /// - Parameter content: The HTML to load.
     /// - Returns: The original thing we read, ready to be combined.
-    public static func buildPartialBlock<Content>(first content: Content) -> Content where Content: InlineElement {
+    static func buildPartialBlock<Content>(first content: Content) -> Content where Content: InlineElement {
         content
     }
 
@@ -86,7 +86,10 @@ extension InlineHTMLBuilder {
     ///   - accumulated: The previous collection of HTML.
     ///   - next: The next piece of HTML to combine.
     /// - Returns: The combined HTML.
-    public static func buildPartialBlock<C0: InlineElement, C1: InlineElement>(accumulated: C0, next: C1) -> some InlineElement {
+    static func buildPartialBlock<C0: InlineElement, C1: InlineElement>(
+        accumulated: C0,
+        next: C1
+    ) -> some InlineElement {
         if var current = accumulated as? [AnyHTML] {
             current.append(AnyHTML(next))
             return current

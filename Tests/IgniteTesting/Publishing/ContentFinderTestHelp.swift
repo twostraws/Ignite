@@ -46,6 +46,7 @@ extension ContentFinderTests {
 
         /// Configuration for header level, sorting, and empty list handling
         private var headerConfiguration: (level: Int, shouldSort: Bool, shouldSkipEmpty: Bool) {
+            // swiftlint:disable:previous large_tuple
             switch self {
             case let .head(level, sort, skip): (level, sort, skip)
             case .h2Quiet: (2, false, true)

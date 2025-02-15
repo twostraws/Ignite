@@ -29,7 +29,13 @@ enum ContentFinderTestCases {
         TestCase(1, [source], items: SymlinkSourceDirectory.all + FileSymlinkCreation.all),
 
         // Error cases
-        TestCase(2, [error], items: DuplicateSymlinkTraversalError.all, expectError: DuplicateSymlinkTraversalError.message),
+        TestCase(
+            2,
+            [error],
+            items: DuplicateSymlinkTraversalError.all,
+            expectError: DuplicateSymlinkTraversalError.message
+        ),
+
         TestCase(3, [error], items: CircularSymlinkError.all, expectError: CircularSymlinkError.message),
 
         // Create directory symlink
