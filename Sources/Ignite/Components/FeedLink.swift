@@ -10,10 +10,9 @@ public struct FeedLink: HTML {
 
     @Environment(\.builtInIconsEnabled) private var builtInIconsEnabled
     @Environment(\.feedConfiguration) private var feedConfig
-    @Environment(\.isFeedEnabled) private var isFeedEnabled
 
     public var body: some HTML {
-        if isFeedEnabled {
+        if let feedConfig {
             Text {
                 if builtInIconsEnabled != .none {
                     Image(systemName: "rss-fill")
