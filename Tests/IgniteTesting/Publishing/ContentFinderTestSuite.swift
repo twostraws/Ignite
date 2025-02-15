@@ -23,25 +23,33 @@ enum ContentFinderTestCases {
     /// Directory symlink tests also require explicit deploy paths.
     static let tests: [TestCase] = [
         // Base directory structure
-        TestCase(0, [source], items: SymlinkTargetDirectory.allWithNorm),
+        TestCase(
+            roots: [source],
+            items: SymlinkTargetDirectory.allWithNorm
+        ),
 
         // Create file symlink
-        TestCase(1, [source], items: SymlinkSourceDirectory.all + FileSymlinkCreation.all),
+        TestCase(
+            roots: [source],
+            items: SymlinkSourceDirectory.all + FileSymlinkCreation.all
+        ),
 
         // Error cases
         TestCase(
-            2,
-            [error],
+            roots: [error],
             items: DuplicateSymlinkTraversalError.all,
             expectError: DuplicateSymlinkTraversalError.message
         ),
 
-        TestCase(3, [error], items: CircularSymlinkError.all, expectError: CircularSymlinkError.message),
+        TestCase(
+            roots: [error],
+            items: CircularSymlinkError.all,
+            expectError: CircularSymlinkError.message
+        ),
 
         // Create directory symlink
         TestCase(
-            4,
-            [source, target],
+            roots: [source, target],
             items: SymlinkSourceDirectory.all + DirectorySymlinkCreation.all,
             // Directory symlinks require explicit deploy paths
             expect: SymlinkSourceDirectory.content + DirectorySymlinkCreation.content
