@@ -104,7 +104,7 @@ final class PublishingContext {
     ///   The default is "Build".
     /// - Returns: The shared `PublishingContext` instance.
     @discardableResult
-    public static func initialize(
+    static func initialize(
         for site: any Site,
         from file: StaticString,
         buildDirectoryPath: String = "Build"
