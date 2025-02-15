@@ -11,6 +11,9 @@ public struct AnyHTML: HTML, BlockHTML, InlineElement {
     /// The body of this HTML element, which is itself
     public var body: some HTML { self }
 
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString.truncatedHash
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
