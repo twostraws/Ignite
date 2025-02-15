@@ -9,7 +9,7 @@ import Foundation
 
 /// A group of metadata headers for your page, such as its title,
 /// links to its CSS, and more.
-public struct HTMLHead: RootElement {
+public struct Head: RootElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -41,7 +41,7 @@ public struct HTMLHead: RootElement {
         for page: Page,
         @HeadElementBuilder additionalItems: () -> [any HeadElement] = { [] }
     ) {
-        items = HTMLHead.standardHeaders(for: page)
+        items = Head.standardHeaders(for: page)
         items += MetaTag.socialSharingTags(for: page)
         items += additionalItems()
     }

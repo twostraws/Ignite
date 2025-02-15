@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public struct HTMLBody: RootElement {
+public struct Body: RootElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
