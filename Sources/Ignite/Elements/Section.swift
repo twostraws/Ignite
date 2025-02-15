@@ -36,10 +36,6 @@ public struct Section: BlockHTML {
         self.items = flatUnwrap(items)
     }
 
-    init(items: [any HTML]) {
-        self.items = flatUnwrap(items)
-    }
-
     public func render() -> String {
         let content = items.map { $0.render() }.joined()
         var attributes = attributes
