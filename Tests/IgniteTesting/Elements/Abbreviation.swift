@@ -44,7 +44,7 @@ class AbbreviationTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        "<abbr title=\"\(description)\">\
+        <abbr title=\"\(description)\">\
         <strong>\(abbreviation)</strong>\
         </abbr>
         """)
