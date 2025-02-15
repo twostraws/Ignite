@@ -18,31 +18,21 @@ public struct AnyHTML: HTML, BlockHTML, InlineElement {
     public var columnWidth: ColumnWidth = .automatic
 
     /// The underlying HTML content, unwrapped to its most basic form
-    private let wrapped: any HTML
+    let wrapped: any HTML
 
     /// Creates a new AnyHTML instance that wraps the given HTML content.
     /// If the content is already an AnyHTML instance, it will be unwrapped to prevent nesting.
     /// - Parameter content: The HTML content to wrap
     public init(_ content: any HTML) {
         // Recursively unwrap nested AnyHTML instances
-        if let anyHTML = content as? AnyHTML {
-            self.wrapped = anyHTML.unwrapped
-        } else {
-            self.wrapped = content
+        var current = content
+        while let anyHTML = current as? AnyHTML {
+            current = anyHTML.wrapped
         }
+        self.wrapped = current
 
         if let content = wrapped as? (any BlockHTML) {
             self.columnWidth = content.columnWidth
-        }
-    }
-
-    /// Helper property that recursively unwraps nested AnyHTML instances
-    /// to get to the underlying content
-    var unwrapped: any HTML {
-        if let anyHTML = wrapped as? AnyHTML {
-            anyHTML.unwrapped
-        } else {
-            wrapped
         }
     }
 
