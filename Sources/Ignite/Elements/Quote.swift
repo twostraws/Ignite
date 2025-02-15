@@ -11,7 +11,7 @@ public struct Quote: BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
