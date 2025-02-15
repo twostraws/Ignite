@@ -20,7 +20,7 @@ public struct FeedLink: HTML {
                         .foregroundStyle("#f26522")
                         .margin(.trailing, .px(10))
                 }
-                
+
                 Link("RSS Feed", target: feedConfig.path)
                 EmptyHTML()
             }
