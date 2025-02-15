@@ -82,7 +82,7 @@ extension HTML {
         // Unwrap AnyHTML if needed
         let unwrappedContent: Any
         if let anyHTML = bodyContent as? AnyHTML {
-            unwrappedContent = anyHTML.unwrapped
+            unwrappedContent = anyHTML.wrapped
         } else {
             unwrappedContent = bodyContent
         }
@@ -173,19 +173,6 @@ public extension HTML {
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
-
-    /// Adds a custom attribute to the element.
-    /// - Parameters:
-    ///   - name: The name of the custom attribute
-    ///   - value: The value of the custom attribute
-    /// - Returns: The modified `HTML` element
-    func customAttribute(_ attribute: Attribute?) -> Self {
-        guard let attribute else { return self }
-        var attributes = attributes
-        attributes.customAttributes.append(attribute)
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
 }
 
 extension HTML {
@@ -247,6 +234,19 @@ extension HTML {
         guard !actions.isEmpty else { return self }
         var attributes = attributes
         attributes.events.append(Event(name: name, actions: actions))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(_ attribute: Attribute?) -> Self {
+        guard let attribute else { return self }
+        var attributes = attributes
+        attributes.customAttributes.append(attribute)
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -316,7 +316,7 @@ extension HTML {
         array.flatMap { flatUnwrap($0) }
     } else if let html = content as? any HTML {
         if let anyHTML = html as? AnyHTML {
-            flatUnwrap([anyHTML.unwrapped.body])
+            flatUnwrap([anyHTML.wrapped.body])
         } else if let collection = html as? HTMLCollection {
             flatUnwrap(collection.elements)
         } else {
@@ -334,7 +334,7 @@ extension HTML {
     if let array = content as? [Any] {
         array.flatMap { flatUnwrap($0) }
     } else if let html = content as? any InlineElement {
-        if let anyHTML = html as? AnyHTML, let wrapped = anyHTML.unwrapped.body as? (any InlineElement) {
+        if let anyHTML = html as? AnyHTML, let wrapped = anyHTML.wrapped.body as? (any InlineElement) {
             flatUnwrap([wrapped])
         } else if let collection = html as? HTMLCollection, let elements = collection.elements as? [any InlineElement] {
             flatUnwrap(elements)
@@ -356,7 +356,7 @@ extension HTML {
         }
     } else if let html = content as? any HTML {
         if let anyHTML = html as? AnyHTML {
-            return anyHTML.unwrapped.body
+            return anyHTML.wrapped.body
         }
         return html.body
     }
