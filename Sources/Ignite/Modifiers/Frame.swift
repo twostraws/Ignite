@@ -221,7 +221,7 @@ public extension HTML {
     }
 }
 
-public extension InlineHTML {
+public extension InlineElement {
     /// Creates a specific frame for this element, either using exact values or
     /// using minimum/maximum ranges.
     /// - Parameters:
@@ -241,7 +241,7 @@ public extension InlineHTML {
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
         alignment: Alignment = .center
-    ) -> some InlineHTML {
+    ) -> some InlineElement {
         modifier(FrameModifier(
             width: width,
             minWidth: minWidth,
@@ -272,7 +272,7 @@ public extension InlineHTML {
         minHeight: Int? = nil,
         maxHeight: Int? = nil,
         alignment: Alignment = .center
-    ) -> some InlineHTML {
+    ) -> some InlineElement {
         modifier(FrameModifier(
             width: width.map { .px($0) },
             minWidth: minWidth.map { .px($0) },
@@ -287,7 +287,7 @@ public extension InlineHTML {
     /// A convenience method for setting only the alignment.
     /// - Parameter alignment: The desired alignment
     /// - Returns: A modified element with the specified alignment
-    func frame(alignment: Alignment) -> some InlineHTML {
+    func frame(alignment: Alignment) -> some InlineElement {
         modifier(FrameModifier(alignment: alignment))
     }
 }

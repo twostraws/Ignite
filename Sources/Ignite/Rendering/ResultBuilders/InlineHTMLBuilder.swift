@@ -15,7 +15,7 @@ public struct InlineHTMLBuilder {
     /// Converts a single inline element into a builder expression.
     /// - Parameter content: The inline element to convert
     /// - Returns: The same inline element, unchanged
-    public static func buildExpression<Content: InlineHTML>(_ content: Content) -> Content {
+    public static func buildExpression<Content: InlineElement>(_ content: Content) -> Content {
         content
     }
 
@@ -28,21 +28,21 @@ public struct InlineHTMLBuilder {
     /// Passes through a single inline element unchanged.
     /// - Parameter content: The inline element to pass through
     /// - Returns: The same inline element
-    public static func buildBlock<Content: InlineHTML>(_ content: Content) -> Content {
+    public static func buildBlock<Content: InlineElement>(_ content: Content) -> Content {
         content
     }
 
     /// Handles array transformations in the builder.
     /// - Parameter components: Array of inline elements
     /// - Returns: A flattened HTML element
-    public static func buildArray<Content: InlineHTML>(_ components: [Content]) -> some HTML {
+    public static func buildArray<Content: InlineElement>(_ components: [Content]) -> some HTML {
         components.map { AnyHTML($0) }
     }
 
     /// Handles optional inline elements.
     /// - Parameter component: An optional inline element
     /// - Returns: Either the wrapped element or an empty element
-    public static func buildOptional<Content: InlineHTML>(_ component: Content?) -> some InlineHTML {
+    public static func buildOptional<Content: InlineElement>(_ component: Content?) -> some InlineElement {
         if let component {
             AnyHTML(component)
         } else {
@@ -53,31 +53,31 @@ public struct InlineHTMLBuilder {
     /// Handles the first branch of an if/else statement.
     /// - Parameter component: The inline element to use if condition is true
     /// - Returns: The provided inline element
-    public static func buildEither<Content: InlineHTML>(first component: Content) -> Content {
+    public static func buildEither<Content: InlineElement>(first component: Content) -> Content {
         component
     }
 
     /// Handles the second branch of an if/else statement.
     /// - Parameter component: The inline element to use if condition is false
     /// - Returns: The provided inline element
-    public static func buildEither<Content: InlineHTML>(second component: Content) -> Content {
+    public static func buildEither<Content: InlineElement>(second component: Content) -> Content {
         component
     }
 
     /// Handles variadic inline elements by combining them into a flat structure.
     /// - Parameter components: Variable number of inline elements
     /// - Returns: A flattened HTML structure containing all elements
-    public static func buildBlock(_ components: any InlineHTML...) -> HTMLCollection {
+    public static func buildBlock(_ components: any InlineElement...) -> HTMLCollection {
         HTMLCollection(components)
     }
 }
 
 /// Extension providing result builder functionality for combining multiple HTML elements
-extension InlineHTMLBuilder {
+public extension InlineHTMLBuilder {
     /// Loads a single piece of HTML to be combined with others.
     /// - Parameter content: The HTML to load.
     /// - Returns: The original thing we read, ready to be combined.
-    public static func buildPartialBlock<Content>(first content: Content) -> Content where Content: InlineHTML {
+    static func buildPartialBlock<Content>(first content: Content) -> Content where Content: InlineElement {
         content
     }
 
@@ -86,7 +86,10 @@ extension InlineHTMLBuilder {
     ///   - accumulated: The previous collection of HTML.
     ///   - next: The next piece of HTML to combine.
     /// - Returns: The combined HTML.
-    public static func buildPartialBlock<C0: InlineHTML, C1: InlineHTML>(accumulated: C0, next: C1) -> some InlineHTML {
+    static func buildPartialBlock<C0: InlineElement, C1: InlineElement>(
+        accumulated: C0,
+        next: C1
+    ) -> some InlineElement {
         if var current = accumulated as? [AnyHTML] {
             current.append(AnyHTML(next))
             return current

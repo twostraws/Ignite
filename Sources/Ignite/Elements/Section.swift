@@ -18,7 +18,7 @@ public struct Section: BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -33,10 +33,6 @@ public struct Section: BlockHTML {
     }
 
     public init(_ items: any HTML) {
-        self.items = flatUnwrap(items)
-    }
-
-    init(items: [any HTML]) {
         self.items = flatUnwrap(items)
     }
 

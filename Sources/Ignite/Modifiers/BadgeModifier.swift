@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public extension InlineHTML {
+public extension InlineElement {
     /// Adds a badge to the right side of this element.
     ///
     /// Use badges to add small, supplementary information to any inline element.

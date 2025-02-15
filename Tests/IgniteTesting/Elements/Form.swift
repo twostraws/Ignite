@@ -19,8 +19,8 @@ class FormTests: IgniteTestSuite {
         let element = Form {
             TextField("MyLabel", placeholder: "MyPlaceholder")
             Button("Submit").type(.submit)
-        } onSubmit: { id in
-            SubscribeAction(.sendFox("myListID"), formID: id)
+        } onSubmit: {
+            SubscribeAction(.sendFox("myListID"))
         }
         .id("myID")
 
@@ -55,8 +55,8 @@ class FormTests: IgniteTestSuite {
         let element = Form {
             TextField("MyLabel", placeholder: "MyPlaceholder")
             Button("Submit").type(.submit)
-        } onSubmit: { id in
-            SubscribeAction(.sendFox("myListID"), formID: id)
+        } onSubmit: {
+            SubscribeAction(.sendFox("myListID"))
         }
         .id("myID")
         .labelStyle(style)
@@ -119,8 +119,8 @@ class FormTests: IgniteTestSuite {
         let element = Form {
             TextField("MyLabel", placeholder: "MyPlaceholder")
             Button("Submit").type(.submit)
-        } onSubmit: { id in
-            SubscribeAction(.sendFox("myID"), formID: id)
+        } onSubmit: {
+            SubscribeAction(.sendFox("myID"))
         }
         .id("myID")
         .controlSize(controlSize)

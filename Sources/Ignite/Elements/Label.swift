@@ -6,12 +6,12 @@
 //
 
 /// A form label with support for various styles
-struct Label: InlineHTML {
+struct Label: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }

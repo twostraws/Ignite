@@ -7,12 +7,12 @@
 
 /// A horizontal divider for your page, that can also be used to divide elements
 /// in a dropdown.
-public struct Divider: BlockHTML, DropdownElement {
+public struct Divider: BlockHTML, DropdownItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }

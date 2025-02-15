@@ -14,7 +14,7 @@ import Testing
 @Suite("CodeBlock Tests")
 @MainActor
 class CodeBlockTests: IgniteTestSuite {
-    @Test("Test rendering a code block")
+    @Test("Rendering a code block")
     func codeBlockTest() {
         let element = CodeBlock {
             """

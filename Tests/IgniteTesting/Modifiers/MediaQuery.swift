@@ -16,7 +16,7 @@ import Testing
 class MediaQueryTests: IgniteTestSuite {
     typealias MediaQueryTestCase = (query: MediaQuery, output: String)
 
-    @Test("Test breakpoint queries", arguments: [
+    @Test("Breakpoint queries", arguments: [
         (query: MediaQuery.breakpoint(.small),
          output: "min-width: 576px"),
         (query: MediaQuery.breakpoint(.medium),
@@ -34,7 +34,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == testCase.output)
     }
 
-    @Test("Test color scheme queries", arguments: [
+    @Test("Color scheme queries", arguments: [
         (query: MediaQuery.colorScheme(.light),
          output: "prefers-color-scheme: light"),
         (query: MediaQuery.colorScheme(.dark),
@@ -46,7 +46,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == testCase.output)
     }
 
-    @Test("Test contrast queries", arguments: [
+    @Test("Contrast queries", arguments: [
         (query: MediaQuery.contrast(.high),
          output: "prefers-contrast: more"),
         (query: MediaQuery.contrast(.low),
@@ -62,7 +62,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == testCase.output)
     }
 
-    @Test("Test display mode queries", arguments: [
+    @Test("Display mode queries", arguments: [
         (query: MediaQuery.displayMode(.fullscreen),
          output: "display-mode: fullscreen"),
         (query: MediaQuery.displayMode(.browser),
@@ -82,7 +82,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == testCase.output)
     }
 
-    @Test("Test orientation queries", arguments: [
+    @Test("Orientation queries", arguments: [
         (query: MediaQuery.orientation(.landscape),
          output: "orientation: landscape"),
         (query: MediaQuery.orientation(.portrait),
@@ -95,7 +95,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == testCase.output)
     }
 
-    @Test("Test transparency queries", arguments: [
+    @Test("Transparency queries", arguments: [
         (query: MediaQuery.transparency(.normal),
          output: "prefers-reduced-transparency: no-preference"),
         (query: MediaQuery.transparency(.reduced),
@@ -107,7 +107,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == testCase.output)
     }
 
-    @Test("Test reduced motion queries", arguments: [
+    @Test("Reduced motion queries", arguments: [
         (query: MediaQuery.motion(.reduced),
          output: "prefers-reduced-motion: reduce"),
         (query: MediaQuery.motion(.allowed),
@@ -119,7 +119,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == testCase.output)
     }
 
-    @Test("Test theme queries", arguments: [
+    @Test("Theme queries", arguments: [
         (query: MediaQuery.theme("dark"),
          output: "data-theme-state=\"dark\""),
         (query: MediaQuery.theme("light"),

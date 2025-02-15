@@ -20,7 +20,7 @@ struct FeedGeneratorTests {
         TestSite(timeZone: .init(abbreviation: "EST")!)
     ]
 
-    @Test("Test generateFeed", arguments: await sites)
+    @Test("generateFeed()", arguments: await sites)
     func generateFeed(for site: any Site) async throws {
         let feedHref = site.url.appending(path: site.feedConfiguration.path).absoluteString
         var exampleContent = Content()

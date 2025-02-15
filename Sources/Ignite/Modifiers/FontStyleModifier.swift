@@ -38,11 +38,11 @@ public extension HTML {
     }
 }
 
-public extension InlineHTML {
+public extension InlineElement {
     /// Adjusts the heading level of this text.
     /// - Parameter style: The new heading level.
     /// - Returns: A new `Text` instance with the updated font style.
-    func font(_ style: Font.Style) -> some InlineHTML {
+    func font(_ style: Font.Style) -> some InlineElement {
         modifier(FontStyleModifier(style: style))
     }
 }

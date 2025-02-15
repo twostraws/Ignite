@@ -60,7 +60,7 @@ protocol CSSRepresentable {
 }
 
 /// The possible background sizes
-public enum BackgroundImageContentMode: CSSRepresentable {
+public enum BackgroundImageContentMode: CSSRepresentable, Sendable {
     /// This is the default value. The background image is displayed at its original size.
     case original
 
@@ -85,7 +85,7 @@ public enum BackgroundImageContentMode: CSSRepresentable {
 }
 
 /// A type representing the background image position within the page element
-public struct BackgroundPosition: CSSRepresentable {
+public struct BackgroundPosition: CSSRepresentable, Sendable {
 
     /// The possible absolute values going from left to right and top to bottom.
     /// For example an offset from the top edge of `10px` means 10 px down from the top.

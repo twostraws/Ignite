@@ -14,6 +14,20 @@ import Testing
 @Suite("Background Tests")
 @MainActor
 class BackgroundTests: IgniteTestSuite {
+    static let testMaterial: [Material] = [
+        .ultraThinMaterial,
+        .thinMaterial,
+        .regularMaterial,
+        .thickMaterial,
+        .ultraThickMaterial
+    ]
+
+    static let testGradient: [Gradient] = [
+        Gradient(colors: [.white, .black], type: .radial),
+        Gradient(colors: [.white, .black], type: .linear(angle: 10)),
+        Gradient(colors: [.white, .black], type: .conic(angle: 10))
+    ]
+
     @Test("Background modifier with Color on Text")
     func textWithColorBackground() async throws {
         let element = Text("Hello, world!").background(.teal)
@@ -30,26 +44,19 @@ class BackgroundTests: IgniteTestSuite {
         #expect(output == "<p style=\"background-color: Tomato\">Hello, world!</p>")
     }
 
-    @Test("Background modifier with thinMaterial on Text")
-    func textWithMaterialBackground() async throws {
-        let element = Text("Hello, world!").background(.thinMaterial)
+    @Test("Background modifier with Material on Text", arguments: await Self.testMaterial)
+    func textWithMaterialBackground(material: Material) async throws {
+        let element = Text("Hello, world!").background(material)
         let output = element.render()
 
-        #expect(output == "<p class=\"material-thin\">Hello, world!</p>")
+        #expect(output == "<p class=\"\(material.className)\">Hello, world!</p>")
     }
 
-    @Test func textWithGradientBackground() async throws {
-        let gradient = Gradient(
-            colors: [.red, .green, .yellow],
-            type: .linear(angle: 90)
-        )
+    @Test("Gradient Background Test", arguments: await Self.testGradient)
+    func textWithGradientBackground(gradient: Gradient) async throws {
         let element = Text("Hello, world!").background(gradient)
         let output = element.render()
 
-        #expect(output == """
-        <p style=\"background-image: linear-gradient(90deg, \
-        rgb(255 0 0 / 100%) 0.0%, rgb(0 128 0 / 100%) 50.0%, \
-        rgb(255 255 0 / 100%) 100.0%)\">Hello, world!</p>
-        """)
+        #expect(output == "<p style=\"background-image: \(gradient.description)\">Hello, world!</p>")
     }
 }

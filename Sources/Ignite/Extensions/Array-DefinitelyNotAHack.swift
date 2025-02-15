@@ -5,7 +5,6 @@
 // See LICENSE for license information.
 //
 
-// swiftlint:disable unused_setter_value
 extension Array: HeadElement, HTML, HorizontalAligning where Element: HTML {
     public var body: some HTML { self }
 
@@ -19,7 +18,7 @@ extension Array: BlockHTML where Element: BlockHTML {
 
     public var columnWidth: ColumnWidth {
         get { .automatic }
-        set {}
+        set {} // swiftlint:disable:this unused_setter_value
     }
 
     @MainActor public func render() -> String {
@@ -27,11 +26,10 @@ extension Array: BlockHTML where Element: BlockHTML {
     }
 }
 
-extension Array: InlineHTML where Element: InlineHTML {
-    public var body: some InlineHTML { self }
+extension Array: InlineElement where Element: InlineElement {
+    public var body: some InlineElement { self }
 
     @MainActor public func render() -> String {
         self.map { $0.render() }.joined()
     }
 }
-// swiftlint:enable unused_setter_value

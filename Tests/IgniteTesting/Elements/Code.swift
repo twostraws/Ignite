@@ -14,7 +14,7 @@ import Testing
 @Suite("Code Tests")
 @MainActor
 class CodeTests: IgniteTestSuite {
-    @Test("Test inline code formatting")
+    @Test("Inline code formatting")
     func inlineCode() async throws {
         let element = Code("background-color")
         let output = element.render()
