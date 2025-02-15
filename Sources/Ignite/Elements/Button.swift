@@ -6,7 +6,7 @@
 //
 
 /// A clickable button with a label and styling.
-public struct Button: BlockHTML, InlineHTML {
+public struct Button: BlockHTML, InlineElement {
     /// How many columns this should occupy when placed in a section or form.
     public var columnWidth: ColumnWidth = .automatic
 
@@ -36,7 +36,7 @@ public struct Button: BlockHTML, InlineHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -64,14 +64,14 @@ public struct Button: BlockHTML, InlineHTML {
 
     /// Creates a button with a label.
     /// - Parameter label: The label text to display on this button.
-    public init(_ label: some InlineHTML) {
+    public init(_ label: some InlineElement) {
         self.label = label
     }
 
     /// Creates a button from a more complex piece of HTML.
     /// - Parameter label: An inline element builder of all the content
     /// for this button.
-    public init(@InlineHTMLBuilder label: @escaping () -> some InlineHTML) {
+    public init(@InlineHTMLBuilder label: @escaping () -> some InlineElement) {
         self.label = label()
     }
 
@@ -90,7 +90,7 @@ public struct Button: BlockHTML, InlineHTML {
     ///   - label: The label text to display on this button.
     ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
     public init(
-        @InlineHTMLBuilder _ label: @escaping () -> some InlineHTML,
+        @InlineHTMLBuilder _ label: @escaping () -> some InlineElement,
         @ActionBuilder actions: () -> [Action]
     ) {
         self.label = label()
@@ -140,7 +140,7 @@ public struct Button: BlockHTML, InlineHTML {
     ///   - role: The role we are styling.
     ///   - size: The size we are styling.
     /// - Returns: The CSS classes to apply for this button
-    public static func classes(forRole role: Role, size: Size) -> [String] {
+    static func classes(forRole role: Role, size: Size) -> [String] {
         var outputClasses = ["btn"]
 
         switch size {
@@ -163,7 +163,7 @@ public struct Button: BlockHTML, InlineHTML {
     }
 
     /// Adds the correct ARIA attribute for Close buttons, if needed.
-    public static func aria(forRole role: Role) -> Attribute? {
+    static func aria(forRole role: Role) -> Attribute? {
         switch role {
         case .close:
             Attribute(name: "label", value: "Close")

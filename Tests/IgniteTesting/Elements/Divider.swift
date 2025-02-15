@@ -14,7 +14,7 @@ import Testing
 @Suite("Divider Tests")
 @MainActor
 struct DividerTests {
-    @Test("Test a single divider")
+    @Test("A single divider")
     func singleDivider() async throws {
         let element = Divider()
         let output = element.render()

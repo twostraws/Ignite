@@ -23,8 +23,8 @@ struct FormTests {
         let element = Form {
             TextField("MyLabel", placeholder: "MyPlaceholder")
             Button("Submit").type(.submit)
-        } onSubmit: { id in
-            SubscribeAction(.sendFox("myListID"), formID: id)
+        } onSubmit: {
+            SubscribeAction(.sendFox("myListID"))
         }
         .id("myID")
 
@@ -59,8 +59,8 @@ struct FormTests {
         let element = Form {
             TextField("MyLabel", placeholder: "MyPlaceholder")
             Button("Submit").type(.submit)
-        } onSubmit: { id in
-            SubscribeAction(.sendFox("myListID"), formID: id)
+        } onSubmit: {
+            SubscribeAction(.sendFox("myListID"))
         }
         .id("myID")
         .labelStyle(style)
@@ -123,8 +123,8 @@ struct FormTests {
         let element = Form {
             TextField("MyLabel", placeholder: "MyPlaceholder")
             Button("Submit").type(.submit)
-        } onSubmit: { id in
-            SubscribeAction(.sendFox("myID"), formID: id)
+        } onSubmit: {
+            SubscribeAction(.sendFox("myID"))
         }
         .id("myID")
         .controlSize(controlSize)

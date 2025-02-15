@@ -11,7 +11,7 @@ public struct Quote: BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// How many columns this should occupy when placed in a grid.
     public var columnWidth = ColumnWidth.automatic
@@ -20,7 +20,7 @@ public struct Quote: BlockHTML {
     var contents: any HTML
 
     /// Provide details about this quote, e.g. a source name.
-    var caption: any InlineHTML
+    var caption: any InlineElement
 
     /// Create a new quote from a page element builder that returns an array
     /// of elements to display in the quote.
@@ -39,7 +39,7 @@ public struct Quote: BlockHTML {
     /// - contents: Additional details about the quote, e.g. its source.
     public init(
         @HTMLBuilder contents: () -> some HTML,
-        @InlineHTMLBuilder caption: () -> some InlineHTML
+        @InlineHTMLBuilder caption: () -> some InlineElement
     ) {
         self.contents = contents()
         self.caption = caption()

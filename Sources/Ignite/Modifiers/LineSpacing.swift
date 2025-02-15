@@ -28,13 +28,13 @@ struct LineSpacingModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         if content.body.isComposite {
             if let customHeight {
-                content.containerStyle(.init(.lineHeight, value: customHeight.formatted()))
+                content.containerStyle(.init(.lineHeight, value: customHeight.formatted(.nonLocalizedDecimal)))
             } else if let presetHeight {
                 content.containerClass("lh-\(presetHeight.rawValue)")
             }
         } else {
             if let customHeight {
-                content.style(.init(.lineHeight, value: customHeight.formatted()))
+                content.style(.init(.lineHeight, value: customHeight.formatted(.nonLocalizedDecimal)))
             } else if let presetHeight {
                 content.class("lh-\(presetHeight.rawValue)")
             }
@@ -76,7 +76,7 @@ public extension BlockHTML {
 }
 
 /// Predefined line height values that match Bootstrap's spacing system.
-public enum LineSpacing: String, CaseIterable {
+public enum LineSpacing: String, CaseIterable, Sendable {
     /// Single line height (1.0)
     case xSmall = "1"
 

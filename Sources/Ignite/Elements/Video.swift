@@ -6,12 +6,12 @@
 //
 
 /// Shows a Video player on your page.
-public struct Video: BlockHTML, InlineHTML, LazyLoadable {
+public struct Video: BlockHTML, InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
