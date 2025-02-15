@@ -128,9 +128,9 @@ public struct Form: BlockHTML {
         self.verticalSpacing = verticalSpacing
         self.horizontalSpacing = horizontalSpacing
         if let action = action as? SubscribeAction, case .mailchimp = action.service {
-            attributes.id = "mc-embedded-subscribe-form"
+            descriptor.id = "mc-embedded-subscribe-form"
         } else {
-            attributes.id = UUID().uuidString.truncatedHash
+            descriptor.id = UUID().uuidString.truncatedHash
         }
     }
 
@@ -139,9 +139,9 @@ public struct Form: BlockHTML {
             fatalError("Form supports only SubscribeAction at this time.")
         }
 
-        action = action.setFormID(attributes.id)
+        action = action.setFormID(descriptor.id)
 
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = "form"
 
         attributes.customAttributes.append(.init(name: "method", value: "post"))
@@ -201,7 +201,7 @@ public struct Form: BlockHTML {
             fatalError("Form supports only SubscribeAction at the moment.")
         }
 
-        action = action.setFormID(attributes.id)
+        action = action.setFormID(descriptor.id)
 
         let sizedTextField = textField
             .id(action.service.emailFieldID)
@@ -215,7 +215,7 @@ public struct Form: BlockHTML {
 
         let label = Label(text: textLabel)
             .class(controlSize.labelClass)
-            .customAttribute(name: "for", value: textField.attributes.id)
+            .customAttribute(name: "for", value: textField.descriptor.id)
 
         return switch labelStyle {
         case .hidden:

@@ -31,7 +31,7 @@ public struct ListItem: HTML, ListableElement {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = "li"
         return attributes.description(wrapping: content.render())
     }

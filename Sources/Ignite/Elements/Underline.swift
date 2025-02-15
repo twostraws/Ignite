@@ -36,7 +36,7 @@ public struct Underline: InlineElement {
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = "u"
         return attributes.description(wrapping: content.render())
     }

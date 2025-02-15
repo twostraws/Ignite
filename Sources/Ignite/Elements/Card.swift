@@ -240,7 +240,7 @@ public struct Card: BlockHTML {
                 renderFooter()
             }
         }
-        .attributes(attributes)
+        .attributes(descriptor)
         .class("card")
         .class(cardClasses)
         .render()

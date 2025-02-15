@@ -49,7 +49,7 @@ public struct HTMLHead: RootElement {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = "head"
         return attributes.description(wrapping: HTMLCollection(items).render())
     }

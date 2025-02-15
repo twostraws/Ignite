@@ -54,7 +54,7 @@ public struct VStack: BlockHTML {
     }
 
     public func render() -> String {
-        var itemAttributes = CoreAttributes()
+        var itemAttributes = Descriptor()
         itemAttributes.append(classes: "mb-0")
         var items = [any HTML]()
 
@@ -71,7 +71,7 @@ public struct VStack: BlockHTML {
             }
         }
 
-        var attributes = attributes
+        var attributes = descriptor
         attributes.append(classes: "vstack")
 
         if case let .exact(pixels) = spacingAmount {

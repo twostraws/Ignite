@@ -66,7 +66,7 @@ public struct Column: HTML, HorizontalAligning {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var columnAttributes = attributes
+        var columnAttributes = descriptor
 
         if verticalAlignment != .top {
             columnAttributes.append(classes: ["align-\(verticalAlignment.rawValue)"])

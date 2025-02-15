@@ -35,7 +35,7 @@ public struct Code: InlineElement {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = "code"
         return attributes.description(wrapping: content)
     }

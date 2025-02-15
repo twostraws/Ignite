@@ -25,9 +25,9 @@ public struct Text: BlockHTML, DropdownItem {
 
     /// The font style to use for this text.
     var font: Font.Style {
-        if attributes.classes.contains("lead") {
+        if descriptor.classes.contains("lead") {
             .lead
-        } else if let tag = attributes.tag, let style = Font.Style(rawValue: tag) {
+        } else if let tag = descriptor.tag, let style = Font.Style(rawValue: tag) {
             style
         } else {
             .body
@@ -118,7 +118,7 @@ public struct Text: BlockHTML, DropdownItem {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        attributes.description(wrapping: content.render())
+        descriptor.description(wrapping: content.render())
     }
 }
 

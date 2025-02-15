@@ -65,7 +65,7 @@ public struct HTMLBody: RootElement {
 
         output += Script(file: "/js/ignite-core.js").render()
 
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = "body"
         if isBoundByContainer {
             attributes.append(classes: ["container"])

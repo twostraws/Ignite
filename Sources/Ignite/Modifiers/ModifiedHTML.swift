@@ -29,10 +29,10 @@ struct ModifiedHTML: HTML, InlineElement, BlockHTML, RootElement, NavigationItem
     init(_ content: any HTML, modifier: any HTMLModifier) {
         if let modified = content as? ModifiedHTML {
             self.content = modified.content
-            AttributeStore.default.merge(modified.attributes, intoHTML: id)
+            AttributeStore.default.merge(modified.descriptor, intoHTML: id)
         } else {
             self.content = content
-            AttributeStore.default.merge(content.attributes, intoHTML: id)
+            AttributeStore.default.merge(content.descriptor, intoHTML: id)
         }
 
         _ = modifier.body(content: self)
@@ -46,11 +46,11 @@ struct ModifiedHTML: HTML, InlineElement, BlockHTML, RootElement, NavigationItem
     /// - Returns: The rendered HTML string
     func render() -> String {
         if content.isPrimitive {
-            AttributeStore.default.merge(attributes, intoHTML: content.id)
+            AttributeStore.default.merge(descriptor, intoHTML: content.id)
             return content.render()
         } else {
             let rawContent = content.render()
-            var attrs = attributes
+            var attrs = descriptor
             if attrs.tag == nil { attrs.tag = "div" }
             return attrs.description(wrapping: rawContent)
         }

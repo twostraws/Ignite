@@ -26,7 +26,7 @@ public struct Divider: BlockHTML, DropdownItem {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.selfClosingTag = "hr"
         return attributes.description()
     }

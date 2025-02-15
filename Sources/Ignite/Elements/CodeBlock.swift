@@ -51,7 +51,7 @@ public struct CodeBlock: BlockHTML {
         if let language {
             publishingContext.syntaxHighlighters.append(language)
             return """
-            <pre\(attributes.description())>\
+            <pre\(descriptor.description())>\
             <code class=\"language-\(language)\">\
             \(content)\
             </code>\
@@ -59,7 +59,7 @@ public struct CodeBlock: BlockHTML {
             """
         } else {
             return """
-            <pre\(attributes.description())>\
+            <pre\(descriptor.description())>\
             <code>\(content)</code>\
             </pre>
             """

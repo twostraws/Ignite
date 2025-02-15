@@ -51,11 +51,11 @@ public struct ContentPreview: BlockHTML {
         // fallback to default layout.
         if let style {
             style.body(content: content)
-                .attributes(attributes)
+                .attributes(descriptor)
                 .render()
         } else {
             defaultCardLayout()
-                .attributes(attributes)
+                .attributes(descriptor)
                 .render()
         }
     }

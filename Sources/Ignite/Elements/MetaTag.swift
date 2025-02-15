@@ -177,7 +177,7 @@ public struct MetaTag: HeadElement, Sendable {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = CoreAttributes()
+        var attributes = Descriptor()
         attributes.selfClosingTag = "meta"
 
         if charset.isEmpty {

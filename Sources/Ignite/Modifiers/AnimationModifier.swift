@@ -70,7 +70,7 @@ public extension HTML {
         direction: AnimationDirection?,
         trigger: AnimationTrigger
     ) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
 
         // Track which containers we've already added
         let existingContainers = Set(attributes.containerAttributes.flatMap(\.classes))
@@ -163,7 +163,7 @@ public extension HTML {
     private func apply(
         animation: some Animatable,
         triggers: [AnimationTrigger],
-        to attributes: inout CoreAttributes,
+        to attributes: inout Descriptor,
         in existingContainers: Set<String>,
         styles wrapperStyles: OrderedSet<InlineStyle>
     ) {
@@ -236,7 +236,7 @@ public extension HTML {
         }
     }
 
-    private func addOnClick(to attributes: CoreAttributes, index: Int) -> [ContainerAttributes] {
+    private func addOnClick(to attributes: Descriptor, index: Int) -> [ContainerAttributes] {
         attributes.containerAttributes.enumerated().map { i, element in
             if i == index {
                 var modified = element

@@ -63,7 +63,7 @@ public struct Accordion: BlockHTML {
         let accordionID = "accordion\(UUID().uuidString.truncatedHash)"
         let assignedItems = items.map { $0.assigned(to: accordionID, openMode: openMode) }
         let output = Section { assignedItems }
-            .attributes(attributes)
+            .attributes(descriptor)
             .class("accordion")
             .id(accordionID)
             .render()

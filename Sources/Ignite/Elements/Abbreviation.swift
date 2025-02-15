@@ -25,7 +25,7 @@ public struct Abbreviation: InlineElement {
     public init(_ abbreviation: String, description: String) {
         contents = abbreviation
         let customAttribute = Attribute(name: "title", value: description)
-        attributes.customAttributes.append(customAttribute)
+        descriptor.customAttributes.append(customAttribute)
     }
 
     /// Creates a new `Abbreviation` instance using an inline element builder
@@ -36,13 +36,13 @@ public struct Abbreviation: InlineElement {
     public init(_ description: String, @InlineHTMLBuilder content: () -> some InlineElement) {
         contents = content()
         let customAttribute = Attribute(name: "title", value: description)
-        attributes.customAttributes.append(customAttribute)
+        descriptor.customAttributes.append(customAttribute)
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = "abbr"
         return attributes.description(wrapping: contents.render())
     }
