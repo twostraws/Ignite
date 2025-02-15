@@ -173,19 +173,6 @@ public extension HTML {
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
-
-    /// Adds a custom attribute to the element.
-    /// - Parameters:
-    ///   - name: The name of the custom attribute
-    ///   - value: The value of the custom attribute
-    /// - Returns: The modified `HTML` element
-    func customAttribute(_ attribute: Attribute?) -> Self {
-        guard let attribute else { return self }
-        var attributes = attributes
-        attributes.customAttributes.append(attribute)
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
 }
 
 extension HTML {
@@ -247,6 +234,19 @@ extension HTML {
         guard !actions.isEmpty else { return self }
         var attributes = attributes
         attributes.events.append(Event(name: name, actions: actions))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(_ attribute: Attribute?) -> Self {
+        guard let attribute else { return self }
+        var attributes = attributes
+        attributes.customAttributes.append(attribute)
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
