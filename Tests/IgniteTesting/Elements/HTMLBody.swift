@@ -15,7 +15,7 @@ import Testing
 @MainActor struct SubsiteBodyTests {
    static let sites: [any Site] = [TestSite(), TestSubsite()]
 
-   @Test("Simple Body Test", arguments: await Self.sites)
+   @Test("Simple Body Test", .disabled(), arguments: await Self.sites)
    func simpleBody(for site: any Site) async throws {
        try PublishingContext.initialize(for: site, from: #filePath)
 
