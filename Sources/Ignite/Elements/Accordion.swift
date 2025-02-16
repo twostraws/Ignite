@@ -9,7 +9,7 @@
 /// display more content.
 public struct Accordion: BlockHTML {
     /// Controls what happens when a section is opened.
-    public enum OpenMode {
+    public enum OpenMode: Sendable {
         /// Opening one accordion section automatically closes all others.
         case individual
 
@@ -21,7 +21,7 @@ public struct Accordion: BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }

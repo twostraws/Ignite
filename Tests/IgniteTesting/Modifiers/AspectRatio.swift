@@ -46,6 +46,7 @@ struct AspectRatioTests {
 
     @Test("Verify Aspect Ratios with Content Modes")
     func verifyAspectRatiosWithContentModes() async throws {
+        // swiftlint:disable:next large_tuple
         let testCases: [(AspectRatio, ContentMode, String)] = [
             (.square, .fit, "<div class=\"ratio ratio-1x1\"><i class=\"bi-swift object-fit-contain\"></i></div>"),
             (.r4x3, .fill, "<div class=\"ratio ratio-4x3\"><i class=\"bi-swift object-fit-cover\"></i></div>")

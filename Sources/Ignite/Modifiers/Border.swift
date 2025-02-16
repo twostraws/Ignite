@@ -88,7 +88,7 @@ public extension HTML {
     }
 }
 
-public extension InlineHTML {
+public extension InlineElement {
     /// Adds a border to this element.
     /// - Parameters:
     ///   - color: The color of the border
@@ -103,7 +103,7 @@ public extension InlineHTML {
         style: BorderStyle = .solid,
         cornerRadii: CornerRadii = CornerRadii(),
         edges: Edge = .all
-    ) -> some InlineHTML {
+    ) -> some InlineElement {
         modifier(BorderModifier(
             color: color,
             width: width,

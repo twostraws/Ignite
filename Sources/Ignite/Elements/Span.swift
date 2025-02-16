@@ -7,18 +7,18 @@
 
 /// An inline subsection of another element, useful when you need to style
 /// just part of some text, for example.
-public struct Span: InlineHTML {
+public struct Span: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
     /// The contents of this span.
-    public var contents: any InlineHTML
+    public var contents: any InlineElement
 
     /// Creates a span with no content. Used in some situations where
     /// exact styling is performed by Bootstrap, e.g. in Carousel.
@@ -29,14 +29,14 @@ public struct Span: InlineHTML {
     /// Creates a span from one `InlineElement`.
     /// - Parameter singleElement: The element you want to place
     /// inside the span.
-    public init(_ singleElement: some InlineHTML) {
+    public init(_ singleElement: some InlineElement) {
         self.contents = singleElement
     }
 
     /// Creates a span from an inline element builder that returns an array of
     /// elements to place inside the span.
     /// - Parameter contents: The elements to place inside the span.
-    public init(@InlineHTMLBuilder contents: () -> some InlineHTML) {
+    public init(@InlineHTMLBuilder contents: () -> some InlineElement) {
         self.contents = contents()
     }
 
