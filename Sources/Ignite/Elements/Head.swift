@@ -19,6 +19,9 @@ public struct Head: RootElement {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
+    /// Whether to include standard headers and social sharing tags
+    private var includeStandardHeaders = true
+
     /// The metadata elements for this page.
     var items: [any HeadElement]
 
@@ -26,25 +29,27 @@ public struct Head: RootElement {
     /// an array of `HeadElement` objects.
     /// - Parameter items: The `HeadElement` items you want to
     /// include for this page.
-    public init(@HeadElementBuilder items: () -> [any HeadElement]) {
+    public init(@HeadElementBuilder items: () -> [any HeadElement] = { [] }) {
         self.items = items()
     }
 
-    /// A convenience initializer that creates a standard set of headers to use
-    /// for a `Page` instance.
-    /// - Parameters:
-    ///   - configuration: The `SiteConfiguration`, which includes
-    ///   information about the site being rendered and more.
-    ///   - additionalItems: Additional items to enhance the set of standard headers.
-    public init(@HeadElementBuilder additionalItems: () -> [any HeadElement] = { [] }) {
-        items = Head.standardHeaders()
-        items += MetaTag.socialSharingTags()
-        items += additionalItems()
+    /// Disables the inclusion of standard headers and social sharing tags.
+    /// - Returns: A new Head instance with standard headers disabled
+    public func standardHeadersDisabled() -> Head {
+        var copy = self
+        copy.includeStandardHeaders = false
+        return copy
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
+        var items = items
+        if includeStandardHeaders {
+            items.insert(contentsOf:  MetaTag.socialSharingTags(), at: 0)
+            items.insert(contentsOf: Head.standardHeaders(), at: 0)
+        }
+
         var attributes = attributes
         attributes.tag = "head"
         return attributes.description(wrapping: HTMLCollection(items).render())
