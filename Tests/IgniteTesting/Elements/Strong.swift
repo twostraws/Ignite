@@ -12,7 +12,7 @@ import Testing
 
 /// Tests for the `Strong` element.
 @Suite("Strong Tests")
-@MainActor struct StrongTests {
+@MainActor class StrongTests: IgniteTestSuite {
     @Test("Single Element", arguments: ["This is a test", "Another test", ""])
     func singleElement(strongText: String) async throws {
         let element = Strong(strongText)

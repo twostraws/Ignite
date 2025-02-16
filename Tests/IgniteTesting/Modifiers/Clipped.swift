@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Clipped` modifier.
 @Suite("Clipped Tests")
 @MainActor
-struct ClippedTests {
+class ClippedTests: IgniteTestSuite {
     @Test("Clipped Modifier")
     func clippedModifier() async throws {
         let element = Text("Hello").clipped()

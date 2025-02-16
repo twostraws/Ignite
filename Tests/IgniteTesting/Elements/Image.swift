@@ -12,7 +12,7 @@ import Testing
 
 /// Tests for the `Image` element.
 @Suite("Image Tests")
-@MainActor struct ImageTests {
+@MainActor class ImageTests: IgniteTestSuite {
     static let sites: [any Site] = [TestSite(), TestSubsite()]
 
     @Test("Image", arguments: [(path: "/images/example.jpg", description: "Example")], await Self.sites)
@@ -31,7 +31,6 @@ import Testing
     func icon(systemName: String, description: String) async throws {
         let element = Image(systemName: systemName, description: description)
         let output = element.render()
-
         #expect(output == "<i class=\"bi-browser-safari\"></i>")
     }
 }

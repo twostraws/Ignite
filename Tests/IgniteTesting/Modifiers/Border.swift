@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `BorderModifier` modifier.
 @Suite("BorderModifier Tests")
 @MainActor
-struct BorderModifierTests {
+class BorderModifierTests: IgniteTestSuite {
     @Test("Border Modifier with All Edges")
     func borderWithAllEdges() async throws {
         let element = Text("Hello").border(.red, width: 2.0, style: .solid, edges: .all)

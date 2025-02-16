@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Dropdown` element.
 @Suite("Dropdown Tests")
 @MainActor
-struct DropdownTests {
+class DropdownTests: IgniteTestSuite {
     @Test("basic Dropdown Text")
     func basicDropdownText() async throws {
         let element = Dropdown("Click Me") {

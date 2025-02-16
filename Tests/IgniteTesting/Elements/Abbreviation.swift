@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Abbreviation` element.
 @Suite("Abbreviation Tests")
 @MainActor
-struct AbbreviationTests {
+class AbbreviationTests: IgniteTestSuite {
     @Test("Basic Abbreviation", arguments: ["abbr"], ["abbreviation"])
     func basic(abbreviation: String, description: String) async throws {
         let element = Abbreviation(abbreviation, description: description)
@@ -29,7 +29,8 @@ struct AbbreviationTests {
 
         #expect(output == """
         <abbr title=\"\(description)\">\
-        <strong>\(abbreviation)</strong></abbr>
+        <strong>\(abbreviation)</strong>\
+        </abbr>
         """)
     }
 

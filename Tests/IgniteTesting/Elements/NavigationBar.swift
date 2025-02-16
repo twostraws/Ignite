@@ -11,11 +11,7 @@ import Testing
 
 /// Tests for the `NavigationBar` element.
 @Suite("Navigation Bar Tests")
-@MainActor struct NavigationBarTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+@MainActor class NavigationBarTests: IgniteTestSuite {
     @Test("Root Tag is Header")
     func headerTag() async throws {
         let element = NavigationBar()

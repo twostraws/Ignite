@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `CodeBlock` element.
 @Suite("CodeBlock Tests")
 @MainActor
-struct CodeBlockTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class CodeBlockTests: IgniteTestSuite {
     @Test("Rendering a code block")
     func codeBlockTest() {
         let element = CodeBlock { """

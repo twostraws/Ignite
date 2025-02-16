@@ -12,13 +12,9 @@ import Testing
 
 /// Tests for the `title` element.
 @Suite("Link Tests")
-@MainActor struct SubsiteLinkTests {
+@MainActor class SubsiteLinkTests: IgniteTestSuite {
     static let sites: [any Site] = [TestSite(), TestSubsite()]
     static let pages: [any StaticLayout] = [TestLayout(), TestSubsiteLayout()]
-
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
 
     @Test("String Target", arguments: [(target: "/", description: "Go Home")], await Self.sites)
     func target(for link: (target: String, description: String), for site: any Site) async throws {
