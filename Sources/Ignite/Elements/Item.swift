@@ -24,7 +24,7 @@ public struct Item: HTML {
     var startsOpen: Bool
 
     /// The contents of this accordion item.
-    var contents: any BlockHTML
+    var contents: any HTML
 
     /// Used when rendering this accordion item so that we can send change
     /// notifications back the parent accordion object.
@@ -44,7 +44,7 @@ public struct Item: HTML {
     public init(
         _ title: some InlineElement,
         startsOpen: Bool = false,
-        @BlockHTMLBuilder contents: () -> some BlockHTML
+        @HTMLBuilder contents: () -> some HTML
     ) {
         self.title = title
         self.startsOpen = startsOpen

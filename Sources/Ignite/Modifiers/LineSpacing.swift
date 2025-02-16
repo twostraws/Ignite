@@ -59,22 +59,6 @@ public extension HTML {
     }
 }
 
-public extension BlockHTML {
-    /// Sets the line height of the element using a custom value.
-    /// - Parameter spacing: The line height multiplier to use.
-    /// - Returns: The modified HTML element.
-    func lineSpacing(_ spacing: Double) -> some BlockHTML {
-        modifier(LineSpacingModifier(height: spacing))
-    }
-
-    /// Sets the line height of the element using a predefined Bootstrap value.
-    /// - Parameter spacing: The predefined line height to use.
-    /// - Returns: The modified HTML element.
-    func lineSpacing(_ spacing: LineSpacing) -> some BlockHTML {
-        modifier(LineSpacingModifier(height: spacing))
-    }
-}
-
 /// Predefined line height values that match Bootstrap's spacing system.
 public enum LineSpacing: String, CaseIterable, Sendable {
     /// Single line height (1.0)
