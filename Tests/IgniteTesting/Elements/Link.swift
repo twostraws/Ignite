@@ -20,7 +20,7 @@ import Testing
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
 
-    @Test("String Target Test", arguments: [(target: "/", description: "Go Home")], await Self.sites)
+    @Test("String Target", arguments: [(target: "/", description: "Go Home")], await Self.sites)
     func target(for link: (target: String, description: String), for site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
@@ -28,18 +28,16 @@ import Testing
         let output = element.render()
         let expectedPath = PublishingContext.default.path(for: URL(string: link.target)!)
 
-        #expect(
-            output == """
-            <a href="\(expectedPath)" \
-            class="link-underline link-underline-opacity-100 \
-            link-underline-opacity-100-hover">\
-            \(link.description)\
-            </a>
-            """
-        )
+        #expect(output == """
+        <a href="\(expectedPath)" \
+        class="link-underline link-underline-opacity-100 \
+        link-underline-opacity-100-hover">\
+        \(link.description)\
+        </a>
+        """)
     }
 
-    @Test("Page Target Test", arguments: zip(await pages, await Self.sites))
+    @Test("Page Target", arguments: zip(await pages, await Self.sites))
     func target(for page: any StaticLayout, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
@@ -51,7 +49,7 @@ import Testing
         #expect(output == "<a href=\"\(expectedPath)\" class=\"btn btn-primary\">This is a test</a>")
     }
 
-    @Test("Page Content Test", arguments: zip(await pages, await Self.sites))
+    @Test("Page Content", arguments: zip(await pages, await Self.sites))
     func content(for page: any StaticLayout, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
@@ -65,18 +63,16 @@ import Testing
 
         let expectedPath = PublishingContext.default.path(for: URL(string: page.path)!)
 
-        #expect(
-            output == """
-            <a href="\(expectedPath)" \
-            class="link-plain link-underline link-underline-opacity-100 \
-            link-underline-opacity-100-hover">\
-            MORE <p>CONTENT</p>\
-            </a>
-            """
-        )
+        #expect(output == """
+        <a href="\(expectedPath)" \
+        class="link-plain link-underline link-underline-opacity-100 \
+        link-underline-opacity-100-hover">\
+        MORE <p>CONTENT</p>\
+        </a>
+        """)
     }
 
-    @Test("Link Warning Role Test", arguments: zip(await pages, await Self.sites))
+    @Test("Link Warning Role", arguments: zip(await pages, await Self.sites))
     func warningRoleLink(for page: any StaticLayout, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
@@ -84,14 +80,12 @@ import Testing
         let output = element.render()
         let expectedPath = PublishingContext.default.path(for: URL(string: page.path)!)
 
-        #expect(
-            output == """
-            <a href="\(expectedPath)" \
-            class="link-underline link-underline-opacity-100 \
-            link-underline-opacity-100-hover link-warning\">\
-            Link with warning role.\
-            </a>
-            """
-        )
+        #expect(output == """
+        <a href="\(expectedPath)" \
+        class="link-underline link-underline-opacity-100 \
+        link-underline-opacity-100-hover link-warning\">\
+        Link with warning role.\
+        </a>
+        """)
     }
 }

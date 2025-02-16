@@ -15,7 +15,7 @@ import Testing
 @MainActor
 
 struct SectionTests {
-    @Test("init With Content Test")
+    @Test("init With Content")
     func initWithContent() async throws {
         let element = Section {
             Span("Hello, World!")

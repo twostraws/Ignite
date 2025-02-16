@@ -35,7 +35,7 @@ import Testing
         #expect(output == "<img alt=\"\(description)\" src=\"\(expectedPath)\" />")
     }
 
-    @Test("Icon Image Test", arguments: ["browser-safari"], ["Safari logo"])
+    @Test("Icon Image", arguments: ["browser-safari"], ["Safari logo"])
     func icon(systemName: String, description: String) async throws {
         let element = Image(systemName: systemName, description: description)
         let output = element.render()
