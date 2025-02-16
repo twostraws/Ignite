@@ -18,7 +18,6 @@ struct DividerTests {
     func singleDivider() async throws {
         let element = Divider()
         let output = element.render()
-
         #expect(output == "<hr />")
     }
 }

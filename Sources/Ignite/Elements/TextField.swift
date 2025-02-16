@@ -6,7 +6,7 @@
 //
 
 /// A text input field with support for various states
-public struct TextField: InlineHTML, BlockHTML {
+public struct TextField: InlineElement, BlockHTML {
     /// How many columns this should occupy when placed in a section or form.
     public var columnWidth: ColumnWidth = .automatic
 
@@ -14,7 +14,7 @@ public struct TextField: InlineHTML, BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }

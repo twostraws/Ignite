@@ -46,6 +46,7 @@ extension HorizontalAlignment: Responsive {
 }
 
 /// Determines which elements can have horizontal alignment attached,
+@MainActor
 public protocol HorizontalAligning: HTML { }
 
 /// A modifier that controls horizontal alignment of HTML elements

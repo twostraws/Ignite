@@ -278,3 +278,5 @@ public enum Language: String, Sendable {
     case zulu = "zu"
 }
 // swiftlint:enable type_body_length
+
+extension Language: CaseIterable {}

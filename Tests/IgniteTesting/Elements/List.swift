@@ -14,15 +14,14 @@ import Testing
 @Suite("List Tests")
 @MainActor
 struct ListTests {
-    @Test("Basic Rendering Test")
+    @Test("Basic Rendering")
     func testEmptyListRendering() async throws {
         let list = List {}
         let output = list.render()
-
         #expect(output == "<ul><li></li></ul>")
     }
 
-    @Test("Basic Unordered List Test")
+    @Test("Basic Unordered List")
        func unorderedList() async throws {
            let list = List {
                "Veni"
@@ -33,5 +32,4 @@ struct ListTests {
 
            #expect(output == "<ul><li>Veni</li><li>Vidi</li><li>Vici</li></ul>")
        }
-
 }

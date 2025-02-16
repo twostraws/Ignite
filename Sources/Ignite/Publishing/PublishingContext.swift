@@ -59,7 +59,7 @@ final class PublishingContext {
     private(set) var errors = [PublishingError]()
 
     /// All the Markdown content this user has inside their Content folder.
-    public private(set) var allContent = [Content]()
+    private(set) var allContent = [Content]()
 
     /// An ordered set of syntax highlighters pulled from code blocks throughout the site.
     var syntaxHighlighters = OrderedSet<HighlighterLanguage>()
@@ -104,7 +104,7 @@ final class PublishingContext {
     ///   The default is "Build".
     /// - Returns: The shared `PublishingContext` instance.
     @discardableResult
-    public static func initialize(
+    static func initialize(
         for site: any Site,
         from file: StaticString,
         buildDirectoryPath: String = "Build"
@@ -149,25 +149,17 @@ final class PublishingContext {
 
     /// Parses all Markdown content in the site's Content folder.
     func parseContent() throws {
-        guard let enumerator = FileManager.default.enumerator(
-            at: contentDirectory,
-            includingPropertiesForKeys: [.contentModificationDateKey, .creationDateKey]
-        ) else {
-            return
-        }
-
-        while let objectURL = enumerator.nextObject() as? URL {
-            guard objectURL.hasDirectoryPath == false else { continue }
-
-            if objectURL.pathExtension == "md" {
-                let values = try objectURL.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey])
-
-                let article = try Content(from: objectURL, resourceValues: values)
-
-                if article.isPublished {
-                    allContent.append(article)
-                }
+        try ContentFinder.shared.find(root: contentDirectory) { deploy in
+            let article = try Content(
+                from: deploy.url,
+                in: self,
+                resourceValues: deploy.resourceValues,
+                deployPath: deploy.path
+            )
+            if article.isPublished {
+                allContent.append(article)
             }
+            return true // always continuing
         }
 
         // Make content be sorted newest first by default.
@@ -345,13 +337,13 @@ final class PublishingContext {
     /// Renders one piece of Markdown content.
     /// - Parameter content: The content to render.
     func render(_ content: Content) {
-        var layout = layout(for: content)
-
-        let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        layout.environment = values
+        let layout = layout(for: content)
 
         let body = ContentContext.withCurrentContent(content) {
-            Section(layout.body)
+            let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+            return EnvironmentStore.update(values) {
+                Section(layout.body)
+            }
         }
 
         currentRenderingPath = content.path

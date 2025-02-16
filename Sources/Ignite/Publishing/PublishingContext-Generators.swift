@@ -102,18 +102,18 @@ extension PublishingContext {
 
     /// Generates an RSS feed for this site, if enabled.
     public func generateFeed() {
-        guard site.isFeedEnabled else { return }
+        guard let feedConfig = site.feedConfiguration else { return }
 
         let content = allContent.sorted(
             by: \.date,
             order: .reverse
         )
 
-        let generator = FeedGenerator(site: site, content: content)
+        let generator = FeedGenerator(config: feedConfig, site: site, content: content)
         let result = generator.generateFeed()
 
         do {
-            let destinationURL = buildDirectory.appending(path: site.feedConfiguration.path)
+            let destinationURL = buildDirectory.appending(path: feedConfig.path)
             try result.write(to: destinationURL, atomically: true, encoding: .utf8)
         } catch {
             addError(.failedToWriteFeed)

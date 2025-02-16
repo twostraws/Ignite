@@ -27,8 +27,7 @@ struct VStackTests {
         <label class="mb-0">Top Label</label>\
         <label class="mb-0">Bottom Label</label>\
         </div>
-        """
-        )
+        """)
     }
 
     @Test("VStack with elements and spacing")
@@ -44,7 +43,6 @@ struct VStackTests {
         <label class="mb-0">Top Label</label>\
         <label class="mb-0">Bottom Label</label>\
         </div>
-        """
-        )
+        """)
     }
 }

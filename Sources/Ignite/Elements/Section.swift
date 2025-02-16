@@ -17,7 +17,7 @@ public struct Section: BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -35,6 +35,7 @@ public struct Section: BlockHTML {
 
     init(_ items: any HTML) {
         self.items = flatUnwrap(items)
+        self.tag("div")
     }
 
     /// Creates a section that renders as a `div` element.

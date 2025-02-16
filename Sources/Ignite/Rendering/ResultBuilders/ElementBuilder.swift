@@ -6,7 +6,7 @@
 //
 
 typealias HeadElementBuilder = ElementBuilder<any HeadElement>
-typealias RootHTMLBuilder = ElementBuilder<any RootHTML>
+typealias RootElementBuilder = ElementBuilder<any RootElement>
 typealias StaticLayoutBuilder = ElementBuilder<any StaticLayout>
 typealias ContentLayoutBuilder = ElementBuilder<any ContentLayout>
 typealias ActionBuilder = ElementBuilder<any Action>

@@ -5,12 +5,12 @@
 // See LICENSE for license information.
 //
 
-public struct HTMLBody: RootHTML {
+public struct Body: RootElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }

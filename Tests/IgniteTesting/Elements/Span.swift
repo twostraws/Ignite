@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Span` element.
 @Suite("Span Tests")
 @MainActor struct SpanTests {
-    @Test("Single Element Test", arguments: ["This is a test", "Another test"])
+    @Test("Single Element", arguments: ["This is a test", "Another test"])
     func singleElement(spanText: String) async throws {
         let element = Span(spanText)
         let output = element.render()
@@ -21,7 +21,7 @@ import Testing
         #expect(output == "<span>\(spanText)</span>")
     }
 
-    @Test("Builder Test", arguments: ["This is a test", "Another test"])
+    @Test("Builder", arguments: ["This is a test", "Another test"])
     func builder(spanText: String) async throws {
         let element = Span { spanText }
         let output = element.render()
