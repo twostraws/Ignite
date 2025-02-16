@@ -13,12 +13,7 @@ import Testing
 /// Tests for the `HTMLHead` element.
 @Suite("HTMLHead Tests")
 @MainActor
-struct HTMLHeadTests {
-
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class HTMLHeadTests: IgniteTestSuite {
     @Test("Defaults to empty head tag")
     func default_is_empty_head_tag() throws {
         let sut = Head {}

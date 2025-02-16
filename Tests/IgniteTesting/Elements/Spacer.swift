@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Spacer` element.
 @Suite("Spacer Tests")
 @MainActor
-struct SpacerTests {
+class SpacerTests: IgniteTestSuite {
     @Test("SpacerTest")
     func basicSpacerTest() async throws {
         let element = Spacer()

@@ -13,8 +13,8 @@ import Testing
 /// Tests for the `Underline` element.
 @Suite("Underline Tests")
 @MainActor
-struct UnderlineTests {
-    @Test("Single Element", arguments: ["This is a test", "Another test", ""])
+class UnderlineTests: IgniteTestSuite {
+    @Test("Single Element Test", arguments: ["This is a test", "Another test", ""])
     func singleElement(underlineText: String) async throws {
         let element = Underline(underlineText)
         let output = element.render()

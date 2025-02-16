@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `Accordion` element.
 @Suite("Accordion Tests")
 @MainActor
-struct AccordionTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class AccordionTests: IgniteTestSuite {
     @Test("Renders a div tag of class accordion")
     func outputs_div_with_class_accordion() async throws {
         let sut = Accordion {}

@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `MetaTag` element.
 @Suite("MetaTag Tests")
 @MainActor
-struct MetaTagTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class MetaTagTests: IgniteTestSuite {
     @Test("Meta tag with type enum and content a URL")
     func withEnumAndContentURL() async throws {
         let element = MetaTag(.twitterDomain, content: URL(string: "https://example.com?s=searching#target")!)

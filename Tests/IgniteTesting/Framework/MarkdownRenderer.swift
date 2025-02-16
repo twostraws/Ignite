@@ -14,7 +14,6 @@ import Testing
 @Suite("MarkdownRenderer Tests")
 @MainActor
 struct MarkdownRendererTests {
-
     @Test("Markdown metadata is processed")
     func metadataIsProcessed() async throws {
         let element = MarkdownToHTML(
