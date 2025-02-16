@@ -40,15 +40,3 @@ public extension InlineElement {
         ))
     }
 }
-
-public extension BlockHTML {
-    /// Adds "onmouseover" and "onmouseout" JavaScript events to this block element.
-    /// - Parameter actions: A closure that takes a Boolean indicating hover state and returns actions to execute.
-    /// - Returns: A modified block HTML element with the hover event handlers attached.
-    func onHover(@ActionBuilder actions: (_ isHovering: Bool) -> [Action]) -> some BlockHTML {
-        modifier(HoverModifier(
-            hoverActions: actions(true),
-            unhoverActions: actions(false)
-        ))
-    }
-}
