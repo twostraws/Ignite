@@ -18,9 +18,8 @@ struct HiddenTests {
     func hiddenForText() async throws {
         let element = Text("Hello world!").hidden()
         let output = element.render()
-        #expect(
-            output == "<p class=\"d-none\">Hello world!</p>"
-        )
+
+        #expect(output == "<p class=\"d-none\">Hello world!</p>")
     }
 
     @Test("MediaQuery based hidden Modifier for Text")
@@ -30,9 +29,8 @@ struct HiddenTests {
         let element = Text("Hello world!").hidden(mediaQuery)
         let output = element.render()
         let className = CSSManager.default.className(for: [mediaQuery])
-        #expect(
-            output == "<p class=\"\(className)\">Hello world!</p>"
-        )
+
+        #expect(output == "<p class=\"\(className)\">Hello world!</p>")
     }
 
     @Test("Hidden Modifier for Column")
@@ -42,8 +40,7 @@ struct HiddenTests {
             Label(text: "Right Label")
         }.hidden()
         let output = element.render()
-        #expect(
-            output == "<td colspan=\"1\" class=\"d-none\"><label>Left Label</label><label>Right Label</label></td>"
-        )
+
+        #expect(output == "<td colspan=\"1\" class=\"d-none\"><label>Left Label</label><label>Right Label</label></td>")
     }
 }

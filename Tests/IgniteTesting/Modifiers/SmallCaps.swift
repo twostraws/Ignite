@@ -14,7 +14,7 @@ import Testing
 @Suite("SmallCaps Tests")
 @MainActor
 struct SmallCapsTests {
-    @Test("Basic SmallCaps modifier test")
+    @Test("SmallCaps Modifier")
     func htmlSmallCaps() async throws {
         let element = Span("Hello, World!").smallCaps()
         let output = element.render()

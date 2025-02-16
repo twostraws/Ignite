@@ -32,8 +32,7 @@ struct ItemTests {
         let itemIDStringRange =  output.index(after: startIndex)..<output.index(startIndex, offsetBy: 25)
         let itemID = output[itemIDStringRange]
 
-        #expect(output ==
-        """
+        #expect(output == """
         <div class="accordion-item">\
         <h2 class="accordion-header">\
         <button type="button" class="accordion-button btn collapsed" data-bs-target="#\(itemID)" \
@@ -43,7 +42,6 @@ struct ItemTests {
         <div class="accordion-body">\
         <p>This is an accordion item.</p>\
         </div></div></div>
-        """
-        )
+        """)
     }
 }
