@@ -19,7 +19,6 @@ class IncludeTests: IgniteTestSuite {
         let element = Include("important.html")
         let output = element.render()
 
-        #expect(
-            output == "")
+        #expect(output == "")
     }
 }

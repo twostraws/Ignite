@@ -26,6 +26,7 @@ struct LineSpacingTests {
     func lineSpacing(spacing: LineSpacing) async throws {
         let element = Text("Hello, world!").lineSpacing(spacing)
         let output = element.render()
+
         #expect(output == "<p class=\"lh-\(spacing.rawValue)\">Hello, world!</p>")
     }
 }

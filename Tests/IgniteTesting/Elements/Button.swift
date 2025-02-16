@@ -15,7 +15,7 @@ import Testing
 @Suite("Button Tests")
 @MainActor
 class ButtonTests: IgniteTestSuite {
-    @Test("Button Test")
+    @Test("Button")
     func button() async throws {
         let element = Text {
             Button("Say Hello") {
@@ -23,17 +23,17 @@ class ButtonTests: IgniteTestSuite {
             }
             .role(.primary)
         }
+
         let output = element.render()
 
         #expect(output == """
-            <p><button type=\"button\" \
-            class=\"btn btn-primary\" \
-            onclick=\"alert('Hello, world!')\">Say Hello</button></p>
-            """
-        )
+        <p><button type=\"button\" \
+        class=\"btn btn-primary\" \
+        onclick=\"alert('Hello, world!')\">Say Hello</button></p>
+        """)
     }
 
-    @Test("Show Text Test")
+    @Test("Show Text")
     func showText() async throws {
         let button1 = Text {
             Button("Show First Text") {
@@ -66,26 +66,24 @@ class ButtonTests: IgniteTestSuite {
         let outputText2 = text2.render()
 
         #expect(outputButton1 == """
-            <p><button type=\"button\" class=\"btn btn-primary\" \
-            onclick=\"document.getElementById('FirstText').classList.remove('d-none'); \
-            document.getElementById('SecondText').classList.add('d-none')\">Show First \
-            Text</button></p>
-            """
-        )
+        <p><button type=\"button\" class=\"btn btn-primary\" \
+        onclick=\"document.getElementById('FirstText').classList.remove('d-none'); \
+        document.getElementById('SecondText').classList.add('d-none')\">Show First \
+        Text</button></p>
+        """)
 
         #expect(outputButton2 == """
-            <p><button type=\"button\" \
-            class=\"btn btn-primary\" onclick=\"document.getElementById('FirstText').classList.add('d-none'); \
-            document.getElementById('SecondText').classList.remove('d-none')\">Show Second Text</button></p>
-            """
-        )
+        <p><button type=\"button\" \
+        class=\"btn btn-primary\" onclick=\"document.getElementById('FirstText').classList.add('d-none'); \
+        document.getElementById('SecondText').classList.remove('d-none')\">Show Second Text</button></p>
+        """)
 
         #expect(outputText1 == "<h3 id=\"FirstText\">This is the first text.</h3>")
 
         #expect(outputText2 == "<h3 id=\"SecondText\" class=\"d-none\">This is the second text.</h3>")
     }
 
-    @Test("Link Button Test")
+    @Test("Link Button")
     func linkButton() async throws {
         let element = Text {
             Link("This is a link button", target: self.contentExamples())
@@ -93,17 +91,17 @@ class ButtonTests: IgniteTestSuite {
         }
 
         let output = element.render()
+
         #expect(output == """
         <p><a href=\"https://www.hackingwithswift.com\" \
         class=\"btn btn-primary\">This is a link button</a></p>
         """)
     }
 
-    @Test("Disabled Button Test")
+    @Test("Disabled Button")
     func disabledButton() async throws {
         let button = Button().disabled()
         let output = button.render()
-
         #expect(output == #"<button type="button" disabled class="btn"></button>"#)
     }
 

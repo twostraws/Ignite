@@ -22,12 +22,12 @@ class AlertTests: IgniteTestSuite {
         "alert-warning",
         "alert-info",
         "alert-light",
-        "alert-dark"
-    ]))
+        "alert-dark"]))
     func allRolesForAlertVariant(role: Role, cssAppliedClass: String) async throws {
         let element = Alert {
             Text("This is not an exercice")
         }.role(role)
+
         let output = element.render()
 
         #expect(output == "<div class=\"alert \(cssAppliedClass)\"><p>This is not an exercice</p></div>")

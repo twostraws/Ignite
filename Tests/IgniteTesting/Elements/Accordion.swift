@@ -17,10 +17,8 @@ class AccordionTests: IgniteTestSuite {
     @Test("Renders a div tag of class accordion")
     func outputs_div_with_class_accordion() async throws {
         let sut = Accordion {}
-
         let attributes = try #require(sut.render().htmlTagWithCloseTag("div")?.attributes)
         let classAttribute = try #require(attributes.htmlAttribute(named: "class"))
-
         #expect(classAttribute == "accordion")
     }
 
@@ -34,7 +32,7 @@ class AccordionTests: IgniteTestSuite {
         )
 
         let expected = /accordion[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]/
-        #expect(nil != idattribute.firstMatch(of: expected))
+        #expect(idattribute.firstMatch(of: expected) != nil)
     }
 
     @Test("Outputs Items Provided", arguments: [Accordion.OpenMode.all, .individual])
@@ -44,8 +42,8 @@ class AccordionTests: IgniteTestSuite {
             Item("second title", contents: { Text("hello") }),
             Item("titulo 3", contents: { Image("imagename") })
         ]}
-        let sut = Accordion(items)
-            .openMode(openMode)
+
+        let sut = Accordion(items).openMode(openMode)
         let output = sut.render()
 
         let accordionID = try #require(output.htmlTagWithCloseTag("div")?.attributes.htmlAttribute(named: "id"))
@@ -77,8 +75,8 @@ class AccordionTests: IgniteTestSuite {
             Item("second title", contents: { Text("hello") }),
             Item("titulo 3", contents: { Image("imagename") })
         ]}
-        let sut = Accordion(items)
-            .openMode(openMode)
+
+        let sut = Accordion(items).openMode(openMode)
         let output = sut.render()
 
         let accordionID = try #require(output.htmlTagWithCloseTag("div")?.attributes.htmlAttribute(named: "id"))
@@ -93,17 +91,14 @@ class AccordionTests: IgniteTestSuite {
 
 // MARK: - Helpers
 
-fileprivate extension String {
-
+private extension String {
     func clearingItemIDs() -> String {
         let toReplace = /item[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]/
-
         return replacing(toReplace, with: "-----")
     }
 
     func clearingAccordionIDs() -> String {
         let toReplace = /accordion[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]/
-
         return replacing(toReplace, with: "-----")
     }
 }

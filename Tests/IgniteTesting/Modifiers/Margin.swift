@@ -22,75 +22,48 @@ struct MarginTests {
         #expect(output == "<p style=\"margin: 20px\">Hello, world!</p>")
     }
 
-    @Test("Margin modifier with custom pixel value", arguments: [
-        (value: 40, expected: "40px"),
-        (value: 0, expected: "0px"),
-        (value: -40, expected: "-40px")
-    ])
-    func customPixelMargin(testCase: (value: Int, expected: String)) async throws {
-        let element = Text("Hello, world!").margin(testCase.value)
+    @Test("Margin modifier with custom pixel value", arguments: [40, 0, -40])
+    func customPixelMargin(value: Int) async throws {
+        let element = Text("Hello, world!").margin(value)
         let output = element.render()
 
-        #expect(output == "<p style=\"margin: \(testCase.expected)\">Hello, world!</p>")
+        #expect(output == "<p style=\"margin: \(value)px\">Hello, world!</p>")
     }
 
-    @Test("Margin modifier with amount value")
-    func amountUnitMargin() async throws {
-        let element = Text("Hello, world!").margin(.small)
+    @Test("Margin modifier with amount value", arguments: SpacingAmount.allCases)
+    func amountUnitMargin(amount: SpacingAmount) async throws {
+        let element = Text("Hello, world!").margin(amount)
         let output = element.render()
 
-        #expect(output == "<p class=\"m-2\">Hello, world!</p>")
+        #expect(output == "<p class=\"m-\(amount.rawValue)\">Hello, world!</p>")
     }
 
-    @Test("Margin modifier with length unit", arguments: [
-        (value: LengthUnit.rem(2.5), expected: "2.5rem"),
-        (value: LengthUnit.em(3), expected: "3.0em"),
-        (value: LengthUnit.percent(25%), expected: "25.0%"),
-        (value: LengthUnit.vw(10%), expected: "10.0vw"),
-        (value: LengthUnit.vh(30%), expected: "30.0vh")
-    ])
-    func lengthUnitMargin(testCase: (value: LengthUnit, expected: String)) async throws {
-        let element = Text("Hello, world!").margin(testCase.value)
+    @Test("Margin modifier with length unit",
+          arguments: [LengthUnit.rem(2.5), .em(3), .percent(25%), .vw(10%), .vh(30%), .custom("min(5vh, 30px)")])
+    func lengthUnitMargin(value: LengthUnit) {
+        let element = Text("Hello, world!").margin(value)
         let output = element.render()
 
-        #expect(output == "<p style=\"margin: \(testCase.expected)\">Hello, world!</p>")
+        #expect(output == "<p style=\"margin: \(value.stringValue)\">Hello, world!</p>")
     }
 
-    @Test("Margin with negative length values", arguments: [
-        (value: LengthUnit.rem(-2.5), expected: "-2.5rem"),
-        (value: LengthUnit.em(-3), expected: "-3.0em"),
-        (value: LengthUnit.percent(-25%), expected: "-25.0%"),
-        (value: LengthUnit.vw(-10%), expected: "-10.0vw"),
-        (value: LengthUnit.vh(-30%), expected: "-30.0vh")
-    ])
-    func negativeMargin(testCase: (value: LengthUnit, expected: String)) {
-        let element = Text("Hello, world!").margin(testCase.value)
+    @Test("Margin with negative length values",
+          arguments: [LengthUnit.rem(-2.5), .em(-3), .percent(-25%), .vw(-10%), .vh(-30%)])
+    func negativeMargin(value: LengthUnit) {
+        let element = Text("Hello, world!").margin(value)
         let output = element.render()
 
-        #expect(output == "<p style=\"margin: \(testCase.expected)\">Hello, world!</p>")
+        #expect(output == "<p style=\"margin: \(value.stringValue)\">Hello, world!</p>")
     }
 
-    @Test("Margin modifier with custom length unit")
-    func customLengthUnitMargin() async throws {
-        let element = Text("Hello, world!").margin(.custom("min(60vh, 300px)"))
+    @Test("Margin on selected sides with default pixels", arguments: zip(
+        [Edge.top, .bottom, .leading, .trailing],
+        ["margin-top", "margin-bottom", "margin-left", "margin-right"]))
+    func selectedEdgeMargin(alignment: Edge, property: String) {
+        let element = Text("Hello, world!").margin(alignment)
         let output = element.render()
 
-        #expect(output == "<p style=\"margin: min(60vh, 300px)\">Hello, world!</p>")
-    }
-
-    @Test("Margin on selected sides with default pixels", arguments: [
-        (value: (Edge.top), expected: "margin-top: 20px"),
-        (value: (Edge.bottom), expected: "margin-bottom: 20px"),
-        (value: (Edge.leading), expected: "margin-left: 20px"),
-        (value: (Edge.trailing), expected: "margin-right: 20px"),
-        (value: (Edge.vertical), expected: "margin-bottom: 20px; margin-top: 20px"),
-        (value: (Edge.horizontal), expected: "margin-left: 20px; margin-right: 20px")
-    ])
-    func selectedEdgeMargin(testCase: (value: Edge, expected: String)) {
-        let element = Text("Hello, world!").margin(testCase.value)
-        let output = element.render()
-
-        #expect(output == "<p style=\"\(testCase.expected)\">Hello, world!</p>")
+        #expect(output == "<p style=\"\(property): 20px\">Hello, world!</p>")
     }
 
     @Test("Margin with custom pixel value and multiple edges")

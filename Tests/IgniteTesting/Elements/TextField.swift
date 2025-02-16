@@ -72,8 +72,6 @@ class TextFieldTests: IgniteTestSuite {
             .required()
         let output = textField.render()
 
-        #expect(
-            output == #"<input disabled readonly required type="text" class="form-control" />"#
-        )
+        #expect(output == #"<input disabled readonly required type="text" class="form-control" />"#)
     }
 }

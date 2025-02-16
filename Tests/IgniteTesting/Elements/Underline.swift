@@ -22,7 +22,7 @@ class UnderlineTests: IgniteTestSuite {
         #expect(output == "<u>\(underlineText)</u>")
     }
 
-    @Test("Builder Test", arguments: ["This is a test", "Another test", ""])
+    @Test("Builder", arguments: ["This is a test", "Another test", ""])
     func builder(underlineText: String) async throws {
         let element = Underline { underlineText }
         let output = element.render()

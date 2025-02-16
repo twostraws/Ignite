@@ -14,12 +14,13 @@ import Testing
 @Suite("ListItem Tests")
 @MainActor
 class ListItemTests: IgniteTestSuite {
-    @Test("Standalone ListItem Test")
+    @Test("Standalone ListItem")
     func standAlone() async throws {
         let element = ListItem {
             "Standalone List Item"
         }
         let output = element.render()
+
         #expect(output == "<li>Standalone List Item</li>")
     }
 }

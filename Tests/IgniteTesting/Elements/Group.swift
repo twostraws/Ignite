@@ -23,14 +23,14 @@ class GroupTests: IgniteTestSuite {
                 ShowAlert(message: "Bottom Button Tapped")
             }
         }
+
         let output = element.render()
 
         #expect(output == """
         <label>Top Label</label>\
         <p>Middle Text</p>\
         <button type="button" class="btn" onclick="alert('Bottom Button Tapped')">Bottom Button</button>
-        """
-        )
+        """)
     }
 
     @Test("Adding attributes to all children")
@@ -44,6 +44,7 @@ class GroupTests: IgniteTestSuite {
                 ShowAlert(message: "Bottom Button Tapped")
             }
         }.customAttribute(name: attributeName, value: attributeValue)
+
         let output = element.render()
 
         #expect(output == """
@@ -51,7 +52,6 @@ class GroupTests: IgniteTestSuite {
         <p \(attributeName)="\(attributeValue)">Middle Text</p>\
         <button type="button" \(attributeName)="\(attributeValue)" class="btn" \
         onclick="alert('Bottom Button Tapped')">Bottom Button</button>
-        """
-        )
+        """)
     }
 }

@@ -16,18 +16,17 @@ import Testing
 class CodeBlockTests: IgniteTestSuite {
     @Test("Rendering a code block")
     func codeBlockTest() {
-        let element = CodeBlock {
-            """
-            import Foundation
-            struct CodeBlockTest {
-                let name: String
-            }
-            let test = CodeBlockTest(name: "Swift")
-            """
+        let element = CodeBlock { """
+        import Foundation
+        struct CodeBlockTest {
+            let name: String
         }
+        let test = CodeBlockTest(name: "Swift")
+        """ }
+
         let output = element.render()
-        #expect(output ==
-        """
+
+        #expect(output == """
         <pre><code>import Foundation
         struct CodeBlockTest {
             let name: String

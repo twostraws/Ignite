@@ -14,7 +14,7 @@ import Testing
 @Suite("Dropdown Tests")
 @MainActor
 class DropdownTests: IgniteTestSuite {
-    @Test("basic Dropdown Text Test")
+    @Test("basic Dropdown Text")
     func basicDropdownText() async throws {
         let element = Dropdown("Click Me") {
             Text("Content1")
@@ -25,16 +25,16 @@ class DropdownTests: IgniteTestSuite {
         let output = element.render()
 
         let expectedOutput = """
-            <div class="dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle"
-                    data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
-                <ul class="dropdown-menu">
-                    <li><p class="dropdown-header">Content1</p></li>
-                    <li><p class="dropdown-header">Content2</p></li>
-                    <li><p class="dropdown-header">Or you can just…</p></li>
-                </ul>
-            </div>
-            """
+        <div class="dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
+            <ul class="dropdown-menu">
+                <li><p class="dropdown-header">Content1</p></li>
+                <li><p class="dropdown-header">Content2</p></li>
+                <li><p class="dropdown-header">Or you can just…</p></li>
+            </ul>
+        </div>
+        """
 
         let normalizedOutput = output.replacingOccurrences(
             of: "\\s+", with: "", options: .regularExpression
@@ -46,7 +46,7 @@ class DropdownTests: IgniteTestSuite {
         #expect(normalizedOutput == normalizedExpectedOutput)
     }
 
-    @Test("Dropdown Role Test")
+    @Test("Dropdown Role")
     func dropdownRole() async throws {
         let element = Dropdown("Click Me") {
             Text("Content1")
@@ -55,14 +55,14 @@ class DropdownTests: IgniteTestSuite {
         let output = element.render()
 
         let expectedOutput = """
-            <div class="dropdown">
-                <button type="button" class="btn btn-secondary dropdown-toggle"
-                    data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
-                <ul class="dropdown-menu">
-                    <li><p class="dropdown-header">Content1</p></li>
-                </ul>
-            </div>
-            """
+        <div class="dropdown">
+            <button type="button" class="btn btn-secondary dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
+            <ul class="dropdown-menu">
+                <li><p class="dropdown-header">Content1</p></li>
+            </ul>
+        </div>
+        """
 
         let normalizedOutput = output.replacingOccurrences(
             of: "\\s+", with: "", options: .regularExpression
@@ -74,19 +74,19 @@ class DropdownTests: IgniteTestSuite {
         #expect(normalizedOutput == normalizedExpectedOutput)
     }
 
-    @Test("Empty Dropdown Test")
+    @Test("Empty Dropdown")
     func emptyDropdown() async throws {
         let element = Dropdown("Click Me") {}.role(.primary)
 
         let output = element.render()
 
         let expectedOutput = """
-            <div class="dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle"
-                    data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
-                <ul class="dropdown-menu"></ul>
-            </div>
-            """
+        <div class="dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
+            <ul class="dropdown-menu"></ul>
+        </div>
+        """
 
         let normalizedOutput = output.replacingOccurrences(
             of: "\\s+", with: "", options: .regularExpression
@@ -98,7 +98,7 @@ class DropdownTests: IgniteTestSuite {
         #expect(normalizedOutput == normalizedExpectedOutput)
     }
 
-    @Test("Dropdown Large Content Test")
+    @Test("Dropdown Large Content")
     func dropdownLargeContent() async throws {
         let element = Dropdown("Click Me") {
             for index in 1...50 {
@@ -109,20 +109,20 @@ class DropdownTests: IgniteTestSuite {
         let output = element.render()
 
         var expectedOutput = """
-            <div class="dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle"
-                    data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
-                <ul class="dropdown-menu">
-            """
+        <div class="dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
+            <ul class="dropdown-menu">
+        """
         for index in 1...50 {
             expectedOutput += """
-                    <li><p class="dropdown-header">Item \(index)</p></li>
-                """
+                <li><p class="dropdown-header">Item \(index)</p></li>
+            """
         }
         expectedOutput += """
-                </ul>
-            </div>
-            """
+            </ul>
+        </div>
+        """
 
         let normalizedOutput = output.replacingOccurrences(
             of: "\\s+", with: "", options: .regularExpression
@@ -133,5 +133,4 @@ class DropdownTests: IgniteTestSuite {
 
         #expect(normalizedOutput == normalizedExpectedOutput)
     }
-
 }

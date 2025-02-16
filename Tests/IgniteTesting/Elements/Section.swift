@@ -14,7 +14,7 @@ import Testing
 @Suite("Section Tests")
 @MainActor
 class SectionTests: IgniteTestSuite {
-    @Test("init With Content Test")
+    @Test("init With Content")
     func initWithContent() async throws {
         let element = Section {
             Span("Hello, World!")

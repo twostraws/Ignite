@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Video` element.
 @Suite("Video Tests")
-@MainActor
-class VideoTests: IgniteTestSuite {
-    @Test("Lone File Video Test", arguments: ["/videos/example.mp4"])
+@MainActor class VideoTests: IgniteTestSuite {
+    @Test("Lone File Video", arguments: ["/videos/example.mp4"])
     func loneFileVideo(videoFile: String) async throws {
         let element = Video(videoFile)
         let output = element.render()
@@ -27,7 +26,7 @@ class VideoTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Multi-file Video Test", arguments: ["/videos/example1.mp4"], ["/videos/example1.mov"])
+    @Test("Multi-file Video", arguments: ["/videos/example1.mp4"], ["/videos/example1.mov"])
     func multiFileVideo(videoFile1: String, videoFile2: String) async throws {
         let element = Video(videoFile1, videoFile2)
         let output = element.render()

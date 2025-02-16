@@ -12,16 +12,22 @@ import Testing
 
 /// Tests for the `Image` element.
 @Suite("Image Tests")
-@MainActor
-class ImageTests: IgniteTestSuite {
-    @Test("Image Test", arguments: ["/images/example.jpg"], ["Example image"])
-    func named(path: String, description: String) async throws {
-        let element = Image(path, description: description)
+@MainActor class ImageTests: IgniteTestSuite {
+    static let sites: [any Site] = [TestSite(), TestSubsite()]
+
+    @Test("Image", arguments: [(path: "/images/example.jpg", description: "Example")], await Self.sites)
+    func named(image: (path: String, description: String), for site: any Site) async throws {
+        try PublishingContext.initialize(for: site, from: #filePath)
+
+        let element = Image(image.path, description: image.description)
         let output = element.render()
-        #expect(output == "<img alt=\"Example image\" src=\"\(path)\" />")
+
+        let expectedPath = site.url.path == "/" ? image.path : "\(site.url.path)\(image.path)"
+
+        #expect(output == "<img alt=\"Example\" src=\"\(expectedPath)\" />")
     }
 
-    @Test("Icon Image Test", arguments: ["browser-safari"], ["Safari logo"])
+    @Test("Icon Image", arguments: ["browser-safari"], ["Safari logo"])
     func icon(systemName: String, description: String) async throws {
         let element = Image(systemName: systemName, description: description)
         let output = element.render()
