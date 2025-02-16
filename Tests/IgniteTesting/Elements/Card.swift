@@ -83,11 +83,9 @@ struct CardTests {
         """)
     }
 
-    @Test("Card Styles", arguments: [
-        (Card.Style.default, "card"),
-        (Card.Style.bordered, "border-default card"),
-        (Card.Style.solid, "card text-bg-default")
-    ])
+    @Test("Card Styles", arguments: zip(
+        Card.Style.allCases,
+        ["card", "card text-bg-default", "border-default card"]))
     func cardStyles(style: Card.Style, expectedClass: String) async throws {
         let element = Card {
             "Placeholder"

@@ -22,15 +22,14 @@ struct BadgeTests {
         "text-bg-warning",
         "text-bg-info",
         "text-bg-light",
-        "text-bg-dark"
-    ]))
+        "text-bg-dark"]))
     func allRolesForDefaultBadgeVariant(role: Role, cssClass: String) async throws {
         let element = Text {
             Badge("Some text")
                 .role(role)
         }
-        let output = element.render()
 
+        let output = element.render()
         #expect(output == "<p><span class=\"badge rounded-pill \(cssClass)\">Some text</span></p>")
     }
 
@@ -42,16 +41,15 @@ struct BadgeTests {
         "bg-warning-subtle rounded-pill text-warning-emphasis",
         "bg-info-subtle rounded-pill text-info-emphasis",
         "bg-light-subtle rounded-pill text-light-emphasis",
-        "bg-dark-subtle rounded-pill text-dark-emphasis"
-    ]))
+        "bg-dark-subtle rounded-pill text-dark-emphasis"]))
     func allRolesForSubtleBadgeVariant(role: Role, cssClasses: String) async throws {
         let element = Text {
             Badge("Some text")
                 .badgeStyle(.subtle)
                 .role(role)
         }
-        let output = element.render()
 
+        let output = element.render()
         #expect(output == "<p><span class=\"badge \(cssClasses)\">Some text</span></p>")
     }
 
@@ -63,16 +61,15 @@ struct BadgeTests {
         "bg-warning-subtle border border-warning-subtle rounded-pill text-warning-emphasis",
         "bg-info-subtle border border-info-subtle rounded-pill text-info-emphasis",
         "bg-light-subtle border border-light-subtle rounded-pill text-light-emphasis",
-        "bg-dark-subtle border border-dark-subtle rounded-pill text-dark-emphasis"
-    ]))
+        "bg-dark-subtle border border-dark-subtle rounded-pill text-dark-emphasis"]))
     func allRolesForSubtleBorderedBadgeVariant(role: Role, cssClasses: String) async throws {
         let element = Text {
             Badge("Some text")
                 .badgeStyle(.subtleBordered)
                 .role(role)
         }
-        let output = element.render()
 
+        let output = element.render()
         #expect(output == "<p><span class=\"badge \(cssClasses)\">Some text</span></p>")
     }
 }

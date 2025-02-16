@@ -13,7 +13,6 @@ import Testing
 /// Helper function to simulate registerClasses logic
 func simulateRegisterClasses(for responsiveSize: ResponsiveFontSize) -> String {
     let className = "font-" + responsiveSize.breakpointValues.description.truncatedHash
-
     return className
 }
 
@@ -30,10 +29,10 @@ struct FontModifierTests {
 
         let output = element.render()
 
-        #expect(
-            output == "<p><div style=\"font-family: Arial; font-size: 16px; font-weight: 400\">" +
-                      "<span class=\"font-inherit\">Sample text</span></div></p>"
-        )
+        #expect(output == """
+        <p><div style="font-family: Arial; font-size: 16px; font-weight: 400">\
+        <span class="font-inherit">Sample text</span></div></p>
+        """)
     }
 
     @Test("Font Weight Application")
@@ -45,10 +44,10 @@ struct FontModifierTests {
 
         let output = element.render()
 
-        #expect(
-            output == "<p><div style=\"font-family: Arial; font-size: 16px; font-weight: 700\">" +
-                      "<span class=\"font-inherit\">Sample text</span></div></p>"
-        )
+        #expect(output == """
+        <p><div style="font-family: Arial; font-size: 16px; font-weight: 700">\
+        <span class="font-inherit">Sample text</span></div></p>
+        """)
     }
 
     @Test("Font Size Application")
@@ -60,10 +59,10 @@ struct FontModifierTests {
 
         let output = element.render()
 
-        #expect(
-            output == "<p><div style=\"font-family: Arial; font-size: 1.5em; font-weight: 400\">" +
-                      "<span class=\"font-inherit\">Sample text</span></div></p>"
-        )
+        #expect(output == """
+        <p><div style="font-family: Arial; font-size: 1.5em; font-weight: 400">\
+        <span class="font-inherit">Sample text</span></div></p>
+        """)
     }
 
     @Test("Font Family Application")
@@ -75,10 +74,10 @@ struct FontModifierTests {
 
         let output = element.render()
 
-        #expect(
-            output == "<p><div style=\"font-family: Times New Roman; font-size: 16px; font-weight: 400\">" +
-                      "<span class=\"font-inherit\">Sample text</span></div></p>"
-        )
+        #expect(output == """
+        <p><div style="font-family: Times New Roman; font-size: 16px; font-weight: 400">\
+        <span class="font-inherit">Sample text</span></div></p>
+        """)
     }
 
     @Test("Responsive Font Size Application")

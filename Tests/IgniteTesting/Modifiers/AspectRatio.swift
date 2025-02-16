@@ -14,49 +14,26 @@ import Testing
 @Suite("AspectRatio Tests")
 @MainActor
 struct AspectRatioTests {
-    @Test("Verify AspectRatio Modifiers")
-    func verifyAspectRatioModifiers() async throws {
-        let testCases: [(AspectRatio, String)] = [
-            (.square, "1x1"),
-            (.r4x3, "4x3"),
-            (.r16x9, "16x9"),
-            (.r21x9, "21x9")
-        ]
-
-        for (aspectRatio, expectedClass) in testCases {
-            let element = Text("Hello").aspectRatio(aspectRatio)
-            let output = element.render()
-
-            #expect(output == "<p class=\"ratio ratio-\(expectedClass)\">Hello</p>")
-        }
+    init() throws {
+        try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
 
-    @Test("Verify Content Modes")
-    func verifyContentModes() async throws {
-        let testCases: [(ContentMode, String)] = [
-            (.fit, "object-fit-contain"),
-            (.fill, "object-fit-cover")
-        ]
+    @Test("Verify AspectRatio Modifiers", arguments: AspectRatio.allCases)
+    func verifyAspectRatioModifiers(ratio: AspectRatio) async throws {
+        let element = Text("Hello").aspectRatio(ratio)
+        let output = element.render()
 
-        for (contentMode, expectedClass) in testCases {
-            let expectedRawValue = contentMode.htmlClass
-            #expect(expectedRawValue == expectedClass)
-        }
+        #expect(output == "<p class=\"ratio ratio-\(ratio.rawValue)\">Hello</p>")
     }
 
-    @Test("Verify Aspect Ratios with Content Modes")
-    func verifyAspectRatiosWithContentModes() async throws {
-        // swiftlint:disable:next large_tuple
-        let testCases: [(AspectRatio, ContentMode, String)] = [
-            (.square, .fit, "<div class=\"ratio ratio-1x1\"><i class=\"bi-swift object-fit-contain\"></i></div>"),
-            (.r4x3, .fill, "<div class=\"ratio ratio-4x3\"><i class=\"bi-swift object-fit-cover\"></i></div>")
-        ]
+    @Test("Verify Content Modes", arguments: AspectRatio.allCases, ContentMode.allCases)
+    func verifyContentModes(ratio: AspectRatio, mode: ContentMode) async throws {
+        let element = Image("/images/example.jpg").aspectRatio(ratio, contentMode: mode)
+        let output = element.render()
 
-        for (aspectRatio, contentMode, expectedOutput) in testCases {
-            let element = Image(systemName: "swift").aspectRatio(aspectRatio, contentMode: contentMode)
-            let output = element.render()
-
-            #expect(output == expectedOutput)
-        }
+        #expect(output == """
+        <div class="ratio ratio-\(ratio.rawValue)">\
+        <img alt="" src="/images/example.jpg" class="\(mode.htmlClass)" /></div>
+        """)
     }
 }
