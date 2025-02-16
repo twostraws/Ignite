@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `CustomAction` action.
 @Suite("CustomAction Tests")
 @MainActor
-struct CustomActionTests {
+class CustomActionTests: IgniteTestSuite {
     private nonisolated static let inputCode: [String] = [
         "example code",
         "special characters: \\@*_+-./",

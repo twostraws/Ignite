@@ -13,8 +13,7 @@ import Testing
 /// Tests for the `Section` element.
 @Suite("Section Tests")
 @MainActor
-
-struct SectionTests {
+class SectionTests: IgniteTestSuite {
     @Test("Section")
     func section() async throws {
         let element = Section {

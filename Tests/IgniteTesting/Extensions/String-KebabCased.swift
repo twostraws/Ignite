@@ -14,7 +14,6 @@ import Testing
 @Suite("String-KebabCased Tests")
 @MainActor
 struct StringKebabCasedTests {
-
     /// Some types of string will have an output that's the same as their input.
     /// Test examples of each of those cases
     @Test("Noop Cases", arguments: [

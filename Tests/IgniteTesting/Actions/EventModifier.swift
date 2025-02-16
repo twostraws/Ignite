@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `EventModifier` action.
 @Suite("EventModifier Tests")
 @MainActor
-struct EventModifierTests {
+class EventModifierTests: IgniteTestSuite {
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "section"]
 
     private static let events: [EventType] = [
@@ -31,10 +31,6 @@ struct EventModifierTests {
         [CustomAction("document.writeline('foo')"), ShowElement("qux")],
         [ShowModal(id: "foo"), HideElement("qux")]
     ]
-
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
 
     @Test("Events are added", arguments: tags, await Array(zip(events, actions)))
     func eventsAdded(tag: String, eventActions: (EventType, [any Action])) async throws {

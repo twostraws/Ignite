@@ -14,7 +14,6 @@ import Testing
 @Suite("String-TruncatedHash Tests")
 @MainActor
 struct StringTruncatedHashTests {
-
     struct Instance {
         let input: String
         let expected: String

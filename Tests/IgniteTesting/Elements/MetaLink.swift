@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `MetaLink` element.
 @Suite("MetaLink Tests")
 @MainActor
-struct MetaLinkTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class MetaLinkTests: IgniteTestSuite {
     @Test("href string and rel string")
     func hrefStringAndRelString() async throws {
         let element = MetaLink(href: "https://www.example.com", rel: "canonical")

@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `BadgeModifier` modifier.
 @Suite("BadgeModifier Tests")
 @MainActor
-struct BadgeModifierTests {
+class BadgeModifierTests: IgniteTestSuite {
     @Test("Badge Modifier for InlineHTML")
     func badgeModifierForInlineHTML() async throws {
         let element = Text("Notifications").badge(Badge("3"))

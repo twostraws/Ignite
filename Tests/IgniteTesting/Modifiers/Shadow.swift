@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Shadow` modifier.
 @Suite("Shadow Tests")
 @MainActor
-struct ShadowTests {
+class ShadowTests: IgniteTestSuite {
     @Test("Shadow Modifier", arguments: [5, 20])
     func shadowRadius(radius: Int) async throws {
         let element = Span("Hello").shadow(radius: radius)

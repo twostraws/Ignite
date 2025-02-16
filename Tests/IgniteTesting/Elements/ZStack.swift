@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `ZStack` element.
 @Suite("ZStack Tests")
 @MainActor
-struct ZStackTests {
+class ZStackTests: IgniteTestSuite {
     static let alignments: [UnitPoint] = [
         .top, .topLeading, .topTrailing,
         .leading, .center, .trailing,

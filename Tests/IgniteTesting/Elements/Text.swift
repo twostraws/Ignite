@@ -11,7 +11,7 @@ import Testing
 
 /// Tests for the `Text` element.
 @Suite("Text Tests")
-@MainActor struct TextTests {
+@MainActor class TextTests: IgniteTestSuite {
     @Test("Simple String")
     func simpleString() async throws {
         let element = Text("Hello")
