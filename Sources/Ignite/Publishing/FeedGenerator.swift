@@ -7,14 +7,21 @@
 
 @MainActor
 struct FeedGenerator {
+    var feedConfig: FeedConfiguration
     var site: any Site
     var content: [Content]
+
+    init(config: FeedConfiguration, site: any Site, content: [Content]) {
+        self.feedConfig = config
+        self.site = site
+        self.content = content
+    }
 
     func generateFeed() -> String {
         let contentXML = generateContentXML()
         var result = generateRSSHeader()
 
-        if let image = site.feedConfiguration.image {
+        if let image = feedConfig.image {
             result += """
             <image>\
             <url>\(image.url)</url>\
@@ -37,16 +44,16 @@ struct FeedGenerator {
 
     private func generateContentXML() -> String {
         content
-            .prefix(site.feedConfiguration.contentCount)
+            .prefix(feedConfig.contentCount)
             .map { item in
                 var itemXML = """
-            <item>\
-            <guid isPermaLink="true">\(item.path(in: site))</guid>\
-            <title>\(item.title)</title>\
-            <link>\(item.path(in: site))</link>\
-            <description><![CDATA[\(item.description)]]></description>\
-            <pubDate>\(item.date.asRFC822(timeZone: site.timeZone))</pubDate>
-            """
+                <item>\
+                <guid isPermaLink="true">\(item.path(in: site))</guid>\
+                <title>\(item.title)</title>\
+                <link>\(item.path(in: site))</link>\
+                <description><![CDATA[\(item.description)]]></description>\
+                <pubDate>\(item.date.asRFC822(timeZone: site.timeZone))</pubDate>
+                """
 
                 let authorName = item.author ?? site.author
 
@@ -58,7 +65,7 @@ struct FeedGenerator {
                     itemXML += "<category><![CDATA[\(tag)]]></category>"
                 }
 
-                if site.feedConfiguration.mode == .full {
+                if feedConfig.mode == .full {
                     itemXML += """
                     <content:encoded>\
                     <![CDATA[\(item.body.makingAbsoluteLinks(relativeTo: site.url))]]>\
@@ -83,7 +90,7 @@ struct FeedGenerator {
         <description>\(site.description ?? "")</description>\
         <link>\(site.url.absoluteString)</link>\
         <atom:link
-            href="\(site.url.appending(path: site.feedConfiguration.path).absoluteString)"
+            href="\(site.url.appending(path: feedConfig.path).absoluteString)"
             rel="self" type="application/rss+xml"
         />\
         <language>\(site.language.rawValue)</language>\
