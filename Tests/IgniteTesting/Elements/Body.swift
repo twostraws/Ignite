@@ -13,23 +13,21 @@ import Testing
 /// Tests for the `title` element.
 @Suite("Body Tests")
 @MainActor struct SubsiteBodyTests {
-   static let sites: [any Site] = [TestSite(), TestSubsite()]
+    static let sites: [any Site] = [TestSite(), TestSubsite()]
 
-   @Test("Simple Body Test", arguments: await Self.sites)
-   func simpleBody(for site: any Site) async throws {
-       try PublishingContext.initialize(for: site, from: #filePath)
+    @Test("Simple Body Test", arguments: await Self.sites)
+    func simpleBody(for site: any Site) async throws {
+        try PublishingContext.initialize(for: site, from: #filePath)
 
-       let element = Body()
-       let output = element.render()
+        let element = Body()
+        let output = element.render()
 
-       let jsPath = site.url.pathComponents.count <= 1 ? "/js" : "\(site.url.path)/js"
-       #expect(
-           output == """
-           <body class="container">\
-           <script src="\(jsPath)/bootstrap.bundle.min.js"></script>\
-           <script src="\(jsPath)/ignite-core.js"></script>\
-           </body>
-           """
-       )
-   }
+        let jsPath = site.url.pathComponents.count <= 1 ? "/js" : "\(site.url.path)/js"
+        #expect(output == """
+        <body class="container">\
+        <script src="\(jsPath)/bootstrap.bundle.min.js"></script>\
+        <script src="\(jsPath)/ignite-core.js"></script>\
+        </body>
+        """)
+    }
 }

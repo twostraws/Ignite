@@ -14,7 +14,7 @@ import Testing
 @Suite("TextDecoration Tests")
 @MainActor
 struct TextDecorationModifierTests {
-    @Test("TextDecoration modifiers test", arguments: TextDecoration.allCases)
+    @Test("Text Decoration Modifier", arguments: TextDecoration.allCases)
     func textDecorationNone(_ decoration: TextDecoration) async throws {
         let element = Span("Hello, World!").textDecoration(decoration)
         let output = element.render()
