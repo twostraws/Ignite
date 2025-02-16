@@ -9,9 +9,6 @@
 public struct FeedConfiguration: Sendable {
     /// How much content should be provided in this feed.
     public enum ContentMode: Sendable {
-        /// Disable the feed entirely.
-        case disabled
-
         /// Provide only the description of each piece of content.
         case descriptionOnly
 
@@ -50,7 +47,7 @@ public struct FeedConfiguration: Sendable {
     /// How much content should be provided in this feed.
     var mode: ContentMode
 
-    /// How many items of contentshould be returned.
+    /// How many items of content should be returned.
     var contentCount: Int
 
     /// The path to where the generated rss xml file for the feed endpoint should be.
@@ -65,13 +62,14 @@ public struct FeedConfiguration: Sendable {
 
     /// Creates a custom feed configuration from the options provided.
     /// - Parameters:
-    ///   - mode: Whether to descriptions or full article text, or to disable the
-    ///   feed entirely.
+    ///   - mode: Whether to descriptions or full article text.
     ///   - contentCount: How many pieces of content to return.
+    ///   Initializer returns `nil` if less than or equal to `0`.
     ///   - path: The path where the RSS feed should be accessible, default to /feed.rss
     ///   - image: An optional image used to customize your feed's
     ///   appearance in feed readers.
-    public init(mode: ContentMode, contentCount: Int, path: String = "/feed.rss", image: FeedImage? = nil) {
+    public init?(mode: ContentMode, contentCount: Int, path: String = "/feed.rss", image: FeedImage? = nil) {
+        guard contentCount > 0 else { return nil }
         self.mode = mode
         self.contentCount = contentCount
         self.path = path

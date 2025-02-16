@@ -24,10 +24,7 @@ public struct EnvironmentValues {
     public var content: ContentLoader
 
     /// Configuration for RSS/Atom feed generation.
-    public var feedConfiguration: FeedConfiguration
-
-    /// Whether feed generation is enabled for the site.
-    public var isFeedEnabled: Bool
+    public var feedConfiguration: FeedConfiguration?
 
     /// Available themes for the site, including light, dark, and any alternates.
     public var themes: [any Theme] = []
@@ -65,7 +62,6 @@ public struct EnvironmentValues {
     public init() {
         self.content = ContentLoader(content: [])
         self.feedConfiguration = FeedConfiguration(mode: .full, contentCount: 0)
-        self.isFeedEnabled = false
         self.themes = []
         self.decode = .init(sourceDirectory: URL(filePath: ""))
         self.author = ""
@@ -83,7 +79,6 @@ public struct EnvironmentValues {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.content = ContentLoader(content: allContent)
         self.feedConfiguration = site.feedConfiguration
-        self.isFeedEnabled = site.isFeedEnabled
         self.themes = site.allThemes
         self.author = site.author
         self.siteName = site.name

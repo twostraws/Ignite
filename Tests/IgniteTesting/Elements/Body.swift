@@ -19,7 +19,7 @@ import Testing
    func simpleBody(for site: any Site) async throws {
        try PublishingContext.initialize(for: site, from: #filePath)
 
-       let element = HTMLBody(
+       let element = Body(
            for: Page(
                title: "TITLE", description: "DESCRIPTION",
                url: site.url,
