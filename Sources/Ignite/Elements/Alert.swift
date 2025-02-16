@@ -26,7 +26,7 @@ public struct Alert: BlockHTML {
 
     var alertClasses: [String] {
         var outputClasses = ["alert"]
-        outputClasses.append(contentsOf: attributes.classes.sorted())
+        outputClasses.append(contentsOf: descriptor.classes.sorted())
 
         switch role {
         case .default:
@@ -52,7 +52,7 @@ public struct Alert: BlockHTML {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.append(containerAttributes: .init(classes: alertClasses))
         return attributes.description(wrapping: content.render())
     }

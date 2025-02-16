@@ -38,7 +38,7 @@ public struct Section: BlockHTML {
 
     public func render() -> String {
         let content = items.map { $0.render() }.joined()
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = "div"
         return attributes.description(wrapping: content)
     }

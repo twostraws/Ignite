@@ -37,13 +37,13 @@ public struct Video: BlockHTML, InlineElement, LazyLoadable {
     ///   - files: The user videos to render.
     /// - Returns: The HTML for this element.
     public func render(files: [String]) -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = "video controls"
         attributes.closingTag = "video"
 
         let sources = files.compactMap { filename in
             guard let fileType = videoType(for: filename) else { return nil }
-            var sourceAttributes = CoreAttributes()
+            var sourceAttributes = Descriptor()
             sourceAttributes.selfClosingTag = "source"
             sourceAttributes.append(customAttributes:
                 .init(name: "src", value: filename),

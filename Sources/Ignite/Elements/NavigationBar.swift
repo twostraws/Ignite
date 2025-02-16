@@ -170,7 +170,7 @@ public struct NavigationBar: BlockHTML {
                 }
                 .class(widthClasses)
             }
-            .attributes(attributes)
+            .attributes(descriptor)
             .class("navbar", "navbar-expand-md")
             .data("bs-theme", theme(for: style))
         }

@@ -108,7 +108,7 @@ public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownItem {
         if let name = target.name {
             var copy = self
             let attribute = Attribute(name: "target", value: name)
-            copy.attributes.customAttributes.append(attribute)
+            copy.descriptor.customAttributes.append(attribute)
             return copy
         } else {
             return self
@@ -158,7 +158,7 @@ public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownItem {
         var copy = self
         let attributeValue = relationship.map(\.rawValue).joined(separator: " ")
         let attribute = Attribute(name: "rel", value: attributeValue)
-        copy.attributes.customAttributes.append(attribute)
+        copy.descriptor.customAttributes.append(attribute)
         return copy
     }
 
@@ -172,7 +172,7 @@ public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownItem {
 
     /// Whether this link contains sensitive content that should be protected
     private var isPrivacySensitive: Bool {
-        attributes.customAttributes.contains { $0.name == "privacy-sensitive" }
+        descriptor.customAttributes.contains { $0.name == "privacy-sensitive" }
     }
 
     /// Renders a link with privacy protection enabled, encoding the URL and optionally the display content.
@@ -180,7 +180,7 @@ public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownItem {
     /// - Returns: An HTML anchor tag with encoded attributes and content.
     private func renderPrivacyProtectedLink() -> String {
         let displayText = content.render()
-        let encodingType = attributes.customAttributes.first { $0.name == "privacy-sensitive" }?.value ?? "urlOnly"
+        let encodingType = descriptor.customAttributes.first { $0.name == "privacy-sensitive" }?.value ?? "urlOnly"
 
         let encodedUrl = Data(url.utf8).base64EncodedString()
         let displayContent = switch encodingType {
@@ -188,7 +188,7 @@ public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownItem {
         default: displayText
         }
 
-        var linkAttributes = attributes.appending(classes: linkClasses)
+        var linkAttributes = descriptor.appending(classes: linkClasses)
         linkAttributes.classes.append("protected-link")
         linkAttributes.data.append(Attribute(name: "encoded-url", value: encodedUrl))
 
@@ -202,7 +202,7 @@ public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownItem {
     /// Renders a standard link with the provided URL and content.
     /// - Returns: An HTML anchor tag with the appropriate href and content.
     private func renderStandardLink() -> String {
-        var linkAttributes = attributes.appending(classes: linkClasses)
+        var linkAttributes = descriptor.appending(classes: linkClasses)
 
         // char[0] of the 'url' is '/' for an asset; not for a site URL
         let basePath = url.starts(with: "/") ? publishingContext.site.url.path : ""

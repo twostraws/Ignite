@@ -36,7 +36,7 @@ public struct Audio: BlockHTML, InlineElement, LazyLoadable {
     ///   - files: The user audios to render.
     /// - Returns: The HTML for this element.
     public func render(files: [String]) -> String {
-        var output = "<audio controls\(attributes.description())>"
+        var output = "<audio controls\(descriptor.description())>"
 
         for filename in files {
             if let fileType = audioType(for: filename) {

@@ -28,7 +28,7 @@ public typealias Date = Foundation.Date
 
 /// A handful of attributes that all HTML types must support, either for
 /// rendering or for publishing purposes.
-struct CoreAttributes: Sendable {
+struct Descriptor: Sendable {
     /// A unique identifier. Can be empty.
     var id = ""
 
@@ -244,7 +244,7 @@ struct CoreAttributes: Sendable {
     /// - Parameter classes: The CSS classes to append.
     /// - Returns: A copy of the previous `CoreAttributes` object with
     /// the extra CSS classes applied.
-    func appending(classes: [String]) -> CoreAttributes {
+    func appending(classes: [String]) -> Descriptor {
         var copy = self
         copy.classes.formUnion(classes)
         return copy
@@ -266,7 +266,7 @@ struct CoreAttributes: Sendable {
     /// - Parameter aria: The aria to append
     /// - Returns: A copy of the previous `CoreAttributes` object with
     /// the extra aria applied.
-    func appending(aria: Attribute?) -> CoreAttributes {
+    func appending(aria: Attribute?) -> Descriptor {
         guard let aria else { return self }
 
         var copy = self

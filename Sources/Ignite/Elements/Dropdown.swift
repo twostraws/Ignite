@@ -88,12 +88,12 @@ public struct Dropdown: BlockHTML, NavigationItem {
     public func render() -> String {
         if isNavigationItem {
             Group(renderDropdownContent())
-                .attributes(attributes)
+                .attributes(descriptor)
                 .class("dropdown")
                 .render()
         } else {
             Section(renderDropdownContent())
-                .attributes(attributes)
+                .attributes(descriptor)
                 .class("dropdown")
                 .render()
         }

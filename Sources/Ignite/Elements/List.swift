@@ -79,8 +79,8 @@ public struct List: BlockHTML {
         return copy
     }
 
-    private func getAttributes() -> CoreAttributes {
-        var listAttributes = attributes
+    private func getAttributes() -> Descriptor {
+        var listAttributes = descriptor
 
         if listStyle != .plain {
             listAttributes.append(classes: "list-group")

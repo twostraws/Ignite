@@ -24,7 +24,7 @@ struct Label: InlineElement {
     }
 
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = "label"
         return attributes.description(wrapping: text)
     }

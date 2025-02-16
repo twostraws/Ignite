@@ -47,7 +47,7 @@ public struct ZStack: BlockHTML {
         }
 
         items.enumerated().forEach { index, item in
-            var elementAttributes = CoreAttributes()
+            var elementAttributes = Descriptor()
             elementAttributes.append(styles: [
                 .init(.gridArea, value: "1/1"),
                 .init(.zIndex, value: "\(index)"),
@@ -60,7 +60,7 @@ public struct ZStack: BlockHTML {
             AttributeStore.default.merge(elementAttributes, intoHTML: item.id)
         }
 
-        var attributes = attributes
+        var attributes = descriptor
         attributes.append(styles: .init(.display, value: "grid"))
 
         AttributeStore.default.merge(attributes, intoHTML: id)

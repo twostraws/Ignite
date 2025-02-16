@@ -42,7 +42,7 @@ public struct AnyHTML: HTML, BlockHTML, InlineElement {
     /// Renders the wrapped HTML content using the given publishing context
     /// - Returns: The rendered HTML string
     public func render() -> String {
-        AttributeStore.default.merge(attributes, intoHTML: wrapped.id)
+        AttributeStore.default.merge(descriptor, intoHTML: wrapped.id)
         return wrapped.render()
     }
 }

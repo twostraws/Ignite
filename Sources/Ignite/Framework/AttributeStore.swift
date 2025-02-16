@@ -11,13 +11,13 @@ public class AttributeStore {
     @MainActor static let `default` = AttributeStore()
 
     /// Storage dictionary mapping element IDs to their core attributes
-    var storage: [String: CoreAttributes] = [:]
+    var storage: [String: Descriptor] = [:]
 
     /// Retrieves the core attributes for a given element ID
     /// - Parameter elementID: The unique identifier of the HTML element
     /// - Returns: The core attributes for the element, or new empty attributes if none exist
-    func attributes(for elementID: String) -> CoreAttributes {
-        storage[elementID] ?? CoreAttributes()
+    func attributes(for elementID: String) -> Descriptor {
+        storage[elementID] ?? Descriptor()
     }
 
     /// Merges new attributes with existing ones for a specific HTML element
@@ -27,12 +27,12 @@ public class AttributeStore {
     ///   - removedStyles: Optional array of styles to remove after merging
     ///   - removedClasses: Optional array of classes to remove after merging
     private func mergeAttributes(
-        _ attributes: CoreAttributes,
+        _ attributes: Descriptor,
         intoHTML id: String,
         removedStyles: [InlineStyle]? = nil,
         removedClasses: [String]? = nil
-    ) -> CoreAttributes {
-        let currentAttributes = storage[id] ?? CoreAttributes()
+    ) -> Descriptor {
+        let currentAttributes = storage[id] ?? Descriptor()
         var mergedAttributes = currentAttributes
 
         mergedAttributes.styles.formUnion(attributes.styles)
@@ -64,7 +64,7 @@ public class AttributeStore {
     /// - Parameters:
     ///   - attributes: The new attributes to merge
     ///   - id: The unique identifier of the HTML element
-    func merge(_ attributes: CoreAttributes, intoHTML id: String) {
+    func merge(_ attributes: Descriptor, intoHTML id: String) {
         storage[id] = mergeAttributes(attributes, intoHTML: id)
     }
 
@@ -73,7 +73,7 @@ public class AttributeStore {
     ///   - attributes: The new attributes to merge
     ///   - id: The unique identifier of the HTML element
     ///   - styles: Array of styles to remove after merging
-    func merge(_ attributes: CoreAttributes, intoHTML id: String, removing styles: some Collection<InlineStyle>) {
+    func merge(_ attributes: Descriptor, intoHTML id: String, removing styles: some Collection<InlineStyle>) {
         storage[id] = mergeAttributes(attributes, intoHTML: id, removedStyles: Array(styles))
     }
 
@@ -82,7 +82,7 @@ public class AttributeStore {
     ///   - attributes: The new attributes to merge
     ///   - id: The unique identifier of the HTML element
     ///   - classes: Array of classes to remove after merging
-    func merge(_ attributes: CoreAttributes, intoHTML id: String, removing classes: some Collection<String>) {
+    func merge(_ attributes: Descriptor, intoHTML id: String, removing classes: some Collection<String>) {
         storage[id] = mergeAttributes(attributes, intoHTML: id, removedClasses: Array(classes))
     }
 }

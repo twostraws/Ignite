@@ -56,7 +56,7 @@ public extension HTML {
 
 extension HTML {
     /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
-    var attributes: CoreAttributes {
+    var descriptor: Descriptor {
         get { AttributeStore.default.attributes(for: id) }
         set { AttributeStore.default.merge(newValue, intoHTML: id) }
     }
@@ -120,7 +120,7 @@ public extension HTML {
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
     @discardableResult func `class`(_ newClasses: String?...) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         let compacted = newClasses.compactMap(\.self)
         attributes.classes.formUnion(compacted)
         AttributeStore.default.merge(attributes, intoHTML: id)
@@ -133,7 +133,7 @@ public extension HTML {
     ///   - value: The value.
     /// - Returns: The modified `HTML` element
     @discardableResult func style(_ property: Property, _ value: String) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.styles.append(.init(property, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -143,7 +143,7 @@ public extension HTML {
     /// - Parameter string: The ID value to set
     /// - Returns: The modified `HTML` element
     func id(_ string: String) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.id = string
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -156,7 +156,7 @@ public extension HTML {
     /// - Returns: The modified `HTML` element
     func aria(_ key: AriaType, _ value: String?) -> Self {
         guard let value else { return self }
-        var attributes = attributes
+        var attributes = descriptor
         attributes.aria.append(Attribute(name: key.rawValue, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -168,7 +168,7 @@ public extension HTML {
     ///   - value: The value of the custom attribute
     /// - Returns: The modified `HTML` element
     @discardableResult func customAttribute(name: String, value: String) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.customAttributes.append(Attribute(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -180,7 +180,7 @@ extension HTML {
     /// - Parameter newClasses: `Array` of class names to add
     /// - Returns: The modified `HTML` element
     func `class`(_ newClasses: [String]) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         for case let newClass? in newClasses where !attributes.classes.contains(newClass) {
             if !newClass.isEmpty {
                 attributes.classes.append(newClass)
@@ -197,7 +197,7 @@ extension HTML {
     /// - Returns: The modified `HTML` element
     @discardableResult func data(_ name: String, _ value: String?) -> Self {
         guard let value else { return self }
-        var attributes = attributes
+        var attributes = descriptor
         attributes.data.append(Attribute(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -207,7 +207,7 @@ extension HTML {
     /// - Parameter values: Variable number of `AttributeValue` objects
     /// - Returns: The modified `HTML` element
     func style(_ values: InlineStyle?...) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.styles.formUnion(values.compactMap(\.self))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -219,7 +219,7 @@ extension HTML {
     ///   - value: The value.
     /// - Returns: The modified `HTML` element
     func style(_ property: String, _ value: String) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.styles.append(.init(property, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -232,7 +232,7 @@ extension HTML {
     /// - Returns: The modified `HTML` element
     @discardableResult func addEvent(name: String, actions: [Action]) -> Self {
         guard !actions.isEmpty else { return self }
-        var attributes = attributes
+        var attributes = descriptor
         attributes.events.append(Event(name: name, actions: actions))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -245,7 +245,7 @@ extension HTML {
     /// - Returns: The modified `HTML` element
     func customAttribute(_ attribute: Attribute?) -> Self {
         guard let attribute else { return self }
-        var attributes = attributes
+        var attributes = descriptor
         attributes.customAttributes.append(attribute)
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -255,7 +255,7 @@ extension HTML {
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified HTML element
     /// - Note: Uses AttributeStore for persistent storage and merging
-    func attributes(_ attributes: CoreAttributes) -> Self {
+    func attributes(_ attributes: Descriptor) -> Self {
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -264,7 +264,7 @@ extension HTML {
     /// - Parameter newAttributes: The attributes to apply to the wrapper div
     /// - Returns: The original element
     func containerAttributes(_ newAttributes: ContainerAttributes...) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.containerAttributes.formUnion(newAttributes.map { $0 })
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -274,7 +274,7 @@ extension HTML {
     /// - Parameter className: The class to apply to the wrapper div
     /// - Returns: The original element
     func containerClass(_ className: String) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.containerAttributes.append(.init(classes: [className]))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -284,7 +284,7 @@ extension HTML {
     /// - Parameter styles: The styles to apply to the wrapper div
     /// - Returns: The original element
     func containerStyle(_ styles: InlineStyle...) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.containerAttributes.append(.init(styles: OrderedSet(styles)))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
@@ -299,7 +299,7 @@ extension HTML {
     }
 
     @discardableResult func tag(_ tag: String) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = tag
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self

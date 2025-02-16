@@ -101,7 +101,7 @@ public struct Table: BlockHTML {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var tableAttributes = attributes.appending(classes: ["table"])
+        var tableAttributes = descriptor.appending(classes: ["table"])
 
         if hasBorderEnabled {
             tableAttributes.append(classes: ["table-bordered"])
