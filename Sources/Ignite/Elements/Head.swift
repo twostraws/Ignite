@@ -90,6 +90,7 @@ public struct Head: RootElement {
 
         if context.hasSyntaxHighlighters, site.allHighlighterThemes.isEmpty == false {
             MetaLink.highlighterThemeMetaLinks(for: site.allHighlighterThemes)
+            MetaLink.prismPluginCSS
         }
 
         if site.builtInIconsEnabled == .localBootstrap {

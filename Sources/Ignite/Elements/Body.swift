@@ -41,6 +41,7 @@ public struct Body: RootElement {
     }
 
     public func render() -> String {
+        var attributes = attributes
         var output = ""
 
         // Render main content
@@ -56,6 +57,18 @@ public struct Body: RootElement {
             output += Script(file: "/js/syntax-highlighting.js").render()
         }
 
+        if case .visible(let firstLine, let shouldWrap) =
+            publishingContext.site.syntaxHighlighterConfiguration.lineNumberVisibility {
+
+            attributes.append(classes: "line-numbers")
+            if firstLine != 1 {
+                attributes.append(dataAttributes: .init(name: "start", value: firstLine.formatted()))
+            }
+            if shouldWrap {
+                attributes.append(styles: .init(.whiteSpace, value: "pre-wrap"))
+            }
+        }
+
         if output.contains(#"data-bs-toggle="tooltip""#) {
             output += Script(code: """
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -65,7 +78,6 @@ public struct Body: RootElement {
 
         output += Script(file: "/js/ignite-core.js").render()
 
-        var attributes = attributes
         attributes.tag = "body"
         if isBoundByContainer {
             attributes.append(classes: ["container"])
