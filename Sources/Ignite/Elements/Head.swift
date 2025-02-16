@@ -64,7 +64,7 @@ public struct Head: RootElement {
         MetaTag.utf8
         MetaTag.flexibleViewport
 
-        let environment = EnvironmentStore.current
+        let environment = PublishingContext.default.environment
         let pageDescription = environment.pageDescription
 
         if pageDescription.isEmpty == false {

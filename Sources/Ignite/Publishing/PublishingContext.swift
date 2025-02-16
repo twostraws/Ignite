@@ -308,7 +308,7 @@ final class PublishingContext {
             allContent: allContent,
             page: page)
 
-        return EnvironmentStore.update(values) {
+        return withEnvironment(values) {
             finalLayout.body.render()
         }
     }
@@ -332,7 +332,7 @@ final class PublishingContext {
         let finalLayout: any Layout = staticLayout.parentLayout is MissingLayout ?
             site.layout : staticLayout.parentLayout
 
-        let outputString = EnvironmentStore.update(values) {
+        let outputString = withEnvironment(values) {
             finalLayout.body.render()
         }
 

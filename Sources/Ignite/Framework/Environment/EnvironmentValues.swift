@@ -142,7 +142,7 @@ public struct EnvironmentValues {
         self.pageURL = pageURL
         self.pageImage = page.image
 
-        self.pageContent = EnvironmentStore.update(self) {
+        self.pageContent = PublishingContext.default.withEnvironment(self) {
             page.body
         }
     }
@@ -173,7 +173,7 @@ public struct EnvironmentValues {
         self.pageURL = page.url
         self.pageImage = page.image
 
-        self.pageContent = EnvironmentStore.update(self) {
+        self.pageContent = PublishingContext.default.withEnvironment(self) {
             page.body
         }
     }

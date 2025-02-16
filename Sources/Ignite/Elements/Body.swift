@@ -25,7 +25,7 @@ public struct Body: RootElement {
     }
 
     public init() {
-        let pageContent = EnvironmentStore.current.pageContent
+        let pageContent = PublishingContext.default.environment.pageContent
         self.items = flatUnwrap(pageContent)
     }
 

@@ -146,7 +146,7 @@ public struct MetaTag: HeadElement, Sendable {
     /// into your page header to enable social sharing.
     @ElementBuilder<MetaTag> public static func socialSharingTags() -> [MetaTag] {
         let site = PublishingContext.default.site
-        let environment = EnvironmentStore.current
+        let environment = PublishingContext.default.environment
 
         MetaTag(.openGraphSiteName, content: site.name)
 
