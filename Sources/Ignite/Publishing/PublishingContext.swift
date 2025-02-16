@@ -58,6 +58,9 @@ final class PublishingContext {
     /// Any errors that have been issued during a build.
     private(set) var errors = [PublishingError]()
 
+    /// The current environment values for the application.
+    var environment = EnvironmentValues()
+
     /// All the Markdown content this user has inside their Content folder.
     private(set) var allContent = [Content]()
 
@@ -301,7 +304,7 @@ final class PublishingContext {
 
         return PageContext.withCurrentPage(page) {
             let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-            return EnvironmentStore.update(values) {
+            return withEnvironment(values) {
                 finalLayout.body.render()
             }
         }
@@ -317,7 +320,7 @@ final class PublishingContext {
         currentRenderingPath = isHomePage ? "/" : staticLayout.path
 
         let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        let body = EnvironmentStore.update(values) {
+        let body = withEnvironment(values) {
             staticLayout.body
         }
 
@@ -341,7 +344,7 @@ final class PublishingContext {
 
         let body = ContentContext.withCurrentContent(content) {
             let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-            return EnvironmentStore.update(values) {
+            return withEnvironment(values) {
                 Section(layout.body)
             }
         }
@@ -382,5 +385,17 @@ final class PublishingContext {
         } else {
             fatalError(.missingDefaultLayout)
         }
+    }
+
+    /// Temporarily updates the environment values for the duration of an operation.
+    /// - Parameters:
+    ///   - environment: The new environment values to use
+    ///   - operation: A closure that executes with the temporary environment
+    /// - Returns: The value returned by the operation
+    func withEnvironment<T>(_ environment: EnvironmentValues, operation: () -> T) -> T {
+        let previous = self.environment
+        self.environment = environment
+        defer { self.environment = previous }
+        return operation()
     }
 }
