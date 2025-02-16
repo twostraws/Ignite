@@ -7,13 +7,13 @@
 
 /// A protocol for customizing the layout of ContentPreview.
 public protocol ContentPreviewStyle {
-    func body(content: Content) -> any BlockHTML
+    func body(content: Content) -> any HTML
 }
 
 /// A wrapper around Card, specifically aimed at presenting details about
 /// some content on your site. This automatically links to your content page
 /// and adds in tags.
-public struct ContentPreview: BlockHTML {
+public struct ContentPreview: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -24,9 +24,6 @@ public struct ContentPreview: BlockHTML {
     public var isPrimitive: Bool { true }
 
     var content: Content
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// Custom style for the content preview.
     private var style: ContentPreviewStyle?
@@ -62,7 +59,7 @@ public struct ContentPreview: BlockHTML {
 
     /// Default card layout for rendering the content preview.
     /// - Returns: A BlockElement representing the card layout.
-    private func defaultCardLayout() -> some BlockHTML {
+    private func defaultCardLayout() -> some HTML {
         Card(imageName: content.image) {
             Text(content.description)
                 .margin(.bottom, .none)

@@ -12,7 +12,7 @@
 ///
 /// - Note: Unlike ``Group``, modifiers applied to a `Section` affect the
 ///         containing element rather than being propagated to child elements.
-public struct Section: BlockHTML {
+public struct Section: HTML, HorizontalAligning {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

@@ -9,7 +9,7 @@ import Foundation
 
 /// Embeds some JavaScript inside this page, either directly or by
 /// referencing an external file.
-public struct Script: BlockHTML, HeadElement {
+public struct Script: HTML, HeadElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -18,9 +18,6 @@ public struct Script: BlockHTML, HeadElement {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The external file to load.
     private var file: String?
