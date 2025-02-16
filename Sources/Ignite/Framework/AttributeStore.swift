@@ -43,6 +43,7 @@ public class AttributeStore {
         mergedAttributes.containerAttributes.formUnion(attributes.containerAttributes)
         mergedAttributes.customAttributes.formUnion(attributes.customAttributes)
         mergedAttributes.id = attributes.id
+        mergedAttributes.columnWidth = attributes.columnWidth
 
         if attributes.tag != nil {
             mergedAttributes.tag = attributes.tag

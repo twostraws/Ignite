@@ -7,7 +7,7 @@
 
 /// A horizontal divider for your page, that can also be used to divide elements
 /// in a dropdown.
-public struct Divider: BlockHTML, DropdownItem {
+public struct Divider: HTML, DropdownItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -16,9 +16,6 @@ public struct Divider: BlockHTML, DropdownItem {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// Creates a new divider.
     public init() {}

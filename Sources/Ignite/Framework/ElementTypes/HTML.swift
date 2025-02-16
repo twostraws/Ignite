@@ -75,6 +75,11 @@ extension HTML {
         }
     }
 
+    /// How many columns this should occupy when placed in a grid.
+    var columnWidth: ColumnWidth {
+        attributes.columnWidth
+    }
+
     /// A Boolean value indicating whether this element contains multiple child elements.
     var isComposite: Bool {
         let bodyContent = body
@@ -301,6 +306,16 @@ extension HTML {
     @discardableResult func tag(_ tag: String) -> Self {
         var attributes = attributes
         attributes.tag = tag
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adjusts the number of columns assigned to this element.
+    /// - Parameter width: The new number of columns to use.
+    /// - Returns: A copy of the current element with the adjusted column width.
+    @discardableResult func columnWidth(_ width: ColumnWidth) -> Self {
+        var attributes = attributes
+        attributes.columnWidth = width
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
