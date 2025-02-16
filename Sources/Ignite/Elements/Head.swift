@@ -33,16 +33,12 @@ public struct Head: RootElement {
     /// A convenience initializer that creates a standard set of headers to use
     /// for a `Page` instance.
     /// - Parameters:
-    ///   - page: The `Page` you want to create headers for.
     ///   - configuration: The `SiteConfiguration`, which includes
     ///   information about the site being rendered and more.
     ///   - additionalItems: Additional items to enhance the set of standard headers.
-    public init(
-        for page: Page,
-        @HeadElementBuilder additionalItems: () -> [any HeadElement] = { [] }
-    ) {
-        items = Head.standardHeaders(for: page)
-        items += MetaTag.socialSharingTags(for: page)
+    public init(@HeadElementBuilder additionalItems: () -> [any HeadElement] = { [] }) {
+        items = Head.standardHeaders()
+        items += MetaTag.socialSharingTags()
         items += additionalItems()
     }
 
@@ -57,18 +53,17 @@ public struct Head: RootElement {
     /// A static function, returning the standard set of headers used for a `Page` instance.
     ///
     /// This function can be used when defining a custom header based on the standard set of headers.
-    /// - Parameters:
-    ///   - page: The `Page` you want to create headers for.
-    ///   - configuration: The active `SiteConfiguration`, which includes
-    ///   information about the site being rendered and more.
     @HeadElementBuilder
-    public static func standardHeaders(for page: Page) -> [any HeadElement] {
+    public static func standardHeaders() -> [any HeadElement] {
         // swiftlint:disable:previous cyclomatic_complexity
         MetaTag.utf8
         MetaTag.flexibleViewport
 
-        if page.description.isEmpty == false {
-            MetaTag(name: "description", content: page.description)
+        let environment = EnvironmentStore.current
+        let pageDescription = environment.pageDescription
+
+        if pageDescription.isEmpty == false {
+            MetaTag(name: "description", content: pageDescription)
         }
 
         let context = PublishingContext.default
@@ -80,7 +75,7 @@ public struct Head: RootElement {
 
         MetaTag.generator
 
-        Title(page.title)
+        Title(environment.pageTitle)
 
         if site.useDefaultBootstrapURLs == .localBootstrap {
             MetaLink.standardCSS
@@ -108,7 +103,7 @@ public struct Head: RootElement {
             MetaLink.mediaQueryCSS
         }
 
-        MetaLink(href: page.url, rel: "canonical")
+        MetaLink(href: environment.pageURL, rel: "canonical")
 
         if let favicon = site.favicon {
             MetaLink(href: favicon, rel: .icon)

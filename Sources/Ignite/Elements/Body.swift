@@ -24,8 +24,9 @@ public struct Body: RootElement {
         self.items = flatUnwrap(items())
     }
 
-    public init(for page: Page) {
-        self.items = flatUnwrap(page.body)
+    public init() {
+        let pageContent = EnvironmentStore.current.pageContent
+        self.items = flatUnwrap(pageContent)
     }
 
     /// Removes the Bootstrap `container` class from the body element.

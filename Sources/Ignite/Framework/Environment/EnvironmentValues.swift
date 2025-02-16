@@ -59,6 +59,21 @@ public struct EnvironmentValues {
     /// Configuration for Bootstrap icons
     public let builtInIconsEnabled: BootstrapOptions
 
+    /// The title of the current page.
+    public let pageTitle: String
+
+    /// A brief description of the current page.
+    public let pageDescription: String
+
+    /// The full URL where the current page will be published.
+    public let pageURL: URL
+
+    /// An optional image URL used by the page in social-media links.
+    public let pageImage: URL?
+
+    /// The content of the current page being rendered.
+    var pageContent: any HTML = EmptyHTML()
+
     public init() {
         self.content = ContentLoader(content: [])
         self.feedConfiguration = FeedConfiguration(mode: .full, contentCount: 0)
@@ -73,6 +88,11 @@ public struct EnvironmentValues {
         self.favicon = nil
         self.builtInIconsEnabled = .localBootstrap
         self.timeZone = .gmt
+
+        self.pageTitle = ""
+        self.pageDescription = ""
+        self.pageURL = URL(static: "https://example.com")
+        self.pageImage = nil
     }
 
     init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
@@ -89,5 +109,72 @@ public struct EnvironmentValues {
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
         self.timeZone = site.timeZone
+
+        self.pageTitle = ""
+        self.pageDescription = ""
+        self.pageURL = URL(static: "https://example.com")
+        self.pageImage = nil
+    }
+
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [Content],
+        pageURL: URL,
+        page: any StaticLayout
+    ) {
+        self.decode = DecodeAction(sourceDirectory: sourceDirectory)
+        self.content = ContentLoader(content: allContent)
+        self.feedConfiguration = site.feedConfiguration
+        self.themes = site.allThemes
+        self.author = site.author
+        self.siteName = site.name
+        self.siteTitleSuffix = site.titleSuffix
+        self.siteDescription = site.description
+        self.language = site.language
+        self.siteURL = site.url
+        self.favicon = site.favicon
+        self.builtInIconsEnabled = site.builtInIconsEnabled
+        self.timeZone = site.timeZone
+
+        self.pageTitle = page.title
+        self.pageDescription = page.description
+        self.pageURL = pageURL
+        self.pageImage = page.image
+
+        self.pageContent = EnvironmentStore.update(self) {
+            page.body
+        }
+    }
+
+    // Tempory initializer to bridge upcoming changes
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [Content],
+        page: Page
+    ) {
+        self.decode = DecodeAction(sourceDirectory: sourceDirectory)
+        self.content = ContentLoader(content: allContent)
+        self.feedConfiguration = site.feedConfiguration
+        self.themes = site.allThemes
+        self.author = site.author
+        self.siteName = site.name
+        self.siteTitleSuffix = site.titleSuffix
+        self.siteDescription = site.description
+        self.language = site.language
+        self.siteURL = site.url
+        self.favicon = site.favicon
+        self.builtInIconsEnabled = site.builtInIconsEnabled
+        self.timeZone = site.timeZone
+
+        self.pageTitle = page.title
+        self.pageDescription = page.description
+        self.pageURL = page.url
+        self.pageImage = page.image
+
+        self.pageContent = EnvironmentStore.update(self) {
+            page.body
+        }
     }
 }

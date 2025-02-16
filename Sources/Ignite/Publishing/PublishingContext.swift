@@ -299,11 +299,14 @@ final class PublishingContext {
             finalLayout = layout
         }
 
-        return PageContext.withCurrentPage(page) {
-            let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-            return EnvironmentStore.update(values) {
-                finalLayout.body.render()
-            }
+        let values = EnvironmentValues(
+            sourceDirectory: sourceDirectory,
+            site: site,
+            allContent: allContent,
+            page: page)
+
+        return EnvironmentStore.update(values) {
+            finalLayout.body.render()
         }
     }
 
@@ -316,20 +319,20 @@ final class PublishingContext {
         let path = isHomePage ? "" : staticLayout.path
         currentRenderingPath = isHomePage ? "/" : staticLayout.path
 
-        let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        let body = EnvironmentStore.update(values) {
-            staticLayout.body
+        let values = EnvironmentValues(
+            sourceDirectory: sourceDirectory,
+            site: site,
+            allContent: allContent,
+            pageURL: site.url.appending(path: path),
+            page: staticLayout)
+
+        let finalLayout: any Layout = staticLayout.parentLayout is MissingLayout ?
+            site.layout : staticLayout.parentLayout
+
+        let outputString = EnvironmentStore.update(values) {
+            finalLayout.body.render()
         }
 
-        let page = Page(
-            title: staticLayout.title,
-            description: staticLayout.description,
-            url: site.url.appending(path: path),
-            image: staticLayout.image,
-            body: body
-        )
-
-        let outputString = render(page, using: staticLayout.parentLayout)
         let outputDirectory = buildDirectory.appending(path: path)
         write(outputString, to: outputDirectory, priority: isHomePage ? 1 : 0.9)
     }
