@@ -9,7 +9,7 @@
 public struct EmptyLayout: Layout {
     public var body: some HTML {
         Root {
-            HTMLBody(for: page)
+            Body(for: page)
         }
     }
 

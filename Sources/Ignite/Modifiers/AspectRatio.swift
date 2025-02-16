@@ -6,7 +6,7 @@
 //
 
 /// Specific aspect ratios that are commonly used
-public enum AspectRatio: String {
+public enum AspectRatio: String, CaseIterable, Sendable {
     /// A square aspect ratio.
     case square = "1x1"
 
@@ -21,7 +21,7 @@ public enum AspectRatio: String {
 }
 
 /// The content mode of an element, e.g. an image, within its container.
-public enum ContentMode {
+public enum ContentMode: CaseIterable, Sendable {
     /// The element is sized to fit into the container.
     case fit
 

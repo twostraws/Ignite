@@ -14,7 +14,7 @@ import Testing
 @Suite("Modal Tests")
 @MainActor
 struct ModalTests {
-    @Test("Show Modals Test")
+    @Test("Show Modals")
     func showModal() async throws {
         let element = Modal(id: "showModalId") {
             Text("Dismiss me by clicking on the backdrop.")
@@ -33,7 +33,7 @@ struct ModalTests {
         """)
     }
 
-    @Test("Dismissing Modals Test")
+    @Test("Dismissing Modals")
     func dismissModal() async throws {
         let element = Modal(id: "dismissModalId") {
             Section {
@@ -49,6 +49,7 @@ struct ModalTests {
                 .margin(.xLarge)
         }
         let output = element.render()
+
         #expect(output == """
         <div id="dismissModalId" tabindex="-1" class="modal fade" aria-hidden="true" aria-labelledby="modalLabel">\
         <div class="modal-dialog modal-dialog-centered"><div class="modal-content">\
@@ -61,7 +62,7 @@ struct ModalTests {
         """)
     }
 
-    @Test("Modal Size Test",
+    @Test("Modal Size",
           arguments: Modal.Size.allCases)
     func checkModalSizes(sizeOption: Modal.Size) async throws {
         let element = Modal(id: "ModalId") {
@@ -84,7 +85,7 @@ struct ModalTests {
         }
     }
 
-    @Test("Modal Position Test", arguments: Modal.Position.allCases)
+    @Test("Modal Position", arguments: Modal.Position.allCases)
     func checkModalPosition(positionOption: Modal.Position) async throws {
         let element = Modal(id: "topModalId") {
             Text(markdown: "Modal with `Position`")
@@ -107,7 +108,7 @@ struct ModalTests {
 
     }
 
-    @Test("Modal Headers Test")
+    @Test("Modal Headers")
     func modalHeaders() async throws {
         let element = Modal(id: "headerModalId") {
             Text("Body")
@@ -132,7 +133,7 @@ struct ModalTests {
         """)
     }
 
-    @Test("Modal Footers Test")
+    @Test("Modal Footers")
     func modalFooters() async throws {
         let element = Modal(id: "footerModalId") {
             Text("Body")
@@ -148,6 +149,7 @@ struct ModalTests {
             .role(.primary)
         }
         let output = element.render()
+
         #expect(output == """
         <div id="footerModalId" tabindex="-1" class="modal fade" aria-hidden="true" aria-labelledby="modalLabel">\
         <div class="modal-dialog modal-dialog-centered"><div class="modal-content">\
@@ -160,7 +162,7 @@ struct ModalTests {
         """)
     }
 
-    @Test("Modal Headers and Footers Test")
+    @Test("Modal Headers and Footers")
     func modalHeadersAndFooters() async throws {
         let element = Modal(id: "headerAndFooterModalId") {
             Text("Body")
@@ -182,6 +184,7 @@ struct ModalTests {
             .role(.primary)
         }
         let output = element.render()
+
         #expect(output == """
         <div id="headerAndFooterModalId" tabindex="-1" class="\
         modal fade" aria-hidden="true" aria-labelledby="modalLabel">\
@@ -200,7 +203,7 @@ struct ModalTests {
         """)
     }
 
-    @Test("Modal Scrollable Content Test")
+    @Test("Modal Scrollable Content")
     func modalScrollableContent() async throws {
         let element = Modal(id: "modal7") {
             Text(placeholderLength: 1000)
@@ -217,7 +220,7 @@ struct ModalTests {
         """))
     }
 
-    @Test("Modals Presentation Options Test", arguments: [
+    @Test("Modals Presentation Options", arguments: [
         ShowModal.Option.backdrop(dismissible: true), ShowModal.Option.backdrop(dismissible: false),
         ShowModal.Option.noBackdrop, ShowModal.Option.focus(true), ShowModal.Option.focus(false),
         ShowModal.Option.keyboard(true), ShowModal.Option.keyboard(false)])

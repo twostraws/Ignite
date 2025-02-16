@@ -13,8 +13,7 @@ import Testing
 @Suite("ImageFitModifier Tests")
 @MainActor
 struct ImageFitModifierTests {
-
-    @Test("Test default parameters")
+    @Test("Default parameters")
     func testDefaultParameters() async throws {
         let image = Image("/images/example-image.jpg")
         let modifiedImage = image.imageFit()
@@ -24,7 +23,7 @@ struct ImageFitModifierTests {
         #expect(output.contains("object-position: 50% 50%"))
     }
 
-    @Test("Test custom fit and anchor parameters")
+    @Test("Custom fit and anchor parameters")
     func testCustomParameters() async throws {
         let image = Image("/images/example-image.jpg")
         let modifiedImage = image.imageFit(.fit, anchor: .bottomLeading)
@@ -34,12 +33,13 @@ struct ImageFitModifierTests {
         #expect(output.contains("object-position: 0% 100%"))
     }
 
-    @Test("Test different anchor points")
+    @Test("Different anchor points")
     func testDifferentAnchorPoints() async throws {
         let image = Image("/images/example-image.jpg")
         let topLeftImage = image.imageFit(anchor: .topLeading)
         let topLeftOutput = topLeftImage.render()
         #expect(topLeftOutput.contains("object-position: 0% 0%"))
+
         let bottomRightImage = image.imageFit(anchor: .bottomTrailing)
         let bottomRightOutput = bottomRightImage.render()
         #expect(bottomRightOutput.contains("object-position: 100% 100%"))

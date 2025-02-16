@@ -18,9 +18,6 @@ struct CodeTests {
     func inlineCode() async throws {
         let element = Code("background-color")
         let output = element.render()
-
-        #expect(
-            output == "<code>background-color</code>"
-        )
+        #expect(output == "<code>background-color</code>")
     }
 }

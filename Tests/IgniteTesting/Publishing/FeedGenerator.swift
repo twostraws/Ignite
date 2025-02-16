@@ -22,12 +22,13 @@ struct FeedGeneratorTests {
 
     @Test("generateFeed()", arguments: await sites)
     func generateFeed(for site: any Site) async throws {
-        let feedHref = site.url.appending(path: site.feedConfiguration.path).absoluteString
+        let config = site.feedConfiguration!
+        let feedHref = site.url.appending(path: config.path).absoluteString
         var exampleContent = Content()
         exampleContent.title = "Example Title"
         exampleContent.description = "Example Description"
 
-        let generator = FeedGenerator(site: site, content: [exampleContent])
+        let generator = FeedGenerator(config: config, site: site, content: [exampleContent])
 
         #expect(generator.generateFeed() == """
         <?xml version="1.0" encoding="UTF-8" ?>\
@@ -45,11 +46,11 @@ struct FeedGeneratorTests {
         <language>\(site.language.rawValue)</language>\
         <generator>\(Ignite.version)</generator>\
         <image>\
-        <url>\(site.feedConfiguration.image?.url ?? "")</url>\
+        <url>\(config.image?.url ?? "")</url>\
         <title>\(site.name)</title>\
         <link>\(site.url.absoluteString)</link>\
-        <width>\(site.feedConfiguration.image?.width ?? 0)</width>\
-        <height>\(site.feedConfiguration.image?.height ?? 0)</height>\
+        <width>\(config.image?.width ?? 0)</width>\
+        <height>\(config.image?.height ?? 0)</height>\
         </image>\
         <item>\
         <guid isPermaLink="true">\(exampleContent.path(in: site))</guid>\

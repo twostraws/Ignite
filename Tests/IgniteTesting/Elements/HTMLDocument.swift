@@ -14,7 +14,6 @@ import Testing
 @Suite("HTMLDocument Tests")
 @MainActor
 struct HTMLDocumentTests {
-
     init() throws {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
     }
@@ -23,7 +22,6 @@ struct HTMLDocumentTests {
     func containsHTMLDoctype() {
         let sut = Root {}
         let output = sut.render()
-
         #expect(output.hasPrefix("<!doctype html>"))
     }
 
@@ -31,7 +29,6 @@ struct HTMLDocumentTests {
     func containsHTMLTag() {
         let sut = Root {}
         let output = sut.render()
-
         #expect(nil != output.htmlTagWithCloseTag("html"))
     }
 
@@ -83,9 +80,8 @@ struct HTMLDocumentTests {
 
     @Test("places output of contents into contents of html tag")
     func html_tag_contents_are_taken_from_contents_property() async throws {
-
-        let body = HTMLBody { "Hello World" }
-        let sut = Root { body }
+        let body = Body { "Hello World" }
+        let sut = HTMLDocument { body }
 
         let expected = body.render()
 

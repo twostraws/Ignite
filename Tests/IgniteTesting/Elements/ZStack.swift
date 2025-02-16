@@ -35,8 +35,7 @@ struct ZStackTests {
         <label style="align-self: center; grid-area: 1/1; height: fit-content; \
         justify-self: center; width: fit-content; z-index: 1">Bottom Label</label>\
         </div>
-        """
-        )
+        """)
     }
 
     @Test("ZStack with alignments", arguments: await Self.alignments)
@@ -54,8 +53,7 @@ struct ZStackTests {
         <label style="align-self: \(alignment.alignSelf); grid-area: 1/1; height: fit-content; \
         justify-self: \(alignment.justifySelf); width: fit-content; z-index: 1">Bottom Label</label>\
         </div>
-        """
-        )
+        """)
     }
 
 }

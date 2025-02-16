@@ -14,19 +14,11 @@ import Testing
 @Suite("Shadow Tests")
 @MainActor
 struct ShadowTests {
-    @Test("ShadowModifierTest")
-    func radiusFiveSpanShadowTest() async throws {
-        let element = Span("Hello").shadow(radius: 5)
+    @Test("Shadow Modifier", arguments: [5, 20])
+    func shadowRadius(radius: Int) async throws {
+        let element = Span("Hello").shadow(radius: radius)
         let output = element.render()
 
-        #expect(output == "<span style=\"box-shadow: rgb(0 0 0 / 33%) 0px 0px 5px \">Hello</span>")
-    }
-
-    @Test("ShadowModifierTest")
-    func basicTextRadiusTwentyTest() async throws {
-        let element = Text("Hello").shadow(radius: 20)
-        let output = element.render()
-
-        #expect(output == "<p style=\"box-shadow: rgb(0 0 0 / 33%) 0px 0px 20px \">Hello</p>")
+        #expect(output == "<span style=\"box-shadow: rgb(0 0 0 / 33%) 0px 0px \(radius)px \">Hello</span>")
     }
 }
