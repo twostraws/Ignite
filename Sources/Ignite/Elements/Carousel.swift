@@ -6,7 +6,7 @@
 //
 
 /// A collection of slides the user can swipe through.
-public struct Carousel: BlockHTML {
+public struct Carousel: HTML {
     /// Whether moving between slides should cause movement or a crossfade.
     public enum CarouselStyle {
         /// Slides should move.
@@ -20,13 +20,10 @@ public struct Carousel: BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// An automatically-generated unique identifier for this carousel.
     /// Used to tell its buttons which carousel they are controlling.
@@ -48,16 +45,15 @@ public struct Carousel: BlockHTML {
     /// Adjusts the style of this carousel.
     /// - Parameter style: The new style.
     /// - Returns: A new `Carousel` instance with the updated style.
-    public func carouselStyle(_ newStyle: CarouselStyle) -> Self {
+    public func carouselStyle(_ style: CarouselStyle) -> Self {
         var copy = self
-        copy.style = newStyle
+        copy.style = style
         return copy
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         Section {
             Section {
                 ForEach(0..<items.count) { index in
@@ -65,15 +61,15 @@ public struct Carousel: BlockHTML {
                         .data("bs-target", "#\(carouselID)")
                         .data("bs-slide-to", String(index))
                         .class(index == 0 ? "active" : nil)
-                        .aria("current", index == 0 ? "true" : nil)
-                        .aria("label", "Slide \(index + 1)")
+                        .aria(.current, index == 0 ? "true" : nil)
+                        .aria(.label, "Slide \(index + 1)")
                 }
             }
             .class("carousel-indicators")
 
             Section {
                 ForEach(items.enumerated()) { index, item in
-                    item.assigned(at: index, in: context)
+                    item.assigned(at: index)
                 }
             }
             .class("carousel-inner")
@@ -81,7 +77,7 @@ public struct Carousel: BlockHTML {
             Button {
                 Span()
                     .class("carousel-control-prev-icon")
-                    .aria("hidden", "true")
+                    .aria(.hidden, "true")
 
                 Span("Previous")
                     .class("visually-hidden")
@@ -93,7 +89,7 @@ public struct Carousel: BlockHTML {
             Button {
                 Span()
                     .class("carousel-control-next-icon")
-                    .aria("hidden", "true")
+                    .aria(.hidden, "true")
 
                 Span("Next")
                     .class("visually-hidden")
@@ -106,6 +102,6 @@ public struct Carousel: BlockHTML {
         .id(carouselID)
         .class("carousel", "slide", style == .crossfade ? "carousel-fade" : nil)
         .data("bs-ride", "carousel")
-        .render(context: context)
+        .render()
     }
 }

@@ -7,9 +7,9 @@
 
 /// A control that displays a list of section titles that can be folded out to
 /// display more content.
-public struct Accordion: BlockHTML {
+public struct Accordion: HTML {
     /// Controls what happens when a section is opened.
-    public enum OpenMode {
+    public enum OpenMode: Sendable {
         /// Opening one accordion section automatically closes all others.
         case individual
 
@@ -21,13 +21,10 @@ public struct Accordion: BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// A collection of sections you want to show inside this accordion.
     var items: [Item]
@@ -54,9 +51,8 @@ public struct Accordion: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         // Accordions with an individual open mode must have
         // each element linked back to a unique accordion ID.
         // This is generated below, then passed into individual
@@ -67,7 +63,7 @@ public struct Accordion: BlockHTML {
             .attributes(attributes)
             .class("accordion")
             .id(accordionID)
-            .render(context: context)
+            .render()
 
         return output
     }

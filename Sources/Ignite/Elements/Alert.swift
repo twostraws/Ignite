@@ -7,18 +7,15 @@
 
 /// Shows a clearly delineated box on your page, providing important information
 /// or warnings to users.
-public struct Alert: BlockHTML {
+public struct Alert: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     var content: any HTML
 
@@ -50,11 +47,10 @@ public struct Alert: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var attributes = attributes
         attributes.append(containerAttributes: .init(classes: alertClasses))
-        return attributes.description(wrapping: content.render(context: context))
+        return attributes.description(wrapping: content.render())
     }
 }

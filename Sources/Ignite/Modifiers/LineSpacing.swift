@@ -28,13 +28,13 @@ struct LineSpacingModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         if content.body.isComposite {
             if let customHeight {
-                content.containerStyle(.init(name: "line-height", value: String(customHeight)))
+                content.containerStyle(.init(.lineHeight, value: customHeight.formatted(.nonLocalizedDecimal)))
             } else if let presetHeight {
                 content.containerClass("lh-\(presetHeight.rawValue)")
             }
         } else {
             if let customHeight {
-                content.style("line-height: \(customHeight)")
+                content.style(.init(.lineHeight, value: customHeight.formatted(.nonLocalizedDecimal)))
             } else if let presetHeight {
                 content.class("lh-\(presetHeight.rawValue)")
             }
@@ -45,38 +45,22 @@ struct LineSpacingModifier: HTMLModifier {
 
 public extension HTML {
     /// Sets the line height of the element using a custom value.
-    /// - Parameter height: The line height multiplier to use
-    /// - Returns: The modified HTML element
+    /// - Parameter spacing: The line height multiplier to use.
+    /// - Returns: The modified HTML element.
     func lineSpacing(_ spacing: Double) -> some HTML {
         modifier(LineSpacingModifier(height: spacing))
     }
 
     /// Sets the line height of the element using a predefined Bootstrap value.
-    /// - Parameter height: The predefined line height to use
-    /// - Returns: The modified HTML element
+    /// - Parameter spacing: The predefined line height to use.
+    /// - Returns: The modified HTML element.
     func lineSpacing(_ spacing: LineSpacing) -> some HTML {
         modifier(LineSpacingModifier(height: spacing))
     }
 }
 
-public extension BlockHTML {
-    /// Sets the line height of the element using a custom value.
-    /// - Parameter height: The line height multiplier to use
-    /// - Returns: The modified HTML element
-    func lineSpacing(_ spacing: Double) -> some BlockHTML {
-        modifier(LineSpacingModifier(height: spacing))
-    }
-
-    /// Sets the line height of the element using a predefined Bootstrap value.
-    /// - Parameter height: The predefined line height to use
-    /// - Returns: The modified HTML element
-    func lineSpacing(_ spacing: LineSpacing) -> some BlockHTML {
-        modifier(LineSpacingModifier(height: spacing))
-    }
-}
-
 /// Predefined line height values that match Bootstrap's spacing system.
-public enum LineSpacing: String, CaseIterable {
+public enum LineSpacing: String, CaseIterable, Sendable {
     /// Single line height (1.0)
     case xSmall = "1"
 
@@ -97,14 +81,5 @@ public enum LineSpacing: String, CaseIterable {
         case .standard: 1.5
         case .large: 2.0
         }
-    }
-}
-
-public extension StyledHTML {
-    /// Sets the line height of the element using a custom value.
-    /// - Parameter height: The line height multiplier to use
-    /// - Returns: The modified HTML element
-    func lineSpacing(_ height: Double) -> Self {
-        self.style(.init(name: .lineHeight, value: String(height)))
     }
 }

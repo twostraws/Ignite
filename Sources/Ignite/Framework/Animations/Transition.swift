@@ -5,12 +5,14 @@
 // See LICENSE for license information.
 //
 
+import OrderedCollections
+
 /// The main animation configuration type that provides a flexible way to define CSS animations
-public struct Transition: Animatable {
+public struct Transition: Animatable, Hashable {
     /// The CSS properties being animated and their values
     var data: [AnimatableData]
     /// Additional non-animated CSS properties
-    public var staticProperties: OrderedSet<AttributeValue> = []
+    public var baseStyles: OrderedSet<InlineStyle> = []
     /// The event that triggers this animation (hover, click, or appear)
     public var trigger: AnimationTrigger = .hover
 

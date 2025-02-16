@@ -8,8 +8,14 @@
 import Foundation
 
 /// One piece of Markdown content for this site.
+///
+/// - Important: If your content has code blocks containing angle brackets (`<`...`>`),
+/// such as Swift generics, the prettifier will interpret these as HTML tags and break
+/// the code's formatting. To avoid this issue, either set your site’s `shouldPrettify`
+/// property to `false`, or replace `<` and `>` with their character entity references,
+/// `&lt;` and `&gt;` respectively.
 @MainActor
-public struct Content: Sendable {
+public struct Content {
     /// The main title for this content.
     public var title: String
 
@@ -43,7 +49,7 @@ public struct Content: Sendable {
     /// The last modified date of this content. This might be the same as
     /// the publication date if the content has not subsequently been changed.
     public var lastModified: Date {
-        metadata["modified"] as? Date ?? date
+        metadata["lastModified"] as? Date ?? date
     }
 
     /// The `ContentLayout` name to use for this content. This should be the name
@@ -124,10 +130,13 @@ public struct Content: Sendable {
     ///   relative path to this content.
     ///   - resourceValues: Resource values that provide the creation and
     ///   last modification date for this content.
+    ///   - deployPath: optional String used as site url path for the content.
+    ///   If nil (default), use `metadata["path"]` or path to content root.
     init(
         from url: URL,
         in context: PublishingContext,
-        resourceValues: URLResourceValues
+        resourceValues: URLResourceValues,
+        deployPath: String
     ) throws {
         // Use whatever Markdown renderer was configured
         // for the site we're publishing.
@@ -137,55 +146,25 @@ public struct Content: Sendable {
         metadata = parser.metadata
         title = parser.title.strippingTags()
         description = parser.description.strippingTags()
+        path = metadata["path"] as? String ?? deployPath
 
-        if let customPath = metadata["path"] as? String {
-            path = customPath
+        // Save the first subfolder in the path as the article's type
+        let pathParts = path.split(separator: "/") // removes empty
+        if 1 < pathParts.count { // no type if not in subdirectory
+            metadata["type"] = pathParts[0]
+        }
+
+        if let date = parseMetadataDate(for: "date") {
+            metadata["date"] = date
         } else {
-            let basePath = context.contentDirectory.path()
-            let thisPath = url.deletingPathExtension().path()
-            path = String(thisPath.trimmingPrefix(basePath))
-        }
-
-        // Save the article's type as being the first subfolder
-        // of this article inside the Content folder.
-        let distinctComponents = url.pathComponents.dropFirst(context.contentDirectory.pathComponents.count)
-
-        if let firstSubdirectory = distinctComponents.first {
-            metadata["type"] = firstSubdirectory
-        }
-
-        if let date = metadata["date"] as? String {
-            // The user attempted to set a date. This will
-            // be stored as a string right now, so we need
-            // to extract it, verify it, and put it back as
-            // a date.
-            metadata["date"] = process(date: date)
-
-            // If the date is now nil, their format was bad and
-            // needs to be fixed.
-            if metadata["date"] == nil {
-                fatalError("Content dates should be provided in the format 2024-05-24 15:30.")
-            }
-        }
-
-        if let lastModified = metadata["modified"] as? String {
-            // Same for last modified date.
-            metadata["modified"] = process(date: lastModified)
-
-            // If last modified is now nil, their format was bad and
-            // needs to be fixed.
-            if metadata["modified"] == nil {
-                fatalError("Content dates should be provided in the format 2024-05-24 15:30.")
-            }
-        }
-
-        if metadata["date"] == nil {
-            metadata["date"] = resourceValues.creationDate?.formatted(.iso8601) ?? Date.now
+            metadata["date"] = resourceValues.creationDate ?? Date.now
             hasAutomaticDate = true
         }
 
-        if metadata["lastModified"] == nil {
-            metadata["lastModified"] = resourceValues.contentModificationDate?.formatted(.iso8601) ?? Date.now
+        if let lastModified = parseMetadataDate(for: "modified", "lastModified") {
+            metadata["lastModified"] = lastModified
+        } else {
+            metadata["lastModified"] = resourceValues.contentModificationDate ?? Date.now
         }
     }
 
@@ -214,14 +193,48 @@ public struct Content: Sendable {
         }
     }
 
-    // Converts a potentially sketchy date string into
-    // a better `Date` instance.
-    func process(date: String) -> Date? {
+    /// Attempts to parse a date string in the format "y-M-d HH:mm" or "y-M-d".
+    /// - Parameter date: The date string to parse
+    /// - Returns: A `Date` if parsing succeeds, `nil` otherwise
+    private func process(date: String) -> Date? {
         let formatter = DateFormatter()
-        formatter.dateFormat = "y-MM-dd HH:mm"
         formatter.timeZone = .gmt
-        return formatter.date(from: date)
+
+        let formats = ["y-M-d", "y-M-d HH:mm", "y-M-d H:m", "y-M-d HH:mm:ss", "y-M-d H:m:s"]
+        for format in formats {
+            formatter.dateFormat = format
+            if let date = formatter.date(from: date) {
+                return date
+            }
+        }
+
+        return nil
     }
+
+    /// Extracts and parses a date from metadata using specified identifiers.
+    /// - Parameter ids: The metadata keys to check for date values
+    /// - Returns: A parsed `Date` if found, `nil` otherwise
+    /// - Throws: An error if date parsing fails
+    private func parseMetadataDate(for ids: String...) -> Date? {
+
+        for id in ids {
+            guard let dateString = metadata[id] as? String else { continue }
+            if let date = process(date: dateString) {
+                return date
+            } else {
+                PublishingContext.default.addError(.badContentDateFormat)
+                continue
+            }
+        }
+
+        return nil
+    }
+
+    /// Keys for resources required on initialization
+
+    public static nonisolated let resourceKeys: [URLResourceKey]
+        = [.creationDateKey, .contentModificationDateKey]
+
 }
 
 extension Content {

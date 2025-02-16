@@ -10,14 +10,8 @@
 /// `AnimationClassGenerator` converts Ignite animations into CSS classes, handling different
 /// trigger types (hover, click, appear) and generating appropriate keyframes and transition rules.
 struct AnimationClassGenerator {
-    /// The ID of the element receiving animations
-    let elementID: String
-
     /// A mapping of trigger types to their corresponding resolved animations
     let triggerMap: OrderedDictionary<AnimationTrigger, any Animatable>
-
-    /// The base name for the generated CSS classes
-    var name: String { "animation-" + elementID }
 
     /// Holds CSS properties and transitions for both clicked and unclicked states,
     /// separated into transform and non-transform properties. Transform properties
@@ -36,17 +30,17 @@ struct AnimationClassGenerator {
     /// Formats CSS output for click animations, creating separate rules for transform and non-transform properties
     /// - Parameter properties: The collected CSS properties and transitions
     /// - Returns: A string containing the formatted CSS classes
-    func buildClickOutput(_ properties: ClickAnimationProperties) -> String {
+    func buildClickOutput(_ properties: ClickAnimationProperties, id animationID: String) -> String {
         var output = ""
-
+        let baseClass = "animation-" + animationID
         if !properties.nonTransformProperties.isEmpty {
             output += """
-            .\(name).clicked .click-\(elementID) {
+            .\(baseClass).clicked .click-\(animationID) {
                 transition: \(properties.nonTransformTransitions.joined(separator: ", "));
                 \(properties.nonTransformProperties.joined(separator: ";\n        "));
             }
 
-            .\(name).unclicked .click-\(elementID)  {
+            .\(baseClass).unclicked .click-\(animationID)  {
                 transition: \(properties.nonTransformTransitions.joined(separator: ", "));
                 \(properties.unclickedNonTransformProperties.joined(separator: ";\n        "));
             }
@@ -59,12 +53,12 @@ struct AnimationClassGenerator {
             }
 
             output += """
-            .\(name).clicked {
+            .\(baseClass).clicked {
                 transition: \(properties.transformTransitions.joined(separator: ", "));
                 \(properties.transformProperties.joined(separator: ";\n        "));
             }
 
-            .\(name).unclicked {
+            .\(baseClass).unclicked {
                 transition: \(properties.transformTransitions.joined(separator: ", "));
                 \(properties.unclickedTransformProperties.joined(separator: ";\n        "));
             }
@@ -142,7 +136,7 @@ struct AnimationClassGenerator {
     /// 3. Optionally includes an .appeared class if appear properties are present
     /// 4. Formats the output to avoid empty declarations
     private func buildBaseClass(_ animation: any Animatable) -> String {
-        var baseProperties: Set<String> = Set(animation.staticProperties.map { "\($0.name): \($0.value)" })
+        var baseProperties: Set<String> = Set(animation.baseStyles.map { "\($0.property): \($0.value)" })
 
         if let appearAnim = triggerMap[.appear] {
             if let transition = appearAnim as? Transition {
@@ -155,9 +149,10 @@ struct AnimationClassGenerator {
         let appearedProperties = getAppearedProperties()
         let joinedProperties = baseProperties.joined(separator: ";\n        ")
         let baseClassProperties = baseProperties.isEmpty ? "" : "\n        \(joinedProperties);\n    "
+        let className = "animation-" + animation.id
 
         let baseClass = """
-        .\(name) {\(baseClassProperties)}
+        .\(className) {\(baseClassProperties)}
         """
 
         // Only add appeared class if we have properties to set
@@ -165,7 +160,7 @@ struct AnimationClassGenerator {
             let joinedAppearedProperties = appearedProperties.joined(separator: ";\n        ")
 
             return baseClass + "\n\n" + """
-            .\(name).appeared {
+            .\(className).appeared {
                 \(joinedAppearedProperties);
             }
             """
@@ -194,16 +189,17 @@ struct AnimationClassGenerator {
 
         let repeatCount = animation.repeatCount == .infinity ? "infinite" : String(animation.repeatCount)
         let repeatString = animation.repeatCount != 1 ? "animation-iteration-count: \(repeatCount);" : ""
+        let baseClass = "animation-" + animation.id
 
         return """
-        .\(name).appeared {
-            animation: \(name)-appear \(timing);
+        .\(baseClass).appeared {
+            animation: \(baseClass)-appear \(timing);
             animation-fill-mode: \(animation.fillMode.rawValue);
             animation-direction: \(animation.direction.rawValue);
             \(repeatString)
         }
 
-        @keyframes \(name)-appear {
+        @keyframes \(baseClass)-appear {
             \(keyframeContent)
         }
         """

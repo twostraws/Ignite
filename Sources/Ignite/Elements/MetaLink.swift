@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// An item of metadata that links to an external resource somehow, such as
 /// a stylesheet.
 public struct MetaLink: HeadElement, Sendable {
@@ -42,18 +44,9 @@ public struct MetaLink: HeadElement, Sendable {
     /// - Returns: An array of MetaLink elements. If multiple themes are provided,
     /// includes data attributes for theme switching.
     static func highlighterThemeMetaLinks(for themes: some Collection<HighlighterTheme>) -> [MetaLink] {
-        let hasMultipleThemes = themes.count > 1
-
-        return themes.map { theme in
-            var link = MetaLink(href: "/\(theme.url)", rel: .stylesheet)
-
-            if hasMultipleThemes {
-                link = link
-                    .data("highlight-theme", theme.description)
-                    .customAttribute(name: "disabled", value: "")
-            }
-
-            return link
+        themes.sorted().map { theme in
+            MetaLink(href: "/\(theme.url)", rel: .stylesheet)
+                .data("highlight-theme", theme.description)
         }
     }
 
@@ -61,7 +54,7 @@ public struct MetaLink: HeadElement, Sendable {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -109,17 +102,16 @@ public struct MetaLink: HeadElement, Sendable {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
     ///
     /// If the link `href` starts with a `\` it is an asset and requires any `subsite` prepended;
     /// otherwise the `href` is a URL and  doesn't get `subsite` prepended
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var attributes = attributes
         attributes.selfClosingTag = "link"
 
         // char[0] of the link 'href' is '/' for an asset; not for a site URL
-        let basePath = href.starts(with: "/") ? context.site.url.path : ""
+        let basePath = href.starts(with: "/") ? publishingContext.site.url.path : ""
         attributes.append(customAttributes:
             .init(name: "href", value: "\(basePath)\(href)"),
             .init(name: "rel", value: rel)

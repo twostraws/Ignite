@@ -10,6 +10,6 @@ public struct EmptyTagLayout: TagLayout {
     public init() {}
 
     public var body: some HTML {
-        EmptyBlockElement()
+        EmptyHTML()
     }
 }

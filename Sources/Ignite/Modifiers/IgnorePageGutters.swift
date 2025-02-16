@@ -17,7 +17,7 @@ struct IgnorePageGuttersModifier: HTMLModifier {
         if shouldIgnore {
             content
                 .class("row justify-content-center")
-                .style("margin-inline: calc(50% - 50vw)")
+                .style(.marginInline, "calc(50% - 50vw)")
         } else {
             content.class("container")
         }
@@ -31,18 +31,6 @@ public extension HTML {
     ///   - ignore: Whether this HTML should ignore the page gutters. Defaults to `true`.
     /// - - Returns: A modified element that either obeys or ignores the page gutters.
     func ignorePageGutters(_ ignore: Bool = true) -> some HTML {
-        modifier(IgnorePageGuttersModifier(shouldIgnore: ignore))
-    }
-}
-
-
-public extension BlockHTML {
-    /// Determines whether this element should observe the site
-    /// width or extend from one edge of the screen to the other.
-    /// - Parameters:
-    ///   - ignore: Whether this HTML should ignore the page gutters. Defaults to `true`.
-    /// - Returns: - Returns: A modified element that either obeys or ignores the page gutters.
-    func ignorePageGutters(_ ignore: Bool = true) -> some BlockHTML {
         modifier(IgnorePageGuttersModifier(shouldIgnore: ignore))
     }
 }

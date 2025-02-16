@@ -6,18 +6,15 @@
 //
 
 /// A container that arranges its child elements vertically in a stack.
-public struct VStack: BlockHTML {
+public struct VStack: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The spacing between elements.
     private var spacingAmount: SpacingType?
@@ -36,7 +33,7 @@ public struct VStack: BlockHTML {
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameters:
-    ///   - spacing: The number of pixels between elements.
+    ///   - pixels: The number of pixels between elements.
     ///   - items: The items to use in this section.
     public init(spacing pixels: Int, @HTMLBuilder items: () -> some HTML) {
         self.items = flatUnwrap(items())
@@ -53,7 +50,7 @@ public struct VStack: BlockHTML {
         self.spacingAmount = .semantic(spacing)
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var itemAttributes = CoreAttributes()
         itemAttributes.append(classes: "mb-0")
         var items = [any HTML]()
@@ -75,14 +72,14 @@ public struct VStack: BlockHTML {
         attributes.append(classes: "vstack")
 
         if case let .exact(pixels) = spacingAmount {
-            attributes.append(styles: .init(name: .gap, value: "\(pixels)px"))
+            attributes.append(styles: .init(.gap, value: "\(pixels)px"))
         } else if case let .semantic(amount) = spacingAmount {
             attributes.append(classes: "gap-\(amount.rawValue)")
         }
 
         AttributeStore.default.merge(attributes, intoHTML: id)
         attributes.tag = "div"
-        let content = items.map { $0.render(context: context) }.joined()
+        let content = items.map { $0.render() }.joined()
 
         return attributes.description(wrapping: content)
     }

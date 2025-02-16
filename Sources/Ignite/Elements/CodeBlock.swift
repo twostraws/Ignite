@@ -7,18 +7,20 @@
 
 /// An separated section of programming code. For inline code that sit along other
 /// text on your page, use `Code` instead.
-public struct CodeBlock: BlockHTML {
+///
+/// - Important: If your code contains angle brackets (`<`...`>`), such as Swift generics,
+/// the prettifier will interpret these as HTML tags and break the code's formatting.
+/// To avoid this issue, either set your site’s `shouldPrettify` property to `false`,
+/// or replace `<` and `>` with their character entity references, `&lt;` and `&gt;` respectively.
+public struct CodeBlock: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The code to display.
     var content: String
@@ -37,14 +39,14 @@ public struct CodeBlock: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
-        guard context.site.allHighlighterThemes.isEmpty == false else {
-            fatalError("At least one of your themes must specify a syntax highlighter.")
+    public func render() -> String {
+        guard publishingContext.site.allHighlighterThemes.isEmpty == false else {
+            fatalError(.missingDefaultSyntaxHighlighterTheme)
         }
+
         if let language {
-            context.highlighterLanguages.insert(language)
+            publishingContext.syntaxHighlighters.append(language)
             return """
             <pre\(attributes.description())>\
             <code class=\"language-\(language)\">\

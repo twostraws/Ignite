@@ -24,10 +24,10 @@ struct BackgroundImageModifier: HTMLModifier {
     /// - Returns: The modified HTML content with background image applied
     func body(content: some HTML) -> any HTML {
         content.style(
-            "background-image: url('\(imagePath)')",
-            "background-size: \(contentMode.css)",
-            "background-repeat: \(repeats ? "repeat" : "no-repeat")",
-            "background-position: \(position.css)"
+            .init(.backgroundImage, value: "url('\(imagePath)')"),
+            .init(.backgroundSize, value: contentMode.css),
+            .init(.backgroundRepeat, value: repeats ? "repeat" : "no-repeat"),
+            .init(.backgroundPosition, value: position.css)
         )
     }
 }
@@ -60,7 +60,7 @@ protocol CSSRepresentable {
 }
 
 /// The possible background sizes
-public enum BackgroundImageContentMode: CSSRepresentable {
+public enum BackgroundImageContentMode: CSSRepresentable, Sendable {
     /// This is the default value. The background image is displayed at its original size.
     case original
 
@@ -85,7 +85,7 @@ public enum BackgroundImageContentMode: CSSRepresentable {
 }
 
 /// A type representing the background image position within the page element
-public struct BackgroundPosition: CSSRepresentable {
+public struct BackgroundPosition: CSSRepresentable, Sendable {
 
     /// The possible absolute values going from left to right and top to bottom.
     /// For example an offset from the top edge of `10px` means 10 px down from the top.

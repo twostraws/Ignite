@@ -24,11 +24,11 @@ struct BackgroundModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         switch background {
         case .gradient(let gradient):
-            content.style("background-image: \(gradient)")
+            content.style(.backgroundImage, gradient.description)
         case .color(let color):
-            content.style("background-color: \(color.description)")
+            content.style(.backgroundColor, color.description)
         case .colorString(let colorString):
-            content.style("background-color: \(colorString)")
+            content.style(.backgroundColor, colorString)
         case .material(let material):
             content.class(material.className)
         }
@@ -63,53 +63,5 @@ public extension HTML {
     /// - Returns: The modified HTML element
     func background(_ gradient: Gradient) -> some HTML {
         modifier(BackgroundModifier(background: .gradient(gradient)))
-    }
-}
-
-public extension BlockHTML {
-    /// Applies a background color from a `Color` object.
-    /// - Parameter color: The specific color value to use, specified as
-    /// a `Color` instance.
-    /// - Returns: The current element with the updated background color.
-    func background(_ color: Color) -> some BlockHTML {
-        modifier(BackgroundModifier(background: .color(color)))
-    }
-
-    /// Applies a background color from a string.
-    /// - Parameter color: The specific color value to use, specified as a string.
-    /// - Returns: The current element with the updated background color.
-    func background(_ color: String) -> some BlockHTML {
-        modifier(BackgroundModifier(background: .colorString(color)))
-    }
-
-    /// Applies a material effect background.
-    /// - Parameter material: The type of material to apply.
-    /// - Returns: The current element with the updated background material.
-    func background(_ material: Material) -> some BlockHTML {
-        modifier(BackgroundModifier(background: .material(material)))
-    }
-
-    /// Applies a gradient background
-    /// - Parameter gradient: The gradient to apply
-    /// - Returns: The modified HTML element
-    func background(_ gradient: Gradient) -> some BlockHTML {
-        modifier(BackgroundModifier(background: .gradient(gradient)))
-    }
-}
-
-public extension StyledHTML {
-    /// Applies a background color from a `Color` object.
-    /// - Parameter color: The specific color value to use, specified as
-    /// a `Color` instance.
-    /// - Returns: The current element with the updated background color.
-    func background(_ color: Color) -> Self {
-        self.style(.init(name: .backgroundColor, value: color.description))
-    }
-
-    /// Applies a gradient background
-    /// - Parameter gradient: The gradient to apply
-    /// - Returns: The modified HTML element
-    func background(_ gradient: Gradient) -> Self {
-        self.style(.init(name: .backgroundImage, value: gradient.description))
     }
 }

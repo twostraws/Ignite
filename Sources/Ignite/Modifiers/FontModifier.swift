@@ -11,14 +11,15 @@ struct FontModifier: HTMLModifier {
     var font: Font
 
     /// Registers CSS classes for responsive font sizes and returns the generated class name.
+    /// - Parameter responsiveSize: The responsive font size.
     /// - Returns: A unique class name that applies the font's responsive size rules.
-    private func registerResponsiveClasses() -> String {
-        let className = "font-" + font.responsiveSizes.description.truncatedHash
+    private func registerClasses(for responsiveSize: ResponsiveFontSize) -> String {
+        let className = "font-" + responsiveSize.breakpointValues.description.truncatedHash
 
         // Sort sizes by breakpoint to ensure proper cascading
-        let sortedSizes = font.responsiveSizes.sorted { size1, size2 in
-            let (bp1, _) = size1.resolved
-            let (bp2, _) = size2.resolved
+        let allSizes = responsiveSize.breakpointValues.sorted { size1, size2 in
+            let bp1 = size1.breakpoint
+            let bp2 = size2.breakpoint
 
             // nil (base size) should come first
             if bp1 == nil { return true }
@@ -27,30 +28,27 @@ struct FontModifier: HTMLModifier {
         }
 
         // Find base size and breakpoint sizes
-        let baseSize = sortedSizes.first { size in
-            let (breakpoint, _) = size.resolved
-            return breakpoint == nil
+        let baseSize = allSizes.first { size in
+            size.breakpoint == nil
         }
 
-        let breakpointSizes = sortedSizes.filter { size in
-            let (breakpoint, _) = size.resolved
-            return breakpoint != nil
+        let breakpointSizes = allSizes.filter { size in
+            size.breakpoint != nil
         }
 
-        if let (_, value) = baseSize?.resolved {
+        if let baseSize {
             CSSManager.default.register(
                 [],
-                properties: [("font-size", value.stringValue)],
+                properties: [("font-size", baseSize.value.stringValue)],
                 className: className
             )
         }
 
         for size in breakpointSizes {
-            let (breakpoint, value) = size.resolved
-            if let breakpoint = breakpoint {
+            if let breakpoint = size.breakpoint {
                 CSSManager.default.register(
                     [.breakpoint(.init(rawValue: breakpoint)!)],
-                    properties: [("font-size", value.stringValue)],
+                    properties: [("font-size", size.value.stringValue)],
                     className: className
                 )
             }
@@ -67,40 +65,41 @@ struct FontModifier: HTMLModifier {
             (content as? ModifiedHTML)?.content is Text
 
         if isText {
-            var modified = content.style("font-weight: \(font.weight.rawValue)")
+            content.style(.fontWeight, font.weight.rawValue.formatted())
 
             if let style = font.style {
-                modified.fontStyle(style)
+                content.fontStyle(style)
             }
 
             if let name = font.name, name.isEmpty == false {
-                modified.style("font-family: \(name)")
+                content.style(.fontFamily, name)
             }
 
-            if !font.responsiveSizes.isEmpty {
-                let classNames = registerResponsiveClasses()
-                modified.class(classNames)
+            if let responsiveSize = font.responsiveSize {
+                let classNames = registerClasses(for: responsiveSize)
+                content.class(classNames)
             } else if let size = font.size {
-                modified.style("font-size: \(size.stringValue)")
+                content.style(.fontSize, size.stringValue)
             }
 
-            return modified
+            return content
         } else {
             var containerAttributes = ContainerAttributes(styles: [
-                .init(name: "font-weight", value: String(font.weight.rawValue))
+                .init(.fontWeight, value: String(font.weight.rawValue))
             ])
 
             if let name = font.name, name.isEmpty == false {
-                containerAttributes.styles.append(AttributeValue(name: "font-family", value: name))
+                containerAttributes.styles
+                    .append(InlineStyle(.fontFamily, value: name))
             }
 
-            if font.responsiveSizes.isEmpty == false {
-                let classNames = registerResponsiveClasses()
+            if let responsiveSize = font.responsiveSize {
+                let classNames = registerClasses(for: responsiveSize)
                 containerAttributes.classes.append(classNames)
             } else if let size = font.size {
-                containerAttributes.styles.append(.init(name: "font-size", value: size.stringValue))
+                containerAttributes.styles.append(.init(.fontSize, value: size.stringValue))
             } else if let style = font.style {
-                containerAttributes.styles.append(.init(name: "font-size", value: style.sizeVariable))
+                containerAttributes.styles.append(.init(.fontSize, value: style.sizeVariable))
             }
 
             return content
@@ -119,32 +118,11 @@ public extension HTML {
     }
 }
 
-public extension InlineHTML {
+public extension InlineElement {
     /// Adjusts the font of this text.
     /// - Parameter font: The font configuration to apply.
     /// - Returns: A new instance with the updated font.
-    func font(_ font: Font) -> some InlineHTML {
+    func font(_ font: Font) -> some InlineElement {
         modifier(FontModifier(font: font))
-    }
-}
-
-public extension StyledHTML {
-    /// Adjusts the font of this text.
-    /// - Parameters:
-    ///   - name: The name of the font family.
-    ///   - size: The size of the font.
-    ///   - weight: The weight (boldness) of the font. Defaults to `.regular`.
-    /// - Returns: A new instance with the updated font.
-    func font(name: String? = nil, size: LengthUnit? = nil, weight: Font.Weight = .regular) -> Self {
-        var copy = self
-        copy.style(.init(name: .fontWeight, value: String(weight.rawValue)))
-
-        if let name, name.isEmpty == false {
-            copy.style(.init(name: .fontFamily, value: name))
-        }
-        if let size {
-            copy.style(.init(name: .fontSize, value: size.stringValue))
-        }
-        return copy
     }
 }

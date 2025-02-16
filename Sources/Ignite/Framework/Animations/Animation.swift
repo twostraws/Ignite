@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import OrderedCollections
+
 /// A type that defines a multi-step animation using keyframes.
 ///
 /// `Animation` allows you to create complex animations by defining multiple frames,
@@ -22,7 +24,7 @@
 ///        animation.color(.foreground, to: .white)
 ///    }
 /// ```
-public struct Animation: Animatable {
+public struct Animation: Animatable, Hashable {
     /// The collection of frames that define the animation sequence
     var frames: [Frame]
 
@@ -48,7 +50,7 @@ public struct Animation: Animatable {
     public var trigger: AnimationTrigger = .hover
 
     /// Additional non-animated CSS properties
-    public var staticProperties: OrderedSet<AttributeValue> = []
+    public var baseStyles: OrderedSet<InlineStyle> = []
 
     /// Creates a new keyframe animation.
     public init() {
@@ -80,9 +82,8 @@ public extension Animation {
     }
 
     /// Configures animation repetition.
-    /// - Parameters:
-    ///   - count: Number of times to repeat. Use `.infinity` for endless repetition.
-    ///   - autoreverses: Whether the animation should play in reverse after completing.
+    /// - Parameter count: Number of times to repeat. Use `.infinity` for endless repetition.
+    /// - Returns: A new animation instance with the updated repeat count
     func repeatCount(_ count: Double) -> Self {
         var copy = self
         copy.repeatCount = count
@@ -110,9 +111,9 @@ public extension Animation {
     /// Adds an additional CSS style property to the animation
     /// - Parameter style: The CSS style to add
     /// - Returns: A modified animation with the additional style
-    func baseProperty(_ style: AttributeValue) -> Self {
+    func baseStyle(_ style: InlineStyle) -> Self {
         var copy = self
-        copy.staticProperties.append(style)
+        copy.baseStyles.append(style)
         return copy
     }
 }

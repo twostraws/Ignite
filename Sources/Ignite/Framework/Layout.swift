@@ -14,22 +14,22 @@
 ///     var body: some HTML {
 ///         HTMLDocument {
 ///             Header("My Blog")
-///             HTMLBody(for: page)
+///             Body(for: page)
 ///             Footer()
 ///         }
 ///     }
 /// }
 /// ```
 @MainActor
-public protocol Layout: Sendable {
+public protocol Layout {
     /// The type of HTML content this layout will generate
-    associatedtype Body: HTML
+    associatedtype Markup: HTML
 
     /// The main content of the layout, built using the HTML DSL
-    var body: Body { get }
+    var body: Markup { get }
 
     /// A unique identifier for this layout instance
-    var id: String { get set }
+    var id: String { get }
 }
 
 public extension Layout {
@@ -41,9 +41,6 @@ public extension Layout {
     /// Generates a unique identifier for this layout based on its file location and type.
     /// The identifier is used internally for tracking and caching purposes.
     var id: String {
-        get {
-            String(describing: self).truncatedHash
-        }
-        set {} // swiftlint:disable:this unused_setter_value
+        String(describing: self).truncatedHash
     }
 }

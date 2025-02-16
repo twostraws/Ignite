@@ -6,21 +6,18 @@
 //
 
 /// A block quote of text.
-public struct Quote: BlockHTML {
+public struct Quote: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
+    public var id = UUID().uuidString
 
     /// The content of this quote.
     var contents: any HTML
 
     /// Provide details about this quote, e.g. a source name.
-    var caption: any InlineHTML
+    var caption: any InlineElement
 
     /// Create a new quote from a page element builder that returns an array
     /// of elements to display in the quote.
@@ -39,18 +36,17 @@ public struct Quote: BlockHTML {
     /// - contents: Additional details about the quote, e.g. its source.
     public init(
         @HTMLBuilder contents: () -> some HTML,
-        @InlineHTMLBuilder caption: () -> some InlineHTML
+        @InlineHTMLBuilder caption: () -> some InlineElement
     ) {
         self.contents = contents()
         self.caption = caption()
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
-        let renderedContents = contents.render(context: context)
-        let renderedCaption = caption.render(context: context)
+    public func render() -> String {
+        let renderedContents = contents.render()
+        let renderedCaption = caption.render()
         var attributes = attributes
 
         attributes.tag = "blockquote"

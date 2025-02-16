@@ -6,18 +6,15 @@
 //
 
 /// Shows a Video player on your page.
-public struct Video: BlockHTML, InlineHTML, LazyLoadable {
+public struct Video: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The files of the video to display. This should be specified relative to the
     /// root of your site, e.g. /video/outforwalk.mp4.
@@ -26,10 +23,8 @@ public struct Video: BlockHTML, InlineHTML, LazyLoadable {
     /// Creates one or multiple `Video` instance from the names of
     /// files contained in your site's assets. This should be specified
     /// relative to the root of your site, e.g. /video/outforwalk.mp4.
-    /// - Parameters:
-    ///   - names: The filenames of your video relative to the root of
+    /// - Parameter files: A variable number of filenames, relative to the root of
     ///   your site. e.g. /video/outforwalk.mp4.
-    ///   - fileTypes: The format of the video files.
     public init(_ files: String...) {
         self.files = files
     }
@@ -37,9 +32,8 @@ public struct Video: BlockHTML, InlineHTML, LazyLoadable {
     /// Renders user video into the current publishing context.
     /// - Parameters:
     ///   - files: The user videos to render.
-    ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
-    public func render(files: [String], into context: PublishingContext) -> String {
+    public func render(files: [String]) -> String {
         var attributes = attributes
         attributes.tag = "video controls"
         attributes.closingTag = "video"
@@ -59,17 +53,16 @@ public struct Video: BlockHTML, InlineHTML, LazyLoadable {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         guard let files = self.files else {
-            context.addWarning("""
+            publishingContext.addWarning("""
             Creating video with no name should not be possible. \
             Please file a bug report on the Ignite project.
             """)
             return ""
         }
-        return render(files: files, into: context)
+        return render(files: files)
     }
 
     // Dictionary mapping file extensions to VideoType

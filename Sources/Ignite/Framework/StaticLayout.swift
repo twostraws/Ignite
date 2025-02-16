@@ -5,10 +5,12 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// One static layout in your site, where the content is entirely standalone rather
 /// than being produced in conjunction with an external Markdown file.
 @MainActor
-public protocol StaticLayout: EnvironmentReader {
+public protocol StaticLayout: Layoutable {
     /// All layouts have a default path generated for them by Ignite, but you can
     /// override that here if you wish.
     var path: String { get }

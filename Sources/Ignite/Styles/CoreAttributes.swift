@@ -28,28 +28,28 @@ public typealias Date = Foundation.Date
 
 /// A handful of attributes that all HTML types must support, either for
 /// rendering or for publishing purposes.
-public struct CoreAttributes: Sendable {
+struct CoreAttributes: Sendable {
     /// A unique identifier. Can be empty.
     var id = ""
 
     /// ARIA attributes that add accessibility information.
     /// See https://www.w3.org/TR/html-aria/
-    var aria = Set<AttributeValue>()
+    var aria = OrderedSet<Attribute>()
 
     /// CSS classes.
     var classes = OrderedSet<String>()
 
     /// Inline CSS styles.
-    var styles = OrderedSet<AttributeValue>()
+    var styles = OrderedSet<InlineStyle>()
 
     /// Data attributes.
-    var data = Set<AttributeValue>()
+    var data = OrderedSet<Attribute>()
 
     /// JavaScript events, such as onclick.
-    var events = Set<Event>()
+    var events = OrderedSet<Event>()
 
     /// Custom attributes not covered by the above, e.g. loading="lazy"
-    var customAttributes = Set<AttributeValue>()
+    var customAttributes = OrderedSet<Attribute>()
 
     /// The HTML tag to use for this element, e.g. "div" or "p".
     var tag: String?
@@ -59,6 +59,9 @@ public struct CoreAttributes: Sendable {
 
     /// The tag to use for self-closing elements like "meta" or "img".
     var selfClosingTag: String?
+
+    /// How many columns this should occupy when placed in a grid.
+    var columnWidth: ColumnWidth = .automatic
 
     /// CSS classes that should be applied to a wrapper div around this element.
     /// Each `ContainerAttributes` represents a wrapper div with styling
@@ -102,8 +105,8 @@ public struct CoreAttributes: Sendable {
             var output = ""
 
             // Arium? Look, just give me this one…
-            for arium in aria {
-                output += " aria-\(arium.name)=\"\(arium.value)\""
+            for arium in aria.sorted() {
+                output += " " + arium.description
             }
 
             return output
@@ -115,7 +118,7 @@ public struct CoreAttributes: Sendable {
         if classes.isEmpty {
             ""
         } else {
-            " class=\"\(classes.joined(separator: " "))\""
+            " class=\"\(classes.sorted().joined(separator: " "))\""
         }
     }
 
@@ -124,7 +127,7 @@ public struct CoreAttributes: Sendable {
         if styles.isEmpty {
             return ""
         } else {
-            let stringified = styles.map { "\($0.name): \($0.value)" }.joined(separator: "; ")
+            let stringified = styles.sorted().map(\.description).joined(separator: "; ")
             return " style=\"\(stringified)\""
         }
     }
@@ -136,8 +139,8 @@ public struct CoreAttributes: Sendable {
         } else {
             var output = ""
 
-            for datum in data {
-                output += " data-\(datum.name)=\"\(datum.value)\""
+            for datum in data.sorted() {
+                output += " data-\(datum)"
             }
 
             return output
@@ -148,7 +151,7 @@ public struct CoreAttributes: Sendable {
     var eventString: String {
         var result = ""
 
-        for event in events where event.actions.isEmpty == false {
+        for event in events.sorted() where event.actions.isEmpty == false {
             let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
 
             result += " \(event.name)=\"\(actions)\""
@@ -164,8 +167,8 @@ public struct CoreAttributes: Sendable {
         } else {
             var output = ""
 
-            for attribute in customAttributes {
-                output += " \(attribute.name)=\"\(attribute.value)\""
+            for attribute in customAttributes.sorted() {
+                output += " " + attribute.description
             }
 
             return output
@@ -201,13 +204,23 @@ public struct CoreAttributes: Sendable {
 
         // Apply containers from inner to outer
         for container in containerAttributes where !container.isEmpty {
-            let classAttr = container.classes.isEmpty ? "" : " class=\"\(container.classes.joined(separator: " "))\""
+            let classAttr = if container.classes.isEmpty {
+                ""
+            } else {
+                " class=\"\(container.classes.sorted().joined(separator: " "))\""
+            }
 
-            let allStyles = container.styles.map { "\($0.name): \($0.value)" }.joined(separator: "; ")
-            let styleAttr = container.styles.isEmpty ? "" : " style=\"\(allStyles)\""
+            let allStyles = container.styles.sorted().map { $0.description }.joined(separator: "; ")
+
+            let styleAttr = if container.styles.isEmpty {
+                ""
+            } else {
+                " style=\"\(allStyles)\""
+            }
 
             var eventAttr = ""
-            for event in container.events where event.actions.isEmpty == false {
+
+            for event in container.events.sorted() where event.actions.isEmpty == false {
                 let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
                 eventAttr += " \(event.name)=\"\(actions)\""
             }
@@ -256,44 +269,44 @@ public struct CoreAttributes: Sendable {
     /// - Parameter aria: The aria to append
     /// - Returns: A copy of the previous `CoreAttributes` object with
     /// the extra aria applied.
-    func appending(aria: AttributeValue?) -> CoreAttributes {
+    func appending(aria: Attribute?) -> CoreAttributes {
         guard let aria else { return self }
 
         var copy = self
-        copy.aria.insert(aria)
+        copy.aria.append(aria)
         return copy
     }
 
     /// Appends multiple extra inline CSS styles.
     /// - Parameter classes: The inline CSS styles to append.
-    mutating func append(styles: AttributeValue...) {
+    mutating func append(styles: InlineStyle...) {
         self.styles.formUnion(styles)
     }
 
     /// Appends a single extra inline CSS style.
     ///  - Parameter style: The style name, e.g. background-color
     ///  - Parameter value: The style value, e.g. steelblue
-    mutating func append(style: String, value: String) {
-        styles.append(AttributeValue(name: style, value: value))
+    mutating func append(style: Property, value: String) {
+        styles.append(InlineStyle(style, value: value))
     }
 
     /// Appends a data attribute to the element.
     /// - Parameter dataAttributes: Variable number of data attributes to append.
-    mutating func append(dataAttributes: AttributeValue...) {
+    mutating func append(dataAttributes: Attribute...) {
         data.formUnion(dataAttributes)
     }
 
     /// Appends multiple custom attributes to the element.
     /// - Parameter customAttributes: Variable number of custom attributes to append,
     ///   where each attribute is an `AttributeValue` containing a name-value pair.
-    mutating func append(customAttributes: AttributeValue...) {
+    mutating func append(customAttributes: Attribute...) {
         self.customAttributes.formUnion(customAttributes)
     }
 
     /// Appends an array of inline CSS styles to the element.
     /// - Parameter newStyles: An array of `AttributeValue` objects representing
     ///   CSS style properties and their values to be added.
-    mutating func append(styles newStyles: [AttributeValue]) {
+    mutating func append(styles newStyles: [InlineStyle]) {
         var styles = self.styles
         styles.formUnion(newStyles)
         self.styles = styles

@@ -6,11 +6,11 @@
 //
 
 /// Describes elements that can be placed into navigation bars.
-public protocol NavigationItem: InlineHTML {}
+public protocol NavigationItem: InlineElement {}
 
 /// A bar that sits across the top of your page to provide top-level navigation
 /// throughout your site.
-public struct NavigationBar: BlockHTML {
+public struct NavigationBar: HTML {
     /// The color scheme for this navigation bar.
     public enum NavigationBarStyle {
         /// No specific color scheme means this bar will be rendered using
@@ -23,9 +23,9 @@ public struct NavigationBar: BlockHTML {
         /// This bar must always be rendered in dark mode.
         case dark
     }
-    
+
     /// The new number of columns to use.
-    public enum Width {
+    public enum Width: Sendable {
         /// Viewport sets column width
         case viewport
         /// Specific count sets column width
@@ -48,13 +48,10 @@ public struct NavigationBar: BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// Controls the maximum width of the navigation bar content at different breakpoints.
     /// By default, uses Bootstrap's container class.
@@ -62,7 +59,7 @@ public struct NavigationBar: BlockHTML {
 
     /// The main logo for your site, such as an image or some text. This becomes
     /// clickable to let users navigate to your homepage.
-    let logo: (any InlineHTML)?
+    let logo: (any InlineElement)?
 
     /// An array of items to show in this navigation bar.
     let items: [any NavigationItem]
@@ -77,7 +74,7 @@ public struct NavigationBar: BlockHTML {
     /// - Parameters:
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
-        logo: (any InlineHTML)? = nil
+        logo: (any InlineElement)? = nil
     ) {
         self.logo = logo
         self.items = []
@@ -90,7 +87,7 @@ public struct NavigationBar: BlockHTML {
     ///   - items: An element builder that returns an array of
     /// `NavigationItem` objects.
     public init(
-        logo: (any InlineHTML)? = nil,
+        logo: (any InlineElement)? = nil,
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem]
     ) {
         self.logo = logo
@@ -105,7 +102,7 @@ public struct NavigationBar: BlockHTML {
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        logo: (() -> (any InlineHTML))? = nil
+        logo: (() -> (any InlineElement))? = nil
     ) {
         self.items = items()
         self.logo = logo?()
@@ -130,7 +127,7 @@ public struct NavigationBar: BlockHTML {
         case .viewport:
             copy.widthClasses = ["container-fluid", copy.columnWidth.className]
         case .count(let count):
-            copy.columnWidth = .count(count)
+            copy.columnWidth(.count(count))
             copy.widthClasses = ["container", copy.columnWidth.className]
         }
         return copy
@@ -154,9 +151,8 @@ public struct NavigationBar: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         Tag("header") {
             Tag("nav") {
                 Section {
@@ -164,8 +160,10 @@ public struct NavigationBar: BlockHTML {
                         Link(logo, target: "/")
                             .class("navbar-brand")
                     }
-                    renderToggleButton()
-                    renderNavItems(context: context)
+                    if !items.isEmpty {
+                        renderToggleButton()
+                        renderNavItems()
+                    }
                 }
                 .class(widthClasses)
             }
@@ -173,7 +171,7 @@ public struct NavigationBar: BlockHTML {
             .class("navbar", "navbar-expand-md")
             .data("bs-theme", theme(for: style))
         }
-        .render(context: context)
+        .render()
     }
 
     private func renderToggleButton() -> Button {
@@ -184,19 +182,19 @@ public struct NavigationBar: BlockHTML {
         .class("navbar-toggler")
         .data("bs-toggle", "collapse")
         .data("bs-target", "#navbarCollapse")
-        .aria("controls", "navbarCollapse")
-        .aria("expanded", "false")
-        .aria("label", "Toggle navigation")
+        .aria(.controls, "navbarCollapse")
+        .aria(.expanded, "false")
+        .aria(.label, "Toggle navigation")
     }
 
-    private func renderNavItems(context: PublishingContext) -> Section {
+    private func renderNavItems() -> Section {
         Section {
             List {
                 ForEach(items) { item in
                     if let dropdownItem = item as? Dropdown {
                         renderDropdownItem(dropdownItem)
                     } else if let link = item as? Link {
-                        renderLinkItem(link, context: context)
+                        renderLinkItem(link)
                     } else {
                         AnyHTML(item)
                     }
@@ -216,15 +214,13 @@ public struct NavigationBar: BlockHTML {
         .data("bs-theme", "light")
     }
 
-    private func renderLinkItem(_ link: Link, context: PublishingContext) -> ListItem {
+    private func renderLinkItem(_ link: Link) -> ListItem {
         ListItem {
-            let isActive = context.currentRenderingPath == link.url
+            let isActive = publishingContext.currentRenderingPath == link.url
             link
                 .class("nav-link", isActive ? "active" : nil)
-                .aria("current", isActive ? "page" : nil)
+                .aria(.current, isActive ? "page" : nil)
         }
         .class("nav-item")
     }
 }
-
-

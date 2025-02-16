@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Creates a 4-character hash string that persists between app launches (e.g. "Hello World" -> "5eb2")
+/// Creates a 5-character hash string that persists between app launches (e.g. "Hello World" -> "5eb21")
 extension String {
    var truncatedHash: String {
        let hash = strHash(self)
@@ -17,8 +17,8 @@ extension String {
        var result = ""
        var remainingHash = hash
 
-       // Generate exactly 4 characters
-       for _ in 0..<4 {
+       // Generate exactly 5 characters
+       for _ in 0..<5 {
            let index = Int(remainingHash % UInt64(charset.count))
            result.append(charset[index])
            remainingHash /= UInt64(charset.count)

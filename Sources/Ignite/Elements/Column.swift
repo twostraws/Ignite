@@ -8,7 +8,7 @@
 /// A column inside a table row.
 public struct Column: HTML, HorizontalAligning {
     /// How to vertically align the contents of this column.
-    public enum VerticalAlignment: String {
+    public enum VerticalAlignment: String, Sendable, CaseIterable {
         /// Align contents to the top of the column.
         case top
 
@@ -23,7 +23,7 @@ public struct Column: HTML, HorizontalAligning {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -64,9 +64,8 @@ public struct Column: HTML, HorizontalAligning {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var columnAttributes = attributes
 
         if verticalAlignment != .top {
@@ -74,6 +73,6 @@ public struct Column: HTML, HorizontalAligning {
         }
         columnAttributes.tag = "td colspan=\"\(columnSpan)\""
         columnAttributes.closingTag = "td"
-        return columnAttributes.description(wrapping: HTMLCollection(items).render(context: context))
+        return columnAttributes.description(wrapping: HTMLCollection(items).render())
     }
 }

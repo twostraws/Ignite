@@ -12,18 +12,15 @@
 ///
 /// **Note**: A 12-column grid is the default, but you can adjust that downwards
 /// by using the `columns()` modifier.
-public struct Grid: BlockHTML {
+public struct Grid: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// How many columns this should be divided into
     var columnCount: Int?
@@ -66,9 +63,8 @@ public struct Grid: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var sectionAttributes = attributes.appending(classes: ["row"])
 
         // If a column count is set, we want to use that for all
@@ -87,7 +83,7 @@ public struct Grid: BlockHTML {
         if let spacingAmount {
             switch spacingAmount {
             case .exact(let pixels):
-                sectionAttributes.append(styles: .init(name: .rowGap, value: "\(pixels)px"))
+                sectionAttributes.append(styles: .init(.rowGap, value: "\(pixels)px"))
             case .semantic(let amount):
                 gutterClass = "gy-\(amount.rawValue)"
             }
@@ -95,49 +91,47 @@ public struct Grid: BlockHTML {
 
         return Section {
             ForEach(items) { item in
-                if let group = item as? Group {
-                    handleGroup(group, attributes: group.attributes)
+                if let passthrough = item as? any PassthroughHTML {
+                    handlePassthrough(passthrough, attributes: passthrough.attributes)
                 } else if let modified = item as? ModifiedHTML,
-                          let group = modified.content as? Group {
-                    handleGroup(group, attributes: modified.attributes)
-                } else if let item = item as? any BlockHTML {
+                          let passthrough = modified.content as? any PassthroughHTML
+                {
+                    handlePassthrough(passthrough, attributes: modified.attributes)
+                } else {
                     Section(item)
                         .class(className(for: item))
                         .class(gutterClass)
-                } else {
-                    item
                 }
             }
         }
         .attributes(sectionAttributes)
-        .render(context: context)
+        .render()
     }
 
     /// Renders a group of HTML elements with consistent styling and attributes.
     /// - Parameters:
-    ///   - group: The group containing the HTML elements to render.
+    ///   - passthrough: The passthrough entity containing the HTML elements to render.
     ///   - attributes: HTML attributes to apply to each element in the group.
     /// - Returns: A view containing the styled group elements.
-    func handleGroup(_ group: Group, attributes: CoreAttributes) -> some HTML {
+    func handlePassthrough(_ passthrough: any PassthroughHTML, attributes: CoreAttributes) -> some HTML {
         let gutterClass = if case .semantic(let amount) = spacingAmount {
             "g-\(amount.rawValue)"
         } else {
             ""
         }
-        return ForEach(group.items) { item in
-            if let item = item as? any BlockHTML {
-                Section(item)
-                    .class(className(for: group))
-                    .class(gutterClass)
-                    .attributes(attributes)
-            }
+        return ForEach(passthrough.items) { item in
+            Section(item)
+                .class(className(for: passthrough))
+                .class(gutterClass)
+                .attributes(attributes)
         }
     }
 
     /// Calculates the appropriate Bootstrap column class name for a block element.
     /// - Parameter item: The block element to calculate the class name for.
-    /// - Returns: A Bootstrap class name that represents the element's width, scaled according to the section's column count if needed.
-    private func className(for item: any BlockHTML) -> String {
+    /// - Returns: A Bootstrap class name that represents the element's width,
+    /// scaled according to the section's column count if needed.
+    private func className(for item: any HTML) -> String {
         let className: String
         if let columnCount, case .count(let width) = item.columnWidth {
             // Scale the width to be relative to the new column count

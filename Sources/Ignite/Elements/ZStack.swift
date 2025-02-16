@@ -7,18 +7,15 @@
 
 /// Creates a container that stacks its children along the z-axis (depth),
 /// with each subsequent child appearing in front of the previous one.
-public struct ZStack: BlockHTML {
+public struct ZStack: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth: ColumnWidth = .automatic
 
     /// The alignment point for positioning elements within the stack.
     private var alignment: UnitPoint
@@ -35,7 +32,7 @@ public struct ZStack: BlockHTML {
         self.alignment = alignment
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var items = [any HTML]()
 
         for item in self.items {
@@ -49,24 +46,24 @@ public struct ZStack: BlockHTML {
         items.enumerated().forEach { index, item in
             var elementAttributes = CoreAttributes()
             elementAttributes.append(styles: [
-                .init(name: "grid-area", value: "1/1"),
-                .init(name: "z-index", value: "\(index)"),
-                .init(name: "width", value: "fit-content"),
-                .init(name: "height", value: "fit-content"),
-                .init(name: "justify-self", value: alignment.justifySelf),
-                .init(name: "align-self", value: alignment.alignSelf)
+                .init(.gridArea, value: "1/1"),
+                .init(.zIndex, value: "\(index)"),
+                .init(.width, value: "fit-content"),
+                .init(.height, value: "fit-content"),
+                .init(.justifySelf, value: alignment.justifySelf),
+                .init(.alignSelf, value: alignment.alignSelf)
             ])
 
             AttributeStore.default.merge(elementAttributes, intoHTML: item.id)
         }
 
         var attributes = attributes
-        attributes.append(styles: .init(name: "display", value: "grid"))
+        attributes.append(styles: .init(.display, value: "grid"))
 
         AttributeStore.default.merge(attributes, intoHTML: id)
         attributes.tag = "div"
 
-        let content = items.map { $0.render(context: context) }.joined()
+        let content = items.map { $0.render() }.joined()
         return attributes.description(wrapping: content)
     }
 }

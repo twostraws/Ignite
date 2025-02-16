@@ -6,7 +6,7 @@
 //
 
 /// Used to create tabulated data on a page.
-public struct Table: BlockHTML {
+public struct Table: HTML {
     /// Styling options for tables.
     public enum Style {
         /// All table rows and columns look the same. The default.
@@ -25,13 +25,10 @@ public struct Table: BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The rows that are inside this table.
     var rows: [Row]
@@ -99,9 +96,8 @@ public struct Table: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var tableAttributes = attributes.appending(classes: ["table"])
 
         if hasBorderEnabled {
@@ -125,14 +121,14 @@ public struct Table: BlockHTML {
 
         if let header {
             let headerHTML = header.map {
-                "<th>\($0.render(context: context))</th>"
+                "<th>\($0.render())</th>"
             }.joined()
 
             output += "<thead><tr>\(headerHTML)</tr></thead>"
         }
 
         output += "<tbody>"
-        output += rows.render(context: context)
+        output += rows.render()
         output += "</tbody>"
         output += "</table>"
         return output

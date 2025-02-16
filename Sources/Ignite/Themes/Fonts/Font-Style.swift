@@ -62,9 +62,14 @@ public extension Font {
             }
         }
 
+        /// A list of font styles that generate tags, as opposed to CSS classes.
+        @MainActor
+        public static let tagCases: [Style] = [
+            .title1, .title2, .title3, .title4, .title5, .title6, .body
+        ]
+
         /// Creates a new text level from a raw string value.
         /// - Parameter rawValue: The HTML tag name to convert into a text level (e.g., "h1", "p")
-        /// - Returns: The corresponding text level, or nil if the tag name isn't valid
         public init?(rawValue: String) {
             switch rawValue.lowercased() {
             case "h1": self = .title1

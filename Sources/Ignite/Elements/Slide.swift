@@ -6,18 +6,15 @@
 //
 
 /// One slide in a `Carousel`.
-public struct Slide: BlockHTML {
+public struct Slide: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// An optional background image to use for this slide. This should be
     /// specified relative to the root of your site, e.g. /images/dog.jpg.
@@ -64,17 +61,21 @@ public struct Slide: BlockHTML {
 
     /// Used during rendering to assign this carousel slide to a particular parent,
     /// so our open paging behavior works correctly.
-    func assigned(at index: Int, in context: PublishingContext) -> String {
+    func assigned(at index: Int) -> String {
         Section {
             if let slideBackground = background {
                 Image(slideBackground, description: "")
                     .class("d-block", "w-100")
-                    .style("height: 100%", "object-fit: cover", "opacity: \(backgroundOpacity)")
+                    .style(
+                        .init(.height, value: "100%"),
+                        .init(.objectFit, value: "cover"),
+                        .init(.opacity, value: backgroundOpacity.formatted(.nonLocalizedDecimal))
+                    )
             }
 
             Section {
                 Section {
-                    render(context: context)
+                    render()
                 }
                 .class("carousel-caption")
             }
@@ -82,14 +83,13 @@ public struct Slide: BlockHTML {
         }
         .class("carousel-item")
         .class(index == 0 ? "active" : nil)
-        .style("background-color: black")
-        .render(context: context)
+        .style(.backgroundColor, "black")
+        .render()
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
-        items.map { $0.render(context: context) }.joined()
+    public func render() -> String {
+        items.map { $0.render() }.joined()
     }
 }

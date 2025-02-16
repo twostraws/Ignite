@@ -38,9 +38,6 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "IgniteTests",
-            dependencies: ["Ignite"]),
-        .testTarget(
             name: "IgniteTesting",
             dependencies: ["Ignite"])
     ]

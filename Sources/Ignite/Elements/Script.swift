@@ -5,20 +5,19 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// Embeds some JavaScript inside this page, either directly or by
 /// referencing an external file.
-public struct Script: BlockHTML, HeadElement {
+public struct Script: HTML, HeadElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The external file to load.
     private var file: String?
@@ -44,19 +43,18 @@ public struct Script: BlockHTML, HeadElement {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var attributes = attributes
         attributes.tag = "script"
 
         if let file {
-            attributes.append(customAttributes: .init(name: "src", value: "\(context.site.url.path)\(file)"))
+            attributes.append(customAttributes: .init(name: "src", value: "\(publishingContext.site.url.path)\(file)"))
             return attributes.description()
         } else if let code {
             return attributes.description(wrapping: code)
         } else {
-            context.addWarning("""
+            publishingContext.addWarning("""
             Creating a script with no source or code should not be possible. \
             Please file a bug report on the Ignite project.
             """)

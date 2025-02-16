@@ -7,26 +7,23 @@
 
 /// A protocol for customizing the layout of ContentPreview.
 public protocol ContentPreviewStyle {
-    func body(content: Content, context: PublishingContext) -> any BlockHTML
+    func body(content: Content) -> any HTML
 }
 
 /// A wrapper around Card, specifically aimed at presenting details about
 /// some content on your site. This automatically links to your content page
 /// and adds in tags.
-public struct ContentPreview: BlockHTML {
+public struct ContentPreview: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
     var content: Content
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// Custom style for the content preview.
     private var style: ContentPreviewStyle?
@@ -45,26 +42,24 @@ public struct ContentPreview: BlockHTML {
     }
 
     /// Renders the content preview with either a custom layout or the default card.
-    /// - Parameter context: The publishing context for rendering.
     /// - Returns: A rendered string of HTML.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         // If custom style is provided, use it; otherwise,
         // fallback to default layout.
         if let style {
-            style.body(content: content, context: context)
+            style.body(content: content)
                 .attributes(attributes)
-                .render(context: context)
+                .render()
         } else {
-            defaultCardLayout(context: context)
+            defaultCardLayout()
                 .attributes(attributes)
-                .render(context: context)
+                .render()
         }
     }
 
     /// Default card layout for rendering the content preview.
-    /// - Parameter context: The publishing context for rendering tag links.
     /// - Returns: A BlockElement representing the card layout.
-    private func defaultCardLayout(context: PublishingContext) -> some BlockHTML {
+    private func defaultCardLayout() -> some HTML {
         Card(imageName: content.image) {
             Text(content.description)
                 .margin(.bottom, .none)
@@ -80,7 +75,7 @@ public struct ContentPreview: BlockHTML {
                 Section {
                     tagLinks
                 }
-                .style("margin-top: -5px")
+                .style(.marginTop, "-5px")
             }
         }
     }

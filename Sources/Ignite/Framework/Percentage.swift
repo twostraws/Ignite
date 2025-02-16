@@ -53,6 +53,10 @@ public struct Percentage: Hashable, Sendable {
 }
 
 public extension Percentage {
+    static prefix func - (operand: Percentage) -> Percentage {
+        Percentage(-operand.value)
+    }
+
     static func - (lhs: Percentage, rhs: Percentage) -> Double {
         lhs.value - rhs.value
     }

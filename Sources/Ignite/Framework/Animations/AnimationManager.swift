@@ -22,9 +22,7 @@ final class AnimationManager {
     private var animations: [String: OrderedDictionary<AnimationTrigger, any Animatable>] = [:]
 
     /// Returns true if any animations have been registered
-    var hasAnimations: Bool {
-        !animations.isEmpty
-    }
+    var hasAnimations: Bool { !animations.isEmpty }
 
     /// Private initializer to enforce singleton pattern.
     private init() {}
@@ -57,22 +55,19 @@ final class AnimationManager {
         animations[elementID]?[trigger]
     }
 
-    /// Returns all animations registered for a specific HTML element.
-    /// - Parameter elementID: The unique identifier of the HTML element
-    /// - Returns: An array of animations associated with the element, or an empty array if none exist
-    func getAnimations(for elementID: String) -> [any Animatable] {
-        animations[elementID]?.values.map(\.self) ?? []
-    }
-
     /// Generates and writes CSS for all registered animations to a file.
     /// - Parameter file: The URL where the CSS file should be written
     func write(to file: URL) {
-        let cssBlocks = animations.map { elementID, triggerMap in
-            let generator = AnimationClassGenerator(elementID: elementID, triggerMap: triggerMap)
+        let cssBlocks = animations.map { _, triggerMap in
+            let generator = AnimationClassGenerator(triggerMap: triggerMap)
             return generator.build()
         }
 
-        let css = cssBlocks.joined(separator: "\n\n")
-        try? css.write(to: file, atomically: true, encoding: .utf8)
+        do {
+            let css = cssBlocks.joined(separator: "\n\n")
+            try css.write(to: file, atomically: true, encoding: .utf8)
+        } catch {
+            PublishingContext.default.addError(.failedToWriteFile("css/animations.min.css"))
+        }
     }
 }

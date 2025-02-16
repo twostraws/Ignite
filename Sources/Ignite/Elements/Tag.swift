@@ -12,7 +12,7 @@ public struct Tag: HTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -37,7 +37,7 @@ public struct Tag: HTML {
     /// page element to place inside.
     /// - Parameters:
     ///   - name: The name of the HTML tag you want to create.
-    ///   - content: The content to place inside the tag.
+    ///   - singleElement: The content to place inside the tag.
     public init(_ name: String, content singleElement: some HTML) {
         self.name = name
         self.content = singleElement
@@ -54,9 +54,9 @@ public struct Tag: HTML {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         var attributes = attributes
         attributes.tag = name
-        return attributes.description(wrapping: content.render(context: context))
+        return attributes.description(wrapping: content.render())
     }
 }

@@ -13,18 +13,15 @@
 ///
 /// - Note: Unlike ``Group``, modifiers applied to a `Section` affect the
 ///         containing `div` element rather than being propagated to child elements.
-public struct Section: BlockHTML {
+public struct Section: HTML, HorizontalAligning {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     var items: [any HTML] = []
 
@@ -32,16 +29,12 @@ public struct Section: BlockHTML {
         self.items = flatUnwrap(content())
     }
 
-    public init(_ items: any HTML, background: Color? = nil) {
+    public init(_ items: any HTML) {
         self.items = flatUnwrap(items)
     }
 
-    init(context: PublishingContext, items: [any HTML]) {
-        self.items = flatUnwrap(items)
-    }
-
-    public func render(context: PublishingContext) -> String {
-        let content = items.map { $0.render(context: context) }.joined()
+    public func render() -> String {
+        let content = items.map { $0.render() }.joined()
         var attributes = attributes
         attributes.tag = "div"
         return attributes.description(wrapping: content)

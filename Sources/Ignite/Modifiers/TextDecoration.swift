@@ -6,7 +6,7 @@
 //
 
 /// Property sets the appearance of decorative lines on text.
-public enum TextDecoration: String {
+public enum TextDecoration: String, CaseIterable, Sendable {
     case none
     case through = "line-through"
     case underline
@@ -21,7 +21,7 @@ struct TextDecorationModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with text decoration applied
     func body(content: some HTML) -> any HTML {
-        content.style("text-decoration: \(style)")
+        content.style(.textDecoration, style.rawValue)
     }
 }
 
@@ -31,14 +31,5 @@ public extension HTML {
     /// - Returns: The current element with the updated text decoration style applied.
     func textDecoration(_ style: TextDecoration) -> some HTML {
         modifier(TextDecorationModifier(style: style))
-    }
-}
-
-public extension StyledHTML {
-    /// Applies a text decoration style to the current element.
-    /// - Parameter style: The style to apply, specified as a `TextDecoration` case.
-    /// - Returns: The current element with the updated text decoration style applied.
-    func textDecoration(_ style: TextDecoration) -> Self {
-        self.style(.init(name: .textDecoration, value: style.rawValue))
     }
 }

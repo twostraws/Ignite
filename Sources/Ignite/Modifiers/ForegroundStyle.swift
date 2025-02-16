@@ -6,7 +6,7 @@
 //
 
 /// Common foreground styles that allow for clear readability.
-public enum ForegroundStyle: String {
+public enum ForegroundStyle: String, Sendable, CaseIterable {
     case primary = "text-primary"
     case primaryEmphasis = "text-primary-emphasis"
     case secondary = "text-body-secondary"
@@ -63,18 +63,18 @@ struct ForegroundStyleModifier: HTMLModifier {
         case .string(let string):
             if content.body.isComposite {
                 content
-                    .containerStyle(.init(name: "color", value: string))
+                    .containerStyle(.init(.color, value: string))
                     .class("color-inherit")
             } else {
-                content.style("color: \(string)")
+                content.style(.color, string)
             }
         case .color(let color):
             if content.body.isComposite {
                 content
-                    .containerStyle(.init(name: "color", value: color.description))
+                    .containerStyle(.init(.color, value: color.description))
                     .class("color-inherit")
             } else {
-                content.style("color: \(color.description)")
+                content.style(.color, color.description)
             }
         case .style(let foregroundStyle):
             content.class(foregroundStyle.rawValue)
@@ -98,7 +98,7 @@ extension HTML {
     }
 
     /// Applies a foreground color to the current element.
-    /// - Parameter color: The style to apply, specified as a `Color` object.
+    /// - Parameter style: The style to apply, specified as a `Color` object.
     /// - Returns: The current element with the updated color applied.
     public func foregroundStyle(_ style: ForegroundStyle) -> some HTML {
         modifier(ForegroundStyleModifier(style: style))
@@ -109,23 +109,14 @@ extension HTML where Self == Image {
     /// Applies a foreground color to the current element.
     /// - Parameter color: The style to apply, specified as a `Color` object.
     /// - Returns: The current element with the updated color applied.
-    public func foregroundStyle(_ color: Color) -> some InlineHTML {
+    public func foregroundStyle(_ color: Color) -> some InlineElement {
         modifier(ForegroundStyleModifier(color: color))
     }
 
     /// Applies a foreground color to the current element.
     /// - Parameter color: The style to apply, specified as a string.
     /// - Returns: The current element with the updated color applied.
-    public func foregroundStyle(_ color: String) -> some InlineHTML {
+    public func foregroundStyle(_ color: String) -> some InlineElement {
         modifier(ForegroundStyleModifier(string: color))
-    }
-}
-
-public extension StyledHTML {
-    /// Applies a foreground color to the current element.
-    /// - Parameter color: The style to apply, specified as a `Color` object.
-    /// - Returns: The current element with the updated color applied.
-    func foregroundStyle(_ color: Color) -> Self {
-        self.style(.init(name: .color, value: color.description))
     }
 }

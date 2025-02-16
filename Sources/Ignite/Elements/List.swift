@@ -6,7 +6,7 @@
 //
 
 /// Creates a list of items, either ordered or unordered.
-public struct List: BlockHTML {
+public struct List: HTML {
     /// Controls whether this list contains items in a specific order or not.
     public enum ListMarkerStyle {
         /// This list contains items that are ordered, which normally means
@@ -27,13 +27,10 @@ public struct List: BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The current style for this list. Defaults to `.plain`.
     private var listStyle: ListStyle = .plain
@@ -120,16 +117,15 @@ public struct List: BlockHTML {
         }
 
         if listMarkerType.isEmpty == false {
-            listAttributes.append(style: "list-style-type", value: listMarkerType)
+            listAttributes.append(style: .listStyleType, value: listMarkerType)
         }
 
         return listAttributes
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         let listAttributes = getAttributes()
 
         var output = "<\(listElementName)\(listAttributes.description())>"
@@ -142,11 +138,11 @@ public struct List: BlockHTML {
                     item.class("list-group-item")
                 }
 
-                output += listableItem.renderInList(context: context)
+                output += listableItem.renderInList()
             } else {
                 let styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
                 item.class("m-0")
-                output += "<li\(styleClass)>\(item.render(context: context))</li>"
+                output += "<li\(styleClass)>\(item.render())</li>"
             }
         }
 

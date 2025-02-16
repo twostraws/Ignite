@@ -6,9 +6,9 @@
 //
 
 /// A group of information placed inside a gently rounded
-public struct Card: BlockHTML {
+public struct Card: HTML {
     /// Styling for this card.
-    public enum Style: CaseIterable {
+    public enum Style: CaseIterable, Sendable {
         /// Default styling.
         case `default`
 
@@ -70,13 +70,13 @@ public struct Card: BlockHTML {
         }
     }
 
-    enum TextAlignment: String, CaseIterable {
+    enum TextAlignment: String, CaseIterable, Sendable {
         case start = "text-start"
         case center = "text-center"
         case end = "text-end"
     }
 
-    enum VerticalAlignment: String, CaseIterable {
+    enum VerticalAlignment: String, CaseIterable, Sendable {
         case start = "align-content-start"
         case center = "align-content-center"
         case end = "align-content-end"
@@ -122,13 +122,10 @@ public struct Card: BlockHTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     var role = Role.default
     var style = Style.default
@@ -206,13 +203,13 @@ public struct Card: BlockHTML {
         return copy
     }
 
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         Section {
             if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
-                        .style("opacity: \(imageOpacity)")
+                        .style(.opacity, imageOpacity.description)
                 } else {
                     image
                         .class(contentPosition.imageClass)
@@ -229,7 +226,7 @@ public struct Card: BlockHTML {
                 if imageOpacity != 1 {
                     image
                         .class(contentPosition.imageClass)
-                        .style("opacity: \(imageOpacity)")
+                        .style(.opacity, imageOpacity.description)
                 } else {
                     image
                         .class(contentPosition.imageClass)
@@ -243,7 +240,7 @@ public struct Card: BlockHTML {
         .attributes(attributes)
         .class("card")
         .class(cardClasses)
-        .render(context: context)
+        .render()
     }
 
     private func renderHeader() -> Section {

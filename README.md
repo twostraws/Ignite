@@ -222,6 +222,7 @@ struct ExampleSite: Site {
 }
 ```
 
+The `Site` protocol provides sensible defaults for most properties, allowing you to focus on implementing only the customizations your site needs. As shown in the above, only a few properties like `name`, `url`, `homePage`, and `layout` require explicit implementation.
 
 ## Using the command-line tool
 
@@ -279,7 +280,7 @@ I welcome all contributions, whether that's adding new tests, fixing up existing
 - You must comment your code thoroughly, using documentation comments or regular comments as applicable.
 - Please ensure you run SwiftLint in the Sources directory, and fix all outstanding issues.
 - All code must be licensed under the MIT license so it can benefit the most people.
-- Ensure you build IgniteSamples using your  modified copy of Ignite, and compare it to [the live version](https://github.com/twostraws/IgniteSamples).
+- Ensure you build IgniteSamples using your modified copy of Ignite, and compare it to [the live version](https://github.com/twostraws/IgniteSamples).
 - If you create a new element, please consider adding it to the IgniteSamples repository, so folks can see it more easily.
 
 

@@ -36,9 +36,9 @@ public extension HTML {
     /// Applies a transition animation to an HTML element.
     ///
     /// - Parameters:
-    ///   - animation: The transition animation to apply
-    ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
-    /// - Returns: A modified HTML element with the animation applied
+    ///   - transition: The transition animation to apply.
+    ///   - trigger: The event that triggers this animation (.hover, .click, or .appear).
+    /// - Returns: A modified HTML element with the animation applied.
     func transition(_ transition: Transition, on trigger: AnimationTrigger) -> some HTML {
         modifier(AnimationModifier(transition: transition, trigger: trigger))
     }
@@ -46,10 +46,10 @@ public extension HTML {
     /// Applies a keyframe animation to an HTML element.
     ///
     /// - Parameters:
-    ///   - animation: The keyframe animation to apply
-    ///   - autoreverses: Whether the animation should play in reverse after completing
-    ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
-    /// - Returns: A modified HTML element with the animation applied
+    ///   - animation: The keyframe animation to apply.
+    ///   - direction: Whether the animation should play in reverse after completing.
+    ///   - trigger: The event that triggers this animation (.hover, .click, or .appear).
+    /// - Returns: A modified HTML element with the animation applied.
     func animation(
         _ animation: Animation,
         direction: AnimationDirection? = nil,
@@ -65,7 +65,7 @@ public extension HTML {
     ///   - direction: Optional direction for keyframe animations (e.g., alternate, reverse)
     ///   - trigger: The event that triggers this animation (.hover, .click, or .appear)
     /// - Returns: The modified HTML element with animation containers and classes applied
-    internal func applyAnimation(
+    fileprivate func applyAnimation(
         _ animation: some Animatable,
         direction: AnimationDirection?,
         trigger: AnimationTrigger
@@ -76,21 +76,21 @@ public extension HTML {
         let existingContainers = Set(attributes.containerAttributes.flatMap(\.classes))
 
         // Extract color styles from the element and move them to the animation wrapper
-        var wrapperStyles: OrderedSet<AttributeValue> = []
+        var wrapperStyles: OrderedSet<InlineStyle> = []
 
-        if let backgroundColor = attributes.styles.first(where: { $0.name == "background-color" }) {
+        if let backgroundColor = attributes.styles.first(where: { $0.property == "background-color" }) {
             wrapperStyles.append(backgroundColor)
-            attributes.styles.removeAll { $0.name == "background-color" }
+            attributes.styles.removeAll { $0.property == "background-color" }
         }
 
-        if let background = attributes.styles.first(where: { $0.name == "background" }) {
+        if let background = attributes.styles.first(where: { $0.property == "background" }) {
             wrapperStyles.append(background)
-            attributes.styles.removeAll { $0.name == "background" }
+            attributes.styles.removeAll { $0.property == "background" }
         }
 
-        if let color = attributes.styles.first(where: { $0.name == "color" }) {
+        if let color = attributes.styles.first(where: { $0.property == "color" }) {
             wrapperStyles.append(color)
-            attributes.styles.removeAll { $0.name == "color" }
+            attributes.styles.removeAll { $0.property == "color" }
         }
 
         // Check for existing animations with this trigger
@@ -106,7 +106,7 @@ public extension HTML {
         modifiedAnimation.trigger = trigger
 
         if trigger == .click || trigger == .hover {
-            modifiedAnimation.staticProperties.append(.init(name: "cursor", value: "pointer"))
+            modifiedAnimation.baseStyles.append(.init(.cursor, value: "pointer"))
         }
 
         // Register the combined animation
@@ -128,10 +128,10 @@ public extension HTML {
         return self
     }
 
-    func createBaseAnimation(
+    private func createBaseAnimation(
         for animation: any Animatable,
         direction: AnimationDirection?,
-        existingAnimation: Animatable?
+        existingAnimation: (any Animatable)?
     ) -> any Animatable {
         if let basicAnim = animation as? Transition {
             var copy = basicAnim
@@ -165,13 +165,13 @@ public extension HTML {
         triggers: [AnimationTrigger],
         to attributes: inout CoreAttributes,
         in existingContainers: Set<String>,
-        styles wrapperStyles: OrderedSet<AttributeValue>
+        styles wrapperStyles: OrderedSet<InlineStyle>
     ) {
-        let animationName = "animation-\(self.id)"
+        let animationName = "animation-\(animation.id)"
 
         for trigger in triggers {
             switch trigger {
-            case .click where !existingContainers.contains("click-\(self.id)"):
+            case .click where !existingContainers.contains("click-\(animation.id)"):
                 // Add click handler to a new container, or the appear container
                 // if it exists to avoid duplicate class assignments
                 if !existingContainers.contains(animationName) {
@@ -199,7 +199,7 @@ public extension HTML {
                 // Inner click-specific container
                 attributes.append(containerAttributes: ContainerAttributes(
                     type: .animation,
-                    classes: ["click-\(self.id)"]
+                    classes: ["click-\(animation.id)"]
                 ))
 
             case .hover where !existingContainers.contains("\(animationName)-hover"):
@@ -207,7 +207,7 @@ public extension HTML {
                 attributes.append(containerAttributes: ContainerAttributes(
                     type: .transform,
                     classes: ["\(animationName)-transform"],
-                    styles: [AttributeValue(name: "transform-style", value: "preserve-3d")]
+                    styles: [InlineStyle(.transformStyle, value: "preserve-3d")]
                 ))
 
                 // Add hover effects container
@@ -215,7 +215,7 @@ public extension HTML {
 
                 if let animation = animation as? Animation,
                    animation.fillMode == .backwards || animation.fillMode == .both {
-                    classes.append("fill-\(self.id)-\(animation.fillMode.rawValue)")
+                    classes.append("fill-\(animation.id)-\(animation.fillMode.rawValue)")
                 }
 
                 attributes.append(containerAttributes: ContainerAttributes(
@@ -243,7 +243,7 @@ public extension HTML {
                 let newEvent = Event(name: "onclick", actions: [
                     CustomAction("igniteToggleClickAnimation(this)")])
                 modified.type = .click
-                modified.events.insert(newEvent)
+                modified.events.append(newEvent)
                 return modified
             }
 

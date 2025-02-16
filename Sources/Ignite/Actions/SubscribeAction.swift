@@ -7,12 +7,6 @@
 
 /// Represents a form submission action for newsletter subscriptions
 public struct SubscribeAction: Action {
-    /// The email platform to use
-    let service: EmailPlatform
-
-    /// The ID of the form this action is attached to
-    var formID: String
-
     /// Represents different newsletter service providers
     public enum EmailPlatform: Sendable {
         /// Mailchimp newsletter integration
@@ -37,7 +31,7 @@ public struct SubscribeAction: Action {
             }
         }
 
-        var customAttributes: [AttributeValue] {
+        var customAttributes: [Attribute] {
             switch self {
             case .mailchimp:
                 [.init(name: "method", value: "post"),
@@ -48,7 +42,7 @@ public struct SubscribeAction: Action {
             }
         }
 
-        var dataAttributes: [AttributeValue] {
+        var dataAttributes: [Attribute] {
             switch self {
             case .sendFox:
                 [.init(name: "async", value: "true"),
@@ -102,13 +96,27 @@ public struct SubscribeAction: Action {
         }
     }
 
+    /// The email platform to use
+    let service: EmailPlatform
+
+    /// The ID of the form this action is attached to
+    var formID: String
+
+    /// Sets the form identifier for this subscription action.
+    /// - Parameter formID: A string that uniquely identifies the form in the newsletter service.
+    /// - Returns: A new `SubscribeAction` instance with the updated form identifier.
+    func setFormID(_ formID: String) -> Self {
+        var copy = self
+        copy.formID = formID
+        return copy
+    }
+
     /// Creates a new subscribe action for a specific form.
     /// - Parameters:
     ///   - service: The email service to use for subscription.
-    ///   - formID: The ID of the form this action is attached to.
-    public init(_ service: EmailPlatform, formID: String) {
+    public init(_ service: EmailPlatform) {
         self.service = service
-        self.formID = formID
+        self.formID = ""
     }
 
     /// Renders this action using publishing context passed in.

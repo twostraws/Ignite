@@ -26,13 +26,39 @@ struct BorderModifier: HTMLModifier {
     /// - Parameter content: The HTML content to modify
     /// - Returns: The modified HTML content with border styling applied
     func body(content: some HTML) -> any HTML {
-        styleBorder(
-            content: content,
-            color: color,
-            width: width,
-            style: style,
-            cornerRadii: cornerRadii,
-            edges: edges)
+        // Apply border styles based on edges
+        if edges.contains(.all) {
+            content.style(.border, "\(width)px \(style.rawValue) \(color)")
+        } else {
+            if edges.contains(.leading) {
+                content.style(.borderLeft, "\(width)px \(style.rawValue) \(color)")
+            }
+            if edges.contains(.trailing) {
+                content.style(.borderRight, "\(width)px \(style.rawValue) \(color)")
+            }
+            if edges.contains(.top) {
+                content.style(.borderTop, "\(width)px \(style.rawValue) \(color)")
+            }
+            if edges.contains(.bottom) {
+                content.style(.borderBottom, "\(width)px \(style.rawValue) \(color)")
+            }
+        }
+
+        // Apply corner radii
+        if cornerRadii.topLeading > 0 {
+            content.style(.borderTopLeftRadius, "\(cornerRadii.topLeading)px")
+        }
+        if cornerRadii.topTrailing > 0 {
+            content.style(.borderTopRightRadius, "\(cornerRadii.topTrailing)px")
+        }
+        if cornerRadii.bottomLeading > 0 {
+            content.style(.borderBottomLeftRadius, "\(cornerRadii.bottomLeading)px")
+        }
+        if cornerRadii.bottomTrailing > 0 {
+            content.style(.borderBottomRightRadius, "\(cornerRadii.bottomTrailing)px")
+        }
+
+        return content
     }
 }
 
@@ -62,7 +88,7 @@ public extension HTML {
     }
 }
 
-public extension InlineHTML {
+public extension InlineElement {
     /// Adds a border to this element.
     /// - Parameters:
     ///   - color: The color of the border
@@ -77,7 +103,7 @@ public extension InlineHTML {
         style: BorderStyle = .solid,
         cornerRadii: CornerRadii = CornerRadii(),
         edges: Edge = .all
-    ) -> some InlineHTML {
+    ) -> some InlineElement {
         modifier(BorderModifier(
             color: color,
             width: width,
@@ -86,76 +112,4 @@ public extension InlineHTML {
             edges: edges)
         )
     }
-}
-
-public extension StyledHTML {
-    /// Adds a border to this element.
-    /// - Parameters:
-    ///   - color: The color of the border
-    ///   - width: The width in pixels
-    ///   - style: The border style
-    ///   - cornerRadii: The corner rounding radii
-    ///   - edges: Which edges should have borders
-    /// - Returns: A modified element with the border applied
-    func border(
-        _ color: Color,
-        width: Double = 1,
-        style: BorderStyle = .solid,
-        cornerRadii: CornerRadii = CornerRadii(),
-        edges: Edge = .all
-    ) -> Self {
-        styleBorder(
-            content: self,
-            color: color,
-            width: width,
-            style: style,
-            cornerRadii: cornerRadii,
-            edges: edges)
-    }
-}
-
-// A helper method that encapsulates the border generation logic.
-@MainActor fileprivate func styleBorder<T: Modifiable>(
-    content: T,
-    color: Color,
-    width: Double = 1,
-    style: BorderStyle = .solid,
-    cornerRadii: CornerRadii = CornerRadii(),
-    edges: Edge = .all
-) -> T {
-    var modified = content
-
-    // Apply border styles based on edges
-    if edges.contains(.all) {
-        modified.style(.init(name: .border, value: "\(width)px \(style.rawValue) \(color)"))
-    } else {
-        if edges.contains(.leading) {
-            modified.style(.init(name: .borderLeft, value: "\(width)px \(style.rawValue) \(color)"))
-        }
-        if edges.contains(.trailing) {
-            modified.style(.init(name: .borderRight, value: "\(width)px \(style.rawValue) \(color)"))
-        }
-        if edges.contains(.top) {
-            modified.style(.init(name: .borderTop, value: "\(width)px \(style.rawValue) \(color)"))
-        }
-        if edges.contains(.bottom) {
-            modified.style(.init(name: .borderBottom, value: "\(width)px \(style.rawValue) \(color)"))
-        }
-    }
-
-    // Apply corner radii
-    if cornerRadii.topLeading > 0 {
-        modified.style(.init(name: .borderTopLeftRadius, value: "\(cornerRadii.topLeading)px"))
-    }
-    if cornerRadii.topTrailing > 0 {
-        modified.style(.init(name: .borderTopRightRadius, value: "\(cornerRadii.topTrailing)px"))
-    }
-    if cornerRadii.bottomLeading > 0 {
-        modified.style(.init(name: .borderBottomLeftRadius, value: "\(cornerRadii.topTrailing)px"))
-    }
-    if cornerRadii.bottomTrailing > 0 {
-        modified.style(.init(name: .borderBottomRightRadius, value: "\(cornerRadii.topTrailing)px"))
-    }
-
-    return modified
 }

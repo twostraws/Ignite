@@ -12,7 +12,7 @@ public struct Title: HeadElement {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -27,9 +27,8 @@ public struct Title: HeadElement {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
-        "<title>\(text)\(context.site.titleSuffix)</title>"
+    public func render() -> String {
+        "<title>\(text)\(publishingContext.site.titleSuffix)</title>"
     }
 }

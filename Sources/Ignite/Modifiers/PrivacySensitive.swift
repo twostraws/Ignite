@@ -6,7 +6,7 @@
 //
 
 /// Specifies what content should be encoded for privacy protection
-public enum PrivacyEncoding: String {
+public enum PrivacyEncoding: String, Sendable {
     /// Only encode the URL (default)
     case urlOnly
 

@@ -11,20 +11,20 @@ public struct Item: HTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
     /// The title to show for this item. Clicking this title will display the
     /// item's contents.
-    var title: any InlineHTML
+    var title: any InlineElement
 
     /// Whether this accordion item should start open or not.
     var startsOpen: Bool
 
     /// The contents of this accordion item.
-    var contents: any BlockHTML
+    var contents: any HTML
 
     /// Used when rendering this accordion item so that we can send change
     /// notifications back the parent accordion object.
@@ -42,9 +42,9 @@ public struct Item: HTML {
     ///   - contents: A block element builder that creates the contents
     ///   for this accordion item.
     public init(
-        _ title: some InlineHTML,
+        _ title: some InlineElement,
         startsOpen: Bool = false,
-        @BlockHTMLBuilder contents: () -> some BlockHTML
+        @HTMLBuilder contents: () -> some HTML
     ) {
         self.title = title
         self.startsOpen = startsOpen
@@ -61,9 +61,8 @@ public struct Item: HTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         guard let parentID, let parentOpenMode else {
             fatalError("Accordion sections must not be rendered without a parentID and parentOpenMode in place.")
         }
@@ -76,15 +75,15 @@ public struct Item: HTML {
                     .class("accordion-button", startsOpen ? "" : "collapsed")
                     .data("bs-toggle", "collapse")
                     .data("bs-target", "#\(itemID)")
-                    .aria("expanded", startsOpen ? "true" : "false")
-                    .aria("controls", itemID)
+                    .aria(.expanded, startsOpen ? "true" : "false")
+                    .aria(.controls, itemID)
             }
             .font(.title2)
             .class("accordion-header")
 
             Section {
                 Section {
-                    contents.render(context: context)
+                    contents.render()
                 }
                 .class("accordion-body")
             }
@@ -93,6 +92,6 @@ public struct Item: HTML {
             .data("bs-parent", parentOpenMode == .individual ? "#\(parentID)" : "")
         }
         .class("accordion-item")
-        .render(context: context)
+        .render()
     }
 }

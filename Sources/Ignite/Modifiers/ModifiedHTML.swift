@@ -6,7 +6,7 @@
 //
 
 /// A type that wraps HTML content with a modifier, preserving attributes and structure.
-struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
+struct ModifiedHTML: HTML, InlineElement, RootElement, NavigationItem {
     /// The column width to use when this element appears in a grid layout.
     var columnWidth: ColumnWidth = .automatic
 
@@ -35,23 +35,17 @@ struct ModifiedHTML: HTML, InlineHTML, BlockHTML, RootHTML, NavigationItem {
             AttributeStore.default.merge(content.attributes, intoHTML: id)
         }
 
-        let modifiedContent: any HTML = modifier.body(content: self)
-        AttributeStore.default.merge(modifiedContent.attributes, intoHTML: id)
-
-        if let block = self.content as? (any BlockHTML) {
-            self.columnWidth = block.columnWidth
-        }
+        _ = modifier.body(content: self)
     }
 
     /// Renders this element using the provided publishing context.
-    /// - Parameter context: The current publishing context
     /// - Returns: The rendered HTML string
-    func render(context: PublishingContext) -> String {
+    func render() -> String {
         if content.isPrimitive {
             AttributeStore.default.merge(attributes, intoHTML: content.id)
-            return content.render(context: context)
+            return content.render()
         } else {
-            let rawContent = content.render(context: context)
+            let rawContent = content.render()
             var attrs = attributes
             if attrs.tag == nil { attrs.tag = "div" }
             return attrs.description(wrapping: rawContent)

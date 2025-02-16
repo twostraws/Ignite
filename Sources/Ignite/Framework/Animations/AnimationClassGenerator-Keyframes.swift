@@ -17,9 +17,9 @@ extension AnimationClassGenerator {
         if triggerMap[.click] != nil {
             baseProperties.insert("cursor: pointer")
         }
-
+        let baseClass = "animation-" + animation.id
         let timing = getAnimationTiming(animation)
-        baseProperties.insert("animation: \(name)-appear \(timing)")
+        baseProperties.insert("animation: \(baseClass)-appear \(timing)")
         return baseProperties
     }
 
@@ -46,23 +46,24 @@ extension AnimationClassGenerator {
         let fillModeClass = fillMode(for: animation, timing: timing, iterations: iterationCount)
 
         let animationRepeat = animation.repeatCount != 1 ? " " + iterationCount : ""
+        let baseClass = "animation-" + animation.id
 
         return """
-        .\(name)-hover {
+        .\(baseClass)-hover {
             transform-style: preserve-3d;
             \(baseState)
         }
 
-        .\(name)-hover:hover {
-            animation: \(name)-hover \(timing) \(animation.direction.rawValue)\(animationRepeat);
+        .\(baseClass)-hover:hover {
+            animation: \(baseClass)-hover \(timing) \(animation.direction.rawValue)\(animationRepeat);
         }
 
-        .\(name)-hover:not(:hover) {
+        .\(baseClass)-hover:not(:hover) {
             \(postHoverState ?? "")
         }
         \(fillModeClass)
 
-        @keyframes \(name)-hover {
+        @keyframes \(baseClass)-hover {
             \(buildKeyframeContent(animation))
         }
         """
@@ -138,7 +139,7 @@ extension AnimationClassGenerator {
             }
         }
 
-        return buildClickOutput(properties)
+        return buildClickOutput(properties, id: animation.id)
     }
 
     private func baseState(for animation: Animation) -> String {
@@ -158,14 +159,15 @@ extension AnimationClassGenerator {
     private func fillMode(for animation: Animation, timing: String, iterations: String) -> String {
         if animation.fillMode == .backwards || animation.fillMode == .both {
             let count = animation.repeatCount != 1 ? " " + iterations : ""
+            let baseClass = "animation-" + animation.id
             return """
 
-            .\(name)-hover.fill-\(elementID)-\(animation.fillMode) {
-                animation: \(name)-hover \(timing) \(animation.direction.rawValue) \(animation.fillMode)\(count);
+            .\(baseClass)-hover.fill-\(animation.id)-\(animation.fillMode) {
+                animation: \(baseClass)-hover \(timing) \(animation.direction.rawValue) \(animation.fillMode)\(count);
                 animation-play-state: paused;
             }
 
-            .\(name)-hover.fill-\(elementID)-\(animation.fillMode):hover {
+            .\(baseClass)-hover.fill-\(animation.id)-\(animation.fillMode):hover {
                 animation-play-state: running;
             }
             """

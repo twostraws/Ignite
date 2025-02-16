@@ -6,18 +6,15 @@
 //
 
 /// Creates vertical space of a specific value.
-public struct Spacer: BlockHTML {
+public struct Spacer: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The amount of space to occupy.
     var spacingAmount: SpacingType
@@ -38,17 +35,16 @@ public struct Spacer: BlockHTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         if case let .semantic(spacingAmount) = spacingAmount {
             Section {}
                 .margin(.top, spacingAmount)
-                .render(context: context)
+                .render()
         } else if case let .exact(int) = spacingAmount {
             Section {}
                 .frame(height: .px(int))
-                .render(context: context)
+                .render()
         } else {
             fatalError("Unknown spacing amount: \(String(describing: spacingAmount))")
         }

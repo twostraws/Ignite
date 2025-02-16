@@ -8,7 +8,7 @@
 /// A modal dialog presented on top of the screen
 public struct Modal: HTML {
     /// The size of the modal. Except from the full screen modal the height is defined by the height wheras the width
-    public enum Size {
+    public enum Size: CaseIterable, Sendable {
         /// A modal dialog with a small max-width of 300px
 
         case small
@@ -42,7 +42,7 @@ public struct Modal: HTML {
         }
     }
 
-    public enum Position {
+    public enum Position: CaseIterable, Sendable {
         case top
         case center
 
@@ -60,7 +60,7 @@ public struct Modal: HTML {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -124,9 +124,8 @@ public struct Modal: HTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
+    public func render() -> String {
         Section {
             Section {
                 Section {
@@ -159,8 +158,8 @@ public struct Modal: HTML {
         .class(animated ? "modal fade" : "modal")
         .tabFocus(.focusable)
         .id(htmlID)
-        .aria("labelledby", "modalLabel")
-        .aria("hidden", "true")
-        .render(context: context)
+        .aria(.labelledBy, "modalLabel")
+        .aria(.hidden, "true")
+        .render()
     }
 }

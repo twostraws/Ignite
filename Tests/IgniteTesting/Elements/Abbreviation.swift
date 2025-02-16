@@ -14,43 +14,39 @@ import Testing
 @Suite("Abbreviation Tests")
 @MainActor
 struct AbbreviationTests {
-    let publishingContext = ElementTest.publishingContext
-
-    @Test("Basic Abbreviation Test", arguments: ["abbr"], ["abbreviation"])
-    func test_basic(abbreviation: String, description: String) async throws {
+    @Test("Basic Abbreviation", arguments: ["abbr"], ["abbreviation"])
+    func basic(abbreviation: String, description: String) async throws {
         let element = Abbreviation(abbreviation, description: description)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
-        #expect(
-            output == "<abbr title=\"\(description)\">\(abbreviation)</abbr>")
+        #expect(output == "<abbr title=\"\(description)\">\(abbreviation)</abbr>")
     }
-    @Test(
-        "Single Element Abbreviation Test", arguments: ["abbreviation"],
-        ["abbr"])
-    func test_singleElement(description: String, abbreviation: String)
-        async throws
-    {
+
+    @Test("Single Element Abbreviation", arguments: ["abbreviation"], ["abbr"])
+    func singleElement(description: String, abbreviation: String) async throws {
         let element = Abbreviation(description) { Strong(abbreviation) }
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
-        #expect(
-            output
-                == "<abbr title=\"\(description)\"><strong>\(abbreviation)</strong></abbr>"
-        )
+        #expect(output == """
+        <abbr title=\"\(description)\">\
+        <strong>\(abbreviation)</strong></abbr>
+        """)
     }
-    @Test("Builder Abbreviation Test", arguments: ["abbreviation"], ["abbr"])
-    func test_builder(description: String, abbreviation: String) async throws {
+
+    @Test("Builder Abbreviation", arguments: ["abbreviation"], ["abbr"])
+    func builder(description: String, abbreviation: String) async throws {
         let element = Abbreviation(description) {
             Strong {
                 abbreviation
             }
         }
 
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
-        #expect(
-            output
-                == "<abbr title=\"\(description)\"><strong>\(abbreviation)</strong></abbr>"
-        )
+        #expect(output == """
+        <abbr title=\"\(description)\">\
+        <strong>\(abbreviation)</strong>\
+        </abbr>
+        """)
     }
 }

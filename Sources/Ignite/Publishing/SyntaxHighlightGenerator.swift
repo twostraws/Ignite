@@ -11,10 +11,10 @@ import Foundation
 struct SyntaxHighlightGenerator {
     var site: any Site
 
-    func generateSyntaxHighlighters(context: PublishingContext) throws -> String {
+    func generateSyntaxHighlighters(context: PublishingContext) -> String {
         var result = ""
 
-        var highlighters = context.highlighterLanguages
+        var highlighters = context.syntaxHighlighters.union(context.site.syntaxHighlighters)
         var highlightersCount = 0
 
         // A lazy way to recursively scan through dependencies
@@ -23,7 +23,7 @@ struct SyntaxHighlightGenerator {
             let dependencies = highlighters.compactMap(\.dependency)
 
             for dependency in dependencies where highlighters.contains(dependency) == false {
-                highlighters.insert(dependency)
+                highlighters.append(dependency)
             }
         } while highlightersCount != highlighters.count
 
@@ -33,11 +33,13 @@ struct SyntaxHighlightGenerator {
         // Add our highlighters in reverse order, so dependencies are added first
         for filename in filenames.reversed() {
             guard let url = Bundle.module.url(forResource: filename, withExtension: "js") else {
-                throw PublishingError.missingSyntaxHighlighter(filename)
+                context.addError(.missingSyntaxHighlighter(filename))
+                continue
             }
 
             guard let contents = try? String(contentsOf: url) else {
-                throw PublishingError.failedToLoadSyntaxHighlighter(filename)
+                context.addError(.failedToLoadSyntaxHighlighter(filename))
+                continue
             }
 
             result += contents

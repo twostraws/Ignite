@@ -12,27 +12,22 @@ import Testing
 /// Tests for the `Text` element.
 @Suite("Text Tests")
 @MainActor struct TextTests {
-    let publishingContext = ElementTest.publishingContext
-
-    @Test("Simple String Test")
-    func test_simpleString() async throws {
+    @Test("Simple String")
+    func simpleString() async throws {
         let element = Text("Hello")
-        let output = element.render(context: publishingContext)
-
+        let output = element.render()
         #expect(output == "<p>Hello</p>")
     }
-    @Test("Builder with Simple String Test")
+
+    @Test("Builder with Simple String")
     @MainActor func test_simpleBuilderString() async throws {
-        let element = Text {
-            "Hello"
-        }
-
-        let output = element.render(context: publishingContext)
-
+        let element = Text { "Hello" }
+        let output = element.render()
         #expect(output == "<p>Hello</p>")
     }
-    @Test("Builder with Complex String Test")
-    func test_complexBuilderString() {
+
+    @Test("Builder with Complex String")
+    func complexBuilderString() {
         let element = Text {
             "Hello, "
             Emphasis("world")
@@ -48,48 +43,49 @@ import Testing
             }
         }
 
-        let output = element.render(context: publishingContext)
-        #expect(
-            output
-                == "<p>Hello, <em>world</em><s> - <strong>this <u>is</u> a</strong> test!</s></p>"
-        )
+        let output = element.render()
 
+        #expect(output == """
+        <p>Hello, <em>world</em><s> - <strong>this <u>is</u> a</strong> test!</s></p>
+        """)
     }
-    @Test(
-        "Custom Font Test",
-        arguments: [
-            Font.Style.lead, .body, .title1, .title2, .title3, .title4, .title5,
-            .title6,
-        ])
-    func test_customFont(font: Font.Style) async throws {
+
+    @Test("Custom Font", arguments: Font.Style.allCases)
+    func customFont(font: Font.Style) async throws {
         let element = Text("Hello").font(font)
-        let output = element.render(context: publishingContext)
+        let output = element.render()
 
         if font == .lead {
             // This applies a paragraph class rather than a different tag.
-            #expect(
-                output
-                    == "<div class=\"lead\"><p class=\"font-inherit\">Hello</p></div>"
-            )
+            #expect(output == "<p class=\"lead\">Hello</p>")
         } else {
-            #expect(
-                output
-                    == "<div class=\"\(font.fontSizeClass)\"><p class=\"font-inherit\">Hello</p></div>"
-            )
+            #expect(output == "<\(font.rawValue)>Hello</\(font.rawValue)>")
         }
     }
-    @Test("Markdown Test")
-    func test_markdown() async throws {
-        let element = Text(
-            markdown:
-                "Text in *italics*, text in **bold**, and text in ***bold italics***."
-        )
-        let output = element.render(context: publishingContext)
-        // swiftlint:disable line_length
-        #expect(
-            output
-                == "<p>Text in <em>italics</em>, text in <strong>bold</strong>, and text in <em><strong>bold italics</strong></em>.</p>"
-        )
-        // swiftlint:enable line_length
+
+    @Test("Markdown")
+    func markdown() async throws {
+        let element = Text(markdown: "*i*, **b**, and ***b&i***")
+        let output = element.render()
+
+        #expect(output == """
+        <p><em>i</em>, <strong>b</strong>, and <em><strong>b&i</strong></em></p>
+        """)
+    }
+
+    @Test("Strikethrough")
+    func strikethrough() async throws {
+        // Given
+        let element = Text {
+            Strikethrough {
+                "There will be a few tickets available at the box office tonight."
+            }
+        }
+        // When
+        let output = element.render()
+        // Then
+        #expect(output == """
+        <p><s>There will be a few tickets available at the box office tonight.</s></p>
+        """)
     }
 }

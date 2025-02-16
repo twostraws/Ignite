@@ -10,18 +10,15 @@
 /// just use a simple string. Using `Text` is required if you want a specific paragraph
 /// of text with some styling, or a header of a particular size.
 @MainActor
-public struct Text: BlockHTML, DropdownElement {
+public struct Text: HTML, DropdownItem, HorizontalAligning {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The font style to use for this text.
     var font: Font.Style {
@@ -35,18 +32,18 @@ public struct Text: BlockHTML, DropdownElement {
     }
 
     /// The content to place inside the text.
-    var content: any InlineHTML
+    var content: any InlineElement
 
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
     /// - Parameter content: An array of the content to place into the text.
-    public init(@InlineHTMLBuilder content: @escaping () -> any InlineHTML) {
+    public init(@InlineHTMLBuilder content: @escaping () -> any InlineElement) {
         self.content = content()
         self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new `Text` instance from one inline element.
-    public init(_ string: any InlineHTML) {
+    public init(_ string: any InlineElement) {
         self.content = string
         self.tag(Font.Style.body.rawValue)
     }
@@ -116,15 +113,14 @@ public struct Text: BlockHTML, DropdownElement {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render(context: PublishingContext) -> String {
-        attributes.description(wrapping: content.render(context: context))
+    public func render() -> String {
+        attributes.description(wrapping: content.render())
     }
 }
 
 extension HTML {
-    func fontStyle(_ font: Font.Style) -> Self {
+    @discardableResult func fontStyle(_ font: Font.Style) -> Self {
         if font == .lead {
             self.class(font.rawValue)
         } else {

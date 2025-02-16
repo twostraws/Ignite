@@ -5,13 +5,15 @@
 // See LICENSE for license information.
 //
 
+import OrderedCollections
+
 /// A protocol that defines the core animation capabilities for Ignite's animation system.
-public protocol Animatable {
+public protocol Animatable: Hashable {
     /// The event that triggers the animation.
     var trigger: AnimationTrigger { get set }
 
     /// Additional non-animated CSS properties
-    var staticProperties: OrderedSet<AttributeValue> { get set }
+    var baseStyles: OrderedSet<InlineStyle> { get set }
 
     /// A unique identifier generated from the animation type name
     static var id: String { get }
@@ -34,6 +36,10 @@ public protocol Animatable {
 }
 
 public extension Animatable {
+    var id: String {
+        Self.id
+    }
+
     static var id: String {
         String(describing: self).truncatedHash
     }

@@ -16,18 +16,15 @@
 ///         attributes to multiple elements without affecting the document
 ///         structure. If you need a containing `div` element, use
 ///         ``Section`` instead.
-public struct Group: BlockHTML {
+public struct Group: PassthroughHTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     var items: [any HTML] = []
 
@@ -43,11 +40,11 @@ public struct Group: BlockHTML {
         self.items = flatUnwrap(items)
     }
 
-    public func render(context: PublishingContext) -> String {
-        return items.map {
+    public func render() -> String {
+        items.map {
             let item: any HTML = $0
             AttributeStore.default.merge(attributes, intoHTML: item.id)
-            return item.render(context: context)
+            return item.render()
         }.joined()
     }
 }

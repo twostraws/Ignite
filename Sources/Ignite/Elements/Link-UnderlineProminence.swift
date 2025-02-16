@@ -7,45 +7,26 @@
 
 import Foundation
 
-extension Link {
+public extension Link {
     /// Defines the prominence of the underline decoration for links,
     /// allowing customization of both base and hover styles.
-    public enum UnderlineProminence: Equatable {
-
+    enum UnderlineProminence: Int, CustomStringConvertible, Equatable {
         /// No underline style with an opacity of 0%.
-        case none
-
+        case none = 0
         /// A faint underline style with an opacity of 10%.
-        case faint
-
+        case faint = 10
         /// A light underline style with an opacity of 25%.
-        case light
-
+        case light = 25
         /// A medium underline style with an opacity of 50%.
-        case medium
-
+        case medium = 50
         /// A bold underline style with an opacity of 75%.
-        case bold
-
+        case bold = 75
         /// A fully opaque underline style with an opacity of 100%.
-        case heavy
+        case heavy = 100
 
-        /// The opacity value as an `Int`, representing the opacity percentage.
-        var opacity: Int {
-            switch self {
-            case .none:
-                0
-            case .faint:
-                10
-            case .light:
-                25
-            case .medium:
-                50
-            case .bold:
-                75
-            case .heavy:
-                100
-            }
+        /// The Bootstrap opacity suffix.
+        public var description: String {
+            rawValue.formatted()
         }
     }
 }

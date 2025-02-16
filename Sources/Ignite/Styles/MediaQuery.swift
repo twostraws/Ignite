@@ -6,7 +6,7 @@
 //
 
 /// A type that represents different media query conditions for applying conditional styles.
-public enum MediaQuery: Equatable, Hashable, Sendable {
+public enum MediaQuery: Sendable {
     /// Applies styles based on the user's preferred color scheme.
     case colorScheme(ColorScheme)
 
@@ -32,7 +32,7 @@ public enum MediaQuery: Equatable, Hashable, Sendable {
     case breakpoint(Breakpoint)
 
     /// The user's preferred color scheme options.
-    public enum ColorScheme: CaseIterable, Equatable, Sendable {
+    public enum ColorScheme: Sendable {
         /// Dark mode preference
         case dark
         /// Light mode preference
@@ -40,7 +40,7 @@ public enum MediaQuery: Equatable, Hashable, Sendable {
     }
 
     /// The user's motion preference options.
-    public enum Motion: CaseIterable, Equatable, Sendable {
+    public enum Motion: Sendable {
         /// Reduced motion preference
         case reduced
         /// Standard motion preference
@@ -48,17 +48,19 @@ public enum MediaQuery: Equatable, Hashable, Sendable {
     }
 
     /// The user's contrast preference options.
-    public enum Contrast: CaseIterable, Equatable, Sendable {
-        /// Reduced contrast preference
-        case reduced
+    public enum Contrast: Sendable {
+        /// A custom contrast preference
+        case custom
         /// High contrast preference
         case high
         /// Low contrast preference
         case low
+        /// Unspecified contrast preference
+        case noPreference
     }
 
     /// The user's transparency preference options.
-    public enum Transparency: CaseIterable, Equatable, Sendable {
+    public enum Transparency: Sendable {
         /// Reduced transparency preference
         case reduced
         /// Standard transparency preference
@@ -66,7 +68,7 @@ public enum MediaQuery: Equatable, Hashable, Sendable {
     }
 
     /// The device orientation options.
-    public enum Orientation: CaseIterable, Equatable, Sendable {
+    public enum Orientation: Sendable {
         /// Portrait orientation
         case portrait
         /// Landscape orientation
@@ -74,7 +76,7 @@ public enum MediaQuery: Equatable, Hashable, Sendable {
     }
 
     /// The web application display mode options.
-    public enum DisplayMode: CaseIterable, Equatable, Sendable {
+    public enum DisplayMode: Sendable {
         /// Standard browser mode
         case browser
         /// Full screen mode
@@ -90,7 +92,7 @@ public enum MediaQuery: Equatable, Hashable, Sendable {
     }
 
     /// The user's breakpoint preference options.
-    public enum Breakpoint: String, CaseIterable, Equatable, Sendable {
+    public enum Breakpoint: String, Sendable {
         /// Small breakpoint (typically ≥576px)
         case small = "sm"
         /// Medium breakpoint (typically ≥768px)
@@ -106,63 +108,90 @@ public enum MediaQuery: Equatable, Hashable, Sendable {
     /// Generates the CSS media query string for this condition
     /// - Parameter theme: The theme to use for breakpoint values
     /// - Returns: A CSS media query string
-    @MainActor func queryString(with theme: Theme? = nil) -> String {
+    @MainActor func query(with theme: Theme) -> String {
         switch self {
         case .colorScheme(let scheme):
-            return switch scheme {
-            case .dark: "prefers-color-scheme: dark"
-            case .light: "prefers-color-scheme: light"
-            }
+            css(for: scheme, using: theme)
 
         case .motion(let motion):
-            return  switch motion {
-            case .reduced: "prefers-reduced-motion: reduce"
-            case .allowed: "prefers-reduced-motion: no-preference"
-            }
+            css(for: motion, using: theme)
 
         case .contrast(let contrast):
-            return switch contrast {
-            case .reduced: "prefers-contrast: less"
-            case .high: "prefers-contrast: more"
-            case .low: "prefers-contrast: less"
-            }
+            css(for: contrast, using: theme)
 
         case .transparency(let transparency):
-            return switch transparency {
-            case .reduced: "prefers-reduced-transparency: reduce"
-            case .normal: "prefers-reduced-transparency: no-preference"
-            }
+            css(for: transparency, using: theme)
 
         case .orientation(let orientation):
-            return switch orientation {
-            case .portrait: "orientation: portrait"
-            case .landscape: "orientation: landscape"
-            }
+            css(for: orientation, using: theme)
 
         case .displayMode(let mode):
-            return switch mode {
-            case .browser: "display-mode: browser"
-            case .fullscreen: "display-mode: fullscreen"
-            case .minimalUI: "display-mode: minimal-ui"
-            case .pip: "display-mode: picture-in-picture"
-            case .standalone: "display-mode: standalone"
-            case .windowControlsOverlay: "display-mode: window-controls-overlay"
-            }
+            css(for: mode, using: theme)
 
         case .theme(let id):
-            return "data-theme-state=\"\(id.kebabCased())\""
+            "data-theme-state=\"\(id.kebabCased())\""
 
         case .breakpoint(let breakpoint):
-            guard let theme else { return "" }
-            let breakpointValue = switch breakpoint {
-            case .small: theme.smallBreakpoint.stringValue
-            case .medium: theme.mediumBreakpoint.stringValue
-            case .large: theme.largeBreakpoint.stringValue
-            case .xLarge: theme.xLargeBreakpoint.stringValue
-            case .xxLarge: theme.xxLargeBreakpoint.stringValue
-            }
-
-            return "min-width: \(breakpointValue)"
+            css(for: breakpoint, using: theme)
         }
+    }
+
+    @MainActor func css(for scheme: ColorScheme, using theme: Theme) -> String {
+        switch scheme {
+        case .dark: "prefers-color-scheme: dark"
+        case .light: "prefers-color-scheme: light"
+        }
+    }
+
+    @MainActor func css(for motion: Motion, using theme: Theme) -> String {
+        switch motion {
+        case .reduced: "prefers-reduced-motion: reduce"
+        case .allowed: "prefers-reduced-motion: no-preference"
+        }
+    }
+    @MainActor func css(for contrast: Contrast, using theme: Theme) -> String {
+        switch contrast {
+        case .custom: "prefers-contrast: custom"
+        case .high: "prefers-contrast: more"
+        case .low: "prefers-contrast: less"
+        case .noPreference: "prefers-contrast: no-preference"
+        }
+    }
+
+    @MainActor func css(for transparency: Transparency, using theme: Theme) -> String {
+        switch transparency {
+        case .reduced: "prefers-reduced-transparency: reduce"
+        case .normal: "prefers-reduced-transparency: no-preference"
+        }
+    }
+
+    @MainActor func css(for orientation: Orientation, using theme: Theme) -> String {
+        switch orientation {
+        case .portrait: "orientation: portrait"
+        case .landscape: "orientation: landscape"
+        }
+    }
+
+    @MainActor func css(for mode: DisplayMode, using theme: Theme) -> String {
+        switch mode {
+        case .browser: "display-mode: browser"
+        case .fullscreen: "display-mode: fullscreen"
+        case .minimalUI: "display-mode: minimal-ui"
+        case .pip: "display-mode: picture-in-picture"
+        case .standalone: "display-mode: standalone"
+        case .windowControlsOverlay: "display-mode: window-controls-overlay"
+        }
+    }
+
+    @MainActor func css(for breakpoint: Breakpoint, using theme: Theme) -> String {
+        let breakpointValue = switch breakpoint {
+        case .small: theme.smallBreakpoint.stringValue
+        case .medium: theme.mediumBreakpoint.stringValue
+        case .large: theme.largeBreakpoint.stringValue
+        case .xLarge: theme.xLargeBreakpoint.stringValue
+        case .xxLarge: theme.xxLargeBreakpoint.stringValue
+        }
+
+        return "min-width: \(breakpointValue)"
     }
 }

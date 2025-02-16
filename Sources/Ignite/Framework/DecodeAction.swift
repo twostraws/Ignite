@@ -28,7 +28,7 @@ public struct DecodeAction {
     public func url(forResource resource: String) -> URL? {
         let fullURL = sourceDirectory.appending(path: "Resources/\(resource)")
 
-        if FileManager.default.fileExists(atPath: fullURL.path()) {
+        if FileManager.default.fileExists(atPath: fullURL.decodedPath) {
             return fullURL
         } else {
             return nil
