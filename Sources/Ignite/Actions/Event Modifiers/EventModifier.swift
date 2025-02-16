@@ -36,14 +36,3 @@ public extension InlineElement {
         modifier(EventModifier(type: type, actions: actions))
     }
 }
-
-public extension BlockHTML {
-    /// Adds an event attribute to the `BlockHTML` element.
-    /// - Parameters:
-    ///   - type: The name of the attribute.
-    ///   - actions: Array of actions to execute when the event occurs
-    /// - Returns: A modified HTML element with the specified attribute.
-    func onEvent(_ type: EventType, _ actions: [Action]) -> some BlockHTML {
-        modifier(EventModifier(type: type, actions: actions))
-    }
-}

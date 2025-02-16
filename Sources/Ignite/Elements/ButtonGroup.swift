@@ -7,7 +7,7 @@
 
 /// A container that automatically adjusts the styling for buttons it contains so
 /// that they sit more neatly together.
-public struct ButtonGroup: BlockHTML {
+public struct ButtonGroup: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -16,9 +16,6 @@ public struct ButtonGroup: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// A required screen reader description for this element.
     var accessibilityLabel: String

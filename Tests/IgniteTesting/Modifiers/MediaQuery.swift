@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Margin` modifier.
 @Suite("MediaQuery Tests")
 @MainActor
-struct MediaQueryTests {
+class MediaQueryTests: IgniteTestSuite {
     typealias MediaQueryTestCase = (query: MediaQuery, output: String)
 
     @Test("Breakpoint queries", arguments: [
@@ -91,6 +91,7 @@ struct MediaQueryTests {
     func orientation_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
         let query = testCase.query
         let output = query.query(with: .light)
+
         #expect(output == testCase.output)
     }
 
@@ -129,6 +130,7 @@ struct MediaQueryTests {
     func theme_queries_render_correctly(testCase: MediaQueryTestCase) async throws {
         let query = testCase.query
         let output = query.query(with: .light)
+
         #expect(output == testCase.output)
     }
 }

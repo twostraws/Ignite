@@ -55,19 +55,3 @@ public extension InlineElement {
         letterSpacing(.px(pixels))
     }
 }
-
-public extension BlockHTML {
-    /// Adjusts the spacing between letters in block-level text.
-    /// - Parameter spacing: The amount of spacing to apply between letters
-    /// - Returns: A modified copy of the element with letter spacing applied
-    func letterSpacing(_ spacing: LengthUnit) -> some BlockHTML {
-        modifier(LetterSpacingModifier(spacing))
-    }
-
-    /// Adjusts the spacing between letters in block-level text using pixels.
-    /// - Parameter pixels: The amount of spacing to apply between letters in pixels
-    /// - Returns: A modified copy of the element with letter spacing applied
-    func letterSpacing(_ pixels: Int) -> some BlockHTML {
-        letterSpacing(.px(pixels))
-    }
-}

@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `HideElement` action.
 @Suite("HideElement Tests")
 @MainActor
-struct HideElementTests {
+class HideElementTests: IgniteTestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

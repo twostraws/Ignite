@@ -12,11 +12,7 @@ import Testing
 
 /// Tests for the `Image` element.
 @Suite("Image Tests")
-@MainActor struct ImageTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+@MainActor class ImageTests: IgniteTestSuite {
     @Test("Local Image", arguments: ["/images/example.jpg"], ["Example image"])
     func named(file: String, description: String) async throws {
         let element = Image(file, description: description)
@@ -39,7 +35,6 @@ import Testing
     func icon(systemName: String, description: String) async throws {
         let element = Image(systemName: systemName, description: description)
         let output = element.render()
-
         #expect(output == "<i class=\"bi-browser-safari\"></i>")
     }
 }

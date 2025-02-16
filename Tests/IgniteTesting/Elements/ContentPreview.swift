@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `ContentPreview` element.
 @Suite("ContentPreview Tests")
 @MainActor
-struct ContentPreviewTests {
+class ContentPreviewTests: IgniteTestSuite {
     @Test("ExampleTest")
     func example() async throws {
 

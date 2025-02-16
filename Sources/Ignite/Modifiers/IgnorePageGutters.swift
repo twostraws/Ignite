@@ -34,14 +34,3 @@ public extension HTML {
         modifier(IgnorePageGuttersModifier(shouldIgnore: ignore))
     }
 }
-
-public extension BlockHTML {
-    /// Determines whether this element should observe the site
-    /// width or extend from one edge of the screen to the other.
-    /// - Parameters:
-    ///   - ignore: Whether this HTML should ignore the page gutters. Defaults to `true`.
-    /// - Returns: - Returns: A modified element that either obeys or ignores the page gutters.
-    func ignorePageGutters(_ ignore: Bool = true) -> some BlockHTML {
-        modifier(IgnorePageGuttersModifier(shouldIgnore: ignore))
-    }
-}

@@ -11,7 +11,7 @@ import Testing
 
 /// Tests for the `Script` element.
 @Suite("Script Tests")
-@MainActor struct ScriptTests {
+@MainActor class ScriptTests: IgniteTestSuite {
     static let sites: [any Site] = [TestSite(), TestSubsite()]
 
     @Test("Code", arguments: await Self.sites)

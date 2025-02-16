@@ -6,7 +6,7 @@
 //
 
 /// Creates vertical space of a specific value.
-public struct Spacer: BlockHTML {
+public struct Spacer: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -15,9 +15,6 @@ public struct Spacer: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The amount of space to occupy.
     var spacingAmount: SpacingType

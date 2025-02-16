@@ -6,7 +6,7 @@
 //
 
 /// An image on your page. Can be vector (SVG) or raster (JPG, PNG, GIF).
-public struct Image: BlockHTML, InlineElement, LazyLoadable {
+public struct Image: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -15,9 +15,6 @@ public struct Image: BlockHTML, InlineElement, LazyLoadable {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// The path of the image, either relative to the
     /// root of your site, e.g. /images/dog.jpg., or as a web address.

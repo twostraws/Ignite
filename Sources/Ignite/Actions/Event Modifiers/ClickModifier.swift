@@ -31,12 +31,3 @@ public extension InlineElement {
         modifier(ClickModifier(actions: actions()))
     }
 }
-
-public extension BlockHTML {
-    /// Adds an "onclick" JavaScript event to this block element.
-    /// - Parameter actions: A closure that returns the actions to execute when clicked.
-    /// - Returns: A modified block HTML element with the click event handler attached.
-    func onClick(@ActionBuilder actions: () -> [Action]) -> some BlockHTML {
-        modifier(ClickModifier(actions: actions()))
-    }
-}

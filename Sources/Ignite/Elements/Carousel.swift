@@ -6,7 +6,7 @@
 //
 
 /// A collection of slides the user can swipe through.
-public struct Carousel: BlockHTML {
+public struct Carousel: HTML {
     /// Whether moving between slides should cause movement or a crossfade.
     public enum CarouselStyle {
         /// Slides should move.
@@ -24,9 +24,6 @@ public struct Carousel: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// An automatically-generated unique identifier for this carousel.
     /// Used to tell its buttons which carousel they are controlling.
