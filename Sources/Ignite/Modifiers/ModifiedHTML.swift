@@ -44,7 +44,6 @@ struct ModifiedHTML: HTML, InlineElement, RootElement, NavigationItem {
     /// - Returns: The rendered HTML string
     func render() -> String {
         if content.isPrimitive {
-            AttributeStore.default.merge(attributes, intoHTML: content.id)
             return content.render()
         } else {
             let rawContent = content.render()
