@@ -64,10 +64,13 @@ extension PublishingContext {
                 includingPropertiesForKeys: nil
             )
 
+            let buildFontsDirectory = buildDirectory.appending(path: "fonts")
+            try FileManager.default.createDirectory(at: buildFontsDirectory, withIntermediateDirectories: true)
+
             for font in fonts {
                 try FileManager.default.copyItem(
                     at: fontsDirectory.appending(path: font.lastPathComponent),
-                    to: buildDirectory.appending(path: font.lastPathComponent)
+                    to: buildFontsDirectory.appending(path: font.lastPathComponent)
                 )
             }
         } catch {
