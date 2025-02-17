@@ -5,16 +5,4 @@
 // See LICENSE for license information.
 //
 
-/// Describes a HTML element that is rendered in block style, i.e. that it occupies the
-/// full width of the page by default.
-@MainActor
-public protocol BlockHTML: HTML, HorizontalAligning {
-    /// How many columns this should occupy when placed in a grid.
-    var columnWidth: ColumnWidth { get set }
-
-    /// Adjusts the number of columns assigned to this element.
-    /// - Parameter width: The new number of columns to use.
-    /// - Returns: A copy of the current element with the adjusted column width.
-    func width(_ width: Int) -> Self
-}
-
+// File to be deleted

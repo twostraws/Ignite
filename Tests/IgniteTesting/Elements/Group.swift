@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Group` element.
 @Suite("Group Tests")
 @MainActor
-struct GroupTests {
+class GroupTests: IgniteTestSuite {
     @Test("Group does not change HTML structure")
     func groupDoesNotAddAnyAdditionalHTML() async throws {
         let element = Group {
@@ -23,14 +23,14 @@ struct GroupTests {
                 ShowAlert(message: "Bottom Button Tapped")
             }
         }
+
         let output = element.render()
 
         #expect(output == """
         <label>Top Label</label>\
         <p>Middle Text</p>\
         <button type="button" class="btn" onclick="alert('Bottom Button Tapped')">Bottom Button</button>
-        """
-        )
+        """)
     }
 
     @Test("Adding attributes to all children")
@@ -44,6 +44,7 @@ struct GroupTests {
                 ShowAlert(message: "Bottom Button Tapped")
             }
         }.customAttribute(name: attributeName, value: attributeValue)
+
         let output = element.render()
 
         #expect(output == """
@@ -51,7 +52,6 @@ struct GroupTests {
         <p \(attributeName)="\(attributeValue)">Middle Text</p>\
         <button type="button" \(attributeName)="\(attributeValue)" class="btn" \
         onclick="alert('Bottom Button Tapped')">Bottom Button</button>
-        """
-        )
+        """)
     }
 }

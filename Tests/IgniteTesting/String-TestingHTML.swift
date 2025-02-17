@@ -8,7 +8,6 @@
 import Foundation
 
 extension String {
-
     // no, this isn't appropriate for general HTML parsing,
     // but for our purposes, testing nested tags,
     // it should work fine

@@ -11,18 +11,12 @@ import Testing
 
 /// Tests for the `NavigationBar` element.
 @Suite("Navigation Bar Tests")
-@MainActor struct NavigationBarTests {
-
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+@MainActor class NavigationBarTests: IgniteTestSuite {
     @Test("Root Tag is Header")
     func headerTag() async throws {
         let element = NavigationBar()
 
-        #expect(nil != element.render()
-            .htmlTagWithCloseTag("header"))
+        #expect(element.render().htmlTagWithCloseTag("header") != nil)
     }
 
     @Test("Has Nav Tag Inside Header")
@@ -32,7 +26,7 @@ import Testing
         let header = try #require(element.render()
             .htmlTagWithCloseTag("header"))
 
-        #expect(nil != header.contents.htmlTagWithCloseTag("nav"))
+        #expect(header.contents.htmlTagWithCloseTag("nav") != nil)
     }
 
     @Test("Nav Tag Class Is navbar and navbar-expand-md")
@@ -60,7 +54,7 @@ import Testing
             .htmlTagWithCloseTag("nav")?.attributes
         )
 
-        #expect(nil == navAttributes.htmlAttribute(named: "data-bs-theme"))
+        #expect(navAttributes.htmlAttribute(named: "data-bs-theme") == nil)
     }
 
     @Test("Nav Tag Class data-bs-theme is dark if style is dark")
@@ -106,7 +100,7 @@ import Testing
             .htmlTagWithCloseTag("nav")?.contents
         )
 
-        #expect(nil != navContents.htmlTagWithCloseTag("div"))
+        #expect(navContents.htmlTagWithCloseTag("div") != nil)
     }
 
     @Test("Div Tag Class contains column count if given column width", arguments: [0, 3, 7])
@@ -188,13 +182,13 @@ import Testing
         )
 
         let expected = """
-<button type="button"\
- class="btn navbar-toggler"\
- data-bs-target="#navbarCollapse"\
- data-bs-toggle="collapse" aria-controls="navbarCollapse"\
- aria-expanded="false" aria-label="Toggle navigation">\
-<span class="navbar-toggler-icon"></span></button>
-"""
+        <button type="button" \
+        class="btn navbar-toggler" \
+        data-bs-target="#navbarCollapse" \
+        data-bs-toggle="collapse" aria-controls="navbarCollapse" \
+        aria-expanded="false" aria-label="Toggle navigation">\
+        <span class="navbar-toggler-icon"></span></button>
+        """
         #expect(divContents.contains(expected))
     }
 
@@ -211,7 +205,7 @@ import Testing
             .htmlTagWithCloseTag("div")?.contents
         )
 
-        #expect(nil != divContents.htmlTagWithCloseTag("ul"))
+        #expect(divContents.htmlTagWithCloseTag("ul") != nil)
     }
 
     @Test("Unordered List omits alignment if default")
@@ -238,7 +232,7 @@ import Testing
         let element = NavigationBar(logo: Image("somepath")) {
             item
         }
-            .navigationItemAlignment(.center)
+        .navigationItemAlignment(.center)
 
         let ulClasses = try #require(element.render()
             .htmlTagWithCloseTag("header")?.contents
@@ -258,7 +252,7 @@ import Testing
         let element = NavigationBar(logo: Image("somepath")) {
             item
         }
-            .navigationItemAlignment(.trailing)
+        .navigationItemAlignment(.trailing)
 
         let ulClasses = try #require(element.render()
             .htmlTagWithCloseTag("header")?.contents

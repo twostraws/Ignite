@@ -11,11 +11,7 @@ import Testing
 /// Tests for the element's `Attributes`.
 @Suite("Attributes Tests")
 @MainActor
-struct AttributesTest {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class AttributesTest: IgniteTestSuite {
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "nav", "section"]
 
     @Test("Classes are sorted", arguments: tags)
@@ -23,7 +19,6 @@ struct AttributesTest {
         let element = Tag(tag) {}.class("foo", "bar", "baz", "qux")
         let output = element.render()
         let expected = "<\(tag) class=\"bar baz foo qux\"></\(tag)>"
-
         #expect(output == expected)
     }
 
@@ -34,8 +29,8 @@ struct AttributesTest {
             .customAttribute(name: "baz", value: "baz")
             .customAttribute(name: "foo", value: "foo")
             .customAttribute(name: "bar", value: "bar")
-        let output = element.render()
 
+        let output = element.render()
         #expect(output == "<\(tag) bar=\"bar\" baz=\"baz\" foo=\"foo\" qux=\"qux\"></\(tag)>")
     }
 
@@ -46,13 +41,12 @@ struct AttributesTest {
             .addEvent(name: "baz", actions: [ShowAlert(message: "baz")])
             .addEvent(name: "qux", actions: [ShowAlert(message: "qux")])
             .addEvent(name: "foo", actions: [ShowAlert(message: "foo")])
+
         let output = element.render()
 
-        #expect(
-            output == """
-            <\(tag) bar=\"alert('bar')\" baz=\"alert('baz')\" foo=\"alert('foo')\" qux=\"alert('qux')\"></\(tag)>
-            """
-        )
+        #expect(output == """
+        <\(tag) bar=\"alert('bar')\" baz=\"alert('baz')\" foo=\"alert('foo')\" qux=\"alert('qux')\"></\(tag)>
+        """)
     }
 
     @Test("Styles are sorted", arguments: tags)
@@ -64,10 +58,7 @@ struct AttributesTest {
                 .init(.cursor, value: "pointer")
             )
         let output = element.render()
-
-        #expect(
-            output == "<\(tag) style=\"accent-color: red; cursor: pointer; z-index: 1\"></\(tag)>"
-        )
+        #expect(output == "<\(tag) style=\"accent-color: red; cursor: pointer; z-index: 1\"></\(tag)>")
     }
 
     @Test("Aria attributes are sorted", arguments: tags)
@@ -76,11 +67,9 @@ struct AttributesTest {
             .aria(.atomic, "bar")
             .aria(.checked, "qux")
             .aria(.setSize, "foo")
-        let output = element.render()
 
-        #expect(
-            output == "<\(tag) aria-atomic=\"bar\" aria-checked=\"qux\" aria-setsize=\"foo\"></\(tag)>"
-        )
+        let output = element.render()
+        #expect(output == "<\(tag) aria-atomic=\"bar\" aria-checked=\"qux\" aria-setsize=\"foo\"></\(tag)>")
     }
 
     @Test("Data attributes are sorted", arguments: tags)
@@ -90,11 +79,9 @@ struct AttributesTest {
             .data("baz", "qux")
             .data("qux", "foo")
             .data("bar", "baz")
-        let output = element.render()
 
-        #expect(
-            output == "<\(tag) data-bar=\"baz\" data-baz=\"qux\" data-foo=\"bar\" data-qux=\"foo\"></\(tag)>"
-        )
+        let output = element.render()
+        #expect(output == "<\(tag) data-bar=\"baz\" data-baz=\"qux\" data-foo=\"bar\" data-qux=\"foo\"></\(tag)>")
     }
 
     @Test("Boolean attributes are sorted", arguments: tags)
@@ -103,8 +90,8 @@ struct AttributesTest {
             .customAttribute(.disabled)
             .customAttribute(.required)
             .customAttribute(.selected)
-        let output = element.render()
 
+        let output = element.render()
         #expect(output == "<\(tag) disabled required selected></\(tag)>")
     }
 }

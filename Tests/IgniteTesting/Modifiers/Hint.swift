@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Hint` modifier.
 @Suite("Hint Tests")
 @MainActor
-struct HintTests {
+class HintTests: IgniteTestSuite {
     @Test("Markdown Hint")
     func markdownHint() async throws {
         let element = Text {
@@ -24,12 +24,12 @@ struct HintTests {
         let output = element.render()
 
         #expect(output == """
-                    <p><span data-bs-html="true" \
-                    data-bs-title="Why, <em>hello</em> there!" \
-                    data-bs-toggle="tooltip">Hover over me\
-                    </span>\
-                    </p>
-                    """)
+        <p><span data-bs-html="true" \
+        data-bs-title="Why, <em>hello</em> there!" \
+        data-bs-toggle="tooltip">Hover over me\
+        </span>\
+        </p>
+        """)
     }
 
     @Test("HMTL Hint")
@@ -42,12 +42,12 @@ struct HintTests {
         let output = element.render()
 
         #expect(output == """
-                    <p><span data-bs-html="true" \
-                    data-bs-title="www.example.com" \
-                    data-bs-toggle="tooltip">Hover over me\
-                    </span>\
-                    </p>
-                    """)
+        <p><span data-bs-html="true" \
+        data-bs-title="www.example.com" \
+        data-bs-toggle="tooltip">Hover over me\
+        </span>\
+        </p>
+        """)
     }
 
     @Test("HMTL Hint")
@@ -60,10 +60,10 @@ struct HintTests {
         let output = element.render()
 
         #expect(output == """
-                    <p><span data-bs-title="Why, hello there!" \
-                    data-bs-toggle="tooltip">Hover over me\
-                    </span>\
-                    </p>
-                    """)
+        <p><span data-bs-title="Why, hello there!" \
+        data-bs-toggle="tooltip">Hover over me\
+        </span>\
+        </p>
+        """)
     }
 }

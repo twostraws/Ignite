@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `VStack` element.
 @Suite("VStack Tests")
 @MainActor
-struct VStackTests {
+class VStackTests: IgniteTestSuite {
     @Test("VStack with elements")
     func basicVStack() async throws {
         let element = VStack {
@@ -27,8 +27,7 @@ struct VStackTests {
         <label class="mb-0">Top Label</label>\
         <label class="mb-0">Bottom Label</label>\
         </div>
-        """
-        )
+        """)
     }
 
     @Test("VStack with elements and spacing")
@@ -44,7 +43,6 @@ struct VStackTests {
         <label class="mb-0">Top Label</label>\
         <label class="mb-0">Bottom Label</label>\
         </div>
-        """
-        )
+        """)
     }
 }

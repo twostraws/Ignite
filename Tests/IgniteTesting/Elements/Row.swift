@@ -21,9 +21,8 @@ struct RowTests {
             Text("Column 2")
         }
         let output = row.render()
-        #expect(
-            output == "<tr><td><p>Column 1</p></td><td><p>Column 2</p></td></tr>"
-        )
+
+        #expect(output == "<tr><td><p>Column 1</p></td><td><p>Column 2</p></td></tr>")
     }
 
     @Test("Row with Column Elements")
@@ -33,9 +32,8 @@ struct RowTests {
             Column { Text("Column 2") }
         }
         let output = row.render()
-        #expect(
-            output == "<tr><td colspan=\"1\"><p>Column 1</p></td><td colspan=\"1\"><p>Column 2</p></td></tr>"
-        )
+
+        #expect(output == "<tr><td colspan=\"1\"><p>Column 1</p></td><td colspan=\"1\"><p>Column 2</p></td></tr>")
     }
 
     @Test("Row with Mixed Content")
@@ -45,8 +43,7 @@ struct RowTests {
             Column { Text("Column 2") }
         }
         let output = row.render()
-        #expect(
-            output == "<tr><td><p>Column 1</p></td><td colspan=\"1\"><p>Column 2</p></td></tr>"
-        )
+
+        #expect(output == "<tr><td><p>Column 1</p></td><td colspan=\"1\"><p>Column 2</p></td></tr>")
     }
 }

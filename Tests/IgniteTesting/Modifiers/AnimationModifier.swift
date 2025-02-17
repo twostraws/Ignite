@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `AnimationModifier` modifier.
 @Suite("AnimationModifier Tests")
 @MainActor
-struct AnimationModifierTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class AnimationModifierTests: IgniteTestSuite {
     @Test("HMTL Animation should bounce")
     func htmlAnimationModifierBounce() async throws {
         let element = Text {
@@ -31,12 +27,12 @@ struct AnimationModifierTests {
         // <div class="animation-H57c1-hover"><p><span>This is a Span</span></p></div></div>
         // Where 'H57c1' is the stable ID of the animation, used to generate the CSS class name
         let pattern = #"""
-            <div class="animation-(?<code>[a-zA-Z0-9]{5})-transform" style="transform-style: preserve-3d">\
-            <div class="animation-\k<code>-hover">\
-            <p><span>This is a Span</span></p>\
-            </div></div>
-            """#
-            .replacingOccurrences(of: "\n", with: "") // Remove line breaks from the pattern
+        <div class="animation-(?<code>[a-zA-Z0-9]{5})-transform" style="transform-style: preserve-3d">\
+        <div class="animation-\k<code>-hover">\
+        <p><span>This is a Span</span></p>\
+        </div></div>
+        """#
+        .replacingOccurrences(of: "\n", with: "") // Remove line breaks from the pattern
 
         // Create a Swift Regex object
         do {

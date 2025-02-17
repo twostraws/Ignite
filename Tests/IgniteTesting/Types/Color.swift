@@ -14,12 +14,9 @@ import Testing
 @Suite("Tests for the `Color` type")
 @MainActor
 struct ColorTypeTests {
-    @Test("CSS values via parameters",
-          arguments: zip(
-            [Color.black, .white],
-            ["0 0 0", "255 255 255"]
-          )
-    )
+    @Test("CSS values via parameters", arguments: zip(
+        [Color.black, .white],
+        ["0 0 0", "255 255 255"]))
     func makeColor(color: Color, rgbValues: String) async throws {
         #expect(color.description == "rgb(" + rgbValues + " / 100%)")
     }
@@ -38,8 +35,8 @@ struct ColorTypeTests {
         let red = 255
         let green = 0
         let blue = 0
-
         let color = Color(red: red, green: green, blue: blue)
+
         #expect(color.description == "rgb(\(red) \(blue) \(green) / 100%)")
     }
 
@@ -49,10 +46,8 @@ struct ColorTypeTests {
         let green = 0
         let blue = 0
         let opacity = 50%
-
         let color = Color(red: red, green: green, blue: blue, opacity: opacity)
-        #expect(
-            color.description == "rgb(\(red) \(blue) \(green) / \(opacity.roundedValue)%)"
-        )
+
+        #expect(color.description == "rgb(\(red) \(blue) \(green) / \(opacity.roundedValue)%)")
     }
 }

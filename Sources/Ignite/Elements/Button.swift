@@ -33,7 +33,7 @@ public struct Button: InlineElement {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -137,7 +137,7 @@ public struct Button: InlineElement {
     ///   - role: The role we are styling.
     ///   - size: The size we are styling.
     /// - Returns: The CSS classes to apply for this button
-    public static func classes(forRole role: Role, size: Size) -> [String] {
+    static func classes(forRole role: Role, size: Size) -> [String] {
         var outputClasses = ["btn"]
 
         switch size {
@@ -160,7 +160,7 @@ public struct Button: InlineElement {
     }
 
     /// Adds the correct ARIA attribute for Close buttons, if needed.
-    public static func aria(forRole role: Role) -> Attribute? {
+    static func aria(forRole role: Role) -> Attribute? {
         switch role {
         case .close:
             Attribute(name: "label", value: "Close")

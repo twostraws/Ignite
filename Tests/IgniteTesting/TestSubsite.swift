@@ -19,7 +19,7 @@ struct TestSubsite: Site {
     var layout = EmptyLayout()
 }
 
-/// An example page  used in tests.
+/// An example page used in tests.
 struct TestSubsiteLayout: StaticLayout {
     var title = "Subsite Home"
 

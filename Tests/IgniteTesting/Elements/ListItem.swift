@@ -13,13 +13,14 @@ import Testing
 /// Tests for the `ListItem` element.
 @Suite("ListItem Tests")
 @MainActor
-struct ListItemTests {
-    @Test("Standalone ListItem Test")
+class ListItemTests: IgniteTestSuite {
+    @Test("Standalone ListItem")
     func standAlone() async throws {
         let element = ListItem {
             "Standalone List Item"
         }
         let output = element.render()
+
         #expect(output == "<li>Standalone List Item</li>")
     }
 }

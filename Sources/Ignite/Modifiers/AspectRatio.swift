@@ -6,7 +6,7 @@
 //
 
 /// Specific aspect ratios that are commonly used
-public enum AspectRatio: String {
+public enum AspectRatio: String, CaseIterable, Sendable {
     /// A square aspect ratio.
     case square = "1x1"
 
@@ -21,7 +21,7 @@ public enum AspectRatio: String {
 }
 
 /// The content mode of an element, e.g. an image, within its container.
-public enum ContentMode {
+public enum ContentMode: CaseIterable, Sendable {
     /// The element is sized to fit into the container.
     case fit
 
@@ -53,35 +53,31 @@ struct AspectRatioModifier: HTMLModifier {
                 Section {
                     content.class(contentMode.htmlClass)
                 }
-                .aspectRatio(ratio: ratio)
+                .applyAspectRatio(ratio)
             } else if let customRatio {
                 Section {
                     content.class(contentMode.htmlClass)
                 }
-                .aspectRatio(ratio: customRatio)
+                .applyAspectRatio(customRatio)
             }
         } else if let ratio {
-            content.aspectRatio(ratio: ratio)
+            content.applyAspectRatio(ratio)
         } else if let customRatio {
-            content.aspectRatio(ratio: customRatio)
+            content.applyAspectRatio(customRatio)
         }
         content
     }
 }
 
-extension HTML {
+// Helper methods to reuse logic
+private extension HTML {
     /// Applies a fixed aspect ratio to the current element.
-    /// - Parameter ratio: The aspect ratio to apply.
-    /// - Returns: A new instance of this element with the ratio applied.
-    func aspectRatio(ratio: AspectRatio) -> Self {
+    func applyAspectRatio(_ ratio: AspectRatio) -> Self {
         self.class("ratio", "ratio-\(ratio.rawValue)")
     }
 
     /// Applies a custom ratio to the current element.
-    /// - Parameter aspectRatio: The ratio to use, relative to 1.
-    /// For example, specifying 2 here will make a 2:1 aspect ratio.
-    /// - Returns: A new instance of this element with the ratio applied.
-    func aspectRatio(ratio: Double) -> Self {
+    func applyAspectRatio(_ ratio: Double) -> Self {
         let percentage = 100 / ratio
         return self
             .class("ratio")

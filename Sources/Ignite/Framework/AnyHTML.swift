@@ -11,37 +11,31 @@ public struct AnyHTML: HTML, InlineElement {
     /// The body of this HTML element, which is itself
     public var body: some HTML { self }
 
+    /// The unique identifier of this HTML.
+    public var id = UUID().uuidString
+
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
     /// The underlying HTML content, unwrapped to its most basic form
-    private let wrapped: any HTML
+    let wrapped: any HTML
 
     /// Creates a new AnyHTML instance that wraps the given HTML content.
     /// If the content is already an AnyHTML instance, it will be unwrapped to prevent nesting.
     /// - Parameter content: The HTML content to wrap
     public init(_ content: any HTML) {
         // Recursively unwrap nested AnyHTML instances
-        if let anyHTML = content as? AnyHTML {
-            self.wrapped = anyHTML.unwrapped
-        } else {
-            self.wrapped = content
+        var current = content
+        while let anyHTML = current as? AnyHTML {
+            current = anyHTML.wrapped
         }
-    }
-
-    /// Helper property that recursively unwraps nested AnyHTML instances
-    /// to get to the underlying content
-    var unwrapped: any HTML {
-        if let anyHTML = wrapped as? AnyHTML {
-            anyHTML.unwrapped
-        } else {
-            wrapped
-        }
+        self.wrapped = current
     }
 
     /// Renders the wrapped HTML content using the given publishing context
     /// - Returns: The rendered HTML string
     public func render() -> String {
-        wrapped.render()
+        AttributeStore.default.merge(attributes, intoHTML: wrapped.id)
+        return wrapped.render()
     }
 }

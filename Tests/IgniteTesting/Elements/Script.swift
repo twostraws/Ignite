@@ -11,10 +11,10 @@ import Testing
 
 /// Tests for the `Script` element.
 @Suite("Script Tests")
-@MainActor struct ScriptTests {
+@MainActor class ScriptTests: IgniteTestSuite {
     static let sites: [any Site] = [TestSite(), TestSubsite()]
 
-    @Test("Code Test", arguments: await Self.sites)
+    @Test("Code", arguments: await Self.sites)
     func code(for site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
@@ -24,7 +24,7 @@ import Testing
         #expect(output == "<script>javascript code</script>")
     }
 
-    @Test("File Test", arguments: ["/code.js"], await Self.sites)
+    @Test("File", arguments: ["/code.js"], await Self.sites)
     func file(scriptFile: String, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
@@ -35,7 +35,7 @@ import Testing
         #expect(output == "<script src=\"\(expectedPath)\"></script>")
     }
 
-    @Test("Attributes Test", arguments: ["/code.js"], await Self.sites)
+    @Test("Attributes", arguments: ["/code.js"], await Self.sites)
     func attributes(scriptFile: String, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 

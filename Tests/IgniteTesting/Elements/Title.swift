@@ -12,12 +12,9 @@ import Testing
 
 /// Tests for the `title` element.
 @Suite("Title Tests")
-@MainActor struct TitleTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
-    @Test("Empty Title Test", arguments: [""])
+@MainActor
+class TitleTests: IgniteTestSuite {
+    @Test("Empty Title", arguments: [""])
     func empty(emptyTitleText: String) async throws {
         let element = Title(emptyTitleText)
         let output = element.render()
@@ -25,7 +22,7 @@ import Testing
         #expect(output == "<title>\(emptyTitleText) - My Test Site</title>")
     }
 
-    @Test("Builder Test", arguments: ["Example Page", "Another Example Page"])
+    @Test("Builder", arguments: ["Example Page", "Another Example Page"])
     func builder(titleText: String) async throws {
         let element = Title(titleText)
         let output = element.render()

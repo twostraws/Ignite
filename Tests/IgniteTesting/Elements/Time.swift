@@ -12,8 +12,8 @@ import Testing
 
 /// Tests for the `time` element.
 @Suite("Time Tests")
-@MainActor struct TimeTests {
-    @Test("Without DateTime Test", arguments: ["This is a test", "Another test"])
+@MainActor class TimeTests: IgniteTestSuite {
+    @Test("Without DateTime", arguments: ["This is a test", "Another test"])
     func withoutDatetime(timeText: String) async throws {
         let element = Time(timeText)
         let output = element.render()
@@ -21,7 +21,7 @@ import Testing
         #expect(output == "<time>\(timeText)</time>")
     }
 
-    @Test("Builder Test", arguments: ["This is a test", "Another test"])
+    @Test("Builder", arguments: ["This is a test", "Another test"])
     func builder(timeText: String) async throws {
         guard
             let customTimeInterval = DateComponents(
@@ -42,9 +42,6 @@ import Testing
         let element = Time(timeText, dateTime: dateTime)
         let output = element.render()
 
-        #expect(
-            output
-                == "<time datetime=\"2024-05-22T20:00:30Z\">\(timeText)</time>"
-        )
+        #expect(output == "<time datetime=\"2024-05-22T20:00:30Z\">\(timeText)</time>")
     }
 }

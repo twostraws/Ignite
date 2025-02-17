@@ -5,12 +5,12 @@
 // See LICENSE for license information.
 //
 
-public struct HTMLBody: RootElement {
+public struct Body: RootElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -41,6 +41,7 @@ public struct HTMLBody: RootElement {
     }
 
     public func render() -> String {
+        var attributes = attributes
         var output = ""
 
         // Render main content
@@ -56,6 +57,18 @@ public struct HTMLBody: RootElement {
             output += Script(file: "/js/syntax-highlighting.js").render()
         }
 
+        if case .visible(let firstLine, let shouldWrap) =
+            publishingContext.site.syntaxHighlighterConfiguration.lineNumberVisibility {
+
+            attributes.append(classes: "line-numbers")
+            if firstLine != 1 {
+                attributes.append(dataAttributes: .init(name: "start", value: firstLine.formatted()))
+            }
+            if shouldWrap {
+                attributes.append(styles: .init(.whiteSpace, value: "pre-wrap"))
+            }
+        }
+
         if output.contains(#"data-bs-toggle="tooltip""#) {
             output += Script(code: """
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -65,7 +78,6 @@ public struct HTMLBody: RootElement {
 
         output += Script(file: "/js/ignite-core.js").render()
 
-        var attributes = attributes
         attributes.tag = "body"
         if isBoundByContainer {
             attributes.append(classes: ["container"])

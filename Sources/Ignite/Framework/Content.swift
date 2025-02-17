@@ -196,7 +196,7 @@ public struct Content {
     /// Attempts to parse a date string in the format "y-M-d HH:mm" or "y-M-d".
     /// - Parameter date: The date string to parse
     /// - Returns: A `Date` if parsing succeeds, `nil` otherwise
-    func process(date: String) -> Date? {
+    private func process(date: String) -> Date? {
         let formatter = DateFormatter()
         formatter.timeZone = .gmt
 

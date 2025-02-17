@@ -39,6 +39,9 @@ public struct MetaLink: HeadElement, Sendable {
     /// The CSS responsible for managing animation states and transitions.
     static let animationCSS = MetaLink(href: "/css/animations.min.css", rel: .stylesheet)
 
+    /// The CSS used in Prism plugins like line numbering and line highlighting.
+    static let prismPluginCSS = MetaLink(href: "/css/prism-plugins.css", rel: .stylesheet)
+
     /// Creates an array of `MetaLink` elements for syntax highlighting themes.
     /// - Parameter themes: A collection of syntax highlighting themes to include.
     /// - Returns: An array of MetaLink elements. If multiple themes are provided,
@@ -54,7 +57,7 @@ public struct MetaLink: HeadElement, Sendable {
     public var body: some HTML { self }
 
     /// The unique identifier of this HTML.
-    public var id = UUID().uuidString.truncatedHash
+    public var id = UUID().uuidString
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }

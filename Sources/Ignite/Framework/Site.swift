@@ -91,8 +91,9 @@ public protocol Site: Sendable {
     var markdownRenderer: MarkdownRendererType.Type { get }
 
     /// Controls how the RSS feed for your site should be generated. The default
-    /// configuration sends back content description only for 20 items.
-    var feedConfiguration: FeedConfiguration { get }
+    /// configuration sends back content description only for 20 items. To disable
+    /// your site's RSS feed, set this property to `nil`.
+    var feedConfiguration: FeedConfiguration? { get }
 
     /// Controls how search engines and similar index your site. The default
     /// configuration allows all robots to index everything.
@@ -118,10 +119,10 @@ public protocol Site: Sendable {
     /// Additional themes that can be selected by users beyond light and dark mode.
     var alternateThemes: [any Theme] { get }
 
-    ///  The syntax highlighters used throughout the site. Highlighters used
-    ///  in Markdown files _must_ be included here. Highlighters specified in `CodeBlock`
+    ///  Controls how syntax highlighting behaves throughout your site. Languages used
+    ///  in Markdown files _must_ be included here. Languages specified in `CodeBlock`
     ///  will be added automatically.
-    var syntaxHighlighters: [HighlighterLanguage] { get }
+    var syntaxHighlighterConfiguration: SyntaxHighlighterConfiguration { get }
 
     /// Controls whether HTML output should be formatted with proper indentation.
     ///
@@ -173,8 +174,8 @@ public extension Site {
     /// Formats HTML output with proper indentation by default.
     var prettifyHTML: Bool { true }
 
-    /// No syntax highlighter languages by default.
-    var syntaxHighlighters: [HighlighterLanguage] { [] }
+    /// No syntax highlighters by default.
+    var syntaxHighlighterConfiguration: SyntaxHighlighterConfiguration { .automatic }
 
     /// Enable local Bootstrap files by default
     var useDefaultBootstrapURLs: BootstrapOptions { .localBootstrap }
@@ -189,13 +190,7 @@ public extension Site {
 
     /// A default feed configuration allows 20 items of content, showing just
     /// their descriptions.
-    var feedConfiguration: FeedConfiguration { .default }
-
-    /// A simple helper property that determines whether we have a feed
-    /// configuration that means a feed should actually be made.
-    var isFeedEnabled: Bool {
-        feedConfiguration.mode != .disabled && feedConfiguration.contentCount > 0
-    }
+    var feedConfiguration: FeedConfiguration? { .default }
 
     /// A default robots.txt configuration that allows all robots to index all pages.
     var robotsConfiguration: DefaultRobotsConfiguration { DefaultRobotsConfiguration() }

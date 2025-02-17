@@ -41,15 +41,14 @@ actor ContentFinderTests {
         if let inputError = test.inputError {
             throw inputError // configuration failure
         }
-        guard let baseDirectory = try Self.makeSuiteBaseDirectory(test.index) else {
+        guard let baseDirectory = try Self.makeSuiteBaseDirectory(test.id) else {
             #expect(Bool(false), "Unable to make suite base dir")
             return
         }
         defer { Self.removeSuiteBaseDirectory(baseDirectory) }
 
         // Configure directory tree
-        let root = try test.setupRootPath(baseDirectory, index: test.index)
-        // defer { try? test.tearDown(baseDir: root) }  // deleted baseDir above
+        let root = try test.setupRootPath(baseDirectory, id: test.id)
 
         // Visit directory tree
         var found = [ContentFinder.DeployContent]()
@@ -76,7 +75,7 @@ actor ContentFinderTests {
             MdHeaderList.h2SortQuiet.generateMarkdownSection(header: $0.0, items: Array($0.1))
         }
         let allsJoined = alls.joined(separator: "")
-        let message = "\n# \(test.index)/\(test.makeRoots)\(allsJoined)"
+        let message = "\n# \(test.id)/\(test.directoryRoots)\(allsJoined)"
 
         enum EmitError: Error, CustomStringConvertible {
             case message(String)
@@ -92,8 +91,8 @@ actor ContentFinderTests {
     /// Make the temporary base directory of the test case, deleting any existing one.
     /// - Parameter index: Int id for test (if duplicate, parallel tests will conflict with each other)
     /// - Returns: file: URL to writable temporary directory, if successful.
-    static func makeSuiteBaseDirectory(_ index: Int) throws -> URL? {
-        let name = "ContentFinder.find_\(index)"
+    static func makeSuiteBaseDirectory(_ id: String) throws -> URL? {
+        let name = "ContentFinder.find_\(id)"
         var foundUrl = try Files.makeTempDirectory(name: name)
         if !foundUrl.found {
             return foundUrl.url
@@ -129,7 +128,7 @@ actor ContentFinderTests {
     /// (either a set of paths or some error text).
     struct TestCase: CustomStringConvertible {
         /// User-defined but unique value to keep parallel test temp directories distinct.
-        let index: Int
+        let id: String = UUID().uuidString
 
         /// ``ContentFinder.find(root:, suffixes:, contentMaker:)``
         /// parameter for file suffixes
@@ -144,7 +143,7 @@ actor ContentFinderTests {
         /// Names of directory roots configured in test.
         /// If the expected deploy paths are not specified explicitly,
         /// derive them by using the first name as the prefix to remove from the file-item's.
-        let makeRoots: [String]
+        let directoryRoots: [String]
 
         /// Expected deploy paths from running find (possibly derived from ``items``)
         let expectDeployPaths: Set<String>
@@ -160,23 +159,21 @@ actor ContentFinderTests {
 
         /// Initialize with suffixes, file-items, and optional expected deploy paths.
         /// - Parameters:
-        ///   - index: Unique Int for distinguishing parallel tests
-        ///   - makeRoots: Array of String names of directory roots in test
-        ///   - suffixes: Array of String file suffixes to pass to find
-        ///   - items: Array of ``FileItem`` to set up before calling find
-        ///   - expect: Optional Array of String deploy paths (derived if nil)
-        ///   - expectError: Optional String for content of error-throwing tests
+        ///   - roots: An array directory root names in the test
+        ///   - suffixes: An array of file suffixes to find
+        ///   - items: An array of ``FileItem`` to set up before calling `findContent(test:)`
+        ///   - expect: An optional array of deploy paths (derived if `nil`)
+        ///   - expectError: An optional error message for content-error tests
         init(
-            _ index: Int,
-            _ makeRoots: [String],
+            roots: [String],
             suffixes: [String] = [".md"],
             items: [FileItem],
             expect: [String]? = nil,
             expectError: String? = nil
         ) {
-            if makeRoots.isEmpty {
+            if roots.isEmpty {
                 inputError = .emptyRoots
-            } else if let index = makeRoots.firstIndex(where: { $0.isEmpty }) {
+            } else if let index = roots.firstIndex(where: { $0.isEmpty }) {
                 inputError = .emptyRoot(index)
             } else if suffixes.isEmpty {
                 inputError = .emptySuffixes
@@ -185,8 +182,7 @@ actor ContentFinderTests {
             } else {
                 inputError = nil
             }
-            self.index = index
-            self.makeRoots = makeRoots
+            self.directoryRoots = roots
             self.suffixes = suffixes
             self.items = items
             self.expectError = expectError
@@ -199,7 +195,7 @@ actor ContentFinderTests {
                     items.compactMap {
                         Self.expectDeployPath(
                             path: $0.path,
-                            roots: makeRoots,
+                            roots: roots,
                             suffixes: suffixes
                         )
                     }
@@ -210,7 +206,7 @@ actor ContentFinderTests {
         /// Setup directory tree for test
         /// - Parameter suiteBaseDir: Parent directory for test directory
         /// - Returns: URL for test directory, populated per ``items`` ``FileItem``
-        func setupRootPath(_ suiteBaseDir: URL, index: Int) throws -> URL {
+        func setupRootPath(_ suiteBaseDir: URL, id: String) throws -> URL {
             // swiftlint:disable:next nesting
             typealias ItemURL = (item: FileItem, url: URL)
             // swiftlint:disable:next nesting
@@ -220,12 +216,12 @@ actor ContentFinderTests {
                 case duplicateSourceDirectory(path: String, next: URL, prior: URL)
                 case noSourceDirectory(path: String, itemUrls: [ItemURL])
             }
-            let testBaseDir = try makeTestBaseDirectory(suiteBaseDir, index: index)
+            let testBaseDir = try makeTestBaseDirectory(suiteBaseDir, id: id)
             guard !testBaseDir.found else {
                 throw SetupError.baseDirectoryAlreadyExists(testBaseDir.url)
             }
             let maker = FileItemMaker(baseDirectory: testBaseDir.url)
-            let sourcePath = makeRoots.first ?? "Never have no roots"
+            let sourcePath = directoryRoots.first ?? "Never have no roots"
             var sourceDirectory: URL?
             var itemURLs = [ItemURL]()
             for item in items {
@@ -260,15 +256,15 @@ actor ContentFinderTests {
         /// Both test directory and suite directory use the test index to avoid conflict with other tests.
         private func makeTestBaseDirectory(
             _ suiteBaseDirectory: URL,
-            index: Int
+            id: String
         ) throws -> Files.FoundURL {
-            let url = Files.makeDirectoryURL(suiteBaseDirectory, path: "Tst_\(index)")
+            let url = Files.makeDirectoryURL(suiteBaseDirectory, path: "Tst_\(id)")
             return try Files.makeDirectory(at: url)
         }
 
         var description: String {
-            let root = makeRoots.count == 1 ? makeRoots.first! : "\(makeRoots)"
-            let prefix = "[\(index)] \(root)"
+            let root = directoryRoots.count == 1 ? directoryRoots.first! : "\(directoryRoots)"
+            let prefix = "[\(id)] \(root)"
             let eol = " " // single-line (test label); use "\n" when debugging
             if let inErr = inputError {
                 return "\(prefix) input error:\(eol)\(inErr)"
