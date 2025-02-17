@@ -10,15 +10,15 @@ import Foundation
 /// Recurse content root, resolving symbolic links and selecting files by suffix.
 struct ContentFinder: Sendable {
     // no configuration, so no need for alternative instances
-    static let shared = ContentFinder()
+    static let `default` = ContentFinder()
 
     private let isLinkKey = Set([URLResourceKey.isSymbolicLinkKey])
     private let resourceKeys = Content.resourceKeys
         + [.isDirectoryKey, .isSymbolicLinkKey]
-    private let dirListOptions: FileManager.DirectoryEnumerationOptions = [
-      .skipsHiddenFiles,
-      .skipsPackageDescendants, // shouldn't be packages in our tree...
-      .skipsSubdirectoryDescendants // one directory level per enumerator
+    private let directoryListOptions: FileManager.DirectoryEnumerationOptions = [
+        .skipsHiddenFiles,
+        .skipsPackageDescendants, // shouldn't be packages in our tree...
+        .skipsSubdirectoryDescendants // one directory level per enumerator
     ]
 
     /// Find content input for a  content maker: recurse from content root, resolve symbolic links,
@@ -42,16 +42,16 @@ struct ContentFinder: Sendable {
         // swiftlint:disable:previous function_body_length
         // lint exception: using local closures to break up logic
         root: URL,
-        suffixes: [String] = [".md"],
+        suffixes: [String] = [".md", ".md symlink"],
         contentMaker: (DeployContent) throws -> Bool
     ) throws {
         enum ParameterError: Error {
-            case notFileUrl(URL), noSuffixes, emptySuffix
+            case notFileURL(URL), noSuffixes, emptySuffix
             case directorySeen(next: DeployPath, prior: DeployPath)
         }
-        guard root.isFileURL else { throw ParameterError.notFileUrl(root) }
+        guard root.isFileURL else { throw ParameterError.notFileURL(root) }
         guard !suffixes.isEmpty else { throw ParameterError.noSuffixes }
-        guard nil == suffixes.first(where: {$0.isEmpty}) else {
+        guard suffixes.first(where: { $0.isEmpty }) == nil else {
             throw ParameterError.emptySuffix
         }
         // Manage recursion directly, produce logical paths for symbolic links.
@@ -60,27 +60,26 @@ struct ContentFinder: Sendable {
 
         // Avoid infinite loops by not adding roots already seen
         // One element per dir added in roots
-        var dirsSeen = [URL: DeployPath]()
+        var directoriesSeen = [URL: DeployPath]()
 
         func addRootIfUnseen(_ root: DeployPath) throws {
             let key = root.url.standardizedFileURL
-            if let prior = dirsSeen[key] {
+            if let prior = directoriesSeen[key] {
                 throw ParameterError.directorySeen(next: root, prior: prior)
             }
-            dirsSeen[key] = root
+            directoriesSeen[key] = root
             roots.append(root)
         }
 
         // pop last root and make directory enumerator, if available
-        func nextDeployEnumerator(
-        ) -> (deploy: DeployPath, FileManager.DirectoryEnumerator)? {
-          guard !roots.isEmpty else { return nil }
-          let deploy = roots.removeLast()
-          return FileManager.default.enumerator(
-            at: deploy.url,
-            includingPropertiesForKeys: resourceKeys,
-            options: dirListOptions
-          ).map { (deploy, $0) }
+        func nextDeployEnumerator() -> (deploy: DeployPath, FileManager.DirectoryEnumerator)? {
+            guard !roots.isEmpty else { return nil }
+            let deploy = roots.removeLast()
+            return FileManager.default.enumerator(
+                at: deploy.url,
+                includingPropertiesForKeys: resourceKeys,
+                options: directoryListOptions
+            ).map { (deploy, $0) }
         }
 
         // Verify name ends with suffix (case-insensitively) and strip suffix.
@@ -93,9 +92,10 @@ struct ContentFinder: Sendable {
 
         try addRootIfUnseen(.init(root, path: ""))
 
-        let resrcSet = Set(resourceKeys)
+        let resourceSet = Set(resourceKeys)
         outer:
-        while let (deploy, enumerator) = nextDeployEnumerator() { // dir
+            while let (deploy, enumerator) = nextDeployEnumerator()
+        { // dir
             while let url = enumerator.nextObject() as? URL { // file, dir
                 // resolve symbolic links to get correct resource values
                 let linkValue = try url.resourceValues(forKeys: isLinkKey)
@@ -105,7 +105,7 @@ struct ContentFinder: Sendable {
                 _ = consume url // signal error if used instead of next
 
                 // add to roots/enumerator if directory
-                let resources = try next.resourceValues(forKeys: resrcSet)
+                let resources = try next.resourceValues(forKeys: resourceSet)
                 if let isDir = resources.isDirectory, isDir {
                     try addRootIfUnseen(deploy.child(next, name: name))
                     continue
@@ -120,7 +120,7 @@ struct ContentFinder: Sendable {
                     path: deploy.child(next, name: deployName).path,
                     resourceValues: resources
                 )
-                if !(try contentMaker(content)) {
+                if try !contentMaker(content) {
                     break outer
                 }
             }
@@ -141,8 +141,9 @@ struct ContentFinder: Sendable {
         for suffix in suffixes {
             let range = name.range(of: suffix, options: options)
             if let range, range.upperBound == name.endIndex,
-               range.lowerBound > name.startIndex { // not empty
-               return range.lowerBound
+               range.lowerBound > name.startIndex
+            { // not empty
+                return range.lowerBound
             }
         }
         return nil
@@ -162,10 +163,12 @@ struct ContentFinder: Sendable {
         var description: String {
             "\n-  url: \(url.absoluteString)\n- path: \(path)"
         }
+
         init(_ url: URL, path: String) {
             self.url = url
             self.path = path
         }
+
         /// Build next subdirectory or the path to a file
         /// - Parameters:
         ///   - child: URL to child (i.e., with any symbolic link resolved to actual path)

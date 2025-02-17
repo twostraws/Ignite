@@ -152,7 +152,7 @@ final class PublishingContext {
 
     /// Parses all Markdown content in the site's Content folder.
     func parseContent() throws {
-        try ContentFinder.shared.find(root: contentDirectory) { deploy in
+        try ContentFinder.default.find(root: contentDirectory) { deploy in
             let article = try Content(
                 from: deploy.url,
                 in: self,
