@@ -58,8 +58,8 @@ class FormTests: IgniteTestSuite {
         } onSubmit: {
             SubscribeAction(.sendFox("myListID"))
         }
-        .id("myID")
         .labelStyle(style)
+        .id("myID")
 
         let output = element.render()
 
@@ -122,8 +122,8 @@ class FormTests: IgniteTestSuite {
         } onSubmit: {
             SubscribeAction(.sendFox("myID"))
         }
-        .id("myID")
         .controlSize(controlSize)
+        .id("myID")
 
         let output = element.render()
 

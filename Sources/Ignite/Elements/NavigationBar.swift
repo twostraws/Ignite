@@ -187,7 +187,7 @@ public struct NavigationBar: HTML {
         .aria(.label, "Toggle navigation")
     }
 
-    private func renderNavItems() -> Section {
+    private func renderNavItems() -> some HTML {
         Section {
             List {
                 ForEach(items) { item in
