@@ -42,7 +42,7 @@ public enum LengthUnit: Hashable, Equatable, Sendable, CustomStringConvertible, 
     static var `default`: LengthUnit { .em(.infinity) }
 
     /// Indicates whether this unit represents a default value
-    public var isDefault: Bool {
+    var isDefault: Bool {
         if self == .default { return true }
         return false
     }
