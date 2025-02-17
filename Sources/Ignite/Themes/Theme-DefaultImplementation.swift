@@ -45,11 +45,11 @@ public extension Theme {
     var largeBodySize: LengthUnit { .default }
 
     // Font Weights
-    var lighterFontWeight: LengthUnit { .default }
-    var lightFontWeight: LengthUnit { .default }
-    var regularFontWeight: LengthUnit { .default }
-    var boldFontWeight: LengthUnit { .default }
-    var bolderFontWeight: LengthUnit { .default }
+    var lighterFontWeight: Font.Weight { .default }
+    var lightFontWeight: Font.Weight { .default }
+    var regularFontWeight: Font.Weight { .default }
+    var boldFontWeight: Font.Weight { .default }
+    var bolderFontWeight: Font.Weight { .default }
 
     // Line Heights
     var regularLineHeight: LengthUnit { .default }
@@ -66,7 +66,7 @@ public extension Theme {
 
     // Heading Properties
     var headingFont: Font { .default }
-    var headingFontWeight: LengthUnit { .default }
+    var headingFontWeight: Font.Weight { .default }
     var headingLineHeight: LengthUnit { .default }
 
     // Bottom Margins
