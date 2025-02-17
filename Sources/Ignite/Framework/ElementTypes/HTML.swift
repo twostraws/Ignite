@@ -132,55 +132,6 @@ extension HTML {
         return self
     }
 
-    /// Adds an inline style to the element.
-    /// - Parameters:
-    ///   - property: The CSS property.
-    ///   - value: The value.
-    /// - Returns: The modified `HTML` element
-    @discardableResult func style(_ property: Property, _ value: String) -> Self {
-        var attributes = attributes
-        attributes.styles.append(.init(property, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Sets the `HTML` id attribute of the element.
-    /// - Parameter string: The ID value to set
-    /// - Returns: The modified `HTML` element
-    func id(_ string: String) -> Self {
-        var attributes = attributes
-        attributes.id = string
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds an ARIA attribute to the element.
-    /// - Parameters:
-    ///   - key: The ARIA attribute key
-    ///   - value: The ARIA attribute value
-    /// - Returns: The modified `HTML` element
-    func aria(_ key: AriaType, _ value: String?) -> Self {
-        guard let value else { return self }
-        var attributes = attributes
-        attributes.aria.append(Attribute(name: key.rawValue, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds a custom attribute to the element.
-    /// - Parameters:
-    ///   - name: The name of the custom attribute
-    ///   - value: The value of the custom attribute
-    /// - Returns: The modified `HTML` element
-    @discardableResult func customAttribute(name: String, value: String) -> Self {
-        var attributes = attributes
-        attributes.customAttributes.append(Attribute(name: name, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-}
-
-extension HTML {
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
     /// - Returns: The modified `HTML` element
