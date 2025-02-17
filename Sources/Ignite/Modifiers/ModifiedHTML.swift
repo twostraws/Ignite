@@ -17,7 +17,7 @@ struct ModifiedHTML: HTML, InlineElement, RootElement, NavigationItem {
     var body: some HTML { self }
 
     /// Whether this HTML belongs to the framework.
-    var isPrimitive: Bool = true
+    var isPrimitive: Bool { true }
 
     /// The underlying HTML content being modified.
     private(set) var content: any HTML
@@ -31,14 +31,12 @@ struct ModifiedHTML: HTML, InlineElement, RootElement, NavigationItem {
             self.id = content.id
         }
 
-        if let modified = content as? ModifiedHTML {
-            self.content = modified.content
-            AttributeStore.default.merge(modified.attributes, intoHTML: id)
+        self.content = if let modified = content as? ModifiedHTML {
+            modified.content
         } else {
-            self.content = content
-            AttributeStore.default.merge(content.attributes, intoHTML: id)
+            content
         }
-        
+
         _ = modifier.body(content: self)
     }
 
