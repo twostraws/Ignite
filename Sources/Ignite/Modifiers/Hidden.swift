@@ -11,7 +11,7 @@ struct HiddenModifier: HTMLModifier {
     private let isHidden: Bool
 
     /// Media queries that determine when the element should be hidden
-    private let queries: [MediaQuery]?
+    private let queries: [any Query]?
 
     /// Creates a new hidden modifier with a boolean flag
     /// - Parameter isHidden: Whether to hide the element
@@ -22,7 +22,7 @@ struct HiddenModifier: HTMLModifier {
 
     /// Creates a new hidden modifier with media queries
     /// - Parameter queries: Media queries that determine when to hide the element
-    init(queries: [MediaQuery]) {
+    init(queries: [any Query]) {
         self.isHidden = true
         self.queries = queries
 
@@ -56,7 +56,7 @@ public extension HTML {
     /// Hides the element when all specified media queries match.
     /// - Parameter queries: One or more media queries that must all match for the element to be hidden.
     /// - Returns: A modified copy of the element with conditional visibility.
-    func hidden(_ queries: MediaQuery...) -> some HTML {
+    func hidden(_ queries: any Query...) -> some HTML {
         modifier(HiddenModifier(queries: queries))
     }
 }

@@ -11,12 +11,9 @@ final class CSSManager {
     /// The shared instance used for managing CSS rules across the application.
     static let `default` = CSSManager()
 
-    /// All themes available in the site
-    private var themes: [Theme] = []
-
-    /// Queue of registrations waiting for themes to be set
+    /// Queue of registrations waiting to be processed
     private struct PendingRegistration {
-        let queries: [MediaQuery]
+        let queries: [any Query]
         let properties: [(String, String)]
         let className: String?
     }
@@ -35,51 +32,52 @@ final class CSSManager {
     /// A mapping of query hashes to their style properties.
     private var styleProperties: [String: [(String, String)]] = [:]
 
-    /// Sets the themes and processes any pending registrations
-    /// - Parameter themes: Array of themes from the site
-    func setThemes(_ themes: [Theme]) {
-        self.themes = themes
+    /// Processes all registrations
+    /// - Parameter themes: Array of themes from the site.
+    /// - Returns: A string containing all generated CSS rules, separated by newlines.
+    func generateAllRules(themes: [Theme]) -> String {
+        rules.removeAll()
+        classNames.removeAll()
+        styleProperties.removeAll()
 
-        // Process all pending registrations
+        // Process all registrations
         for registration in pendingRegistrations {
-            register(
-                registration.queries,
+            let hash = hashForQueries(registration.queries)
+            let finalClassName = registration.className ?? "style-\(hash)"
+
+            classNames[hash] = finalClassName
+            styleProperties[hash] = registration.properties
+            rules[hash] = generateCSSRule(
+                for: registration.queries,
+                className: finalClassName,
                 properties: registration.properties,
-                className: registration.className
+                themes: themes
             )
         }
-        pendingRegistrations.removeAll()
+
+        return rules.values.joined(separator: "\n\n")
     }
 
-    /// Registers a set of media queries and generates a corresponding CSS class
+    /// Registers a set of media queries and queues them for CSS generation
     /// - Parameters:
     ///   - queries: Media queries that determine when styles should be applied
     ///   - properties: CSS property names and values to apply
     ///   - className: Optional specific class name to use (generates one if nil)
-    /// - Returns: The class name used for these styles
+    /// - Returns: The class name that will be used for these styles
     @discardableResult
     func register(
-        _ queries: [MediaQuery],
+        _ queries: [any Query],
         properties: [(String, String)] = [("display", "none")],
         className: String? = nil
     ) -> String {
         let hash = hashForQueries(queries)
-
-        if themes.isEmpty {
-            // Queue the registration for later
-            pendingRegistrations.append(PendingRegistration(
-                queries: queries,
-                properties: properties,
-                className: className
-            ))
-            // Return the class name that will be used
-            return className ?? "style-\(hash)"
-        }
-
         let finalClassName = className ?? "style-\(hash)"
-        classNames[hash] = finalClassName
-        styleProperties[hash] = properties
-        rules[hash] = generateCSSRule(for: queries, className: finalClassName, properties: properties)
+
+        pendingRegistrations.append(PendingRegistration(
+            queries: queries,
+            properties: properties,
+            className: finalClassName
+        ))
 
         return finalClassName
     }
@@ -87,7 +85,7 @@ final class CSSManager {
     /// Gets the class name for a set of media queries.
     /// - Parameter queries: The media queries to look up.
     /// - Returns: The corresponding CSS class name, or an empty string if not found.
-    func className(for queries: [MediaQuery]) -> String {
+    func className(for queries: [any Query]) -> String {
         let hash = hashForQueries(queries)
         return classNames[hash] ?? ""
     }
@@ -95,7 +93,7 @@ final class CSSManager {
     /// Generates a unique, order-independent hash for a set of media queries.
     /// - Parameter queries: The media queries to hash.
     /// - Returns: A truncated hash string that uniquely identifies this combination of queries.
-    func hashForQueries(_ queries: [MediaQuery]) -> String {
+    func hashForQueries(_ queries: [any Query]) -> String {
         let sortedQueries = queries.sorted { String(describing: $0) < String(describing: $1) }
         return sortedQueries.map { String(describing: $0) }
             .joined()
@@ -107,11 +105,13 @@ final class CSSManager {
     ///   - queries: The media queries to apply.
     ///   - className: The CSS class name to use.
     ///   - properties: The CSS properties to apply.
+    ///   - themes: The themes to handle.
     /// - Returns: A CSS rule string.
     private func generateCSSRule(
-        for queries: [MediaQuery],
+        for queries: [any Query],
         className: String,
-        properties: [(String, String)]
+        properties: [(String, String)],
+        themes: [Theme]
     ) -> String {
         var rules: [String] = []
 
@@ -157,16 +157,16 @@ final class CSSManager {
     ///   - theme: The theme context for this rule
     /// - Returns: A CSS rule string with theme context
     private func generateThemedRule(
-        for queries: [MediaQuery],
+        for queries: [any Query],
         className: String,
         properties: [(String, String)],
         theme: Theme
     ) -> String {
         let (_, mediaQueries) = queries.reduce(into: (Set<String>(), [String]())) { result, query in
-            if case .theme(let id) = query {
-                result.0.insert(id.kebabCased())
+            if let themeQuery = query as? ThemeQuery {
+                result.0.insert(themeQuery.id.kebabCased())
             } else {
-                result.1.append(query.query(with: theme))
+                result.1.append(query.condition(with: theme))
             }
         }
 
@@ -190,10 +190,5 @@ final class CSSManager {
             }
             """
         }
-    }
-
-    /// A string containing all generated CSS rules, separated by newlines.
-    var allRules: String {
-        rules.values.joined(separator: "\n\n")
     }
 }
