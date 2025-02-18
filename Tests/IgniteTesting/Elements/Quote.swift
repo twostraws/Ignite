@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Quote` element.
 @Suite("Quote Tests")
 @MainActor
-struct QuoteTests {
+class QuoteTests: IgniteTestSuite {
     @Test("Plain Quote", arguments: ["It is a truth universally acknowledged..."])
     func plainQuoteTest(quoteText: String) async throws {
         let element = Quote {

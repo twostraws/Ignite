@@ -14,7 +14,7 @@ public extension Image {
     func imageFit(
         _ fit: ImageFit = .cover,
         anchor: UnitPoint = .center
-    ) -> Self {
+    ) -> some InlineElement {
         let xPercent = Int(anchor.x * 100)
         let yPercent = Int(anchor.y * 100)
 

@@ -6,7 +6,7 @@
 //
 
 /// A type that wraps HTML content with a modifier, preserving attributes and structure.
-struct ModifiedHTML: HTML, InlineElement, BlockHTML, RootElement, NavigationItem {
+struct ModifiedHTML: HTML, InlineElement, RootElement, NavigationItem {
     /// The column width to use when this element appears in a grid layout.
     var columnWidth: ColumnWidth = .automatic
 
@@ -17,7 +17,7 @@ struct ModifiedHTML: HTML, InlineElement, BlockHTML, RootElement, NavigationItem
     var body: some HTML { self }
 
     /// Whether this HTML belongs to the framework.
-    var isPrimitive: Bool = true
+    var isPrimitive: Bool { true }
 
     /// The underlying HTML content being modified.
     private(set) var content: any HTML
@@ -27,26 +27,23 @@ struct ModifiedHTML: HTML, InlineElement, BlockHTML, RootElement, NavigationItem
     ///   - content: The HTML content to modify
     ///   - modifier: The modifier to apply to the content
     init(_ content: any HTML, modifier: any HTMLModifier) {
-        if let modified = content as? ModifiedHTML {
-            self.content = modified.content
-            AttributeStore.default.merge(modified.attributes, intoHTML: id)
+        if content.isPrimitive {
+            self.id = content.id
+        }
+
+        self.content = if let modified = content as? ModifiedHTML {
+            modified.content
         } else {
-            self.content = content
-            AttributeStore.default.merge(content.attributes, intoHTML: id)
+            content
         }
 
         _ = modifier.body(content: self)
-
-        if let block = self.content as? (any BlockHTML) {
-            self.columnWidth = block.columnWidth
-        }
     }
 
     /// Renders this element using the provided publishing context.
     /// - Returns: The rendered HTML string
     func render() -> String {
         if content.isPrimitive {
-            AttributeStore.default.merge(attributes, intoHTML: content.id)
             return content.render()
         } else {
             let rawContent = content.render()

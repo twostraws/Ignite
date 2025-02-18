@@ -58,6 +58,9 @@ final class PublishingContext {
     /// Any errors that have been issued during a build.
     private(set) var errors = [PublishingError]()
 
+    /// The current environment values for the application.
+    var environment = EnvironmentValues()
+
     /// All the Markdown content this user has inside their Content folder.
     private(set) var allContent = [Content]()
 
@@ -66,7 +69,7 @@ final class PublishingContext {
 
     /// Whether the site uses syntax highlighters.
     var hasSyntaxHighlighters: Bool {
-        !syntaxHighlighters.isEmpty || !site.syntaxHighlighters.isEmpty
+        !syntaxHighlighters.isEmpty || !site.syntaxHighlighterConfiguration.languages.isEmpty
     }
 
     /// The sitemap for this site. Yes, using an array is less efficient when
@@ -126,6 +129,19 @@ final class PublishingContext {
         }
     }
 
+    /// Converts a URL to a site-relative path string.
+    /// - Parameter url: The URL to convert.
+    /// - Returns: A string path, either preserving remote URLs or
+    /// making local URLs relative to the site root.
+    func path(for url: URL) -> String {
+        let path = String(url.relativeString)
+        return if url.isFileURL {
+            site.url.appending(path: path).decodedPath
+        } else {
+            path
+        }
+    }
+
     /// Adds a warning during a site build.
     /// - Parameter message: The warning string to add.
     func addWarning(_ message: String) {
@@ -149,7 +165,7 @@ final class PublishingContext {
 
     /// Parses all Markdown content in the site's Content folder.
     func parseContent() throws {
-        try ContentFinder.shared.find(root: contentDirectory) { deploy in
+        try ContentFinder.default.find(root: contentDirectory) { deploy in
             let article = try Content(
                 from: deploy.url,
                 in: self,
@@ -235,6 +251,7 @@ final class PublishingContext {
 
         if hasSyntaxHighlighters {
             copy(resource: "js/prism-core.js")
+            copy(resource: "css/prism-plugins.css")
             copySyntaxHighlighters()
         }
     }
@@ -301,7 +318,7 @@ final class PublishingContext {
 
         return PageContext.withCurrentPage(page) {
             let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-            return EnvironmentStore.update(values) {
+            return withEnvironment(values) {
                 finalLayout.body.render()
             }
         }
@@ -317,7 +334,7 @@ final class PublishingContext {
         currentRenderingPath = isHomePage ? "/" : staticLayout.path
 
         let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        let body = EnvironmentStore.update(values) {
+        let body = withEnvironment(values) {
             staticLayout.body
         }
 
@@ -341,7 +358,7 @@ final class PublishingContext {
 
         let body = ContentContext.withCurrentContent(content) {
             let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-            return EnvironmentStore.update(values) {
+            return withEnvironment(values) {
                 Section(layout.body)
             }
         }
@@ -382,5 +399,17 @@ final class PublishingContext {
         } else {
             fatalError(.missingDefaultLayout)
         }
+    }
+
+    /// Temporarily updates the environment values for the duration of an operation.
+    /// - Parameters:
+    ///   - environment: The new environment values to use
+    ///   - operation: A closure that executes with the temporary environment
+    /// - Returns: The value returned by the operation
+    func withEnvironment<T>(_ environment: EnvironmentValues, operation: () -> T) -> T {
+        let previous = self.environment
+        self.environment = environment
+        defer { self.environment = previous }
+        return operation()
     }
 }

@@ -10,7 +10,7 @@ public protocol NavigationItem: InlineElement {}
 
 /// A bar that sits across the top of your page to provide top-level navigation
 /// throughout your site.
-public struct NavigationBar: BlockHTML {
+public struct NavigationBar: HTML {
     /// The color scheme for this navigation bar.
     public enum NavigationBarStyle {
         /// No specific color scheme means this bar will be rendered using
@@ -52,9 +52,6 @@ public struct NavigationBar: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// Controls the maximum width of the navigation bar content at different breakpoints.
     /// By default, uses Bootstrap's container class.
@@ -130,7 +127,7 @@ public struct NavigationBar: BlockHTML {
         case .viewport:
             copy.widthClasses = ["container-fluid", copy.columnWidth.className]
         case .count(let count):
-            copy.columnWidth = .count(count)
+            copy.columnWidth(.count(count))
             copy.widthClasses = ["container", copy.columnWidth.className]
         }
         return copy
@@ -190,7 +187,7 @@ public struct NavigationBar: BlockHTML {
         .aria(.label, "Toggle navigation")
     }
 
-    private func renderNavItems() -> Section {
+    private func renderNavItems() -> some HTML {
         Section {
             List {
                 ForEach(items) { item in

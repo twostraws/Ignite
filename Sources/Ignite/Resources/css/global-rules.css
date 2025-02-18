@@ -295,6 +295,7 @@ h6 { font-size: var(--bs-h6-font-size, 1rem); }
 /* Code blocks */
 code, pre {
     font-family: var(--bs-font-monospace, monospace);
+    font-size: var(--bs-code-font-size, 1em);
 }
 
 /* Border styles */

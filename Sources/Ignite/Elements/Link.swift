@@ -8,7 +8,7 @@
 import Foundation
 
 /// A hyperlink to another resource on this site or elsewhere.
-public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownItem {
+public struct Link: InlineElement, NavigationItem, DropdownItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -17,9 +17,6 @@ public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownItem {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth: ColumnWidth = .automatic
 
     /// The visual style to apply to the link.
     public enum LinkStyle {
@@ -204,9 +201,13 @@ public struct Link: BlockHTML, InlineElement, NavigationItem, DropdownItem {
     private func renderStandardLink() -> String {
         var linkAttributes = attributes.appending(classes: linkClasses)
 
-        // char[0] of the 'url' is '/' for an asset; not for a site URL
-        let basePath = url.starts(with: "/") ? publishingContext.site.url.path : ""
-        linkAttributes.tag = "a href=\"\(basePath)\(url)\""
+        guard let url = URL(string: url) else {
+            publishingContext.addWarning("One of your links uses an invalid URL.")
+            return ""
+        }
+
+        let path = publishingContext.path(for: url)
+        linkAttributes.tag = "a href=\"\(path)\""
         linkAttributes.closingTag = "a"
         return linkAttributes.description(wrapping: content.render())
     }

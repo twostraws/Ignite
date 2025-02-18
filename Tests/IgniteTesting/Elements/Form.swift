@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `Form` element.
 @Suite("Form Tests")
 @MainActor
-struct FormTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class FormTests: IgniteTestSuite {
     @Test("Basic Form")
     func form() async throws {
         let element = Form {
@@ -62,8 +58,8 @@ struct FormTests {
         } onSubmit: {
             SubscribeAction(.sendFox("myListID"))
         }
-        .id("myID")
         .labelStyle(style)
+        .id("myID")
 
         let output = element.render()
 
@@ -126,8 +122,8 @@ struct FormTests {
         } onSubmit: {
             SubscribeAction(.sendFox("myID"))
         }
-        .id("myID")
         .controlSize(controlSize)
+        .id("myID")
 
         let output = element.render()
 

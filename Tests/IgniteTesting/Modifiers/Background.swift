@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Background` modifier.
 @Suite("Background Tests")
 @MainActor
-struct BackgroundTests {
+class BackgroundTests: IgniteTestSuite {
     static let testMaterial: [Material] = [
         .ultraThinMaterial,
         .thinMaterial,

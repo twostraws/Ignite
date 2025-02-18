@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `CornerRadius` modifier.
 @Suite("CornerRadius Tests")
 @MainActor
-struct CornerRadiusTests {
+class CornerRadiusTests: IgniteTestSuite {
     @Test("CornerRadius Modifier with All Edges (String)")
     func cornerRadiusWithAllEdgesString() async throws {
         let element = Text("Hello").cornerRadius("50%")

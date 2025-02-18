@@ -12,26 +12,29 @@ import Testing
 
 /// Tests for the `Image` element.
 @Suite("Image Tests")
-@MainActor struct ImageTests {
-    static let sites: [any Site] = [TestSite(), TestSubsite()]
-
-    @Test("Image", arguments: [(path: "/images/example.jpg", description: "Example")], await Self.sites)
-    func named(image: (path: String, description: String), for site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-
-        let element = Image(image.path, description: image.description)
+@MainActor class ImageTests: IgniteTestSuite {
+    @Test("Local Image", arguments: ["/images/example.jpg"], ["Example image"])
+    func named(file: String, description: String) async throws {
+        let element = Image(file, description: description)
         let output = element.render()
 
-        let expectedPath = site.url.path == "/" ? image.path : "\(site.url.path)\(image.path)"
+        let expectedPath = PublishingContext.default.path(for: URL(string: file)!)
+        #expect(output == "<img alt=\"\(description)\" src=\"\(expectedPath)\" />")
+    }
 
-        #expect(output == "<img alt=\"Example\" src=\"\(expectedPath)\" />")
+    @Test("Remote Image", arguments: ["https://example.com"], ["Example image"])
+    func named(url: String, description: String) async throws {
+        let element = Image(url, description: description)
+        let output = element.render()
+
+        let expectedPath = PublishingContext.default.path(for: URL(string: url)!)
+        #expect(output == "<img alt=\"\(description)\" src=\"\(expectedPath)\" />")
     }
 
     @Test("Icon Image", arguments: ["browser-safari"], ["Safari logo"])
     func icon(systemName: String, description: String) async throws {
         let element = Image(systemName: systemName, description: description)
         let output = element.render()
-
         #expect(output == "<i class=\"bi-browser-safari\"></i>")
     }
 }

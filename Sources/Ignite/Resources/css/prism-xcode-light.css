@@ -2,8 +2,8 @@ code[class*="language-"],
 pre[class*="language-"] {
     color: #000000;
     background: transparent;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Monaco, 'Andale Mono', 'Ubuntu Mono', Courier, monospace;
-    font-size: 1em;
+    font-family: var(--bs-font-monospace, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Monaco, 'Andale Mono', 'Ubuntu Mono', Courier, monospace);
+    font-size: var(--bs-body-font-size, 1em);
     text-align: left;
     white-space: pre;
     word-spacing: normal;

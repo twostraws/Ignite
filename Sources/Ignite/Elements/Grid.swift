@@ -12,7 +12,7 @@
 ///
 /// **Note**: A 12-column grid is the default, but you can adjust that downwards
 /// by using the `columns()` modifier.
-public struct Grid: BlockHTML {
+public struct Grid: HTML, HorizontalAligning {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -21,9 +21,6 @@ public struct Grid: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// How many columns this should be divided into
     var columnCount: Int?
@@ -97,14 +94,13 @@ public struct Grid: BlockHTML {
                 if let passthrough = item as? any PassthroughHTML {
                     handlePassthrough(passthrough, attributes: passthrough.attributes)
                 } else if let modified = item as? ModifiedHTML,
-                          let passthrough = modified.content as? any PassthroughHTML {
+                          let passthrough = modified.content as? any PassthroughHTML
+                {
                     handlePassthrough(passthrough, attributes: modified.attributes)
-                } else if let item = item as? any BlockHTML {
+                } else {
                     Section(item)
                         .class(className(for: item))
                         .class(gutterClass)
-                } else {
-                    item
                 }
             }
         }
@@ -124,12 +120,10 @@ public struct Grid: BlockHTML {
             ""
         }
         return ForEach(passthrough.items) { item in
-            if let item = item as? any BlockHTML {
-                Section(item)
-                    .class(className(for: passthrough))
-                    .class(gutterClass)
-                    .attributes(attributes)
-            }
+            Section(item)
+                .class(className(for: passthrough))
+                .class(gutterClass)
+                .attributes(attributes)
         }
     }
 
@@ -137,7 +131,7 @@ public struct Grid: BlockHTML {
     /// - Parameter item: The block element to calculate the class name for.
     /// - Returns: A Bootstrap class name that represents the element's width,
     /// scaled according to the section's column count if needed.
-    private func className(for item: any BlockHTML) -> String {
+    private func className(for item: any HTML) -> String {
         let className: String
         if let columnCount, case .count(let width) = item.columnWidth {
             // Scale the width to be relative to the new column count

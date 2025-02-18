@@ -26,7 +26,7 @@ import Testing
                 body: Text("TEXT")))
         let output = element.render()
 
-        let jsPath = site.url.pathComponents.count <= 1 ? "/js" : "\(site.url.path)/js"
+        let jsPath = PublishingContext.default.path(for: URL(string: "/js")!)
 
         #expect(output == """
         <body class="container"><p>TEXT</p>\

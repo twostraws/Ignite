@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `Card` element.
 @Suite("Card Tests")
 @MainActor
-struct CardTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class CardTests: IgniteTestSuite {
     @Test("Basic Card")
     func basicCard() async throws {
         let element = Card {

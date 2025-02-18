@@ -6,7 +6,7 @@
 //
 
 /// A form container for collecting user input
-public struct Form: BlockHTML {
+public struct Form: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -15,9 +15,6 @@ public struct Form: BlockHTML {
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
-
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
 
     /// How many columns this should be divided into
     private var columnCount: Int = 12
@@ -188,7 +185,7 @@ public struct Form: BlockHTML {
 
         // Add custom SendFox JavaScript if needed.
         if case .sendFox = action.service {
-            formOutput += Script(file: "https://cdn.sendfox.com/js/form.js")
+            formOutput += Script(file: URL(static: "https://cdn.sendfox.com/js/form.js"))
                 .customAttribute(name: "charset", value: "utf-8")
                 .render()
         }
@@ -263,8 +260,7 @@ public struct Form: BlockHTML {
     ///   - totalColumns: The total number of columns in the form's grid.
     /// - Returns: A string containing the appropriate Bootstrap column class.
     private func getColumnClass(for item: any HTML, totalColumns: Int) -> String {
-        if let item = item as? (any BlockHTML),
-           case .count(let width) = item.columnWidth {
+        if case .count(let width) = item.columnWidth {
             // Convert the width from form columns to Bootstrap columns
             let bootstrapColumns = 12 * width / totalColumns
             return "col-md-\(bootstrapColumns)"

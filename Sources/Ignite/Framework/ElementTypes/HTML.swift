@@ -75,6 +75,11 @@ extension HTML {
         }
     }
 
+    /// How many columns this should occupy when placed in a grid.
+    var columnWidth: ColumnWidth {
+        attributes.columnWidth
+    }
+
     /// A Boolean value indicating whether this element contains multiple child elements.
     var isComposite: Bool {
         let bodyContent = body
@@ -115,7 +120,7 @@ extension HTML {
     }
 }
 
-public extension HTML {
+extension HTML {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
@@ -127,24 +132,16 @@ public extension HTML {
         return self
     }
 
-    /// Adds an inline style to the element.
-    /// - Parameters:
-    ///   - property: The CSS property.
-    ///   - value: The value.
+    /// Adds an array of CSS classes to the element.
+    /// - Parameter newClasses: `Array` of class names to add
     /// - Returns: The modified `HTML` element
-    @discardableResult func style(_ property: Property, _ value: String) -> Self {
+    func `class`(_ newClasses: [String]) -> Self {
         var attributes = attributes
-        attributes.styles.append(.init(property, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Sets the `HTML` id attribute of the element.
-    /// - Parameter string: The ID value to set
-    /// - Returns: The modified `HTML` element
-    func id(_ string: String) -> Self {
-        var attributes = attributes
-        attributes.id = string
+        for case let newClass? in newClasses where !attributes.classes.contains(newClass) {
+            if !newClass.isEmpty {
+                attributes.classes.append(newClass)
+            }
+        }
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -158,34 +155,6 @@ public extension HTML {
         guard let value else { return self }
         var attributes = attributes
         attributes.aria.append(Attribute(name: key.rawValue, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds a custom attribute to the element.
-    /// - Parameters:
-    ///   - name: The name of the custom attribute
-    ///   - value: The value of the custom attribute
-    /// - Returns: The modified `HTML` element
-    @discardableResult func customAttribute(name: String, value: String) -> Self {
-        var attributes = attributes
-        attributes.customAttributes.append(Attribute(name: name, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-}
-
-extension HTML {
-    /// Adds an array of CSS classes to the element.
-    /// - Parameter newClasses: `Array` of class names to add
-    /// - Returns: The modified `HTML` element
-    func `class`(_ newClasses: [String]) -> Self {
-        var attributes = attributes
-        for case let newClass? in newClasses where !attributes.classes.contains(newClass) {
-            if !newClass.isEmpty {
-                attributes.classes.append(newClass)
-            }
-        }
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -234,6 +203,18 @@ extension HTML {
         guard !actions.isEmpty else { return self }
         var attributes = attributes
         attributes.events.append(Event(name: name, actions: actions))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    @discardableResult func customAttribute(name: String, value: String) -> Self {
+        var attributes = attributes
+        attributes.customAttributes.append(Attribute(name: name, value: value))
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
@@ -301,6 +282,16 @@ extension HTML {
     @discardableResult func tag(_ tag: String) -> Self {
         var attributes = attributes
         attributes.tag = tag
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adjusts the number of columns assigned to this element.
+    /// - Parameter width: The new number of columns to use.
+    /// - Returns: A copy of the current element with the adjusted column width.
+    @discardableResult func columnWidth(_ width: ColumnWidth) -> Self {
+        var attributes = attributes
+        attributes.columnWidth = width
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }

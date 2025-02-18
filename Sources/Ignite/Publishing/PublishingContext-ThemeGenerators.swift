@@ -14,7 +14,6 @@ extension PublishingContext {
             theme.sansSerifFont,
             theme.monospaceFont,
             theme.font,
-            theme.codeFont,
             theme.headingFont
         ] + theme.alternateFonts
 
@@ -314,7 +313,6 @@ extension PublishingContext {
         addFont(.sansSerifFont, theme.sansSerifFont, defaultFonts: Font.systemFonts)
         addFont(.monospaceFont, theme.monospaceFont, defaultFonts: Font.monospaceFonts)
         addFont(.bodyFont, theme.font, defaultFonts: Font.systemFonts)
-        addFont(.codeFont, theme.codeFont, defaultFonts: Font.monospaceFonts)
         addFont(.headingFont, theme.headingFont, defaultFonts: Font.systemFonts)
 
         // Font sizes
@@ -322,6 +320,7 @@ extension PublishingContext {
         addProperty(.bodyFontSize, theme.bodySize)
         addProperty(.smallBodyFontSize, theme.smallBodySize)
         addProperty(.largeBodyFontSize, theme.largeBodySize)
+        addProperty(.codeFontSize, theme.codeFontSize)
 
         // Heading sizes
         addProperty(.h1FontSize, theme.xxLargeHeadingSize)

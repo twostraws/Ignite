@@ -31,12 +31,3 @@ public extension InlineElement {
         modifier(DoubleClickModifier(actions: actions()))
     }
 }
-
-public extension BlockHTML {
-    /// Adds an "ondblclick" JavaScript event to this block element.
-    /// - Parameter actions: A closure that returns the actions to execute when double-clicked.
-    /// - Returns: A modified block HTML element with the double click event handler attached.
-    func onDoubleClick(@ActionBuilder actions: () -> [Action]) -> some BlockHTML {
-        modifier(DoubleClickModifier(actions: actions()))
-    }
-}
