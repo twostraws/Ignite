@@ -28,16 +28,12 @@ class SubsiteTests: IgniteSubsiteTestSuite {
 
     @Test("Body Test")
     func body() async throws {
-        let element = Body(
-            for: Page(
-                title: "TITLE", description: "DESCRIPTION",
-                url: site.url,
-                body: Text("TEXT")))
+        let element = Body()
         let output = element.render()
         let path = site.url.decodedPath
 
         #expect(output == """
-        <body class="container"><p>TEXT</p>\
+        <body class="container">\
         <script src="\(path)/js/bootstrap.bundle.min.js"></script>\
         <script src="\(path)/js/ignite-core.js"></script>\
         </body>
