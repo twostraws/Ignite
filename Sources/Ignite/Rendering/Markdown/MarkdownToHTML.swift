@@ -35,7 +35,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     public init(markdown: String, removeTitleFromBody: Bool) {
         self.removeTitleFromBody = removeTitleFromBody
         let processed = processMetadata(for: markdown)
-        let document = Document(parsing: processed)
+        let document = Markdown.Document(parsing: processed)
         body = visit(document)
     }
 
@@ -54,7 +54,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
         }
 
         let processed = processMetadata(for: markdown)
-        let document = Document(parsing: processed)
+        let document = Markdown.Document(parsing: processed)
         body = visit(document)
 
         if title.isEmpty {

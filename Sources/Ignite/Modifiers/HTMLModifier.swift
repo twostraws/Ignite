@@ -35,11 +35,11 @@ public extension HTML where Self: InlineElement {
     }
 }
 
-public extension HTML where Self: RootElement {
+public extension HTML where Self: DocumentElement {
     /// Applies a modifier to this HTML root element while preserving its block nature.
     /// - Parameter modifier: The modifier to apply to this element
     /// - Returns: A modified copy of the element with changes applied, maintaining block status
-    func modifier<M: HTMLModifier>(_ modifier: M) -> some RootElement {
+    func modifier<M: HTMLModifier>(_ modifier: M) -> some DocumentElement {
         ModifiedHTML(self, modifier: modifier)
     }
 }

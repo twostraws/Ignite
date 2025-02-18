@@ -6,7 +6,7 @@
 //
 
 /// A type that wraps HTML content with a modifier, preserving attributes and structure.
-struct ModifiedHTML: HTML, InlineElement, RootElement, NavigationItem {
+struct ModifiedHTML: HTML, InlineElement, DocumentElement, NavigationItem {
     /// The column width to use when this element appears in a grid layout.
     var columnWidth: ColumnWidth = .automatic
 

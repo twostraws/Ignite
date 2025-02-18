@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public struct HTMLDocument: HTML {
+public struct Document: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -16,9 +16,9 @@ public struct HTMLDocument: HTML {
     public var isPrimitive: Bool { true }
 
     private let language: Language
-    private let contents: [any RootElement]
+    private let contents: [any DocumentElement]
 
-    public init(language: Language = .english, @RootElementBuilder contents: () -> [any RootElement]) {
+    public init(language: Language = .english, @DocumentElementBuilder contents: () -> [any DocumentElement]) {
         self.language = language
         self.contents = contents()
     }
