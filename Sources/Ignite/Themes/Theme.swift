@@ -93,9 +93,6 @@ public protocol Theme: Sendable {
     /// Base font family for body text
     var font: Font { get }
 
-    /// Font family for code blocks
-    var codeFont: Font { get }
-
     /// Alternate fonts
     var alternateFonts: [Font] { get }
 
@@ -110,6 +107,9 @@ public protocol Theme: Sendable {
 
     /// Large font size
     var largeBodySize: LengthUnit { get }
+
+    /// Inline code font size
+    var codeFontSize: LengthUnit { get }
 
     /// Extra light font weight
     var lighterFontWeight: Font.Weight { get }
