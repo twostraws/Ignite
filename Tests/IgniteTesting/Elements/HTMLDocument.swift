@@ -20,21 +20,21 @@ struct HTMLDocumentTests {
 
     @Test("Starts with doctype html")
     func containsHTMLDoctype() {
-        let sut = Root {}
+        let sut = Document {}
         let output = sut.render()
         #expect(output.hasPrefix("<!doctype html>"))
     }
 
     @Test("Contains html tag")
     func containsHTMLTag() {
-        let sut = Root {}
+        let sut = Document {}
         let output = sut.render()
         #expect(nil != output.htmlTagWithCloseTag("html"))
     }
 
     @Test("theme attribute is `auto`")
     func theme_is_auto() throws {
-        let sut = Root {}
+        let sut = Document {}
         let output = sut.render()
 
         let theme = try #require(output.htmlTagWithCloseTag("html")?.attributes
@@ -46,7 +46,7 @@ struct HTMLDocumentTests {
 
     @Test("lang attribute defaults to en")
     func language_attribute_defaults_to_en() throws {
-        let sut = Root {}
+        let sut = Document {}
         let output = sut.render()
 
         let language = try #require(output.htmlTagWithCloseTag("html")?.attributes
@@ -58,7 +58,7 @@ struct HTMLDocumentTests {
 
     @Test("lang attribute is taken from language property", arguments: Language.allCases)
     func language_property_determines_lang_attribute(_ language: Language) throws {
-        let sut = Root(language: language) {}
+        let sut = Document(language: language) {}
         let output = sut.render()
 
         let langAttribute = try #require(output.htmlTagWithCloseTag("html")?.attributes
@@ -70,7 +70,7 @@ struct HTMLDocumentTests {
 
     @Test("If contents are empty then html tag is empty")
     func contents_are_empty_by_default() throws {
-        let sut = Root {}
+        let sut = Document {}
         let output = sut.render()
 
         let htmlContents = try #require(output.htmlTagWithCloseTag("html")?.contents)
@@ -81,7 +81,7 @@ struct HTMLDocumentTests {
     @Test("places output of contents into contents of html tag")
     func html_tag_contents_are_taken_from_contents_property() async throws {
         let body = Body { "Hello World" }
-        let sut = Root { body }
+        let sut = Document { body }
 
         let expected = body.render()
 

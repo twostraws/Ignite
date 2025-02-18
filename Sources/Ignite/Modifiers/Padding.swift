@@ -74,11 +74,11 @@ public extension HTML {
     }
 }
 
-public extension RootElement {
+public extension DocumentElement {
     /// Applies padding on all sides of this element. Defaults to 20 pixels.
     /// - Parameter length: The amount of padding to apply, specified in pixels.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ length: Int = 20) -> some RootElement {
+    func padding(_ length: Int = 20) -> some DocumentElement {
         modifier(PaddingModifier(length: .px(length)))
     }
 
@@ -86,7 +86,7 @@ public extension RootElement {
     /// - Parameter length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ length: LengthUnit) -> some RootElement {
+    func padding(_ length: LengthUnit) -> some DocumentElement {
         modifier(PaddingModifier(length: length))
     }
 
@@ -94,7 +94,7 @@ public extension RootElement {
     /// - Parameter amount: The amount of padding to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ amount: SpacingAmount) -> some RootElement {
+    func padding(_ amount: SpacingAmount) -> some DocumentElement {
         modifier(PaddingModifier(amount: amount))
     }
 
@@ -103,7 +103,7 @@ public extension RootElement {
     ///   - edges: The edges where this padding should be applied.
     ///   - length: The amount of padding to apply, specified in pixels.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ edges: Edge, _ length: Int = 20) -> some RootElement {
+    func padding(_ edges: Edge, _ length: Int = 20) -> some DocumentElement {
         modifier(PaddingModifier(length: .px(length), edges: edges))
     }
 
@@ -113,7 +113,7 @@ public extension RootElement {
     ///   - length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ edges: Edge, _ length: LengthUnit) -> some RootElement {
+    func padding(_ edges: Edge, _ length: LengthUnit) -> some DocumentElement {
         modifier(PaddingModifier(length: length, edges: edges))
     }
 
@@ -123,7 +123,7 @@ public extension RootElement {
     ///   - amount: The amount of padding to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ edges: Edge, _ amount: SpacingAmount) -> some RootElement {
+    func padding(_ edges: Edge, _ amount: SpacingAmount) -> some DocumentElement {
         modifier(PaddingModifier(amount: amount, edges: edges))
     }
 }
