@@ -201,9 +201,13 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     private func renderStandardLink() -> String {
         var linkAttributes = attributes.appending(classes: linkClasses)
 
-        // char[0] of the 'url' is '/' for an asset; not for a site URL
-        let basePath = url.starts(with: "/") ? publishingContext.site.url.path : ""
-        linkAttributes.tag = "a href=\"\(basePath)\(url)\""
+        guard let url = URL(string: url) else {
+            publishingContext.addWarning("One of your links uses an invalid URL.")
+            return ""
+        }
+
+        let path = publishingContext.path(for: url)
+        linkAttributes.tag = "a href=\"\(path)\""
         linkAttributes.closingTag = "a"
         return linkAttributes.description(wrapping: content.render())
     }

@@ -129,6 +129,19 @@ final class PublishingContext {
         }
     }
 
+    /// Converts a URL to a site-relative path string.
+    /// - Parameter url: The URL to convert.
+    /// - Returns: A string path, either preserving remote URLs or
+    /// making local URLs relative to the site root.
+    func path(for url: URL) -> String {
+        let path = String(url.relativeString)
+        return if url.isFileURL {
+            site.url.appending(path: path).decodedPath
+        } else {
+            path
+        }
+    }
+
     /// Adds a warning during a site build.
     /// - Parameter message: The warning string to add.
     func addWarning(_ message: String) {

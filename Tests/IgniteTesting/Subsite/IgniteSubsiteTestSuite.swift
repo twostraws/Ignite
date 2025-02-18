@@ -14,6 +14,10 @@ import Foundation
 class IgniteSubsiteTestSuite {
     let site: any Site = TestSubsite()
 
+    var publishingContext: PublishingContext {
+        PublishingContext.default
+    }
+
     /// Creates a new test instance and initializes the publishing context for `TestSubsite`.
     init() throws {
         try PublishingContext.initialize(for: TestSubsite(), from: #filePath)

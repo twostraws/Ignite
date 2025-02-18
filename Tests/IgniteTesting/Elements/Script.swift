@@ -24,14 +24,25 @@ import Testing
         #expect(output == "<script>javascript code</script>")
     }
 
-    @Test("File", arguments: ["/code.js"], await Self.sites)
+    @Test("Local File", arguments: ["/code.js"], await Self.sites)
     func file(scriptFile: String, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Script(file: scriptFile)
         let output = element.render()
 
-        let expectedPath = site.url.pathComponents.count <= 1 ? scriptFile : "\(site.url.path)\(scriptFile)"
+        let expectedPath = PublishingContext.default.path(for: URL(string: scriptFile)!)
+        #expect(output == "<script src=\"\(expectedPath)\"></script>")
+    }
+
+    @Test("Remote File", arguments: ["https://example.com"], await Self.sites)
+    func file(remoteScript: String, site: any Site) async throws {
+        try PublishingContext.initialize(for: site, from: #filePath)
+
+        let element = Script(file: remoteScript)
+        let output = element.render()
+
+        let expectedPath = PublishingContext.default.path(for: URL(string: remoteScript)!)
         #expect(output == "<script src=\"\(expectedPath)\"></script>")
     }
 
@@ -44,7 +55,7 @@ import Testing
             .customAttribute(name: "custom", value: "part")
         let output = element.render()
 
-        let expectedPath = site.url.pathComponents.count <= 1 ? scriptFile : "\(site.url.path)\(scriptFile)"
+        let expectedPath = PublishingContext.default.path(for: URL(string: scriptFile)!)
         #expect(output == "<script custom=\"part\" src=\"\(expectedPath)\" data-key=\"value\"></script>")
     }
 }

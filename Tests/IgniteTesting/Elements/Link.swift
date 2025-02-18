@@ -22,7 +22,7 @@ import Testing
 
         let element = Link(link.description, target: link.target)
         let output = element.render()
-        let expectedPath = site.url.path == "/" ? link.target : "\(site.url.path)\(link.target)"
+        let expectedPath = PublishingContext.default.path(for: URL(string: link.target)!)
 
         #expect(output == """
         <a href="\(expectedPath)" \
@@ -40,9 +40,7 @@ import Testing
         let element = Link("This is a test", target: page).linkStyle(.button)
         let output = element.render()
 
-        let expectedPath = site.url.pathComponents.count <= 1 ?
-            "/test-layout" :
-            "\(site.url.path)/test-subsite-layout"
+        let expectedPath = PublishingContext.default.path(for: URL(string: page.path)!)
 
         #expect(output == "<a href=\"\(expectedPath)\" class=\"btn btn-primary\">This is a test</a>")
     }
@@ -59,9 +57,7 @@ import Testing
             })
         let output = element.render()
 
-        let expectedPath = site.url.pathComponents.count <= 1 ?
-            "/test-layout" :
-            "\(site.url.path)/test-subsite-layout"
+        let expectedPath = PublishingContext.default.path(for: URL(string: page.path)!)
 
         #expect(output == """
         <a href="\(expectedPath)" \
@@ -78,9 +74,7 @@ import Testing
 
         let element = Link("Link with warning role.", target: page).role(.warning)
         let output = element.render()
-        let expectedPath = site.url.pathComponents.count <= 1 ?
-            "/test-layout" :
-            "\(site.url.path)/test-subsite-layout"
+        let expectedPath = PublishingContext.default.path(for: URL(string: page.path)!)
 
         #expect(output == """
         <a href="\(expectedPath)" \

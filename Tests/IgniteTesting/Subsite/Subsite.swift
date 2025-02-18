@@ -20,7 +20,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
     func named(path: String, description: String) async throws {
         let element = Image(path, description: description)
         let output = element.render()
-        let path = site.url.appending(path: path).decodedPath
+        let path = publishingContext.path(for: URL(string: path)!)
         #expect(output == "<img alt=\"Example image\" src=\"\(path)\" />")
     }
 
@@ -34,12 +34,12 @@ class SubsiteTests: IgniteSubsiteTestSuite {
                 url: site.url,
                 body: Text("TEXT")))
         let output = element.render()
-        let path = site.url.decodedPath
+        let path = publishingContext.path(for: URL(string: "/js")!)
 
         #expect(output == """
         <body class="container"><p>TEXT</p>\
-        <script src="\(path)/js/bootstrap.bundle.min.js"></script>\
-        <script src="\(path)/js/ignite-core.js"></script>\
+        <script src="\(path)/bootstrap.bundle.min.js"></script>\
+        <script src="\(path)/ignite-core.js"></script>\
         </body>
         """)
     }
@@ -50,7 +50,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
     func file(scriptFile: String) async throws {
         let element = Script(file: scriptFile)
         let output = element.render()
-        let expectedPath = site.url.appending(path: scriptFile).decodedPath
+        let expectedPath = publishingContext.path(for: URL(string: scriptFile)!)
         #expect(output == "<script src=\"\(expectedPath)\"></script>")
     }
 
@@ -61,17 +61,17 @@ class SubsiteTests: IgniteSubsiteTestSuite {
             .customAttribute(name: "custom", value: "part")
         let output = element.render()
 
-        let expectedPath = site.url.appending(path: scriptFile).decodedPath
+        let expectedPath = publishingContext.path(for: URL(string: scriptFile)!)
         #expect(output == "<script custom=\"part\" src=\"\(expectedPath)\" data-key=\"value\"></script>")
     }
 
     // MARK: - Link
 
-    @Test("String Target Test", .disabled("Fix in PR 421"), arguments: ["/"], ["Go Home"])
+    @Test("String Target Test", arguments: ["/"], ["Go Home"])
     func target(for target: String, description: String) async throws {
         let element = Link(description, target: target)
         let output = element.render()
-        let expectedPath = site.url.appending(path: target).decodedPath
+        let expectedPath = publishingContext.path(for: URL(string: target)!)
 
         #expect(output == """
         <a href="\(expectedPath)" \
@@ -82,7 +82,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         """)
     }
 
-    @Test("Page Target Test", .disabled("Fix in PR 421"))
+    @Test("Page Target Test")
     func target() async throws {
         let page = TestSubsiteLayout()
         let element = Link("This is a test", target: page).linkStyle(.button)
@@ -90,7 +90,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         #expect(output == "<a href=\"\(page.path)\" class=\"btn btn-primary\">This is a test</a>")
     }
 
-    @Test("Page Content Test", .disabled("Fix in PR 421"))
+    @Test("Page Content Test")
     func content() async throws {
         let page = TestLayout()
         let element = Link(target: page) {

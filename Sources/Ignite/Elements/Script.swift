@@ -20,21 +20,21 @@ public struct Script: HTML, HeadElement {
     public var isPrimitive: Bool { true }
 
     /// The external file to load.
-    private var file: String?
+    private var file: URL?
 
     /// Direct, inline JavaScript code to execute.
     private var code: String?
 
-    /// Creates a new script that references an external file.
+    /// Creates a new script that references a local file.
     /// - Parameter file: The URL of the file to load.
     public init(file: String) {
-        self.file = file
+        self.file = URL(string: file)
     }
 
     /// Creates a new script that references an external file.
     /// - Parameter file: The URL of the file to load.
     public init(file: URL) {
-        self.file = file.absoluteString
+        self.file = file
     }
 
     /// Embeds some custom, inline JavaScript on this page.
@@ -49,7 +49,8 @@ public struct Script: HTML, HeadElement {
         attributes.tag = "script"
 
         if let file {
-            attributes.append(customAttributes: .init(name: "src", value: "\(publishingContext.site.url.path)\(file)"))
+            let path = publishingContext.path(for: file)
+            attributes.append(customAttributes: .init(name: "src", value: path))
             return attributes.description()
         } else if let code {
             return attributes.description(wrapping: code)
