@@ -33,7 +33,8 @@ public struct Section: HTML, HorizontalAligning {
 
     var items: [any HTML] = []
 
-    init(_ items: any HTML) {
+    // Temporarily public
+    public init(_ items: any HTML) {
         self.items = flatUnwrap(items)
         self.tag("div")
     }
