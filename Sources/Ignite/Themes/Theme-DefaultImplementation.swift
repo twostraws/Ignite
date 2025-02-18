@@ -35,7 +35,6 @@ public extension Theme {
     var sansSerifFont: Font { .default }
     var monospaceFont: Font { .default }
     var font: Font { .default }
-    var codeFont: Font { .default }
     var alternateFonts: [Font] { [] }
 
     // Font Sizes
@@ -43,6 +42,7 @@ public extension Theme {
     var bodySize: LengthUnit { .default }
     var smallBodySize: LengthUnit { .default }
     var largeBodySize: LengthUnit { .default }
+    var codeFontSize: LengthUnit { .default }
 
     // Font Weights
     var lighterFontWeight: Font.Weight { .default }

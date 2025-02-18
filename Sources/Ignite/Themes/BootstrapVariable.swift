@@ -91,8 +91,8 @@ enum BootstrapVariable: String {
     /// Base body font family
     case bodyFont = "--bs-body-font-family"
 
-    /// Font family for code blocks
-    case codeFont = "--bs-font-code"
+    /// Font family for headings
+    case headingFont = "--bs-headings-font-family"
 
     // MARK: - Font Sizes
 
@@ -108,8 +108,8 @@ enum BootstrapVariable: String {
     /// Large body font size
     case largeBodyFontSize = "--bs-body-font-size-lg"
 
-    /// Font family for headings
-    case headingFont = "--bs-headings-font-family"
+    /// Inline code font size
+    case codeFontSize = "--bs-code-font-size"
 
     // MARK: - Heading Sizes
 
