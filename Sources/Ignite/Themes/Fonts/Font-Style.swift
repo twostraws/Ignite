@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+public typealias FontStyle = Font.Style
+
 /// Represents different text styles available in the system
 public extension Font {
     enum Style: String, CaseIterable, Sendable {

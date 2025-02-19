@@ -12,7 +12,10 @@
 /// structures into a flat, iterable collections of `HTML` elements.
 struct HTMLCollection: InlineElement, @preconcurrency Sequence {
     /// The content and behavior of this HTML sequence
-    public var body: some HTML { self }
+    var body: some HTML { self }
+
+    /// Whether this HTML belongs to the framework.
+    var isPrimitive: Bool { true }
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -39,13 +42,13 @@ struct HTMLCollection: InlineElement, @preconcurrency Sequence {
 
     /// Creates an iterator over the sequence's elements
     /// - Returns: An iterator that provides access to each HTML element
-    public func makeIterator() -> IndexingIterator<[any HTML]> {
+    func makeIterator() -> IndexingIterator<[any HTML]> {
         elements.makeIterator()
     }
 
     /// Renders all elements in the sequence into HTML
     /// - Returns: The combined HTML string of all elements
-    public func render() -> String {
+    func render() -> String {
         elements.map { $0.render() }.joined()
     }
 }

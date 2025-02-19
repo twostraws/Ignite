@@ -112,19 +112,19 @@ public protocol Theme: Sendable {
     var codeFontSize: LengthUnit { get }
 
     /// Extra light font weight
-    var lighterFontWeight: Font.Weight { get }
+    var lighterFontWeight: FontWeight { get }
 
     /// Light font weight
-    var lightFontWeight: Font.Weight { get }
+    var lightFontWeight: FontWeight { get }
 
     /// Normal font weight
-    var regularFontWeight: Font.Weight { get }
+    var regularFontWeight: FontWeight { get }
 
     /// Bold font weight
-    var boldFontWeight: Font.Weight { get }
+    var boldFontWeight: FontWeight { get }
 
     /// Extra bold font weight
-    var bolderFontWeight: Font.Weight { get }
+    var bolderFontWeight: FontWeight { get }
 
     /// Base line height
     var regularLineHeight: LengthUnit { get }
@@ -157,7 +157,7 @@ public protocol Theme: Sendable {
     var headingFont: Font { get }
 
     /// Font weight for headings
-    var headingFontWeight: Font.Weight { get }
+    var headingFontWeight: FontWeight { get }
 
     /// Line height for headings
     var headingLineHeight: LengthUnit { get }

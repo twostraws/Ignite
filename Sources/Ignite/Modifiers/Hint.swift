@@ -40,15 +40,15 @@ struct HintModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with tooltip applied
     func body(content: some HTML) -> any HTML {
-        content
+        var modified: any HTML = content
             .data("bs-toggle", "tooltip")
             .data("bs-title", text)
 
         if isHTML {
-            content.data("bs-html", "true")
+            modified = modified.data("bs-html", "true")
         }
 
-        return content
+        return modified
     }
 }
 

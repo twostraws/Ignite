@@ -191,8 +191,8 @@ extension Button {
     /// - Returns: A copy of the current element with the adjusted column width.
     public func width(_ width: Int) -> Self {
         let copy = self
-        copy.columnWidth(.count(width))
-        copy.class("w-100")
         return copy
+            .columnWidth(.count(width))
+            .class("w-100")
     }
 }
