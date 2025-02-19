@@ -173,11 +173,21 @@ extension HTML {
     }
 
     /// Adds inline styles to the element.
-    /// - Parameter values: Variable number of `AttributeValue` objects
+    /// - Parameter values: Variable number of `InlineStyle` objects
     /// - Returns: The modified `HTML` element
     func style(_ values: InlineStyle?...) -> Self {
         var attributes = attributes
         attributes.styles.formUnion(values.compactMap(\.self))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
+    /// Adds inline styles to the element.
+    /// - Parameter values: An array of `InlineStyle` objects
+    /// - Returns: The modified `HTML` element
+    func style(_ values: [InlineStyle]) -> Self {
+        var attributes = attributes
+        attributes.styles.formUnion(values)
         AttributeStore.default.merge(attributes, intoHTML: id)
         return self
     }
