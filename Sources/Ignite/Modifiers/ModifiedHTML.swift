@@ -17,30 +17,29 @@ struct ModifiedHTML: HTML, InlineElement, DocumentElement, NavigationItem {
     var isPrimitive: Bool { true }
 
     /// The underlying HTML content being modified.
-    private(set) var content: any HTML
+    private(set) var content: any HTML = EmptyHTML()
 
     /// Creates a new modified HTML element by applying a modifier to existing content.
     /// - Parameters:
     ///   - content: The HTML content to modify
     ///   - modifier: The modifier to apply to the content
     init(_ content: any HTML, modifier: any HTMLModifier) {
-        switch content {
-        case let modified as ModifiedHTML where modified.content.isPrimitive:
-            let modified = modifier.body(content: modified.content)
-            self.content = modified
-
-        case let modified as ModifiedHTML where !modified.content.isPrimitive:
-            self.content = modified.content
+        let unwrapped: any HTML
+        if let modified = content as? ModifiedHTML {
             self.id = modified.id
-            _ = modifier.body(content: self)
+            unwrapped = modified.content
+        } else {
+            unwrapped = content
+        }
 
-        case let content where content.isPrimitive:
-            let modified = modifier.body(content: content)
+        let modified: any HTML
+        if unwrapped.isPrimitive {
+            modified = modifier.body(content: unwrapped)
             self.content = modified
-
-        default:
-            self.content = content
+        } else {
+            // Store attributes
             _ = modifier.body(content: self)
+            self.content = unwrapped
         }
     }
 

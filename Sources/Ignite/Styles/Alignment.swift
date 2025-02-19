@@ -47,3 +47,25 @@ public struct Alignment: Equatable {
     /// A guide that marks the bottom and trailing edges.
     public static let bottomTrailing = Alignment(horizontal: .trailing, vertical: .bottom)
 }
+
+extension Alignment {
+    /// The appropriate Bootstrap classes for this alignment
+    var bootstrapClasses: [String] {
+        [horizontal.bootstrapClass, vertical.bootstrapClass]
+    }
+
+    /// Flex container rules for aligning content
+    var flexAlignmentRules: [InlineStyle] {
+        switch (horizontal, vertical) {
+        case (.leading, .top):      [.init(.alignItems, value: "flex-start"), .init(.justifyContent, value: "flex-start")]
+        case (.center, .top):       [.init(.alignItems, value: "center"), .init(.justifyContent, value: "flex-start")]
+        case (.trailing, .top):     [.init(.alignItems, value: "flex-end"), .init(.justifyContent, value: "flex-start")]
+        case (.leading, .center):   [.init(.alignItems, value: "flex-start"), .init(.justifyContent, value: "center")]
+        case (.center, .center):    [.init(.alignItems, value: "center"), .init(.justifyContent, value: "center")]
+        case (.trailing, .center):  [.init(.alignItems, value: "flex-end"), .init(.justifyContent, value: "center")]
+        case (.leading, .bottom):   [.init(.alignItems, value: "flex-start"), .init(.justifyContent, value: "flex-end")]
+        case (.center, .bottom):    [.init(.alignItems, value: "center"), .init(.justifyContent, value: "flex-end")]
+        case (.trailing, .bottom):  [.init(.alignItems, value: "flex-end"), .init(.justifyContent, value: "flex-end")]
+        }
+    }
+}
