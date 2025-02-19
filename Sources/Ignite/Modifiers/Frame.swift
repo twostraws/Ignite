@@ -89,52 +89,6 @@ struct FrameModifier: HTMLModifier {
         self.alignment = alignment
     }
 
-    private func handleDerivedSize(
-        _ value: LengthUnit,
-        dimension: Dimension,
-        classes: inout [String],
-        styles: inout [InlineStyle]
-    ) {
-        switch value {
-        case .vh(100%), .vw(100%):
-            classes.append(dimension.viewportClass)
-            if dimension.needsFlexAlignment {
-                classes.append("d-flex")
-                classes.append(contentsOf: alignment.bootstrapClasses)
-            }
-
-        case .percent(100%):
-            classes.append(dimension.bootstrapClass)
-            if dimension.needsFlexAlignment {
-                classes.append("d-flex")
-                classes.append(contentsOf: alignment.bootstrapClasses)
-            }
-
-        default: break
-        }
-    }
-
-    private func handleExplicitSize(value: LengthUnit, dimension: Dimension, content: any HTML) -> any HTML {
-        var containerAttributes = content.attributes.containerAttributes
-            .first(where: { $0.type == .frame }) ?? ContainerAttributes(type: .frame)
-
-        containerAttributes.styles.append(.init(.position, value: "relative"))
-        containerAttributes.styles.append(.init(.display, value: "flex"))
-        containerAttributes.styles.append(.init(.flex, value: "1"))
-        containerAttributes.styles.append(.init(.flexDirection, value: "column"))
-        containerAttributes.styles.append(contentsOf: alignment.containerAlignmentRules)
-        containerAttributes.styles.append(.init(.border, value: "1px solid green"))
-
-        return content
-            .style(.init(dimension.cssProperty, value: value.stringValue))
-            .style(.init(.flexDirection, value: "column"))
-            .style(.init(.display, value: "flex"))
-            .style(.init(.position, value: "absolute"))
-            .style(.init(.overflow, value: "hidden"))
-            .style(alignment.edgeAlignmentRules)
-            .containerAttributes(containerAttributes)
-    }
-
     func body(content: some HTML) -> any HTML {
         var modified: any HTML = content
         var classes = [String]()
@@ -170,6 +124,68 @@ struct FrameModifier: HTMLModifier {
         } else {
             modified
         }
+    }
+
+    /// Handles percentage-based and viewport-based dimensions by applying appropriate Bootstrap classes
+    /// - Parameters:
+    ///   - value: The length unit to apply
+    ///   - dimension: The dimension type being modified
+    ///   - classes: The array of CSS classes to modify
+    ///   - styles: The array of inline styles to modify
+    private func handleDerivedSize(
+        _ value: LengthUnit,
+        dimension: Dimension,
+        classes: inout [String],
+        styles: inout [InlineStyle]
+    ) {
+        switch value {
+        case .vh(100%), .vw(100%):
+            classes.append(dimension.viewportClass)
+            if dimension.needsFlexAlignment {
+                classes.append("d-flex")
+                classes.append(contentsOf: alignment.bootstrapClasses)
+            }
+
+        case .percent(100%):
+            classes.append(dimension.bootstrapClass)
+            if dimension.needsFlexAlignment {
+                classes.append("d-flex")
+                classes.append(contentsOf: alignment.bootstrapClasses)
+            }
+
+        default: break
+        }
+    }
+
+    /// Handles explicit size dimensions by applying absolute positioning and flex layout
+    /// - Parameters:
+    ///   - value: The length unit to apply
+    ///   - dimension: The dimension type being modified
+    ///   - content: The HTML content to modify
+    /// - Returns: The modified HTML content
+    private func handleExplicitSize(value: LengthUnit, dimension: Dimension, content: any HTML) -> any HTML {
+        // When a modified element is smaller than its parent container,
+        // we need to wrap it in a "framing context" that is invisible from the view hierarchy—
+        // hence using ContainerAttributes instead of `Section`.
+        // Using this invisible framing context means that modifiers applied after
+        // frame() will respect the modified element's size—not the size of the framing context.
+        var containerAttributes = content.attributes.containerAttributes
+            .first(where: { $0.type == .frame }) ?? ContainerAttributes(type: .frame)
+
+        containerAttributes.styles.append(.init(.position, value: "relative"))
+        containerAttributes.styles.append(.init(.display, value: "flex"))
+        containerAttributes.styles.append(.init(.flex, value: "1"))
+        containerAttributes.styles.append(.init(.flexDirection, value: "column"))
+        containerAttributes.styles.append(contentsOf: alignment.containerAlignmentRules)
+
+        return content
+            .style(.init(dimension.cssProperty, value: value.stringValue))
+            .style(.init(.flexDirection, value: "column"))
+            .style(.init(.display, value: "flex"))
+            .style(.init(.position, value: "absolute"))
+            .style(.init(.overflow, value: "hidden"))
+            .style(alignment.edgeAlignmentRules)
+            .containerAttributes(containerAttributes)
     }
 }
 
@@ -317,11 +333,11 @@ public extension InlineElement {
 
 fileprivate extension Alignment {
     /// The appropriate Bootstrap classes for this alignment
-    /// Returns the appropriate Bootstrap classes for this alignment
     var bootstrapClasses: [String] {
         [horizontal.bootstrapClass, vertical.bootstrapClass]
     }
 
+    /// CSS positioning rules based on the horizontal and vertical alignment
     var edgeAlignmentRules: [InlineStyle] {
         switch (horizontal, vertical) {
         case (.leading, .top):      [.init(.top, value: "0"), .init(.left, value: "0")]
@@ -336,6 +352,7 @@ fileprivate extension Alignment {
         }
     }
 
+    /// Flex container alignment rules for centering content
     var containerAlignmentRules: [InlineStyle] {
         switch (horizontal, vertical) {
         case (.leading, .top):      []
