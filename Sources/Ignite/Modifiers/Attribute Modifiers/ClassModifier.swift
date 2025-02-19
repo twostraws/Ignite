@@ -24,7 +24,7 @@ public extension HTML {
     /// Adds a CSS class to the HTML element
     /// - Parameter className: The CSS class name to add
     /// - Returns: A modified copy of the element with the CSS class added
-    @discardableResult func `class`(_ className: String) -> some HTML {
+    func `class`(_ className: String) -> some HTML {
         modifier(ClassModifier(className: className))
     }
 }
@@ -33,7 +33,7 @@ public extension InlineElement {
     /// Adds a CSS class to the HTML element
     /// - Parameter className: The CSS class name to add
     /// - Returns: A modified copy of the element with the CSS class added
-    @discardableResult func `class`(_ className: String) -> some InlineElement {
+    func `class`(_ className: String) -> some InlineElement {
         modifier(ClassModifier(className: className))
     }
 }

@@ -65,32 +65,31 @@ struct FontModifier: HTMLModifier {
             (content as? ModifiedHTML)?.content is Text
 
         if isText {
-            content.style(.fontWeight, font.weight.rawValue.formatted())
+            var modified: any HTML = content.style(.fontWeight, font.weight.rawValue.formatted())
 
             if let style = font.style {
-                content.fontStyle(style)
+                modified = modified.fontStyle(style)
             }
 
             if let name = font.name, name.isEmpty == false {
-                content.style(.fontFamily, name)
+                modified = modified.style(.fontFamily, name)
             }
 
             if let responsiveSize = font.responsiveSize {
                 let classNames = registerClasses(for: responsiveSize)
-                content.class(classNames)
+                modified = modified.class(classNames)
             } else if let size = font.size {
-                content.style(.fontSize, size.stringValue)
+                modified = modified.style(.fontSize, size.stringValue)
             }
 
-            return content
+            return modified
         } else {
             var containerAttributes = ContainerAttributes(styles: [
                 .init(.fontWeight, value: String(font.weight.rawValue))
             ])
 
             if let name = font.name, name.isEmpty == false {
-                containerAttributes.styles
-                    .append(InlineStyle(.fontFamily, value: name))
+                containerAttributes.styles.append(.init(.fontFamily, value: name))
             }
 
             if let responsiveSize = font.responsiveSize {

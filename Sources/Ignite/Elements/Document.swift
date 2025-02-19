@@ -24,8 +24,9 @@ public struct Document: HTML {
     }
 
     public func render() -> String {
-        self.customAttribute(name: "lang", value: language.rawValue)
-        self.customAttribute(name: "data-bs-theme", value: "auto")
+        var attributes = attributes
+        attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
+        attributes.append(customAttributes: .init(name: "data-bs-theme", value: "auto"))
         var output = "<!doctype html>"
         output += "<html\(attributes.description())>"
         output += contents.map { $0.render() }.joined()

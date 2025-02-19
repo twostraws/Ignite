@@ -26,7 +26,7 @@ public extension HTML {
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
-    @discardableResult func aria(_ key: AriaType, _ value: String) -> some HTML {
+    func aria(_ key: AriaType, _ value: String) -> some HTML {
         modifier(AriaModifier(key: key, value: value))
     }
 }
@@ -37,7 +37,7 @@ public extension InlineElement {
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
-    @discardableResult func aria(_ key: AriaType, _ value: String) -> some InlineElement {
+    func aria(_ key: AriaType, _ value: String) -> some InlineElement {
         modifier(AriaModifier(key: key, value: value))
     }
 }
