@@ -17,9 +17,6 @@ struct HTMLCollection: InlineElement, @preconcurrency Sequence {
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { true }
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The array of HTML elements contained in this sequence
     var elements: [any HTML]
 
