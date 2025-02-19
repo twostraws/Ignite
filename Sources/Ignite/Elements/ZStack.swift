@@ -1,10 +1,3 @@
-//
-// ZStack.swift
-// Ignite
-// https://www.github.com/twostraws/Ignite
-// See LICENSE for license information.
-//
-
 /// Creates a container that stacks its children along the z-axis (depth),
 /// with each subsequent child appearing in front of the previous one.
 public struct ZStack: HTML {
@@ -18,7 +11,7 @@ public struct ZStack: HTML {
     public var isPrimitive: Bool { true }
 
     /// The alignment point for positioning elements within the stack.
-    private var alignment: UnitPoint
+    private var alignment: Alignment
 
     /// The child elements to be stacked.
     private var items: [any HTML] = []
@@ -27,7 +20,7 @@ public struct ZStack: HTML {
     /// - Parameters:
     ///   - alignment: The point within the stack where elements should be aligned (default: .center).
     ///   - items: A closure that returns the elements to be stacked.
-    public init(alignment: UnitPoint = .center, @HTMLBuilder _ items: () -> some HTML) {
+    public init(alignment: Alignment = .center, @HTMLBuilder _ items: () -> some HTML) {
         self.items = flatUnwrap(items())
         self.alignment = alignment
     }
@@ -45,20 +38,25 @@ public struct ZStack: HTML {
 
         items.enumerated().forEach { index, item in
             var elementAttributes = CoreAttributes()
+
             elementAttributes.append(styles: [
+                .init(.position, value: "relative"),
+                .init(.display, value: "grid"),
                 .init(.gridArea, value: "1/1"),
-                .init(.zIndex, value: "\(index)"),
-                .init(.width, value: "fit-content"),
-                .init(.height, value: "fit-content"),
-                .init(.justifySelf, value: alignment.justifySelf),
-                .init(.alignSelf, value: alignment.alignSelf)
+                .init(.zIndex, value: "\(index)")
             ])
+
+            elementAttributes.append(styles: alignment.flexAlignmentRules)
 
             AttributeStore.default.merge(elementAttributes, intoHTML: item.id)
         }
 
         var attributes = attributes
-        attributes.append(styles: .init(.display, value: "grid"))
+        attributes.append(styles: [
+            .init(.position, value: "relative"),
+            .init(.width, value: "100%"),
+            .init(.display, value: "grid")
+        ])
 
         AttributeStore.default.merge(attributes, intoHTML: id)
         attributes.tag = "div"

@@ -13,6 +13,7 @@ struct FrameModifier: HTMLModifier {
     private let height: LengthUnit?
     private let minHeight: LengthUnit?
     private let maxHeight: LengthUnit?
+    private let alignment: HorizontalAlignment
 
     init(
         width: LengthUnit? = nil,
@@ -20,7 +21,8 @@ struct FrameModifier: HTMLModifier {
         maxWidth: LengthUnit? = nil,
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
-        maxHeight: LengthUnit? = nil
+        maxHeight: LengthUnit? = nil,
+        alignment: HorizontalAlignment = .center
     ) {
         self.width = width
         self.minWidth = minWidth
@@ -28,6 +30,7 @@ struct FrameModifier: HTMLModifier {
         self.height = height
         self.minHeight = minHeight
         self.maxHeight = maxHeight
+        self.alignment = alignment
     }
 
     func body(content: some HTML) -> any HTML {
@@ -57,6 +60,14 @@ struct FrameModifier: HTMLModifier {
             modified = modified.style(.init(.maxHeight, value: maxHeight.stringValue))
         }
 
+        if alignment == .center {
+            modified = modified.class("mx-auto")
+        } else if alignment == .leading {
+            modified = modified.style(.init(.marginRight, value: "auto"))
+        } else {
+            modified = modified.style(.init(.marginLeft, value: "auto"))
+        }
+
         return modified
     }
 }
@@ -78,7 +89,8 @@ public extension HTML {
         maxWidth: LengthUnit? = nil,
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
-        maxHeight: LengthUnit? = nil
+        maxHeight: LengthUnit? = nil,
+        alignment: HorizontalAlignment = .center
     ) -> some HTML {
         modifier(FrameModifier(
             width: width,
@@ -86,7 +98,8 @@ public extension HTML {
             maxWidth: maxWidth,
             height: height,
             minHeight: minHeight,
-            maxHeight: maxHeight
+            maxHeight: maxHeight,
+            alignment: alignment
         ))
     }
 
@@ -106,7 +119,8 @@ public extension HTML {
         maxWidth: Int? = nil,
         height: Int? = nil,
         minHeight: Int? = nil,
-        maxHeight: Int? = nil
+        maxHeight: Int? = nil,
+        alignment: HorizontalAlignment = .center
     ) -> some HTML {
         modifier(FrameModifier(
             width: width.map { .px($0) },
@@ -114,7 +128,8 @@ public extension HTML {
             maxWidth: maxWidth.map { .px($0) },
             height: height.map { .px($0) },
             minHeight: minHeight.map { .px($0) },
-            maxHeight: maxHeight.map { .px($0) }
+            maxHeight: maxHeight.map { .px($0) },
+            alignment: alignment
         ))
     }
 }
@@ -136,7 +151,8 @@ public extension InlineElement {
         maxWidth: LengthUnit? = nil,
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
-        maxHeight: LengthUnit? = nil
+        maxHeight: LengthUnit? = nil,
+        alignment: HorizontalAlignment = .center
     ) -> some InlineElement {
         modifier(FrameModifier(
             width: width,
@@ -144,7 +160,8 @@ public extension InlineElement {
             maxWidth: maxWidth,
             height: height,
             minHeight: minHeight,
-            maxHeight: maxHeight
+            maxHeight: maxHeight,
+            alignment: alignment
         ))
     }
 
@@ -164,7 +181,8 @@ public extension InlineElement {
         maxWidth: Int? = nil,
         height: Int? = nil,
         minHeight: Int? = nil,
-        maxHeight: Int? = nil
+        maxHeight: Int? = nil,
+        alignment: HorizontalAlignment = .center
     ) -> some InlineElement {
         modifier(FrameModifier(
             width: width.map { .px($0) },
@@ -172,7 +190,8 @@ public extension InlineElement {
             maxWidth: maxWidth.map { .px($0) },
             height: height.map { .px($0) },
             minHeight: minHeight.map { .px($0) },
-            maxHeight: maxHeight.map { .px($0) }
+            maxHeight: maxHeight.map { .px($0) },
+            alignment: alignment
         ))
     }
 }
