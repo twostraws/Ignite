@@ -182,6 +182,16 @@ extension HTML {
         return self
     }
 
+    /// Adds inline styles to the element.
+    /// - Parameter values: An array of `InlineStyle` objects
+    /// - Returns: The modified `HTML` element
+    func style(_ values: [InlineStyle]) -> Self {
+        var attributes = attributes
+        attributes.styles.formUnion(values)
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+
     /// Adds an inline style to the element.
     /// - Parameters:
     ///   - property: The CSS property.

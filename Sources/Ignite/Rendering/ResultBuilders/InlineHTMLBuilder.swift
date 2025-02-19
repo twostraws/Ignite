@@ -67,7 +67,7 @@ public struct InlineHTMLBuilder {
     /// Handles variadic inline elements by combining them into a flat structure.
     /// - Parameter components: Variable number of inline elements
     /// - Returns: A flattened HTML structure containing all elements
-    public static func buildBlock(_ components: any InlineElement...) -> HTMLCollection {
+    public static func buildBlock(_ components: any InlineElement...) -> some InlineElement {
         HTMLCollection(components)
     }
 }

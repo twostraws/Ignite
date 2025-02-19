@@ -37,9 +37,9 @@ struct FrameModifier: HTMLModifier {
         /// The Bootstrap class to use when the dimension should fill the viewport.
         var viewportClass: String {
             switch self {
-            case .width, .maxWidth: "vw-100"
+            case .width, .maxWidth: "position-relative vw-100 start-50 translate-middle-x"
             case .minWidth: "min-vw-100"
-            case .height, .maxHeight: "vh-100"
+            case .height, .maxHeight: "position-absolute top-0 vh-100"
             case .minHeight: "min-vh-100"
             }
         }
@@ -68,7 +68,7 @@ struct FrameModifier: HTMLModifier {
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
-        alignment: Alignment = .center
+        alignment: Alignment = .topLeading
     ) {
         self.width = width
         self.minWidth = minWidth
@@ -89,20 +89,12 @@ struct FrameModifier: HTMLModifier {
         self.alignment = alignment
     }
 
-    /// Processes a single dimensional constraint and applies the appropriate styling.
-    /// - Parameters:
-    ///   - value: The length value to apply, if any
-    ///   - dimension: The type of dimension being processed (width, height, etc.)
-    ///   - classes: The collection of Bootstrap classes to append to
-    ///   - modified: The HTML element being modified
-    private func handleDimension(
-        _ value: LengthUnit?,
+    private func handleDerivedSize(
+        _ value: LengthUnit,
         dimension: Dimension,
         classes: inout [String],
-        modified: inout any HTML
+        styles: inout [InlineStyle]
     ) {
-        guard let value else { return }
-
         switch value {
         case .vh(100%), .vw(100%):
             classes.append(dimension.viewportClass)
@@ -118,35 +110,66 @@ struct FrameModifier: HTMLModifier {
                 classes.append(contentsOf: alignment.bootstrapClasses)
             }
 
-        case .default:
-            // Don't apply any styling for default values
-            break
-
-        default:
-            modified.style(dimension.cssProperty, value.stringValue)
+        default: break
         }
+    }
+
+    private func handleExplicitSize(value: LengthUnit, dimension: Dimension, content: any HTML) -> any HTML {
+        var containerAttributes = content.attributes.containerAttributes
+            .first(where: { $0.type == .frame }) ?? ContainerAttributes(type: .frame)
+
+        containerAttributes.styles.append(.init(.position, value: "relative"))
+        containerAttributes.styles.append(.init(.display, value: "flex"))
+        containerAttributes.styles.append(.init(.flex, value: "1"))
+        containerAttributes.styles.append(.init(.flexDirection, value: "column"))
+        containerAttributes.styles.append(contentsOf: alignment.containerAlignmentRules)
+        containerAttributes.styles.append(.init(.border, value: "1px solid green"))
+
+        return content
+            .style(.init(dimension.cssProperty, value: value.stringValue))
+            .style(.init(.flexDirection, value: "column"))
+            .style(.init(.display, value: "flex"))
+            .style(.init(.position, value: "absolute"))
+            .style(.init(.overflow, value: "hidden"))
+            .style(alignment.edgeAlignmentRules)
+            .containerAttributes(containerAttributes)
     }
 
     func body(content: some HTML) -> any HTML {
         var modified: any HTML = content
         var classes = [String]()
+        var styles = [InlineStyle]()
+        var requiresContainer = false
 
-        handleDimension(width, dimension: .width, classes: &classes, modified: &modified)
-        handleDimension(minWidth, dimension: .minWidth, classes: &classes, modified: &modified)
-        handleDimension(maxWidth, dimension: .maxWidth, classes: &classes, modified: &modified)
-        handleDimension(height, dimension: .height, classes: &classes, modified: &modified)
-        handleDimension(minHeight, dimension: .minHeight, classes: &classes, modified: &modified)
-        handleDimension(maxHeight, dimension: .maxHeight, classes: &classes, modified: &modified)
+        let dimensions: [(value: LengthUnit?, dimension: Dimension)] = [
+            (width, .width),
+            (minWidth, .minWidth),
+            (maxWidth, .maxWidth),
+            (height, .height),
+            (minHeight, .minHeight),
+            (maxHeight, .maxHeight)
+        ]
 
-        if alignment != .topLeading {
-            classes.append(contentsOf: alignment.bootstrapClasses)
+        for dimension in dimensions {
+            guard let value = dimension.value else { continue }
+            if dimension.value == .vh(100%) || dimension.value == .vw(100%) || dimension.value == .percent(100%) {
+                handleDerivedSize(value, dimension: dimension.dimension, classes: &classes, styles: &styles)
+                requiresContainer = true
+            } else if dimension.value != .default {
+                modified = handleExplicitSize(
+                    value: value,
+                    dimension: dimension.dimension,
+                    content: modified)
+            }
         }
 
-        if !classes.isEmpty {
-            modified.class(classes.joined(separator: " "))
+        return if requiresContainer {
+            Section(modified)
+                .class(classes)
+                .style(styles)
+        } else {
+            modified
         }
-
-        return modified
     }
 }
 
@@ -169,7 +192,7 @@ public extension HTML {
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
-        alignment: Alignment = .center
+        alignment: Alignment = .topLeading
     ) -> some HTML {
         modifier(FrameModifier(
             width: width,
@@ -200,7 +223,7 @@ public extension HTML {
         height: Int? = nil,
         minHeight: Int? = nil,
         maxHeight: Int? = nil,
-        alignment: Alignment = .center
+        alignment: Alignment = .topLeading
     ) -> some HTML {
         modifier(FrameModifier(
             width: width.map { .px($0) },
@@ -240,7 +263,7 @@ public extension InlineElement {
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
-        alignment: Alignment = .center
+        alignment: Alignment = .topLeading
     ) -> some InlineElement {
         modifier(FrameModifier(
             width: width,
@@ -271,7 +294,7 @@ public extension InlineElement {
         height: Int? = nil,
         minHeight: Int? = nil,
         maxHeight: Int? = nil,
-        alignment: Alignment = .center
+        alignment: Alignment = .topLeading
     ) -> some InlineElement {
         modifier(FrameModifier(
             width: width.map { .px($0) },
@@ -289,5 +312,41 @@ public extension InlineElement {
     /// - Returns: A modified element with the specified alignment
     func frame(alignment: Alignment) -> some InlineElement {
         modifier(FrameModifier(alignment: alignment))
+    }
+}
+
+fileprivate extension Alignment {
+    /// The appropriate Bootstrap classes for this alignment
+    /// Returns the appropriate Bootstrap classes for this alignment
+    var bootstrapClasses: [String] {
+        [horizontal.bootstrapClass, vertical.bootstrapClass]
+    }
+
+    var edgeAlignmentRules: [InlineStyle] {
+        switch (horizontal, vertical) {
+        case (.leading, .top):      [.init(.top, value: "0"), .init(.left, value: "0")]
+        case (.center, .top):       [.init(.top, value: "0")]
+        case (.trailing, .top):     [.init(.top, value: "0"), .init(.right, value: "0")]
+        case (.leading, .center):   [.init(.left, value: "0")]
+        case (.center, .center):    []
+        case (.trailing, .center):  [.init(.right, value: "0")]
+        case (.leading, .bottom):   [.init(.bottom, value: "0"), .init(.left, value: "0"), .init(.margin, value: "0")]
+        case (.center, .bottom):    [.init(.bottom, value: "0"), .init(.margin, value: "0")]
+        case (.trailing, .bottom):  [.init(.bottom, value: "0"), .init(.right, value: "0"), .init(.margin, value: "0")]
+        }
+    }
+
+    var containerAlignmentRules: [InlineStyle] {
+        switch (horizontal, vertical) {
+        case (.leading, .top):      []
+        case (.center, .top):       [.init(.alignItems, value: "center")]
+        case (.trailing, .top):     []
+        case (.leading, .center):   [.init(.justifyContent, value: "center")]
+        case (.center, .center):    [.init(.alignItems, value: "center"), .init(.justifyContent, value: "center")]
+        case (.trailing, .center):  [.init(.justifyContent, value: "center")]
+        case (.leading, .bottom):   []
+        case (.center, .bottom):    [.init(.alignItems, value: "center")]
+        case (.trailing, .bottom):  []
+        }
     }
 }

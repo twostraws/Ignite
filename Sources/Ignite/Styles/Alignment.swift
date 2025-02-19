@@ -46,9 +46,4 @@ public struct Alignment: Equatable {
 
     /// A guide that marks the bottom and trailing edges.
     public static let bottomTrailing = Alignment(horizontal: .trailing, vertical: .bottom)
-
-    /// Returns the appropriate Bootstrap classes for this alignment
-    var bootstrapClasses: [String] {
-        [horizontal.bootstrapClass, vertical.bootstrapClass]
-    }
 }

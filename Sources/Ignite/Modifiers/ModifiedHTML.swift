@@ -7,11 +7,8 @@
 
 /// A type that wraps HTML content with a modifier, preserving attributes and structure.
 struct ModifiedHTML: HTML, InlineElement, DocumentElement, NavigationItem {
-    /// The column width to use when this element appears in a grid layout.
-    var columnWidth: ColumnWidth = .automatic
-
     /// A unique identifier for this element.
-    var id = UUID().uuidString.truncatedHash
+    var id = UUID().uuidString
 
     /// The content and behavior of this HTML element.
     var body: some HTML { self }
@@ -27,17 +24,24 @@ struct ModifiedHTML: HTML, InlineElement, DocumentElement, NavigationItem {
     ///   - content: The HTML content to modify
     ///   - modifier: The modifier to apply to the content
     init(_ content: any HTML, modifier: any HTMLModifier) {
-        if content.isPrimitive {
-            self.id = content.id
-        }
+        switch content {
+        case let modified as ModifiedHTML where modified.content.isPrimitive:
+            let modified = modifier.body(content: modified.content)
+            self.content = modified
 
-        self.content = if let modified = content as? ModifiedHTML {
-            modified.content
-        } else {
-            content
-        }
+        case let modified as ModifiedHTML where !modified.content.isPrimitive:
+            self.content = modified.content
+            self.id = modified.id
+            _ = modifier.body(content: self)
 
-        _ = modifier.body(content: self)
+        case let content where content.isPrimitive:
+            let modified = modifier.body(content: content)
+            self.content = modified
+
+        default:
+            self.content = content
+            _ = modifier.body(content: self)
+        }
     }
 
     /// Renders this element using the provided publishing context.

@@ -10,9 +10,12 @@
 /// `HTMLCollection` is used internally to handle opaque HTML content returned from result builders,
 /// particularly in loops and other control flow situations. It converts potentially nested
 /// structures into a flat, iterable collections of `HTML` elements.
-public struct HTMLCollection: InlineElement, @preconcurrency Sequence {
+struct HTMLCollection: InlineElement, @preconcurrency Sequence {
     /// The content and behavior of this HTML sequence
     public var body: some HTML { self }
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
 
     /// The array of HTML elements contained in this sequence
     var elements: [any HTML]
