@@ -39,23 +39,25 @@ struct CornerRadiusModifier: HTMLModifier {
             return content.style(.borderRadius, "\(length)")
         }
 
+        var modified: any HTML = content
+
         if edges.contains(.topLeading) {
-            content.style(.borderTopLeftRadius, "\(length)")
+            modified = modified.style(.borderTopLeftRadius, "\(length)")
         }
 
         if edges.contains(.topTrailing) {
-            content.style(.borderTopRightRadius, "\(length)")
+            modified = modified.style(.borderTopRightRadius, "\(length)")
         }
 
         if edges.contains(.bottomLeading) {
-            content.style(.borderBottomLeftRadius, "\(length)")
+            modified = modified.style(.borderBottomLeftRadius, "\(length)")
         }
 
         if edges.contains(.bottomTrailing) {
-            content.style(.borderBottomRightRadius, "\(length)")
+            modified = modified.style(.borderBottomRightRadius, "\(length)")
         }
 
-        return content
+        return modified
     }
 }
 

@@ -27,38 +27,39 @@ struct BorderModifier: HTMLModifier {
     /// - Returns: The modified HTML content with border styling applied
     func body(content: some HTML) -> any HTML {
         // Apply border styles based on edges
+        var modified: any HTML = content
         if edges.contains(.all) {
-            content.style(.border, "\(width)px \(style.rawValue) \(color)")
+            modified = modified.style(.border, "\(width)px \(style.rawValue) \(color)")
         } else {
             if edges.contains(.leading) {
-                content.style(.borderLeft, "\(width)px \(style.rawValue) \(color)")
+                modified = modified.style(.borderLeft, "\(width)px \(style.rawValue) \(color)")
             }
             if edges.contains(.trailing) {
-                content.style(.borderRight, "\(width)px \(style.rawValue) \(color)")
+                modified = modified.style(.borderRight, "\(width)px \(style.rawValue) \(color)")
             }
             if edges.contains(.top) {
-                content.style(.borderTop, "\(width)px \(style.rawValue) \(color)")
+                modified = modified.style(.borderTop, "\(width)px \(style.rawValue) \(color)")
             }
             if edges.contains(.bottom) {
-                content.style(.borderBottom, "\(width)px \(style.rawValue) \(color)")
+                modified = modified.style(.borderBottom, "\(width)px \(style.rawValue) \(color)")
             }
         }
 
         // Apply corner radii
         if cornerRadii.topLeading > 0 {
-            content.style(.borderTopLeftRadius, "\(cornerRadii.topLeading)px")
+            modified = modified.style(.borderTopLeftRadius, "\(cornerRadii.topLeading)px")
         }
         if cornerRadii.topTrailing > 0 {
-            content.style(.borderTopRightRadius, "\(cornerRadii.topTrailing)px")
+            modified = modified.style(.borderTopRightRadius, "\(cornerRadii.topTrailing)px")
         }
         if cornerRadii.bottomLeading > 0 {
-            content.style(.borderBottomLeftRadius, "\(cornerRadii.bottomLeading)px")
+            modified = modified.style(.borderBottomLeftRadius, "\(cornerRadii.bottomLeading)px")
         }
         if cornerRadii.bottomTrailing > 0 {
-            content.style(.borderBottomRightRadius, "\(cornerRadii.bottomTrailing)px")
+            modified = modified.style(.borderBottomRightRadius, "\(cornerRadii.bottomTrailing)px")
         }
 
-        return content
+        return modified
     }
 }
 

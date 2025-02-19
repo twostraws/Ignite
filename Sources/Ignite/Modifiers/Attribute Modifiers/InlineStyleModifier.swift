@@ -26,7 +26,7 @@ public extension HTML {
     ///   - property: The CSS property to set
     ///   - value: The value to set for the property
     /// - Returns: A modified copy of the element with the style property added
-    @discardableResult func style(_ property: Property, _ value: String) -> some HTML {
+    func style(_ property: Property, _ value: String) -> some HTML {
         modifier(InlineStyleModifier(property: property, value: value))
     }
 }
@@ -37,7 +37,7 @@ public extension InlineElement {
     ///   - property: The CSS property to set
     ///   - value: The value to set for the property
     /// - Returns: A modified copy of the element with the style property added
-    @discardableResult func style(_ property: Property, _ value: String) -> some InlineElement {
+    func style(_ property: Property, _ value: String) -> some InlineElement {
         modifier(InlineStyleModifier(property: property, value: value))
     }
 }

@@ -130,18 +130,19 @@ public struct List: HTML {
 
         var output = "<\(listElementName)\(listAttributes.description())>"
 
-        for item in items {
+        for originalItem in items {
+            var item = originalItem
             // Any element that renders its own <li> (e.g. ForEach) should
             // be allowed to handle that itself.
             if let listableItem = item as? ListableElement {
                 if listStyle != .plain {
-                    item.class("list-group-item")
+                    item.attributes.append(classes: "list-group-item")
                 }
 
                 output += listableItem.renderInList()
             } else {
                 let styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
-                item.class("m-0")
+                item.attributes.append(classes: "m-0")
                 output += "<li\(styleClass)>\(item.render())</li>"
             }
         }

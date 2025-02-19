@@ -120,7 +120,7 @@ public struct Text: HTML, DropdownItem, HorizontalAligning {
 }
 
 extension HTML {
-    @discardableResult func fontStyle(_ font: Font.Style) -> Self {
+    func fontStyle(_ font: Font.Style) -> Self {
         if font == .lead {
             self.class(font.rawValue)
         } else {

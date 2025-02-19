@@ -26,7 +26,7 @@ public extension HTML {
     ///   - name: The name of the data attribute
     ///   - value: The value of the data attribute
     /// - Returns: The modified `HTML` element
-    @discardableResult func data(_ name: String, _ value: String) -> some HTML {
+    func data(_ name: String, _ value: String) -> some HTML {
         modifier(DataModifier(name: name, value: value))
     }
 }
@@ -37,7 +37,7 @@ public extension InlineElement {
     ///   - name: The name of the data attribute
     ///   - value: The value of the data attribute
     /// - Returns: The modified `HTML` element
-    @discardableResult func data(_ name: String, _ value: String) -> some InlineElement {
+    func data(_ name: String, _ value: String) -> some InlineElement {
         modifier(DataModifier(name: name, value: value))
     }
 }
