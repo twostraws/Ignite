@@ -14,7 +14,7 @@ import Testing
 @Suite("ZStack Tests")
 @MainActor
 class ZStackTests: IgniteTestSuite {
-    static let alignments: [UnitPoint] = [
+    static let alignments: [Alignment] = [
         .top, .topLeading, .topTrailing,
         .leading, .center, .trailing,
         .bottom, .bottomLeading, .bottomTrailing
@@ -31,15 +31,15 @@ class ZStackTests: IgniteTestSuite {
         #expect(output == """
         <div style="display: grid">\
         <label style="align-self: center; grid-area: 1/1; height: fit-content; \
-        justify-self: center; width: fit-content; z-index: 0">Top Label</label>\
+        justify-self: center; margin-bottom: 0; width: fit-content; z-index: 0">Top Label</label>\
         <label style="align-self: center; grid-area: 1/1; height: fit-content; \
-        justify-self: center; width: fit-content; z-index: 1">Bottom Label</label>\
+        justify-self: center; margin-bottom: 0; width: fit-content; z-index: 1">Bottom Label</label>\
         </div>
         """)
     }
 
     @Test("ZStack with alignments", arguments: await Self.alignments)
-    func zStackWithAlignment(for alignment: UnitPoint) async throws {
+    func zStackWithAlignment(for alignment: Alignment) async throws {
         let element = ZStack(alignment: alignment) {
             Label(text: "Top Label")
             Label(text: "Bottom Label")
@@ -49,9 +49,9 @@ class ZStackTests: IgniteTestSuite {
         #expect(output == """
         <div style="display: grid">\
         <label style="align-self: \(alignment.alignSelf); grid-area: 1/1; height: fit-content; \
-        justify-self: \(alignment.justifySelf); width: fit-content; z-index: 0">Top Label</label>\
+        justify-self: \(alignment.justifySelf); margin-bottom: 0; width: fit-content; z-index: 0">Top Label</label>\
         <label style="align-self: \(alignment.alignSelf); grid-area: 1/1; height: fit-content; \
-        justify-self: \(alignment.justifySelf); width: fit-content; z-index: 1">Bottom Label</label>\
+        justify-self: \(alignment.justifySelf); margin-bottom: 0; width: fit-content; z-index: 1">Bottom Label</label>\
         </div>
         """)
     }

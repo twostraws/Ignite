@@ -51,4 +51,28 @@ public struct Alignment: Equatable {
     var bootstrapClasses: [String] {
         [horizontal.bootstrapClass, vertical.bootstrapClass]
     }
+
+    /// Returns the CSS justify-self value for this alignment point
+    var justifySelf: String {
+        switch horizontal {
+        case .leading:
+            return "start"
+        case .trailing:
+            return "end"
+        case .center:
+            return "center"
+        }
+    }
+
+    /// Returns the CSS align-self value for this alignment point
+    var alignSelf: String {
+        switch vertical {
+        case .top:
+            return "start"
+        case .bottom:
+            return "end"
+        case .center:
+            return "center"
+        }
+    }
 }

@@ -32,11 +32,6 @@ struct UnitPointTests {
        ("end", "end")        // bottomTrailing
     ]
 
-    @Test("UnitPoint alignment", arguments: await zip(unitPoints, alignmentValues))
-    func testUnitPointAlignment(_ point: UnitPoint, expected: (justifySelf: String, alignSelf: String)) async throws {
-        #expect(point.justifySelf == expected.justifySelf && point.alignSelf == expected.alignSelf)
-    }
-
     static let pointPairs: [(start: UnitPoint, end: UnitPoint)] = [
        (.topLeading, .bottomTrailing),
        (.top, .bottom),
