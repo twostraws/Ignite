@@ -46,14 +46,14 @@ public struct ZStack: HTML {
         items.enumerated().forEach { index, item in
             var elementAttributes = CoreAttributes()
             elementAttributes.append(styles: [
+                .init(.position, value: "relative"),
+                .init(.display, value: "grid"),
                 .init(.gridArea, value: "1/1"),
                 .init(.zIndex, value: "\(index)"),
-                .init(.width, value: "fit-content"),
-                .init(.height, value: "fit-content"),
-                .init(.justifySelf, value: alignment.justifySelf),
-                .init(.alignSelf, value: alignment.alignSelf),
                 .init(.marginBottom, value: "0")
             ])
+
+            elementAttributes.append(styles: alignment.flexAlignmentRules)
 
             AttributeStore.default.merge(elementAttributes, intoHTML: item.id)
         }
@@ -66,5 +66,22 @@ public struct ZStack: HTML {
 
         let content = items.map { $0.render() }.joined()
         return attributes.description(wrapping: content)
+    }
+}
+
+fileprivate extension Alignment {
+    /// Grid container rules for aligning content
+    var flexAlignmentRules: [InlineStyle] {
+        switch (horizontal, vertical) {
+        case (.leading, .top):      [.init(.alignSelf, value: "flex-start"), .init(.justifySelf, value: "flex-start")]
+        case (.center, .top):       [.init(.alignSelf, value: "flex-start"), .init(.justifySelf, value: "center")]
+        case (.trailing, .top):     [.init(.alignSelf, value: "flex-start"), .init(.justifySelf, value: "flex-end")]
+        case (.leading, .center):   [.init(.alignSelf, value: "center"), .init(.justifySelf, value: "flex-start")]
+        case (.center, .center):    [.init(.alignSelf, value: "center"), .init(.justifySelf, value: "center")]
+        case (.trailing, .center):  [.init(.alignSelf, value: "center"), .init(.justifySelf, value: "flex-end")]
+        case (.leading, .bottom):   [.init(.alignSelf, value: "flex-end"), .init(.justifySelf, value: "flex-start")]
+        case (.center, .bottom):    [.init(.alignSelf, value: "flex-end"), .init(.justifySelf, value: "center")]
+        case (.trailing, .bottom):  [.init(.alignSelf, value: "flex-end"), .init(.justifySelf, value: "flex-end")]
+        }
     }
 }
