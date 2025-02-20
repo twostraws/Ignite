@@ -15,8 +15,9 @@ struct MarginModifier: HTMLModifier {
             content.edgeAdjust(prefix: "margin", edges, length.stringValue)
         } else if let amount {
             content.edgeAdjust(prefix: "m", edges, amount)
+        } else {
+            content
         }
-        content
     }
 }
 

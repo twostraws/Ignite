@@ -97,6 +97,10 @@ public struct Grid: HTML, HorizontalAligning {
                           let passthrough = modified.content as? any PassthroughHTML
                 {
                     handlePassthrough(passthrough, attributes: modified.attributes)
+                } else if let modified = item as? ModifiedHTML  {
+                    Section(modified)
+                        .class(className(for: modified.content))
+                        .class(gutterClass)
                 } else {
                     Section(item)
                         .class(className(for: item))
@@ -132,14 +136,12 @@ public struct Grid: HTML, HorizontalAligning {
     /// - Returns: A Bootstrap class name that represents the element's width,
     /// scaled according to the section's column count if needed.
     private func className(for item: any HTML) -> String {
-        let className: String
         if let columnCount, case .count(let width) = item.columnWidth {
             // Scale the width to be relative to the new column count
             let scaledWidth = width * 12 / columnCount
             return ColumnWidth.count(scaledWidth).className
         } else {
-            className = item.columnWidth.className
+            return item.columnWidth.className
         }
-        return className
     }
 }

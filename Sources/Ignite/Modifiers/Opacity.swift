@@ -37,8 +37,9 @@ struct OpacityModifier: HTMLModifier {
             content.style(.opacity, percentage.value.formatted(.nonLocalizedDecimal(places: 3)))
         } else if let doubleValue, doubleValue != 1 {
             content.style(.opacity, doubleValue.formatted(.nonLocalizedDecimal(places: 3)))
+        } else {
+            content
         }
-        content
     }
 }
 

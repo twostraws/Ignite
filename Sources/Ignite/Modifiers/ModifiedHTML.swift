@@ -7,9 +7,6 @@
 
 /// A type that wraps HTML content with a modifier, preserving attributes and structure.
 struct ModifiedHTML: HTML, InlineElement, DocumentElement, NavigationItem {
-    /// The column width to use when this element appears in a grid layout.
-    var columnWidth: ColumnWidth = .automatic
-
     /// A unique identifier for this element.
     var id = UUID().uuidString
 
@@ -27,23 +24,33 @@ struct ModifiedHTML: HTML, InlineElement, DocumentElement, NavigationItem {
     ///   - content: The HTML content to modify
     ///   - modifier: The modifier to apply to the content
     init(_ content: any HTML, modifier: any HTMLModifier) {
-        if content.isPrimitive {
-            self.id = content.id
-        }
-
-        self.content = if let modified = content as? ModifiedHTML {
-            modified.content
+        let unwrapped: any HTML
+        if let modified = content as? ModifiedHTML {
+            self.id = modified.id
+            unwrapped = modified.content
         } else {
-            content
+            unwrapped = content
         }
 
-        _ = modifier.body(content: self)
+        let modified: any HTML
+        if unwrapped.isPrimitive {
+            modified = modifier.body(content: unwrapped)
+            self.content = modified
+            // In case modified is a new view—that is, one different
+            // from unwrapped—we need to merge unwrapped's attributes
+            AttributeStore.default.merge(unwrapped.attributes, intoHTML: modified.id)
+        } else {
+            self.content = unwrapped
+            // Store attributes in ModifiedHTML
+            _ = modifier.body(content: self)
+        }
     }
 
     /// Renders this element using the provided publishing context.
     /// - Returns: The rendered HTML string
     func render() -> String {
         if content.isPrimitive {
+            AttributeStore.default.merge(attributes, intoHTML: content.id)
             return content.render()
         } else {
             let rawContent = content.render()
