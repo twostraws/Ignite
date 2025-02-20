@@ -58,13 +58,15 @@ public struct Accordion: HTML {
         // This is generated below, then passed into individual
         // items so they can adapt accordinly.
         let accordionID = "accordion\(UUID().uuidString.truncatedHash)"
-        let assignedItems = items.map { $0.assigned(to: accordionID, openMode: openMode) }
-        let output = Section { assignedItems }
-            .attributes(attributes)
-            .class("accordion")
-            .id(accordionID)
-            .render()
+        let content = Section {
+            ForEach(items) { item in
+                item.assigned(to: accordionID, openMode: openMode)
+            }
+        }
+        .attributes(attributes)
+        .class("accordion")
+        .id(accordionID)
 
-        return output
+        return content.render()
     }
 }

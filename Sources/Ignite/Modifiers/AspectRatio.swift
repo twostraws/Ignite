@@ -64,8 +64,9 @@ struct AspectRatioModifier: HTMLModifier {
             content.applyAspectRatio(ratio)
         } else if let customRatio {
             content.applyAspectRatio(customRatio)
+        } else {
+            content
         }
-        content
     }
 }
 

@@ -176,20 +176,21 @@ public struct Content {
 
     /// An array of `Link` objects that show badges for the tags of this
     /// content, and also link to the tag pages.
-    public func tagLinks() -> [Link] {
+    @HTMLBuilder
+    public func tagLinks() -> (some HTML)? {
         if let tags = metadata["tags"] as? String {
-            tags.splitAndTrim().map { tag in
+            let targets: [(name: String, path: String)] = tags.splitAndTrim().map { tag in
                 let tagPath = tag.convertedToSlug() ?? tag
-
-                return Link(target: "/tags/\(tagPath)") {
-                    Badge(tag)
+                return (name: tag, path: "/tags/\(tagPath)")
+            }
+            ForEach(targets) { target in
+                Link(target: target.path) {
+                    Badge(target.name)
                         .role(.primary)
                         .margin(.trailing, .px(5))
                 }
                 .relationship(.tag)
             }
-        } else {
-            []
         }
     }
 

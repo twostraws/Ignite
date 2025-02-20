@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `AspectRatio` modifier.
 @Suite("AspectRatio Tests")
 @MainActor
-struct AspectRatioTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class AspectRatioTests: IgniteTestSuite {
     @Test("Verify AspectRatio Modifiers", arguments: AspectRatio.allCases)
     func verifyAspectRatioModifiers(ratio: AspectRatio) async throws {
         let element = Text("Hello").aspectRatio(ratio)
