@@ -176,8 +176,7 @@ public struct Content {
 
     /// An array of `Link` objects that show badges for the tags of this
     /// content, and also link to the tag pages.
-    @HTMLBuilder
-    public func tagLinks() -> (some HTML)? {
+    @HTMLBuilder public func tagLinks() -> (some HTML)? {
         if let tags = metadata["tags"] as? String {
             let targets: [(name: String, path: String)] = tags.splitAndTrim().map { tag in
                 let tagPath = tag.convertedToSlug() ?? tag
