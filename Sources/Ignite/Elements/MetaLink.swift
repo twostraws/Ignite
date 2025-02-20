@@ -46,8 +46,8 @@ public struct MetaLink: HeadElement, Sendable {
     /// - Parameter themes: A collection of syntax highlighting themes to include.
     /// - Returns: An array of MetaLink elements. If multiple themes are provided,
     /// includes data attributes for theme switching.
-    static func highlighterThemeMetaLinks(for themes: some Collection<HighlighterTheme>) -> [MetaLink] {
-        themes.sorted().map { theme in
+    static func highlighterThemeMetaLinks(for themes: some Collection<HighlighterTheme>) -> some HeadElement {
+        ForEach(themes.sorted()) { theme in
             MetaLink(href: "/\(theme.url)", rel: .stylesheet)
                 .data("highlight-theme", theme.description)
         }
