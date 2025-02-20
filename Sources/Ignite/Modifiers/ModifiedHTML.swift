@@ -11,7 +11,7 @@ struct ModifiedHTML: HTML, InlineElement, DocumentElement, NavigationItem {
     var columnWidth: ColumnWidth = .automatic
 
     /// A unique identifier for this element.
-    var id = UUID().uuidString.truncatedHash
+    var id = UUID().uuidString
 
     /// The content and behavior of this HTML element.
     var body: some HTML { self }
