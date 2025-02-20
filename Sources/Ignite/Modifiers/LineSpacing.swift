@@ -32,14 +32,13 @@ struct LineSpacingModifier: HTMLModifier {
             } else if let presetHeight {
                 content.containerClass("lh-\(presetHeight.rawValue)")
             }
+        } else if let customHeight {
+            content.style(.init(.lineHeight, value: customHeight.formatted(.nonLocalizedDecimal)))
+        } else if let presetHeight {
+            content.class("lh-\(presetHeight.rawValue)")
         } else {
-            if let customHeight {
-                content.style(.init(.lineHeight, value: customHeight.formatted(.nonLocalizedDecimal)))
-            } else if let presetHeight {
-                content.class("lh-\(presetHeight.rawValue)")
-            }
+            content
         }
-        content
     }
 }
 

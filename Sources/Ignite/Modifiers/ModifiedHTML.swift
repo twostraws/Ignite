@@ -17,7 +17,7 @@ struct ModifiedHTML: HTML, InlineElement, DocumentElement, NavigationItem {
     var isPrimitive: Bool { true }
 
     /// The underlying HTML content being modified.
-    private(set) var content: any HTML = EmptyHTML()
+    private(set) var content: any HTML
 
     /// Creates a new modified HTML element by applying a modifier to existing content.
     /// - Parameters:
@@ -36,10 +36,13 @@ struct ModifiedHTML: HTML, InlineElement, DocumentElement, NavigationItem {
         if unwrapped.isPrimitive {
             modified = modifier.body(content: unwrapped)
             self.content = modified
+            // In case modified is a new view—that is, one different
+            // from unwrapped—we need to merge unwrapped's attributes
+            AttributeStore.default.merge(unwrapped.attributes, intoHTML: modified.id)
         } else {
-            // Store attributes
-            _ = modifier.body(content: self)
             self.content = unwrapped
+            // Store attributes in ModifiedHTML
+            _ = modifier.body(content: self)
         }
     }
 

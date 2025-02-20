@@ -42,7 +42,10 @@ public class AttributeStore {
         mergedAttributes.events.formUnion(attributes.events)
         mergedAttributes.containerAttributes.formUnion(attributes.containerAttributes)
         mergedAttributes.customAttributes.formUnion(attributes.customAttributes)
-        mergedAttributes.columnWidth = attributes.columnWidth
+
+        if attributes.columnWidth != .automatic {
+            mergedAttributes.columnWidth = attributes.columnWidth
+        }
 
         if attributes.id.isEmpty == false {
             mergedAttributes.id = attributes.id
@@ -51,9 +54,11 @@ public class AttributeStore {
         if attributes.tag != nil {
             mergedAttributes.tag = attributes.tag
         }
+
         if attributes.closingTag != nil {
             mergedAttributes.closingTag = attributes.closingTag
         }
+
         if attributes.selfClosingTag != nil {
             mergedAttributes.selfClosingTag = attributes.selfClosingTag
         }
