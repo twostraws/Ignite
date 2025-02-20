@@ -26,9 +26,6 @@ enum ContainerType {
 
     /// A standard container with no special rendering behavior.
     case regular
-
-    /// A container that handles the modified frame of an element.
-    case frame
 }
 
 /// A type that holds CSS classes and styles for HTML container elements.
