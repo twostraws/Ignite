@@ -18,7 +18,7 @@ public struct ZStack: HTML {
     public var isPrimitive: Bool { true }
 
     /// The alignment point for positioning elements within the stack.
-    private var alignment: UnitPoint
+    private var alignment: Alignment
 
     /// The child elements to be stacked.
     private var items: [any HTML] = []
@@ -27,7 +27,7 @@ public struct ZStack: HTML {
     /// - Parameters:
     ///   - alignment: The point within the stack where elements should be aligned (default: .center).
     ///   - items: A closure that returns the elements to be stacked.
-    public init(alignment: UnitPoint = .center, @HTMLBuilder _ items: () -> some HTML) {
+    public init(alignment: Alignment = .center, @HTMLBuilder _ items: () -> some HTML) {
         self.items = flatUnwrap(items())
         self.alignment = alignment
     }
@@ -45,25 +45,48 @@ public struct ZStack: HTML {
 
         items.enumerated().forEach { index, item in
             var elementAttributes = CoreAttributes()
+
             elementAttributes.append(styles: [
+                .init(.position, value: "relative"),
+                .init(.display, value: "grid"),
                 .init(.gridArea, value: "1/1"),
                 .init(.zIndex, value: "\(index)"),
-                .init(.width, value: "fit-content"),
-                .init(.height, value: "fit-content"),
-                .init(.justifySelf, value: alignment.justifySelf),
-                .init(.alignSelf, value: alignment.alignSelf)
+                .init(.marginBottom, value: "0")
             ])
+
+            elementAttributes.append(styles: alignment.flexAlignmentRules)
 
             AttributeStore.default.merge(elementAttributes, intoHTML: item.id)
         }
 
         var attributes = attributes
-        attributes.append(styles: .init(.display, value: "grid"))
+        attributes.append(styles: [
+            .init(.position, value: "relative"),
+            .init(.width, value: "100%"),
+            .init(.display, value: "grid")
+        ])
 
         AttributeStore.default.merge(attributes, intoHTML: id)
         attributes.tag = "div"
 
         let content = items.map { $0.render() }.joined()
         return attributes.description(wrapping: content)
+    }
+}
+
+fileprivate extension Alignment {
+    /// Flex container rules for aligning content
+    var flexAlignmentRules: [InlineStyle] {
+        switch (horizontal, vertical) {
+        case (.leading, .top):      [.init(.justifyContent, value: "flex-start"), .init(.alignItems, value: "flex-start")]
+        case (.center, .top):       [.init(.justifyContent, value: "center"), .init(.alignItems, value: "flex-start")]
+        case (.trailing, .top):     [.init(.justifyContent, value: "flex-end"), .init(.alignItems, value: "flex-start")]
+        case (.leading, .center):   [.init(.justifyContent, value: "flex-start"), .init(.alignItems, value: "center")]
+        case (.center, .center):    [.init(.justifyContent, value: "center"), .init(.alignItems, value: "center")]
+        case (.trailing, .center):  [.init(.justifyContent, value: "flex-end"), .init(.alignItems, value: "center")]
+        case (.leading, .bottom):   [.init(.justifyContent, value: "flex-start"), .init(.alignItems, value: "flex-end")]
+        case (.center, .bottom):    [.init(.justifyContent, value: "center"), .init(.alignItems, value: "flex-end")]
+        case (.trailing, .bottom):  [.init(.justifyContent, value: "flex-end"), .init(.alignItems, value: "flex-end")]
+        }
     }
 }
