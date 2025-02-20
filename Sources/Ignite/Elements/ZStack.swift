@@ -18,7 +18,7 @@ public struct ZStack: HTML {
     public var isPrimitive: Bool { true }
 
     /// The alignment point for positioning elements within the stack.
-    private var alignment: UnitPoint
+    private var alignment: Alignment
 
     /// The child elements to be stacked.
     private var items: [any HTML] = []
@@ -27,7 +27,7 @@ public struct ZStack: HTML {
     /// - Parameters:
     ///   - alignment: The point within the stack where elements should be aligned (default: .center).
     ///   - items: A closure that returns the elements to be stacked.
-    public init(alignment: UnitPoint = .center, @HTMLBuilder _ items: () -> some HTML) {
+    public init(alignment: Alignment = .center, @HTMLBuilder _ items: () -> some HTML) {
         self.items = flatUnwrap(items())
         self.alignment = alignment
     }
@@ -51,7 +51,8 @@ public struct ZStack: HTML {
                 .init(.width, value: "fit-content"),
                 .init(.height, value: "fit-content"),
                 .init(.justifySelf, value: alignment.justifySelf),
-                .init(.alignSelf, value: alignment.alignSelf)
+                .init(.alignSelf, value: alignment.alignSelf),
+                .init(.marginBottom, value: "0")
             ])
 
             AttributeStore.default.merge(elementAttributes, intoHTML: item.id)
