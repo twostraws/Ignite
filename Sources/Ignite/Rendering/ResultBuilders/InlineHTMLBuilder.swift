@@ -36,7 +36,7 @@ public struct InlineHTMLBuilder {
     /// - Parameter components: Array of inline elements
     /// - Returns: A flattened HTML element
     public static func buildArray<Content: InlineElement>(_ components: [Content]) -> some HTML {
-        components.map { AnyHTML($0) }
+        HTMLCollection(components)
     }
 
     /// Handles optional inline elements.
@@ -90,11 +90,11 @@ public extension InlineHTMLBuilder {
         accumulated: C0,
         next: C1
     ) -> some InlineElement {
-        if var current = accumulated as? [AnyHTML] {
-            current.append(AnyHTML(next))
+        if var current = accumulated as? HTMLCollection {
+            current.elements.append(next)
             return current
         } else {
-            return [AnyHTML(accumulated), AnyHTML(next)]
+            return HTMLCollection([accumulated, next])
         }
     }
 }

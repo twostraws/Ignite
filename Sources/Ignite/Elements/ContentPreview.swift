@@ -71,7 +71,7 @@ public struct ContentPreview: HTML {
         } footer: {
             let tagLinks = content.tagLinks()
 
-            if tagLinks.isEmpty == false {
+            if let tagLinks {
                 Section {
                     tagLinks
                 }

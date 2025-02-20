@@ -57,17 +57,6 @@ public struct HTMLBuilder {
         }
     }
 
-    /// Handles optional arrays of HTML elements.
-    /// - Parameter component: An optional array of HTML elements
-    /// - Returns: Either the wrapped elements or an empty element
-    public static func buildOptional<Content: HTML>(_ component: [Content]?) -> some HTML {
-        if let component {
-            AnyHTML(component)
-        } else {
-            AnyHTML(EmptyHTML())
-        }
-    }
-
     /// Handles the first branch of an if/else statement.
     /// - Parameter component: The HTML element to use if condition is true
     /// - Returns: The wrapped HTML element
@@ -97,7 +86,7 @@ public struct HTMLBuilder {
     /// - Parameter components: Array of HTML elements
     /// - Returns: The same array as HTML content
     public static func buildArray<Content: HTML>(_ components: [Content]) -> some HTML {
-        components
+        HTMLCollection(components)
     }
 
     /// Handles nested arrays from loops and other control flow.
@@ -169,11 +158,11 @@ extension HTMLBuilder {
     ///   - next: The next piece of HTML to combine.
     /// - Returns: The combined HTML.
     public static func buildPartialBlock<C0: HTML, C1: HTML>(accumulated: C0, next: C1) -> some HTML {
-        if var current = accumulated as? [AnyHTML] {
-            current.append(AnyHTML(next))
+        if var current = accumulated as? HTMLCollection {
+            current.elements.append(next)
             return current
         } else {
-            return [AnyHTML(accumulated), AnyHTML(next)]
+            return HTMLCollection([accumulated, next])
         }
     }
 }

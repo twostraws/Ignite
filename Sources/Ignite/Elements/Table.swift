@@ -128,7 +128,7 @@ public struct Table: HTML {
         }
 
         output += "<tbody>"
-        output += rows.render()
+        output += HTMLCollection(rows).render()
         output += "</tbody>"
         output += "</table>"
         return output
