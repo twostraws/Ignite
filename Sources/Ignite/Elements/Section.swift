@@ -22,9 +22,6 @@ public struct Section: HTML, HorizontalAligning {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// How many columns this should occupy when placed in a grid.
-    public var columnWidth = ColumnWidth.automatic
-
     /// The heading text of the section.
     var header: String?
 

@@ -47,12 +47,12 @@ public struct Alignment: Equatable {
     /// A guide that marks the bottom and trailing edges.
     public static let bottomTrailing = Alignment(horizontal: .trailing, vertical: .bottom)
 
-    /// Returns the appropriate Bootstrap classes for this alignment
+    /// The appropriate Bootstrap classes for this alignment
     var bootstrapClasses: [String] {
         [horizontal.bootstrapClass, vertical.bootstrapClass]
     }
 
-    /// Returns the CSS justify-self value for this alignment point
+    /// The CSS justify-self value for this alignment
     var justifySelf: String {
         switch horizontal {
         case .leading:
@@ -64,7 +64,7 @@ public struct Alignment: Equatable {
         }
     }
 
-    /// Returns the CSS align-self value for this alignment point
+    /// The CSS align-self value for this alignment
     var alignSelf: String {
         switch vertical {
         case .top:
