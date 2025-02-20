@@ -54,7 +54,7 @@ extension Alignment {
         [horizontal.bootstrapClass, vertical.bootstrapClass]
     }
 
-    /// Returns the CSS justify-self value for this alignment point
+    /// The CSS justify-self value for this alignment
     var justifySelf: String {
         switch horizontal {
         case .leading:
@@ -66,7 +66,7 @@ extension Alignment {
         }
     }
 
-    /// Returns the CSS align-self value for this alignment point
+    /// The CSS align-self value for this alignment
     var alignSelf: String {
         switch vertical {
         case .top:
