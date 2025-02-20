@@ -14,8 +14,8 @@ struct InlineStyleModifier: HTMLModifier {
     /// - Returns: The modified HTML with the style property added
     func body(content: some HTML) -> any HTML {
         var copy = content
-        copy.attributes.styles.append(.init(property, value: value))
-        AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
+        copy.descriptor.styles.append(.init(property, value: value))
+        DescriptorStorage.shared.merge(copy.descriptor, intoHTML: copy.id)
         return copy
     }
 }

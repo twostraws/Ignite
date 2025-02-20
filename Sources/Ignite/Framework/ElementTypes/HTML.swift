@@ -56,9 +56,9 @@ public extension HTML {
 
 extension HTML {
     /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
-    var attributes: CoreAttributes {
-        get { AttributeStore.default.attributes(for: id) }
-        set { AttributeStore.default.merge(newValue, intoHTML: id) }
+    var descriptor: ElementDescriptor {
+        get { DescriptorStorage.shared.descriptor(for: id) }
+        set { DescriptorStorage.shared.merge(newValue, intoHTML: id) }
     }
 
     /// The publishing context of this site.
@@ -77,7 +77,7 @@ extension HTML {
 
     /// How many columns this should occupy when placed in a grid.
     var columnWidth: ColumnWidth {
-        attributes.columnWidth
+        descriptor.columnWidth
     }
 
     /// A Boolean value indicating whether this element contains multiple child elements.
@@ -125,10 +125,10 @@ extension HTML {
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
     func `class`(_ newClasses: String?...) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         let compacted = newClasses.compactMap(\.self)
         attributes.classes.formUnion(compacted)
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -136,13 +136,13 @@ extension HTML {
     /// - Parameter newClasses: `Array` of class names to add
     /// - Returns: The modified `HTML` element
     func `class`(_ newClasses: [String]) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         for case let newClass? in newClasses where !attributes.classes.contains(newClass) {
             if !newClass.isEmpty {
                 attributes.classes.append(newClass)
             }
         }
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -153,9 +153,9 @@ extension HTML {
     /// - Returns: The modified `HTML` element
     func aria(_ key: AriaType, _ value: String?) -> Self {
         guard let value else { return self }
-        var attributes = attributes
+        var attributes = descriptor
         attributes.aria.append(Attribute(name: key.rawValue, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -166,9 +166,9 @@ extension HTML {
     /// - Returns: The modified `HTML` element
     func data(_ name: String, _ value: String?) -> Self {
         guard let value else { return self }
-        var attributes = attributes
+        var attributes = descriptor
         attributes.data.append(Attribute(name: name, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -176,9 +176,9 @@ extension HTML {
     /// - Parameter values: Variable number of `InlineStyle` objects
     /// - Returns: The modified `HTML` element
     func style(_ values: InlineStyle?...) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.styles.formUnion(values.compactMap(\.self))
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -186,9 +186,9 @@ extension HTML {
     /// - Parameter values: An array of `InlineStyle` objects
     /// - Returns: The modified `HTML` element
     func style(_ values: [InlineStyle]) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.styles.formUnion(values)
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -198,9 +198,9 @@ extension HTML {
     ///   - value: The value.
     /// - Returns: The modified `HTML` element
     func style(_ property: String, _ value: String) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.styles.append(.init(property, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -211,9 +211,9 @@ extension HTML {
     /// - Returns: The modified `HTML` element
     @discardableResult func addEvent(name: String, actions: [Action]) -> Self {
         guard !actions.isEmpty else { return self }
-        var attributes = attributes
+        var attributes = descriptor
         attributes.events.append(Event(name: name, actions: actions))
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -223,9 +223,9 @@ extension HTML {
     ///   - value: The value of the custom attribute
     /// - Returns: The modified `HTML` element
     func customAttribute(name: String, value: String) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.customAttributes.append(Attribute(name: name, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -236,9 +236,9 @@ extension HTML {
     /// - Returns: The modified `HTML` element
     func customAttribute(_ attribute: Attribute?) -> Self {
         guard let attribute else { return self }
-        var attributes = attributes
+        var attributes = descriptor
         attributes.customAttributes.append(attribute)
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -246,8 +246,8 @@ extension HTML {
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified HTML element
     /// - Note: Uses AttributeStore for persistent storage and merging
-    func attributes(_ attributes: CoreAttributes) -> Self {
-        AttributeStore.default.merge(attributes, intoHTML: id)
+    func descriptor(_ descriptor: ElementDescriptor) -> Self {
+        DescriptorStorage.shared.merge(descriptor, intoHTML: id)
         return self
     }
 
@@ -255,9 +255,9 @@ extension HTML {
     /// - Parameter newAttributes: The attributes to apply to the wrapper div
     /// - Returns: The original element
     func containerAttributes(_ newAttributes: ContainerAttributes...) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.containerAttributes.formUnion(newAttributes.map { $0 })
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -265,9 +265,9 @@ extension HTML {
     /// - Parameter className: The class to apply to the wrapper div
     /// - Returns: The original element
     func containerClass(_ className: String) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.containerAttributes.append(.init(classes: [className]))
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -275,9 +275,9 @@ extension HTML {
     /// - Parameter styles: The styles to apply to the wrapper div
     /// - Returns: The original element
     func containerStyle(_ styles: InlineStyle...) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.containerAttributes.append(.init(styles: OrderedSet(styles)))
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -290,9 +290,9 @@ extension HTML {
     }
 
     @discardableResult func tag(_ tag: String) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = tag
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 
@@ -300,9 +300,9 @@ extension HTML {
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A copy of the current element with the adjusted column width.
     @discardableResult func columnWidth(_ width: ColumnWidth) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.columnWidth = width
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         return self
     }
 }

@@ -44,7 +44,7 @@ public struct ZStack: HTML {
         }
 
         items.enumerated().forEach { index, item in
-            var elementAttributes = CoreAttributes()
+            var elementAttributes = ElementDescriptor()
             elementAttributes.append(styles: [
                 .init(.position, value: "relative"),
                 .init(.display, value: "grid"),
@@ -55,13 +55,13 @@ public struct ZStack: HTML {
 
             elementAttributes.append(styles: alignment.flexAlignmentRules)
 
-            AttributeStore.default.merge(elementAttributes, intoHTML: item.id)
+            DescriptorStorage.shared.merge(elementAttributes, intoHTML: item.id)
         }
 
-        var attributes = attributes
+        var attributes = descriptor
         attributes.append(styles: .init(.display, value: "grid"))
 
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         attributes.tag = "div"
 
         let content = items.map { $0.render() }.joined()

@@ -21,7 +21,7 @@ struct ContainerRelativeFrameModifier: HTMLModifier {
     /// - Parameter content: The HTML element to wrap in a flex container
     /// - Returns: A Group containing the content with flex display and alignment applied
     func body(content: some HTML) -> any HTML {
-        let frameableContent: any HTML = content.attributes.tag == "div" ?
+        let frameableContent: any HTML = content.descriptor.tag == "div" ?
             content.style(.init(.marginBottom, value: "0")) :
             Section(content.style(.init(.marginBottom, value: "0")))
 

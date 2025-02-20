@@ -98,7 +98,7 @@ public struct Carousel: HTML {
             .data("bs-target", "#\(carouselID)")
             .data("bs-slide", "next")
         }
-        .attributes(attributes)
+        .descriptor(descriptor)
         .id(carouselID)
         .class("carousel", "slide", style == .crossfade ? "carousel-fade" : nil)
         .data("bs-ride", "carousel")

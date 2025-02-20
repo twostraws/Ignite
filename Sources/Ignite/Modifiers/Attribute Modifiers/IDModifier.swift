@@ -14,8 +14,8 @@ struct IDModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         guard !id.isEmpty else { return content }
         var copy = content
-        copy.attributes.id = id
-        AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
+        copy.descriptor.id = id
+        DescriptorStorage.shared.merge(copy.descriptor, intoHTML: copy.id)
         return copy
     }
 }

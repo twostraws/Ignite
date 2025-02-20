@@ -90,7 +90,7 @@ public struct TextField: InlineElement {
     }
 
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.selfClosingTag = "input"
         attributes.append(classes: "form-control")
         attributes.append(customAttributes: .init(name: "type", value: type.rawValue))

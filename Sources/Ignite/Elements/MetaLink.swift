@@ -110,7 +110,7 @@ public struct MetaLink: HeadElement, Sendable {
     /// If the link `href` starts with a `\` it is an asset and requires any `subsite` prepended;
     /// otherwise the `href` is a URL and  doesn't get `subsite` prepended
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.selfClosingTag = "link"
 
         // char[0] of the link 'href' is '/' for an asset; not for a site URL

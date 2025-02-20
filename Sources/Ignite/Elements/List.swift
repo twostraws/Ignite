@@ -76,8 +76,8 @@ public struct List: HTML {
         return copy
     }
 
-    private func getAttributes() -> CoreAttributes {
-        var listAttributes = attributes
+    private func getAttributes() -> ElementDescriptor {
+        var listAttributes = descriptor
 
         if listStyle != .plain {
             listAttributes.append(classes: "list-group")
@@ -136,13 +136,13 @@ public struct List: HTML {
             // be allowed to handle that itself.
             if let listableItem = item as? ListableElement {
                 if listStyle != .plain {
-                    item.attributes.append(classes: "list-group-item")
+                    item.descriptor.append(classes: "list-group-item")
                 }
 
                 output += listableItem.renderInList()
             } else {
                 let styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
-                item.attributes.append(classes: "m-0")
+                item.descriptor.append(classes: "m-0")
                 output += "<li\(styleClass)>\(item.render())</li>"
             }
         }

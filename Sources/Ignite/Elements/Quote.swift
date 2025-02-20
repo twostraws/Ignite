@@ -47,7 +47,7 @@ public struct Quote: HTML {
     public func render() -> String {
         let renderedContents = contents.render()
         let renderedCaption = caption.render()
-        var attributes = attributes
+        var attributes = descriptor
 
         attributes.tag = "blockquote"
         attributes.append(classes: "blockquote")
@@ -55,7 +55,7 @@ public struct Quote: HTML {
         if renderedCaption.isEmpty {
             return attributes.description(wrapping: renderedContents)
         } else {
-            var footerAttributes = CoreAttributes()
+            var footerAttributes = ElementDescriptor()
             footerAttributes.tag = "footer"
             footerAttributes.append(classes: "blockquote-footer")
             let footer = footerAttributes.description(wrapping: renderedCaption)

@@ -41,7 +41,7 @@ public struct Body: DocumentElement {
     }
 
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         var output = ""
 
         // Render main content

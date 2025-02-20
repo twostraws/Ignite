@@ -237,7 +237,7 @@ public struct Card: HTML {
                 renderFooter()
             }
         }
-        .attributes(attributes)
+        .descriptor(descriptor)
         .class("card")
         .class(cardClasses)
         .render()

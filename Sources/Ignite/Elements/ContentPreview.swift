@@ -48,11 +48,11 @@ public struct ContentPreview: HTML {
         // fallback to default layout.
         if let style {
             style.body(content: content)
-                .attributes(attributes)
+                .descriptor(descriptor)
                 .render()
         } else {
             defaultCardLayout()
-                .attributes(attributes)
+                .descriptor(descriptor)
                 .render()
         }
     }

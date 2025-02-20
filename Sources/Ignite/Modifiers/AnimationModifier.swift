@@ -70,7 +70,7 @@ public extension HTML {
         direction: AnimationDirection?,
         trigger: AnimationTrigger
     ) -> Self {
-        var attributes = attributes
+        var attributes = descriptor
 
         // Track which containers we've already added
         let existingContainers = Set(attributes.containerAttributes.flatMap(\.classes))
@@ -124,7 +124,7 @@ public extension HTML {
             styles: wrapperStyles
         )
 
-        AttributeStore.default.merge(attributes, intoHTML: self.id, removing: wrapperStyles)
+        DescriptorStorage.shared.merge(attributes, intoHTML: self.id, removing: wrapperStyles)
         return self
     }
 
@@ -163,7 +163,7 @@ public extension HTML {
     private func apply(
         animation: some Animatable,
         triggers: [AnimationTrigger],
-        to attributes: inout CoreAttributes,
+        to attributes: inout ElementDescriptor,
         in existingContainers: Set<String>,
         styles wrapperStyles: OrderedSet<InlineStyle>
     ) {
@@ -236,7 +236,7 @@ public extension HTML {
         }
     }
 
-    private func addOnClick(to attributes: CoreAttributes, index: Int) -> [ContainerAttributes] {
+    private func addOnClick(to attributes: ElementDescriptor, index: Int) -> [ContainerAttributes] {
         attributes.containerAttributes.enumerated().map { i, element in
             if i == index {
                 var modified = element

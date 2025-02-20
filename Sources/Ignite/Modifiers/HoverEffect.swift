@@ -23,7 +23,7 @@ struct HoverEffectModifier: HTMLModifier {
         content.onHover { isHovering in
             if isHovering {
                 let effectElement = effect(EmptyHoverEffect())
-                let effectAttributes = AttributeStore.default.attributes(for: effectElement.id)
+                let effectAttributes = DescriptorStorage.shared.descriptor(for: effectElement.id)
                 ApplyHoverEffects(styles: effectAttributes.styles)
             } else {
                 RemoveHoverEffects()

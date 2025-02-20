@@ -65,7 +65,7 @@ public struct Grid: HTML, HorizontalAligning {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var sectionAttributes = attributes.appending(classes: ["row"])
+        var sectionAttributes = descriptor.appending(classes: ["row"])
 
         // If a column count is set, we want to use that for all
         // page sizes that are medium and above. Below that we
@@ -92,11 +92,11 @@ public struct Grid: HTML, HorizontalAligning {
         return Section {
             ForEach(items) { item in
                 if let passthrough = item as? any PassthroughHTML {
-                    handlePassthrough(passthrough, attributes: passthrough.attributes)
+                    handlePassthrough(passthrough, attributes: passthrough.descriptor)
                 } else if let modified = item as? ModifiedHTML,
                           let passthrough = modified.content as? any PassthroughHTML
                 {
-                    handlePassthrough(passthrough, attributes: modified.attributes)
+                    handlePassthrough(passthrough, attributes: modified.descriptor)
                 } else if let modified = item as? ModifiedHTML  {
                     Section(modified)
                         .class(className(for: modified.content))
@@ -108,7 +108,7 @@ public struct Grid: HTML, HorizontalAligning {
                 }
             }
         }
-        .attributes(sectionAttributes)
+        .descriptor(sectionAttributes)
         .render()
     }
 
@@ -117,7 +117,7 @@ public struct Grid: HTML, HorizontalAligning {
     ///   - passthrough: The passthrough entity containing the HTML elements to render.
     ///   - attributes: HTML attributes to apply to each element in the group.
     /// - Returns: A view containing the styled group elements.
-    func handlePassthrough(_ passthrough: any PassthroughHTML, attributes: CoreAttributes) -> some HTML {
+    func handlePassthrough(_ passthrough: any PassthroughHTML, attributes: ElementDescriptor) -> some HTML {
         let gutterClass = if case .semantic(let amount) = spacingAmount {
             "g-\(amount.rawValue)"
         } else {
@@ -127,7 +127,7 @@ public struct Grid: HTML, HorizontalAligning {
             Section(item)
                 .class(className(for: passthrough))
                 .class(gutterClass)
-                .attributes(attributes)
+                .descriptor(attributes)
         }
     }
 

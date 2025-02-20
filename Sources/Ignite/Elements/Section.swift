@@ -68,6 +68,6 @@ public struct Section: HTML, HorizontalAligning {
             items.insert(Text(header).fontStyle(headerStyle), at: 0)
         }
         let content = items.map { $0.render() }.joined()
-        return attributes.description(wrapping: content)
+        return descriptor.description(wrapping: content)
     }
 }

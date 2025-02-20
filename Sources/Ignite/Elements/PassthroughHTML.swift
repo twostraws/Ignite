@@ -14,5 +14,5 @@
     var items: [any HTML] { get }
 
     /// The attributes that should be passed through to child elements.
-    var attributes: CoreAttributes { get }
+    var descriptor: ElementDescriptor { get }
 }

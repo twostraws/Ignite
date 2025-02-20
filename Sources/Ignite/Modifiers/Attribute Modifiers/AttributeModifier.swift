@@ -19,8 +19,8 @@ struct AttributeModifier: HTMLModifier {
         } else {
             .init(name)
         }
-        copy.attributes.customAttributes.append(attribute)
-        AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
+        copy.descriptor.customAttributes.append(attribute)
+        DescriptorStorage.shared.merge(copy.descriptor, intoHTML: copy.id)
         return copy
     }
 }

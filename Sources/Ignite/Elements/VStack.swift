@@ -51,7 +51,7 @@ public struct VStack: HTML {
     }
 
     public func render() -> String {
-        var itemAttributes = CoreAttributes()
+        var itemAttributes = ElementDescriptor()
         itemAttributes.append(classes: "mb-0")
         var items = [any HTML]()
 
@@ -59,16 +59,16 @@ public struct VStack: HTML {
             switch item {
             case let container as HTMLCollection:
                 for item in container.elements {
-                    AttributeStore.default.merge(itemAttributes, intoHTML: item.id)
+                    DescriptorStorage.shared.merge(itemAttributes, intoHTML: item.id)
                     items.append(item)
                 }
             default:
-                AttributeStore.default.merge(itemAttributes, intoHTML: item.id)
+                DescriptorStorage.shared.merge(itemAttributes, intoHTML: item.id)
                 items.append(item)
             }
         }
 
-        var attributes = attributes
+        var attributes = descriptor
         attributes.append(classes: "vstack")
 
         if case let .exact(pixels) = spacingAmount {
@@ -77,7 +77,7 @@ public struct VStack: HTML {
             attributes.append(classes: "gap-\(amount.rawValue)")
         }
 
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        DescriptorStorage.shared.merge(attributes, intoHTML: id)
         attributes.tag = "div"
         let content = items.map { $0.render() }.joined()
 

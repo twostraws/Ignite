@@ -24,7 +24,7 @@ public struct Document: HTML {
     }
 
     public func render() -> String {
-        var attributes = attributes
+        var attributes = descriptor
         attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
         attributes.append(customAttributes: .init(name: "data-bs-theme", value: "auto"))
         var output = "<!doctype html>"

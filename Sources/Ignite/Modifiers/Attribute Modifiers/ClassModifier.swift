@@ -14,8 +14,8 @@ struct ClassModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         guard !className.isEmpty else { return content }
         var copy = content
-        copy.attributes.classes.append(className)
-        AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
+        copy.descriptor.classes.append(className)
+        DescriptorStorage.shared.merge(copy.descriptor, intoHTML: copy.id)
         return copy
     }
 }

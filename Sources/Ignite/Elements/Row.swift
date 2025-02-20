@@ -36,7 +36,7 @@ public struct Row: HTML {
                 "<td>\(column.render())</td>"
             }
         }.joined()
-        var attributes = attributes
+        var attributes = descriptor
         attributes.tag = "tr"
         return attributes.description(wrapping: output)
     }

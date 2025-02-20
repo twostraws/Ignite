@@ -63,7 +63,7 @@ public struct Accordion: HTML {
                 item.assigned(to: accordionID, openMode: openMode)
             }
         }
-        .attributes(attributes)
+        .descriptor(descriptor)
         .class("accordion")
         .id(accordionID)
 

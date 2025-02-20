@@ -167,7 +167,7 @@ public struct NavigationBar: HTML {
                 }
                 .class(widthClasses)
             }
-            .attributes(attributes)
+            .descriptor(descriptor)
             .class("navbar", "navbar-expand-md")
             .data("bs-theme", theme(for: style))
         }

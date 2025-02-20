@@ -46,7 +46,7 @@ public struct CodeBlock: HTML {
 
         let highlights = lines.map { "\($0)" }
         let dataLine = highlights.joined(separator: ",")
-        copy.attributes.append(dataAttributes: .init(name: "line", value: dataLine))
+        copy.descriptor.append(dataAttributes: .init(name: "line", value: dataLine))
         return copy
     }
 
@@ -58,7 +58,7 @@ public struct CodeBlock: HTML {
 
         let highlights = ranges.map { "\($0.lowerBound)-\($0.upperBound)" }
         let dataLine = highlights.joined(separator: ",")
-        copy.attributes.append(dataAttributes: .init(name: "line", value: dataLine))
+        copy.descriptor.append(dataAttributes: .init(name: "line", value: dataLine))
         return copy
     }
 
@@ -75,7 +75,7 @@ public struct CodeBlock: HTML {
         let allHighlights = singleLines + rangeLines
 
         let dataLine = allHighlights.joined(separator: ",")
-        copy.attributes.append(dataAttributes: .init(name: "line", value: dataLine))
+        copy.descriptor.append(dataAttributes: .init(name: "line", value: dataLine))
         return copy
     }
 
@@ -90,24 +90,24 @@ public struct CodeBlock: HTML {
 
         switch (siteVisibility, visibility) {
         case (.visible, .hidden):
-            copy.attributes.append(classes: "no-line-numbers")
+            copy.descriptor.append(classes: "no-line-numbers")
 
         case (.hidden, .visible(let elementFirstLine, let elementWrapped)):
-            copy.attributes.append(classes: "line-numbers")
+            copy.descriptor.append(classes: "line-numbers")
 
             if elementFirstLine != 1 {
-                copy.attributes.append(dataAttributes: .init(name: "start", value: elementFirstLine.formatted()))
+                copy.descriptor.append(dataAttributes: .init(name: "start", value: elementFirstLine.formatted()))
             }
             if elementWrapped {
-                copy.attributes.append(styles: .init(.whiteSpace, value: "pre-wrap"))
+                copy.descriptor.append(styles: .init(.whiteSpace, value: "pre-wrap"))
             }
 
         case (.visible(let siteFirstLine, let siteWrapped), .visible(let elementFirstLine, let elementWrapped)):
             if elementFirstLine != siteFirstLine {
-                copy.attributes.append(dataAttributes: .init(name: "start", value: elementFirstLine.formatted()))
+                copy.descriptor.append(dataAttributes: .init(name: "start", value: elementFirstLine.formatted()))
             }
             if elementWrapped != siteWrapped {
-                copy.attributes.append(styles: .init(.whiteSpace, value: elementWrapped ? "pre-wrap" : "pre"))
+                copy.descriptor.append(styles: .init(.whiteSpace, value: elementWrapped ? "pre-wrap" : "pre"))
             }
 
         default:
@@ -127,7 +127,7 @@ public struct CodeBlock: HTML {
         if let language {
             publishingContext.syntaxHighlighters.append(language)
             return """
-            <pre\(attributes.description())>\
+            <pre\(descriptor.description())>\
             <code class=\"language-\(language)\">\
             \(content)\
             </code>\
@@ -135,7 +135,7 @@ public struct CodeBlock: HTML {
             """
         } else {
             return """
-            <pre\(attributes.description())>\
+            <pre\(descriptor.description())>\
             <code>\(content)</code>\
             </pre>
             """

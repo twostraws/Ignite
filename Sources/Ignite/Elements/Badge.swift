@@ -27,7 +27,7 @@ public struct Badge: InlineElement {
 
     var badgeClasses: [String] {
         var outputClasses = ["badge"]
-        outputClasses.append(contentsOf: attributes.classes.sorted())
+        outputClasses.append(contentsOf: descriptor.classes.sorted())
 
         switch style {
         case .default:
@@ -93,9 +93,9 @@ public struct Badge: InlineElement {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        let badgeAttributes = attributes.appending(classes: badgeClasses)
+        let badgeAttributes = descriptor.appending(classes: badgeClasses)
         return Span(text)
-            .attributes(badgeAttributes)
+            .descriptor(badgeAttributes)
             .render()
     }
 }

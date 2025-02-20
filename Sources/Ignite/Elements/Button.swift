@@ -172,7 +172,7 @@ public struct Button: InlineElement {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var buttonAttributes = attributes
+        var buttonAttributes = descriptor
             .appending(classes: Button.classes(forRole: role, size: size))
             .appending(aria: Button.aria(forRole: role))
         if isDisabled {

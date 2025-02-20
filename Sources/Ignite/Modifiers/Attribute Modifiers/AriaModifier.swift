@@ -14,8 +14,8 @@ struct AriaModifier: HTMLModifier {
     /// - Returns: The modified HTML with the style property added
     func body(content: some HTML) -> any HTML {
         var copy = content
-        copy.attributes.aria.append(Attribute(name: key.rawValue, value: value))
-        AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
+        copy.descriptor.aria.append(Attribute(name: key.rawValue, value: value))
+        DescriptorStorage.shared.merge(copy.descriptor, intoHTML: copy.id)
         return copy
     }
 }
