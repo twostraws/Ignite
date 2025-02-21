@@ -120,11 +120,13 @@ public struct Text: HTML, DropdownItem, HorizontalAligning {
 }
 
 extension HTML {
-    func fontStyle(_ font: Font.Style) -> Self {
+    func fontStyle(_ font: Font.Style) -> some HTML {
+        var copy = self
         if font == .lead {
-            self.class(font.rawValue)
+            copy.attributes.append(classes: font.rawValue)
         } else {
-            self.tag(font.rawValue)
+            copy.tag(font.rawValue)
         }
+        return copy
     }
 }
