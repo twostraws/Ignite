@@ -188,11 +188,9 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         var linkAttributes = attributes.appending(classes: linkClasses)
         linkAttributes.classes.append("protected-link")
         linkAttributes.data.append(Attribute(name: "encoded-url", value: encodedUrl))
+        linkAttributes.append(customAttributes: .init(name: "href", value: "#"))
 
-        linkAttributes.tag = """
-        a href="#"
-        """
-        linkAttributes.closingTag = "a"
+        linkAttributes.tag = "a"
         return linkAttributes.description(wrapping: displayContent)
     }
 
@@ -207,8 +205,8 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         }
 
         let path = publishingContext.path(for: url)
-        linkAttributes.tag = "a href=\"\(path)\""
-        linkAttributes.closingTag = "a"
+        linkAttributes.tag = "a"
+        linkAttributes.append(customAttributes: .init(name: "href", value: path))
         return linkAttributes.description(wrapping: content.render())
     }
 }

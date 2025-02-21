@@ -51,16 +51,8 @@ public class AttributeStore {
             mergedAttributes.id = attributes.id
         }
 
-        if attributes.tag != nil {
+        if attributes.tag.isEmpty == false {
             mergedAttributes.tag = attributes.tag
-        }
-
-        if attributes.closingTag != nil {
-            mergedAttributes.closingTag = attributes.closingTag
-        }
-
-        if attributes.selfClosingTag != nil {
-            mergedAttributes.selfClosingTag = attributes.selfClosingTag
         }
 
         removedStyles?.forEach { mergedAttributes.styles.remove($0) }

@@ -35,13 +35,14 @@ public struct Video: InlineElement, LazyLoadable {
     /// - Returns: The HTML for this element.
     public func render(files: [String]) -> String {
         var attributes = attributes
-        attributes.tag = "video controls"
-        attributes.closingTag = "video"
+        attributes.append(customAttributes: .controls)
+        attributes.tag = "video"
 
         let sources = files.compactMap { filename in
             guard let fileType = videoType(for: filename) else { return nil }
             var sourceAttributes = CoreAttributes()
-            sourceAttributes.selfClosingTag = "source"
+            sourceAttributes.tag = "source"
+            sourceAttributes.tagIsSelfClosing = true
             sourceAttributes.append(customAttributes:
                 .init(name: "src", value: filename),
                 .init(name: "type", value: fileType.rawValue)
