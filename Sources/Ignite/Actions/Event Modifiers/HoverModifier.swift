@@ -12,8 +12,8 @@ struct HoverModifier: HTMLModifier {
 
     func body(content: some HTML) -> any HTML {
         content
-            .addEvent(name: "onmouseover", actions: hoverActions)
-            .addEvent(name: "onmouseout", actions: unhoverActions)
+            .onEvent(.mouseOver, hoverActions)
+            .onEvent(.mouseOut, unhoverActions)
     }
 }
 

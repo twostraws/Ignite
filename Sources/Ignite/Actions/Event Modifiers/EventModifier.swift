@@ -11,7 +11,11 @@ struct EventModifier: HTMLModifier {
     let actions: [Action]
 
     func body(content: some HTML) -> any HTML {
-        content.addEvent(name: type.rawValue, actions: actions)
+        guard !actions.isEmpty else { return content }
+        var copy = content
+        copy.attributes.events.append(Event(name: type.rawValue, actions: actions))
+        AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
+        return copy
     }
 }
 

@@ -209,12 +209,11 @@ extension HTML {
     ///   - name: The name of the event (e.g., "click", "mouseover")
     ///   - actions: Array of actions to execute when the event occurs
     /// - Returns: The modified `HTML` element
-    @discardableResult func addEvent(name: String, actions: [Action]) -> Self {
-        guard !actions.isEmpty else { return self }
+    func addEvent(name: String, actions: [Action]) {
+        guard !actions.isEmpty else { return }
         var attributes = attributes
         attributes.events.append(Event(name: name, actions: actions))
         AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
     }
 
     /// Adds a custom attribute to the element.
