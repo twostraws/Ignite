@@ -14,13 +14,15 @@ public struct MetaLink: HeadElement, Sendable {
     public static let standardCSS = MetaLink(href: "/css/bootstrap.min.css", rel: .stylesheet)
 
     /// The standard CSS you should include on all Ignite pages if using remote Bootstrap files
-    public static let standardRemoteCSS = MetaLink(
-        href: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
-        rel: .stylesheet)
+    public static var standardRemoteCSS: some HeadElement {
+        MetaLink(
+            href: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+            rel: .stylesheet)
         .customAttribute(
             name: "integrity",
             value: "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH")
         .customAttribute(name: "crossorigin", value: "anonymous")
+    }
 
     /// The CSS you should include for Ignite pages that use system icons.
     public static let iconCSS = MetaLink(href: "/css/bootstrap-icons.min.css", rel: .stylesheet)
