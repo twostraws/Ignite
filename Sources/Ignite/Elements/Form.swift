@@ -131,6 +131,36 @@ public struct Form: HTML {
         }
     }
 
+    @HTMLBuilder
+    func formContent(for action: SubscribeAction) -> some HTML {
+        Section {
+            ForEach(items) { item in
+                if let textField = item as? TextField {
+                    formField(textField: textField, action: action)
+                } else if let button = item as? Button {
+                    styledButton(button)
+                } else {
+                    simpleItem(item)
+                }
+            }
+
+            if let honeypotName = action.service.honeypotFieldName {
+                Section {
+                    TextField(placeholder: nil)
+                        .type(.text)
+                        .customAttribute(name: "name", value: honeypotName)
+                        .customAttribute(name: "tabindex", value: "-1")
+                        .customAttribute(name: "value", value: "")
+                        .customAttribute(name: "autocomplete", value: "off")
+                }
+                .customAttribute(name: "style", value: "position: absolute; left: -5000px;")
+                .customAttribute(name: "aria-hidden", value: "true")
+            }
+        }
+        .class("row", "g-\(horizontalSpacing.rawValue)", "gy-\(verticalSpacing.rawValue)")
+        .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
+    }
+
     public func render() -> String {
         guard var action = action as? SubscribeAction else {
             fatalError("Form supports only SubscribeAction at this time.")
@@ -153,35 +183,9 @@ public struct Form: HTML {
             attributes.customAttributes.append(.init(name: "target", value: "_blank"))
         }
 
-        let wrappedContent = Section {
-            ForEach(items) { item in
-                if let textField = item as? TextField {
-                    renderFormField(textField)
-                } else if let button = item as? Button {
-                    renderButton(button)
-                } else {
-                    renderSimpleItem(item)
-                }
-            }
+        let formContent = formContent(for: action)
 
-            if let honeypotName = action.service.honeypotFieldName {
-                Section {
-                    TextField(placeholder: nil)
-                        .type(.text)
-                        .customAttribute(name: "name", value: honeypotName)
-                        .customAttribute(name: "tabindex", value: "-1")
-                        .customAttribute(name: "value", value: "")
-                        .customAttribute(name: "autocomplete", value: "off")
-                }
-                .customAttribute(name: "style", value: "position: absolute; left: -5000px;")
-                .customAttribute(name: "aria-hidden", value: "true")
-            }
-        }
-        .class("row", "g-\(horizontalSpacing.rawValue)", "gy-\(verticalSpacing.rawValue)")
-        .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
-        .render()
-
-        var formOutput = attributes.description(wrapping: wrappedContent)
+        var formOutput = attributes.description(wrapping: formContent.render())
 
         // Add custom SendFox JavaScript if needed.
         if case .sendFox = action.service {
@@ -193,67 +197,67 @@ public struct Form: HTML {
         return formOutput
     }
 
-    private func renderFormField(_ textField: TextField) -> Section {
-        guard var action = action as? SubscribeAction else {
-            fatalError("Form supports only SubscribeAction at the moment.")
+    @HTMLBuilder
+    func labeledTextField(label: some InlineElement, field: some InlineElement) -> some HTML {
+        switch labelStyle {
+        case .hidden:
+            simpleItem(field)
+
+        case .floating:
+            Section {
+                Section {
+                    field
+                    label
+                }
+                .class("form-floating")
+            }
+            .class(getColumnClass(for: field, totalColumns: columnCount))
+
+        case .front:
+            Section {
+                Section {
+                    label.class("col-form-label col-sm-2")
+                    Section(field).class("col-sm-10")
+                }
+                .class("row")
+            }
+            .class(getColumnClass(for: field, totalColumns: columnCount))
+
+        case .top:
+            Section {
+                label.class("form-label")
+                field
+            }
+            .class(getColumnClass(for: field, totalColumns: columnCount))
         }
+    }
 
-        action = action.setFormID(attributes.id)
-
+    @HTMLBuilder
+    private func formField(textField: TextField, action: SubscribeAction) -> some HTML {
         let sizedTextField = textField
             .id(action.service.emailFieldID)
             .class(controlSize.controlClass)
             .customAttribute(name: "name", value: action.service.emailFieldName!)
 
         // If no label text, return just the field
-        guard let textLabel = textField.label else {
-            return renderSimpleItem(sizedTextField)
-        }
+        if let textLabel = textField.label {
+            let label = Label(text: textLabel)
+                .class(controlSize.labelClass)
+                .customAttribute(name: "for", value: textField.attributes.id)
 
-        let label = Label(text: textLabel)
-            .class(controlSize.labelClass)
-            .customAttribute(name: "for", value: textField.attributes.id)
-
-        return switch labelStyle {
-        case .hidden:
-            renderSimpleItem(sizedTextField)
-
-        case .floating:
-            Section {
-                Section {
-                    sizedTextField
-                    label
-                }
-                .class("form-floating")
-            }
-            .class(getColumnClass(for: textField, totalColumns: columnCount))
-
-        case .front:
-            Section {
-                Section {
-                    label.class("col-form-label col-sm-2")
-                    Section(sizedTextField).class("col-sm-10")
-                }
-                .class("row")
-            }
-            .class(getColumnClass(for: textField, totalColumns: columnCount))
-
-        case .top:
-            Section {
-                label.class("form-label")
-                sizedTextField
-            }
-            .class(getColumnClass(for: textField, totalColumns: columnCount))
+            labeledTextField(label: label, field: sizedTextField)
+        } else {
+            simpleItem(sizedTextField)
         }
     }
 
-    private func renderButton(_ button: Button) -> Section {
+    private func styledButton(_ button: Button) -> some HTML {
         Section(button.class(controlSize.buttonClass))
             .class(getColumnClass(for: button, totalColumns: columnCount))
             .class("d-flex", "align-items-stretch")
     }
 
-    private func renderSimpleItem(_ item: any InlineElement) -> Section {
+    private func simpleItem(_ item: any InlineElement) -> some HTML {
         Section(item)
             .class(getColumnClass(for: item, totalColumns: columnCount))
     }

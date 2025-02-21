@@ -243,7 +243,7 @@ public struct Card: HTML {
         .render()
     }
 
-    private func renderHeader() -> Section {
+    private func renderHeader() -> some HTML {
         Section {
             for item in header {
                 item
@@ -252,7 +252,7 @@ public struct Card: HTML {
         .class("card-header")
     }
 
-    private func renderItems() -> Section {
+    private func renderItems() -> some HTML {
         Section {
             ForEach(items) { item in
                 switch item {
@@ -272,7 +272,7 @@ public struct Card: HTML {
         .class(contentPosition.bodyClasses)
     }
 
-    private func renderFooter() -> Section {
+    private func renderFooter() -> some HTML {
         Section {
             for item in footer {
                 item

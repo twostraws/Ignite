@@ -206,7 +206,7 @@ public struct NavigationBar: HTML {
         .id("navbarCollapse")
     }
 
-    private func renderDropdownItem(_ dropdownItem: Dropdown) -> ListItem {
+    private func renderDropdownItem(_ dropdownItem: Dropdown) -> some HTML {
         ListItem {
             dropdownItem.configuredAsNavigationItem()
         }
@@ -214,7 +214,7 @@ public struct NavigationBar: HTML {
         .data("bs-theme", "light")
     }
 
-    private func renderLinkItem(_ link: Link) -> ListItem {
+    private func renderLinkItem(_ link: Link) -> some HTML {
         ListItem {
             let isActive = publishingContext.currentRenderingPath == link.url
             link
