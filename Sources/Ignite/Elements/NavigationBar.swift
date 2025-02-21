@@ -224,3 +224,18 @@ public struct NavigationBar: HTML {
         .class("nav-item")
     }
 }
+
+fileprivate extension HTML {
+    /// Adds a data attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the data attribute
+    ///   - value: The value of the data attribute
+    /// - Returns: The modified `HTML` element
+    func data(_ name: String, _ value: String?) -> Self {
+        guard let value else { return self }
+        var attributes = attributes
+        attributes.data.append(Attribute(name: name, value: value))
+        AttributeStore.default.merge(attributes, intoHTML: id)
+        return self
+    }
+}
