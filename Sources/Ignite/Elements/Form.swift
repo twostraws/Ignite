@@ -117,7 +117,7 @@ public struct Form: HTML {
     public init(
         horizontalSpacing: SpacingAmount = .medium,
         verticalSpacing: SpacingAmount = .medium,
-        @InlineHTMLBuilder content: () -> some InlineElement,
+        @InlineElementBuilder content: () -> some InlineElement,
         onSubmit: () -> any Action
     ) {
         self.items = flatUnwrap(content())

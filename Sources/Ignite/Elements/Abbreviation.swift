@@ -33,7 +33,7 @@ public struct Abbreviation: InlineElement {
     /// - Parameters:
     ///   - description: The description of the abbreviation.
     ///   - content: The elements to place inside the abbreviation.
-    public init(_ description: String, @InlineHTMLBuilder content: () -> some InlineElement) {
+    public init(_ description: String, @InlineElementBuilder content: () -> some InlineElement) {
         contents = content()
         let customAttribute = Attribute(name: "title", value: description)
         attributes.customAttributes.append(customAttribute)

@@ -68,7 +68,7 @@ public struct Button: InlineElement {
     /// Creates a button from a more complex piece of HTML.
     /// - Parameter label: An inline element builder of all the content
     /// for this button.
-    public init(@InlineHTMLBuilder label: @escaping () -> some InlineElement) {
+    public init(@InlineElementBuilder label: @escaping () -> some InlineElement) {
         self.label = label()
     }
 
@@ -87,7 +87,7 @@ public struct Button: InlineElement {
     ///   - label: The label text to display on this button.
     ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
     public init(
-        @InlineHTMLBuilder _ label: @escaping () -> some InlineElement,
+        @InlineElementBuilder _ label: @escaping () -> some InlineElement,
         @ActionBuilder actions: () -> [Action]
     ) {
         self.label = label()

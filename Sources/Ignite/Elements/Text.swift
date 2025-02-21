@@ -37,7 +37,7 @@ public struct Text: HTML, DropdownItem, HorizontalAligning {
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
     /// - Parameter content: An array of the content to place into the text.
-    public init(@InlineHTMLBuilder content: @escaping () -> any InlineElement) {
+    public init(@InlineElementBuilder content: @escaping () -> any InlineElement) {
         self.content = content()
         self.tag(Font.Style.body.rawValue)
     }

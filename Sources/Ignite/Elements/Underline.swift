@@ -21,7 +21,7 @@ public struct Underline: InlineElement {
 
     /// Creates a new `Underline` instance using an inline element builder
     /// that returns an array of content to place inside.
-    public init(@InlineHTMLBuilder content: @escaping () -> some InlineElement) {
+    public init(@InlineElementBuilder content: @escaping () -> some InlineElement) {
         self.content = content()
     }
 

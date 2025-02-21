@@ -21,7 +21,7 @@ public struct Strong: InlineElement {
 
     /// Creates a new `Strong` instance using an inline element builder
     /// that returns an array of content to place inside.
-    public init(@InlineHTMLBuilder content: () -> some InlineElement) {
+    public init(@InlineElementBuilder content: () -> some InlineElement) {
         self.content = content()
     }
 
