@@ -62,6 +62,9 @@ public struct EnvironmentValues {
     /// The current page being rendered.
     var page: Page = .empty
 
+    /// The current piece of Markdown content being rendered.
+    var article: Content = .empty
+
     /// The current tag of the page being rendered.
     var tag: String?
 
@@ -100,9 +103,14 @@ public struct EnvironmentValues {
         self.timeZone = site.timeZone
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content], page: Page = .empty) {
+    init(sourceDirectory: URL, site: any Site, allContent: [Content], page: Page) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         self.page = page
+    }
+
+    init(sourceDirectory: URL, site: any Site, allContent: [Content], article: Content) {
+        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+        self.article = article
     }
 
     init(sourceDirectory: URL, site: any Site, allContent: [Content], tag: String?, taggedContent: [Content]) {
