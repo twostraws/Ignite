@@ -133,15 +133,6 @@ extension HTML {
         AttributeStore.default.merge(attributes, intoHTML: id)
     }
 
-    /// Merges a complete set of core attributes into this element.
-    /// - Parameter attributes: The CoreAttributes to merge with existing attributes
-    /// - Returns: The modified HTML element
-    /// - Note: Uses AttributeStore for persistent storage and merging
-    func attributes(_ attributes: CoreAttributes) -> Self {
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
     /// Sets the tabindex behavior for this element.
     /// - Parameter tabFocus: The TabFocus enum value defining keyboard navigation behavior
     /// - Returns: The modified HTML element
