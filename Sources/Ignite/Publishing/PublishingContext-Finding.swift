@@ -93,9 +93,9 @@ struct ContentFinder: Sendable {
         try addRootIfUnseen(.init(root, path: ""))
 
         let resourceSet = Set(resourceKeys)
-        outer:
-            while let (deploy, enumerator) = nextDeployEnumerator()
-        { // dir
+
+    outer:
+        while let (deploy, enumerator) = nextDeployEnumerator() { // dir
             while let url = enumerator.nextObject() as? URL { // file, dir
                 // resolve symbolic links to get correct resource values
                 let linkValue = try url.resourceValues(forKeys: isLinkKey)
@@ -141,8 +141,7 @@ struct ContentFinder: Sendable {
         for suffix in suffixes {
             let range = name.range(of: suffix, options: options)
             if let range, range.upperBound == name.endIndex,
-               range.lowerBound > name.startIndex
-            { // not empty
+               range.lowerBound > name.startIndex { // not empty
                 return range.lowerBound
             }
         }

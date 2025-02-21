@@ -94,10 +94,9 @@ public struct Grid: HTML, HorizontalAligning {
                 if let passthrough = item as? any PassthroughHTML {
                     handlePassthrough(passthrough, attributes: passthrough.attributes)
                 } else if let modified = item as? ModifiedHTML,
-                          let passthrough = modified.content as? any PassthroughHTML
-                {
+                          let passthrough = modified.content as? any PassthroughHTML {
                     handlePassthrough(passthrough, attributes: modified.attributes)
-                } else if let modified = item as? ModifiedHTML  {
+                } else if let modified = item as? ModifiedHTML {
                     Section(modified)
                         .class(className(for: modified.content))
                         .class(gutterClass)
