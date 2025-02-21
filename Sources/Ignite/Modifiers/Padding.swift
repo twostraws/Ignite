@@ -11,7 +11,7 @@ struct PaddingModifier: HTMLModifier {
     var edges = Edge.all
 
     func body(content: some HTML) -> any HTML {
-        if let length {
+        return if let length {
             content.edgeAdjust(prefix: "padding", edges, length.stringValue)
         } else if let amount {
             content.edgeAdjust(prefix: "p", edges, amount)

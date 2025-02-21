@@ -73,12 +73,12 @@ struct AspectRatioModifier: HTMLModifier {
 // Helper methods to reuse logic
 private extension HTML {
     /// Applies a fixed aspect ratio to the current element.
-    func applyAspectRatio(_ ratio: AspectRatio) -> Self {
+    func applyAspectRatio(_ ratio: AspectRatio) -> some HTML {
         self.class("ratio", "ratio-\(ratio.rawValue)")
     }
 
     /// Applies a custom ratio to the current element.
-    func applyAspectRatio(_ ratio: Double) -> Self {
+    func applyAspectRatio(_ ratio: Double) -> some HTML {
         let percentage = 100 / ratio
         return self
             .class("ratio")

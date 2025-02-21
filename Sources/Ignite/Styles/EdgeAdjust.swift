@@ -15,12 +15,12 @@ extension HTML {
     ///   - edges: Which edges we are changing.
     ///   - length: The value we are changing it to.
     /// - Returns: A copy of the current element with the updated edge adjustment.
-    func edgeAdjust(prefix: String, _ edges: Edge = .all, _ length: String = "20px") -> Self {
+    func edgeAdjust(prefix: String, _ edges: Edge = .all, _ length: String = "20px") -> any HTML {
         if edges.contains(.all) {
             return self.style("\(prefix)", length)
         }
 
-        var copy = self
+        var copy: any HTML = self
 
         if edges.contains(.leading) {
             copy = copy.style("\(prefix)-left", length)
@@ -47,12 +47,12 @@ extension HTML {
     ///   - edges: Which edges we are changing.
     ///   - amount: The value we are changing it to.
     /// - Returns: A copy of the current element with the updated edge adjustment.
-    func edgeAdjust(prefix: String, _ edges: Edge = .all, _ amount: SpacingAmount) -> Self {
+    func edgeAdjust(prefix: String, _ edges: Edge = .all, _ amount: SpacingAmount) -> any HTML {
         if edges.contains(.all) {
             return self.class("\(prefix)-\(amount.rawValue)")
         }
 
-        var copy = self
+        var copy: any HTML = self
 
         if edges.contains(.horizontal) {
             copy = copy.class("\(prefix)x-\(amount.rawValue)")

@@ -121,31 +121,6 @@ extension HTML {
 }
 
 extension HTML {
-    /// Adds multiple optional CSS classes to the element.
-    /// - Parameter newClasses: Variable number of optional class names
-    /// - Returns: The modified HTML element
-    func `class`(_ newClasses: String?...) -> Self {
-        var attributes = attributes
-        let compacted = newClasses.compactMap(\.self)
-        attributes.classes.formUnion(compacted)
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds an array of CSS classes to the element.
-    /// - Parameter newClasses: `Array` of class names to add
-    /// - Returns: The modified `HTML` element
-    func `class`(_ newClasses: [String]) -> Self {
-        var attributes = attributes
-        for case let newClass? in newClasses where !attributes.classes.contains(newClass) {
-            if !newClass.isEmpty {
-                attributes.classes.append(newClass)
-            }
-        }
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
     /// Adds a data attribute to the element.
     /// - Parameters:
     ///   - name: The name of the data attribute
