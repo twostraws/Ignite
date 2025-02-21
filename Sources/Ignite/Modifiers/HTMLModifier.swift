@@ -10,14 +10,14 @@
 /// HTMLModifier provides a standardized way to apply styling, attributes, and other modifications
 /// to HTML elements while preserving their structure and type information.
 @MainActor
-public protocol HTMLModifier {
+protocol HTMLModifier {
     /// Applies modifications to the provided HTML content.
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with changes applied
     @HTMLBuilder func body(content: some HTML) -> any HTML
 }
 
-public extension HTML {
+extension HTML {
     /// Applies a modifier to this HTML element.
     /// - Parameter modifier: The modifier to apply to this element
     /// - Returns: A modified copy of the element with changes applied
@@ -26,7 +26,7 @@ public extension HTML {
     }
 }
 
-public extension HTML where Self: InlineElement {
+extension HTML where Self: InlineElement {
     /// Applies a modifier to this inline HTML element while preserving its inline nature.
     /// - Parameter modifier: The modifier to apply to this element
     /// - Returns: A modified copy of the element with changes applied, maintaining inline status
@@ -35,7 +35,7 @@ public extension HTML where Self: InlineElement {
     }
 }
 
-public extension HTML where Self: HeadElement {
+extension HTML where Self: HeadElement {
     /// Applies a modifier to this HTML root element while preserving its block nature.
     /// - Parameter modifier: The modifier to apply to this element
     /// - Returns: A modified copy of the element with changes applied, maintaining block status
@@ -44,7 +44,7 @@ public extension HTML where Self: HeadElement {
     }
 }
 
-public extension HTML where Self: DocumentElement {
+extension HTML where Self: DocumentElement {
     /// Applies a modifier to this HTML root element while preserving its block nature.
     /// - Parameter modifier: The modifier to apply to this element
     /// - Returns: A modified copy of the element with changes applied, maintaining block status
