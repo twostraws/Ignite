@@ -11,14 +11,6 @@ extension PublishingContext {
     /// Renders one static page using the correct theme, which is taken either from the
     /// provided them or from the main site theme.
     func render(_ page: Page, using layout: any Layout) -> String {
-        let finalLayout: any Layout
-
-        if layout is MissingLayout {
-            finalLayout = site.layout
-        } else {
-            finalLayout = layout
-        }
-
         let values = EnvironmentValues(
             sourceDirectory: sourceDirectory,
             site: site,
@@ -26,7 +18,7 @@ extension PublishingContext {
             page: page)
 
         return withEnvironment(values) {
-            finalLayout.body.render()
+            layout.body.render()
         }
     }
 
