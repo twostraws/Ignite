@@ -158,12 +158,10 @@ extension HTML {
 
     /// Adjusts the number of columns assigned to this element.
     /// - Parameter width: The new number of columns to use.
-    /// - Returns: A copy of the current element with the adjusted column width.
-    @discardableResult func columnWidth(_ width: ColumnWidth) -> Self {
+    func columnWidth(_ width: ColumnWidth) {
         var attributes = attributes
         attributes.columnWidth = width
         AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
     }
 }
 
