@@ -134,38 +134,6 @@ extension HTML {
         return self
     }
 
-    /// Adds inline styles to the element.
-    /// - Parameter values: Variable number of `InlineStyle` objects
-    /// - Returns: The modified `HTML` element
-    func style(_ values: InlineStyle?...) -> Self {
-        var attributes = attributes
-        attributes.styles.formUnion(values.compactMap(\.self))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds inline styles to the element.
-    /// - Parameter values: An array of `InlineStyle` objects
-    /// - Returns: The modified `HTML` element
-    func style(_ values: [InlineStyle]) -> Self {
-        var attributes = attributes
-        attributes.styles.formUnion(values)
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds an inline style to the element.
-    /// - Parameters:
-    ///   - property: The CSS property.
-    ///   - value: The value.
-    /// - Returns: The modified `HTML` element
-    func style(_ property: String, _ value: String) -> Self {
-        var attributes = attributes
-        attributes.styles.append(.init(property, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
     /// Adds an event handler to the element.
     /// - Parameters:
     ///   - name: The name of the event (e.g., "click", "mouseover")

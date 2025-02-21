@@ -22,21 +22,21 @@ struct ContainerRelativeFrameModifier: HTMLModifier {
     /// - Returns: A Group containing the content with flex display and alignment applied
     func body(content: some HTML) -> any HTML {
         let frameableContent: any HTML = content.attributes.tag == "div" ?
-            content.style(.init(.marginBottom, value: "0")) :
-            Section(content.style(.init(.marginBottom, value: "0")))
+            content.style(.marginBottom, "0") :
+            Section(content.style(.marginBottom, "0"))
 
         return Section(
             frameableContent
-                .style(.init(.display, value: "flex"))
-                .style(.init(.flexDirection, value: "column"))
-                .style(.init(.position, value: "absolute"))
-                .style(.init(.overflow, value: "hidden"))
+                .style(.display, "flex")
+                .style(.flexDirection, "column")
+                .style(.position, "absolute")
+                .style(.overflow, "hidden")
                 .style(edgeAlignmentRules)
                 .style(alignment.flexAlignmentRules)
         )
-        .style(.init(.width, value: "100%"))
-        .style(.init(.height, value: "100%"))
-        .style(.init(.position, value: "relative"))
+        .style(.width, "100%")
+        .style(.height, "100%")
+        .style(.position, "relative")
     }
 }
 
