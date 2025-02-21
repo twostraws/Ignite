@@ -28,18 +28,18 @@ public struct Section: HTML, HorizontalAligning {
     /// The heading's semantic font size.
     var headerStyle: Font.Style = .title2
 
-    var items: [any HTML] = []
+    var content: any HTML
 
     // Temporarily public
-    public init(_ items: any HTML) {
-        self.items = flatUnwrap(items)
+    public init(_ content: any HTML) {
+        self.content = content
         self.tag("div")
     }
 
     /// Creates a section that renders as a `div` element.
     /// - Parameter content: The content to display within this section.
     public init(@HTMLBuilder content: () -> some HTML) {
-        self.items = flatUnwrap(content())
+        self.content = content()
         self.tag("div")
     }
 
@@ -48,7 +48,7 @@ public struct Section: HTML, HorizontalAligning {
     ///   - header: The text to display as the section's heading
     ///   - content: The content to display within this section
     public init(_ header: String, @HTMLBuilder content: () -> some HTML) {
-        self.items = flatUnwrap(content())
+        self.content = content()
         self.header = header
         self.tag("section")
     }
@@ -63,7 +63,7 @@ public struct Section: HTML, HorizontalAligning {
     }
 
     public func render() -> String {
-        var items = items
+        var items = [content]
         if let header = header {
             items.insert(Text(header).fontStyle(headerStyle), at: 0)
         }
