@@ -16,7 +16,7 @@ struct FontStyleModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
 
         let isText = content.body is Text ||
-        (content as? ModifiedHTML)?.content is Text
+        (content as? ModifiedHTML)?.unwrapped is Text
 
         if isText {
             content
