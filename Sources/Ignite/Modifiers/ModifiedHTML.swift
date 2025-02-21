@@ -6,7 +6,7 @@
 //
 
 /// A type that wraps HTML content with a modifier, preserving attributes and structure.
-struct ModifiedHTML: HTML, InlineElement, DocumentElement, NavigationItem {
+struct ModifiedHTML: HTML, InlineElement, HeadElement, DocumentElement, NavigationItem {
     /// A unique identifier for this element.
     var id = UUID().uuidString
 
