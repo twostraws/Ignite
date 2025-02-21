@@ -24,7 +24,8 @@ public struct Body: DocumentElement {
         self.items = flatUnwrap(items())
     }
 
-    public init(for page: Page) {
+    public init() {
+        let page = PublishingContext.default.environment.page
         self.items = flatUnwrap(page.body)
     }
 
