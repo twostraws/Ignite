@@ -21,7 +21,7 @@ public struct Strikethrough: InlineElement {
 
     /// Creates a new `Strikethrough` instance using an inline element builder
     /// that returns an array of content to place inside.
-    public init(@InlineHTMLBuilder content: () -> some InlineElement) {
+    public init(@InlineElementBuilder content: () -> some InlineElement) {
         self.content = content()
     }
 

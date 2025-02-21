@@ -23,7 +23,7 @@ public struct Emphasis: InlineElement {
     /// of content to display.
     /// - Parameter content: The content to render with emphasis.
     public init(
-        @InlineHTMLBuilder content: () -> some InlineElement
+        @InlineElementBuilder content: () -> some InlineElement
     ) {
         self.content = content()
     }

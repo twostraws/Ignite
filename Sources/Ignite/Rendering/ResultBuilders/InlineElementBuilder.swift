@@ -11,7 +11,7 @@
 /// a SwiftUI-like syntax, handling common control flow patterns like conditionals and loops.
 @MainActor
 @resultBuilder
-public struct InlineHTMLBuilder {
+public struct InlineElementBuilder {
     /// Converts a single inline element into a builder expression.
     /// - Parameter content: The inline element to convert
     /// - Returns: The same inline element, unchanged
@@ -73,7 +73,7 @@ public struct InlineHTMLBuilder {
 }
 
 /// Extension providing result builder functionality for combining multiple HTML elements
-public extension InlineHTMLBuilder {
+public extension InlineElementBuilder {
     /// Loads a single piece of HTML to be combined with others.
     /// - Parameter content: The HTML to load.
     /// - Returns: The original thing we read, ready to be combined.

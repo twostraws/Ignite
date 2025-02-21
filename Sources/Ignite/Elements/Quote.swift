@@ -36,7 +36,7 @@ public struct Quote: HTML {
     /// - contents: Additional details about the quote, e.g. its source.
     public init(
         @HTMLBuilder contents: () -> some HTML,
-        @InlineHTMLBuilder caption: () -> some InlineElement
+        @InlineElementBuilder caption: () -> some InlineElement
     ) {
         self.contents = contents()
         self.caption = caption()

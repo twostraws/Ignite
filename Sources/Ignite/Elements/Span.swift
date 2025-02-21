@@ -36,7 +36,7 @@ public struct Span: InlineElement {
     /// Creates a span from an inline element builder that returns an array of
     /// elements to place inside the span.
     /// - Parameter contents: The elements to place inside the span.
-    public init(@InlineHTMLBuilder contents: () -> some InlineElement) {
+    public init(@InlineElementBuilder contents: () -> some InlineElement) {
         self.contents = contents()
     }
 
