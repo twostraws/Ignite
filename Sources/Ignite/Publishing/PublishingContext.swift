@@ -359,11 +359,14 @@ final class PublishingContext {
     func render(_ content: Content) {
         let layout = layout(for: content)
 
-        let body = ContentContext.withCurrentContent(content) {
-            let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-            return withEnvironment(values) {
-                Section(layout.body)
-            }
+        let values = EnvironmentValues(
+            sourceDirectory: sourceDirectory,
+            site: site,
+            allContent: allContent,
+            article: content)
+
+        let body = withEnvironment(values) {
+            Section(layout.body)
         }
 
         currentRenderingPath = content.path
