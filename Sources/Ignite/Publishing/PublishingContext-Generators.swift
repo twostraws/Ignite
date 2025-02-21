@@ -142,10 +142,10 @@ extension PublishingContext {
     /// Generates the CSS file containing all media query rules.
     func generateMediaQueryCSS() {
         guard CSSManager.default.hasCSS else { return }
-        CSSManager.default.setThemes(site.allThemes)
+        let mediaQueryCSS = CSSManager.default.generateAllRules(themes: site.allThemes)
         let cssPath = buildDirectory.appending(path: "css/media-queries.min.css")
         do {
-            try CSSManager.default.allRules.write(to: cssPath, atomically: true, encoding: .utf8)
+            try mediaQueryCSS.write(to: cssPath, atomically: true, encoding: .utf8)
         } catch {
             fatalError(.failedToWriteFile("media-queries.min.css"))
         }

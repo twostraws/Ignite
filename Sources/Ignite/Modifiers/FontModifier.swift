@@ -47,7 +47,7 @@ struct FontModifier: HTMLModifier {
         for size in breakpointSizes {
             if let breakpoint = size.breakpoint {
                 CSSManager.default.register(
-                    [.breakpoint(.init(rawValue: breakpoint)!)],
+                    [.breakpoint(.init(stringValue: breakpoint)!)],
                     properties: [("font-size", size.value.stringValue)],
                     className: className
                 )
