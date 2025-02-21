@@ -10,7 +10,7 @@ struct DoubleClickModifier: HTMLModifier {
     let actions: [Action]
 
     func body(content: some HTML) -> any HTML {
-        content.addEvent(name: "ondblclick", actions: actions)
+        content.onEvent(.doubleClick, actions)
     }
 }
 
