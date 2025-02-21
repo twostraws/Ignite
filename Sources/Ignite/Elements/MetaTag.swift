@@ -142,31 +142,33 @@ public struct MetaTag: HeadElement, Sendable {
 
     /// Returns a standard set of social sharing metadata for a given page,
     /// including the page title, description, and image.
-    /// - Parameters:
-    ///   - page: The page for which metadata should be rendered.
-    ///   - configuration: The site configuration.
     /// - Returns: An array of `MetaTag` objects that should be placed
     /// into your page header to enable social sharing.
-    @ElementBuilder<MetaTag> public static func socialSharingTags(for page: Page) -> [MetaTag] {
+    @ElementBuilder<MetaTag> public static func socialSharingTags() -> [MetaTag] {
         let site = PublishingContext.default.site
+        let environment = PublishingContext.default.environment
+
         MetaTag(.openGraphSiteName, content: site.name)
 
-        if let image = page.image {
+        if let image = environment.page.image {
             MetaTag(.openGraphImage, content: image)
             MetaTag(.twitterImage, content: image)
         }
 
-        MetaTag(.openGraphTitle, content: page.title)
-        MetaTag(.twitterTitle, content: page.title)
+        let pageTitle = environment.page.title
+        MetaTag(.openGraphTitle, content: pageTitle)
+        MetaTag(.twitterTitle, content: pageTitle)
 
-        if page.description.isEmpty == false {
-            MetaTag(.openGraphDescription, content: page.description)
-            MetaTag(.twitterDescription, content: page.description)
+        let pageDescription = environment.page.description
+        if pageDescription.isEmpty == false {
+            MetaTag(.openGraphDescription, content: pageDescription)
+            MetaTag(.twitterDescription, content: pageDescription)
         }
 
-        MetaTag(.openGraphURL, content: page.url)
+        let pageURL = environment.page.url
+        MetaTag(.openGraphURL, content: pageURL)
 
-        if let domain = page.url.removingWWW {
+        if let domain = pageURL.removingWWW {
             MetaTag(.twitterDomain, content: domain)
         }
 

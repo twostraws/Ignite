@@ -18,6 +18,10 @@ import Foundation
 class IgniteTestSuite {
     let site: any Site = TestSite()
 
+    var publishingContext: PublishingContext {
+        PublishingContext.default
+    }
+
     /// Creates a new test instance and initializes the publishing context for `TestSite`.
     init() throws {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
