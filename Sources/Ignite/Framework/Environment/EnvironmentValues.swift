@@ -32,17 +32,8 @@ public struct EnvironmentValues {
     /// Locates, loads, and decodes a JSON file in your Resources folder.
     public var decode: DecodeAction
 
-    /// The name of the site
-    public let siteName: String
-
-    /// A string to append to the end of page titles
-    public let siteTitleSuffix: String
-
-    /// An optional description for the site
-    public let siteDescription: String?
-
-    /// The base URL for the site
-    public let siteURL: URL
+    /// The site's metadata, such as name, description, and URL.
+    public let site: SiteMetadata
 
     /// The author of the site
     public let author: String
@@ -77,14 +68,11 @@ public struct EnvironmentValues {
         self.themes = []
         self.decode = .init(sourceDirectory: URL(filePath: ""))
         self.author = ""
-        self.siteName = ""
-        self.siteTitleSuffix = ""
-        self.siteDescription = nil
         self.language = .english
-        self.siteURL = URL(static: "https://example.com")
         self.favicon = nil
         self.builtInIconsEnabled = .localBootstrap
         self.timeZone = .gmt
+        self.site = .empty
     }
 
     init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
@@ -93,14 +81,18 @@ public struct EnvironmentValues {
         self.feedConfiguration = site.feedConfiguration
         self.themes = site.allThemes
         self.author = site.author
-        self.siteName = site.name
-        self.siteTitleSuffix = site.titleSuffix
-        self.siteDescription = site.description
         self.language = site.language
-        self.siteURL = site.url
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
         self.timeZone = site.timeZone
+
+        self.site = SiteMetadata(
+            name: site.name,
+            titleSuffix: site.titleSuffix,
+            description: site.description,
+            url: site.url)
+
+
     }
 
     init(sourceDirectory: URL, site: any Site, allContent: [Content], page: Page) {
