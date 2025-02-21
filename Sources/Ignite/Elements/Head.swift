@@ -19,6 +19,9 @@ public struct Head: DocumentElement {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
+    /// Whether to include standard headers and social sharing tags
+    private var includeStandardHeaders = true
+
     /// The metadata elements for this page.
     var items: [any HeadElement]
 
@@ -26,29 +29,27 @@ public struct Head: DocumentElement {
     /// an array of `HeadElement` objects.
     /// - Parameter items: The `HeadElement` items you want to
     /// include for this page.
-    public init(@HeadElementBuilder items: () -> [any HeadElement]) {
+    public init(@HeadElementBuilder items: () -> [any HeadElement] = { [] }) {
         self.items = items()
     }
 
-    /// A convenience initializer that creates a standard set of headers to use
-    /// for a `Page` instance.
-    /// - Parameters:
-    ///   - page: The `Page` you want to create headers for.
-    ///   - configuration: The `SiteConfiguration`, which includes
-    ///   information about the site being rendered and more.
-    ///   - additionalItems: Additional items to enhance the set of standard headers.
-    public init(
-        for page: Page,
-        @HeadElementBuilder additionalItems: () -> [any HeadElement] = { [] }
-    ) {
-        items = Head.standardHeaders(for: page)
-        items += MetaTag.socialSharingTags(for: page)
-        items += additionalItems()
+    /// Disables the inclusion of standard headers and social sharing tags.
+    /// - Returns: A new Head instance with standard headers disabled
+    public func standardHeadersDisabled() -> Head {
+        var copy = self
+        copy.includeStandardHeaders = false
+        return copy
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
+        var items = items
+        if includeStandardHeaders {
+            items.insert(contentsOf:  MetaTag.socialSharingTags(), at: 0)
+            items.insert(contentsOf: Head.standardHeaders(), at: 0)
+        }
+
         var attributes = attributes
         attributes.tag = "head"
         return attributes.description(wrapping: HTMLCollection(items).render())
@@ -57,18 +58,17 @@ public struct Head: DocumentElement {
     /// A static function, returning the standard set of headers used for a `Page` instance.
     ///
     /// This function can be used when defining a custom header based on the standard set of headers.
-    /// - Parameters:
-    ///   - page: The `Page` you want to create headers for.
-    ///   - configuration: The active `SiteConfiguration`, which includes
-    ///   information about the site being rendered and more.
     @HeadElementBuilder
-    public static func standardHeaders(for page: Page) -> [any HeadElement] {
+    public static func standardHeaders() -> [any HeadElement] {
         // swiftlint:disable:previous cyclomatic_complexity
         MetaTag.utf8
         MetaTag.flexibleViewport
 
-        if page.description.isEmpty == false {
-            MetaTag(name: "description", content: page.description)
+        let environment = PublishingContext.default.environment
+        let pageDescription = environment.page.description
+
+        if pageDescription.isEmpty == false {
+            MetaTag(name: "description", content: pageDescription)
         }
 
         let context = PublishingContext.default
@@ -80,7 +80,7 @@ public struct Head: DocumentElement {
 
         MetaTag.generator
 
-        Title(page.title)
+        Title(environment.page.title)
 
         if site.useDefaultBootstrapURLs == .localBootstrap {
             MetaLink.standardCSS
@@ -109,7 +109,7 @@ public struct Head: DocumentElement {
             MetaLink.mediaQueryCSS
         }
 
-        MetaLink(href: page.url, rel: "canonical")
+        MetaLink(href: environment.page.url, rel: "canonical")
 
         if let favicon = site.favicon {
             MetaLink(href: favicon, rel: .icon)

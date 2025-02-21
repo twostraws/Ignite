@@ -59,7 +59,9 @@ class MetaTagTests: IgniteTestSuite {
             body: Text("not much contents")
         )
 
-        let tags = MetaTag.socialSharingTags(for: page)
+        publishingContext.environment.page = page
+
+        let tags = MetaTag.socialSharingTags()
 
         let expectedTags: [MetaTag] = [
             MetaTag(.openGraphSiteName, content: "My Test Site"),
@@ -88,7 +90,9 @@ class MetaTagTests: IgniteTestSuite {
             body: Text("not much contents")
         )
 
-        let actualTags = MetaTag.socialSharingTags(for: page)
+        publishingContext.environment.page = page
+
+        let actualTags = MetaTag.socialSharingTags()
 
         let expectedTags: [MetaTag] = [
             MetaTag(.openGraphSiteName, content: "My Test Site"),
