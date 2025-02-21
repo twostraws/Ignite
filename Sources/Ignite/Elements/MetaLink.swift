@@ -113,7 +113,8 @@ public struct MetaLink: HeadElement, Sendable {
     /// otherwise the `href` is a URL and  doesn't get `subsite` prepended
     public func render() -> String {
         var attributes = attributes
-        attributes.selfClosingTag = "link"
+        attributes.tag = "link"
+        attributes.tagIsSelfClosing = true
 
         // char[0] of the link 'href' is '/' for an asset; not for a site URL
         let basePath = href.starts(with: "/") ? publishingContext.site.url.path : ""
