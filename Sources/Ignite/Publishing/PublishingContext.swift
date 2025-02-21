@@ -194,7 +194,6 @@ final class PublishingContext {
         generateThemes(site.allThemes)
         generateMediaQueryCSS()
         generateAnimations()
-        await generateTagLayouts()
         generateSiteMap()
         generateFeed()
         generateRobots()

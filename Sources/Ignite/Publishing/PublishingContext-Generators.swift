@@ -47,49 +47,8 @@ extension PublishingContext {
             render(content)
         }
         currentRenderingPath = nil
-    }
 
-    /// Generates all tags pages, including the "all tags" page.
-    func generateTagLayouts() async {
-        if site.tagLayout is EmptyTagLayout { return }
-
-        /// Creates a unique list of sorted tags from across the site, starting
-        /// with `nil` for the "all tags" page.
-        let tags: [String?] = [nil] + Set(allContent.flatMap(\.tags)).sorted()
-
-        for tag in tags {
-            let path: String
-
-            if let tag {
-                path = "tags/\(tag.convertedToSlug() ?? tag)"
-            } else {
-                path = "tags"
-            }
-
-            let outputDirectory = buildDirectory.appending(path: path)
-
-            let values = EnvironmentValues(
-                sourceDirectory: sourceDirectory,
-                site: site,
-                allContent: allContent,
-                tag: tag,
-                taggedContent: content(tagged: tag))
-
-            let body = withEnvironment(values) {
-                Section(site.tagLayout.body)
-            }
-
-            let page = Page(
-                title: "Tags",
-                description: "Tags",
-                url: site.url.appending(path: path),
-                body: body
-            )
-
-            let outputString = render(page, using: site.tagLayout.parentLayout)
-
-            write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
-        }
+        await renderTagLayouts()
     }
 
     /// Generates a sitemap.xml file for this site.
