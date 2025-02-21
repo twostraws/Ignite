@@ -60,7 +60,10 @@ public struct EnvironmentValues {
     public let builtInIconsEnabled: BootstrapOptions
 
     /// The current page being rendered.
-    var page: Page = .empty
+    public internal(set) var page: PageMetadata
+
+    /// The content of the current page being rendered.
+    var pageContent: any HTML = EmptyHTML()
 
     /// The current piece of Markdown content being rendered.
     var article: Content = .empty
@@ -85,9 +88,16 @@ public struct EnvironmentValues {
         self.favicon = nil
         self.builtInIconsEnabled = .localBootstrap
         self.timeZone = .gmt
+        self.page = .empty
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [Content],
+        pageMetadata: PageMetadata,
+        pageContent: any PageContentLayout
+    ) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.content = ContentLoader(content: allContent)
         self.feedConfiguration = site.feedConfiguration
@@ -101,21 +111,71 @@ public struct EnvironmentValues {
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
         self.timeZone = site.timeZone
+        self.page = pageMetadata
+
+        self.pageContent = PublishingContext.default.withEnvironment(self) {
+            pageContent.body
+        }
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content], page: Page) {
-        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        self.page = page
-    }
-
-    init(sourceDirectory: URL, site: any Site, allContent: [Content], article: Content) {
-        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [Content],
+        pageMetadata: PageMetadata,
+        pageContent: any PageContentLayout,
+        article: Content
+    ) {
+        self.decode = DecodeAction(sourceDirectory: sourceDirectory)
+        self.content = ContentLoader(content: allContent)
+        self.feedConfiguration = site.feedConfiguration
+        self.themes = site.allThemes
+        self.author = site.author
+        self.siteName = site.name
+        self.siteTitleSuffix = site.titleSuffix
+        self.siteDescription = site.description
+        self.language = site.language
+        self.siteURL = site.url
+        self.favicon = site.favicon
+        self.builtInIconsEnabled = site.builtInIconsEnabled
+        self.timeZone = site.timeZone
+        self.page = pageMetadata
         self.article = article
+
+        self.pageContent = PublishingContext.default.withEnvironment(self) {
+            pageContent.body
+        }
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content], tag: String?, taggedContent: [Content]) {
-        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [Content],
+        pageMetadata: PageMetadata,
+        pageContent: any PageContentLayout,
+        tag: String?,
+        taggedContent: [Content]
+    ) {
+        self.decode = DecodeAction(sourceDirectory: sourceDirectory)
+        self.content = ContentLoader(content: allContent)
+        self.feedConfiguration = site.feedConfiguration
+        self.themes = site.allThemes
+        self.author = site.author
+        self.siteName = site.name
+        self.siteTitleSuffix = site.titleSuffix
+        self.siteDescription = site.description
+        self.language = site.language
+        self.siteURL = site.url
+        self.favicon = site.favicon
+        self.builtInIconsEnabled = site.builtInIconsEnabled
+        self.timeZone = site.timeZone
+        self.page = pageMetadata
+
         self.tag = tag
         self.taggedContent = taggedContent
+
+        self.pageContent = PublishingContext.default.withEnvironment(self) {
+            pageContent.body
+        }
     }
 }

@@ -25,8 +25,8 @@ public struct Body: DocumentElement {
     }
 
     public init() {
-        let page = PublishingContext.default.environment.page
-        self.items = flatUnwrap(page.body)
+        let pageContent = PublishingContext.default.environment.pageContent
+        self.items = flatUnwrap(pageContent)
     }
 
     /// Removes the Bootstrap `container` class from the body element.

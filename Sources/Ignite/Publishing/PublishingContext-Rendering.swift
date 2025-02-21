@@ -8,20 +8,6 @@
 import Foundation
 
 extension PublishingContext {
-    /// Renders one static page using the correct theme, which is taken either from the
-    /// provided them or from the main site theme.
-    func render(_ page: Page, using layout: any Layout) -> String {
-        let values = EnvironmentValues(
-            sourceDirectory: sourceDirectory,
-            site: site,
-            allContent: allContent,
-            page: page)
-
-        return withEnvironment(values) {
-            layout.body.render()
-        }
-    }
-
     /// Renders a static page.
     /// - Parameters:
     ///   - page: The page to render.
@@ -31,20 +17,24 @@ extension PublishingContext {
         let path = isHomePage ? "" : staticLayout.path
         currentRenderingPath = isHomePage ? "/" : staticLayout.path
 
-        let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        let body = withEnvironment(values) {
-            staticLayout.body
-        }
-
-        let page = Page(
+        let metadata = PageMetadata(
             title: staticLayout.title,
             description: staticLayout.description,
             url: site.url.appending(path: path),
-            image: staticLayout.image,
-            body: body
+            image: staticLayout.image
         )
 
-        let outputString = render(page, using: staticLayout.parentLayout)
+        let values = EnvironmentValues(
+            sourceDirectory: sourceDirectory,
+            site: site,
+            allContent: allContent,
+            pageMetadata: metadata,
+            pageContent: staticLayout)
+
+        let outputString = withEnvironment(values) {
+            staticLayout.parentLayout.body.render()
+        }
+
         let outputDirectory = buildDirectory.appending(path: path)
         write(outputString, to: outputDirectory, priority: isHomePage ? 1 : 0.9)
     }
@@ -53,33 +43,32 @@ extension PublishingContext {
     /// - Parameter content: The content to render.
     func render(_ content: Content) {
         let layout = layout(for: content)
+        currentRenderingPath = content.path
+
+        let metadata = PageMetadata(
+            title: content.title,
+            description: content.description,
+            url: site.url.appending(path: content.path),
+            image: content.image.flatMap { URL(string: $0) }
+        )
 
         let values = EnvironmentValues(
             sourceDirectory: sourceDirectory,
             site: site,
             allContent: allContent,
+            pageMetadata: metadata,
+            pageContent: layout,
             article: content)
 
-        let body = withEnvironment(values) {
-            Section(layout.body)
+        let outputString = withEnvironment(values) {
+            layout.parentLayout.body.render()
         }
 
-        currentRenderingPath = content.path
-
-        let page = Page(
-            title: content.title,
-            description: content.description,
-            url: site.url.appending(path: content.path),
-            image: content.image.flatMap { URL(string: $0) },
-            body: body
-        )
-
-        let outputString = render(page, using: layout.parentLayout)
         let outputDirectory = buildDirectory.appending(path: content.path)
         write(outputString, to: outputDirectory, priority: 0.8)
     }
 
-    /// Renders all tags pages, including the "all tags" page.
+    /// Generates all tags pages, including the "all tags" page.
     func renderTagLayouts() async {
         if site.tagLayout is EmptyTagLayout { return }
 
@@ -88,35 +77,33 @@ extension PublishingContext {
         let tags: [String?] = [nil] + Set(allContent.flatMap(\.tags)).sorted()
 
         for tag in tags {
-            let path: String
-
-            if let tag {
-                path = "tags/\(tag.convertedToSlug() ?? tag)"
+            let path: String = if let tag {
+                "tags/\(tag.convertedToSlug() ?? tag)"
             } else {
-                path = "tags"
+                "tags"
             }
 
             let outputDirectory = buildDirectory.appending(path: path)
+            let tagLayout = site.tagLayout
+
+            let metadata = PageMetadata(
+                title: "Tags",
+                description: "Tags",
+                url: site.url.appending(path: path)
+            )
 
             let values = EnvironmentValues(
                 sourceDirectory: sourceDirectory,
                 site: site,
                 allContent: allContent,
+                pageMetadata: metadata,
+                pageContent: tagLayout,
                 tag: tag,
                 taggedContent: content(tagged: tag))
 
-            let body = withEnvironment(values) {
-                Section(site.tagLayout.body)
+            let outputString = withEnvironment(values) {
+                tagLayout.parentLayout.body.render()
             }
-
-            let page = Page(
-                title: "Tags",
-                description: "Tags",
-                url: site.url.appending(path: path),
-                body: body
-            )
-
-            let outputString = render(page, using: site.tagLayout.parentLayout)
 
             write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }
