@@ -35,7 +35,7 @@ public protocol Layout {
 public extension Layout {
     /// The current page being rendered.
     var page: Page {
-        PageContext.current
+        PublishingContext.default.environment.page
     }
 
     /// Generates a unique identifier for this layout based on its file location and type.

@@ -316,11 +316,14 @@ final class PublishingContext {
             finalLayout = layout
         }
 
-        return PageContext.withCurrentPage(page) {
-            let values = EnvironmentValues(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-            return withEnvironment(values) {
-                finalLayout.body.render()
-            }
+        let values = EnvironmentValues(
+            sourceDirectory: sourceDirectory,
+            site: site,
+            allContent: allContent,
+            page: page)
+
+        return withEnvironment(values) {
+            finalLayout.body.render()
         }
     }
 
