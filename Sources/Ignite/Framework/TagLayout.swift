@@ -31,10 +31,10 @@ public protocol TagLayout: Layoutable {
 extension TagLayout {
     /// The current tag during page generation.
     public var tag: String? {
-        TagContext.current
+        PublishingContext.default.environment.tag
     }
 
     public var content: [Content] {
-        TagContext.content
+        PublishingContext.default.environment.taggedContent
     }
 }
