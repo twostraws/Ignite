@@ -59,4 +59,12 @@ struct ModifiedHTML: HTML, InlineElement, HeadElement, DocumentElement, Navigati
             return attrs.description(wrapping: rawContent)
         }
     }
+
+    /// Recursively unwraps modified content to find the original underlying type
+    var unwrapped: any HTML {
+        if let modified = content as? ModifiedHTML {
+            return modified.unwrapped
+        }
+        return content
+    }
 }
