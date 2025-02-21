@@ -23,12 +23,4 @@ public struct DocumentBuilder {
             }
         }
     }
-
-    // Support empty layouts
-    public static func buildBlock() -> some HTML {
-        Document {
-            Head()
-            Body()
-        }
-    }
 }
