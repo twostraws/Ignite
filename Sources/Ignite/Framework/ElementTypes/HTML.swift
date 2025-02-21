@@ -250,36 +250,6 @@ extension HTML {
         return self
     }
 
-    /// Adds a wrapper div with the specified attributes to the element's storage
-    /// - Parameter newAttributes: The attributes to apply to the wrapper div
-    /// - Returns: The original element
-    func containerAttributes(_ newAttributes: ContainerAttributes...) -> Self {
-        var attributes = attributes
-        attributes.containerAttributes.formUnion(newAttributes.map { $0 })
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds a wrapper div with the specified class to the element's storage
-    /// - Parameter className: The class to apply to the wrapper div
-    /// - Returns: The original element
-    func containerClass(_ className: String) -> Self {
-        var attributes = attributes
-        attributes.containerAttributes.append(.init(classes: [className]))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds a wrapper div with the specified style to the element's storage
-    /// - Parameter styles: The styles to apply to the wrapper div
-    /// - Returns: The original element
-    func containerStyle(_ styles: InlineStyle...) -> Self {
-        var attributes = attributes
-        attributes.containerAttributes.append(.init(styles: OrderedSet(styles)))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
     /// Sets the tabindex behavior for this element.
     /// - Parameter tabFocus: The TabFocus enum value defining keyboard navigation behavior
     /// - Returns: The modified HTML element

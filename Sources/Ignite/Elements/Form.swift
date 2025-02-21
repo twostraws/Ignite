@@ -220,19 +220,23 @@ public struct Form: HTML {
 
         case .floating:
             Section {
-                sizedTextField
-                label
+                Section {
+                    sizedTextField
+                    label
+                }
+                .class("form-floating")
             }
-            .class("form-floating")
-            .containerClass(getColumnClass(for: textField, totalColumns: columnCount))
+            .class(getColumnClass(for: textField, totalColumns: columnCount))
 
         case .front:
             Section {
-                label.class("col-form-label col-sm-2")
-                Section(sizedTextField).class("col-sm-10")
+                Section {
+                    label.class("col-form-label col-sm-2")
+                    Section(sizedTextField).class("col-sm-10")
+                }
+                .class("row")
             }
-            .class("row")
-            .containerClass(getColumnClass(for: textField, totalColumns: columnCount))
+            .class(getColumnClass(for: textField, totalColumns: columnCount))
 
         case .top:
             Section {
