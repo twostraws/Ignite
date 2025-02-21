@@ -37,15 +37,13 @@ class AttributesTest: IgniteTestSuite {
     @Test("Events are sorted", arguments: tags)
     func events_areSorted(tag: String) async throws {
         let element = Tag(tag) {}
-            .addEvent(name: "bar", actions: [ShowAlert(message: "bar")])
-            .addEvent(name: "baz", actions: [ShowAlert(message: "baz")])
-            .addEvent(name: "qux", actions: [ShowAlert(message: "qux")])
-            .addEvent(name: "foo", actions: [ShowAlert(message: "foo")])
+            .onEvent(.mouseUp, [ShowAlert(message: "bar")])
+            .onEvent(.mouseDown, [ShowAlert(message: "baz")])
 
         let output = element.render()
 
         #expect(output == """
-        <\(tag) bar=\"alert('bar')\" baz=\"alert('baz')\" foo=\"alert('foo')\" qux=\"alert('qux')\"></\(tag)>
+        <\(tag) onmousedown=\"alert('baz')\" onmouseup=\"alert('bar')\"></\(tag)>
         """)
     }
 
