@@ -203,31 +203,6 @@ extension HTML {
         AttributeStore.default.merge(attributes, intoHTML: id)
     }
 
-    /// Adds a custom attribute to the element.
-    /// - Parameters:
-    ///   - name: The name of the custom attribute
-    ///   - value: The value of the custom attribute
-    /// - Returns: The modified `HTML` element
-    func customAttribute(name: String, value: String) -> Self {
-        var attributes = attributes
-        attributes.customAttributes.append(Attribute(name: name, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
-    /// Adds a custom attribute to the element.
-    /// - Parameters:
-    ///   - name: The name of the custom attribute
-    ///   - value: The value of the custom attribute
-    /// - Returns: The modified `HTML` element
-    func customAttribute(_ attribute: Attribute?) -> Self {
-        guard let attribute else { return self }
-        var attributes = attributes
-        attributes.customAttributes.append(attribute)
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
     /// Merges a complete set of core attributes into this element.
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified HTML element
@@ -241,7 +216,7 @@ extension HTML {
     /// - Parameter tabFocus: The TabFocus enum value defining keyboard navigation behavior
     /// - Returns: The modified HTML element
     /// - Note: Adds appropriate HTML attribute based on TabFocus enum
-    func tabFocus(_ tabFocus: TabFocus) -> Self {
+    func tabFocus(_ tabFocus: TabFocus) -> some HTML {
         customAttribute(name: tabFocus.htmlName, value: tabFocus.value)
     }
 

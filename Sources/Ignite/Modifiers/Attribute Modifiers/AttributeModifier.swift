@@ -7,18 +7,14 @@
 
 /// A modifier that adds a custom attribute to the element.
 struct AttributeModifier: HTMLModifier {
-    let name: String
-    let value: String?
+    let attribute: Attribute?
+
     /// Adds a custom attribute to the element.
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with the style property added
     func body(content: some HTML) -> any HTML {
+        guard let attribute else { return content }
         var copy = content
-        let attribute: Attribute = if let value {
-            .init(name: name, value: value)
-        } else {
-            .init(name)
-        }
         copy.attributes.customAttributes.append(attribute)
         AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
         return copy
@@ -32,14 +28,14 @@ public extension HTML {
     ///   - value: The value of the attribute
     /// - Returns: The modified element
     func attribute(_ name: String, _ value: String) -> some HTML {
-        modifier(AttributeModifier(name: name, value: value))
+        modifier(AttributeModifier(attribute: .init(name: name, value: value)))
     }
 
     /// Adds a custom boolean attribute to the element.
     /// - Parameter name: The name of the attribute
     /// - Returns: The modified element
     func attribute(_ name: String) -> some HTML {
-        modifier(AttributeModifier(name: name, value: nil))
+        modifier(AttributeModifier(attribute: .init(name)))
     }
 }
 
@@ -50,13 +46,13 @@ public extension InlineElement {
     ///   - value: The value of the attribute
     /// - Returns: The modified element
     func attribute(_ name: String, _ value: String) -> some InlineElement {
-        modifier(AttributeModifier(name: name, value: value))
+        modifier(AttributeModifier(attribute: .init(name: name, value: value)))
     }
 
     /// Adds a custom boolean attribute to the element.
     /// - Parameter name: The name of the attribute
     /// - Returns: The modified element
     func attribute(_ name: String) -> some InlineElement {
-        modifier(AttributeModifier(name: name, value: nil))
+        modifier(AttributeModifier(attribute: .init(name)))
     }
 }
