@@ -288,11 +288,10 @@ extension HTML {
         customAttribute(name: tabFocus.htmlName, value: tabFocus.value)
     }
 
-    @discardableResult func tag(_ tag: String) -> Self {
+    func tag(_ tag: String) {
         var attributes = attributes
         attributes.tag = tag
         AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
     }
 
     /// Adjusts the number of columns assigned to this element.
