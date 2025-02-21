@@ -84,26 +84,28 @@ struct FontModifier: HTMLModifier {
 
             return modified
         } else {
-            var containerAttributes = ContainerAttributes(styles: [
-                .init(.fontWeight, value: String(font.weight.rawValue))
-            ])
+            var styles = [InlineStyle]()
+            var classes = [String]()
+
+            styles.append(.init(.fontWeight, value: String(font.weight.rawValue)))
 
             if let name = font.name, name.isEmpty == false {
-                containerAttributes.styles.append(.init(.fontFamily, value: name))
+                styles.append(.init(.fontFamily, value: name))
             }
 
             if let responsiveSize = font.responsiveSize {
                 let classNames = registerClasses(for: responsiveSize)
-                containerAttributes.classes.append(classNames)
+                classes.append(classNames)
             } else if let size = font.size {
-                containerAttributes.styles.append(.init(.fontSize, value: size.stringValue))
+                styles.append(.init(.fontSize, value: size.stringValue))
             } else if let style = font.style {
-                containerAttributes.styles.append(.init(.fontSize, value: style.sizeVariable))
+                styles.append(.init(.fontSize, value: style.sizeVariable))
             }
 
-            return content
-                .containerAttributes(containerAttributes)
-                .class("font-inherit")
+            return Section(content.class("font-inherit"))
+                .style(styles)
+                .class(classes)
+
         }
     }
 }

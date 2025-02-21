@@ -1,5 +1,5 @@
 //
-// TextLevelModifier.swift
+// FontStyleModifier.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -15,16 +15,18 @@ struct FontStyleModifier: HTMLModifier {
     /// - Returns: The modified HTML content with text level styling applied
     func body(content: some HTML) -> any HTML {
 
-        let isText = content.body is Text ||
-        (content as? ModifiedHTML)?.unwrapped is Text
+        let isText: Bool = if let modified = content as? ModifiedHTML {
+            modified.unwrapped is Text
+        } else {
+            content.body is Text
+        }
 
         if isText {
             content
                 .fontStyle(style)
         } else {
-            content
-                .containerClass(style.fontSizeClass)
-                .class("font-inherit")
+            Section(content.class("font-inherit"))
+                .class(style.fontSizeClass)
         }
     }
 }
