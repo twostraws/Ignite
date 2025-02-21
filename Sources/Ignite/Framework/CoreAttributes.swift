@@ -52,13 +52,10 @@ struct CoreAttributes: Sendable {
     var customAttributes = OrderedSet<Attribute>()
 
     /// The HTML tag to use for this element, e.g. "div" or "p".
-    var tag: String?
+    var tag: String = ""
 
-    /// An optional different tag to use when closing this element, e.g. "a" for links with href attributes.
-    var closingTag: String?
-
-    /// The tag to use for self-closing elements like "meta" or "img".
-    var selfClosingTag: String?
+    /// Whether this element uses a self-closing tag.
+    var tagIsSelfClosing = false
 
     /// How many columns this should occupy when placed in a grid.
     var columnWidth: ColumnWidth = .automatic
@@ -185,21 +182,19 @@ struct CoreAttributes: Sendable {
         var result = content ?? attributes
 
         if containerAttributes.isEmpty {
-            if let selfClosingTag {
-                return "<\(selfClosingTag)\(attributes) />"
+            if tagIsSelfClosing {
+                return "<\(tag)\(attributes) />"
             }
-            if let tag {
-                let closing = closingTag ?? tag
-                return "<\(tag)\(attributes)>\(content ?? "")</\(closing)>"
+            if tag.isEmpty == false {
+                return "<\(tag)\(attributes)>\(content ?? "")</\(tag)>"
             }
             return result
         }
 
-        if let selfClosingTag {
-            result = "<\(selfClosingTag)\(attributes) />"
-        } else if let tag {
-            let closing = closingTag ?? tag
-            result = "<\(tag)\(attributes)>\(result)</\(closing)>"
+        if tagIsSelfClosing {
+            result = "<\(tag)\(attributes) />"
+        } else if tag.isEmpty == false {
+            result = "<\(tag)\(attributes)>\(result)</\(tag)>"
         }
 
         // Apply containers from inner to outer

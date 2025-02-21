@@ -24,7 +24,8 @@ public struct Divider: HTML, DropdownItem {
     /// - Returns: The HTML for this element.
     public func render() -> String {
         var attributes = attributes
-        attributes.selfClosingTag = "hr"
+        attributes.tag = "hr"
+        attributes.tagIsSelfClosing = true
         return attributes.description()
     }
 }
