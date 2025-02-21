@@ -30,7 +30,8 @@ public class AttributeStore {
         _ attributes: CoreAttributes,
         intoHTML id: String,
         removedStyles: [InlineStyle]? = nil,
-        removedClasses: [String]? = nil
+        removedClasses: [String]? = nil,
+        excludeTag: Bool = false
     ) -> CoreAttributes {
         let currentAttributes = storage[id] ?? CoreAttributes()
         var mergedAttributes = currentAttributes
@@ -51,7 +52,7 @@ public class AttributeStore {
             mergedAttributes.id = attributes.id
         }
 
-        if attributes.tag != nil {
+        if attributes.tag != nil && excludeTag == false {
             mergedAttributes.tag = attributes.tag
         }
 
@@ -93,5 +94,9 @@ public class AttributeStore {
     ///   - classes: Array of classes to remove after merging
     func merge(_ attributes: CoreAttributes, intoHTML id: String, removing classes: some Collection<String>) {
         storage[id] = mergeAttributes(attributes, intoHTML: id, removedClasses: Array(classes))
+    }
+
+    func merge(_ attributes: CoreAttributes, intoHTML id: String, excludeTag: Bool) {
+        storage[id] = mergeAttributes(attributes, intoHTML: id, excludeTag: excludeTag)
     }
 }
