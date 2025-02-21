@@ -68,9 +68,15 @@ extension PublishingContext {
 
             let outputDirectory = buildDirectory.appending(path: path)
 
-            let body = TagContext.withCurrentTag(tag, content: content(tagged: tag)) {
-                let tagLayoutBody = site.tagLayout.body
-                return Section(tagLayoutBody)
+            let values = EnvironmentValues(
+                sourceDirectory: sourceDirectory,
+                site: site,
+                allContent: allContent,
+                tag: tag,
+                taggedContent: content(tagged: tag))
+
+            let body = withEnvironment(values) {
+                Section(site.tagLayout.body)
             }
 
             let page = Page(

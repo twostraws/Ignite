@@ -60,7 +60,13 @@ public struct EnvironmentValues {
     public let builtInIconsEnabled: BootstrapOptions
 
     /// The current page being rendered.
-    let page: Page
+    var page: Page = .empty
+
+    /// The current tag of the page being rendered.
+    var tag: String?
+
+    /// Content that has the current tag.
+    var taggedContent: [Content] = []
 
     public init() {
         self.content = ContentLoader(content: [])
@@ -76,10 +82,9 @@ public struct EnvironmentValues {
         self.favicon = nil
         self.builtInIconsEnabled = .localBootstrap
         self.timeZone = .gmt
-        self.page = .empty
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content], page: Page = .empty) {
+    init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.content = ContentLoader(content: allContent)
         self.feedConfiguration = site.feedConfiguration
@@ -93,6 +98,16 @@ public struct EnvironmentValues {
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
         self.timeZone = site.timeZone
+    }
+
+    init(sourceDirectory: URL, site: any Site, allContent: [Content], page: Page = .empty) {
+        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
         self.page = page
+    }
+
+    init(sourceDirectory: URL, site: any Site, allContent: [Content], tag: String?, taggedContent: [Content]) {
+        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+        self.tag = tag
+        self.taggedContent = taggedContent
     }
 }
