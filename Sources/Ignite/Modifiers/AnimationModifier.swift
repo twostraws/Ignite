@@ -27,8 +27,9 @@ struct AnimationModifier: HTMLModifier {
             content.applyAnimation(transition, direction: nil, trigger: trigger)
         } else if let animation {
             content.applyAnimation(animation, direction: direction, trigger: trigger)
+        } else {
+            content
         }
-        content
     }
 }
 
