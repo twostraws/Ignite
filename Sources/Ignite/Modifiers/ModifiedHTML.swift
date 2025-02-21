@@ -24,25 +24,11 @@ struct ModifiedHTML: HTML, InlineElement, HeadElement, DocumentElement, Navigati
     ///   - content: The HTML content to modify
     ///   - modifier: The modifier to apply to the content
     init(_ content: any HTML, modifier: any HTMLModifier) {
-        let unwrapped: any HTML
-        if let modified = content as? ModifiedHTML {
-            self.id = modified.id
-            unwrapped = modified.content
+        if content.isPrimitive {
+            self.content = modifier.body(content: content)
         } else {
-            unwrapped = content
-        }
-
-        let modified: any HTML
-        if unwrapped.isPrimitive {
-            modified = modifier.body(content: unwrapped)
-            self.content = modified
-            // In case modified is a new view—that is, one different
-            // from unwrapped—we need to merge unwrapped's attributes
-            AttributeStore.default.merge(unwrapped.attributes, intoHTML: modified.id)
-        } else {
-            self.content = unwrapped
-            // Store attributes in ModifiedHTML
-            _ = modifier.body(content: self)
+            // Wrap in a Section so that applied attributes persist
+            self.content = modifier.body(content: Section(content))
         }
     }
 
@@ -50,13 +36,11 @@ struct ModifiedHTML: HTML, InlineElement, HeadElement, DocumentElement, Navigati
     /// - Returns: The rendered HTML string
     func render() -> String {
         if content.isPrimitive {
+            // Merge any attributes this ModifiedHTML might be holding to our primitive type
             AttributeStore.default.merge(attributes, intoHTML: content.id)
             return content.render()
         } else {
-            let rawContent = content.render()
-            var attrs = attributes
-            if attrs.tag == nil { attrs.tag = "div" }
-            return attrs.description(wrapping: rawContent)
+            return content.render()
         }
     }
 
