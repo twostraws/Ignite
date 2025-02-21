@@ -174,7 +174,7 @@ public struct NavigationBar: HTML {
         .render()
     }
 
-    private func renderToggleButton() -> Button {
+    private func renderToggleButton() -> some InlineElement {
         Button {
             Span()
                 .class("navbar-toggler-icon")

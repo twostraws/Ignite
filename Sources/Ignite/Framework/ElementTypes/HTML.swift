@@ -146,19 +146,6 @@ extension HTML {
         return self
     }
 
-    /// Adds an ARIA attribute to the element.
-    /// - Parameters:
-    ///   - key: The ARIA attribute key
-    ///   - value: The ARIA attribute value
-    /// - Returns: The modified `HTML` element
-    func aria(_ key: AriaType, _ value: String?) -> Self {
-        guard let value else { return self }
-        var attributes = attributes
-        attributes.aria.append(Attribute(name: key.rawValue, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
-    }
-
     /// Adds a data attribute to the element.
     /// - Parameters:
     ///   - name: The name of the data attribute
