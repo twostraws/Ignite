@@ -91,10 +91,10 @@ public struct Grid: HTML, HorizontalAligning {
 
         return Section {
             ForEach(items) { item in
-                if let passthrough = item as? any PassthroughHTML {
+                if let passthrough = item as? any PassthroughElement {
                     handlePassthrough(passthrough, attributes: passthrough.attributes)
                 } else if let modified = item as? ModifiedHTML,
-                          let passthrough = modified.content as? any PassthroughHTML {
+                          let passthrough = modified.content as? any PassthroughElement {
                     handlePassthrough(passthrough, attributes: modified.attributes)
                 } else if let modified = item as? ModifiedHTML {
                     Section(modified)
@@ -116,7 +116,7 @@ public struct Grid: HTML, HorizontalAligning {
     ///   - passthrough: The passthrough entity containing the HTML elements to render.
     ///   - attributes: HTML attributes to apply to each element in the group.
     /// - Returns: A view containing the styled group elements.
-    func handlePassthrough(_ passthrough: any PassthroughHTML, attributes: CoreAttributes) -> some HTML {
+    func handlePassthrough(_ passthrough: any PassthroughElement, attributes: CoreAttributes) -> some HTML {
         let gutterClass = if case .semantic(let amount) = spacingAmount {
             "g-\(amount.rawValue)"
         } else {
