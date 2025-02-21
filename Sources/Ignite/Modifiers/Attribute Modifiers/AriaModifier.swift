@@ -8,11 +8,12 @@
 /// A modifier that adds an ARIA attribute to the element.
 struct AriaModifier: HTMLModifier {
     let key: AriaType
-    let value: String
+    let value: String?
     /// Adds an ARIA attribute to the element.
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with the style property added
     func body(content: some HTML) -> any HTML {
+        guard let value else { return content }
         var copy = content
         copy.attributes.aria.append(Attribute(name: key.rawValue, value: value))
         AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
