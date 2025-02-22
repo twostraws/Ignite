@@ -24,11 +24,7 @@ public protocol TagLayout: PageContentLayout {}
 
 extension TagLayout {
     /// The current tag during page generation.
-    public var tag: String? {
-        PublishingContext.default.environment.tag
-    }
-
-    public var content: [Content] {
-        PublishingContext.default.environment.taggedContent
+    public var tag: any Category {
+        PublishingContext.default.environment.category
     }
 }

@@ -56,8 +56,8 @@ public struct EnvironmentValues {
     /// The current piece of Markdown content being rendered.
     var article: Content = .empty
 
-    /// The current tag of the page being rendered.
-    var tag: String?
+    /// The current category of the page being rendered.
+    var category: any Category = EmptyCategory()
 
     /// Content that has the current tag.
     var taggedContent: [Content] = []
@@ -105,9 +105,8 @@ public struct EnvironmentValues {
         self.article = article
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content], tag: String?, taggedContent: [Content]) {
+    init(sourceDirectory: URL, site: any Site, allContent: [Content], category: any Category) {
         self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        self.tag = tag
-        self.taggedContent = taggedContent
+        self.category = category
     }
 }

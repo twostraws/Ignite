@@ -98,12 +98,17 @@ extension PublishingContext {
 
             let outputDirectory = buildDirectory.appending(path: path)
 
+            let category: any Category = if let tag {
+                TagCategory(name: tag, content: content(tagged: tag))
+            } else {
+                AllTagsCategory(content: content(tagged: nil))
+            }
+
             let values = EnvironmentValues(
                 sourceDirectory: sourceDirectory,
                 site: site,
                 allContent: allContent,
-                tag: tag,
-                taggedContent: content(tagged: tag))
+                category: category)
 
             let body = withEnvironment(values) {
                 Section(site.tagLayout.body)
