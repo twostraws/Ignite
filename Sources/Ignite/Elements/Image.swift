@@ -98,7 +98,8 @@ public struct Image: InlineElement, LazyLoadable {
     /// - Returns: The HTML for this element.
     private func render(path: String, description: String) -> String {
         var attributes = attributes
-        attributes.selfClosingTag = "img"
+        attributes.tag = "img"
+        attributes.tagIsSelfClosing = true
         attributes.append(customAttributes:
             .init(name: "src", value: path),
             .init(name: "alt", value: description)

@@ -71,8 +71,8 @@ public struct Column: HTML, HorizontalAligning {
         if verticalAlignment != .top {
             columnAttributes.append(classes: ["align-\(verticalAlignment.rawValue)"])
         }
-        columnAttributes.tag = "td colspan=\"\(columnSpan)\""
-        columnAttributes.closingTag = "td"
+        columnAttributes.tag = "td"
+        columnAttributes.append(customAttributes: .init(name: "colspan", value: columnSpan.formatted()))
         return columnAttributes.description(wrapping: HTMLCollection(items).render())
     }
 }

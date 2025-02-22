@@ -24,7 +24,7 @@ public struct Text: HTML, DropdownItem, HorizontalAligning {
     var font: Font.Style {
         if attributes.classes.contains("lead") {
             .lead
-        } else if let tag = attributes.tag, let style = Font.Style(rawValue: tag) {
+        } else if let style = Font.Style(rawValue: attributes.tag) {
             style
         } else {
             .body

@@ -15,7 +15,6 @@ import Foundation
 /// ```swift
 /// struct ContentView: HTMLRootElement {
 ///     @Environment(\.themes) var themes
-///     @Environment(\.siteConfiguration) var config
 /// }
 /// ```
 @MainActor
@@ -32,17 +31,8 @@ public struct EnvironmentValues {
     /// Locates, loads, and decodes a JSON file in your Resources folder.
     public var decode: DecodeAction
 
-    /// The name of the site
-    public let siteName: String
-
-    /// A string to append to the end of page titles
-    public let siteTitleSuffix: String
-
-    /// An optional description for the site
-    public let siteDescription: String?
-
-    /// The base URL for the site
-    public let siteURL: URL
+    /// The site's metadata, such as name, description, and URL.
+    public let site: SiteMetadata
 
     /// The author of the site
     public let author: String
@@ -60,7 +50,7 @@ public struct EnvironmentValues {
     public let builtInIconsEnabled: BootstrapOptions
 
     /// The current page being rendered.
-    public internal(set) var page: PageMetadata
+    internal(set) public var page: PageMetadata
 
     /// The content of the current page being rendered.
     var pageContent: any HTML = EmptyHTML()
@@ -80,15 +70,12 @@ public struct EnvironmentValues {
         self.themes = []
         self.decode = .init(sourceDirectory: URL(filePath: ""))
         self.author = ""
-        self.siteName = ""
-        self.siteTitleSuffix = ""
-        self.siteDescription = nil
         self.language = .english
-        self.siteURL = URL(static: "https://example.com")
         self.favicon = nil
         self.builtInIconsEnabled = .localBootstrap
         self.timeZone = .gmt
         self.page = .empty
+        self.site = .empty
     }
 
     init(
@@ -103,15 +90,17 @@ public struct EnvironmentValues {
         self.feedConfiguration = site.feedConfiguration
         self.themes = site.allThemes
         self.author = site.author
-        self.siteName = site.name
-        self.siteTitleSuffix = site.titleSuffix
-        self.siteDescription = site.description
         self.language = site.language
-        self.siteURL = site.url
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
         self.timeZone = site.timeZone
         self.page = pageMetadata
+        
+        self.site = SiteMetadata(
+            name: site.name,
+            titleSuffix: site.titleSuffix,
+            description: site.description,
+            url: site.url)
 
         self.pageContent = PublishingContext.default.withEnvironment(self) {
             pageContent.body
@@ -131,15 +120,18 @@ public struct EnvironmentValues {
         self.feedConfiguration = site.feedConfiguration
         self.themes = site.allThemes
         self.author = site.author
-        self.siteName = site.name
-        self.siteTitleSuffix = site.titleSuffix
-        self.siteDescription = site.description
         self.language = site.language
-        self.siteURL = site.url
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
         self.timeZone = site.timeZone
         self.page = pageMetadata
+        
+        self.site = SiteMetadata(
+            name: site.name,
+            titleSuffix: site.titleSuffix,
+            description: site.description,
+            url: site.url)
+        
         self.article = article
 
         self.pageContent = PublishingContext.default.withEnvironment(self) {
@@ -161,15 +153,17 @@ public struct EnvironmentValues {
         self.feedConfiguration = site.feedConfiguration
         self.themes = site.allThemes
         self.author = site.author
-        self.siteName = site.name
-        self.siteTitleSuffix = site.titleSuffix
-        self.siteDescription = site.description
         self.language = site.language
-        self.siteURL = site.url
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
         self.timeZone = site.timeZone
         self.page = pageMetadata
+        
+        self.site = SiteMetadata(
+            name: site.name,
+            titleSuffix: site.titleSuffix,
+            description: site.description,
+            url: site.url)
 
         self.tag = tag
         self.taggedContent = taggedContent

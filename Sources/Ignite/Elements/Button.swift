@@ -175,12 +175,16 @@ public struct Button: InlineElement {
         var buttonAttributes = attributes
             .appending(classes: Button.classes(forRole: role, size: size))
             .appending(aria: Button.aria(forRole: role))
+
+        buttonAttributes.append(customAttributes: .init(name: "type", value: type.htmlName))
+
         if isDisabled {
             buttonAttributes.append(customAttributes: .disabled)
         }
+
         let output = HTMLCollection(label).render()
-        buttonAttributes.tag = "button type=\"\(type.htmlName)\""
-        buttonAttributes.closingTag = "button"
+        buttonAttributes.tag = "button"
+
         return buttonAttributes.description(wrapping: output)
     }
 }

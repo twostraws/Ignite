@@ -180,7 +180,8 @@ public struct MetaTag: HeadElement, Sendable {
     /// - Returns: The HTML for this element.
     public func render() -> String {
         var attributes = CoreAttributes()
-        attributes.selfClosingTag = "meta"
+        attributes.tag = "meta"
+        attributes.tagIsSelfClosing = true
 
         if charset.isEmpty {
             attributes.append(customAttributes:
