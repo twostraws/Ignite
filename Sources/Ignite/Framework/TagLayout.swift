@@ -28,7 +28,7 @@ extension TagLayout {
         PublishingContext.shared.environment.tag
     }
 
-    public var content: [Content] {
+    public var content: [Article] {
         PublishingContext.shared.environment.taggedContent
     }
 }

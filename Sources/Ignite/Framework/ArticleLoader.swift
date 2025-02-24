@@ -6,18 +6,18 @@
 //
 
 @MainActor
-public struct ContentLoader {
-    public var all: [Content]
+public struct ArticleLoader {
+    public var all: [Article]
 
-    init(content: [Content]) {
+    init(content: [Article]) {
         all = content
     }
 
-    public func typed(_ type: String) -> [Content] {
+    public func typed(_ type: String) -> [Article] {
         all.filter { $0.type == type }
     }
 
-    public func tagged(_ tag: String) -> [Content] {
+    public func tagged(_ tag: String) -> [Article] {
         all.filter { $0.tags.contains(tag) }
     }
 }

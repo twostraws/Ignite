@@ -28,10 +28,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
 
     @Test("Body Test")
     func body() async throws {
-        publishingContext.environment.page = Page(
-            title: "TITLE", description: "DESCRIPTION",
-            url: site.url,
-            body: Text("TEXT"))
+        publishingContext.environment.pageContent = Text("TEXT")
 
         let element = Body()
         let output = element.render()

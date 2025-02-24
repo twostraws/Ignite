@@ -9,9 +9,9 @@
 struct FeedGenerator {
     var feedConfig: FeedConfiguration
     var site: any Site
-    var content: [Content]
+    var content: [Article]
 
-    init(config: FeedConfiguration, site: any Site, content: [Content]) {
+    init(config: FeedConfiguration, site: any Site, content: [Article]) {
         self.feedConfig = config
         self.site = site
         self.content = content
@@ -68,7 +68,7 @@ struct FeedGenerator {
                 if feedConfig.mode == .full {
                     itemXML += """
                     <content:encoded>\
-                    <![CDATA[\(item.body.makingAbsoluteLinks(relativeTo: site.url))]]>\
+                    <![CDATA[\(item.text.makingAbsoluteLinks(relativeTo: site.url))]]>\
                     </content:encoded>
                     """
                 }

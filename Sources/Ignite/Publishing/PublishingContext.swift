@@ -62,7 +62,7 @@ final class PublishingContext {
     var environment = EnvironmentValues()
 
     /// All the Markdown content this user has inside their Content folder.
-    private(set) var allContent = [Content]()
+    private(set) var allContent = [Article]()
 
     /// An ordered set of syntax highlighters pulled from code blocks throughout the site.
     var syntaxHighlighters = OrderedSet<HighlighterLanguage>()
@@ -121,7 +121,7 @@ final class PublishingContext {
     /// - Parameter tag: The tag to filter by, or nil for all content.
     /// - Returns: An array of content matching the specified tag, or all content
     /// if no tag was specified.
-    func content(tagged tag: String?) -> [Content] {
+    func content(tagged tag: String?) -> [Article] {
         if let tag {
             allContent.filter { $0.tags.contains(tag) }
         } else {
@@ -166,7 +166,7 @@ final class PublishingContext {
     /// Parses all Markdown content in the site's Content folder.
     func parseContent() throws {
         try ContentFinder.shared.find(root: contentDirectory) { deploy in
-            let article = try Content(
+            let article = try Article(
                 from: deploy.url,
                 in: self,
                 resourceValues: deploy.resourceValues,

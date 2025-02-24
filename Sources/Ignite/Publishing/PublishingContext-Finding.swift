@@ -13,7 +13,7 @@ struct ContentFinder: Sendable {
     static let shared = ContentFinder()
 
     private let isLinkKey = Set([URLResourceKey.isSymbolicLinkKey])
-    private let resourceKeys = Content.resourceKeys
+    private let resourceKeys = Article.resourceKeys
         + [.isDirectoryKey, .isSymbolicLinkKey]
     private let directoryListOptions: FileManager.DirectoryEnumerationOptions = [
         .skipsHiddenFiles,

@@ -52,11 +52,10 @@ class MetaTagTests: IgniteTestSuite {
 
     @Test("Social sharing tags with no image, description, or www")
     func socialSharingTagsWithNoImageDescriptionOrWWW() async throws {
-        let page = Page(
+        let page = PageMetadata(
             title: "My Page Title",
             description: "",
-            url: URL(string: "https://example.com")!,
-            body: Text("not much contents")
+            url: URL(string: "https://example.com")!
         )
 
         publishingContext.environment.page = page
@@ -82,12 +81,11 @@ class MetaTagTests: IgniteTestSuite {
 
     @Test("Social sharing tags with image, description, and www")
     func socialSharingTagsWithImageDescriptionAndWWW() async throws {
-        let page = Page(
+        let page = PageMetadata(
             title: "My Page Title",
             description: "describing the page",
             url: URL(string: "https://www.example.com")!,
-            image: URL(string: "https://example.com/image.png")!,
-            body: Text("not much contents")
+            image: URL(string: "https://example.com/image.png")!
         )
 
         publishingContext.environment.page = page
