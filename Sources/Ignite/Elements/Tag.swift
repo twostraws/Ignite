@@ -7,7 +7,7 @@
 
 /// A struct able to become any HTML tag. Useful for when Ignite has not
 /// implemented a specific tag you need.
-public struct Tag: HTML {
+public struct Tag: HTML, HeadElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
