@@ -9,6 +9,11 @@
 ///
 /// HTMLModifier provides a standardized way to apply styling, attributes, and other modifications
 /// to HTML elements while preserving their structure and type information.
+///
+/// - Important: Use `HTMLModifier` only when a modifier needs to directly manipulate the attributes
+/// property of an `HTML` element, like `ClassModifier`. For modifiers that perform complex
+/// transformations resulting in different types of `HTML` elements—or extend more than one protocol—
+/// the `HTMLModifier` pattern provides a more straightforward implementation.
 @MainActor
 protocol HTMLModifier {
     /// Applies modifications to the provided HTML content.
