@@ -10,8 +10,8 @@ public struct Audio: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -33,7 +33,7 @@ public struct Audio: InlineElement, LazyLoadable {
     ///   - files: The user audios to render.
     /// - Returns: The HTML for this element.
     public func render(files: [String]) -> String {
-        var output = "<audio controls\(attributes.description())>"
+        var output = ""
 
         for filename in files {
             if let fileType = audioType(for: filename) {
@@ -42,8 +42,7 @@ public struct Audio: InlineElement, LazyLoadable {
         }
 
         output += "Your browser does not support the audio element."
-        output += "</audio>"
-        return output
+        return "<audio controls\(attributes)>\(output)</audio>"
     }
 
     /// Renders this element using publishing context passed in.

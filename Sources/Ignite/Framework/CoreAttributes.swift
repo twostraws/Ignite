@@ -28,40 +28,36 @@ public typealias Date = Foundation.Date
 
 /// A handful of attributes that all HTML types must support, either for
 /// rendering or for publishing purposes.
-struct CoreAttributes: Equatable, Sendable {
+public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     /// A unique identifier. Can be empty.
     var id = ""
 
     /// ARIA attributes that add accessibility information.
     /// See https://www.w3.org/TR/html-aria/
-    var aria = OrderedSet<Attribute>()
+    var aria = Set<Attribute>()
 
     /// CSS classes.
-    var classes = OrderedSet<String>()
+    var classes = Set<String>()
 
     /// Inline CSS styles.
-    var styles = OrderedSet<InlineStyle>()
+    var styles = Set<InlineStyle>()
 
     /// Data attributes.
-    var data = OrderedSet<Attribute>()
+    var data = Set<Attribute>()
 
     /// JavaScript events, such as onclick.
-    var events = OrderedSet<Event>()
+    var events = Set<Event>()
 
     /// Custom attributes not covered by the above, e.g. loading="lazy"
-    var customAttributes = OrderedSet<Attribute>()
+    var customAttributes = Set<Attribute>()
 
     /// Whether this set of attributes is empty.
     var isEmpty: Bool { self == CoreAttributes() }
 
-    /// The HTML tag to use for this element, e.g. "div" or "p".
-    var tag: String = ""
-
-    /// Whether this element uses a self-closing tag.
-    var tagIsSelfClosing = false
-
-    /// How many columns this should occupy when placed in a grid.
-    var columnWidth: ColumnWidth = .automatic
+    /// All core attributes collapsed down to a single string for easy application.
+    public var description: String {
+        "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
+    }
 
     /// The ID of this element, if set.
     var idString: String {
@@ -150,31 +146,13 @@ struct CoreAttributes: Equatable, Sendable {
         }
     }
 
-    /// Generates an HTML string containing all attributes and optionally wraps content.
-    /// - Parameter content: Optional content to wrap with opening and closing tags
-    /// - Returns: A string containing all attributes and optional content wrapped in tags
-    func description(wrapping content: String? = nil) -> String {
-        let attributes = idString + customAttributeString + classString + styleString
-            + dataString + ariaString + eventString
-
-        var result = content ?? attributes
-
-        if tagIsSelfClosing {
-            result = "<\(tag)\(attributes) />"
-        } else if tag.isEmpty == false {
-            result = "<\(tag)\(attributes)>\(result)</\(tag)>"
-        }
-
-        return result
-    }
-
-    /// Appends an array of CSS classes to the current element.
+    /// Appends an array of CSS classes.
     /// - Parameter classes: The CSS classes to append.
-    mutating func append(classes: [String]) {
+    mutating func append(classes: some Collection<String>) {
         self.classes.formUnion(classes)
     }
 
-    /// Appends multiple CSS classes to the current element.
+    /// Appends multiple CSS classes.
     /// - Parameter classes: The CSS classes to append.
     mutating func append(classes: String...) {
         self.classes.formUnion(classes)
@@ -198,7 +176,7 @@ struct CoreAttributes: Equatable, Sendable {
         guard let aria else { return self }
 
         var copy = self
-        copy.aria.append(aria)
+        copy.aria.insert(aria)
         return copy
     }
 
@@ -212,23 +190,23 @@ struct CoreAttributes: Equatable, Sendable {
     ///  - Parameter style: The style name, e.g. background-color
     ///  - Parameter value: The style value, e.g. steelblue
     mutating func append(style: Property, value: String) {
-        styles.append(InlineStyle(style, value: value))
+        styles.insert(InlineStyle(style, value: value))
     }
 
-    /// Appends a data attribute to the element.
+    /// Appends a data attribute.
     /// - Parameter dataAttributes: Variable number of data attributes to append.
     mutating func append(dataAttributes: Attribute...) {
         data.formUnion(dataAttributes)
     }
 
-    /// Appends multiple custom attributes to the element.
+    /// Appends multiple custom attributes.
     /// - Parameter customAttributes: Variable number of custom attributes to append,
     ///   where each attribute is an `AttributeValue` containing a name-value pair.
     mutating func append(customAttributes: Attribute...) {
         self.customAttributes.formUnion(customAttributes)
     }
 
-    /// Appends an array of inline CSS styles to the element.
+    /// Appends an array of inline CSS styles.
     /// - Parameter newStyles: An array of `AttributeValue` objects representing
     ///   CSS style properties and their values to be added.
     mutating func append(styles newStyles: [InlineStyle]) {
@@ -256,7 +234,7 @@ struct CoreAttributes: Equatable, Sendable {
         for property in properties {
             styles.removeAll(where: { $0.property == property.rawValue })
         }
-        self.styles = OrderedSet(styles)
+        self.styles = Set(styles)
     }
 
     /// Retrieves the inline styles for specified CSS properties.

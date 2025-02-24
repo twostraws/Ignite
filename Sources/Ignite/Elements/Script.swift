@@ -13,8 +13,8 @@ public struct Script: HTML, HeadElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -46,14 +46,12 @@ public struct Script: HTML, HeadElement {
     /// - Returns: The HTML for this element.
     public func render() -> String {
         var attributes = attributes
-        attributes.tag = "script"
-
         if let file {
             let path = publishingContext.path(for: file)
             attributes.append(customAttributes: .init(name: "src", value: path))
-            return attributes.description()
+            return "<script\(attributes)></script>"
         } else if let code {
-            return attributes.description(wrapping: code)
+            return "<script\(attributes)>\(code)</script>"
         } else {
             publishingContext.addWarning("""
             Creating a script with no source or code should not be possible. \

@@ -16,8 +16,8 @@ public struct CodeBlock: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -43,7 +43,6 @@ public struct CodeBlock: HTML {
     /// - Returns: A copy of this code block with the specified lines highlighted.
     public func highlightedLines(_ lines: Int...) -> Self {
         var copy = self
-
         let highlights = lines.map { "\($0)" }
         let dataLine = highlights.joined(separator: ",")
         copy.attributes.append(dataAttributes: .init(name: "line", value: dataLine))
@@ -55,7 +54,6 @@ public struct CodeBlock: HTML {
     /// - Returns: A copy of this code block with the specified line ranges highlighted.
     public func highlightedRanges(_ ranges: ClosedRange<Int>...) -> Self {
         var copy = self
-
         let highlights = ranges.map { "\($0.lowerBound)-\($0.upperBound)" }
         let dataLine = highlights.joined(separator: ",")
         copy.attributes.append(dataAttributes: .init(name: "line", value: dataLine))
@@ -68,12 +66,11 @@ public struct CodeBlock: HTML {
     ///   - ranges: Ranges of lines to highlight.
     /// - Returns: A copy of this code block with the specified lines highlighted.
     public func highlightedLines(_ lines: Int..., ranges: ClosedRange<Int>...) -> Self {
-        var copy = self
-
         let singleLines = lines.map { "\($0)" }
         let rangeLines = ranges.map { "\($0.lowerBound)-\($0.upperBound)" }
         let allHighlights = singleLines + rangeLines
 
+        var copy = self
         let dataLine = allHighlights.joined(separator: ",")
         copy.attributes.append(dataAttributes: .init(name: "line", value: dataLine))
         return copy
@@ -85,7 +82,6 @@ public struct CodeBlock: HTML {
     /// - Returns: A copy of this code block with the specified line number visibility.
     public func lineNumberVisibility(_ visibility: SyntaxHighlighterConfiguration.LineNumberVisibility) -> Self {
         var copy = self
-
         let siteVisibility = publishingContext.site.syntaxHighlighterConfiguration.lineNumberVisibility
 
         switch (siteVisibility, visibility) {
@@ -114,7 +110,7 @@ public struct CodeBlock: HTML {
             break
         }
 
-        return copy
+        return self
     }
 
     /// Renders this element using publishing context passed in.
@@ -127,7 +123,7 @@ public struct CodeBlock: HTML {
         if let language {
             publishingContext.syntaxHighlighters.append(language)
             return """
-            <pre\(attributes.description())>\
+            <pre\(attributes)>\
             <code class=\"language-\(language)\">\
             \(content)\
             </code>\
@@ -135,7 +131,7 @@ public struct CodeBlock: HTML {
             """
         } else {
             return """
-            <pre\(attributes.description())>\
+            <pre\(attributes)>\
             <code>\(content)</code>\
             </pre>
             """

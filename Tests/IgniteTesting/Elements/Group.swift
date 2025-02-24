@@ -50,7 +50,7 @@ class GroupTests: IgniteTestSuite {
         #expect(output == """
         <label \(attributeName)="\(attributeValue)">Top Label</label>\
         <p \(attributeName)="\(attributeValue)">Middle Text</p>\
-        <button \(attributeName)="\(attributeValue)" type="button" class="btn" \
+        <button type="button" \(attributeName)="\(attributeValue)" class="btn" \
         onclick="alert('Bottom Button Tapped')">Bottom Button</button>
         """)
     }

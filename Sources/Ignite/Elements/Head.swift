@@ -13,8 +13,8 @@ public struct Head: DocumentElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -50,9 +50,7 @@ public struct Head: DocumentElement {
             items.insert(contentsOf: Head.standardHeaders(), at: 0)
         }
 
-        var attributes = attributes
-        attributes.tag = "head"
-        return attributes.description(wrapping: HTMLCollection(items).render())
+        return "<head\(attributes)>\(HTMLCollection(items))</head>"
     }
 
     /// A static function, returning the standard set of headers used for a `Page` instance.

@@ -12,8 +12,8 @@ public struct ListItem: HTML, ListableElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -31,9 +31,7 @@ public struct ListItem: HTML, ListableElement {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = attributes
-        attributes.tag = "li"
-        return attributes.description(wrapping: content.render())
+        "<li\(attributes)>\(content)</li>"
     }
 
     /// Renders this element inside a list, using the publishing context passed in.

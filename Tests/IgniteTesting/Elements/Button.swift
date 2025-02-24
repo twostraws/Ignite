@@ -102,7 +102,7 @@ class ButtonTests: IgniteTestSuite {
     func disabledButton() async throws {
         let button = Button().disabled()
         let output = button.render()
-        #expect(output == #"<button disabled type="button" class="btn"></button>"#)
+        #expect(output == #"<button type="button" disabled class="btn"></button>"#)
     }
 
     // MARK: Targets

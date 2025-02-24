@@ -266,7 +266,7 @@ import Testing
         #expect(ulClasses.contains(expected))
     }
 
-    @Test("UL Tag contains rendered output of item")
+    @Test("UL Tag contains rendered output of navigation item")
     func divTagContainsRenderedItem() async throws {
         let item = Link("Link 1", target: URL(string: "1")!)
         let element = NavigationBar(logo: Image("somepath")) {
@@ -280,11 +280,15 @@ import Testing
             .htmlTagWithCloseTag("ul")?.contents
         )
 
-        let expected = item.render()
-        #expect(ulContents.contains(expected))
+        let expectedLink = item
+            .class("nav-link")
+            .render()
+        let expectedNavItem = "<li class=\"nav-item\">\(expectedLink)</li>"
+
+        #expect(ulContents.contains(expectedNavItem))
     }
 
-    @Test("UL Tag contains rendered output of items")
+    @Test("UL Tag contains rendered output of navigation items")
     func divTagContainsRenderedItems() async throws {
         let item1 = Link("Link 1", target: URL(string: "1")!)
         let item2 = Link("Link 2", target: URL(string: "2")!)
@@ -300,7 +304,17 @@ import Testing
             .htmlTagWithCloseTag("ul")?.contents
         )
 
-        #expect(ulContents.contains(item1.render()))
-        #expect(ulContents.contains(item2.render()))
+        let expectedLink1 = item1
+            .class("nav-link")
+            .render()
+        let expectedNavItem1 = "<li class=\"nav-item\">\(expectedLink1)</li>"
+
+        let expectedLink2 = item2
+            .class("nav-link")
+            .render()
+        let expectedNavItem2 = "<li class=\"nav-item\">\(expectedLink2)</li>"
+
+        #expect(ulContents.contains(expectedNavItem1))
+        #expect(ulContents.contains(expectedNavItem2))
     }
 }

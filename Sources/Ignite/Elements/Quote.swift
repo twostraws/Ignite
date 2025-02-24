@@ -10,8 +10,8 @@ public struct Quote: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// The content of this quote.
     var contents: any HTML
@@ -45,21 +45,17 @@ public struct Quote: HTML {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        let renderedContents = contents.render()
-        let renderedCaption = caption.render()
         var attributes = attributes
-
-        attributes.tag = "blockquote"
         attributes.append(classes: "blockquote")
 
+        let renderedContents = contents.render()
+        let renderedCaption = caption.render()
+
         if renderedCaption.isEmpty {
-            return attributes.description(wrapping: renderedContents)
+            return "<blockquote\(attributes)>\(renderedContents)</blockquote>"
         } else {
-            var footerAttributes = CoreAttributes()
-            footerAttributes.tag = "footer"
-            footerAttributes.append(classes: "blockquote-footer")
-            let footer = footerAttributes.description(wrapping: renderedCaption)
-            return attributes.description(wrapping: renderedContents + footer)
+            let footer = "<footer class=\"blockquote-footer\">\(renderedCaption)</footer>"
+            return "<blockquote\(attributes)>\(renderedContents + footer)</blockquote>"
         }
     }
 }

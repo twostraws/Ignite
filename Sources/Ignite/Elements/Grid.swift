@@ -16,8 +16,8 @@ public struct Grid: HTML, HorizontalAligning {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -97,14 +97,23 @@ public struct Grid: HTML, HorizontalAligning {
                           let passthrough = modified.unwrapped as? any PassthroughElement {
                     handlePassthrough(passthrough, attributes: modified.attributes)
                 } else {
-                    Section(item)
-                        .class(className(for: item))
+                    handleItem(item)
                         .class(gutterClass)
                 }
             }
         }
         .attributes(sectionAttributes)
         .render()
+    }
+
+    /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.
+    private func handleItem(_ item: any HTML) -> some HTML {
+        var item = item
+        let name = className(for: item)
+        item.attributes.remove(classes: name)
+
+        return Section(item)
+            .class(name)
     }
 
     /// Renders a group of HTML elements with consistent styling and attributes.
@@ -119,8 +128,7 @@ public struct Grid: HTML, HorizontalAligning {
             ""
         }
         return ForEach(passthrough.items) { item in
-            Section(item)
-                .class(className(for: passthrough))
+            handleItem(item)
                 .class(gutterClass)
                 .attributes(attributes)
         }
@@ -131,12 +139,15 @@ public struct Grid: HTML, HorizontalAligning {
     /// - Returns: A Bootstrap class name that represents the element's width,
     /// scaled according to the section's column count if needed.
     private func className(for item: any HTML) -> String {
-        if let columnCount, case .count(let width) = item.columnWidth {
+        let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") })
+        if let columnCount,
+           let widthClass,
+           let width = Int(widthClass.dropFirst("col-md-".count)) {
             // Scale the width to be relative to the new column count
             let scaledWidth = width * 12 / columnCount
             return ColumnWidth.count(scaledWidth).className
         } else {
-            return item.columnWidth.className
+            return widthClass ?? "col"
         }
     }
 }

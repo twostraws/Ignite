@@ -23,7 +23,7 @@ struct HoverEffectModifier: HTMLModifier {
         content.onHover { isHovering in
             if isHovering {
                 let effectElement = effect(EmptyHoverEffect())
-                let effectAttributes = AttributeStore.default.attributes(for: effectElement.id)
+                let effectAttributes = effectElement.attributes
                 ApplyHoverEffects(styles: effectAttributes.styles)
             } else {
                 RemoveHoverEffects()
@@ -51,12 +51,12 @@ public struct EmptyHoverEffect: HTML {
 }
 
 private struct ApplyHoverEffects: Action {
-    let styles: OrderedSet<InlineStyle>
+    let styles: Set<InlineStyle>
 
     func compile() -> String {
         """
         this.unhoveredStyle = this.style.cssText;
-        \(styles.map { "this.style.\($0.property.convertingCSSNamesToJS()) = '\($0.value)'" }.joined(separator: "; "))
+        \(styles.sorted().map { "this.style.\($0.property.convertingCSSNamesToJS()) = '\($0.value)'" }.joined(separator: "; "))
         """
     }
 }

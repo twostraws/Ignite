@@ -10,8 +10,8 @@ public struct Abbreviation: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -25,7 +25,7 @@ public struct Abbreviation: InlineElement {
     public init(_ abbreviation: String, description: String) {
         contents = abbreviation
         let customAttribute = Attribute(name: "title", value: description)
-        attributes.customAttributes.append(customAttribute)
+        attributes.append(customAttributes: customAttribute)
     }
 
     /// Creates a new `Abbreviation` instance using an inline element builder
@@ -36,14 +36,12 @@ public struct Abbreviation: InlineElement {
     public init(_ description: String, @InlineElementBuilder content: () -> some InlineElement) {
         contents = content()
         let customAttribute = Attribute(name: "title", value: description)
-        attributes.customAttributes.append(customAttribute)
+        attributes.append(customAttributes: customAttribute)
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = attributes
-        attributes.tag = "abbr"
-        return attributes.description(wrapping: contents.render())
+        "<abbr\(attributes)>\(contents.render())</abbr>"
     }
 }

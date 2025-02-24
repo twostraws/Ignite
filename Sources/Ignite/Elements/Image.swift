@@ -10,8 +10,8 @@ public struct Image: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -64,7 +64,7 @@ public struct Image: InlineElement, LazyLoadable {
     /// - Returns: A new `Image` instance configured to be flexibly sized.
     public func resizable() -> Self {
         var copy = self
-        copy.attributes.classes.append("img-fluid")
+        copy.attributes.append(classes: "img-fluid")
         return copy
     }
 
@@ -86,8 +86,7 @@ public struct Image: InlineElement, LazyLoadable {
     private func render(icon: String, description: String) -> String {
         var attributes = attributes
         attributes.append(classes: "bi-\(icon)")
-        attributes.tag = "i"
-        return attributes.description()
+        return "<i\(attributes)></i>"
     }
 
     /// Renders a user image into the current publishing context.
@@ -98,13 +97,11 @@ public struct Image: InlineElement, LazyLoadable {
     /// - Returns: The HTML for this element.
     private func render(path: String, description: String) -> String {
         var attributes = attributes
-        attributes.tag = "img"
-        attributes.tagIsSelfClosing = true
         attributes.append(customAttributes:
             .init(name: "src", value: path),
             .init(name: "alt", value: description)
         )
-        return attributes.description()
+        return "<img\(attributes) />"
     }
 
     /// Renders this element using publishing context passed in.

@@ -10,8 +10,8 @@ public struct Form: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -169,23 +169,22 @@ public struct Form: HTML {
         action = action.setFormID(attributes.id)
 
         var attributes = attributes
-        attributes.tag = "form"
 
-        attributes.customAttributes.append(.init(name: "method", value: "post"))
-        attributes.customAttributes.append(.init(name: "action", value: action.service.endpoint(formID: action.formID)))
+        attributes.append(customAttributes: .init(name: "method", value: "post"))
+        attributes.append(customAttributes: .init(name: "action", value: action.service.endpoint(formID: action.formID)))
         attributes.data.formUnion(action.service.dataAttributes)
 
         if let formClass = action.service.formClass {
-            attributes.classes.append(formClass)
+            attributes.append(classes: formClass)
         }
 
         if case .mailchimp = action.service {
-            attributes.customAttributes.append(.init(name: "target", value: "_blank"))
+            attributes.append(customAttributes: .init(name: "target", value: "_blank"))
         }
 
         let formContent = formContent(for: action)
 
-        var formOutput = attributes.description(wrapping: formContent.render())
+        var formOutput = "<form\(attributes)>\(formContent)</form>"
 
         // Add custom SendFox JavaScript if needed.
         if case .sendFox = action.service {
@@ -243,7 +242,7 @@ public struct Form: HTML {
         if let textLabel = textField.label {
             let label = Label(text: textLabel)
                 .class(controlSize.labelClass)
-                .customAttribute(name: "for", value: textField.attributes.id)
+                .customAttribute(name: "for", value: action.service.emailFieldID)
 
             labeledTextField(label: label, field: sizedTextField)
         } else {
@@ -268,12 +267,11 @@ public struct Form: HTML {
     ///   - totalColumns: The total number of columns in the form's grid.
     /// - Returns: A string containing the appropriate Bootstrap column class.
     private func getColumnClass(for item: any HTML, totalColumns: Int) -> String {
-        if case .count(let width) = item.columnWidth {
-            // Convert the width from form columns to Bootstrap columns
+        if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }),
+           let width = Int(widthClass.dropFirst("col-md-".count)) {
             let bootstrapColumns = 12 * width / totalColumns
             return "col-md-\(bootstrapColumns)"
         } else {
-            // Default to auto width if not specified
             return "col"
         }
     }

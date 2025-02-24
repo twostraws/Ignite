@@ -15,8 +15,8 @@
 /// `Div`, `Paragraph`, or `Link`, or create custom components by conforming to `HTMLRootElement`.
 @MainActor
 public protocol HTML: CustomStringConvertible, Sendable {
-    /// A unique identifier used to track this element's state and attributes.
-    var id: String { get }
+    /// The standard set of control attributes for HTML elements.
+    var attributes: CoreAttributes { get set }
 
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { get }
@@ -40,9 +40,10 @@ public extension HTML {
         }
     }
 
-    /// A unique identifier generated from the element's type and source location.
-    var id: String {
-        String(describing: self).truncatedHash
+    /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
+    var attributes: CoreAttributes {
+        get { CoreAttributes() }
+        set {} // swiftlint:disable:this unused_setter
     }
 
     /// The default status as a primitive element.
@@ -55,15 +56,19 @@ public extension HTML {
 }
 
 extension HTML {
-    /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
-    var attributes: CoreAttributes {
-        get { AttributeStore.default.attributes(for: id) }
-        set { AttributeStore.default.merge(newValue, intoHTML: id) }
-    }
-
     /// The publishing context of this site.
     var publishingContext: PublishingContext {
         PublishingContext.default
+    }
+
+    /// The Bootstrap class that sizes this element in a grid.
+    var columnWidth: String {
+        if let width = attributes.classes.first(where: {
+            $0.starts(with: "col-md-")
+        }) {
+            return width
+        }
+        return "col"
     }
 
     /// Checks if this element is an empty HTML element.
@@ -73,11 +78,6 @@ extension HTML {
         } else {
             self is EmptyHTML
         }
-    }
-
-    /// How many columns this should occupy when placed in a grid.
-    var columnWidth: ColumnWidth {
-        attributes.columnWidth
     }
 
     /// A Boolean value indicating whether this element contains multiple child elements.
@@ -126,11 +126,10 @@ extension HTML {
     ///   - name: The name of the event (e.g., "click", "mouseover")
     ///   - actions: Array of actions to execute when the event occurs
     /// - Returns: The modified `HTML` element
-    func addEvent(name: String, actions: [Action]) {
+    mutating func addEvent(name: String, actions: [Action]) {
         guard !actions.isEmpty else { return }
-        var attributes = attributes
-        attributes.events.append(Event(name: name, actions: actions))
-        AttributeStore.default.merge(attributes, intoHTML: id)
+        let event = Event(name: name, actions: actions)
+        attributes.events.insert(event)
     }
 
     /// Sets the tabindex behavior for this element.
@@ -141,18 +140,10 @@ extension HTML {
         customAttribute(name: tabFocus.htmlName, value: tabFocus.value)
     }
 
-    func tag(_ tag: String) {
-        var attributes = attributes
-        attributes.tag = tag
-        AttributeStore.default.merge(attributes, intoHTML: id)
-    }
-
     /// Adjusts the number of columns assigned to this element.
     /// - Parameter width: The new number of columns to use.
-    func columnWidth(_ width: ColumnWidth) {
-        var attributes = attributes
-        attributes.columnWidth = width
-        AttributeStore.default.merge(attributes, intoHTML: id)
+    mutating func columnWidth(_ width: ColumnWidth) {
+        attributes.classes.insert(width.className)
     }
 }
 

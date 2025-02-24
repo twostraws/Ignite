@@ -26,8 +26,8 @@ public struct List: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -128,7 +128,7 @@ public struct List: HTML {
     public func render() -> String {
         let listAttributes = getAttributes()
 
-        var output = "<\(listElementName)\(listAttributes.description())>"
+        var output = "<\(listElementName)\(listAttributes)>"
 
         for originalItem in items {
             var item = originalItem

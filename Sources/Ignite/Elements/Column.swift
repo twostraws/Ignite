@@ -22,8 +22,8 @@ public struct Column: HTML, HorizontalAligning {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -71,8 +71,7 @@ public struct Column: HTML, HorizontalAligning {
         if verticalAlignment != .top {
             columnAttributes.append(classes: ["align-\(verticalAlignment.rawValue)"])
         }
-        columnAttributes.tag = "td"
         columnAttributes.append(customAttributes: .init(name: "colspan", value: columnSpan.formatted()))
-        return columnAttributes.description(wrapping: HTMLCollection(items).render())
+        return "<td\(columnAttributes)>\(HTMLCollection(items))</td>"
     }
 }
