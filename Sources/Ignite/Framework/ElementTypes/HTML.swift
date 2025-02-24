@@ -43,7 +43,7 @@ public extension HTML {
     /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
     var attributes: CoreAttributes {
         get { CoreAttributes() }
-        set {} // swiftlint:disable:this unused_setter
+        set {} // swiftlint:disable:this unused_setter_value
     }
 
     /// The default status as a primitive element.

@@ -5,7 +5,6 @@
 // See LICENSE for license information.
 //
 
-
 /// A result builder that enables declarative syntax for constructing layouts.
 @MainActor
 @resultBuilder

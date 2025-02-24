@@ -46,7 +46,7 @@ public struct Head: DocumentElement {
     public func render() -> String {
         var items = items
         if includeStandardHeaders {
-            items.insert(contentsOf:  MetaTag.socialSharingTags(), at: 0)
+            items.insert(contentsOf: MetaTag.socialSharingTags(), at: 0)
             items.insert(contentsOf: Head.standardHeaders(), at: 0)
         }
 
@@ -58,7 +58,6 @@ public struct Head: DocumentElement {
     /// This function can be used when defining a custom header based on the standard set of headers.
     @HeadElementBuilder
     public static func standardHeaders() -> [any HeadElement] {
-        // swiftlint:disable:previous cyclomatic_complexity
         MetaTag.utf8
         MetaTag.flexibleViewport
 

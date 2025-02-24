@@ -51,7 +51,7 @@ public struct Animation: Animatable, Hashable {
 
     init(options: [AnimationOption], frames: [Keyframe]) {
         self.frames = frames
-        self.with(options)
+        with(options)
     }
 
     /// Creates a new keyframe animation.
@@ -85,7 +85,7 @@ extension Animation {
             case .delay(let value):
                 delay = value
             case .speed(let value):
-                duration = duration / value
+                duration /= value
             }
         }
     }
@@ -97,12 +97,12 @@ public extension Animation {
         Animation(
             options: [
                 .duration(0.5),
-                .timing(.custom("cubic-bezier(0.36, 0, 0.66, -0.56)")),
+                .timing(.custom("cubic-bezier(0.36, 0, 0.66, -0.56)"))
             ],
             frames: [
                 Keyframe(0%).custom(.transform, value: "translateY(0)"),
                 Keyframe(50%).custom(.transform, value: "translateY(-20px)"),
-                Keyframe(100%).custom(.transform, value: "translateY(0)"),
+                Keyframe(100%).custom(.transform, value: "translateY(0)")
             ]
         )
     }
@@ -112,12 +112,12 @@ public extension Animation {
         Animation(
             options: [
                 .duration(0.5),
-                .timing(.custom("cubic-bezier(0.36, 0, 0.66, -0.56)")),
+                .timing(.custom("cubic-bezier(0.36, 0, 0.66, -0.56)"))
             ],
             frames: [
                 Keyframe(0%).custom(.transform, value: "translateY(0)"),
                 Keyframe(50%).custom(.transform, value: "translateY(-20px)"),
-                Keyframe(100%).custom(.transform, value: "translateY(0)"),
+                Keyframe(100%).custom(.transform, value: "translateY(0)")
             ]
         )
     }
@@ -128,14 +128,14 @@ public extension Animation {
             options: [
                 .duration(0.5),
                 .timing(.automatic),
-                .repeatCount(3),
+                .repeatCount(3)
             ],
             frames: [
                 Keyframe(0%).custom(.transform, value: "translateX(0)"),
                 Keyframe(25%).custom(.transform, value: "translateX(10px)"),
                 Keyframe(50%).custom(.transform, value: "translateX(0)"),
                 Keyframe(75%).custom(.transform, value: "translateX(10px)"),
-                Keyframe(100%).custom(.transform, value: "translateX(0)"),
+                Keyframe(100%).custom(.transform, value: "translateX(0)")
             ]
         )
     }
@@ -146,14 +146,14 @@ public extension Animation {
             options: [
                 .duration(0.5),
                 .timing(.automatic),
-                .repeatCount(3),
+                .repeatCount(3)
             ],
             frames: [
                 Keyframe(0%).custom(.transform, value: "translateX(0)"),
                 Keyframe(25%).custom(.transform, value: "translateX(10px)"),
                 Keyframe(50%).custom(.transform, value: "translateX(0)"),
                 Keyframe(75%).custom(.transform, value: "translateX(10px)"),
-                Keyframe(100%).custom(.transform, value: "translateX(0)"),
+                Keyframe(100%).custom(.transform, value: "translateX(0)")
             ]
         )
     }

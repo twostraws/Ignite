@@ -91,8 +91,6 @@ public struct EnvironmentValues {
             titleSuffix: site.titleSuffix,
             description: site.description,
             url: site.url)
-
-
     }
 
     init(sourceDirectory: URL, site: any Site, allContent: [Content], page: Page) {
