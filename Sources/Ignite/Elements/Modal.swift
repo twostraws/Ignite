@@ -129,7 +129,7 @@ public struct Modal: HTML {
         Section {
             Section {
                 Section {
-                    if !header.isEmptyHTML {
+                    if !header.isEmpty {
                         Section {
                             header
                         }
@@ -141,7 +141,7 @@ public struct Modal: HTML {
                     }
                     .class("modal-body")
 
-                    if !footer.isEmptyHTML {
+                    if !footer.isEmpty {
                         Section {
                             footer
                         }

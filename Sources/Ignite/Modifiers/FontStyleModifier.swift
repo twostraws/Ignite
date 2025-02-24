@@ -14,14 +14,7 @@ struct FontStyleModifier: HTMLModifier {
     /// - Parameter content: The HTML content to modify
     /// - Returns: The modified HTML content with text level styling applied
     func body(content: some HTML) -> any HTML {
-
-        let isText: Bool = if let modified = content as? ModifiedHTML {
-            modified.unwrapped is Text
-        } else {
-            content.body is Text
-        }
-
-        if isText {
+        if content.isText {
             content
                 .fontStyle(style)
         } else {

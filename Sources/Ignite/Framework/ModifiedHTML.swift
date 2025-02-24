@@ -63,6 +63,9 @@ struct ModifiedHTML: HTML, InlineElement, HeadElement, DocumentElement, Navigati
         if let modified = content as? ModifiedHTML {
             return modified.unwrapped
         }
+        if let anyHTML = content as? AnyHTML {
+            return anyHTML.wrapped
+        }
         return content
     }
 }
