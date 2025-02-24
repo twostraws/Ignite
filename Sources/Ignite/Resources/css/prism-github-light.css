@@ -1,7 +1,7 @@
 pre[class*="language-"],
 code[class*="language-"] {
   color: #24292f;
-  font-size: var(--bs-code-font-size, 1em);
+  font-size: var(--code-block-font-size, 1em);
   text-shadow: none;
   font-family: var(--bs-font-monospace, Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace);
   direction: ltr;

@@ -42,7 +42,8 @@ public extension Theme {
     var bodySize: LengthUnit { .default }
     var smallBodySize: LengthUnit { .default }
     var largeBodySize: LengthUnit { .default }
-    var codeFontSize: LengthUnit { .default }
+    var inlineCodeFontSize: LengthUnit { .default }
+    var codeBlockFontSize: LengthUnit { .default }
 
     // Font Weights
     var lighterFontWeight: FontWeight { .default }

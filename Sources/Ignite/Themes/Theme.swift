@@ -109,7 +109,10 @@ public protocol Theme: Sendable {
     var largeBodySize: LengthUnit { get }
 
     /// Inline code font size
-    var codeFontSize: LengthUnit { get }
+    var inlineCodeFontSize: LengthUnit { get }
+
+    /// Code block font size
+    var codeBlockFontSize: LengthUnit { get }
 
     /// Extra light font weight
     var lighterFontWeight: FontWeight { get }
