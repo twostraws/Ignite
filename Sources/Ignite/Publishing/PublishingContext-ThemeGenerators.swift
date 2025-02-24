@@ -340,9 +340,9 @@ extension PublishingContext {
         addProperty(.bolderFontWeight, theme.bolderFontWeight)
 
         // Line heights
-        addProperty(.bodyLineHeight, theme.regularLineHeight)
-        addProperty(.condensedLineHeight, theme.condensedLineHeight)
-        addProperty(.expandedLineHeight, theme.expandedLineHeight)
+        addProperty(.bodyLineHeight, theme.lineHeight)
+        addProperty(.condensedLineHeight, theme.smallLineHeight)
+        addProperty(.expandedLineHeight, theme.largeLineHeight)
 
         // Heading properties
         addProperty(.headingsFontWeight, theme.headingFontWeight)

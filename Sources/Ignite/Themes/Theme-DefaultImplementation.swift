@@ -52,9 +52,9 @@ public extension Theme {
     var bolderFontWeight: FontWeight { .default }
 
     // Line Heights
-    var regularLineHeight: LengthUnit { .default }
-    var condensedLineHeight: LengthUnit { .default }
-    var expandedLineHeight: LengthUnit { .default }
+    var lineHeight: LengthUnit { .default }
+    var smallLineHeight: LengthUnit { .default }
+    var largeLineHeight: LengthUnit { .default }
 
     // Heading Sizes
     var xxLargeHeadingSize: LengthUnit { .default }
