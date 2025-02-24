@@ -13,10 +13,6 @@ extension AnimationClassGenerator {
     /// - Returns: A set of CSS properties including animation name and timing
     func buildBaseKeyframeClass(_ animation: Animation) -> Set<String> {
         var baseProperties = Set<String>()
-
-        if triggerMap[.click] != nil {
-            baseProperties.insert("cursor: pointer")
-        }
         let baseClass = "animation-" + animation.id
         let timing = getAnimationTiming(animation)
         baseProperties.insert("animation: \(baseClass)-appear \(timing)")
@@ -55,7 +51,7 @@ extension AnimationClassGenerator {
         }
 
         .\(baseClass)-hover:hover {
-            animation: \(baseClass)-hover \(timing) \(animation.direction.rawValue)\(animationRepeat);
+            animation: \(baseClass)-hover \(timing) \(animation.direction)\(animationRepeat);
         }
 
         .\(baseClass)-hover:not(:hover) {
@@ -99,8 +95,8 @@ extension AnimationClassGenerator {
 
         // Build common animation properties
         var animationProperties = [
-            "animation-fill-mode: \(animation.fillMode.rawValue)",
-            "animation-direction: \(animation.direction.rawValue)"
+            "animation-fill-mode: \(animation.fillMode)",
+            "animation-direction: \(animation.direction)"
         ]
 
         if animation.repeatCount != 1 {
@@ -163,7 +159,7 @@ extension AnimationClassGenerator {
             return """
 
             .\(baseClass)-hover.fill-\(animation.id)-\(animation.fillMode) {
-                animation: \(baseClass)-hover \(timing) \(animation.direction.rawValue) \(animation.fillMode)\(count);
+                animation: \(baseClass)-hover \(timing) \(animation.direction) \(animation.fillMode)\(count);
                 animation-play-state: paused;
             }
 

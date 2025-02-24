@@ -28,38 +28,47 @@ public extension Animation {
     }
 }
 
-public extension Animation.Frame {
+public extension Keyframe {
     /// Sets a color for this keyframe
     /// - Parameters:
     ///   - area: Which color property to animate (text or background). Default is `.foreground`.
     ///   - value: The color to animate to
-    /// - Note: This will be animated between frames in the keyframe sequence
-    mutating func color(_ area: ColorArea = .foreground, to value: Color) {
-        styles.append(.init(animatable: area.property, value: value.description))
+    /// - Returns: A new keyframe with the color animation applied
+    func color(_ area: ColorArea = .foreground, to value: Color) -> Keyframe {
+        var copy = self
+        copy.styles.append(.init(animatable: area.property, value: value.description))
+        return copy
     }
 
     /// Sets the scale transform for this keyframe
     /// - Parameter value: The scale factor to animate to (e.g., 1.5 for 150% size)
-    /// - Note: This will be animated between frames in the keyframe sequence
-    mutating func scale(_ value: Double) {
-        styles.append(.init(animatable: .transform, value: "scale(\(value))"))
+    /// - Returns: A new keyframe with the scale transform applied
+    func scale(_ value: Double) -> Keyframe {
+        var copy = self
+        copy.styles.append(.init(animatable: .transform, value: "scale(\(value))"))
+        return copy
     }
 
     /// Sets the rotation transform for this keyframe
     /// - Parameters:
     ///   - angle: The angle to rotate by
     ///   - anchor: The point around which to rotate (defaults to center)
-    /// - Note: This will be animated between frames in the keyframe sequence
-    mutating func rotate(_ angle: Angle, anchor: AnchorPoint = .center) {
-        styles.append(.init(animatable: .transformOrigin, value: anchor.value))
-        styles.append(.init(animatable: .transform, value: "rotate(\(angle.value))"))
+    /// - Returns: A new keyframe with the rotation transform applied
+    func rotate(_ angle: Angle, anchor: AnchorPoint = .center) -> Keyframe {
+        var copy = self
+        copy.styles.append(.init(.transformOrigin, value: anchor.value))
+        copy.styles.append(.init(.transform, value: "rotate(\(angle.value))"))
+        return copy
     }
 
     /// Sets a custom style transformation for this keyframe
-    /// - Parameter property: The CSS property to animate
-    /// - Parameter value: The CSS value
-    /// - Note: This will be animated between frames in the keyframe sequence
-    mutating func custom(_ property: AnimatableProperty, value: String) {
-        styles.append(.init(animatable: property, value: value))
+    /// - Parameters:
+    ///   - property: The CSS property to animate
+    ///   - value: The CSS value
+    /// - Returns: A new keyframe with the custom animation applied
+    func custom(_ property: AnimatableProperty, value: String) -> Keyframe {
+        var copy = self
+        copy.styles.append(.init(animatable: property, value: value))
+        return copy
     }
 }
