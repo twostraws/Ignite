@@ -7,7 +7,7 @@
 
 /// A protocol for customizing the layout of ContentPreview.
 public protocol ContentPreviewStyle {
-    func body(content: Content) -> any HTML
+    func body(content: Article) -> any HTML
 }
 
 /// A wrapper around Card, specifically aimed at presenting details about
@@ -23,7 +23,7 @@ public struct ContentPreview: HTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    var content: Content
+    var content: Article
 
     /// Custom style for the content preview.
     private var style: ContentPreviewStyle?
@@ -31,7 +31,7 @@ public struct ContentPreview: HTML {
     /// Initializes the content preview
     /// - Parameters:
     ///   - content: The content to display.
-    public init(for content: Content) {
+    public init(for content: Article) {
         self.content = content
     }
 

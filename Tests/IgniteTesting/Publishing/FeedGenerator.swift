@@ -24,7 +24,7 @@ struct FeedGeneratorTests {
     func generateFeed(for site: any Site) async throws {
         let config = site.feedConfiguration!
         let feedHref = site.url.appending(path: config.path).absoluteString
-        var exampleContent = Content()
+        var exampleContent = Article()
         exampleContent.title = "Example Title"
         exampleContent.description = "Example Description"
 

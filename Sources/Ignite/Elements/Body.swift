@@ -25,8 +25,8 @@ public struct Body: DocumentElement {
     }
 
     public init() {
-        let page = PublishingContext.shared.environment.page
-        self.content = page.body
+        let pageContent = PublishingContext.shared.environment.pageContent
+        self.content = pageContent
     }
 
     /// Removes the Bootstrap `container` class from the body element.
