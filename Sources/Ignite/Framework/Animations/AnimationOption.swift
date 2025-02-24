@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+/// A type that defines configuration options for animations,
+/// such as repeat count and duration.
 public enum AnimationOption: Hashable, Sendable {
     /// How many times the animation repeats
     case repeatCount(Double)

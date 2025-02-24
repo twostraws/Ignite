@@ -5,8 +5,6 @@
 // See LICENSE for license information.
 //
 
-import Foundation
-
 /// A result builder that enables a declarative syntax for creating keyframe animations.
 @resultBuilder
 public struct KeyframeBuilder {
