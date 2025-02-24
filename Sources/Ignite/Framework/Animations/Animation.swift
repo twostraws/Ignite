@@ -14,15 +14,13 @@ import OrderedCollections
 ///
 /// Example:
 /// ```swift
-/// Animation()
-///    .keyframe(0%) { animation in
-///        animation.color(.background, to: .blue)
-///        animation.color(.foreground, to: .yellow)
-///    }
-///    .keyframe(100%) { animation in
-///        animation.color(.background, to: .red)
-///        animation.color(.foreground, to: .white)
-///    }
+/// Text("Animation")
+///     .animation(.click) { keyframe in
+///         keyframe(0%)
+///             .color(.background, to: .blue)
+///         keyframe(100%)
+///             .color(.foreground, to: .yellow)
+///     }
 /// ```
 public struct Animation: Animatable, Hashable {
     /// The collection of frames that define the animation sequence
@@ -46,15 +44,14 @@ public struct Animation: Animatable, Hashable {
     /// The duration of the complete animation sequence in seconds
     public var duration: Double = 1
 
-    /// The event that triggers this animation
-    public var trigger: AnimationTrigger = .hover
-
-    /// Additional non-animated CSS properties
-    public var baseStyles: OrderedSet<InlineStyle> = []
-
     /// Creates a new keyframe animation.
     public init() {
         self.frames = []
+    }
+
+    init(options: [AnimationOption], frames: [Keyframe]) {
+        self.frames = frames
+        self.with(options)
     }
 
     /// Creates a new keyframe animation.
@@ -63,135 +60,101 @@ public struct Animation: Animatable, Hashable {
     }
 }
 
-public extension Animation {
-    /// Adds a new keyframe to the animation sequence at the specified position
-    /// - Parameters:
-    ///   - position: The position in the timeline (e.g., "0%", "50%", "100%")
-    ///   - content: A closure that configures the frame's animations
-    /// - Returns: A copy of the animation with the new frame added
-    func keyframe(_ position: Percentage, content: (inout Frame) -> Void) -> Animation {
-        precondition(
-            position >= 0% && position <= 100%,
-            "Animation frame position must be between 0% and 100%, got \(position)"
-        )
-        var copy = self
-        var frame = Frame(position, data: [])
-        content(&frame)
-        copy.frames.append(frame)
-        return copy
-    }
+extension Animation {
+    mutating func with(_ options: [AnimationOption]) {
+        var lastOptionByType: [AnimationOption.OptionType: AnimationOption] = [:]
 
-    /// Configures animation repetition.
-    /// - Parameter count: Number of times to repeat. Use `.infinity` for endless repetition.
-    /// - Returns: A new animation instance with the updated repeat count
-    func repeatCount(_ count: Double) -> Self {
-        var copy = self
-        copy.repeatCount = count
-        return copy
-    }
+        // Collect last option of each type
+        for option in options {
+            lastOptionByType[option.optionType] = option
+        }
 
-    /// Sets the fill mode for the animation, controlling how styles are applied before and after execution
-    /// - Parameter mode: The fill mode to use (.none, .forwards, .backwards, or .both)
-    /// - Returns: A new animation instance with the updated fill mode
-    func fillMode(_ mode: FillMode) -> Self {
-        var copy = self
-        copy.fillMode = mode
-        return copy
-    }
-
-    /// Sets the direction for the animation, controlling whether it plays forwards, backwards, or alternates
-    /// - Parameter direction: The direction to use (.normal, .reverse, .alternate, or .alternateReverse)
-    /// - Returns: A new animation instance with the updated direction
-    func direction(_ direction: AnimationDirection) -> Self {
-        var copy = self
-        copy.direction = direction
-        return copy
-    }
-
-    /// Adds an additional CSS style property to the animation
-    /// - Parameter style: The CSS style to add
-    /// - Returns: A modified animation with the additional style
-    func baseStyle(_ style: InlineStyle) -> Self {
-        var copy = self
-        copy.baseStyles.append(style)
-        return copy
+        // Apply the final options
+        for option in lastOptionByType.values {
+            switch option {
+            case .repeatCount(let value):
+                repeatCount = value
+            case .fillMode(let value):
+                fillMode = value
+            case .direction(let value):
+                direction = value
+            case .duration(let value):
+                duration = value
+            case .timing(let value):
+                timing = value
+            case .delay(let value):
+                delay = value
+            case .speed(let value):
+                duration = duration / value
+            }
+        }
     }
 }
 
 public extension Animation {
     /// Creates a bouncing animation.
     static var bounce: Self {
-        Animation()
-            .keyframe(0%) { frame in
-                frame.custom(.transform, value: "translateY(0)")
-            }
-            .keyframe(50%) { frame in
-                frame.custom(.transform, value: "translateY(-20px)")
-            }
-            .keyframe(100%) { frame in
-                frame.custom(.transform, value: "translateY(0)")
-            }
-            .duration(0.5)
-            .timing(.custom("cubic-bezier(0.36, 0, 0.66, -0.56)"))
+        Animation(
+            options: [
+                .duration(0.5),
+                .timing(.custom("cubic-bezier(0.36, 0, 0.66, -0.56)")),
+            ],
+            frames: [
+                Keyframe(0%).custom(.transform, value: "translateY(0)"),
+                Keyframe(50%).custom(.transform, value: "translateY(-20px)"),
+                Keyframe(100%).custom(.transform, value: "translateY(0)"),
+            ]
+        )
     }
 
     /// Adds a bounce effect to the current animation
     func bounce() -> Self {
-        self.keyframe(0%) { frame in
-            frame.custom(.transform, value: "translateY(0)")
-        }
-        .keyframe(50%) { frame in
-            frame.custom(.transform, value: "translateY(-20px)")
-        }
-        .keyframe(100%) { frame in
-            frame.custom(.transform, value: "translateY(0)")
-        }
-        .duration(0.5)
-        .timing(.custom("cubic-bezier(0.36, 0, 0.66, -0.56)"))
+        Animation(
+            options: [
+                .duration(0.5),
+                .timing(.custom("cubic-bezier(0.36, 0, 0.66, -0.56)")),
+            ],
+            frames: [
+                Keyframe(0%).custom(.transform, value: "translateY(0)"),
+                Keyframe(50%).custom(.transform, value: "translateY(-20px)"),
+                Keyframe(100%).custom(.transform, value: "translateY(0)"),
+            ]
+        )
     }
 
     /// Creates a shaking animation.
     static var wiggle: Self {
-        Animation()
-            .keyframe(0%) { frame in
-                frame.custom(.transform, value: "translateX(0)")
-            }
-            .keyframe(25%) { frame in
-                frame.custom(.transform, value: "translateX(10px)")
-            }
-            .keyframe(50%) { frame in
-                frame.custom(.transform, value: "translateX(0)")
-            }
-            .keyframe(75%) { frame in
-                frame.custom(.transform, value: "translateX(10px)")
-            }
-            .keyframe(100%) { frame in
-                frame.custom(.transform, value: "translateX(0)")
-            }
-            .duration(0.5)
-            .timing(.automatic)
-            .repeatCount(3)
+        Animation(
+            options: [
+                .duration(0.5),
+                .timing(.automatic),
+                .repeatCount(3),
+            ],
+            frames: [
+                Keyframe(0%).custom(.transform, value: "translateX(0)"),
+                Keyframe(25%).custom(.transform, value: "translateX(10px)"),
+                Keyframe(50%).custom(.transform, value: "translateX(0)"),
+                Keyframe(75%).custom(.transform, value: "translateX(10px)"),
+                Keyframe(100%).custom(.transform, value: "translateX(0)"),
+            ]
+        )
     }
 
     /// Adds a wiggle effect to the current animation
     func wiggle() -> Self {
-        self.keyframe(0%) { frame in
-            frame.custom(.transform, value: "translateX(0)")
-        }
-        .keyframe(25%) { frame in
-            frame.custom(.transform, value: "translateX(10px)")
-        }
-        .keyframe(50%) { frame in
-            frame.custom(.transform, value: "translateX(0)")
-        }
-        .keyframe(75%) { frame in
-            frame.custom(.transform, value: "translateX(10px)")
-        }
-        .keyframe(100%) { frame in
-            frame.custom(.transform, value: "translateX(0)")
-        }
-        .duration(0.5)
-        .timing(.automatic)
-        .repeatCount(3)
+        Animation(
+            options: [
+                .duration(0.5),
+                .timing(.automatic),
+                .repeatCount(3),
+            ],
+            frames: [
+                Keyframe(0%).custom(.transform, value: "translateX(0)"),
+                Keyframe(25%).custom(.transform, value: "translateX(10px)"),
+                Keyframe(50%).custom(.transform, value: "translateX(0)"),
+                Keyframe(75%).custom(.transform, value: "translateX(10px)"),
+                Keyframe(100%).custom(.transform, value: "translateX(0)"),
+            ]
+        )
     }
 }

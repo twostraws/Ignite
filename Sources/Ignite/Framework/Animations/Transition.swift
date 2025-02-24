@@ -10,15 +10,13 @@ import OrderedCollections
 /// The main animation configuration type that provides a flexible way to define CSS animations
 public struct Transition: Animatable, Hashable {
     /// The CSS properties being animated and their values
-    var data: [AnimatableData]
-    /// Additional non-animated CSS properties
-    public var baseStyles: OrderedSet<InlineStyle> = []
-    /// The event that triggers this animation (hover, click, or appear)
-    public var trigger: AnimationTrigger = .hover
+    var data: [AnimatableData] = []
 
-    public init(@AnimationBuilder content: () -> [AnimatableData]) {
-        self.data = content()
+    init(data: [AnimatableData]) {
+        self.data = data
     }
+
+    init() {}
 }
 
 public extension Transition {
@@ -61,14 +59,12 @@ public extension Transition {
     }
 }
 
-public extension Animatable where Self == Transition {
+public extension Transition {
     /// Creates a fade-in animation that transitions opacity from 0 to 1.
     static var fadeIn: Self {
-        Transition {
-            AnimatableData(.opacity, from: "0", to: "1")
-        }
-        .duration(0.35)
-        .timing(.automatic)
+        Transition(data: [.init(.opacity, from: "0", to: "1")])
+            .duration(0.35)
+            .timing(.automatic)
     }
 
     /// Adds a fade-in effect to the current animation
@@ -78,11 +74,9 @@ public extension Animatable where Self == Transition {
 
     /// Creates a fade-out animation that transitions opacity from 1 to 0.
     static var fadeOut: Self {
-        Transition {
-            AnimatableData(.opacity, from: "1", to: "0")
-        }
-        .duration(0.35)
-        .timing(.automatic)
+        Transition(data: [.init(.opacity, from: "1", to: "0")])
+            .duration(0.35)
+            .timing(.automatic)
     }
 
     /// Adds a fade-out effect to the current animation
@@ -100,11 +94,9 @@ public extension Animatable where Self == Transition {
         default: ("translateX", "-100%")
         }
 
-        return Transition {
-            AnimatableData(.transform, from: "\(property)(\(from))", to: "\(property)(0)")
-        }
-        .duration(0.35)
-        .timing(.automatic)
+        return Transition(data: [.init(.transform, from: "\(property)(\(from))", to: "\(property)(0)")])
+            .duration(0.35)
+            .timing(.automatic)
     }
 
     /// Adds a slide-in effect to the current animation
@@ -117,9 +109,7 @@ public extension Animatable where Self == Transition {
         default: ("translateX", "-100%")
         }
 
-        return self.combined(with: [
-            AnimatableData(.transform, from: "\(property)(\(from))", to: "\(property)(0)")
-        ])
+        return self.combined(with: [.init(.transform, from: "\(property)(\(from))", to: "\(property)(0)")])
     }
 
     /// Creates an animation that slides content out to a specified edge.
@@ -132,11 +122,9 @@ public extension Animatable where Self == Transition {
         default: ("translateX", "-100%")
         }
 
-        return Transition {
-            AnimatableData(.transform, from: "\(property)(0)", to: "\(property)(\(to))")
-        }
-        .duration(0.35)
-        .timing(.automatic)
+        return Transition(data: [.init(.transform, from: "\(property)(0)", to: "\(property)(\(to))")])
+            .duration(0.35)
+            .timing(.automatic)
     }
 
     /// Adds a slide-out effect to the current animation
@@ -149,17 +137,14 @@ public extension Animatable where Self == Transition {
         default: ("translateX", "-100%")
         }
 
-        return self.combined(with: [
-            AnimatableData(.transform, from: "\(property)(0)", to: "\(property)(\(to))")
-        ])
+        return self.combined(with: [.init(.transform, from: "\(property)(0)", to: "\(property)(\(to))")])
     }
 
     /// Creates a rotation animation by specified angle.
     static func rotate(_ angle: Angle, anchor: AnchorPoint = .center) -> Self {
-        Transition {
-            AnimatableData(.transform, from: "rotate(0deg)", to: "rotate(\(angle.value))")
-            AnimatableData(.transformOrigin, from: anchor.value, to: anchor.value)
-        }
+        Transition(data: [
+            .init(.transform, from: "rotate(0deg)", to: "rotate(\(angle.value))"),
+            .init(.transformOrigin, from: anchor.value, to: anchor.value)])
     }
 
     /// Adds a rotation effect to the current animation
@@ -172,58 +157,42 @@ public extension Animatable where Self == Transition {
 
     /// Creates a scale animation between two values.
     static func scale(from: Double = 0.8, to: Double = 1.0) -> Self {
-        Transition {
-            AnimatableData(.transform, from: "scale(\(from))", to: "scale(\(to))")
-        }
+        Transition(data: [.init(.transform, from: "scale(\(from))", to: "scale(\(to))")])
     }
 
     /// Adds a scale effect to the current animation
     func scale(from: Double = 0.8, to: Double = 1.0) -> Self {
-        self.combined(with: [
-            AnimatableData(.transform, from: "scale(\(from))", to: "scale(\(to))")
-        ])
+        self.combined(with: [.init(.transform, from: "scale(\(from))", to: "scale(\(to))")])
     }
 
     /// Creates a color transition animation.
     static func color(_ color: Color) -> Self {
-        Transition {
-            AnimatableData(.color, value: "\(color.description) !important")
-        }
+        Transition(data: [.init(.color, value: "\(color.description) !important")])
     }
 
     /// Adds a color transition to the current animation
     func color(_ color: Color) -> Self {
-        self.combined(with: [
-            AnimatableData(.color, value: "\(color.description) !important")
-        ])
+        self.combined(with: [.init(.color, value: "\(color.description) !important")])
     }
 
     /// Creates a background color transition animation.
     static func backgroundColor(_ color: Color) -> Self {
-        Transition {
-            AnimatableData(.backgroundColor, value: "\(color.description) !important")
-        }
+        Transition(data: [.init(.backgroundColor, value: "\(color.description) !important")])
     }
 
     /// Adds a background color transition to the current animation
     func backgroundColor(_ color: Color) -> Self {
-        self.combined(with: [
-            AnimatableData(.backgroundColor, value: "\(color.description) !important")
-        ])
+        self.combined(with: [.init(.backgroundColor, value: "\(color.description) !important")])
     }
 
     /// Creates a blur effect animation.
     static func blur(radius: Double) -> Self {
-        Transition {
-            AnimatableData(.filter, from: "blur(0px)", to: "blur(\(radius)px)")
-        }
+        Transition(data: [.init(.filter, from: "blur(0px)", to: "blur(\(radius)px)")])
     }
 
     /// Adds a blur effect to the current animation
     func blur(radius: Double) -> Self {
-        self.combined(with: [
-            AnimatableData(.filter, from: "blur(0px)", to: "blur(\(radius)px)")
-        ])
+        self.combined(with: [.init(.filter, from: "blur(0px)", to: "blur(\(radius)px)")])
     }
 
     /// Creates a 3D flip animation in the specified direction.
@@ -235,12 +204,10 @@ public extension Animatable where Self == Transition {
         case .down: ("X", "360deg")
         }
 
-        return Transition {
-            AnimatableData(
-                .transform,
-                from: "perspective(400px) rotate\(axis)(0)",
-                to: "perspective(400px) rotate\(axis)(\(degrees))")
-        }
+        return Transition(data: [.init(
+            .transform,
+            from: "perspective(400px) rotate\(axis)(0)",
+            to: "perspective(400px) rotate\(axis)(\(degrees))")])
         .duration(0.5)
         .timing(.easeInOut)
     }

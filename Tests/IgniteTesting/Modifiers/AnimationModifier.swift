@@ -21,16 +21,15 @@ class AnimationModifierTests: IgniteTestSuite {
         }.animation(Animation.bounce, on: .hover)
 
         let output = element.render()
-
+        print(output)
         // Example output:
-        // <div class="animation-H57c1-transform" style="transform-style: preserve-3d">
+        // <div class="animation-H57c1-hover" style="transform-style: preserve-3d">
         // <div class="animation-H57c1-hover"><p><span>This is a Span</span></p></div></div>
         // Where 'H57c1' is the stable ID of the animation, used to generate the CSS class name
         let pattern = #"""
-        <div class="animation-(?<code>[a-zA-Z0-9]{5})-transform" style="transform-style: preserve-3d">\
-        <div class="animation-\k<code>-hover">\
+        <div class="animation-(?<code>[a-zA-Z0-9]{5})-hover" style="transform-style: preserve-3d">\
         <p><span>This is a Span</span></p>\
-        </div></div>
+        </div>
         """#
         .replacingOccurrences(of: "\n", with: "") // Remove line breaks from the pattern
 
