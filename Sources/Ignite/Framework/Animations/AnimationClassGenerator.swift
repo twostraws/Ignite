@@ -176,8 +176,8 @@ struct AnimationClassGenerator {
     private func buildAppearKeyframes(_ animation: Animation) -> String {
         let timing = getAnimationTiming(animation)
         let keyframeContent = animation.frames.map { frame in
-            let properties = frame.animations
-                .map { "\($0.property.rawValue): \($0.final)" }
+            let properties = frame.styles
+                .map { "\($0.property): \($0.value)" }
                 .joined(separator: ";\n                ")
 
             return """
