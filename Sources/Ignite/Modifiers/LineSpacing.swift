@@ -26,23 +26,30 @@ struct LineSpacingModifier: HTMLModifier {
     }
 
     func body(content: some HTML) -> any HTML {
-        let isText = content.body is Text ||
-            (content as? ModifiedHTML)?.content is Text
+        if content.isText {
+            applyLineHeightToText(content: content)
+        } else {
+            applyLineHeightToNonText(content: content)
+        }
+    }
 
-        return if isText {
-            if let customHeight {
-                Section(content)
-                    .style(.lineHeight, customHeight.formatted(.nonLocalizedDecimal))
-            } else if let presetHeight {
-                Section(content)
-                    .class("lh-\(presetHeight.rawValue)")
-            } else {
-                content
-            }
-        } else if let customHeight {
+    private func applyLineHeightToText(content: some HTML) -> any HTML {
+        if let customHeight {
             content.style(.init(.lineHeight, value: customHeight.formatted(.nonLocalizedDecimal)))
         } else if let presetHeight {
             content.class("lh-\(presetHeight.rawValue)")
+        } else {
+            content
+        }
+    }
+
+    private func applyLineHeightToNonText(content: some HTML) -> any HTML {
+        if let customHeight {
+            Section(content.class("line-height-inherit"))
+                .style(.lineHeight, customHeight.formatted(.nonLocalizedDecimal))
+        } else if let presetHeight {
+            Section(content.class("line-height-inherit"))
+                .class("lh-\(presetHeight.rawValue)")
         } else {
             content
         }

@@ -80,19 +80,17 @@ struct ForegroundStyleModifier: HTMLModifier {
             }
         case .string(let string):
             if content.isText {
+                content.style(.color, string)
+            } else {
                 Section(content.class("color-inherit"))
                     .style(.color, string)
-
-            } else {
-                content.style(.color, string)
             }
         case .color(let color):
             if content.isText {
+                content.style(.color, color.description)
+            } else {
                 Section(content.class("color-inherit"))
                     .style(.color, color.description)
-
-            } else {
-                content.style(.color, color.description)
             }
         case .style(let foregroundStyle):
             content.class(foregroundStyle.rawValue)
