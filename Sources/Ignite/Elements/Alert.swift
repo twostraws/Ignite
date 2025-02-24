@@ -49,8 +49,9 @@ public struct Alert: HTML {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = attributes
-        attributes.append(containerAttributes: .init(classes: alertClasses))
-        return attributes.description(wrapping: content.render())
+        Section(content)
+            .class(alertClasses)
+            .attributes(attributes)
+            .render()
     }
 }
