@@ -25,7 +25,7 @@ public struct Body: DocumentElement {
     }
 
     public init() {
-        let page = PublishingContext.default.environment.page
+        let page = PublishingContext.shared.environment.page
         self.content = page.body
     }
 

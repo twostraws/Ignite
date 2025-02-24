@@ -19,7 +19,7 @@ class IgniteTestSuite {
     let site: any Site = TestSite()
 
     var publishingContext: PublishingContext {
-        PublishingContext.default
+        PublishingContext.shared
     }
 
     /// Creates a new test instance and initializes the publishing context for `TestSite`.
