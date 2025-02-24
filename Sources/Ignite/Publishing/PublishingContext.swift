@@ -14,18 +14,18 @@ import SwiftSoup
 @MainActor
 final class PublishingContext {
     /// The shared instance of `PublishingContext`.
-    private static var defaultContext: PublishingContext!
+    private static var sharedContext: PublishingContext!
 
     /// The shared instance of `PublishingContext`.
-    static var `default`: PublishingContext {
-        guard let defaultContext else {
+    static var shared: PublishingContext {
+        guard let sharedContext else {
             fatalError("""
             "PublishingContext.default accessed before being initialized. \
             Call PublishingContext.initialize() first.
             """)
         }
 
-        return defaultContext
+        return sharedContext
     }
 
     /// The site that is currently being built.
@@ -113,7 +113,7 @@ final class PublishingContext {
         buildDirectoryPath: String = "Build"
     ) throws -> PublishingContext {
         let context = try PublishingContext(for: site, from: file, buildDirectoryPath: buildDirectoryPath)
-        defaultContext = context
+        sharedContext = context
         return context
     }
 
@@ -165,7 +165,7 @@ final class PublishingContext {
 
     /// Parses all Markdown content in the site's Content folder.
     func parseContent() throws {
-        try ContentFinder.default.find(root: contentDirectory) { deploy in
+        try ContentFinder.shared.find(root: contentDirectory) { deploy in
             let article = try Content(
                 from: deploy.url,
                 in: self,

@@ -222,7 +222,7 @@ public struct Content {
             if let date = process(date: dateString) {
                 return date
             } else {
-                PublishingContext.default.addError(.badContentDateFormat)
+                PublishingContext.shared.addError(.badContentDateFormat)
                 continue
             }
         }

@@ -30,7 +30,7 @@ final class AnimationManager {
     }
 
     /// The shared singleton instance of the animation manager.
-    static let `default` = AnimationManager()
+    static let shared = AnimationManager()
 
     /// Storage for registered animations, keyed by element ID and trigger type.
     ///
@@ -62,7 +62,7 @@ final class AnimationManager {
             let newContent = existingContent + "\n\n" + cssBlocks.joined(separator: "\n\n")
             try newContent.write(to: file, atomically: true, encoding: .utf8)
         } catch {
-            PublishingContext.default.addError(.failedToWriteFile("css/ignite-core.min.css"))
+            PublishingContext.shared.addError(.failedToWriteFile("css/ignite-core.min.css"))
         }
     }
 }

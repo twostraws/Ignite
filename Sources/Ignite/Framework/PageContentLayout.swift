@@ -19,6 +19,6 @@ public extension PageContentLayout {
     // Default to `MissingLayout`, which will cause the main
     // site layout to be used instead.
     var parentLayout: any Layout {
-        PublishingContext.default.site.layout
+        PublishingContext.shared.site.layout
     }
 }

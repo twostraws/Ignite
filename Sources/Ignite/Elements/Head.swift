@@ -61,14 +61,14 @@ public struct Head: DocumentElement {
         MetaTag.utf8
         MetaTag.flexibleViewport
 
-        let environment = PublishingContext.default.environment
+        let environment = PublishingContext.shared.environment
         let pageDescription = environment.page.description
 
         if pageDescription.isEmpty == false {
             MetaTag(name: "description", content: pageDescription)
         }
 
-        let context = PublishingContext.default
+        let context = PublishingContext.shared
         let site = context.site
 
         if site.author.isEmpty == false {
@@ -98,7 +98,7 @@ public struct Head: DocumentElement {
 
         MetaLink.igniteCoreCSS
 
-        if CSSManager.default.hasCSS {
+        if CSSManager.shared.hasCSS {
             MetaLink.mediaQueryCSS
         }
 
@@ -118,7 +118,7 @@ public struct Head: DocumentElement {
         guard let sourceURL = Bundle.module.url(forResource: "Resources/js/theme-switching", withExtension: "js"),
               let contents = try? String(contentsOf: sourceURL)
         else {
-            PublishingContext.default.addError(.missingSiteResource("js/theme-switching.js"))
+            PublishingContext.shared.addError(.missingSiteResource("js/theme-switching.js"))
             return nil
         }
         return Script(code: contents)

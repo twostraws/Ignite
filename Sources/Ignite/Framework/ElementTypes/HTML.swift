@@ -58,7 +58,7 @@ public extension HTML {
 extension HTML {
     /// The publishing context of this site.
     var publishingContext: PublishingContext {
-        PublishingContext.default
+        PublishingContext.shared
     }
 
     /// The Bootstrap class that sizes this element in a grid.

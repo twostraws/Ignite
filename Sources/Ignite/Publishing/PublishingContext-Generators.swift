@@ -100,8 +100,8 @@ extension PublishingContext {
 
     /// Generates the CSS file containing all media query rules.
     func generateMediaQueryCSS() {
-        guard CSSManager.default.hasCSS else { return }
-        let mediaQueryCSS = CSSManager.default.generateAllRules(themes: site.allThemes)
+        guard CSSManager.shared.hasCSS else { return }
+        let mediaQueryCSS = CSSManager.shared.generateAllRules(themes: site.allThemes)
         let cssPath = buildDirectory.appending(path: "css/media-queries.min.css")
         do {
             try mediaQueryCSS.write(to: cssPath, atomically: true, encoding: .utf8)
@@ -113,6 +113,6 @@ extension PublishingContext {
     /// Generates animations for the site.
     func generateAnimations() {
         let animationsPath = buildDirectory.appending(path: "css/ignite-core.min.css")
-        AnimationManager.default.write(to: animationsPath)
+        AnimationManager.shared.write(to: animationsPath)
     }
 }

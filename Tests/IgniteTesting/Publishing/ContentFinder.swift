@@ -52,7 +52,7 @@ actor ContentFinderTests {
 
         // Visit directory tree
         var found = [ContentFinder.DeployContent]()
-        try ContentFinder.default.find(root: root, suffixes: test.suffixes) {
+        try ContentFinder.shared.find(root: root, suffixes: test.suffixes) {
             found.append($0)
             return true
         }

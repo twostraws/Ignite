@@ -9,7 +9,7 @@
 @MainActor
 final class CSSManager {
     /// The shared instance used for managing CSS rules across the application.
-    static let `default` = CSSManager()
+    static let shared = CSSManager()
 
     /// Queue of registrations waiting to be processed
     private struct PendingRegistration {
