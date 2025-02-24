@@ -14,7 +14,7 @@ struct InlineStyleModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         var copy = content
         for style in styles {
-            copy.attributes.append(styles: .init(style.property, value: style.value))
+            copy.attributes.add(styles: .init(style.property, value: style.value))
         }
         return copy
     }

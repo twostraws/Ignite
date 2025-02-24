@@ -46,7 +46,7 @@ public struct Quote: HTML {
     /// - Returns: The HTML for this element.
     public func render() -> String {
         var attributes = attributes
-        attributes.append(classes: "blockquote")
+        attributes.add(classes: "blockquote")
 
         let renderedContents = contents.render()
         let renderedCaption = caption.render()

@@ -15,7 +15,7 @@ struct AttributeModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         guard let attribute else { return content }
         var copy = content
-        copy.attributes.append(customAttributes: attribute)
+        copy.attributes.add(customAttributes: attribute)
         return copy
     }
 }

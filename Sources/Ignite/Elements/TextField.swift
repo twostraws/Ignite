@@ -91,23 +91,23 @@ public struct TextField: InlineElement {
 
     public func render() -> String {
         var attributes = attributes
-        attributes.append(classes: "form-control")
-        attributes.append(customAttributes: .init(name: "type", value: type.rawValue))
+        attributes.add(classes: "form-control")
+        attributes.add(customAttributes: .init(name: "type", value: type.rawValue))
 
         if let placeholder {
-            attributes.append(customAttributes: .init(name: "placeholder", value: placeholder))
+            attributes.add(customAttributes: .init(name: "placeholder", value: placeholder))
         }
 
         if isRequired {
-            attributes.append(customAttributes: .required)
+            attributes.add(customAttributes: .required)
         }
 
         if isDisabled {
-            attributes.append(customAttributes: .disabled)
+            attributes.add(customAttributes: .disabled)
         }
 
         if isReadOnly {
-            attributes.append(customAttributes: .readOnly)
+            attributes.add(customAttributes: .readOnly)
         }
 
         return "<input\(attributes) />"

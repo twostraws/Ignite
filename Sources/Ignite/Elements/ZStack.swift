@@ -45,7 +45,7 @@ public struct ZStack: HTML {
 
         items = items.enumerated().map { index, item in
             var elementAttributes = CoreAttributes()
-            elementAttributes.append(styles: [
+            elementAttributes.add(styles: [
                 .init(.position, value: "relative"),
                 .init(.display, value: "grid"),
                 .init(.gridArea, value: "1/1"),
@@ -53,12 +53,12 @@ public struct ZStack: HTML {
                 .init(.marginBottom, value: "0")
             ])
 
-            elementAttributes.append(styles: alignment.flexAlignmentRules)
+            elementAttributes.add(styles: alignment.flexAlignmentRules)
             return item.attributes(elementAttributes)
         }
 
         var attributes = attributes
-        attributes.append(styles: .init(.display, value: "grid"))
+        attributes.add(styles: .init(.display, value: "grid"))
 
         let content = items.map { $0.render() }.joined()
         return "<div\(attributes)>\(content)</div>"

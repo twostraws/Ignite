@@ -112,7 +112,7 @@ public struct MetaLink: HeadElement, Sendable {
         var attributes = attributes
         // char[0] of the link 'href' is '/' for an asset; not for a site URL
         let basePath = href.starts(with: "/") ? publishingContext.site.url.path : ""
-        attributes.append(customAttributes:
+        attributes.add(customAttributes:
             .init(name: "href", value: "\(basePath)\(href)"),
             .init(name: "rel", value: rel))
 

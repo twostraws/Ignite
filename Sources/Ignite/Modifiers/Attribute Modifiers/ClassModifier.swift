@@ -15,7 +15,7 @@ struct ClassModifier: HTMLModifier {
         let existingNames = classNames.filter { !$0.isEmpty }
         guard !existingNames.isEmpty else { return content }
         var copy = content
-        copy.attributes.append(classes: classNames)
+        copy.attributes.add(classes: classNames)
         return copy
     }
 }

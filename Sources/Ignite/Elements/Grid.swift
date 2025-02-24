@@ -65,14 +65,14 @@ public struct Grid: HTML, HorizontalAligning {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var sectionAttributes = attributes.appending(classes: ["row"])
+        var sectionAttributes = attributes.adding(classes: ["row"])
 
         // If a column count is set, we want to use that for all
         // page sizes that are medium and above. Below that we
         // should drop down to width 1 to avoid squeezing things
         // into oblivion.
         if let columnCount {
-            sectionAttributes.append(classes: [
+            sectionAttributes.add(classes: [
                 "row-cols-1",
                 "row-cols-md-\(columnCount)"
             ])
@@ -83,7 +83,7 @@ public struct Grid: HTML, HorizontalAligning {
         if let spacingAmount {
             switch spacingAmount {
             case .exact(let pixels):
-                sectionAttributes.append(styles: .init(.rowGap, value: "\(pixels)px"))
+                sectionAttributes.add(styles: .init(.rowGap, value: "\(pixels)px"))
             case .semantic(let amount):
                 gutterClass = "gy-\(amount.rawValue)"
             }

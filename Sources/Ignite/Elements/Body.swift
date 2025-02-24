@@ -57,12 +57,12 @@ public struct Body: DocumentElement {
         if case .visible(let firstLine, let shouldWrap) =
             publishingContext.site.syntaxHighlighterConfiguration.lineNumberVisibility {
 
-            attributes.append(classes: "line-numbers")
+            attributes.add(classes: "line-numbers")
             if firstLine != 1 {
-                attributes.append(dataAttributes: .init(name: "start", value: firstLine.formatted()))
+                attributes.add(dataAttributes: .init(name: "start", value: firstLine.formatted()))
             }
             if shouldWrap {
-                attributes.append(styles: .init(.whiteSpace, value: "pre-wrap"))
+                attributes.add(styles: .init(.whiteSpace, value: "pre-wrap"))
             }
         }
 
@@ -76,7 +76,7 @@ public struct Body: DocumentElement {
         output += Script(file: "/js/ignite-core.js").render()
 
         if isBoundByContainer {
-            attributes.append(classes: ["container"])
+            attributes.add(classes: ["container"])
         }
         return "<body\(attributes)>\(output)</body>"
     }

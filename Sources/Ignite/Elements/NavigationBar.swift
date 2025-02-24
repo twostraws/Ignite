@@ -234,7 +234,7 @@ fileprivate extension HTML {
     func data(_ name: String, _ value: String?) -> Self {
         guard let value else { return self }
         var copy = self
-        copy.attributes.append(dataAttributes: .init(name: name, value: value))
+        copy.attributes.add(dataAttributes: .init(name: name, value: value))
         return copy
     }
 }

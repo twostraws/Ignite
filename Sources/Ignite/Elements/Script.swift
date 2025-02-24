@@ -48,7 +48,7 @@ public struct Script: HTML, HeadElement {
         var attributes = attributes
         if let file {
             let path = publishingContext.path(for: file)
-            attributes.append(customAttributes: .init(name: "src", value: path))
+            attributes.add(customAttributes: .init(name: "src", value: path))
             return "<script\(attributes)></script>"
         } else if let code {
             return "<script\(attributes)>\(code)</script>"

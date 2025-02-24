@@ -10,7 +10,7 @@ struct GridColumnWidthModifier: HTMLModifier {
 
     func body(content: some HTML) -> any HTML {
         var copy = content
-        copy.attributes.append(classes: width.className)
+        copy.attributes.add(classes: width.className)
         return copy
     }
 }

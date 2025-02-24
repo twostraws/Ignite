@@ -69,9 +69,9 @@ public struct Column: HTML, HorizontalAligning {
         var columnAttributes = attributes
 
         if verticalAlignment != .top {
-            columnAttributes.append(classes: ["align-\(verticalAlignment.rawValue)"])
+            columnAttributes.add(classes: ["align-\(verticalAlignment.rawValue)"])
         }
-        columnAttributes.append(customAttributes: .init(name: "colspan", value: columnSpan.formatted()))
+        columnAttributes.add(customAttributes: .init(name: "colspan", value: columnSpan.formatted()))
         return "<td\(columnAttributes)>\(HTMLCollection(items))</td>"
     }
 }

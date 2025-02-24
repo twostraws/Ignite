@@ -170,16 +170,16 @@ public struct Form: HTML {
 
         var attributes = attributes
 
-        attributes.append(customAttributes: .init(name: "method", value: "post"))
-        attributes.append(customAttributes: .init(name: "action", value: action.service.endpoint(formID: action.formID)))
+        attributes.add(customAttributes: .init(name: "method", value: "post"))
+        attributes.add(customAttributes: .init(name: "action", value: action.service.endpoint(formID: action.formID)))
         attributes.data.formUnion(action.service.dataAttributes)
 
         if let formClass = action.service.formClass {
-            attributes.append(classes: formClass)
+            attributes.add(classes: formClass)
         }
 
         if case .mailchimp = action.service {
-            attributes.append(customAttributes: .init(name: "target", value: "_blank"))
+            attributes.add(customAttributes: .init(name: "target", value: "_blank"))
         }
 
         let formContent = formContent(for: action)
