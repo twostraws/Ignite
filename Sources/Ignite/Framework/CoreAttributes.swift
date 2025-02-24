@@ -63,31 +63,6 @@ struct CoreAttributes: Equatable, Sendable {
     /// How many columns this should occupy when placed in a grid.
     var columnWidth: ColumnWidth = .automatic
 
-    /// CSS classes that should be applied to a wrapper div around this element.
-    /// Each `ContainerAttributes` represents a wrapper div with styling
-    var containerAttributes = OrderedSet<ContainerAttributes>() {
-        didSet {
-            containerAttributes = OrderedSet(containerAttributes.sorted { first, second in
-                // First handle transform vs animation containers
-                if first.type == .transform, second.type == .animation {
-                    // transform goes after animation
-                    false
-                } else if first.type == .animation, second.type == .transform {
-                    // animation goes before transform
-                    true
-                } else if first.type == .click {
-                    // Click containers should always be outermost
-                    false // first goes after second
-                } else if second.type == .click {
-                    true // second goes after first
-                } else {
-                    // For all other containers, maintain their relative positions
-                    containerAttributes.firstIndex(of: first)! < containerAttributes.firstIndex(of: second)!
-                }
-            })
-        }
-    }
-
     /// The ID of this element, if set.
     var idString: String {
         if id.isEmpty {
@@ -184,46 +159,10 @@ struct CoreAttributes: Equatable, Sendable {
 
         var result = content ?? attributes
 
-        if containerAttributes.isEmpty {
-            if tagIsSelfClosing {
-                return "<\(tag)\(attributes) />"
-            }
-            if tag.isEmpty == false {
-                return "<\(tag)\(attributes)>\(content ?? "")</\(tag)>"
-            }
-            return result
-        }
-
         if tagIsSelfClosing {
             result = "<\(tag)\(attributes) />"
         } else if tag.isEmpty == false {
             result = "<\(tag)\(attributes)>\(result)</\(tag)>"
-        }
-
-        // Apply containers from inner to outer
-        for container in containerAttributes where !container.isEmpty {
-            let classAttr = if container.classes.isEmpty {
-                ""
-            } else {
-                " class=\"\(container.classes.sorted().joined(separator: " "))\""
-            }
-
-            let allStyles = container.styles.sorted().map { $0.description }.joined(separator: "; ")
-
-            let styleAttr = if container.styles.isEmpty {
-                ""
-            } else {
-                " style=\"\(allStyles)\""
-            }
-
-            var eventAttr = ""
-
-            for event in container.events.sorted() where event.actions.isEmpty == false {
-                let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
-                eventAttr += " \(event.name)=\"\(actions)\""
-            }
-
-            result = "<div\(classAttr)\(styleAttr)\(eventAttr)>\(result)</div>"
         }
 
         return result
@@ -249,18 +188,6 @@ struct CoreAttributes: Equatable, Sendable {
         var copy = self
         copy.classes.formUnion(classes)
         return copy
-    }
-
-    /// Appends a class to the elements container.
-    /// - Parameter dataAttributes: Variable number of container attributes to append.
-    mutating func append(containerAttributes: ContainerAttributes...) {
-        self.containerAttributes.formUnion(containerAttributes)
-    }
-
-    /// Appends a class to the elements container.
-    /// - Parameter dataAttributes: The container attributes to append.
-    mutating func append(containerAttributes: [ContainerAttributes]) {
-        self.containerAttributes.formUnion(containerAttributes)
     }
 
     /// Returns a new set of attributes with an extra aria appended
