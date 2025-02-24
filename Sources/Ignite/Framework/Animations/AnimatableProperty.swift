@@ -6,7 +6,7 @@
 //
 
 /// CSS properties that can be animated
-public enum AnimatableProperty: String, Hashable {
+public enum AnimatableProperty: String, Hashable, Sendable {
     /// Controls the aspect ratio of an element
     case aspectRatio = "aspect-ratio"
     /// Controls the background properties of an element
