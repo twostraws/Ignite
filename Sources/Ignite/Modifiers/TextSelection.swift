@@ -12,13 +12,6 @@ public enum TextSelection: String {
     case none
 }
 
-struct TextSelectionModifier: HTMLModifier {
-    var selection: TextSelection
-    func body(content: some HTML) -> any HTML {
-        content.class("user-select-\(selection)")
-    }
-}
-
 public extension HTML {
     /// Adjusts whether the user can select the text inside this element. You of course
     /// welcome to use this how you see fit, but please exercise restraint – not only
@@ -27,6 +20,6 @@ public extension HTML {
     /// - Parameter selection: The new text selection value.
     /// - Returns: A copy of the current element with the updated text selection value.
     func textSelection(_ selection: TextSelection) -> some HTML {
-        modifier(TextSelectionModifier(selection: selection))
+        self.class("user-select-\(selection)")
     }
 }

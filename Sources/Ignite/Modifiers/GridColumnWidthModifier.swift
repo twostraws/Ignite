@@ -16,6 +16,9 @@ struct GridColumnWidthModifier: HTMLModifier {
 }
 
 public extension HTML {
+    /// Adjusts the number of columns assigned to this element.
+    /// - Parameter width: The new number of columns to use.
+    /// - Returns: A new element with the adjusted column width.
     func width(_ width: Int) -> some HTML {
         modifier(GridColumnWidthModifier(width: .count(width)))
     }
