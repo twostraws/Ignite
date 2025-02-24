@@ -66,7 +66,7 @@ final class CSSManager {
     /// - Returns: The class name that will be used for these styles
     @discardableResult
     func register(
-        _ queries: [any Query],
+        _ queries: [any Query] = [],
         properties: [(String, String)] = [("display", "none")],
         className: String? = nil
     ) -> String {

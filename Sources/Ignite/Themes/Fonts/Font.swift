@@ -218,6 +218,20 @@ public struct Font: Hashable, Equatable, Sendable {
         Font(name: name, style: style, size: .px(size), weight: weight)
     }
 
+    /// Creates a custom font with the specified name and style.
+    /// - Parameters:
+    ///   - name: The name of the font file including its extension.
+    ///   - style: The semantic level of the font. Defaults to `.body`.
+    ///   - weight: The weight (boldness) of the font.
+    /// - Returns: A Font instance configured with the custom font.
+    public static func custom(
+        _ name: String,
+        style: Font.Style = .body,
+        weight: Font.Weight = .regular
+    ) -> Font {
+        Font(name: name, style: style, size: nil, weight: weight)
+    }
+
     /// Creates a custom font with the specified name and size.
     /// - Parameters:
     ///   - name: The name of the font file including its extension.
