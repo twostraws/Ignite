@@ -21,9 +21,6 @@ final class AnimationManager {
     /// corresponding resolved animations.
     private var animations: [String: OrderedDictionary<AnimationTrigger, any Animatable>] = [:]
 
-    /// Returns true if any animations have been registered
-    var hasAnimations: Bool { !animations.isEmpty }
-
     /// Private initializer to enforce singleton pattern.
     private init() {}
 
@@ -64,10 +61,11 @@ final class AnimationManager {
         }
 
         do {
-            let css = cssBlocks.joined(separator: "\n\n")
-            try css.write(to: file, atomically: true, encoding: .utf8)
+            let existingContent = try String(contentsOf: file, encoding: .utf8)
+            let newContent = existingContent + "\n\n" + cssBlocks.joined(separator: "\n\n")
+            try newContent.write(to: file, atomically: true, encoding: .utf8)
         } catch {
-            PublishingContext.default.addError(.failedToWriteFile("css/animations.min.css"))
+            PublishingContext.default.addError(.failedToWriteFile("css/ignite-core.min.css"))
         }
     }
 }

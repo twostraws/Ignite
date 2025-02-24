@@ -222,17 +222,10 @@ final class PublishingContext {
         copyAssets()
         copyFonts()
 
-        let themesPath = buildDirectory.appending(path: "css/themes.min.css").decodedPath
+        let igniteCorePath = buildDirectory.appending(path: "css/ignite-core.min.css").decodedPath
 
-        if !FileManager.default.fileExists(atPath: themesPath) {
-            copy(resource: "css/themes.min.css")
-        }
-
-        if AnimationManager.default.hasAnimations {
-            let animationsPath = buildDirectory.appending(path: "css/animations.min.css").decodedPath
-            if !FileManager.default.fileExists(atPath: animationsPath) {
-                copy(resource: "css/animations.min.css")
-            }
+        if !FileManager.default.fileExists(atPath: igniteCorePath) {
+            copy(resource: "css/ignite-core.min.css")
         }
 
         copy(resource: "js/ignite-core.js")
