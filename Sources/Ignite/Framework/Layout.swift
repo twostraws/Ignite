@@ -34,7 +34,7 @@ public protocol Layout {
 
 public extension Layout {
     /// The current page being rendered.
-    var pageContent: some HTML {
+    var content: some HTML {
         Section(PublishingContext.shared.environment.pageContent)
     }
 
