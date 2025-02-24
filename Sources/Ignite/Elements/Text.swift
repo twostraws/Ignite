@@ -111,7 +111,7 @@ extension HTML {
     func fontStyle(_ font: Font.Style) -> any HTML {
         var copy: any HTML = self
         if font == .lead {
-            copy.attributes.append(classes: font.rawValue)
+            copy.attributes.add(classes: font.rawValue)
         } else if var text = copy as? Text {
             text.font = font
             copy = text

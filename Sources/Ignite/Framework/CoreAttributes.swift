@@ -146,33 +146,33 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         }
     }
 
-    /// Appends an array of CSS classes.
-    /// - Parameter classes: The CSS classes to append.
-    mutating func append(classes: some Collection<String>) {
+    /// Adds an array of CSS classes.
+    /// - Parameter classes: The CSS classes to add.
+    mutating func add(classes: some Collection<String>) {
         self.classes.formUnion(classes)
     }
 
-    /// Appends multiple CSS classes.
-    /// - Parameter classes: The CSS classes to append.
-    mutating func append(classes: String...) {
+    /// Adds multiple CSS classes.
+    /// - Parameter classes: The CSS classes to add.
+    mutating func add(classes: String...) {
         self.classes.formUnion(classes)
     }
 
-    /// Returns a new set of attributes with extra CSS classes appended.
-    /// - Parameter classes: The CSS classes to append.
+    /// Returns a new set of attributes with extra CSS classes added.
+    /// - Parameter classes: The CSS classes to add.
     /// - Returns: A copy of the previous `CoreAttributes` object with
     /// the extra CSS classes applied.
-    func appending(classes: [String]) -> CoreAttributes {
+    func adding(classes: [String]) -> CoreAttributes {
         var copy = self
         copy.classes.formUnion(classes)
         return copy
     }
 
-    /// Returns a new set of attributes with an extra aria appended
-    /// - Parameter aria: The aria to append
+    /// Returns a new set of attributes with an extra aria added.
+    /// - Parameter aria: The aria to add.
     /// - Returns: A copy of the previous `CoreAttributes` object with
     /// the extra aria applied.
-    func appending(aria: Attribute?) -> CoreAttributes {
+    func adding(aria: Attribute?) -> CoreAttributes {
         guard let aria else { return self }
 
         var copy = self
@@ -180,36 +180,36 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         return copy
     }
 
-    /// Appends multiple extra inline CSS styles.
-    /// - Parameter classes: The inline CSS styles to append.
-    mutating func append(styles: InlineStyle...) {
+    /// Adds multiple extra inline CSS styles.
+    /// - Parameter classes: The inline CSS styles to add.
+    mutating func add(styles: InlineStyle...) {
         self.styles.formUnion(styles)
     }
 
-    /// Appends a single extra inline CSS style.
+    /// Adds a single extra inline CSS style.
     ///  - Parameter style: The style name, e.g. background-color
     ///  - Parameter value: The style value, e.g. steelblue
-    mutating func append(style: Property, value: String) {
+    mutating func add(style: Property, value: String) {
         styles.insert(InlineStyle(style, value: value))
     }
 
-    /// Appends a data attribute.
-    /// - Parameter dataAttributes: Variable number of data attributes to append.
-    mutating func append(dataAttributes: Attribute...) {
+    /// Adds a data attribute.
+    /// - Parameter dataAttributes: Variable number of data attributes to add.
+    mutating func add(dataAttributes: Attribute...) {
         data.formUnion(dataAttributes)
     }
 
-    /// Appends multiple custom attributes.
-    /// - Parameter customAttributes: Variable number of custom attributes to append,
+    /// Adds multiple custom attributes.
+    /// - Parameter customAttributes: Variable number of custom attributes to add,
     ///   where each attribute is an `AttributeValue` containing a name-value pair.
-    mutating func append(customAttributes: Attribute...) {
+    mutating func add(customAttributes: Attribute...) {
         self.customAttributes.formUnion(customAttributes)
     }
 
-    /// Appends an array of inline CSS styles.
+    /// Adds an array of inline CSS styles.
     /// - Parameter newStyles: An array of `AttributeValue` objects representing
     ///   CSS style properties and their values to be added.
-    mutating func append(styles newStyles: [InlineStyle]) {
+    mutating func add(styles newStyles: [InlineStyle]) {
         var styles = self.styles
         styles.formUnion(newStyles)
         self.styles = styles

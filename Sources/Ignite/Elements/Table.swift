@@ -98,19 +98,19 @@ public struct Table: HTML {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var tableAttributes = attributes.appending(classes: ["table"])
+        var tableAttributes = attributes.adding(classes: ["table"])
 
         if hasBorderEnabled {
-            tableAttributes.append(classes: ["table-bordered"])
+            tableAttributes.add(classes: ["table-bordered"])
         }
 
         switch style {
         case .plain:
             break
         case .stripedRows:
-            tableAttributes.append(classes: ["table-striped"])
+            tableAttributes.add(classes: ["table-striped"])
         case .stripedColumns:
-            tableAttributes.append(classes: ["table-striped-columns"])
+            tableAttributes.add(classes: ["table-striped-columns"])
         }
 
         var output = "<table\(tableAttributes)>"

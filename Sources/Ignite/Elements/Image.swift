@@ -64,7 +64,7 @@ public struct Image: InlineElement, LazyLoadable {
     /// - Returns: A new `Image` instance configured to be flexibly sized.
     public func resizable() -> Self {
         var copy = self
-        copy.attributes.append(classes: "img-fluid")
+        copy.attributes.add(classes: "img-fluid")
         return copy
     }
 
@@ -85,7 +85,7 @@ public struct Image: InlineElement, LazyLoadable {
     /// - Returns: The HTML for this element.
     private func render(icon: String, description: String) -> String {
         var attributes = attributes
-        attributes.append(classes: "bi-\(icon)")
+        attributes.add(classes: "bi-\(icon)")
         return "<i\(attributes)></i>"
     }
 
@@ -97,7 +97,7 @@ public struct Image: InlineElement, LazyLoadable {
     /// - Returns: The HTML for this element.
     private func render(path: String, description: String) -> String {
         var attributes = attributes
-        attributes.append(customAttributes:
+        attributes.add(customAttributes:
             .init(name: "src", value: path),
             .init(name: "alt", value: description)
         )
