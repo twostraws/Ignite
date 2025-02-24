@@ -123,7 +123,13 @@ struct FrameModifier: HTMLModifier {
             break
 
         default:
-            modified.attributes.add(styles: .init(dimension.cssProperty, value: value.stringValue))
+            if dimension == .maxWidth || dimension == .width {
+                // For max-width and width, ensure all units are responsive
+                modified.attributes.add(styles: .init(dimension.cssProperty, value: "min(\(value.stringValue), 100%)"))
+            } else {
+                // For other dimensions, use the original value
+                modified.attributes.add(styles: .init(dimension.cssProperty, value: value.stringValue))
+            }
         }
     }
 

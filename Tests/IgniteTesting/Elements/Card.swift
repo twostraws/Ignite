@@ -72,7 +72,7 @@ class CardTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <div class="card justify-content-center align-items-center" style="max-width: 500px">\
+        <div class="card justify-content-center align-items-center" style="max-width: min(500px, 100%)">\
         <img alt="" src="/images/photos/dishwasher.jpg" class="card-img-top" /><div class="card-body">\
         <p class="card-text">Before putting your dishes into the dishwasher, give them a quick pre-clean.</p>\
         <a href="/" class="btn btn-primary card-link">Back to the homepage</a></div></div>
