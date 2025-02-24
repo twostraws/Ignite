@@ -322,7 +322,8 @@ extension PublishingContext {
         addProperty(.bodyFontSize, theme.bodySize)
         addProperty(.smallBodyFontSize, theme.smallBodySize)
         addProperty(.largeBodyFontSize, theme.largeBodySize)
-        addProperty(.codeFontSize, theme.codeFontSize)
+        addProperty(.inlineCodeFontSize, theme.inlineCodeFontSize)
+        addProperty(.codeBlockFontSize, theme.codeBlockFontSize)
 
         // Heading sizes
         addProperty(.h1FontSize, theme.xxLargeHeadingSize)

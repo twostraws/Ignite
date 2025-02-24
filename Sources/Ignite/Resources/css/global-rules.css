@@ -292,10 +292,16 @@ h6 { font-size: var(--bs-h6-font-size, 1rem); }
 .lh-base { line-height: var(--bs-line-height-base, 1.5); }
 .lh-lg { line-height: var(--bs-line-height-expanded, 2); }
 
+/* Inline code */
+:not(pre) > code {
+    font-family: var(--bs-font-monospace, monospace);
+    font-size: var(--bs-code-font-size, 1em);
+}
+
 /* Code blocks */
 code, pre {
     font-family: var(--bs-font-monospace, monospace);
-    font-size: var(--bs-code-font-size, 1em);
+    font-size: var(--code-block-font-size, 1em);
 }
 
 /* Border styles */

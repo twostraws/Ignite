@@ -2,7 +2,7 @@ code[class*="language-"],
 pre[class*="language-"] {
     color: #839496;
     text-shadow: 0 1px rgba(0, 0, 0, 0.3);
-    font-size: var(--bs-code-font-size, 1em);
+    font-size: var(--code-block-font-size, 1em);
     font-family: var(--bs-font-monospace, Inconsolata, Monaco, Consolas, 'Courier New', Courier, monospace);
     direction: ltr;
     text-align: left;

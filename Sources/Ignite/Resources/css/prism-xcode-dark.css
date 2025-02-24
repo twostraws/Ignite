@@ -5,7 +5,7 @@ pre[class*="language-"] {
     background: none;
     text-shadow: 0 1px rgba(0, 0, 0, 0.3);
     font-family: var(--bs-font-monospace, Consolas, "Liberation Mono", Menlo, Monaco, 'Andale Mono', 'Ubuntu Mono', Courier, monospace);
-    font-size: var(--bs-body-font-size, 1em);
+    font-size: var(--code-block-font-size, 1em);
     text-align: left;
     white-space: pre;
     word-spacing: normal;
