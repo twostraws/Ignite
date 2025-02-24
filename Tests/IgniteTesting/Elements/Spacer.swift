@@ -19,6 +19,6 @@ class SpacerTests: IgniteTestSuite {
         let element = Spacer()
         let output = element.render()
 
-        #expect(output == "<div class=\"justify-content-center align-items-center\" style=\"height: 20px\"></div>")
+        #expect(output == "<div style=\"height: 20px\"></div>")
     }
 }
