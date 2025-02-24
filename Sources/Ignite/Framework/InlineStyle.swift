@@ -18,6 +18,11 @@ public struct InlineStyle: Hashable, Equatable, Sendable, Comparable, CustomStri
         self.value = value
     }
 
+    init(animatable property: AnimatableProperty, value: String) {
+        self.property = property.rawValue
+        self.value = value
+    }
+
     init(_ property: String, value: String) {
         self.property = property
         self.value = value
