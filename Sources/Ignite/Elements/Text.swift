@@ -14,22 +14,14 @@ public struct Text: HTML, DropdownItem, HorizontalAligning {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// The font style to use for this text.
-    var font: Font.Style {
-        if attributes.classes.contains("lead") {
-            .lead
-        } else if let style = Font.Style(rawValue: attributes.tag) {
-            style
-        } else {
-            .body
-        }
-    }
+    /// The font to use for this text.
+    var font = FontStyle.body
 
     /// The content to place inside the text.
     var content: any InlineElement
@@ -39,13 +31,11 @@ public struct Text: HTML, DropdownItem, HorizontalAligning {
     /// - Parameter content: An array of the content to place into the text.
     public init(@InlineElementBuilder content: @escaping () -> any InlineElement) {
         self.content = content()
-        self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new `Text` instance from one inline element.
     public init(_ string: any InlineElement) {
         self.content = string
-        self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new `Text` instance using "lorem ipsum" placeholder text.
@@ -95,7 +85,6 @@ public struct Text: HTML, DropdownItem, HorizontalAligning {
         result += "."
 
         self.content = result
-        self.tag(Font.Style.body.rawValue)
     }
 
     /// Creates a new Text struct from a Markdown string.
@@ -109,23 +98,27 @@ public struct Text: HTML, DropdownItem, HorizontalAligning {
         // the `font()` modifier.
         let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
         self.content = cleanedHTML
-        self.tag(Font.Style.body.rawValue)
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        attributes.description(wrapping: content.render())
+        "<\(font.rawValue)\(attributes)>" + content.render() + "</\(font.rawValue)>"
     }
 }
 
 extension HTML {
-    func fontStyle(_ font: Font.Style) -> some HTML {
-        var copy = self
+    func fontStyle(_ font: Font.Style) -> any HTML {
+        var copy: any HTML = self
         if font == .lead {
             copy.attributes.append(classes: font.rawValue)
-        } else {
-            copy.tag(font.rawValue)
+        } else if var text = copy as? Text {
+            text.font = font
+            copy = text
+        } else if var modified = copy as? ModifiedHTML, var text = modified.unwrapped as? Text {
+            text.font = font
+            modified.content = text
+            copy = modified
         }
         return copy
     }

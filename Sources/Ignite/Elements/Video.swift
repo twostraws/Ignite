@@ -10,8 +10,8 @@ public struct Video: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -34,23 +34,17 @@ public struct Video: InlineElement, LazyLoadable {
     ///   - files: The user videos to render.
     /// - Returns: The HTML for this element.
     public func render(files: [String]) -> String {
-        var attributes = attributes
-        attributes.append(customAttributes: .controls)
-        attributes.tag = "video"
+        var output = "<video controls\(attributes)>"
 
-        let sources = files.compactMap { filename in
-            guard let fileType = videoType(for: filename) else { return nil }
-            var sourceAttributes = CoreAttributes()
-            sourceAttributes.tag = "source"
-            sourceAttributes.tagIsSelfClosing = true
-            sourceAttributes.append(customAttributes:
-                .init(name: "src", value: filename),
-                .init(name: "type", value: fileType.rawValue)
-            )
-            return sourceAttributes.description()
-        }.joined()
+        for filename in files {
+            if let fileType = videoType(for: filename) {
+                output += "<source src=\"\(filename)\" type=\"\(fileType.rawValue)\" />"
+            }
+        }
 
-        return attributes.description(wrapping: sources + "Your browser does not support the video tag.")
+        output += "Your browser does not support the video tag."
+        output += "</video>"
+        return output
     }
 
     /// Renders this element using publishing context passed in.

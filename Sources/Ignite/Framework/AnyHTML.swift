@@ -11,8 +11,8 @@ public struct AnyHTML: HTML, InlineElement {
     /// The body of this HTML element, which is itself
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -35,7 +35,8 @@ public struct AnyHTML: HTML, InlineElement {
     /// Renders the wrapped HTML content using the given publishing context
     /// - Returns: The rendered HTML string
     public func render() -> String {
-        AttributeStore.default.merge(attributes, intoHTML: wrapped.id)
+        var wrapped = wrapped
+        wrapped.attributes.merge(attributes)
         return wrapped.render()
     }
 }

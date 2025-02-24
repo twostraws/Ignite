@@ -12,8 +12,8 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -105,7 +105,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         if let name = target.name {
             var copy = self
             let attribute = Attribute(name: "target", value: name)
-            copy.attributes.customAttributes.append(attribute)
+            copy.attributes.append(customAttributes: attribute)
             return copy
         } else {
             return self
@@ -155,7 +155,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         var copy = self
         let attributeValue = relationship.map(\.rawValue).joined(separator: " ")
         let attribute = Attribute(name: "rel", value: attributeValue)
-        copy.attributes.customAttributes.append(attribute)
+        copy.attributes.append(customAttributes: attribute)
         return copy
     }
 
@@ -186,12 +186,11 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         }
 
         var linkAttributes = attributes.appending(classes: linkClasses)
-        linkAttributes.classes.append("protected-link")
-        linkAttributes.data.append(Attribute(name: "encoded-url", value: encodedUrl))
+        linkAttributes.append(classes: "protected-link")
+        linkAttributes.append(dataAttributes: .init(name: "encoded-url", value: encodedUrl))
         linkAttributes.append(customAttributes: .init(name: "href", value: "#"))
 
-        linkAttributes.tag = "a"
-        return linkAttributes.description(wrapping: displayContent)
+        return "a\(linkAttributes)>\(displayContent)</a>"
     }
 
     /// Renders a standard link with the provided URL and content.
@@ -205,9 +204,8 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         }
 
         let path = publishingContext.path(for: url)
-        linkAttributes.tag = "a"
         linkAttributes.append(customAttributes: .init(name: "href", value: path))
-        return linkAttributes.description(wrapping: content.render())
+        return "<a\(linkAttributes)>\(content)</a>"
     }
 }
 

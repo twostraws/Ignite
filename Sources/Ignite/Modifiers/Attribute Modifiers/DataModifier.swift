@@ -14,8 +14,7 @@ struct DataModifier: HTMLModifier {
     /// - Returns: The modified HTML with the style property added
     func body(content: some HTML) -> any HTML {
         var copy = content
-        copy.attributes.data.append(.init(name: name, value: value))
-        AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
+        copy.attributes.data.insert(.init(name: name, value: value))
         return copy
     }
 }

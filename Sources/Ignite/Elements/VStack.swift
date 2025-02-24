@@ -10,8 +10,8 @@ public struct VStack: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -59,12 +59,10 @@ public struct VStack: HTML {
             switch item {
             case let container as HTMLCollection:
                 for item in container.elements {
-                    AttributeStore.default.merge(itemAttributes, intoHTML: item.id)
-                    items.append(item)
+                    items.append(item.attributes(itemAttributes))
                 }
             default:
-                AttributeStore.default.merge(itemAttributes, intoHTML: item.id)
-                items.append(item)
+                items.append(item.attributes(itemAttributes))
             }
         }
 
@@ -77,10 +75,7 @@ public struct VStack: HTML {
             attributes.append(classes: "gap-\(amount.rawValue)")
         }
 
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        attributes.tag = "div"
         let content = items.map { $0.render() }.joined()
-
-        return attributes.description(wrapping: content)
+        return "<div\(attributes)>\(content)</div>"
     }
 }

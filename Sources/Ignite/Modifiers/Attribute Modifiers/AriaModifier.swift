@@ -15,8 +15,7 @@ struct AriaModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         guard let value else { return content }
         var copy = content
-        copy.attributes.aria.append(Attribute(name: key.rawValue, value: value))
-        AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
+        copy.attributes.aria.insert(Attribute(name: key.rawValue, value: value))
         return copy
     }
 }

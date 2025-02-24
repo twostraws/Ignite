@@ -16,8 +16,8 @@ public struct Section: HTML, HorizontalAligning {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -33,14 +33,12 @@ public struct Section: HTML, HorizontalAligning {
     // Temporarily public
     public init(_ content: any HTML) {
         self.content = content
-        self.tag("div")
     }
 
     /// Creates a section that renders as a `div` element.
     /// - Parameter content: The content to display within this section.
     public init(@HTMLBuilder content: () -> some HTML) {
         self.content = content()
-        self.tag("div")
     }
 
     /// Creates a section that renders as a `section` element with a heading.
@@ -50,7 +48,6 @@ public struct Section: HTML, HorizontalAligning {
     public init(_ header: String, @HTMLBuilder content: () -> some HTML) {
         self.content = content()
         self.header = header
-        self.tag("section")
     }
 
     /// Adjusts the semantic importance of the section's header by changing its font style.
@@ -63,11 +60,11 @@ public struct Section: HTML, HorizontalAligning {
     }
 
     public func render() -> String {
-        var items = [content]
+        let renderedContent = content.render()
         if let header = header {
-            items.insert(Text(header).fontStyle(headerStyle), at: 0)
+            let renderedHeader = Text(header).fontStyle(headerStyle).render()
+            return "<section\(attributes)>\(renderedHeader + renderedContent)</section>"
         }
-        let content = items.map { $0.render() }.joined()
-        return attributes.description(wrapping: content)
+        return "<div\(attributes)>\(renderedContent)</div>"
     }
 }

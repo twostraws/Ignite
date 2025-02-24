@@ -68,7 +68,7 @@ struct AnimatedHTML: HTML {
             guard let appearAnimations = registeredAnimations[.appear] else { return }
             let animationClasses = Set(appearAnimations.map { "animation-\($0.id)" })
             let newClasses = animationClasses.subtracting(outerAttributes.classes)
-            attributes.classes.append(contentsOf: newClasses)
+            attributes.append(classes: newClasses)
         }
 
         func assignClickClasses(outer outerAttr: inout CoreAttributes, inner innerAttr: inout CoreAttributes) {
@@ -76,7 +76,7 @@ struct AnimatedHTML: HTML {
             innerAttr.append(classes: clickAnimations.map { "click-\($0.id)" })
             outerAttr.append(classes: clickAnimations.map { "animation-\($0.id)" })
             let clickEvent = Event(.click, actions: [CustomAction("igniteToggleClickAnimation(this)")])
-            outerAttr.events.append(clickEvent)
+            outerAttr.events.insert(clickEvent)
         }
 
         func assignHoverClass(_ attributes: inout CoreAttributes) {

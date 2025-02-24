@@ -13,8 +13,8 @@ struct CoreAttributesModifier: HTMLModifier {
     /// - Parameter content: The HTML element to modify
     /// - Returns: The modified HTML with the style property added
     func body(content: some HTML) -> any HTML {
-        let copy = content
-        AttributeStore.default.merge(attributes, intoHTML: copy.id)
+        var copy = content
+        copy.attributes.merge(attributes)
         return copy
     }
 }

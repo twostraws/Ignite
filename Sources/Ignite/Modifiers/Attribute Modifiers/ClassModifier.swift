@@ -16,7 +16,6 @@ struct ClassModifier: HTMLModifier {
         guard !existingNames.isEmpty else { return content }
         var copy = content
         copy.attributes.append(classes: classNames)
-        AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
         return copy
     }
 }

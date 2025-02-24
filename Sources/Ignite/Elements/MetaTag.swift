@@ -65,8 +65,8 @@ public struct MetaTag: HeadElement, Sendable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -179,9 +179,7 @@ public struct MetaTag: HeadElement, Sendable {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = CoreAttributes()
-        attributes.tag = "meta"
-        attributes.tagIsSelfClosing = true
+        var attributes = attributes
 
         if charset.isEmpty {
             attributes.append(customAttributes:
@@ -192,6 +190,6 @@ public struct MetaTag: HeadElement, Sendable {
                 .init(name: "charset", value: charset)
             )
         }
-        return attributes.description()
+        return "<meta\(attributes) />"
     }
 }
