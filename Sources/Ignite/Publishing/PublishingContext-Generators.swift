@@ -112,8 +112,7 @@ extension PublishingContext {
 
     /// Generates animations for the site.
     func generateAnimations() {
-        guard AnimationManager.default.hasAnimations else { return }
-        let animationsPath = buildDirectory.appending(path: "css/animations.min.css")
+        let animationsPath = buildDirectory.appending(path: "css/ignite-core.min.css")
         AnimationManager.default.write(to: animationsPath)
     }
 }

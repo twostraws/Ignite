@@ -124,11 +124,13 @@ extension PublishingContext {
             """
         }
 
-        let cssPath = buildDirectory.appending(path: "css/themes.min.css")
+        let cssPath = buildDirectory.appending(path: "css/ignite-core.min.css")
         do {
-            try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
+            let existingContent = try String(contentsOf: cssPath, encoding: .utf8)
+            let newContent = existingContent + "\n\n" + cssContent
+            try newContent.write(to: cssPath, atomically: true, encoding: .utf8)
         } catch {
-            fatalError(.failedToWriteFile("css/themes.min.css"))
+            fatalError(.failedToWriteFile("css/ignite-core.min.css"))
         }
     }
 

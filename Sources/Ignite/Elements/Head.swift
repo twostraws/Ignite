@@ -99,11 +99,7 @@ public struct Head: DocumentElement {
             MetaLink.remoteIconCSS
         }
 
-        if AnimationManager.default.hasAnimations {
-            MetaLink.animationCSS
-        }
-
-        MetaLink.themeCSS
+        MetaLink.igniteCoreCSS
 
         if CSSManager.default.hasCSS {
             MetaLink.mediaQueryCSS
