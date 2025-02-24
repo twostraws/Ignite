@@ -11,9 +11,6 @@ extension String: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
