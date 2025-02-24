@@ -1,9 +1,3 @@
-/*
- Automatic Theme Switching Implementation
- Used in HTMLHead.swift.
- For user-driven theme switching implementation, see ignite-core.js.
- */
-
 (function() {
     function getThemePreference() {
         return localStorage.getItem('custom-theme') || 'auto';
