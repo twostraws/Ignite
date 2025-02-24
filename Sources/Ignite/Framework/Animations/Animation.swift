@@ -75,7 +75,7 @@ public extension Animation {
             "Animation frame position must be between 0% and 100%, got \(position)"
         )
         var copy = self
-        var frame = Frame(position, animations: [])
+        var frame = Frame(position, data: [])
         content(&frame)
         copy.frames.append(frame)
         return copy
