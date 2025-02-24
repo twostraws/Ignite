@@ -25,18 +25,16 @@ struct ContainerRelativeFrameModifier: HTMLModifier {
             content.style(.marginBottom, "0") :
             Section(content.style(.marginBottom, "0"))
 
-        return Section(
-            frameableContent
-                .style(.display, "flex")
-                .style(.flexDirection, "column")
-                .style(.position, "absolute")
-                .style(.overflow, "hidden")
-                .style(edgeAlignmentRules)
-                .style(alignment.flexAlignmentRules)
-        )
-        .style(.width, "100%")
-        .style(.height, "100%")
-        .style(.position, "relative")
+        return frameableContent
+            .style(.display, "flex")
+            .style(.flexDirection, "column")
+            .style(.position, "absolute")
+            .style(.overflow, "hidden")
+            .style(edgeAlignmentRules)
+            .style(alignment.flexAlignmentRules)
+            .style(.width, "100%")
+            .style(.height, "100%")
+            .style(.position, "relative")
     }
 }
 
@@ -49,7 +47,7 @@ public extension HTML {
     }
 }
 
-fileprivate extension Alignment {
+private extension Alignment {
     /// Flex container rules for aligning content
     var flexAlignmentRules: [InlineStyle] {
         switch (horizontal, vertical) {
