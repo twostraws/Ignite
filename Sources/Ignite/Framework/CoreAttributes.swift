@@ -28,7 +28,7 @@ public typealias Date = Foundation.Date
 
 /// A handful of attributes that all HTML types must support, either for
 /// rendering or for publishing purposes.
-struct CoreAttributes: Sendable {
+struct CoreAttributes: Equatable, Sendable {
     /// A unique identifier. Can be empty.
     var id = ""
 
@@ -51,6 +51,9 @@ struct CoreAttributes: Sendable {
     /// Custom attributes not covered by the above, e.g. loading="lazy"
     var customAttributes = OrderedSet<Attribute>()
 
+    /// Whether this set of attributes is empty.
+    var isEmpty: Bool { self == CoreAttributes() }
+
     /// The HTML tag to use for this element, e.g. "div" or "p".
     var tag: String = ""
 
@@ -66,10 +69,10 @@ struct CoreAttributes: Sendable {
         didSet {
             containerAttributes = OrderedSet(containerAttributes.sorted { first, second in
                 // First handle transform vs animation containers
-                if first.type == .transform && second.type == .animation {
+                if first.type == .transform, second.type == .animation {
                     // transform goes after animation
                     false
-                } else if first.type == .animation && second.type == .transform {
+                } else if first.type == .animation, second.type == .transform {
                     // animation goes before transform
                     true
                 } else if first.type == .click {
@@ -177,7 +180,7 @@ struct CoreAttributes: Sendable {
     /// - Returns: A string containing all attributes and optional content wrapped in tags
     func description(wrapping content: String? = nil) -> String {
         let attributes = idString + customAttributeString + classString + styleString
-                         + dataString + ariaString + eventString
+            + dataString + ariaString + eventString
 
         var result = content ?? attributes
 
@@ -305,5 +308,74 @@ struct CoreAttributes: Sendable {
         var styles = self.styles
         styles.formUnion(newStyles)
         self.styles = styles
+    }
+
+    /// Removes all attributes.
+    mutating func clear() {
+        self = CoreAttributes()
+    }
+
+    /// Removes specified CSS classes from the element.
+    /// - Parameter properties: Variable number of CSS classes to remove.
+    mutating func remove(classes: String...) {
+        let classes = self.classes.subtracting(classes)
+        self.classes = classes
+    }
+
+    /// Removes specified CSS properties from the element's inline styles.
+    /// - Parameter properties: Variable number of CSS properties to remove.
+    mutating func remove(styles properties: Property...) {
+        var styles = Array(self.styles)
+        for property in properties {
+            styles.removeAll(where: { $0.property == property.rawValue })
+        }
+        self.styles = OrderedSet(styles)
+    }
+
+    /// Retrieves the inline styles for specified CSS properties.
+    /// - Parameter properties: Variable number of CSS properties to look up.
+    /// - Returns: An array of `InlineStyle` objects matching the specified properties.
+    func get(styles properties: Property...) -> [InlineStyle] {
+        properties.compactMap { property in
+            if let style = styles.first(where: { $0.property == property.rawValue }) {
+                return style
+            }
+            return nil
+        }
+    }
+
+    /// Merges another set of CoreAttributes into this instance
+    /// - Parameter other: The CoreAttributes to merge into this instance
+    /// - Returns: A new CoreAttributes instance with the combined attributes
+    func merging(_ other: CoreAttributes) -> CoreAttributes {
+        var result = self
+
+        if !other.id.isEmpty {
+            result.id = other.id
+        }
+
+        result.aria.formUnion(other.aria)
+        result.classes.formUnion(other.classes)
+        result.styles.formUnion(other.styles)
+        result.data.formUnion(other.data)
+        result.events.formUnion(other.events)
+        result.customAttributes.formUnion(other.customAttributes)
+
+        return result
+    }
+
+    /// Merges another set of CoreAttributes into this instance in place
+    /// - Parameter other: The CoreAttributes to merge into this instance
+    mutating func merge(_ other: CoreAttributes) {
+        if !other.id.isEmpty {
+            id = other.id
+        }
+
+        aria.formUnion(other.aria)
+        classes.formUnion(other.classes)
+        styles.formUnion(other.styles)
+        data.formUnion(other.data)
+        events.formUnion(other.events)
+        customAttributes.formUnion(other.customAttributes)
     }
 }
