@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-fileprivate typealias AnimationInfo = Dictionary<AnimationTrigger, [any Animatable]>
+private typealias AnimationInfo = [AnimationTrigger: [any Animatable]]
 
 struct AnimatedHTML: HTML {
     /// The content and behavior of this HTML.

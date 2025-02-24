@@ -56,7 +56,9 @@ private struct ApplyHoverEffects: Action {
     func compile() -> String {
         """
         this.unhoveredStyle = this.style.cssText;
-        \(styles.sorted().map { "this.style.\($0.property.convertingCSSNamesToJS()) = '\($0.value)'" }.joined(separator: "; "))
+        \(styles.sorted().map {
+            "this.style.\($0.property.convertingCSSNamesToJS()) = '\($0.value)'"
+        }.joined(separator: "; "))
         """
     }
 }
