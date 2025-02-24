@@ -72,7 +72,7 @@ extension HTML {
     }
 
     /// Checks if this element is an empty HTML element.
-    var isEmptyHTML: Bool {
+    var isEmpty: Bool {
         if let collection = self as? HTMLCollection {
             collection.elements.allSatisfy { $0 is EmptyHTML }
         } else {
@@ -80,43 +80,9 @@ extension HTML {
         }
     }
 
-    /// A Boolean value indicating whether this element contains multiple child elements.
-    var isComposite: Bool {
-        let bodyContent = body
-
-        // Unwrap AnyHTML if needed
-        let unwrappedContent: Any
-        if let anyHTML = bodyContent as? AnyHTML {
-            unwrappedContent = anyHTML.wrapped
-        } else {
-            unwrappedContent = bodyContent
-        }
-
-        if unwrappedContent is Text {
-            return false
-        }
-
-        // Check for multiple elements using Mirror
-        let mirror = Mirror(reflecting: unwrappedContent)
-
-        // Check for elements array (like in HTMLGroup)
-        if let items = mirror.children.first(where: { $0.label == "elements" })?.value as? [any HTML] {
-            return items.count > 1
-        }
-
-        // Check for items property (like in Group)
-        if let items = mirror.children.first(where: { $0.label == "items" })?.value as? any HTML {
-            let itemsMirror = Mirror(reflecting: items)
-            return itemsMirror.children.count > 0
-        }
-
-        // Check if it's a custom HTML component by looking at its body
-        if let htmlBody = mirror.children.first(where: { $0.label == "body" })?.value {
-            let bodyMirror = Mirror(reflecting: htmlBody)
-            return bodyMirror.children.count > 1
-        }
-
-        return false
+    /// A Boolean value indicating whether this represents `Text`.
+    var isText: Bool {
+        body is Text || (body as? ModifiedHTML)?.unwrapped is Text
     }
 }
 

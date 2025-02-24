@@ -14,10 +14,7 @@ struct FontModifier: HTMLModifier {
     /// - Parameter content: The HTML content to modify
     /// - Returns: The modified HTML content with font styling applied
     func body(content: some HTML) -> any HTML {
-        let isText = content.body is Text ||
-            (content as? ModifiedHTML)?.content is Text
-
-        return if isText {
+        if content.isText {
             applyFontToText(content: content)
         } else {
             applyFontToNonText(content: content)

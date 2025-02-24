@@ -26,13 +26,18 @@ struct LineSpacingModifier: HTMLModifier {
     }
 
     func body(content: some HTML) -> any HTML {
-        if content.body.isComposite {
+        let isText = content.body is Text ||
+            (content as? ModifiedHTML)?.content is Text
+
+        return if isText {
             if let customHeight {
                 Section(content)
                     .style(.lineHeight, customHeight.formatted(.nonLocalizedDecimal))
             } else if let presetHeight {
                 Section(content)
                     .class("lh-\(presetHeight.rawValue)")
+            } else {
+                content
             }
         } else if let customHeight {
             content.style(.init(.lineHeight, value: customHeight.formatted(.nonLocalizedDecimal)))

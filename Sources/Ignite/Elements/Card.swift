@@ -216,7 +216,7 @@ public struct Card: HTML {
                 }
             }
 
-            if header.isEmptyHTML == false {
+            if header.isEmpty == false {
                 renderHeader()
             }
 
@@ -233,7 +233,7 @@ public struct Card: HTML {
                 }
             }
 
-            if footer.isEmptyHTML == false {
+            if footer.isEmpty == false {
                 renderFooter()
             }
         }
