@@ -25,7 +25,7 @@ struct TestSite: Site {
         image: .init(url: "path/to/image.png", width: 100, height: 100)
     )
 
-    var contentLayouts: [any ContentLayout] = [
+    var articleLayouts: [any ContentLayout] = [
         TestStory()
     ]
 
