@@ -19,7 +19,7 @@
 /// }
 /// ```
 @MainActor
-public protocol ContentLayout: PageContentLayout {}
+public protocol ContentLayout: LayoutContent {}
 
 public extension ContentLayout {
     /// The current Markdown content being rendered.

@@ -7,7 +7,7 @@
 
 /// A protocol that allows pages of any type to use a layout.
 @MainActor
-public protocol PageContentLayout: Sendable {
+public protocol LayoutContent: Sendable {
     /// The type of HTML content this element contains.
     associatedtype Body: HTML
 
@@ -15,7 +15,7 @@ public protocol PageContentLayout: Sendable {
     @HTMLBuilder var body: Body { get }
 }
 
-public extension PageContentLayout {
+public extension LayoutContent {
     // Default to `MissingLayout`, which will cause the main
     // site layout to be used instead.
     var parentLayout: any Layout {
