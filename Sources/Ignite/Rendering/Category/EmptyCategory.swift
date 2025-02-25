@@ -8,5 +8,5 @@
 /// Represents the absense of a category.
 struct EmptyCategory: Category {
     var name: String { "" }
-    var content: [Content] { [] }
+    var articles: [Article] { [] }
 }

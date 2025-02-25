@@ -9,8 +9,8 @@
 public protocol Category: CustomStringConvertible, Sendable {
     /// The name of the category.
     var name: String { get }
-    /// An array of content that belongs to this category.
-    var content: [Content] { get }
+    /// An array of articles that belongs to this category.
+    var articles: [Article] { get }
 }
 
 public extension Category {

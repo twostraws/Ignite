@@ -10,5 +10,5 @@ public struct AllTagsCategory: Category {
     /// The name of the category, which defaults to "All Tags".
     public var name = "All Tags"
     /// All of the articles that have a tag.
-    public var content: [Content]
+    public var articles: [Article]
 }

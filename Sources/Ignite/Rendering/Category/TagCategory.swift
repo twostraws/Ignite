@@ -10,5 +10,5 @@ public struct TagCategory: Category {
     /// The name of the tag.
     public var name: String
     /// An array of content that has this tag.
-    public var content: [Content]
+    public var articles: [Article]
 }

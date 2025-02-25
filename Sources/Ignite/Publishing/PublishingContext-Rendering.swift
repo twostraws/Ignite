@@ -93,9 +93,9 @@ extension PublishingContext {
             )
 
             let category: any Category = if let tag {
-                TagCategory(name: tag, content: content(tagged: tag))
+                TagCategory(name: tag, articles: content(tagged: tag))
             } else {
-                AllTagsCategory(content: content(tagged: nil))
+                AllTagsCategory(articles: content(tagged: nil))
             }
 
             let values = EnvironmentValues(
