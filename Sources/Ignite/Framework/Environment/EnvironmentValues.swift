@@ -52,7 +52,7 @@ public struct EnvironmentValues {
     /// The current page being rendered.
     internal(set) public var page: PageMetadata
 
-    /// The content of the current page being rendered.
+    /// The page content of the current layout being rendered.
     var pageContent: any HTML = EmptyHTML()
 
     /// The current piece of Markdown content being rendered.
@@ -81,12 +81,12 @@ public struct EnvironmentValues {
     init(
         sourceDirectory: URL,
         site: any Site,
-        allContent: [Article],
+        allArticles: [Article],
         pageMetadata: PageMetadata,
         pageContent: any LayoutContent
     ) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
-        self.articles = ArticleLoader(content: allContent)
+        self.articles = ArticleLoader(content: allArticles)
         self.feedConfiguration = site.feedConfiguration
         self.themes = site.allThemes
         self.author = site.author
@@ -110,13 +110,13 @@ public struct EnvironmentValues {
     init(
         sourceDirectory: URL,
         site: any Site,
-        allContent: [Article],
+        allArticles: [Article],
         pageMetadata: PageMetadata,
         pageContent: any LayoutContent,
         article: Article
     ) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
-        self.articles = ArticleLoader(content: allContent)
+        self.articles = ArticleLoader(content: allArticles)
         self.feedConfiguration = site.feedConfiguration
         self.themes = site.allThemes
         self.author = site.author
@@ -142,14 +142,14 @@ public struct EnvironmentValues {
     init(
         sourceDirectory: URL,
         site: any Site,
-        allContent: [Article],
+        allArticles: [Article],
         pageMetadata: PageMetadata,
         pageContent: any LayoutContent,
         tag: String?,
         taggedContent: [Article]
     ) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
-        self.articles = ArticleLoader(content: allContent)
+        self.articles = ArticleLoader(content: allArticles)
         self.feedConfiguration = site.feedConfiguration
         self.themes = site.allThemes
         self.author = site.author

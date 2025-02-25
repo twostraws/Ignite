@@ -7,7 +7,7 @@
 
 typealias HeadElementBuilder = ElementBuilder<any HeadElement>
 typealias DocumentElementBuilder = ElementBuilder<any DocumentElement>
-typealias StaticLayoutBuilder = ElementBuilder<any StaticLayout>
+typealias PageBuilder = ElementBuilder<any Page>
 typealias ArticleLayoutBuilder = ElementBuilder<any ArticleLayout>
 typealias ActionBuilder = ElementBuilder<any Action>
 

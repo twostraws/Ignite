@@ -20,15 +20,23 @@
 /// }
 /// ```
 @MainActor
-public protocol TagLayout: LayoutContent {}
+public protocol ArchiveLayout: LayoutContent {
+    /// The page layout to use for this tag page.
+    var pageLayout: any Layout { get }
+}
 
-extension TagLayout {
+public extension ArchiveLayout {
     /// The current tag during page generation.
-    public var tag: String? {
+    var tag: String? {
         PublishingContext.shared.environment.tag
     }
 
-    public var content: [Article] {
+    var content: [Article] {
         PublishingContext.shared.environment.taggedContent
+    }
+
+    // Defaults to the site's main layout.
+    var pageLayout: any Layout {
+        PublishingContext.shared.site.layout
     }
 }

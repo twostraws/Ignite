@@ -37,7 +37,7 @@ struct TestSite: Site {
 }
 
 /// An example page used in tests.
-struct TestLayout: StaticLayout {
+struct TestLayout: Page {
     var title = "Home"
 
     var body: some HTML {

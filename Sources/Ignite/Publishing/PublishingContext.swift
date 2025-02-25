@@ -62,7 +62,7 @@ final class PublishingContext {
     var environment = EnvironmentValues()
 
     /// All the Markdown content this user has inside their Content folder.
-    private(set) var allContent = [Article]()
+    private(set) var allArticles = [Article]()
 
     /// An ordered set of syntax highlighters pulled from code blocks throughout the site.
     var syntaxHighlighters = OrderedSet<HighlighterLanguage>()
@@ -123,9 +123,9 @@ final class PublishingContext {
     /// if no tag was specified.
     func content(tagged tag: String?) -> [Article] {
         if let tag {
-            allContent.filter { $0.tags.contains(tag) }
+            allArticles.filter { $0.tags.contains(tag) }
         } else {
-            allContent
+            allArticles
         }
     }
 
@@ -173,13 +173,13 @@ final class PublishingContext {
                 deployPath: deploy.path
             )
             if article.isPublished {
-                allContent.append(article)
+                allArticles.append(article)
             }
             return true // always continuing
         }
 
         // Make content be sorted newest first by default.
-        allContent.sort(
+        allArticles.sort(
             by: \.date,
             order: .reverse
         )
