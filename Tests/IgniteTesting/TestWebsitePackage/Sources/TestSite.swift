@@ -25,7 +25,7 @@ struct TestSite: Site {
         image: .init(url: "path/to/image.png", width: 100, height: 100)
     )
 
-    var articleLayouts: [any ContentLayout] = [
+    var articleLayouts: [any ArticleLayout] = [
         TestStory()
     ]
 
@@ -57,7 +57,7 @@ struct TestSitePublisher {
     }
 }
 
-struct TestStory: ContentLayout {
+struct TestStory: ArticleLayout {
     var body: some HTML {
         EmptyHTML()
     }
