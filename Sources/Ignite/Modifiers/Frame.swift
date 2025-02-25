@@ -122,14 +122,15 @@ struct FrameModifier: HTMLModifier {
             // Don't apply any styling for default values
             break
 
+        case .custom(let value):
+            modified.attributes.add(styles: .init(dimension.cssProperty, value: value))
+
+        case value where dimension == .maxWidth || dimension == .width:
+            // For max-width and width, ensure all units are responsive
+            modified.attributes.add(styles: .init(dimension.cssProperty, value: "min(\(value.stringValue), 100%)"))
         default:
-            if dimension == .maxWidth || dimension == .width {
-                // For max-width and width, ensure all units are responsive
-                modified.attributes.add(styles: .init(dimension.cssProperty, value: "min(\(value.stringValue), 100%)"))
-            } else {
-                // For other dimensions, use the original value
-                modified.attributes.add(styles: .init(dimension.cssProperty, value: value.stringValue))
-            }
+            // For other dimensions, use the original value
+            modified.attributes.add(styles: .init(dimension.cssProperty, value: value.stringValue))
         }
     }
 
