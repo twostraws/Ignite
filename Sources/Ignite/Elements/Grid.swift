@@ -116,7 +116,7 @@ public struct Grid: HTML, HorizontalAligning {
         }
 
         return Section(item)
-            .class(name)
+            .class(name ?? "col")
     }
 
     /// Renders a group of HTML elements with consistent styling and attributes.
@@ -147,7 +147,7 @@ public struct Grid: HTML, HorizontalAligning {
             let scaledWidth = width * 12 / columnCount
             return ColumnWidth.count(scaledWidth).className
         } else {
-            return "col"
+            return widthClass
         }
     }
 }
