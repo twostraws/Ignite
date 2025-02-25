@@ -33,7 +33,7 @@ import Foundation
 @MainActor
 public protocol Site: Sendable {
     /// The type of your homepage. Required.
-    associatedtype HomePageLayout: Page
+    associatedtype HomePage: Page
 
     /// The type used to generate your archive pages. A default is provided that means
     /// no archive pages are generated.
@@ -100,7 +100,7 @@ public protocol Site: Sendable {
     var robotsConfiguration: RobotsType { get }
 
     /// The homepage for your site; what users land on when visiting your root domain.
-    var homePage: HomePageLayout { get }
+    var homePage: HomePage { get }
 
     /// A type that conforms to `ArchiveLayout`, to be used when rendering individual
     /// archive pages or the "all tags" page.
