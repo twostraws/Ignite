@@ -5,8 +5,8 @@
 // See LICENSE for license information.
 //
 
-/// A default tag layout that does nothing; used to disable tag pages entirely.
-public struct EmptyTagLayout: ArchiveLayout {
+/// A default archive layout that does nothing; used to disable archive pages entirely.
+public struct EmptyArchiveLayout: ArchiveLayout {
     public var body: some HTML {
         EmptyHTML()
     }

@@ -39,11 +39,11 @@ extension PublishingContext {
     func generateContent() async {
         render(site.homePage, isHomePage: true)
 
-        for page in site.staticLayouts {
+        for page in site.pages {
             render(page)
         }
 
-        for content in allContent {
+        for content in allArticles {
             render(content)
         }
         currentRenderingPath = nil
@@ -69,7 +69,7 @@ extension PublishingContext {
     public func generateFeed() {
         guard let feedConfig = site.feedConfiguration else { return }
 
-        let content = allContent.sorted(
+        let content = allArticles.sorted(
             by: \.date,
             order: .reverse
         )

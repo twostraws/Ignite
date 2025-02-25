@@ -27,7 +27,7 @@ extension PublishingContext {
         let values = EnvironmentValues(
             sourceDirectory: sourceDirectory,
             site: site,
-            allContent: allContent,
+            allArticles: allArticles,
             pageMetadata: metadata,
             pageContent: staticLayout)
 
@@ -55,7 +55,7 @@ extension PublishingContext {
         let values = EnvironmentValues(
             sourceDirectory: sourceDirectory,
             site: site,
-            allContent: allContent,
+            allArticles: allArticles,
             pageMetadata: metadata,
             pageContent: layout,
             article: article)
@@ -70,11 +70,11 @@ extension PublishingContext {
 
     /// Generates all tags pages, including the "all tags" page.
     func renderTagLayouts() async {
-        if site.tagLayout is EmptyTagLayout { return }
+        if site.archiveLayout is EmptyArchiveLayout { return }
 
         /// Creates a unique list of sorted tags from across the site, starting
         /// with `nil` for the "all tags" page.
-        let tags: [String?] = [nil] + Set(allContent.flatMap(\.tags)).sorted()
+        let tags: [String?] = [nil] + Set(allArticles.flatMap(\.tags)).sorted()
 
         for tag in tags {
             let path: String = if let tag {
@@ -84,7 +84,7 @@ extension PublishingContext {
             }
 
             let outputDirectory = buildDirectory.appending(path: path)
-            let tagLayout = site.tagLayout
+            let tagLayout = site.archiveLayout
 
             let metadata = PageMetadata(
                 title: "Tags",
@@ -95,7 +95,7 @@ extension PublishingContext {
             let values = EnvironmentValues(
                 sourceDirectory: sourceDirectory,
                 site: site,
-                allContent: allContent,
+                allArticles: allArticles,
                 pageMetadata: metadata,
                 pageContent: tagLayout,
                 tag: tag,

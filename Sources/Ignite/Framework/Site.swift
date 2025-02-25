@@ -35,9 +35,9 @@ public protocol Site: Sendable {
     /// The type of your homepage. Required.
     associatedtype HomePageLayout: Page
 
-    /// The type used to generate your tag pages. A default is provided that means
-    /// no tags pages are generated.
-    associatedtype TagPageLayout: ArchiveLayout
+    /// The type used to generate your archive pages. A default is provided that means
+    /// no archive pages are generated.
+    associatedtype ArchivePageLayout: ArchiveLayout
 
     /// The type that defines the base layout structure for all pages.
     associatedtype LayoutType: Layout
@@ -102,9 +102,9 @@ public protocol Site: Sendable {
     /// The homepage for your site; what users land on when visiting your root domain.
     var homePage: HomePageLayout { get }
 
-    /// A type that conforms to `TagLayout`, to be used when rendering individual
-    /// tag pages or the "all tags" page.
-    var tagLayout: TagPageLayout { get }
+    /// A type that conforms to `ArchiveLayout`, to be used when rendering individual
+    /// archive pages or the "all tags" page.
+    var archiveLayout: ArchivePageLayout { get }
 
     /// The base layout applied to all pages. This is used to render all pages that don't
     /// explicitly override the layout with something custom.
@@ -136,8 +136,8 @@ public protocol Site: Sendable {
     /// The path to the favicon
     var favicon: URL? { get }
 
-    /// An array of all the static layouts you want to include in your site.
-    @StaticLayoutBuilder var staticLayouts: [any Page] { get }
+    /// An array of all the pages you want to include in your site.
+    @PageBuilder var pages: [any Page] { get }
 
     /// An array of all the content layouts you want to include in your site.
     @ArticleLayoutBuilder var articleLayouts: [any ArticleLayout] { get }
@@ -195,14 +195,14 @@ public extension Site {
     /// A default robots.txt configuration that allows all robots to index all pages.
     var robotsConfiguration: DefaultRobotsConfiguration { DefaultRobotsConfiguration() }
 
-    /// No static layouts by default.
-    var staticLayouts: [any Page] { [] }
+    /// No pages by default.
+    var pages: [any Page] { [] }
 
     /// No content layouts by default.
     var articleLayouts: [any ArticleLayout] { [] }
 
-    /// An empty tag layout by default, which triggers no tag pages being made.
-    var tagLayout: EmptyTagLayout { EmptyTagLayout() }
+    /// An empty archive layout by default, which triggers no archive pages being made.
+    var archiveLayout: EmptyArchiveLayout { EmptyArchiveLayout() }
 
     /// The default favicon being nil
     var favicon: URL? { nil }
