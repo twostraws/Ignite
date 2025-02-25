@@ -26,4 +26,9 @@ public extension ArticleLayout {
     var article: Article {
         PublishingContext.shared.environment.article
     }
+
+    // Defaults to the site's main layout.
+    var pageLayout: any Layout {
+        PublishingContext.shared.site.layout
+    }
 }

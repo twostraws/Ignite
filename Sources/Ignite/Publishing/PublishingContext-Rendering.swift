@@ -13,7 +13,7 @@ extension PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render(_ staticLayout: any StaticLayout, isHomePage: Bool = false) {
+    func render(_ staticLayout: any Page, isHomePage: Bool = false) {
         let path = isHomePage ? "" : staticLayout.path
         currentRenderingPath = isHomePage ? "/" : staticLayout.path
 
@@ -32,7 +32,7 @@ extension PublishingContext {
             pageContent: staticLayout)
 
         let outputString = withEnvironment(values) {
-            staticLayout.parentLayout.body.render()
+            staticLayout.layout.body.render()
         }
 
         let outputDirectory = buildDirectory.appending(path: path)
@@ -61,7 +61,7 @@ extension PublishingContext {
             article: article)
 
         let outputString = withEnvironment(values) {
-            layout.parentLayout.body.render()
+            layout.pageLayout.body.render()
         }
 
         let outputDirectory = buildDirectory.appending(path: article.path)
@@ -102,7 +102,7 @@ extension PublishingContext {
                 taggedContent: content(tagged: tag))
 
             let outputString = withEnvironment(values) {
-                tagLayout.parentLayout.body.render()
+                tagLayout.pageLayout.body.render()
             }
 
             write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)

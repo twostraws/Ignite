@@ -33,11 +33,11 @@ import Foundation
 @MainActor
 public protocol Site: Sendable {
     /// The type of your homepage. Required.
-    associatedtype HomePageLayout: StaticLayout
+    associatedtype HomePageLayout: Page
 
     /// The type used to generate your tag pages. A default is provided that means
     /// no tags pages are generated.
-    associatedtype TagPageLayout: TagLayout
+    associatedtype TagPageLayout: ArchiveLayout
 
     /// The type that defines the base layout structure for all pages.
     associatedtype LayoutType: Layout
@@ -137,7 +137,7 @@ public protocol Site: Sendable {
     var favicon: URL? { get }
 
     /// An array of all the static layouts you want to include in your site.
-    @StaticLayoutBuilder var staticLayouts: [any StaticLayout] { get }
+    @StaticLayoutBuilder var staticLayouts: [any Page] { get }
 
     /// An array of all the content layouts you want to include in your site.
     @ArticleLayoutBuilder var articleLayouts: [any ArticleLayout] { get }
@@ -196,7 +196,7 @@ public extension Site {
     var robotsConfiguration: DefaultRobotsConfiguration { DefaultRobotsConfiguration() }
 
     /// No static layouts by default.
-    var staticLayouts: [any StaticLayout] { [] }
+    var staticLayouts: [any Page] { [] }
 
     /// No content layouts by default.
     var articleLayouts: [any ArticleLayout] { [] }
