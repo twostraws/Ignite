@@ -20,7 +20,7 @@
 /// }
 /// ```
 @MainActor
-public protocol TagLayout: PageContentLayout {}
+public protocol TagLayout: LayoutContent {}
 
 extension TagLayout {
     /// The current tag during page generation.
