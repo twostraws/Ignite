@@ -192,7 +192,7 @@ final class PublishingContext {
         await generateContent()
         copyResources()
         generateThemes(site.allThemes)
-        try generateMediaQueryCSS()
+        generateMediaQueryCSS()
         generateAnimations()
         generateSiteMap()
         generateFeed()

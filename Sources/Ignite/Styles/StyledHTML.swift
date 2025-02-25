@@ -6,7 +6,7 @@
 //
 
 /// A concrete type used for style resolution that only holds attributes
-@MainActor public struct StyledHTML {
+@MainActor public struct StyledHTML: Modifiable {
     /// A collection of styles, classes, and attributes.
     var attributes = CoreAttributes()
 
@@ -15,7 +15,7 @@
     /// - Returns: The modified `HTML` element
     public func style(_ property: Property, _ value: String) -> Self {
         var copy = self
-        copy.attributes.append(styles: .init(property, value: value))
+        copy.attributes.add(styles: .init(property, value: value))
         return copy
     }
 }
