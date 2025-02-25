@@ -14,6 +14,9 @@ struct HTMLCollection: InlineElement, @preconcurrency Sequence {
     /// The content and behavior of this HTML sequence
     var body: some HTML { self }
 
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
+
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { true }
 
@@ -46,6 +49,10 @@ struct HTMLCollection: InlineElement, @preconcurrency Sequence {
     /// Renders all elements in the sequence into HTML
     /// - Returns: The combined HTML string of all elements
     func render() -> String {
-        elements.map { $0.render() }.joined()
+        elements.map {
+            var item: any HTML = $0
+            item.attributes.merge(attributes)
+            return item.render()
+        }.joined()
     }
 }

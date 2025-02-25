@@ -20,6 +20,16 @@ struct Event: Sendable, Hashable, Comparable {
         lhs.name < rhs.name
     }
 
+    init(_ type: EventType, actions: [any Action]) {
+        self.name = type.rawValue
+        self.actions = actions
+    }
+
+    init(name: String, actions: [any Action]) {
+        self.name = name
+        self.actions = actions
+    }
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
         hasher.combine(actions.map { $0.compile() })

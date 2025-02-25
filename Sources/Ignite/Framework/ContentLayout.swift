@@ -19,17 +19,11 @@
 /// }
 /// ```
 @MainActor
-public protocol ContentLayout: Layoutable {
-    /// The type of HTML content this layout will generate
-    associatedtype Body: HTML
-
-    /// The main content of the layout
-    @HTMLBuilder var body: Body { get }
-}
+public protocol ContentLayout: PageContentLayout {}
 
 public extension ContentLayout {
     /// The current Markdown content being rendered.
-    var content: Content {
-        PublishingContext.default.environment.article
+    var article: Article {
+        PublishingContext.shared.environment.article
     }
 }

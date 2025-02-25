@@ -18,7 +18,7 @@ import Testing
         let element = Image(file, description: description)
         let output = element.render()
 
-        let expectedPath = PublishingContext.default.path(for: URL(string: file)!)
+        let expectedPath = PublishingContext.shared.path(for: URL(string: file)!)
         #expect(output == "<img alt=\"\(description)\" src=\"\(expectedPath)\" />")
     }
 
@@ -27,7 +27,7 @@ import Testing
         let element = Image(url, description: description)
         let output = element.render()
 
-        let expectedPath = PublishingContext.default.path(for: URL(string: url)!)
+        let expectedPath = PublishingContext.shared.path(for: URL(string: url)!)
         #expect(output == "<img alt=\"\(description)\" src=\"\(expectedPath)\" />")
     }
 

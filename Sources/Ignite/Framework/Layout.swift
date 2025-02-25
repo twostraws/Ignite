@@ -23,10 +23,10 @@
 @MainActor
 public protocol Layout {
     /// The type of HTML content this layout will generate
-    associatedtype Markup: HTML
+    associatedtype Document: HTML
 
     /// The main content of the layout, built using the HTML DSL
-    var body: Markup { get }
+    @DocumentBuilder var body: Document { get }
 
     /// A unique identifier for this layout instance
     var id: String { get }
@@ -34,8 +34,8 @@ public protocol Layout {
 
 public extension Layout {
     /// The current page being rendered.
-    var page: Page {
-        PublishingContext.default.environment.page
+    var content: some HTML {
+        Section(PublishingContext.shared.environment.pageContent)
     }
 
     /// Generates a unique identifier for this layout based on its file location and type.

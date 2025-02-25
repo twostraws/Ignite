@@ -10,10 +10,10 @@ import Foundation
 /// Recurse content root, resolving symbolic links and selecting files by suffix.
 struct ContentFinder: Sendable {
     // no configuration, so no need for alternative instances
-    static let `default` = ContentFinder()
+    static let shared = ContentFinder()
 
     private let isLinkKey = Set([URLResourceKey.isSymbolicLinkKey])
-    private let resourceKeys = Content.resourceKeys
+    private let resourceKeys = Article.resourceKeys
         + [.isDirectoryKey, .isSymbolicLinkKey]
     private let directoryListOptions: FileManager.DirectoryEnumerationOptions = [
         .skipsHiddenFiles,

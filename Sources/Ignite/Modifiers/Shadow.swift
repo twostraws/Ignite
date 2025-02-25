@@ -28,36 +28,6 @@ struct Shadow: CustomStringConvertible {
     }
 }
 
-/// A modifier that applies box shadow styling to HTML elements.
-struct ShadowModifier: HTMLModifier {
-    /// The shadow's color
-    var color: Color
-
-    /// The shadow's blur radius in pixels
-    var radius: Int
-
-    /// The horizontal offset in pixels
-    var x: Int
-
-    /// The vertical offset in pixels
-    var y: Int
-
-    /// Whether the shadow should be inset
-    var inset: Bool
-
-    /// Computed shadow configuration
-    private var shadow: Shadow {
-        Shadow(color: color, radius: radius, x: x, y: y, inset: inset)
-    }
-
-    /// Applies box shadow styling to the provided HTML content
-    /// - Parameter content: The HTML element to modify
-    /// - Returns: The modified HTML with box shadow applied
-    func body(content: some HTML) -> any HTML {
-        content.style(.boxShadow, shadow.description)
-    }
-}
-
 public extension HTML {
     /// Applies an inner shadow to this element.
     /// - Parameters:
@@ -67,7 +37,8 @@ public extension HTML {
     ///   - y: The Y offset for the shadow, specified in pixels. Defaults to 0.
     /// - Returns: A copy of this element with the updated shadow applied.
     func innerShadow(_ color: Color = .black.opacity(0.33), radius: Int, x: Int = 0, y: Int = 0) -> some HTML {
-        modifier(ShadowModifier(color: color, radius: radius, x: x, y: y, inset: true))
+        let shadow = Shadow(color: color, radius: radius, x: x, y: y, inset: true)
+        return self.style(.boxShadow, shadow.description)
     }
 
     /// Applies a drop shadow to this element.
@@ -78,6 +49,7 @@ public extension HTML {
     ///   - y: The Y offset for the shadow, specified in pixels. Defaults to 0.
     /// - Returns: A copy of this element with the updated shadow applied.
     func shadow(_ color: Color = .black.opacity(0.33), radius: Int, x: Int = 0, y: Int = 0) -> some HTML {
-        modifier(ShadowModifier(color: color, radius: radius, x: x, y: y, inset: false))
+        let shadow = Shadow(color: color, radius: radius, x: x, y: y, inset: false)
+        return self.style(.boxShadow, shadow.description)
     }
 }

@@ -65,8 +65,8 @@ public struct MetaTag: HeadElement, Sendable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -142,31 +142,33 @@ public struct MetaTag: HeadElement, Sendable {
 
     /// Returns a standard set of social sharing metadata for a given page,
     /// including the page title, description, and image.
-    /// - Parameters:
-    ///   - page: The page for which metadata should be rendered.
-    ///   - configuration: The site configuration.
     /// - Returns: An array of `MetaTag` objects that should be placed
     /// into your page header to enable social sharing.
-    @ElementBuilder<MetaTag> public static func socialSharingTags(for page: Page) -> [MetaTag] {
-        let site = PublishingContext.default.site
+    @ElementBuilder<MetaTag> public static func socialSharingTags() -> [MetaTag] {
+        let site = PublishingContext.shared.site
+        let environment = PublishingContext.shared.environment
+
         MetaTag(.openGraphSiteName, content: site.name)
 
-        if let image = page.image {
+        if let image = environment.page.image {
             MetaTag(.openGraphImage, content: image)
             MetaTag(.twitterImage, content: image)
         }
 
-        MetaTag(.openGraphTitle, content: page.title)
-        MetaTag(.twitterTitle, content: page.title)
+        let pageTitle = environment.page.title
+        MetaTag(.openGraphTitle, content: pageTitle)
+        MetaTag(.twitterTitle, content: pageTitle)
 
-        if page.description.isEmpty == false {
-            MetaTag(.openGraphDescription, content: page.description)
-            MetaTag(.twitterDescription, content: page.description)
+        let pageDescription = environment.page.description
+        if pageDescription.isEmpty == false {
+            MetaTag(.openGraphDescription, content: pageDescription)
+            MetaTag(.twitterDescription, content: pageDescription)
         }
 
-        MetaTag(.openGraphURL, content: page.url)
+        let pageURL = environment.page.url
+        MetaTag(.openGraphURL, content: pageURL)
 
-        if let domain = page.url.removingWWW {
+        if let domain = pageURL.removingWWW {
             MetaTag(.twitterDomain, content: domain)
         }
 
@@ -177,18 +179,17 @@ public struct MetaTag: HeadElement, Sendable {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = CoreAttributes()
-        attributes.selfClosingTag = "meta"
+        var attributes = attributes
 
         if charset.isEmpty {
-            attributes.append(customAttributes:
+            attributes.add(customAttributes:
                 .init(name: type, value: value),
                 .init(name: "content", value: content))
         } else {
-            attributes.append(customAttributes:
+            attributes.add(customAttributes:
                 .init(name: "charset", value: charset)
             )
         }
-        return attributes.description()
+        return "<meta\(attributes) />"
     }
 }

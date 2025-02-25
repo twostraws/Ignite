@@ -32,8 +32,8 @@ public struct Button: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -173,15 +173,15 @@ public struct Button: InlineElement {
     /// - Returns: The HTML for this element.
     public func render() -> String {
         var buttonAttributes = attributes
-            .appending(classes: Button.classes(forRole: role, size: size))
-            .appending(aria: Button.aria(forRole: role))
+            .adding(classes: Button.classes(forRole: role, size: size))
+            .adding(aria: Button.aria(forRole: role))
+
         if isDisabled {
-            buttonAttributes.append(customAttributes: .disabled)
+            buttonAttributes.add(customAttributes: .disabled)
         }
+
         let output = HTMLCollection(label).render()
-        buttonAttributes.tag = "button type=\"\(type.htmlName)\""
-        buttonAttributes.closingTag = "button"
-        return buttonAttributes.description(wrapping: output)
+        return "<button type=\"\(type.htmlName)\"\(buttonAttributes)>\(output)</button>"
     }
 }
 

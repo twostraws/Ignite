@@ -21,7 +21,7 @@
 
     /// The current value from the environment store.
     public var wrappedValue: Value {
-        PublishingContext.default.environment[keyPath: keyPath]
+        PublishingContext.shared.environment[keyPath: keyPath]
     }
 
     /// Creates an environment property with the given key path.

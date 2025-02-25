@@ -32,14 +32,11 @@ public struct MetaLink: HeadElement, Sendable {
         href: "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css",
         rel: .stylesheet)
 
-    /// The CSS responsible for applying theme-specific styles and variables.
-    static let themeCSS = MetaLink(href: "/css/themes.min.css", rel: .stylesheet)
+    /// The CSS responsible for applying CSS relating to animations and themes..
+    static let igniteCoreCSS = MetaLink(href: "/css/ignite-core.min.css", rel: .stylesheet)
 
     /// The CSS responsible for handling media query-based visibility rules.
     static let mediaQueryCSS = MetaLink(href: "/css/media-queries.min.css", rel: .stylesheet)
-
-    /// The CSS responsible for managing animation states and transitions.
-    static let animationCSS = MetaLink(href: "/css/animations.min.css", rel: .stylesheet)
 
     /// The CSS used in Prism plugins like line numbering and line highlighting.
     static let prismPluginCSS = MetaLink(href: "/css/prism-plugins.css", rel: .stylesheet)
@@ -58,8 +55,8 @@ public struct MetaLink: HeadElement, Sendable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -113,14 +110,12 @@ public struct MetaLink: HeadElement, Sendable {
     /// otherwise the `href` is a URL and  doesn't get `subsite` prepended
     public func render() -> String {
         var attributes = attributes
-        attributes.selfClosingTag = "link"
-
         // char[0] of the link 'href' is '/' for an asset; not for a site URL
         let basePath = href.starts(with: "/") ? publishingContext.site.url.path : ""
-        attributes.append(customAttributes:
+        attributes.add(customAttributes:
             .init(name: "href", value: "\(basePath)\(href)"),
-            .init(name: "rel", value: rel)
-        )
-        return attributes.description()
+            .init(name: "rel", value: rel))
+
+        return "<link\(attributes) />"
     }
 }

@@ -28,64 +28,35 @@ public typealias Date = Foundation.Date
 
 /// A handful of attributes that all HTML types must support, either for
 /// rendering or for publishing purposes.
-struct CoreAttributes: Sendable {
+public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     /// A unique identifier. Can be empty.
     var id = ""
 
     /// ARIA attributes that add accessibility information.
     /// See https://www.w3.org/TR/html-aria/
-    var aria = OrderedSet<Attribute>()
+    var aria = Set<Attribute>()
 
     /// CSS classes.
-    var classes = OrderedSet<String>()
+    var classes = Set<String>()
 
     /// Inline CSS styles.
-    var styles = OrderedSet<InlineStyle>()
+    var styles = Set<InlineStyle>()
 
     /// Data attributes.
-    var data = OrderedSet<Attribute>()
+    var data = Set<Attribute>()
 
     /// JavaScript events, such as onclick.
-    var events = OrderedSet<Event>()
+    var events = Set<Event>()
 
     /// Custom attributes not covered by the above, e.g. loading="lazy"
-    var customAttributes = OrderedSet<Attribute>()
+    var customAttributes = Set<Attribute>()
 
-    /// The HTML tag to use for this element, e.g. "div" or "p".
-    var tag: String?
+    /// Whether this set of attributes is empty.
+    var isEmpty: Bool { self == CoreAttributes() }
 
-    /// An optional different tag to use when closing this element, e.g. "a" for links with href attributes.
-    var closingTag: String?
-
-    /// The tag to use for self-closing elements like "meta" or "img".
-    var selfClosingTag: String?
-
-    /// How many columns this should occupy when placed in a grid.
-    var columnWidth: ColumnWidth = .automatic
-
-    /// CSS classes that should be applied to a wrapper div around this element.
-    /// Each `ContainerAttributes` represents a wrapper div with styling
-    var containerAttributes = OrderedSet<ContainerAttributes>() {
-        didSet {
-            containerAttributes = OrderedSet(containerAttributes.sorted { first, second in
-                // First handle transform vs animation containers
-                if first.type == .transform && second.type == .animation {
-                    // transform goes after animation
-                    false
-                } else if first.type == .animation && second.type == .transform {
-                    // animation goes before transform
-                    true
-                } else if first.type == .click {
-                    // Click containers should always be outermost
-                    false // first goes after second
-                } else if second.type == .click {
-                    true // second goes after first
-                } else {
-                    // For all other containers, maintain their relative positions
-                    containerAttributes.firstIndex(of: first)! < containerAttributes.firstIndex(of: second)!
-                }
-            })
-        }
+    /// All core attributes collapsed down to a single string for easy application.
+    public var description: String {
+        "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
     }
 
     /// The ID of this element, if set.
@@ -175,140 +146,141 @@ struct CoreAttributes: Sendable {
         }
     }
 
-    /// Generates an HTML string containing all attributes and optionally wraps content.
-    /// - Parameter content: Optional content to wrap with opening and closing tags
-    /// - Returns: A string containing all attributes and optional content wrapped in tags
-    func description(wrapping content: String? = nil) -> String {
-        let attributes = idString + customAttributeString + classString + styleString
-                         + dataString + ariaString + eventString
-
-        var result = content ?? attributes
-
-        if containerAttributes.isEmpty {
-            if let selfClosingTag {
-                return "<\(selfClosingTag)\(attributes) />"
-            }
-            if let tag {
-                let closing = closingTag ?? tag
-                return "<\(tag)\(attributes)>\(content ?? "")</\(closing)>"
-            }
-            return result
-        }
-
-        if let selfClosingTag {
-            result = "<\(selfClosingTag)\(attributes) />"
-        } else if let tag {
-            let closing = closingTag ?? tag
-            result = "<\(tag)\(attributes)>\(result)</\(closing)>"
-        }
-
-        // Apply containers from inner to outer
-        for container in containerAttributes where !container.isEmpty {
-            let classAttr = if container.classes.isEmpty {
-                ""
-            } else {
-                " class=\"\(container.classes.sorted().joined(separator: " "))\""
-            }
-
-            let allStyles = container.styles.sorted().map { $0.description }.joined(separator: "; ")
-
-            let styleAttr = if container.styles.isEmpty {
-                ""
-            } else {
-                " style=\"\(allStyles)\""
-            }
-
-            var eventAttr = ""
-
-            for event in container.events.sorted() where event.actions.isEmpty == false {
-                let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
-                eventAttr += " \(event.name)=\"\(actions)\""
-            }
-
-            result = "<div\(classAttr)\(styleAttr)\(eventAttr)>\(result)</div>"
-        }
-
-        return result
-    }
-
-    /// Appends an array of CSS classes to the current element.
-    /// - Parameter classes: The CSS classes to append.
-    mutating func append(classes: [String]) {
+    /// Adds an array of CSS classes.
+    /// - Parameter classes: The CSS classes to add.
+    mutating func add(classes: some Collection<String>) {
         self.classes.formUnion(classes)
     }
 
-    /// Appends multiple CSS classes to the current element.
-    /// - Parameter classes: The CSS classes to append.
-    mutating func append(classes: String...) {
+    /// Adds multiple CSS classes.
+    /// - Parameter classes: The CSS classes to add.
+    mutating func add(classes: String...) {
         self.classes.formUnion(classes)
     }
 
-    /// Returns a new set of attributes with extra CSS classes appended.
-    /// - Parameter classes: The CSS classes to append.
+    /// Returns a new set of attributes with extra CSS classes added.
+    /// - Parameter classes: The CSS classes to add.
     /// - Returns: A copy of the previous `CoreAttributes` object with
     /// the extra CSS classes applied.
-    func appending(classes: [String]) -> CoreAttributes {
+    func adding(classes: [String]) -> CoreAttributes {
         var copy = self
         copy.classes.formUnion(classes)
         return copy
     }
 
-    /// Appends a class to the elements container.
-    /// - Parameter dataAttributes: Variable number of container attributes to append.
-    mutating func append(containerAttributes: ContainerAttributes...) {
-        self.containerAttributes.formUnion(containerAttributes)
-    }
-
-    /// Appends a class to the elements container.
-    /// - Parameter dataAttributes: The container attributes to append.
-    mutating func append(containerAttributes: [ContainerAttributes]) {
-        self.containerAttributes.formUnion(containerAttributes)
-    }
-
-    /// Returns a new set of attributes with an extra aria appended
-    /// - Parameter aria: The aria to append
+    /// Returns a new set of attributes with an extra aria added.
+    /// - Parameter aria: The aria to add.
     /// - Returns: A copy of the previous `CoreAttributes` object with
     /// the extra aria applied.
-    func appending(aria: Attribute?) -> CoreAttributes {
+    func adding(aria: Attribute?) -> CoreAttributes {
         guard let aria else { return self }
 
         var copy = self
-        copy.aria.append(aria)
+        copy.aria.insert(aria)
         return copy
     }
 
-    /// Appends multiple extra inline CSS styles.
-    /// - Parameter classes: The inline CSS styles to append.
-    mutating func append(styles: InlineStyle...) {
+    /// Adds multiple extra inline CSS styles.
+    /// - Parameter classes: The inline CSS styles to add.
+    mutating func add(styles: InlineStyle...) {
         self.styles.formUnion(styles)
     }
 
-    /// Appends a single extra inline CSS style.
+    /// Adds a single extra inline CSS style.
     ///  - Parameter style: The style name, e.g. background-color
     ///  - Parameter value: The style value, e.g. steelblue
-    mutating func append(style: Property, value: String) {
-        styles.append(InlineStyle(style, value: value))
+    mutating func add(style: Property, value: String) {
+        styles.insert(InlineStyle(style, value: value))
     }
 
-    /// Appends a data attribute to the element.
-    /// - Parameter dataAttributes: Variable number of data attributes to append.
-    mutating func append(dataAttributes: Attribute...) {
+    /// Adds a data attribute.
+    /// - Parameter dataAttributes: Variable number of data attributes to add.
+    mutating func add(dataAttributes: Attribute...) {
         data.formUnion(dataAttributes)
     }
 
-    /// Appends multiple custom attributes to the element.
-    /// - Parameter customAttributes: Variable number of custom attributes to append,
+    /// Adds multiple custom attributes.
+    /// - Parameter customAttributes: Variable number of custom attributes to add,
     ///   where each attribute is an `AttributeValue` containing a name-value pair.
-    mutating func append(customAttributes: Attribute...) {
+    mutating func add(customAttributes: Attribute...) {
         self.customAttributes.formUnion(customAttributes)
     }
 
-    /// Appends an array of inline CSS styles to the element.
+    /// Adds an array of inline CSS styles.
     /// - Parameter newStyles: An array of `AttributeValue` objects representing
     ///   CSS style properties and their values to be added.
-    mutating func append(styles newStyles: [InlineStyle]) {
+    mutating func add(styles newStyles: [InlineStyle]) {
         var styles = self.styles
         styles.formUnion(newStyles)
         self.styles = styles
+    }
+
+    /// Removes all attributes.
+    mutating func clear() {
+        self = CoreAttributes()
+    }
+
+    /// Removes specified CSS classes from the element.
+    /// - Parameter properties: Variable number of CSS classes to remove.
+    mutating func remove(classes: String...) {
+        let classes = self.classes.subtracting(classes)
+        self.classes = classes
+    }
+
+    /// Removes specified CSS properties from the element's inline styles.
+    /// - Parameter properties: Variable number of CSS properties to remove.
+    mutating func remove(styles properties: Property...) {
+        var styles = Array(self.styles)
+        for property in properties {
+            styles.removeAll(where: { $0.property == property.rawValue })
+        }
+        self.styles = Set(styles)
+    }
+
+    /// Retrieves the inline styles for specified CSS properties.
+    /// - Parameter properties: Variable number of CSS properties to look up.
+    /// - Returns: An array of `InlineStyle` objects matching the specified properties.
+    func get(styles properties: Property...) -> [InlineStyle] {
+        properties.compactMap { property in
+            if let style = styles.first(where: { $0.property == property.rawValue }) {
+                return style
+            }
+            return nil
+        }
+    }
+
+    /// Merges another set of CoreAttributes into this instance
+    /// - Parameter other: The CoreAttributes to merge into this instance
+    /// - Returns: A new CoreAttributes instance with the combined attributes
+    func merging(_ other: CoreAttributes) -> CoreAttributes {
+        var result = self
+
+        if !other.id.isEmpty {
+            result.id = other.id
+        }
+
+        result.aria.formUnion(other.aria)
+        result.classes.formUnion(other.classes)
+        result.styles.formUnion(other.styles)
+        result.data.formUnion(other.data)
+        result.events.formUnion(other.events)
+        result.customAttributes.formUnion(other.customAttributes)
+
+        return result
+    }
+
+    /// Merges another set of CoreAttributes into this instance in place
+    /// - Parameter other: The CoreAttributes to merge into this instance
+    mutating func merge(_ other: CoreAttributes) {
+        if !other.id.isEmpty {
+            id = other.id
+        }
+
+        aria.formUnion(other.aria)
+        classes.formUnion(other.classes)
+        styles.formUnion(other.styles)
+        data.formUnion(other.data)
+        events.formUnion(other.events)
+        customAttributes.formUnion(other.customAttributes)
     }
 }

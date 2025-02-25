@@ -26,8 +26,8 @@ public struct List: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -80,9 +80,9 @@ public struct List: HTML {
         var listAttributes = attributes
 
         if listStyle != .plain {
-            listAttributes.append(classes: "list-group")
+            listAttributes.add(classes: "list-group")
         } else if listStyle == .flushGroup {
-            listAttributes.append(classes: "list-group-flush")
+            listAttributes.add(classes: "list-group-flush")
         }
 
         var listMarkerType = ""
@@ -95,7 +95,7 @@ public struct List: HTML {
             }
 
             if listStyle == .group {
-                listAttributes.append(classes: "list-group-numbered")
+                listAttributes.add(classes: "list-group-numbered")
             }
         } else if case .unordered(let unorderedListStyle) = markerStyle {
             // Only add the extra styling if we aren't using
@@ -117,7 +117,7 @@ public struct List: HTML {
         }
 
         if listMarkerType.isEmpty == false {
-            listAttributes.append(style: .listStyleType, value: listMarkerType)
+            listAttributes.add(style: .listStyleType, value: listMarkerType)
         }
 
         return listAttributes
@@ -128,7 +128,7 @@ public struct List: HTML {
     public func render() -> String {
         let listAttributes = getAttributes()
 
-        var output = "<\(listElementName)\(listAttributes.description())>"
+        var output = "<\(listElementName)\(listAttributes)>"
 
         for originalItem in items {
             var item = originalItem
@@ -136,13 +136,13 @@ public struct List: HTML {
             // be allowed to handle that itself.
             if let listableItem = item as? ListableElement {
                 if listStyle != .plain {
-                    item.attributes.append(classes: "list-group-item")
+                    item.attributes.add(classes: "list-group-item")
                 }
 
                 output += listableItem.renderInList()
             } else {
                 let styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
-                item.attributes.append(classes: "m-0")
+                item.attributes.add(classes: "m-0")
                 output += "<li\(styleClass)>\(item.render())</li>"
             }
         }

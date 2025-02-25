@@ -10,8 +10,8 @@ public struct Row: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -36,8 +36,7 @@ public struct Row: HTML {
                 "<td>\(column.render())</td>"
             }
         }.joined()
-        var attributes = attributes
-        attributes.tag = "tr"
-        return attributes.description(wrapping: output)
+
+        return "<tr\(attributes)>\(output)</tr>"
     }
 }

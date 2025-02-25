@@ -31,7 +31,7 @@ import Testing
         let element = Script(file: scriptFile)
         let output = element.render()
 
-        let expectedPath = PublishingContext.default.path(for: URL(string: scriptFile)!)
+        let expectedPath = PublishingContext.shared.path(for: URL(string: scriptFile)!)
         #expect(output == "<script src=\"\(expectedPath)\"></script>")
     }
 
@@ -42,7 +42,7 @@ import Testing
         let element = Script(file: remoteScript)
         let output = element.render()
 
-        let expectedPath = PublishingContext.default.path(for: URL(string: remoteScript)!)
+        let expectedPath = PublishingContext.shared.path(for: URL(string: remoteScript)!)
         #expect(output == "<script src=\"\(expectedPath)\"></script>")
     }
 
@@ -55,7 +55,7 @@ import Testing
             .customAttribute(name: "custom", value: "part")
         let output = element.render()
 
-        let expectedPath = PublishingContext.default.path(for: URL(string: scriptFile)!)
+        let expectedPath = PublishingContext.shared.path(for: URL(string: scriptFile)!)
         #expect(output == "<script custom=\"part\" src=\"\(expectedPath)\" data-key=\"value\"></script>")
     }
 }

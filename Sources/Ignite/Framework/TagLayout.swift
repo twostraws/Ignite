@@ -20,21 +20,15 @@
 /// }
 /// ```
 @MainActor
-public protocol TagLayout: Layoutable {
-    /// The type of HTML content this layout will generate
-    associatedtype Body: HTML
-
-    /// The main content of the layout
-    @HTMLBuilder var body: Body { get }
-}
+public protocol TagLayout: PageContentLayout {}
 
 extension TagLayout {
     /// The current tag during page generation.
     public var tag: String? {
-        PublishingContext.default.environment.tag
+        PublishingContext.shared.environment.tag
     }
 
-    public var content: [Content] {
-        PublishingContext.default.environment.taggedContent
+    public var content: [Article] {
+        PublishingContext.shared.environment.taggedContent
     }
 }

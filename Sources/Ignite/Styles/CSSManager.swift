@@ -9,12 +9,12 @@
 @MainActor
 final class CSSManager {
     /// The shared instance used for managing CSS rules across the application.
-    static let `default` = CSSManager()
+    static let shared = CSSManager()
 
     /// Queue of registrations waiting to be processed
     private struct PendingRegistration {
         let queries: [any Query]
-        let properties: [(String, String)]
+        let properties: [InlineStyle]
         let className: String?
     }
 
@@ -30,7 +30,7 @@ final class CSSManager {
     private var rules: [String: String] = [:]
 
     /// A mapping of query hashes to their style properties.
-    private var styleProperties: [String: [(String, String)]] = [:]
+    private var styleProperties: [String: [InlineStyle]] = [:]
 
     /// Processes all registrations
     /// - Parameter themes: Array of themes from the site.
@@ -66,8 +66,8 @@ final class CSSManager {
     /// - Returns: The class name that will be used for these styles
     @discardableResult
     func register(
-        _ queries: [any Query],
-        properties: [(String, String)] = [("display", "none")],
+        _ queries: [any Query] = [],
+        properties: [InlineStyle] = [.init(.display, value: "none")],
         className: String? = nil
     ) -> String {
         let hash = hashForQueries(queries)
@@ -110,7 +110,7 @@ final class CSSManager {
     private func generateCSSRule(
         for queries: [any Query],
         className: String,
-        properties: [(String, String)],
+        properties: [InlineStyle],
         themes: [Theme]
     ) -> String {
         var rules: [String] = []
@@ -140,8 +140,8 @@ final class CSSManager {
     ///   - className: The CSS class name to use
     ///   - properties: The CSS properties to apply
     /// - Returns: A CSS rule string
-    private func generateBaseRule(className: String, properties: [(String, String)]) -> String {
-        let styleRules = properties.map { "\($0.0): \($0.1);" }.joined(separator: " ")
+    private func generateBaseRule(className: String, properties: [InlineStyle]) -> String {
+        let styleRules = properties.map { "\($0.property): \($0.value);" }.joined(separator: " ")
         return """
         .\(className) {
             \(styleRules)
@@ -159,7 +159,7 @@ final class CSSManager {
     private func generateThemedRule(
         for queries: [any Query],
         className: String,
-        properties: [(String, String)],
+        properties: [InlineStyle],
         theme: Theme
     ) -> String {
         let (_, mediaQueries) = queries.reduce(into: (Set<String>(), [String]())) { result, query in
@@ -171,7 +171,7 @@ final class CSSManager {
         }
 
         let selector = "[data-theme-state=\"\(theme.id)\"]"
-        let styleRules = properties.map { "\($0.0): \($0.1);" }.joined(separator: " ")
+        let styleRules = properties.map { "\($0.property): \($0.value);" }.joined(separator: " ")
 
         if mediaQueries.isEmpty {
             return """

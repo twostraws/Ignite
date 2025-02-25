@@ -17,8 +17,8 @@ public struct Code: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -35,8 +35,6 @@ public struct Code: InlineElement {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = attributes
-        attributes.tag = "code"
-        return attributes.description(wrapping: content)
+    "<code\(attributes)>\(content)</code>"
     }
 }

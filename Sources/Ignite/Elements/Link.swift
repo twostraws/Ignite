@@ -12,8 +12,8 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -105,7 +105,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         if let name = target.name {
             var copy = self
             let attribute = Attribute(name: "target", value: name)
-            copy.attributes.customAttributes.append(attribute)
+            copy.attributes.add(customAttributes: attribute)
             return copy
         } else {
             return self
@@ -155,7 +155,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         var copy = self
         let attributeValue = relationship.map(\.rawValue).joined(separator: " ")
         let attribute = Attribute(name: "rel", value: attributeValue)
-        copy.attributes.customAttributes.append(attribute)
+        copy.attributes.add(customAttributes: attribute)
         return copy
     }
 
@@ -185,21 +185,18 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         default: displayText
         }
 
-        var linkAttributes = attributes.appending(classes: linkClasses)
-        linkAttributes.classes.append("protected-link")
-        linkAttributes.data.append(Attribute(name: "encoded-url", value: encodedUrl))
+        var linkAttributes = attributes.adding(classes: linkClasses)
+        linkAttributes.add(classes: "protected-link")
+        linkAttributes.add(dataAttributes: .init(name: "encoded-url", value: encodedUrl))
+        linkAttributes.add(customAttributes: .init(name: "href", value: "#"))
 
-        linkAttributes.tag = """
-        a href="#"
-        """
-        linkAttributes.closingTag = "a"
-        return linkAttributes.description(wrapping: displayContent)
+        return "a\(linkAttributes)>\(displayContent)</a>"
     }
 
     /// Renders a standard link with the provided URL and content.
     /// - Returns: An HTML anchor tag with the appropriate href and content.
     private func renderStandardLink() -> String {
-        var linkAttributes = attributes.appending(classes: linkClasses)
+        var linkAttributes = attributes.adding(classes: linkClasses)
 
         guard let url = URL(string: url) else {
             publishingContext.addWarning("One of your links uses an invalid URL.")
@@ -207,9 +204,8 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         }
 
         let path = publishingContext.path(for: url)
-        linkAttributes.tag = "a href=\"\(path)\""
-        linkAttributes.closingTag = "a"
-        return linkAttributes.description(wrapping: content.render())
+        linkAttributes.add(customAttributes: .init(name: "href", value: path))
+        return "<a\(linkAttributes)>\(content)</a>"
     }
 }
 
@@ -248,7 +244,7 @@ public extension Link {
     /// Convenience initializer that creates a new `Link` instance using the
     /// title and path of the `MarkdownContent` instance you provide.
     /// - Parameter content: A piece of content from your site.
-    init(_ content: Content) {
+    init(_ content: Article) {
         self.content = content.title
         self.url = content.path
     }

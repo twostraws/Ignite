@@ -15,7 +15,6 @@ struct IDModifier: HTMLModifier {
         guard !id.isEmpty else { return content }
         var copy = content
         copy.attributes.id = id
-        AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
         return copy
     }
 }

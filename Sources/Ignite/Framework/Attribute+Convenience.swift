@@ -21,6 +21,9 @@ extension Attribute {
 
     /// A boolean attribute indicating that an option is selected.
     static let selected: Attribute = .init("selected")
+
+    /// A boolean attribute indicating whether audio/video controls should be displayed.
+    static let controls: Attribute = .init("controls")
 }
 
 // Convenience static methods for common HTML enumerated attributes.

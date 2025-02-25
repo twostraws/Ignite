@@ -12,26 +12,19 @@ import Testing
 
 /// Tests for the `title` element.
 @Suite("Body Tests")
-@MainActor struct SubsiteBodyTests {
+@MainActor class BodyTests: IgniteTestSuite {
     static let sites: [any Site] = [TestSite(), TestSubsite()]
 
     @Test("Simple Body Test", arguments: await Self.sites)
     func simpleBody(for site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-
-        let element = Body(
-            for: Page(
-                title: "TITLE", description: "DESCRIPTION",
-                url: site.url,
-                body: Text("TEXT")))
+        let element = Body()
         let output = element.render()
-
-        let jsPath = PublishingContext.default.path(for: URL(string: "/js")!)
+        let path = publishingContext.path(for: URL(string: "/js")!)
 
         #expect(output == """
-        <body class="container"><p>TEXT</p>\
-        <script src="\(jsPath)/bootstrap.bundle.min.js"></script>\
-        <script src="\(jsPath)/ignite-core.js"></script>\
+        <body class="container">\
+        <script src="\(path)/bootstrap.bundle.min.js"></script>\
+        <script src="\(path)/ignite-core.js"></script>\
         </body>
         """)
     }

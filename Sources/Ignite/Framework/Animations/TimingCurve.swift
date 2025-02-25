@@ -6,7 +6,7 @@
 //
 
 /// Defines the available timing functions for animations
-public enum TimingCurve: CSSRepresentable, Hashable {
+public enum TimingCurve: CSSRepresentable, Sendable, Hashable {
     /// Spring animation (response: 0.55, dampingFraction: 1.0)
     case automatic
     /// Linear timing with constant speed

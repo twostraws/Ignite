@@ -124,11 +124,13 @@ extension PublishingContext {
             """
         }
 
-        let cssPath = buildDirectory.appending(path: "css/themes.min.css")
+        let cssPath = buildDirectory.appending(path: "css/ignite-core.min.css")
         do {
-            try cssContent.write(to: cssPath, atomically: true, encoding: .utf8)
+            let existingContent = try String(contentsOf: cssPath, encoding: .utf8)
+            let newContent = existingContent + "\n\n" + cssContent
+            try newContent.write(to: cssPath, atomically: true, encoding: .utf8)
         } catch {
-            fatalError(.failedToWriteFile("css/themes.min.css"))
+            fatalError(.failedToWriteFile("css/ignite-core.min.css"))
         }
     }
 
@@ -320,7 +322,8 @@ extension PublishingContext {
         addProperty(.bodyFontSize, theme.bodySize)
         addProperty(.smallBodyFontSize, theme.smallBodySize)
         addProperty(.largeBodyFontSize, theme.largeBodySize)
-        addProperty(.codeFontSize, theme.codeFontSize)
+        addProperty(.inlineCodeFontSize, theme.inlineCodeFontSize)
+        addProperty(.codeBlockFontSize, theme.codeBlockFontSize)
 
         // Heading sizes
         addProperty(.h1FontSize, theme.xxLargeHeadingSize)
@@ -338,9 +341,9 @@ extension PublishingContext {
         addProperty(.bolderFontWeight, theme.bolderFontWeight)
 
         // Line heights
-        addProperty(.bodyLineHeight, theme.regularLineHeight)
-        addProperty(.condensedLineHeight, theme.condensedLineHeight)
-        addProperty(.expandedLineHeight, theme.expandedLineHeight)
+        addProperty(.bodyLineHeight, theme.lineHeight)
+        addProperty(.condensedLineHeight, theme.smallLineHeight)
+        addProperty(.expandedLineHeight, theme.largeLineHeight)
 
         // Heading properties
         addProperty(.headingsFontWeight, theme.headingFontWeight)

@@ -68,7 +68,7 @@ extension AnimationClassGenerator {
     /// - Parameter transition: The transition animation to process
     /// - Returns: A set of CSS properties including transitions and initial values
     func buildBaseTransitionClass(_ transition: Transition) -> Set<String> {
-        var baseProperties: Set<String> = ["cursor: pointer"]
+        var baseProperties: Set<String> = []
         let timing = getTransitionTiming(transition).first ?? "0.35s ease"
 
         // Set initial values for all properties
@@ -101,12 +101,12 @@ extension AnimationClassGenerator {
         let baseClass = "animation-" + transition.id
 
         return """
-        .\(baseClass)-transform {
+        .\(baseClass)-hover {
             transform-style: preserve-3d;
             transition: \(transitions.joined(separator: ", "));
         }
 
-        .\(baseClass)-transform:hover {
+        .\(baseClass)-hover:hover {
             \(hoverProperties.joined(separator: ";\n        "));
         }
         """

@@ -109,7 +109,10 @@ public protocol Theme: Sendable {
     var largeBodySize: LengthUnit { get }
 
     /// Inline code font size
-    var codeFontSize: LengthUnit { get }
+    var inlineCodeFontSize: LengthUnit { get }
+
+    /// Code block font size
+    var codeBlockFontSize: LengthUnit { get }
 
     /// Extra light font weight
     var lighterFontWeight: FontWeight { get }
@@ -127,13 +130,13 @@ public protocol Theme: Sendable {
     var bolderFontWeight: FontWeight { get }
 
     /// Base line height
-    var regularLineHeight: LengthUnit { get }
+    var lineHeight: LengthUnit { get }
 
     /// Condensed line height
-    var condensedLineHeight: LengthUnit { get }
+    var smallLineHeight: LengthUnit { get }
 
     /// Expanded line height
-    var expandedLineHeight: LengthUnit { get }
+    var largeLineHeight: LengthUnit { get }
 
     /// Font size for h1 elements
     var xxLargeHeadingSize: LengthUnit { get }

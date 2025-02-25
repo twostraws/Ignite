@@ -15,13 +15,12 @@ import Foundation
 /// ```swift
 /// struct ContentView: HTMLRootElement {
 ///     @Environment(\.themes) var themes
-///     @Environment(\.siteConfiguration) var config
 /// }
 /// ```
 @MainActor
 public struct EnvironmentValues {
-    /// Provides access to the Markdown pages on this site.
-    public var content: ContentLoader
+    /// Provides access to the Markdown articles on this site.
+    public var articles: ArticleLoader
 
     /// Configuration for RSS/Atom feed generation.
     public var feedConfiguration: FeedConfiguration?
@@ -32,17 +31,8 @@ public struct EnvironmentValues {
     /// Locates, loads, and decodes a JSON file in your Resources folder.
     public var decode: DecodeAction
 
-    /// The name of the site
-    public let siteName: String
-
-    /// A string to append to the end of page titles
-    public let siteTitleSuffix: String
-
-    /// An optional description for the site
-    public let siteDescription: String?
-
-    /// The base URL for the site
-    public let siteURL: URL
+    /// The site's metadata, such as name, description, and URL.
+    public let site: SiteMetadata
 
     /// The author of the site
     public let author: String
@@ -60,62 +50,126 @@ public struct EnvironmentValues {
     public let builtInIconsEnabled: BootstrapOptions
 
     /// The current page being rendered.
-    var page: Page = .empty
+    internal(set) public var page: PageMetadata
+
+    /// The content of the current page being rendered.
+    var pageContent: any HTML = EmptyHTML()
 
     /// The current piece of Markdown content being rendered.
-    var article: Content = .empty
+    var article: Article = .empty
 
     /// The current tag of the page being rendered.
     var tag: String?
 
     /// Content that has the current tag.
-    var taggedContent: [Content] = []
+    var taggedContent: [Article] = []
 
     public init() {
-        self.content = ContentLoader(content: [])
+        self.articles = ArticleLoader(content: [])
         self.feedConfiguration = FeedConfiguration(mode: .full, contentCount: 0)
         self.themes = []
         self.decode = .init(sourceDirectory: URL(filePath: ""))
         self.author = ""
-        self.siteName = ""
-        self.siteTitleSuffix = ""
-        self.siteDescription = nil
         self.language = .english
-        self.siteURL = URL(static: "https://example.com")
         self.favicon = nil
         self.builtInIconsEnabled = .localBootstrap
         self.timeZone = .gmt
+        self.page = .empty
+        self.site = .empty
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content]) {
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [Article],
+        pageMetadata: PageMetadata,
+        pageContent: any PageContentLayout
+    ) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
-        self.content = ContentLoader(content: allContent)
+        self.articles = ArticleLoader(content: allContent)
         self.feedConfiguration = site.feedConfiguration
         self.themes = site.allThemes
         self.author = site.author
-        self.siteName = site.name
-        self.siteTitleSuffix = site.titleSuffix
-        self.siteDescription = site.description
         self.language = site.language
-        self.siteURL = site.url
         self.favicon = site.favicon
         self.builtInIconsEnabled = site.builtInIconsEnabled
         self.timeZone = site.timeZone
+        self.page = pageMetadata
+
+        self.site = SiteMetadata(
+            name: site.name,
+            titleSuffix: site.titleSuffix,
+            description: site.description,
+            url: site.url)
+
+        self.pageContent = PublishingContext.shared.withEnvironment(self) {
+            pageContent.body
+        }
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content], page: Page) {
-        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
-        self.page = page
-    }
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [Article],
+        pageMetadata: PageMetadata,
+        pageContent: any PageContentLayout,
+        article: Article
+    ) {
+        self.decode = DecodeAction(sourceDirectory: sourceDirectory)
+        self.articles = ArticleLoader(content: allContent)
+        self.feedConfiguration = site.feedConfiguration
+        self.themes = site.allThemes
+        self.author = site.author
+        self.language = site.language
+        self.favicon = site.favicon
+        self.builtInIconsEnabled = site.builtInIconsEnabled
+        self.timeZone = site.timeZone
+        self.page = pageMetadata
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content], article: Content) {
-        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+        self.site = SiteMetadata(
+            name: site.name,
+            titleSuffix: site.titleSuffix,
+            description: site.description,
+            url: site.url)
+
         self.article = article
+
+        self.pageContent = PublishingContext.shared.withEnvironment(self) {
+            pageContent.body
+        }
     }
 
-    init(sourceDirectory: URL, site: any Site, allContent: [Content], tag: String?, taggedContent: [Content]) {
-        self.init(sourceDirectory: sourceDirectory, site: site, allContent: allContent)
+    init(
+        sourceDirectory: URL,
+        site: any Site,
+        allContent: [Article],
+        pageMetadata: PageMetadata,
+        pageContent: any PageContentLayout,
+        tag: String?,
+        taggedContent: [Article]
+    ) {
+        self.decode = DecodeAction(sourceDirectory: sourceDirectory)
+        self.articles = ArticleLoader(content: allContent)
+        self.feedConfiguration = site.feedConfiguration
+        self.themes = site.allThemes
+        self.author = site.author
+        self.language = site.language
+        self.favicon = site.favicon
+        self.builtInIconsEnabled = site.builtInIconsEnabled
+        self.timeZone = site.timeZone
+        self.page = pageMetadata
+
+        self.site = SiteMetadata(
+            name: site.name,
+            titleSuffix: site.titleSuffix,
+            description: site.description,
+            url: site.url)
+
         self.tag = tag
         self.taggedContent = taggedContent
+
+        self.pageContent = PublishingContext.shared.withEnvironment(self) {
+            pageContent.body
+        }
     }
 }
