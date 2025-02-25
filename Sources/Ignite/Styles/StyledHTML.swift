@@ -6,7 +6,7 @@
 //
 
 /// A concrete type used for style resolution that only holds attributes
-@MainActor public struct StyledHTML: Modifiable {
+@MainActor public struct StyledHTML: Stylable {
     /// A collection of styles, classes, and attributes.
     var attributes = CoreAttributes()
 
