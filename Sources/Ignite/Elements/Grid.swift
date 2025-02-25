@@ -109,8 +109,11 @@ public struct Grid: HTML, HorizontalAligning {
     /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.
     private func handleItem(_ item: any HTML) -> some HTML {
         var item = item
-        let name = className(for: item)
-        item.attributes.remove(classes: name)
+        var name: String?
+        if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }) {
+            item.attributes.remove(classes: widthClass)
+            name = scaleWidthClass(widthClass)
+        }
 
         return Section(item)
             .class(name)
@@ -127,10 +130,10 @@ public struct Grid: HTML, HorizontalAligning {
         } else {
             ""
         }
+
         return ForEach(passthrough.items) { item in
-            handleItem(item)
+            handleItem(item.attributes(attributes))
                 .class(gutterClass)
-                .attributes(attributes)
         }
     }
 
@@ -138,16 +141,13 @@ public struct Grid: HTML, HorizontalAligning {
     /// - Parameter item: The block element to calculate the class name for.
     /// - Returns: A Bootstrap class name that represents the element's width,
     /// scaled according to the section's column count if needed.
-    private func className(for item: any HTML) -> String {
-        let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") })
-        if let columnCount,
-           let widthClass,
-           let width = Int(widthClass.dropFirst("col-md-".count)) {
+    private func scaleWidthClass(_ widthClass: String) -> String {
+        if let columnCount, let width = Int(widthClass.dropFirst("col-md-".count)) {
             // Scale the width to be relative to the new column count
             let scaledWidth = width * 12 / columnCount
             return ColumnWidth.count(scaledWidth).className
         } else {
-            return widthClass ?? "col"
+            return "col"
         }
     }
 }

@@ -100,7 +100,7 @@ struct FontModifier: HTMLModifier {
 
         if let baseSize {
             CSSManager.shared.register(
-                properties: [("font-size", baseSize.value.stringValue)],
+                properties: [.init(.fontSize, value: baseSize.value.stringValue)],
                 className: className)
         }
 
@@ -108,7 +108,7 @@ struct FontModifier: HTMLModifier {
             if let breakpoint = size.breakpoint {
                 CSSManager.shared.register(
                     [.breakpoint(.init(stringValue: breakpoint)!)],
-                    properties: [("font-size", size.value.stringValue)],
+                    properties: [.init(.fontSize, value: size.value.stringValue)],
                     className: className)
             }
         }
