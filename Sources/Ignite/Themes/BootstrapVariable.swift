@@ -109,7 +109,10 @@ enum BootstrapVariable: String {
     case largeBodyFontSize = "--bs-body-font-size-lg"
 
     /// Inline code font size
-    case codeFontSize = "--bs-code-font-size"
+    case inlineCodeFontSize = "--bs-code-font-size"
+
+    /// Code block font size
+    case codeBlockFontSize = "--code-block-font-size"
 
     // MARK: - Heading Sizes
 

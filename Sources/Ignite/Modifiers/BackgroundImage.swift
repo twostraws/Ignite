@@ -5,33 +5,6 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that applies background images to HTML elements.
-struct BackgroundImageModifier: HTMLModifier {
-    /// The path to the image.
-    var imagePath: String
-
-    /// The content mode to use for sizing the image.
-    var contentMode: BackgroundImageContentMode
-
-    /// The position of the image within the element's frame.
-    var position: BackgroundPosition
-
-    /// Whether the image should be repeated.
-    var repeats: Bool
-
-    /// Applies the background image to the provided HTML content.
-    /// - Parameter content: The HTML content to modify
-    /// - Returns: The modified HTML content with background image applied
-    func body(content: some HTML) -> any HTML {
-        content.style(
-            .init(.backgroundImage, value: "url('\(imagePath)')"),
-            .init(.backgroundSize, value: contentMode.css),
-            .init(.backgroundRepeat, value: repeats ? "repeat" : "no-repeat"),
-            .init(.backgroundPosition, value: position.css)
-        )
-    }
-}
-
 public extension HTML {
     /// Applies a background image to the element.
     /// - Parameters:
@@ -46,12 +19,12 @@ public extension HTML {
         position: BackgroundPosition = .center,
         repeats: Bool = false
     ) -> some HTML {
-        modifier(BackgroundImageModifier(
-            imagePath: image,
-            contentMode: contentMode,
-            position: position,
-            repeats: repeats
-        ))
+        self.style(
+            .init(.backgroundImage, value: "url('\(image)')"),
+            .init(.backgroundSize, value: contentMode.css),
+            .init(.backgroundRepeat, value: repeats ? "repeat" : "no-repeat"),
+            .init(.backgroundPosition, value: position.css)
+        )
     }
 }
 
@@ -104,7 +77,6 @@ public struct BackgroundPosition: CSSRepresentable, Sendable {
             case .percent(let value): "\(value)%"
             }
         }
-
     }
 
     /// The possible horizontal alignment values.

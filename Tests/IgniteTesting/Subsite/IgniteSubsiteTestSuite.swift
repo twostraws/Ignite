@@ -15,7 +15,7 @@ class IgniteSubsiteTestSuite {
     let site: any Site = TestSubsite()
 
     var publishingContext: PublishingContext {
-        PublishingContext.default
+        PublishingContext.shared
     }
 
     /// Creates a new test instance and initializes the publishing context for `TestSubsite`.

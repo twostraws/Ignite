@@ -14,18 +14,18 @@ import SwiftSoup
 @MainActor
 final class PublishingContext {
     /// The shared instance of `PublishingContext`.
-    private static var defaultContext: PublishingContext!
+    private static var sharedContext: PublishingContext!
 
     /// The shared instance of `PublishingContext`.
-    static var `default`: PublishingContext {
-        guard let defaultContext else {
+    static var shared: PublishingContext {
+        guard let sharedContext else {
             fatalError("""
             "PublishingContext.default accessed before being initialized. \
             Call PublishingContext.initialize() first.
             """)
         }
 
-        return defaultContext
+        return sharedContext
     }
 
     /// The site that is currently being built.
@@ -62,7 +62,7 @@ final class PublishingContext {
     var environment = EnvironmentValues()
 
     /// All the Markdown content this user has inside their Content folder.
-    private(set) var allContent = [Content]()
+    private(set) var allContent = [Article]()
 
     /// An ordered set of syntax highlighters pulled from code blocks throughout the site.
     var syntaxHighlighters = OrderedSet<HighlighterLanguage>()
@@ -113,7 +113,7 @@ final class PublishingContext {
         buildDirectoryPath: String = "Build"
     ) throws -> PublishingContext {
         let context = try PublishingContext(for: site, from: file, buildDirectoryPath: buildDirectoryPath)
-        defaultContext = context
+        sharedContext = context
         return context
     }
 
@@ -121,7 +121,7 @@ final class PublishingContext {
     /// - Parameter tag: The tag to filter by, or nil for all content.
     /// - Returns: An array of content matching the specified tag, or all content
     /// if no tag was specified.
-    func content(tagged tag: String?) -> [Content] {
+    func content(tagged tag: String?) -> [Article] {
         if let tag {
             allContent.filter { $0.tags.contains(tag) }
         } else {
@@ -165,8 +165,8 @@ final class PublishingContext {
 
     /// Parses all Markdown content in the site's Content folder.
     func parseContent() throws {
-        try ContentFinder.default.find(root: contentDirectory) { deploy in
-            let article = try Content(
+        try ContentFinder.shared.find(root: contentDirectory) { deploy in
+            let article = try Article(
                 from: deploy.url,
                 in: self,
                 resourceValues: deploy.resourceValues,
@@ -222,17 +222,10 @@ final class PublishingContext {
         copyAssets()
         copyFonts()
 
-        let themesPath = buildDirectory.appending(path: "css/themes.min.css").decodedPath
+        let igniteCorePath = buildDirectory.appending(path: "css/ignite-core.min.css").decodedPath
 
-        if !FileManager.default.fileExists(atPath: themesPath) {
-            copy(resource: "css/themes.min.css")
-        }
-
-        if AnimationManager.default.hasAnimations {
-            let animationsPath = buildDirectory.appending(path: "css/animations.min.css").decodedPath
-            if !FileManager.default.fileExists(atPath: animationsPath) {
-                copy(resource: "css/animations.min.css")
-            }
+        if !FileManager.default.fileExists(atPath: igniteCorePath) {
+            copy(resource: "css/ignite-core.min.css")
         }
 
         copy(resource: "js/ignite-core.js")

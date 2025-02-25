@@ -68,7 +68,7 @@ struct FrameModifier: HTMLModifier {
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
-        alignment: Alignment = .center
+        alignment: Alignment = .topLeading
     ) {
         self.width = width
         self.minWidth = minWidth
@@ -123,7 +123,13 @@ struct FrameModifier: HTMLModifier {
             break
 
         default:
-            modified.attributes.append(styles: .init(dimension.cssProperty, value: value.stringValue))
+            if dimension == .maxWidth || dimension == .width {
+                // For max-width and width, ensure all units are responsive
+                modified.attributes.add(styles: .init(dimension.cssProperty, value: "min(\(value.stringValue), 100%)"))
+            } else {
+                // For other dimensions, use the original value
+                modified.attributes.add(styles: .init(dimension.cssProperty, value: value.stringValue))
+            }
         }
     }
 
@@ -169,7 +175,7 @@ public extension HTML {
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
-        alignment: Alignment = .center
+        alignment: Alignment = .topLeading
     ) -> some HTML {
         modifier(FrameModifier(
             width: width,
@@ -200,7 +206,7 @@ public extension HTML {
         height: Int? = nil,
         minHeight: Int? = nil,
         maxHeight: Int? = nil,
-        alignment: Alignment = .center
+        alignment: Alignment = .topLeading
     ) -> some HTML {
         modifier(FrameModifier(
             width: width.map { .px($0) },
@@ -240,7 +246,7 @@ public extension InlineElement {
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
-        alignment: Alignment = .center
+        alignment: Alignment = .topLeading
     ) -> some InlineElement {
         modifier(FrameModifier(
             width: width,
@@ -271,7 +277,7 @@ public extension InlineElement {
         height: Int? = nil,
         minHeight: Int? = nil,
         maxHeight: Int? = nil,
-        alignment: Alignment = .center
+        alignment: Alignment = .topLeading
     ) -> some InlineElement {
         modifier(FrameModifier(
             width: width.map { .px($0) },

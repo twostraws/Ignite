@@ -16,8 +16,8 @@ public struct Grid: HTML, HorizontalAligning {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -65,14 +65,14 @@ public struct Grid: HTML, HorizontalAligning {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var sectionAttributes = attributes.appending(classes: ["row"])
+        var sectionAttributes = attributes.adding(classes: ["row"])
 
         // If a column count is set, we want to use that for all
         // page sizes that are medium and above. Below that we
         // should drop down to width 1 to avoid squeezing things
         // into oblivion.
         if let columnCount {
-            sectionAttributes.append(classes: [
+            sectionAttributes.add(classes: [
                 "row-cols-1",
                 "row-cols-md-\(columnCount)"
             ])
@@ -83,7 +83,7 @@ public struct Grid: HTML, HorizontalAligning {
         if let spacingAmount {
             switch spacingAmount {
             case .exact(let pixels):
-                sectionAttributes.append(styles: .init(.rowGap, value: "\(pixels)px"))
+                sectionAttributes.add(styles: .init(.rowGap, value: "\(pixels)px"))
             case .semantic(let amount):
                 gutterClass = "gy-\(amount.rawValue)"
             }
@@ -97,14 +97,26 @@ public struct Grid: HTML, HorizontalAligning {
                           let passthrough = modified.unwrapped as? any PassthroughElement {
                     handlePassthrough(passthrough, attributes: modified.attributes)
                 } else {
-                    Section(item)
-                        .class(className(for: item))
+                    handleItem(item)
                         .class(gutterClass)
                 }
             }
         }
         .attributes(sectionAttributes)
         .render()
+    }
+
+    /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.
+    private func handleItem(_ item: any HTML) -> some HTML {
+        var item = item
+        var name: String?
+        if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }) {
+            item.attributes.remove(classes: widthClass)
+            name = scaleWidthClass(widthClass)
+        }
+
+        return Section(item)
+            .class(name ?? "col")
     }
 
     /// Renders a group of HTML elements with consistent styling and attributes.
@@ -118,11 +130,10 @@ public struct Grid: HTML, HorizontalAligning {
         } else {
             ""
         }
+
         return ForEach(passthrough.items) { item in
-            Section(item)
-                .class(className(for: passthrough))
+            handleItem(item.attributes(attributes))
                 .class(gutterClass)
-                .attributes(attributes)
         }
     }
 
@@ -130,13 +141,13 @@ public struct Grid: HTML, HorizontalAligning {
     /// - Parameter item: The block element to calculate the class name for.
     /// - Returns: A Bootstrap class name that represents the element's width,
     /// scaled according to the section's column count if needed.
-    private func className(for item: any HTML) -> String {
-        if let columnCount, case .count(let width) = item.columnWidth {
+    private func scaleWidthClass(_ widthClass: String) -> String {
+        if let columnCount, let width = Int(widthClass.dropFirst("col-md-".count)) {
             // Scale the width to be relative to the new column count
             let scaledWidth = width * 12 / columnCount
             return ColumnWidth.count(scaledWidth).className
         } else {
-            return item.columnWidth.className
+            return widthClass
         }
     }
 }

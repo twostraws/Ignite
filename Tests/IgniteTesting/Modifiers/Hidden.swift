@@ -25,7 +25,7 @@ struct HiddenTests {
     @Test("MediaQuery based hidden Modifier for Text")
     func hiddenMediaQueryForText() async throws {
         let query = OrientationQuery.landscape
-        let hash = CSSManager.default.hashForQueries([query])
+        let hash = CSSManager.shared.hashForQueries([query])
         let className = "style-\(hash)"
 
         let element = Text("Hello world!").hidden(query)

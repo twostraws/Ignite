@@ -9,8 +9,8 @@ public struct Body: DocumentElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -18,15 +18,15 @@ public struct Body: DocumentElement {
     /// Whether this HTML uses Bootstrap's `container` class to determine page width.
     var isBoundByContainer: Bool = true
 
-    var items: [any HTML]
+    var content: any HTML
 
-    public init(@HTMLBuilder _ items: () -> some HTML) {
-        self.items = flatUnwrap(items())
+    public init(@HTMLBuilder _ content: () -> some HTML) {
+        self.content = content()
     }
 
     public init() {
-        let page = PublishingContext.default.environment.page
-        self.items = flatUnwrap(page.body)
+        let pageContent = PublishingContext.shared.environment.pageContent
+        self.content = pageContent
     }
 
     /// Removes the Bootstrap `container` class from the body element.
@@ -43,11 +43,7 @@ public struct Body: DocumentElement {
 
     public func render() -> String {
         var attributes = attributes
-        var output = ""
-
-        // Render main content
-        let rendered = items.map { $0.render() }.joined()
-        output = rendered
+        var output = content.render()
 
         // Add required scripts
         if publishingContext.site.useDefaultBootstrapURLs == .localBootstrap {
@@ -61,12 +57,12 @@ public struct Body: DocumentElement {
         if case .visible(let firstLine, let shouldWrap) =
             publishingContext.site.syntaxHighlighterConfiguration.lineNumberVisibility {
 
-            attributes.append(classes: "line-numbers")
+            attributes.add(classes: "line-numbers")
             if firstLine != 1 {
-                attributes.append(dataAttributes: .init(name: "start", value: firstLine.formatted()))
+                attributes.add(dataAttributes: .init(name: "start", value: firstLine.formatted()))
             }
             if shouldWrap {
-                attributes.append(styles: .init(.whiteSpace, value: "pre-wrap"))
+                attributes.add(styles: .init(.whiteSpace, value: "pre-wrap"))
             }
         }
 
@@ -79,10 +75,9 @@ public struct Body: DocumentElement {
 
         output += Script(file: "/js/ignite-core.js").render()
 
-        attributes.tag = "body"
         if isBoundByContainer {
-            attributes.append(classes: ["container"])
+            attributes.add(classes: ["container"])
         }
-        return attributes.description(wrapping: output)
+        return "<body\(attributes)>\(output)</body>"
     }
 }

@@ -65,8 +65,8 @@ public struct MetaTag: HeadElement, Sendable {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -145,8 +145,8 @@ public struct MetaTag: HeadElement, Sendable {
     /// - Returns: An array of `MetaTag` objects that should be placed
     /// into your page header to enable social sharing.
     @ElementBuilder<MetaTag> public static func socialSharingTags() -> [MetaTag] {
-        let site = PublishingContext.default.site
-        let environment = PublishingContext.default.environment
+        let site = PublishingContext.shared.site
+        let environment = PublishingContext.shared.environment
 
         MetaTag(.openGraphSiteName, content: site.name)
 
@@ -179,19 +179,17 @@ public struct MetaTag: HeadElement, Sendable {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        var attributes = CoreAttributes()
-        attributes.tag = "meta"
-        attributes.tagIsSelfClosing = true
+        var attributes = attributes
 
         if charset.isEmpty {
-            attributes.append(customAttributes:
+            attributes.add(customAttributes:
                 .init(name: type, value: value),
                 .init(name: "content", value: content))
         } else {
-            attributes.append(customAttributes:
+            attributes.add(customAttributes:
                 .init(name: "charset", value: charset)
             )
         }
-        return attributes.description()
+        return "<meta\(attributes) />"
     }
 }

@@ -29,6 +29,10 @@ div.alert p:last-child {
   color: inherit;
 }
 
+.line-height-inherit {
+  line-height: inherit;
+}
+
 .form-control::placeholder {
     color: gray;
     opacity: 1;

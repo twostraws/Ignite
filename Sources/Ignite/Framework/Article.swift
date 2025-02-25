@@ -15,7 +15,7 @@ import Foundation
 /// property to `false`, or replace `<` and `>` with their character entity references,
 /// `&lt;` and `&gt;` respectively.
 @MainActor
-public struct Content {
+public struct Article {
     /// The main title for this content.
     public var title: String
 
@@ -29,8 +29,8 @@ public struct Content {
     /// See https://jekyllrb.com/docs/front-matter/
     public var metadata: [String: any Sendable]
 
-    /// The main body of this content. Excludes its title.
-    public var body: String
+    /// The main text of this content. Excludes its title.
+    public var text: String
 
     /// Set to true when no specific date was found for this content,
     /// so one was provided by examining the filesystem date.
@@ -114,7 +114,7 @@ public struct Content {
 
     /// A rough estimate of the number of words in this content.
     public var estimatedWordCount: Int {
-        body.matches(of: #/[\w-]+/#).count
+        text.matches(of: #/[\w-]+/#).count
     }
 
     /// A rough estimate of how many minutes it takes to read this content,
@@ -142,7 +142,7 @@ public struct Content {
         // for the site we're publishing.
         let parser = try context.site.markdownRenderer.init(url: url, removeTitleFromBody: true)
 
-        body = parser.body
+        text = parser.body
         metadata = parser.metadata
         title = parser.title.strippingTags()
         description = parser.description.strippingTags()
@@ -222,7 +222,7 @@ public struct Content {
             if let date = process(date: dateString) {
                 return date
             } else {
-                PublishingContext.default.addError(.badContentDateFormat)
+                PublishingContext.shared.addError(.badContentDateFormat)
                 continue
             }
         }
@@ -237,8 +237,8 @@ public struct Content {
 
 }
 
-extension Content {
-    static let empty = Content()
+extension Article {
+    static let empty = Article()
 
     /// Creates an empty markdown content instance with default values.
     init() {
@@ -246,7 +246,7 @@ extension Content {
         self.description = ""
         self.path = ""
         self.metadata = [:]
-        self.body = ""
+        self.text = ""
         self.hasAutomaticDate = false
     }
 }

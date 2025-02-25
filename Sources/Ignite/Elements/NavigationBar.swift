@@ -47,8 +47,8 @@ public struct NavigationBar: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -125,10 +125,10 @@ public struct NavigationBar: HTML {
         var copy = self
         switch width {
         case .viewport:
-            copy.widthClasses = ["container-fluid", copy.columnWidth.className]
+            copy.widthClasses = ["container-fluid", copy.columnWidth]
         case .count(let count):
             copy.columnWidth(.count(count))
-            copy.widthClasses = ["container", copy.columnWidth.className]
+            copy.widthClasses = ["container", copy.columnWidth]
         }
         return copy
     }
@@ -233,9 +233,8 @@ fileprivate extension HTML {
     /// - Returns: The modified `HTML` element
     func data(_ name: String, _ value: String?) -> Self {
         guard let value else { return self }
-        var attributes = attributes
-        attributes.data.append(Attribute(name: name, value: value))
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        return self
+        var copy = self
+        copy.attributes.add(dataAttributes: .init(name: name, value: value))
+        return copy
     }
 }

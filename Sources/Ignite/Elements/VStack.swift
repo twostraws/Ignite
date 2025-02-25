@@ -10,8 +10,8 @@ public struct VStack: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -52,35 +52,30 @@ public struct VStack: HTML {
 
     public func render() -> String {
         var itemAttributes = CoreAttributes()
-        itemAttributes.append(classes: "mb-0")
+        itemAttributes.add(classes: "mb-0")
         var items = [any HTML]()
 
         for item in self.items {
             switch item {
             case let container as HTMLCollection:
                 for item in container.elements {
-                    AttributeStore.default.merge(itemAttributes, intoHTML: item.id)
-                    items.append(item)
+                    items.append(item.attributes(itemAttributes))
                 }
             default:
-                AttributeStore.default.merge(itemAttributes, intoHTML: item.id)
-                items.append(item)
+                items.append(item.attributes(itemAttributes))
             }
         }
 
         var attributes = attributes
-        attributes.append(classes: "vstack")
+        attributes.add(classes: "vstack")
 
         if case let .exact(pixels) = spacingAmount {
-            attributes.append(styles: .init(.gap, value: "\(pixels)px"))
+            attributes.add(styles: .init(.gap, value: "\(pixels)px"))
         } else if case let .semantic(amount) = spacingAmount {
-            attributes.append(classes: "gap-\(amount.rawValue)")
+            attributes.add(classes: "gap-\(amount.rawValue)")
         }
 
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        attributes.tag = "div"
         let content = items.map { $0.render() }.joined()
-
-        return attributes.description(wrapping: content)
+        return "<div\(attributes)>\(content)</div>"
     }
 }

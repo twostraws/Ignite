@@ -23,7 +23,7 @@ public protocol ContentLayout: PageContentLayout {}
 
 public extension ContentLayout {
     /// The current Markdown content being rendered.
-    var content: Content {
-        PublishingContext.default.environment.article
+    var article: Article {
+        PublishingContext.shared.environment.article
     }
 }

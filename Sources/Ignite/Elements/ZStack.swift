@@ -11,8 +11,8 @@ public struct ZStack: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -43,9 +43,9 @@ public struct ZStack: HTML {
             }
         }
 
-        items.enumerated().forEach { index, item in
+        items = items.enumerated().map { index, item in
             var elementAttributes = CoreAttributes()
-            elementAttributes.append(styles: [
+            elementAttributes.add(styles: [
                 .init(.position, value: "relative"),
                 .init(.display, value: "grid"),
                 .init(.gridArea, value: "1/1"),
@@ -53,19 +53,15 @@ public struct ZStack: HTML {
                 .init(.marginBottom, value: "0")
             ])
 
-            elementAttributes.append(styles: alignment.flexAlignmentRules)
-
-            AttributeStore.default.merge(elementAttributes, intoHTML: item.id)
+            elementAttributes.add(styles: alignment.flexAlignmentRules)
+            return item.attributes(elementAttributes)
         }
 
         var attributes = attributes
-        attributes.append(styles: .init(.display, value: "grid"))
-
-        AttributeStore.default.merge(attributes, intoHTML: id)
-        attributes.tag = "div"
+        attributes.add(styles: .init(.display, value: "grid"))
 
         let content = items.map { $0.render() }.joined()
-        return attributes.description(wrapping: content)
+        return "<div\(attributes)>\(content)</div>"
     }
 }
 

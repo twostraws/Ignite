@@ -13,8 +13,8 @@ public struct Head: DocumentElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -46,13 +46,11 @@ public struct Head: DocumentElement {
     public func render() -> String {
         var items = items
         if includeStandardHeaders {
-            items.insert(contentsOf:  MetaTag.socialSharingTags(), at: 0)
+            items.insert(contentsOf: MetaTag.socialSharingTags(), at: 0)
             items.insert(contentsOf: Head.standardHeaders(), at: 0)
         }
 
-        var attributes = attributes
-        attributes.tag = "head"
-        return attributes.description(wrapping: HTMLCollection(items).render())
+        return "<head\(attributes)>\(HTMLCollection(items))</head>"
     }
 
     /// A static function, returning the standard set of headers used for a `Page` instance.
@@ -60,18 +58,17 @@ public struct Head: DocumentElement {
     /// This function can be used when defining a custom header based on the standard set of headers.
     @HeadElementBuilder
     public static func standardHeaders() -> [any HeadElement] {
-        // swiftlint:disable:previous cyclomatic_complexity
         MetaTag.utf8
         MetaTag.flexibleViewport
 
-        let environment = PublishingContext.default.environment
+        let environment = PublishingContext.shared.environment
         let pageDescription = environment.page.description
 
         if pageDescription.isEmpty == false {
             MetaTag(name: "description", content: pageDescription)
         }
 
-        let context = PublishingContext.default
+        let context = PublishingContext.shared
         let site = context.site
 
         if site.author.isEmpty == false {
@@ -99,13 +96,9 @@ public struct Head: DocumentElement {
             MetaLink.remoteIconCSS
         }
 
-        if AnimationManager.default.hasAnimations {
-            MetaLink.animationCSS
-        }
+        MetaLink.igniteCoreCSS
 
-        MetaLink.themeCSS
-
-        if CSSManager.default.hasCSS {
+        if CSSManager.shared.hasCSS {
             MetaLink.mediaQueryCSS
         }
 
@@ -125,7 +118,7 @@ public struct Head: DocumentElement {
         guard let sourceURL = Bundle.module.url(forResource: "Resources/js/theme-switching", withExtension: "js"),
               let contents = try? String(contentsOf: sourceURL)
         else {
-            PublishingContext.default.addError(.missingSiteResource("js/theme-switching.js"))
+            PublishingContext.shared.addError(.missingSiteResource("js/theme-switching.js"))
             return nil
         }
         return Script(code: contents)

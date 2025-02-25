@@ -10,8 +10,8 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineElement, Passthrough
     /// The body content created by mapping over the data sequence.
     public var body: some HTML { self }
 
-    /// The unique identifier of this HTML.
-    public var id = UUID().uuidString
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
@@ -39,8 +39,8 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineElement, Passthrough
     public func render() -> String {
         let items = data.map(content)
         return items.map {
-            let item: any HTML = $0
-            AttributeStore.default.merge(attributes, intoHTML: item.id)
+            var item: any HTML = $0
+            item.attributes.merge(attributes)
             return item.render()
         }.joined()
     }

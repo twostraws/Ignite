@@ -21,22 +21,20 @@ struct ContainerRelativeFrameModifier: HTMLModifier {
     /// - Parameter content: The HTML element to wrap in a flex container
     /// - Returns: A Group containing the content with flex display and alignment applied
     func body(content: some HTML) -> any HTML {
-        let frameableContent: any HTML = content.attributes.tag == "div" ?
+        let frameableContent: any HTML = content is Section ?
             content.style(.marginBottom, "0") :
             Section(content.style(.marginBottom, "0"))
 
-        return Section(
-            frameableContent
-                .style(.display, "flex")
-                .style(.flexDirection, "column")
-                .style(.position, "absolute")
-                .style(.overflow, "hidden")
-                .style(edgeAlignmentRules)
-                .style(alignment.flexAlignmentRules)
-        )
-        .style(.width, "100%")
-        .style(.height, "100%")
-        .style(.position, "relative")
+        return frameableContent
+            .style(.display, "flex")
+            .style(.flexDirection, "column")
+            .style(.position, "absolute")
+            .style(.overflow, "hidden")
+            .style(edgeAlignmentRules)
+            .style(alignment.flexAlignmentRules)
+            .style(.width, "100%")
+            .style(.height, "100%")
+            .style(.position, "relative")
     }
 }
 
@@ -49,7 +47,7 @@ public extension HTML {
     }
 }
 
-fileprivate extension Alignment {
+private extension Alignment {
     /// Flex container rules for aligning content
     var flexAlignmentRules: [InlineStyle] {
         switch (horizontal, vertical) {

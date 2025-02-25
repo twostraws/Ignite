@@ -10,8 +10,11 @@
 /// `AnimationClassGenerator` converts Ignite animations into CSS classes, handling different
 /// trigger types (hover, click, appear) and generating appropriate keyframes and transition rules.
 struct AnimationClassGenerator {
-    /// A mapping of trigger types to their corresponding resolved animations
-    let triggerMap: OrderedDictionary<AnimationTrigger, any Animatable>
+    /// The event that triggers this animation.
+    var trigger: AnimationTrigger
+
+    /// The animation to execute when triggered.
+    var animation: any Animatable
 
     /// Holds CSS properties and transitions for both clicked and unclicked states,
     /// separated into transform and non-transform properties. Transform properties
@@ -87,36 +90,32 @@ struct AnimationClassGenerator {
     /// Builds the complete CSS output including keyframes and all classes
     /// - Returns: A string containing the complete CSS output
     func build() -> String {
-        var components: [String] = []
-
         // Base class needs an animation for static properties
-        if let firstAnimation = triggerMap.elements.first?.value {
-            components.append(buildBaseClass(firstAnimation))
-        }
+        var components: [String] = [buildBaseClass(animation)]
 
         // Add hover animations if present
-        if let hoverAnim = triggerMap[.hover] {
-            if let transition = hoverAnim as? Transition {
+        if trigger == .hover {
+            if let transition = animation as? Transition {
                 components.append(buildTransitionHoverClass(transition))
-            } else if let animation = hoverAnim as? Animation {
+            } else if let animation = animation as? Animation {
                 components.append(buildKeyframeHoverClass(animation))
             }
         }
 
         // Add appear animations if present
-        if let appearAnim = triggerMap[.appear] {
-            if let transition = appearAnim as? Transition {
+        if trigger == .appear {
+            if let transition = animation as? Transition {
                 components.append(buildTransitionAppearClass(transition))
-            } else if let animation = appearAnim as? Animation {
+            } else if let animation = animation as? Animation {
                 components.append(buildAppearKeyframes(animation))
             }
         }
 
         // Add click animations if present
-        if let clickAnim = triggerMap[.click] {
-            if let transition = clickAnim as? Transition {
+        if trigger == .click {
+            if let transition = animation as? Transition {
                 components.append(buildTransitionClickClass(transition))
-            } else if let animation = clickAnim as? Animation {
+            } else if let animation = animation as? Animation {
                 components.append(buildKeyframeClickClass(animation))
             }
         }
@@ -136,14 +135,18 @@ struct AnimationClassGenerator {
     /// 3. Optionally includes an .appeared class if appear properties are present
     /// 4. Formats the output to avoid empty declarations
     private func buildBaseClass(_ animation: any Animatable) -> String {
-        var baseProperties: Set<String> = Set(animation.baseStyles.map { "\($0.property): \($0.value)" })
+        var baseProperties = Set<String>()
 
-        if let appearAnim = triggerMap[.appear] {
-            if let transition = appearAnim as? Transition {
+        if trigger == .appear {
+            if let transition = animation as? Transition {
                 baseProperties.formUnion(buildBaseTransitionClass(transition))
-            } else if let animation = appearAnim as? Animation {
+            } else if let animation = animation as? Animation {
                 baseProperties.formUnion(buildBaseKeyframeClass(animation))
             }
+        }
+
+        if trigger == .click {
+            baseProperties.insert("cursor: pointer")
         }
 
         let appearedProperties = getAppearedProperties()
@@ -151,9 +154,11 @@ struct AnimationClassGenerator {
         let baseClassProperties = baseProperties.isEmpty ? "" : "\n        \(joinedProperties);\n    "
         let className = "animation-" + animation.id
 
-        let baseClass = """
-        .\(className) {\(baseClassProperties)}
-        """
+        let baseClass = if baseClassProperties.isEmpty {
+            ""
+        } else {
+            ".\(className) {\(baseClassProperties)}"
+        }
 
         // Only add appeared class if we have properties to set
         if !appearedProperties.isEmpty {
@@ -176,8 +181,8 @@ struct AnimationClassGenerator {
     private func buildAppearKeyframes(_ animation: Animation) -> String {
         let timing = getAnimationTiming(animation)
         let keyframeContent = animation.frames.map { frame in
-            let properties = frame.animations
-                .map { "\($0.property.rawValue): \($0.final)" }
+            let properties = frame.styles
+                .map { "\($0.property): \($0.value)" }
                 .joined(separator: ";\n                ")
 
             return """
@@ -194,8 +199,8 @@ struct AnimationClassGenerator {
         return """
         .\(baseClass).appeared {
             animation: \(baseClass)-appear \(timing);
-            animation-fill-mode: \(animation.fillMode.rawValue);
-            animation-direction: \(animation.direction.rawValue);
+            animation-fill-mode: \(animation.fillMode);
+            animation-direction: \(animation.direction);
             \(repeatString)
         }
 
@@ -208,12 +213,12 @@ struct AnimationClassGenerator {
     /// Extracts the final CSS property values for appear animations.
     /// - Returns: An array of CSS property declarations, or an empty array if no appear animation exists.
     private func getAppearedProperties() -> [String] {
-        guard let appearAnim = triggerMap[.appear] else { return [] }
+        guard trigger == .appear else { return [] }
         var properties: [String] = []
 
-        if let transition = appearAnim as? Transition {
+        if let transition = animation as? Transition {
             properties = transition.data.map { data in
-                "\(data.property.rawValue): \(data.final)"
+                "\(data.property): \(data.final)"
             }
         }
 

@@ -13,10 +13,6 @@ extension AnimationClassGenerator {
     /// - Returns: A set of CSS properties including animation name and timing
     func buildBaseKeyframeClass(_ animation: Animation) -> Set<String> {
         var baseProperties = Set<String>()
-
-        if triggerMap[.click] != nil {
-            baseProperties.insert("cursor: pointer")
-        }
         let baseClass = "animation-" + animation.id
         let timing = getAnimationTiming(animation)
         baseProperties.insert("animation: \(baseClass)-appear \(timing)")
@@ -35,8 +31,8 @@ extension AnimationClassGenerator {
 
         // Build post-hover state for .forwards or .both
         let postHoverState = if animation.fillMode == .forwards || animation.fillMode == .both {
-            animation.frames.first?.animations
-                .map { "\($0.property.rawValue): \($0.final)" }
+            animation.frames.first?.styles
+                .map { "\($0.property): \($0.value)" }
                 .joined(separator: ";\n            ")
         } else {
             ""
@@ -55,7 +51,7 @@ extension AnimationClassGenerator {
         }
 
         .\(baseClass)-hover:hover {
-            animation: \(baseClass)-hover \(timing) \(animation.direction.rawValue)\(animationRepeat);
+            animation: \(baseClass)-hover \(timing) \(animation.direction)\(animationRepeat);
         }
 
         .\(baseClass)-hover:not(:hover) {
@@ -74,8 +70,8 @@ extension AnimationClassGenerator {
     /// - Returns: A string containing the formatted keyframe rules
     func buildKeyframeContent(_ animation: Animation) -> String {
         animation.frames.map { frame in
-            let properties = frame.animations
-                .map { "\($0.property.rawValue): \($0.final)" }
+            let properties = frame.styles
+                .map { "\($0.property): \($0.value)" }
                 .joined(separator: ";\n                ")
 
             return """
@@ -99,8 +95,8 @@ extension AnimationClassGenerator {
 
         // Build common animation properties
         var animationProperties = [
-            "animation-fill-mode: \(animation.fillMode.rawValue)",
-            "animation-direction: \(animation.direction.rawValue)"
+            "animation-fill-mode: \(animation.fillMode)",
+            "animation-direction: \(animation.direction)"
         ]
 
         if animation.repeatCount != 1 {
@@ -110,32 +106,32 @@ extension AnimationClassGenerator {
 
         // Add transitions for all unique properties
         let allProperties = Set(animation.frames.flatMap { frame in
-            frame.animations.map(\.property)
+            frame.styles.map(\.property)
         })
 
         for property in allProperties {
-            if property == .transform {
-                properties.transformTransitions.append("\(property.rawValue) \(timing)")
+            if property == "transform" {
+                properties.transformTransitions.append("\(property) \(timing)")
             } else {
-                properties.nonTransformTransitions.append("\(property.rawValue) \(timing)")
+                properties.nonTransformTransitions.append("\(property) \(timing)")
             }
         }
 
         // Add final values from last frame
-        for anim in lastFrame.animations {
-            if anim.property == .transform {
-                properties.transformProperties.append("\(anim.property.rawValue): \(anim.final)")
+        for anim in lastFrame.styles {
+            if anim.property == "transform" {
+                properties.transformProperties.append("\(anim.property): \(anim.value)")
             } else {
-                properties.nonTransformProperties.append("\(anim.property.rawValue): \(anim.final)")
+                properties.nonTransformProperties.append("\(anim.property): \(anim.value)")
             }
         }
 
         // Add initial values from first frame
-        for anim in firstFrame.animations {
-            if anim.property == .transform {
-                properties.unclickedTransformProperties.append("\(anim.property.rawValue): \(anim.final)")
+        for anim in firstFrame.styles {
+            if anim.property == "transform" {
+                properties.unclickedTransformProperties.append("\(anim.property): \(anim.value)")
             } else {
-                properties.unclickedNonTransformProperties.append("\(anim.property.rawValue): \(anim.final)")
+                properties.unclickedNonTransformProperties.append("\(anim.property): \(anim.value)")
             }
         }
 
@@ -144,12 +140,12 @@ extension AnimationClassGenerator {
 
     private func baseState(for animation: Animation) -> String {
         if animation.fillMode == .backwards || animation.fillMode == .both {
-            animation.frames.last?.animations
-                .map { "\($0.property.rawValue): \($0.final)" }
+            animation.frames.last?.styles
+                .map { "\($0.property): \($0.value)" }
                 .joined(separator: ";\n            ") ?? ""
         } else if animation.fillMode == .forwards || animation.fillMode == .both {
-            animation.frames.first?.animations
-                .map { "\($0.property.rawValue): \($0.final)" }
+            animation.frames.first?.styles
+                .map { "\($0.property): \($0.value)" }
                 .joined(separator: ";\n            ") ?? ""
         } else {
             ""
@@ -163,7 +159,7 @@ extension AnimationClassGenerator {
             return """
 
             .\(baseClass)-hover.fill-\(animation.id)-\(animation.fillMode) {
-                animation: \(baseClass)-hover \(timing) \(animation.direction.rawValue) \(animation.fillMode)\(count);
+                animation: \(baseClass)-hover \(timing) \(animation.direction) \(animation.fillMode)\(count);
                 animation-play-state: paused;
             }
 

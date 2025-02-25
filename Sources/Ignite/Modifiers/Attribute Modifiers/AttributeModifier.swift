@@ -15,8 +15,7 @@ struct AttributeModifier: HTMLModifier {
     func body(content: some HTML) -> any HTML {
         guard let attribute else { return content }
         var copy = content
-        copy.attributes.customAttributes.append(attribute)
-        AttributeStore.default.merge(copy.attributes, intoHTML: copy.id)
+        copy.attributes.add(customAttributes: attribute)
         return copy
     }
 }
