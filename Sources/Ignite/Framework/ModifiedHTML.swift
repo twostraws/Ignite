@@ -32,21 +32,24 @@ struct ModifiedHTML: HTML, InlineElement, HeadElement, DocumentElement, Navigati
         }
 
         // This could be the same type, or a new type with new attributes
-        var modified = modifier.body(content: persistableContent)
+        let modified = modifier.body(content: persistableContent)
 
-        attributes.merge(modified.attributes)
+        var unwrapped: any HTML
 
         // Ensure we're not dealing with nested ModifiedHTMLs.
         if let modified = modified as? ModifiedHTML {
-            self.content = modified.content
+            attributes.merge(modified.attributes)
+            unwrapped = modified.content
         } else {
-            self.content = modified
+            unwrapped = modified
         }
 
-        // We want only one source of truth for these attributes, the ModifiedHTML wrapper.
-        modified.attributes.clear()
+        attributes.merge(unwrapped.attributes)
 
-        self.content = modified
+        // We want only one source of truth for these attributes, the ModifiedHTML wrapper.
+        unwrapped.attributes.clear()
+
+        self.content = unwrapped
     }
 
     /// Renders this element using the provided publishing context.
