@@ -35,3 +35,20 @@ public extension HTML {
         self.style(.backgroundImage, gradient.description)
     }
 }
+
+public extension StyledHTML {
+    /// Applies a background color from a `Color` object.
+    /// - Parameter color: The specific color value to use, specified as
+    /// a `Color` instance.
+    /// - Returns: The current element with the updated background color.
+    func background(_ color: Color) -> Self {
+        self.style(.backgroundColor, color.description)
+    }
+
+    /// Applies a gradient background
+    /// - Parameter gradient: The gradient to apply
+    /// - Returns: The modified HTML element
+    func background(_ gradient: Gradient) -> Self {
+        self.style(.backgroundImage, gradient.description)
+    }
+}

@@ -14,7 +14,7 @@
 /// You typically don't conform to `HTML` directly. Instead, use one of the built-in elements like
 /// `Div`, `Paragraph`, or `Link`, or create custom components by conforming to `HTMLRootElement`.
 @MainActor
-public protocol HTML: CustomStringConvertible, Sendable {
+public protocol HTML: Stylable, CustomStringConvertible, Sendable {
     /// The standard set of control attributes for HTML elements.
     var attributes: CoreAttributes { get set }
 
