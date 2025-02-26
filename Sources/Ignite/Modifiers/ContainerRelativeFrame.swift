@@ -5,25 +5,27 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that creates a flex container with horizontal alignment
-struct ContainerRelativeFrameModifier: HTMLModifier {
-    /// The alignment to apply to the container
-    var alignment: Alignment
+public extension HTML {
+    /// Creates a flex container that allows its child to be positioned relative to its container.
+    /// - Parameter alignment: How to align the content within the container. Default is `.center`.
+    /// - Returns: A modified copy of the element with container-relative positioning applied.
+    func containerRelativeFrame(_ alignment: Alignment = .center) -> some HTML {
+        AnyHTML(containerRelativeFrameModifer(alignment))
+    }
+}
 
-    private let edgeAlignmentRules: [InlineStyle] = [
-        .init(.top, value: "0"),
-        .init(.right, value: "0"),
-        .init(.bottom, value: "0"),
-        .init(.left, value: "0")
-    ]
+private let edgeAlignmentRules: [InlineStyle] = [
+    .init(.top, value: "0"),
+    .init(.right, value: "0"),
+    .init(.bottom, value: "0"),
+    .init(.left, value: "0")
+]
 
-    /// Creates a flex container around the provided content with specified alignment
-    /// - Parameter content: The HTML element to wrap in a flex container
-    /// - Returns: A Group containing the content with flex display and alignment applied
-    func body(content: some HTML) -> any HTML {
-        let frameableContent: any HTML = content is Section ?
-            content.style(.marginBottom, "0") :
-            Section(content.style(.marginBottom, "0"))
+private extension HTML {
+    func containerRelativeFrameModifer(_ alignment: Alignment) -> any HTML {
+        let frameableContent: any HTML = self is Section ?
+            self.style(.marginBottom, "0") :
+            Section(self.style(.marginBottom, "0"))
 
         return frameableContent
             .style(.display, "flex")
@@ -35,15 +37,6 @@ struct ContainerRelativeFrameModifier: HTMLModifier {
             .style(.width, "100%")
             .style(.height, "100%")
             .style(.position, "relative")
-    }
-}
-
-public extension HTML {
-    /// Creates a flex container that allows its child to be positioned relative to its container.
-    /// - Parameter alignment: How to align the content within the container. Default is `.center`.
-    /// - Returns: A modified copy of the element with container-relative positioning applied.
-    func containerRelativeFrame(_ alignment: Alignment = .center) -> some HTML {
-        modifier(ContainerRelativeFrameModifier(alignment: alignment))
     }
 }
 

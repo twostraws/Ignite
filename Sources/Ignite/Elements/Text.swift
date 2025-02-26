@@ -115,10 +115,10 @@ extension HTML {
         } else if var text = copy as? Text {
             text.font = font
             copy = text
-        } else if var modified = copy as? ModifiedHTML, var text = modified.unwrapped as? Text {
+        } else if var anyHTML = copy as? AnyHTML, var text = anyHTML.wrapped as? Text {
             text.font = font
-            modified.content = text
-            copy = modified
+            anyHTML.wrapped = text
+            copy = anyHTML
         }
         return copy
     }

@@ -5,14 +5,11 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that adds event attributes to an HTML element.
-struct EventModifier: HTMLModifier {
-    let type: EventType
-    let actions: [Action]
-
-    func body(content: some HTML) -> any HTML {
-        guard !actions.isEmpty else { return content }
-        var copy = content
+private extension HTML {
+    func eventModifier(type: EventType, actions: [Action]) -> any HTML {
+        guard !actions.isEmpty else { return self }
+        // Custom elements need to be wrapped in a primitive container to store attributes
+        var copy: any HTML = self.isPrimitive ? self : Section(self)
         copy.attributes.events.insert(Event(name: type.rawValue, actions: actions))
         return copy
     }
@@ -25,7 +22,7 @@ public extension HTML {
     ///   - actions: Array of actions to execute when the event occurs
     /// - Returns: A modified HTML element with the specified attribute.
     func onEvent(_ type: EventType, _ actions: [Action]) -> some HTML {
-        modifier(EventModifier(type: type, actions: actions))
+        AnyHTML(eventModifier(type: type, actions: actions))
     }
 }
 
@@ -36,6 +33,6 @@ public extension InlineElement {
     ///   - actions: Array of actions to execute when the event occurs
     /// - Returns: A modified HTML element with the specified attribute.
     func onEvent(_ type: EventType, _ actions: [Action]) -> some InlineElement {
-        modifier(EventModifier(type: type, actions: actions))
+        AnyHTML(eventModifier(type: type, actions: actions))
     }
 }

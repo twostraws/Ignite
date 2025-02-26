@@ -93,8 +93,8 @@ public struct Grid: HTML, HorizontalAligning {
             ForEach(items) { item in
                 if let passthrough = item as? any PassthroughElement {
                     handlePassthrough(passthrough, attributes: passthrough.attributes)
-                } else if let modified = item as? ModifiedHTML,
-                          let passthrough = modified.unwrapped as? any PassthroughElement {
+                } else if let modified = item as? AnyHTML,
+                          let passthrough = modified.wrapped as? any PassthroughElement {
                     handlePassthrough(passthrough, attributes: modified.attributes)
                 } else {
                     handleItem(item)
