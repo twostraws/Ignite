@@ -180,7 +180,7 @@ public struct Button: InlineElement {
             buttonAttributes.add(customAttributes: .disabled)
         }
 
-        let output = HTMLCollection(label).render()
+        let output = label.render()
         return "<button type=\"\(type.htmlName)\"\(buttonAttributes)>\(output)</button>"
     }
 }

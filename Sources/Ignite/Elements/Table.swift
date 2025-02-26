@@ -31,10 +31,10 @@ public struct Table: HTML {
     public var isPrimitive: Bool { true }
 
     /// The rows that are inside this table.
-    var rows: [Row]
+    var rows: HTMLCollection
 
     /// An optional array of header to use at the top of this table.
-    var header: [any HTML]?
+    var header: HTMLCollection?
 
     /// The styling to apply to this table. Defaults to `.plain`.
     var style = Style.plain
@@ -51,7 +51,7 @@ public struct Table: HTML {
     /// an array of rows to use in the table.
     /// - Parameter rows: An array of rows to use in the table.
     public init(@ElementBuilder<Row> rows: () -> [Row]) {
-        self.rows = rows()
+        self.rows = HTMLCollection(rows())
     }
 
     /// Creates a new `Table` instance from an element builder that returns
@@ -64,8 +64,8 @@ public struct Table: HTML {
         @ElementBuilder<Row> rows: () -> [Row],
         @HTMLBuilder header: () -> some HTML
     ) {
-        self.rows = rows()
-        self.header = flatUnwrap(header())
+        self.rows = HTMLCollection(rows())
+        self.header = HTMLCollection(header)
     }
 
     /// Adjusts the style of this table.
@@ -128,7 +128,7 @@ public struct Table: HTML {
         }
 
         output += "<tbody>"
-        output += HTMLCollection(rows).render()
+        output += rows.render()
         output += "</tbody>"
         output += "</table>"
         return output

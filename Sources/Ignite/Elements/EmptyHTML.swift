@@ -14,9 +14,6 @@ public struct EmptyHTML: HTML, InlineElement, DocumentElement {
     /// Returns self as the body content since this is an empty element
     public var body: some HTML { self }
 
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
-
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 

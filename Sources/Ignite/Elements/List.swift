@@ -40,7 +40,7 @@ public struct List: HTML {
 
     /// The items to show in this list. This may contain any page elements,
     /// but if you need specific styling you might want to use ListItem objects.
-    private var items: [any HTML]
+    private var items: HTMLCollection
 
     /// Returns the correct HTML name for this list.
     private var listElementName: String {
@@ -55,7 +55,7 @@ public struct List: HTML {
     /// an array of `HTML` objects to display in the list.
     /// - Parameter items: The content you want to display in your list.
     public init(@HTMLBuilder items: () -> some HTML) {
-        self.items = flatUnwrap(items())
+        self.items = HTMLCollection(items)
     }
 
     /// Adjusts the style of this list.

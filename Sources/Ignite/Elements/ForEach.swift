@@ -23,7 +23,7 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineElement, Passthrough
     private let content: (Data.Element) -> Content
 
     /// The child elements contained within this HTML element.
-    var items: [any HTML] { data.map(content) }
+    var items: HTMLCollection { HTMLCollection(data.map(content)) }
 
     /// Creates a new ForEach instance that generates HTML content from a sequence.
     /// - Parameters:

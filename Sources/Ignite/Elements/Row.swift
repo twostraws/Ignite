@@ -17,13 +17,13 @@ public struct Row: HTML {
     public var isPrimitive: Bool { true }
 
     /// The columns to display inside this row.
-    private var columns: [any HTML]
+    private var columns: HTMLCollection
 
     /// Create a new `Row` using a page element builder that returns the
     /// array of columns to use in this row.
     /// - Parameter columns: The columns to use in this row.
     public init(@HTMLBuilder columns: () -> some HTML) {
-        self.columns = flatUnwrap(columns())
+        self.columns = HTMLCollection(columns)
     }
 
     /// Renders this element using publishing context passed in.
