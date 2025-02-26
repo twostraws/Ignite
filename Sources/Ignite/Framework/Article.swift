@@ -36,11 +36,6 @@ public struct Article {
     /// so one was provided by examining the filesystem date.
     public var hasAutomaticDate = false
 
-    /// True if this content has tags attached to it.
-    public var hasTags: Bool {
-        tags.isEmpty == false
-    }
-
     /// The publication date of this content.
     public var date: Date {
         metadata["date"] as? Date ?? .now
@@ -73,12 +68,11 @@ public struct Article {
     }
 
     /// An array of the tags used to describe this content.
-    public var tags: [String] {
+    public var tags: [String]? {
         if let tags = metadata["tags"] as? String {
-            tags.splitAndTrim()
-        } else {
-            []
+            return tags.splitAndTrim()
         }
+        return nil
     }
 
     /// The author for this content, if set.
