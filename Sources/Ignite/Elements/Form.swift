@@ -26,7 +26,7 @@ public struct Form: HTML {
     private var horizontalSpacing: SpacingAmount
 
     /// The form elements to be rendered.
-    private var items: [any InlineElement]
+    private var items: HTMLCollection
 
     /// The action to perform when the form is submitted.
     private var action: any Action
@@ -120,7 +120,7 @@ public struct Form: HTML {
         @InlineElementBuilder content: () -> some InlineElement,
         onSubmit: () -> any Action
     ) {
-        self.items = flatUnwrap(content())
+        self.items = HTMLCollection(content)
         self.action = onSubmit()
         self.verticalSpacing = verticalSpacing
         self.horizontalSpacing = horizontalSpacing
@@ -256,7 +256,7 @@ public struct Form: HTML {
             .class("d-flex", "align-items-stretch")
     }
 
-    private func simpleItem(_ item: any InlineElement) -> some HTML {
+    private func simpleItem(_ item: any HTML) -> some HTML {
         Section(item)
             .class(getColumnClass(for: item, totalColumns: columnCount))
     }

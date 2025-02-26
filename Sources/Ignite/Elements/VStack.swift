@@ -20,13 +20,13 @@ public struct VStack: HTML {
     private var spacingAmount: SpacingType?
 
     /// The child elements contained in the stack.
-    private var items: [any HTML]
+    private var content: HTMLCollection
 
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameter items: The items to use in this section.
     public init(@HTMLBuilder items: () -> some HTML) {
-        self.items = flatUnwrap(items())
+        self.content = HTMLCollection(items)
         self.spacingAmount = nil
     }
 
@@ -36,7 +36,7 @@ public struct VStack: HTML {
     ///   - pixels: The number of pixels between elements.
     ///   - items: The items to use in this section.
     public init(spacing pixels: Int, @HTMLBuilder items: () -> some HTML) {
-        self.items = flatUnwrap(items())
+        self.content = HTMLCollection(items)
         self.spacingAmount = .exact(pixels)
     }
 
@@ -46,25 +46,13 @@ public struct VStack: HTML {
     ///   - spacing: The predefined size between elements.
     ///   - items: The items to use in this section.
     public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
-        self.items = flatUnwrap(items())
+        self.content = HTMLCollection(items)
         self.spacingAmount = .semantic(spacing)
     }
 
     public func render() -> String {
-        var itemAttributes = CoreAttributes()
-        itemAttributes.add(classes: "mb-0")
-        var items = [any HTML]()
-
-        for item in self.items {
-            switch item {
-            case let container as HTMLCollection:
-                for item in container.elements {
-                    items.append(item.attributes(itemAttributes))
-                }
-            default:
-                items.append(item.attributes(itemAttributes))
-            }
-        }
+        var content = content
+        content.attributes.add(classes: "mb-0")
 
         var attributes = attributes
         attributes.add(classes: "vstack")
@@ -75,7 +63,6 @@ public struct VStack: HTML {
             attributes.add(classes: "gap-\(amount.rawValue)")
         }
 
-        let content = items.map { $0.render() }.joined()
         return "<div\(attributes)>\(content)</div>"
     }
 }

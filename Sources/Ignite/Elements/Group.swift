@@ -26,18 +26,18 @@ public struct Group: PassthroughElement {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    var items: [any HTML] = []
+    var items: HTMLCollection
 
     public init(@HTMLBuilder _ content: () -> some HTML) {
-        self.items = flatUnwrap(content())
+        self.items = HTMLCollection(content)
     }
 
     public init(_ items: any HTML) {
-        self.items = flatUnwrap(items)
+        self.items = HTMLCollection([items])
     }
 
     init(context: PublishingContext, items: [any HTML]) {
-        self.items = flatUnwrap(items)
+        self.items = HTMLCollection(items)
     }
 
     public func render() -> String {

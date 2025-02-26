@@ -21,27 +21,19 @@ public struct ZStack: HTML {
     private var alignment: Alignment
 
     /// The child elements to be stacked.
-    private var items: [any HTML] = []
+    private var items: HTMLCollection
 
     /// Creates a new ZStack with the specified alignment and content.
     /// - Parameters:
     ///   - alignment: The point within the stack where elements should be aligned (default: .center).
     ///   - items: A closure that returns the elements to be stacked.
     public init(alignment: Alignment = .center, @HTMLBuilder _ items: () -> some HTML) {
-        self.items = flatUnwrap(items())
+        self.items = HTMLCollection(items)
         self.alignment = alignment
     }
 
     public func render() -> String {
-        var items = [any HTML]()
-
-        for item in self.items {
-            if let container = item as? HTMLCollection {
-                items.append(contentsOf: container.elements)
-            } else {
-                items.append(item)
-            }
-        }
+        var items = items.elements
 
         items = items.enumerated().map { index, item in
             var elementAttributes = CoreAttributes()
