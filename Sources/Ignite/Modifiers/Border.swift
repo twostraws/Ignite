@@ -46,7 +46,12 @@ public extension InlineElement {
 }
 
 private extension HTML {
-    func borderModifier(color: Color, width: Double, style: BorderStyle, cornerRadii: CornerRadii, edges: Edge) -> any HTML {
+    func borderModifier(
+        color: Color, width: Double,
+        style: BorderStyle,
+        cornerRadii: CornerRadii,
+        edges: Edge
+    ) -> any HTML {
         var modified: any HTML = self
         if edges.contains(.all) {
             modified = modified.style(.border, "\(width)px \(style.rawValue) \(color)")
