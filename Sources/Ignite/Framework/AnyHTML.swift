@@ -7,7 +7,7 @@
 
 /// A type-erasing wrapper that can hold any HTML content while maintaining protocol conformance.
 /// This wrapper also handles unwrapping nested AnyHTML instances to prevent unnecessary wrapping layers.
-public struct AnyHTML: HTML, InlineElement {
+public struct AnyHTML: HTML, InlineElement, HeadElement, DocumentElement {
     /// The body of this HTML element, which is itself
     public var body: some HTML { self }
 
@@ -18,7 +18,7 @@ public struct AnyHTML: HTML, InlineElement {
     public var isPrimitive: Bool { true }
 
     /// The underlying HTML content, unattributed.
-    let wrapped: any HTML
+    var wrapped: any HTML
 
     /// Creates a new AnyHTML instance that wraps the given HTML content.
     /// If the content is already an AnyHTML instance, it will be unwrapped to prevent nesting.

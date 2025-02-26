@@ -5,15 +5,11 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that adds a CSS class to an HTML element.
-struct IDModifier: HTMLModifier {
-    let id: String
-    /// Sets the `HTML` id attribute of the element.
-    /// - Parameter content: The HTML element to modify
-    /// - Returns: The modified HTML with the CSS class added
-    func body(content: some HTML) -> any HTML {
-        guard !id.isEmpty else { return content }
-        var copy = content
+private extension HTML {
+    func idModifier(_ id: String) -> any HTML {
+        guard !id.isEmpty else { return self }
+        // Custom elements need to be wrapped in a primitive container to store attributes
+        var copy: any HTML = self.isPrimitive ? self : Section(self)
         copy.attributes.id = id
         return copy
     }
@@ -24,7 +20,7 @@ public extension HTML {
     /// - Parameter id: The HTML ID value to set
     /// - Returns: A modified copy of the element with the HTML id added
     func id(_ id: String) -> some HTML {
-        modifier(IDModifier(id: id))
+        AnyHTML(idModifier(id))
     }
 }
 
@@ -33,6 +29,6 @@ public extension InlineElement {
     /// - Parameter id: The HTML ID value to set
     /// - Returns: A modified copy of the element with the HTML ID added
     func id(_ id: String) -> some InlineElement {
-        modifier(IDModifier(id: id))
+        AnyHTML(idModifier(id))
     }
 }

@@ -82,7 +82,7 @@ extension HTML {
 
     /// A Boolean value indicating whether this represents `Text`.
     var isText: Bool {
-        body is Text || (body as? ModifiedHTML)?.unwrapped is Text
+        body is Text || (body as? AnyHTML)?.wrapped is Text
     }
 }
 

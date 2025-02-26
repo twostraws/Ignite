@@ -5,15 +5,10 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that adds a data attribute to the element.
-struct DataModifier: HTMLModifier {
-    let name: String
-    let value: String
-    /// Adds a data attribute to the element.
-    /// - Parameter content: The HTML element to modify
-    /// - Returns: The modified HTML with the style property added
-    func body(content: some HTML) -> any HTML {
-        var copy = content
+private extension HTML {
+    func dataModifier(name: String, value: String) -> any HTML {
+        // Custom elements need to be wrapped in a primitive container to store attributes
+        var copy: any HTML = self.isPrimitive ? self : Section(self)
         copy.attributes.data.insert(.init(name: name, value: value))
         return copy
     }
@@ -26,7 +21,7 @@ public extension HTML {
     ///   - value: The value of the data attribute
     /// - Returns: The modified `HTML` element
     func data(_ name: String, _ value: String) -> some HTML {
-        modifier(DataModifier(name: name, value: value))
+        AnyHTML(dataModifier(name: name, value: value))
     }
 }
 
@@ -37,6 +32,6 @@ public extension InlineElement {
     ///   - value: The value of the data attribute
     /// - Returns: The modified `HTML` element
     func data(_ name: String, _ value: String) -> some InlineElement {
-        modifier(DataModifier(name: name, value: value))
+        AnyHTML(dataModifier(name: name, value: value))
     }
 }

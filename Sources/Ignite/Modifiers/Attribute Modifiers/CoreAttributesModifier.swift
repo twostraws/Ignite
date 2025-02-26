@@ -5,15 +5,10 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that merges a set of attributes into the element.
-struct CoreAttributesModifier: HTMLModifier {
-    let attributes: CoreAttributes
-
-    /// Adds a custom attribute to the element.
-    /// - Parameter content: The HTML element to modify
-    /// - Returns: The modified HTML with the style property added
-    func body(content: some HTML) -> any HTML {
-        var copy = content
+private extension HTML {
+    func coreAttributesModifier(_ attributes: CoreAttributes) -> any HTML {
+        // Custom elements need to be wrapped in a primitive container to store attributes
+        var copy: any HTML = self.isPrimitive ? self : Section(self)
         copy.attributes.merge(attributes)
         return copy
     }
@@ -25,7 +20,7 @@ extension HTML {
     /// - Returns: The modified HTML element
     /// - Note: Uses AttributeStore for persistent storage and merging
     func attributes(_ attributes: CoreAttributes) -> some HTML {
-        modifier(CoreAttributesModifier(attributes: attributes))
+        AnyHTML(coreAttributesModifier(attributes))
     }
 }
 
@@ -35,6 +30,6 @@ extension InlineElement {
     /// - Returns: The modified HTML element
     /// - Note: Uses AttributeStore for persistent storage and merging
     func attribute(_ attributes: CoreAttributes) -> some InlineElement {
-        modifier(CoreAttributesModifier(attributes: attributes))
+        AnyHTML(coreAttributesModifier(attributes))
     }
 }

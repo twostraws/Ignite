@@ -5,25 +5,6 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that positions elements relative to the screen dimensions.
-struct IgnorePageGuttersModifier: HTMLModifier {
-    /// Whether this HTML should ignore the page gutters.
-    var shouldIgnore: Bool = true
-
-    /// Applies screen-relative positioning to the provided HTML content
-    /// - Parameter content: The HTML element to modify
-    /// - Returns: The modified HTML with full-width positioning applied
-    func body(content: some HTML) -> any HTML {
-        if shouldIgnore {
-            content
-                .style(.width, "100vw")
-                .style(.marginInline, "calc(50% - 50vw)")
-        } else {
-            content.class("container")
-        }
-    }
-}
-
 public extension HTML {
     /// Determines whether this element should observe the site
     /// width or extend from one edge of the screen to the other.
@@ -31,6 +12,16 @@ public extension HTML {
     ///   - ignore: Whether this HTML should ignore the page gutters. Defaults to `true`.
     /// - - Returns: A modified element that either obeys or ignores the page gutters.
     func ignorePageGutters(_ ignore: Bool = true) -> some HTML {
-        modifier(IgnorePageGuttersModifier(shouldIgnore: ignore))
+        AnyHTML(ignorePageGuttersModifer(ignore))
+    }
+}
+
+private extension HTML {
+    func ignorePageGuttersModifer(_ shouldIgnore: Bool = true) -> any HTML {
+        if shouldIgnore {
+            self.style(.init(.width, value: "100vw"), .init(.marginInline, value: "calc(50% - 50vw)"))
+        } else {
+            self.class("container")
+        }
     }
 }

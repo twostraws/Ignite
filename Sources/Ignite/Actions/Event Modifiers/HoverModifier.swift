@@ -5,15 +5,11 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that adds hover event handlers to an HTML element.
-struct HoverModifier: HTMLModifier {
-    let hoverActions: [Action]
-    let unhoverActions: [Action]
-
-    func body(content: some HTML) -> any HTML {
-        content
-            .onEvent(.mouseOver, hoverActions)
-            .onEvent(.mouseOut, unhoverActions)
+private extension HTML {
+    func hoverModifier(hover: [Action], unhover: [Action]) -> any HTML {
+        self
+            .onEvent(.mouseOver, hover)
+            .onEvent(.mouseOut, unhover)
     }
 }
 
@@ -22,10 +18,7 @@ public extension HTML {
     /// - Parameter actions: A closure that takes a Boolean indicating hover state and returns actions to execute.
     /// - Returns: A modified HTML element with the hover event handlers attached.
     func onHover(@ActionBuilder actions: (_ isHovering: Bool) -> [Action]) -> some HTML {
-        modifier(HoverModifier(
-            hoverActions: actions(true),
-            unhoverActions: actions(false)
-        ))
+        AnyHTML(hoverModifier(hover: actions(true), unhover: actions(false)))
     }
 }
 
@@ -34,9 +27,6 @@ public extension InlineElement {
     /// - Parameter actions: A closure that takes a Boolean indicating hover state and returns actions to execute.
     /// - Returns: A modified inline HTML element with the hover event handlers attached.
     func onHover(@ActionBuilder actions: (_ isHovering: Bool) -> [Action]) -> some InlineElement {
-        modifier(HoverModifier(
-            hoverActions: actions(true),
-            unhoverActions: actions(false)
-        ))
+        AnyHTML(hoverModifier(hover: actions(true), unhover: actions(false)))
     }
 }
