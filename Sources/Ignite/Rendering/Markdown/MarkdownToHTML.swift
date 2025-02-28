@@ -262,9 +262,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
         var result = ""
         var paragraphContents = ""
 
-        // Wrap in <p> tags if we're in a list and have blank lines
-        // between items or if we're not in a list
-        if !paragraph.isInsideList || paragraph.parent is Markdown.ListItem {
+        if paragraph.isInsideList == false {
             result += "<p>"
         }
 
@@ -278,7 +276,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
             description = paragraphContents
         }
 
-        if !paragraph.isInsideList || paragraph.parent is Markdown.ListItem {
+        if paragraph.isInsideList == false {
             result += "</p>"
         }
 
