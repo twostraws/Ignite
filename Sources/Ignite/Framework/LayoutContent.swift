@@ -13,6 +13,9 @@ public protocol LayoutContent: Sendable {
 
     /// The content and behavior of this `HTML` element.
     @HTMLBuilder var body: Body { get }
+
+    /// The page layout this content should use.
+    var parentLayout: any Layout { get }
 }
 
 public extension LayoutContent {
