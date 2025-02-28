@@ -98,6 +98,17 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         self.role = .none
     }
 
+    /// Creates a `Link` wrapping the provided content and pointing to the path
+    /// of the `Article` instance you provide.
+    /// - Parameters:
+    ///   - content: A piece of content from your site.
+    ///   - content: The user-facing content to show inside the `Link`.
+    public init(target article: Article, @HTMLBuilder content: @escaping () -> some HTML) {
+        self.content = content()
+        self.url = article.path
+        self.role = .none
+    }
+
     /// Controls in which window this page should be opened.
     /// - Parameter target: The new target to apply.
     /// - Returns: A new `Link` instance with the updated target.
@@ -243,9 +254,9 @@ public extension Link {
 
     /// Convenience initializer that creates a new `Link` instance using the
     /// title and path of the `MarkdownContent` instance you provide.
-    /// - Parameter content: A piece of content from your site.
-    init(_ content: Article) {
-        self.content = content.title
-        self.url = content.path
+    /// - Parameter article: A piece of content from your site.
+    init(_ article: Article) {
+        self.content = article.title
+        self.url = article.path
     }
 }
