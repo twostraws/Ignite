@@ -157,8 +157,7 @@ public struct NavigationBar: HTML {
             Tag("nav") {
                 Section {
                     if let logo {
-                        Link(logo, target: "/")
-                            .class("navbar-brand")
+                        renderLogo(logo)
                     }
                     if !items.isEmpty {
                         renderToggleButton()
@@ -217,11 +216,28 @@ public struct NavigationBar: HTML {
     private func renderLinkItem(_ link: Link) -> some HTML {
         ListItem {
             let isActive = publishingContext.currentRenderingPath == link.url
-            link
+            link.trimmingMargin() // Remove the default margin applied to text
                 .class("nav-link", isActive ? "active" : nil)
                 .aria(.current, isActive ? "page" : nil)
         }
         .class("nav-item")
+    }
+
+    private func renderLogo(_ logo: any InlineElement) -> some InlineElement {
+        Link(logo, target: "/")
+            .trimmingMargin()
+            .class("navbar-brand")
+    }
+}
+
+fileprivate extension Link {
+    func trimmingMargin() -> Self {
+        guard content.isText else { return self }
+        var link = self
+        var text = content
+        text.attributes.add(classes: "mb-0")
+        link.content = text
+        return link
     }
 }
 
