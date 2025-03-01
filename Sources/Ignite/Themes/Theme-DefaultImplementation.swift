@@ -75,7 +75,7 @@ public extension Theme {
     var paragraphBottomMargin: LengthUnit { .default }
 
     // Responsive breakpoints
-    var breakpoints: ResponsiveValues {
+    var siteBreakpoints: ResponsiveValues {
         .init(
             xSmall: .px(576),
             small: .px(576),

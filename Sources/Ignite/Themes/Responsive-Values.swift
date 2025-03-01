@@ -5,20 +5,26 @@
 // See LICENSE for license information.
 //
 
-/// A structure that manages responsive values across different breakpoints.
-///
-/// Use `ResponsiveValues` to define different length values for various screen sizes,
-/// with support for cascading values across breakpoints. For example:
-///
-/// ```swift
-/// let padding = ResponsiveValues(
-///     small: .px(10),
-///     medium: .px(20),
-///     large: .px(30)
-/// )
-/// ```
-public extension LengthUnit {
-    struct ResponsiveValues: Hashable, Sendable {
+public typealias ResponsiveValues = Responsive.Values
+
+public extension Responsive {
+    /// A structure that manages responsive length values across different breakpoints.
+    ///
+    /// Use `Values` to define different length values for various screen sizes,
+    /// with complete coverage of all breakpoints. When specific breakpoints aren't explicitly defined,
+    /// values cascade from smaller breakpoints to larger ones:
+    ///
+    /// ```swift
+    /// let padding = Responsive.Values(
+    ///     xSmall: .px(10),
+    ///     medium: .px(20),
+    ///     large: .px(30)
+    /// )
+    /// ```
+    ///
+    /// After initialization, each breakpoint will have a non-optional value, either explicitly defined
+    /// or inherited from smaller breakpoints. At minimum, the base value, `xSmall`, must be provided.
+    struct Values: Hashable, Sendable {
         /// The length value for extra small screens.
         var xSmall: LengthUnit = .default
 
@@ -37,9 +43,6 @@ public extension LengthUnit {
         /// The length value for extra extra large screens.
         var xxLarge: LengthUnit = .default
 
-        /// Determines whether values cascade upward through breakpoints.
-        private let cascadeUpward: Bool
-
         /// Creates a new responsive values configuration.
         /// - Parameters:
         ///   - xSmall: The value for extra small screens.
@@ -48,18 +51,15 @@ public extension LengthUnit {
         ///   - large: The value for large screens.
         ///   - xLarge: The value for extra large screens.
         ///   - xxLarge: The value for extra extra large screens.
-        ///   - cascade: Whether values should cascade upward through breakpoints.
+        ///   - inherit: Whether values should cascade upward through breakpoints.
         public init(
-            xSmall: LengthUnit? = nil,
+            xSmall: LengthUnit,
             small: LengthUnit? = nil,
             medium: LengthUnit? = nil,
             large: LengthUnit? = nil,
             xLarge: LengthUnit? = nil,
-            xxLarge: LengthUnit? = nil,
-            cascade: Bool = true
+            xxLarge: LengthUnit? = nil
         ) {
-            self.cascadeUpward = cascade
-
             let breakpointValues: [(breakpoint: Breakpoint, value: LengthUnit?)] = [
                 (.xSmall, xSmall),
                 (.small, small),
@@ -83,7 +83,7 @@ public extension LengthUnit {
             }
         }
 
-        /// Processes breakpoint values to handle cascading behavior.
+        /// Processes breakpoint values to handle inheriting behavior.
         /// - Parameter breakpointValues: The array of breakpoint values to process.
         /// - Returns: An array of processed breakpoint values with cascading applied.
         private func resolve(
@@ -97,10 +97,8 @@ public extension LengthUnit {
                 if let currentValue {
                     collected.results.append((breakpoint, currentValue))
                     collected.lastValue = currentValue
-                } else if cascadeUpward, let lastValue = collected.lastValue {
+                } else if let lastValue = collected.lastValue {
                     collected.results.append((breakpoint, lastValue))
-                } else {
-                    collected.results.append((breakpoint, breakpoint.defaultWidth))
                 }
             }.results
         }

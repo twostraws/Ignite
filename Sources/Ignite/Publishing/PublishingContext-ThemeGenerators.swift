@@ -362,12 +362,12 @@ extension PublishingContext {
         addProperty(.xxLargeContainer, theme.siteMaxWidths.xxLarge)
 
         // Breakpoints
-        addProperty(.xSmallBreakpoint, theme.breakpoints.xSmall)
-        addProperty(.smallBreakpoint, theme.breakpoints.small)
-        addProperty(.mediumBreakpoint, theme.breakpoints.medium)
-        addProperty(.largeBreakpoint, theme.breakpoints.large)
-        addProperty(.xLargeBreakpoint, theme.breakpoints.xLarge)
-        addProperty(.xxLargeBreakpoint, theme.breakpoints.xxLarge)
+        addProperty(.xSmallBreakpoint, theme.siteBreakpoints.xSmall)
+        addProperty(.smallBreakpoint, theme.siteBreakpoints.small)
+        addProperty(.mediumBreakpoint, theme.siteBreakpoints.medium)
+        addProperty(.largeBreakpoint, theme.siteBreakpoints.large)
+        addProperty(.xLargeBreakpoint, theme.siteBreakpoints.xLarge)
+        addProperty(.xxLargeBreakpoint, theme.siteBreakpoints.xxLarge)
 
         cssProperties.append("    --syntax-highlight-theme: \"\(theme.syntaxHighlighterTheme.description)\"")
 

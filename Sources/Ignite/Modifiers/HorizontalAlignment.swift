@@ -26,7 +26,7 @@ public extension HorizontalAligning {
 }
 
 /// Controls how elements are horizontally positioned inside their container.
-public enum HorizontalAlignment: String, Sendable, Equatable, Responsive {
+public enum HorizontalAlignment: String, Sendable, Equatable {
     /// Elements are positioned at the start of their container.
     case leading = "text-start"
 
@@ -45,8 +45,16 @@ public enum HorizontalAlignment: String, Sendable, Equatable, Responsive {
         }
     }
 
+
     func responsiveClass(for breakpoint: Breakpoint) -> String {
         let alignmentClass = rawValue.dropFirst(5) // Remove "text-" prefix
         return "text-\(breakpoint)-\(alignmentClass)"
+    }
+}
+
+extension Responsive.PartialValues where Value == HorizontalAlignment {
+    /// The corresponding Bootstrap classes for this responsive value
+    var breakpointClasses: String {
+        values.map { $1.responsiveClass(for: $0) }.joined(separator: " ")
     }
 }

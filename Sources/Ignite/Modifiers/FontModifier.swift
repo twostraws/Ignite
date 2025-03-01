@@ -90,10 +90,10 @@ private extension HTML {
     /// - Parameter responsiveSize: The responsive font size.
     /// - Returns: A unique class name that applies the font's responsive size rules.
     func registerClasses(for responsiveSize: ResponsiveFontSize) -> String {
-        let className = "font-" + responsiveSize.breakpointValues.description.truncatedHash
+        let className = "font-" + responsiveSize.values.description.truncatedHash
 
         // Sort sizes by breakpoint to ensure proper cascading
-        let allSizes = responsiveSize.breakpointValues.sorted { $0.breakpoint < $1.breakpoint }
+        let allSizes = responsiveSize.values.sorted { $0.breakpoint < $1.breakpoint }
 
         // Find base size and breakpoint sizes
         let baseSize = allSizes.first { $0.breakpoint == .xSmall }
