@@ -144,11 +144,11 @@ public enum BreakpointQuery: Query, CaseIterable, Sendable {
     /// - Returns: A CSS media query string.
     @MainActor public func condition(with theme: Theme) -> String {
         let breakpointValue = switch self {
-        case .small: theme.smallBreakpoint.stringValue
-        case .medium: theme.mediumBreakpoint.stringValue
-        case .large: theme.largeBreakpoint.stringValue
-        case .xLarge: theme.xLargeBreakpoint.stringValue
-        case .xxLarge: theme.xxLargeBreakpoint.stringValue
+        case .small: theme.resolvedBreakpoints.small.stringValue
+        case .medium: theme.resolvedBreakpoints.medium.stringValue
+        case .large: theme.resolvedBreakpoints.large.stringValue
+        case .xLarge: theme.resolvedBreakpoints.xLarge.stringValue
+        case .xxLarge: theme.resolvedBreakpoints.xxLarge.stringValue
         }
         return "min-width: \(breakpointValue)"
     }

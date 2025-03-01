@@ -96,12 +96,12 @@ extension PublishingContext {
         var breakpoint: Breakpoint
 
         /// The optional value for this breakpoint, if specified.
-        var value: LengthUnit?
+        var value: LengthUnit
 
         /// The default value to use if no value is specified or inherited.
         var `default`: LengthUnit
 
-        init(_ breakpoint: Breakpoint, value: LengthUnit?, default: LengthUnit) {
+        init(_ breakpoint: Breakpoint, value: LengthUnit, default: LengthUnit) {
             self.breakpoint = breakpoint
             self.value = value
             self.default = `default`
@@ -114,9 +114,9 @@ extension PublishingContext {
             results: [(Breakpoint, LengthUnit)](),
             lastValue: nil as LengthUnit?)
         ) { collected, current in
-            if let currentValue = current.value {
-                collected.results.append((current.breakpoint, currentValue))
-                collected.lastValue = currentValue
+            if current.value != .default {
+                collected.results.append((current.breakpoint, current.value))
+                collected.lastValue = current.value
             } else if let lastValue = collected.lastValue {
                 collected.results.append((current.breakpoint, lastValue))
             } else {

@@ -14,7 +14,7 @@ extension PublishingContext {
             fatalError(.missingDefaultTheme)
         }
 
-        let resolved = resolveSiteWidths(for: theme)
+        let resolved = theme.resolvedSiteWidths
 
         return """
         .container {

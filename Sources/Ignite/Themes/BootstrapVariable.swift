@@ -232,3 +232,9 @@ struct Bootstrap {
         }
     }
 }
+
+extension BootstrapVariable: CustomStringConvertible {
+    var description: String {
+        rawValue
+    }
+}

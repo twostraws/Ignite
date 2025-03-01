@@ -75,18 +75,18 @@ public extension Theme {
     var paragraphBottomMargin: LengthUnit { .default }
 
     // Breakpoints
-    var smallBreakpoint: LengthUnit { BootstrapDefault.smallBreakpoint }
-    var mediumBreakpoint: LengthUnit { BootstrapDefault.mediumBreakpoint }
-    var largeBreakpoint: LengthUnit { BootstrapDefault.largeBreakpoint }
-    var xLargeBreakpoint: LengthUnit { BootstrapDefault.xLargeBreakpoint }
-    var xxLargeBreakpoint: LengthUnit { BootstrapDefault.xxLargeBreakpoint }
+    var smallBreakpoint: LengthUnit { .default }
+    var mediumBreakpoint: LengthUnit { .default }
+    var largeBreakpoint: LengthUnit { .default }
+    var xLargeBreakpoint: LengthUnit { .default }
+    var xxLargeBreakpoint: LengthUnit { .default }
 
     // Maximum widths
-    var smallMaxWidth: LengthUnit { BootstrapDefault.smallContainer }
-    var mediumMaxWidth: LengthUnit { BootstrapDefault.mediumContainer }
-    var largeMaxWidth: LengthUnit { BootstrapDefault.largeContainer }
-    var xLargeMaxWidth: LengthUnit { BootstrapDefault.xLargeContainer }
-    var xxLargeMaxWidth: LengthUnit { BootstrapDefault.xxLargeContainer }
+    var smallMaxWidth: LengthUnit {.default }
+    var mediumMaxWidth: LengthUnit { .default }
+    var largeMaxWidth: LengthUnit {.default }
+    var xLargeMaxWidth: LengthUnit { .default }
+    var xxLargeMaxWidth: LengthUnit { .default }
 }
 
 public extension Theme {
@@ -114,5 +114,17 @@ public extension Theme {
         case is DarkTheme.Type: return baseID + "-dark"
         default: return baseID
         }
+    }
+}
+
+extension Theme {
+    /// The theme's breakpoint values with inheritance applied between breakpoints.
+    var resolvedBreakpoints: ResponsiveValues {
+        PublishingContext.shared.resolveBreakpoints(for: self)
+    }
+
+    /// The theme's container width values with inheritance applied between breakpoints.
+    var resolvedSiteWidths: ResponsiveValues {
+        PublishingContext.shared.resolveSiteWidths(for: self)
     }
 }
