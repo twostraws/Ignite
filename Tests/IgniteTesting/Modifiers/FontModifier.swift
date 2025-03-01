@@ -12,7 +12,7 @@ import Testing
 
 /// Helper function to simulate registerClasses logic
 func simulateRegisterClasses(for responsiveSize: ResponsiveFontSize) -> String {
-    let className = "font-" + responsiveSize.breakpointValues.description.truncatedHash
+    let className = "font-" + responsiveSize.values().description.truncatedHash
     return className
 }
 

@@ -18,9 +18,6 @@ extension PublishingContext {
 
         return """
         .container {
-            @media (min-width: \(resolved.xSmall.stringValue)) {
-                max-width: var(\(BootstrapVariable.xSmallContainer.rawValue), 540px);
-            }
             @media (min-width: \(resolved.small.stringValue)) {
                 max-width: var(\(BootstrapVariable.smallContainer.rawValue), 540px);
             }

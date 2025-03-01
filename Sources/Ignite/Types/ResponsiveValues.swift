@@ -7,8 +7,8 @@
 
 /// A collection of length values for each responsive breakpoint.
 struct ResponsiveValues {
-    /// The length value for extra small screens (typically <576px).
-    let xSmall: LengthUnit
+    /// The base value, for extra small screens (typically <576px).
+    let xSmall: LengthUnit? = nil
 
     /// The length value for small screens (typically ≥576px).
     let small: LengthUnit

@@ -332,7 +332,6 @@ extension PublishingContext {
     /// Adds resolved container size properties to CSS properties array
     func addWidthProperties(_ properties: inout [String], _ theme: any Theme) {
         let resolved = resolveSiteWidths(for: theme)
-        properties.append("    \(BootstrapVariable.xSmallContainer): \(resolved.xSmall)")
         properties.append("    \(BootstrapVariable.smallContainer): \(resolved.small)")
         properties.append("    \(BootstrapVariable.mediumContainer): \(resolved.medium)")
         properties.append("    \(BootstrapVariable.largeContainer): \(resolved.large)")
@@ -343,7 +342,6 @@ extension PublishingContext {
     /// Adds resolved breakpoint size properties to CSS properties array
     func addBreakpointProperties(_ properties: inout [String], _ theme: any Theme) {
         let resolved = resolveBreakpoints(for: theme)
-        properties.append("    \(BootstrapVariable.xSmallBreakpoint): \(resolved.xSmall)")
         properties.append("    \(BootstrapVariable.smallBreakpoint): \(resolved.small)")
         properties.append("    \(BootstrapVariable.mediumBreakpoint): \(resolved.medium)")
         properties.append("    \(BootstrapVariable.largeBreakpoint): \(resolved.large)")

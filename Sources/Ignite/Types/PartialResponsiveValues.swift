@@ -30,7 +30,15 @@ public struct PartialResponsiveValues<Value>: Hashable, Equatable, Sendable
     private let xLarge: Value?
     private let xxLarge: Value?
 
-    /// Applies breakpoint-specific values
+    /// Creates a responsive value that adapts across different screen sizes.
+    /// - Parameters:
+    ///   - xSmall: The base value, applied to all breakpoints unless overridden.
+    ///   - small: Value for small screens and up. If `nil`, inherits from smaller breakpoints.
+    ///   - medium: Value for medium screens and up. If `nil`, inherits from smaller breakpoints.
+    ///   - large: Value for large screens and up. If `nil`, inherits from smaller breakpoints.
+    ///   - xLarge: Value for extra large screens and up. If `nil`, inherits from smaller breakpoints.
+    ///   - xxLarge: Value for extra extra large screens and up. If `nil`, inherits from smaller breakpoints.
+    /// - Returns: A responsive value that adapts to different screen sizes.
     public static func responsive(
         xSmall: Value? = nil,
         small: Value? = nil,
@@ -65,9 +73,10 @@ public struct PartialResponsiveValues<Value>: Hashable, Equatable, Sendable
         self.xxLarge = xxLarge
     }
 
-    /// Returns an ordered array of breakpoint-value pairs,
-    /// from smallest to largest screen size, with cascading applied if enabled.
-    var values: [(breakpoint: Breakpoint, value: Value)] {
+    /// Returns an ordered array of breakpoint-value pairs, from smallest to largest screen size.
+    /// - Parameter cascaded: Whether to apply cascading behavior (values inherit from smaller breakpoints)
+    /// - Returns: Array of tuples with breakpoint identifiers and their values
+    func values(cascaded: Bool = true) -> [(breakpoint: Breakpoint, value: Value)] {
         // Create a sequence of breakpoint names and their corresponding values
         let breakpoints: [(Breakpoint, Value?)] = [
             (.xSmall, xSmall),
@@ -78,7 +87,13 @@ public struct PartialResponsiveValues<Value>: Hashable, Equatable, Sendable
             (.xxLarge, xxLarge)
         ]
 
-        return resolve(breakpoints)
+        return if cascaded {
+            resolve(breakpoints)
+        } else {
+            breakpoints.compactMap { breakpoint, value in
+                value.map { (breakpoint, $0) }
+            }
+        }
     }
 
     /// Processes breakpoints with optional values and applies inheriting if enabled.
@@ -87,8 +102,7 @@ public struct PartialResponsiveValues<Value>: Hashable, Equatable, Sendable
     private func resolve(_ breakpoints: [(Breakpoint, Value?)]) -> [(Breakpoint, Value)] {
         breakpoints.reduce(into: (
             results: [(Breakpoint, Value)](),
-            lastValue: Value?(nil)
-        )
+            lastValue: Value?(nil))
         ) { collected, current in
             let (breakpoint, currentValue) = current
             if let currentValue {

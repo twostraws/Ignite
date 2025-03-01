@@ -171,9 +171,6 @@ public protocol Theme: Sendable {
     /// Bottom margin for paragraphs
     var paragraphBottomMargin: LengthUnit { get }
 
-    /// Extra small breakpoint
-    var xSmallBreakpoint: LengthUnit { get }
-
     /// Small breakpoint
     var smallBreakpoint: LengthUnit { get }
 
@@ -188,9 +185,6 @@ public protocol Theme: Sendable {
 
     /// Extra extra large breakpoint
     var xxLargeBreakpoint: LengthUnit { get }
-
-    /// Maximum width for extra small containers
-    var xSmallMaxWidth: LengthUnit { get }
 
     /// Maximum width for small containers
     var smallMaxWidth: LengthUnit { get }

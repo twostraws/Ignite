@@ -6,24 +6,42 @@
 //
 
 /// A representation of standard responsive design breakpoints.
-enum Breakpoint: String, Sendable, Hashable, CaseIterable, Comparable {
+enum Breakpoint: Sendable, Hashable, CaseIterable, Comparable {
     /// Extra small screens (up to 576px)
-    case xSmall = "xs"
+    case xSmall
 
     /// Small screens (576px)
-    case small = "sm"
+    case small
 
     /// Medium screens (768px)
-    case medium = "md"
+    case medium
 
     /// Large screens (992px)
-    case large = "lg"
+    case large
 
     /// Extra large screens (1200px)
-    case xLarge = "xl"
+    case xLarge
 
     /// Extra extra large screens (1400px)
-    case xxLarge = "xxl"
+    case xxLarge
+
+    /// Returns the breakpoint infix for Bootstrap classes, or nil for the default (xs) breakpoint
+    var infix: String? {
+        switch self {
+        case .xSmall:
+            return nil
+        case .small:
+            return "sm"
+        case .medium:
+            return "md"
+        case .large:
+            return "lg"
+        case .xLarge:
+            return "xl"
+        case .xxLarge:
+            return "xxl"
+        }
+    }
 
     /// The default width associated with each breakpoint.
     var defaultWidth: LengthUnit {

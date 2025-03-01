@@ -75,20 +75,18 @@ public extension Theme {
     var paragraphBottomMargin: LengthUnit { .default }
 
     // Breakpoints
-    var xSmallBreakpoint: LengthUnit { .default }
-    var smallBreakpoint: LengthUnit { .default }
-    var mediumBreakpoint: LengthUnit { .default }
-    var largeBreakpoint: LengthUnit { .default }
-    var xLargeBreakpoint: LengthUnit { .default }
-    var xxLargeBreakpoint: LengthUnit { .default }
+    var smallBreakpoint: LengthUnit { BootstrapDefault.smallBreakpoint }
+    var mediumBreakpoint: LengthUnit { BootstrapDefault.mediumBreakpoint }
+    var largeBreakpoint: LengthUnit { BootstrapDefault.largeBreakpoint }
+    var xLargeBreakpoint: LengthUnit { BootstrapDefault.xLargeBreakpoint }
+    var xxLargeBreakpoint: LengthUnit { BootstrapDefault.xxLargeBreakpoint }
 
     // Maximum widths
-    var xSmallMaxWidth: LengthUnit { .default }
-    var smallMaxWidth: LengthUnit { .default }
-    var mediumMaxWidth: LengthUnit { .default }
-    var largeMaxWidth: LengthUnit { .default }
-    var xLargeMaxWidth: LengthUnit { .default }
-    var xxLargeMaxWidth: LengthUnit { .default }
+    var smallMaxWidth: LengthUnit { BootstrapDefault.smallContainer }
+    var mediumMaxWidth: LengthUnit { BootstrapDefault.mediumContainer }
+    var largeMaxWidth: LengthUnit { BootstrapDefault.largeContainer }
+    var xLargeMaxWidth: LengthUnit { BootstrapDefault.xLargeContainer }
+    var xxLargeMaxWidth: LengthUnit { BootstrapDefault.xxLargeContainer }
 }
 
 public extension Theme {

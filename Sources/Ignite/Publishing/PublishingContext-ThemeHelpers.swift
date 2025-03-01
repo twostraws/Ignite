@@ -65,12 +65,11 @@ extension PublishingContext {
     /// - Returns: A collection of resolved breakpoint values.
     func resolveBreakpoints(for theme: any Theme) -> ResponsiveValues {
         let breakpoints: [UnresolvedBreakpoint] = [
-            .init(.xSmall, value: theme.xSmallBreakpoint, default: .px(576)),
-            .init(.small, value: theme.smallBreakpoint, default: .px(576)),
-            .init(.medium, value: theme.mediumBreakpoint, default: .px(768)),
-            .init(.large, value: theme.largeBreakpoint, default: .px(992)),
-            .init(.xLarge, value: theme.xLargeBreakpoint, default: .px(1200)),
-            .init(.xxLarge, value: theme.xxLargeBreakpoint, default: .px(1400))
+            .init(.small, value: theme.smallBreakpoint, default: BootstrapDefault.smallBreakpoint),
+            .init(.medium, value: theme.mediumBreakpoint, default: BootstrapDefault.mediumBreakpoint),
+            .init(.large, value: theme.largeBreakpoint, default: BootstrapDefault.largeBreakpoint),
+            .init(.xLarge, value: theme.xLargeBreakpoint, default: BootstrapDefault.xLargeBreakpoint),
+            .init(.xxLarge, value: theme.xxLargeBreakpoint, default: BootstrapDefault.xxLargeBreakpoint)
         ]
 
         return resolve(breakpoints)
@@ -81,12 +80,11 @@ extension PublishingContext {
     /// - Returns: A collection of resolved container width values.
     func resolveSiteWidths(for theme: any Theme) -> ResponsiveValues {
         let containerSizes: [UnresolvedBreakpoint] = [
-            .init(.xSmall, value: theme.xSmallMaxWidth, default: .px(540)),
-            .init(.small, value: theme.smallMaxWidth, default: .px(540)),
-            .init(.medium, value: theme.mediumMaxWidth, default: .px(720)),
-            .init(.large, value: theme.largeMaxWidth, default: .px(960)),
-            .init(.xLarge, value: theme.xLargeMaxWidth, default: .px(1140)),
-            .init(.xxLarge, value: theme.xxLargeMaxWidth, default: .px(1320))
+            .init(.small, value: theme.smallMaxWidth, default: BootstrapDefault.smallContainer),
+            .init(.medium, value: theme.mediumMaxWidth, default: BootstrapDefault.mediumContainer),
+            .init(.large, value: theme.largeMaxWidth, default: BootstrapDefault.largeContainer),
+            .init(.xLarge, value: theme.xLargeMaxWidth, default: BootstrapDefault.xLargeContainer),
+            .init(.xxLarge, value: theme.xxLargeMaxWidth, default: BootstrapDefault.xxLargeContainer)
         ]
 
         return resolve(containerSizes)
@@ -132,7 +130,6 @@ extension PublishingContext {
         }
 
         return ResponsiveValues(
-            xSmall: values[.xSmall]!,
             small: values[.small]!,
             medium: values[.medium]!,
             large: values[.large]!,
