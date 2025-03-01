@@ -82,9 +82,9 @@ public extension Theme {
     var xxLargeBreakpoint: LengthUnit { .default }
 
     // Maximum widths
-    var smallMaxWidth: LengthUnit {.default }
+    var smallMaxWidth: LengthUnit { .default }
     var mediumMaxWidth: LengthUnit { .default }
-    var largeMaxWidth: LengthUnit {.default }
+    var largeMaxWidth: LengthUnit { .default }
     var xLargeMaxWidth: LengthUnit { .default }
     var xxLargeMaxWidth: LengthUnit { .default }
 }
