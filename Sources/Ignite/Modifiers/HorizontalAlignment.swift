@@ -45,14 +45,13 @@ public enum HorizontalAlignment: String, Sendable, Equatable {
         }
     }
 
-
     func responsiveClass(for breakpoint: Breakpoint) -> String {
         let alignmentClass = rawValue.dropFirst(5) // Remove "text-" prefix
         return "text-\(breakpoint)-\(alignmentClass)"
     }
 }
 
-extension Responsive.PartialValues where Value == HorizontalAlignment {
+extension PartialResponsiveValues where Value == HorizontalAlignment {
     /// The corresponding Bootstrap classes for this responsive value
     var breakpointClasses: String {
         values.map { $1.responsiveClass(for: $0) }.joined(separator: " ")

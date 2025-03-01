@@ -74,44 +74,37 @@ public extension Theme {
     var headingBottomMargin: LengthUnit { .default }
     var paragraphBottomMargin: LengthUnit { .default }
 
-    // Responsive breakpoints
-    var siteBreakpoints: ResponsiveValues {
-        .init(
-            xSmall: .px(576),
-            small: .px(576),
-            medium: .px(768),
-            large: .px(992),
-            xLarge: .px(1200),
-            xxLarge: .px(1400))
-    }
+    // Breakpoints
+    var xSmallBreakpoint: LengthUnit { .default }
+    var smallBreakpoint: LengthUnit { .default }
+    var mediumBreakpoint: LengthUnit { .default }
+    var largeBreakpoint: LengthUnit { .default }
+    var xLargeBreakpoint: LengthUnit { .default }
+    var xxLargeBreakpoint: LengthUnit { .default }
 
     // Maximum widths
-    var siteMaxWidths: ResponsiveValues {
-        .init(
-            xSmall: .px(540),
-            small: .px(540),
-            medium: .px(720),
-            large: .px(960),
-            xLarge: .px(1140),
-            xxLarge: .px(1320))
-    }
+    var xSmallMaxWidth: LengthUnit { .default }
+    var smallMaxWidth: LengthUnit { .default }
+    var mediumMaxWidth: LengthUnit { .default }
+    var largeMaxWidth: LengthUnit { .default }
+    var xLargeMaxWidth: LengthUnit { .default }
+    var xxLargeMaxWidth: LengthUnit { .default }
 }
 
-extension Theme {
-
+public extension Theme {
     /// The unique identifier for this theme instance, including any system-generated suffix.
-    public var id: String {
+    var id: String {
         Self.id
     }
 
     /// The display name of this theme instance.
-    public var name: String {
+    var name: String {
         Self.name
     }
 
     /// Internal identifier used for theme switching and CSS selectors.
     /// Automatically appends "-light" or "-dark" suffix based on protocol conformance.
-    public static var id: String {
+    static var id: String {
         let baseID = name.kebabCased()
 
         guard baseID != "light" && baseID != "dark" else {
