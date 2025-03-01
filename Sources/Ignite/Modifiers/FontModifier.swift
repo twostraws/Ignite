@@ -93,24 +93,12 @@ private extension HTML {
         let className = "font-" + responsiveSize.breakpointValues.description.truncatedHash
 
         // Sort sizes by breakpoint to ensure proper cascading
-        let allSizes = responsiveSize.breakpointValues.sorted { size1, size2 in
-            let bp1 = size1.breakpoint
-            let bp2 = size2.breakpoint
-
-            // nil (base size) should come first
-            if bp1 == nil { return true }
-            if bp2 == nil { return false }
-            return bp1! < bp2!
-        }
+        let allSizes = responsiveSize.breakpointValues.sorted { $0.breakpoint < $1.breakpoint }
 
         // Find base size and breakpoint sizes
-        let baseSize = allSizes.first { size in
-            size.breakpoint == nil
-        }
+        let baseSize = allSizes.first { $0.breakpoint == .xSmall }
 
-        let breakpointSizes = allSizes.filter { size in
-            size.breakpoint != nil
-        }
+        let breakpointSizes = allSizes.filter { $0.breakpoint != .xSmall }
 
         if let baseSize {
             CSSManager.shared.register(
@@ -119,12 +107,10 @@ private extension HTML {
         }
 
         for size in breakpointSizes {
-            if let breakpoint = size.breakpoint {
-                CSSManager.shared.register(
-                    [.breakpoint(.init(stringValue: breakpoint)!)],
-                    properties: [.init(.fontSize, value: size.value.stringValue)],
-                    className: className)
-            }
+            CSSManager.shared.register(
+                [.breakpoint(.init(size.breakpoint))],
+                properties: [.init(.fontSize, value: size.value.stringValue)],
+                className: className)
         }
 
         return className

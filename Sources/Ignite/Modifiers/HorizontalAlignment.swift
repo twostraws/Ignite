@@ -45,11 +45,8 @@ public enum HorizontalAlignment: String, Sendable, Equatable, Responsive {
         }
     }
 
-    public func responsiveClass(for breakpoint: String?) -> String {
+    func responsiveClass(for breakpoint: Breakpoint) -> String {
         let alignmentClass = rawValue.dropFirst(5) // Remove "text-" prefix
-        if let breakpoint {
-            return "text-\(breakpoint)-\(alignmentClass)"
-        }
-        return "text-\(alignmentClass)"
+        return "text-\(breakpoint)-\(alignmentClass)"
     }
 }

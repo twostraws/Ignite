@@ -130,15 +130,14 @@ public enum BreakpointQuery: Query, CaseIterable, Sendable {
     case xxLarge
 
     /// Creates a breakpoint from a string identifier.
-    public init?(stringValue: String) {
-        switch stringValue.lowercased() {
-        case "xs": self = .xSmall
-        case "sm": self = .small
-        case "md": self = .medium
-        case "lg": self = .large
-        case "xl": self = .xLarge
-        case "xxl": self = .xxLarge
-        default: return nil
+    init(_ breakpoint: Breakpoint) {
+        switch breakpoint {
+        case .xSmall: self = .xSmall
+        case .small: self = .small
+        case .medium: self = .medium
+        case .large: self = .large
+        case .xLarge: self = .xLarge
+        case .xxLarge: self = .xxLarge
         }
     }
 

@@ -16,22 +16,22 @@ extension PublishingContext {
 
         return """
         .container {
-            @media (min-width: \(theme.maxWidths.xSmall.stringValue)) {
+            @media (min-width: \(theme.siteMaxWidths.xSmall.stringValue)) {
                 max-width: var(\(BootstrapVariable.xSmallContainer.rawValue), 540px);
             }
-            @media (min-width: \(theme.maxWidths.small.stringValue)) {
+            @media (min-width: \(theme.siteMaxWidths.small.stringValue)) {
                 max-width: var(\(BootstrapVariable.smallContainer.rawValue), 540px);
             }
-            @media (min-width: \(theme.maxWidths.medium.stringValue)) {
+            @media (min-width: \(theme.siteMaxWidths.medium.stringValue)) {
                 max-width: var(\(BootstrapVariable.mediumContainer.rawValue), 720px);
             }
-            @media (min-width: \(theme.maxWidths.large.stringValue)) {
+            @media (min-width: \(theme.siteMaxWidths.large.stringValue)) {
                 max-width: var(\(BootstrapVariable.largeContainer.rawValue), 960px);
             }
-            @media (min-width: \(theme.maxWidths.xLarge.stringValue)) {
+            @media (min-width: \(theme.siteMaxWidths.xLarge.stringValue)) {
                 max-width: var(\(BootstrapVariable.xLargeContainer.rawValue), 1140px);
             }
-            @media (min-width: \(theme.maxWidths.xxLarge.stringValue)) {
+            @media (min-width: \(theme.siteMaxWidths.xxLarge.stringValue)) {
                 max-width: var(\(BootstrapVariable.xxLargeContainer.rawValue), 1320px);
             }
         }

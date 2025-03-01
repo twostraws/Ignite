@@ -354,12 +354,12 @@ extension PublishingContext {
         addProperty(.paragraphMarginBottom, theme.paragraphBottomMargin)
 
         // Container sizes
-        addProperty(.smallContainer, theme.maxWidths.xSmall)
-        addProperty(.smallContainer, theme.maxWidths.small)
-        addProperty(.mediumContainer, theme.maxWidths.medium)
-        addProperty(.largeContainer, theme.maxWidths.large)
-        addProperty(.xLargeContainer, theme.maxWidths.xLarge)
-        addProperty(.xxLargeContainer, theme.maxWidths.xxLarge)
+        addProperty(.smallContainer, theme.siteMaxWidths.xSmall)
+        addProperty(.smallContainer, theme.siteMaxWidths.small)
+        addProperty(.mediumContainer, theme.siteMaxWidths.medium)
+        addProperty(.largeContainer, theme.siteMaxWidths.large)
+        addProperty(.xLargeContainer, theme.siteMaxWidths.xLarge)
+        addProperty(.xxLargeContainer, theme.siteMaxWidths.xxLarge)
 
         // Breakpoints
         addProperty(.xSmallBreakpoint, theme.breakpoints.xSmall)

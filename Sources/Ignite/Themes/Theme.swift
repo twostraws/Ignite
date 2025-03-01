@@ -171,9 +171,11 @@ public protocol Theme: Sendable {
     /// Bottom margin for paragraphs
     var paragraphBottomMargin: LengthUnit { get }
 
-    /// Responsive breakpoints
-    var breakpoints: Breakpoints { get }
+    typealias ResponsiveValues = LengthUnit.ResponsiveValues
 
-    /// Responsive maximum width for containers
-    var maxWidths: MaxWidths { get }
+    /// Responsive breakpoints
+    var breakpoints: ResponsiveValues { get }
+
+    /// Responsive maximum width for containers, which determine site width
+    var siteMaxWidths: ResponsiveValues { get }
 }

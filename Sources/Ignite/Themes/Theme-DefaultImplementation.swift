@@ -75,10 +75,26 @@ public extension Theme {
     var paragraphBottomMargin: LengthUnit { .default }
 
     // Responsive breakpoints
-    var breakpoints: Breakpoints { .default }
+    var breakpoints: ResponsiveValues {
+        .init(
+            xSmall: .px(576),
+            small: .px(576),
+            medium: .px(768),
+            large: .px(992),
+            xLarge: .px(1200),
+            xxLarge: .px(1400))
+    }
 
     // Maximum widths
-    var maxWidths: MaxWidths { .default }
+    var siteMaxWidths: ResponsiveValues {
+        .init(
+            xSmall: .px(540),
+            small: .px(540),
+            medium: .px(720),
+            large: .px(960),
+            xLarge: .px(1140),
+            xxLarge: .px(1320))
+    }
 }
 
 extension Theme {
