@@ -16,19 +16,22 @@ extension PublishingContext {
 
         return """
         .container {
-            @media (min-width: \(theme.smallBreakpoint.stringValue)) {
+            @media (min-width: \(theme.maxWidths.xSmall.stringValue)) {
+                max-width: var(\(BootstrapVariable.xSmallContainer.rawValue), 540px);
+            }
+            @media (min-width: \(theme.maxWidths.small.stringValue)) {
                 max-width: var(\(BootstrapVariable.smallContainer.rawValue), 540px);
             }
-            @media (min-width: \(theme.mediumBreakpoint.stringValue)) {
+            @media (min-width: \(theme.maxWidths.medium.stringValue)) {
                 max-width: var(\(BootstrapVariable.mediumContainer.rawValue), 720px);
             }
-            @media (min-width: \(theme.largeBreakpoint.stringValue)) {
+            @media (min-width: \(theme.maxWidths.large.stringValue)) {
                 max-width: var(\(BootstrapVariable.largeContainer.rawValue), 960px);
             }
-            @media (min-width: \(theme.xLargeBreakpoint.stringValue)) {
+            @media (min-width: \(theme.maxWidths.xLarge.stringValue)) {
                 max-width: var(\(BootstrapVariable.xLargeContainer.rawValue), 1140px);
             }
-            @media (min-width: \(theme.xxLargeBreakpoint.stringValue)) {
+            @media (min-width: \(theme.maxWidths.xxLarge.stringValue)) {
                 max-width: var(\(BootstrapVariable.xxLargeContainer.rawValue), 1320px);
             }
         }

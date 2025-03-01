@@ -74,20 +74,11 @@ public extension Theme {
     var headingBottomMargin: LengthUnit { .default }
     var paragraphBottomMargin: LengthUnit { .default }
 
-    // Breakpoints
-    var xSmallBreakpoint: LengthUnit { .px(576) }
-    var smallBreakpoint: LengthUnit { .px(576) }
-    var mediumBreakpoint: LengthUnit { .px(768) }
-    var largeBreakpoint: LengthUnit { .px(992) }
-    var xLargeBreakpoint: LengthUnit { .px(1200) }
-    var xxLargeBreakpoint: LengthUnit { .px(1400) }
+    // Responsive breakpoints
+    var breakpoints: Breakpoints { .default }
 
     // Maximum widths
-    var smallMaxWidth: LengthUnit { .default }
-    var mediumMaxWidth: LengthUnit { .default }
-    var largeMaxWidth: LengthUnit { .default }
-    var xLargeMaxWidth: LengthUnit { .default }
-    var xxLargeMaxWidth: LengthUnit { .default }
+    var maxWidths: MaxWidths { .default }
 }
 
 extension Theme {

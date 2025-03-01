@@ -181,6 +181,9 @@ enum BootstrapVariable: String {
     // MARK: - Container Sizes
 
     /// Maximum width for small containers
+    case xSmallContainer = "--theme-container-xs"
+
+    /// Maximum width for small containers
     case smallContainer = "--theme-container-sm"
 
     /// Maximum width for medium containers
@@ -196,6 +199,9 @@ enum BootstrapVariable: String {
     case xxLargeContainer = "--theme-container-xxl"
 
     // MARK: - Breakpoints
+
+    /// Small breakpoint value
+    case xSmallBreakpoint = "--bs-breakpoint-xs"
 
     /// Small breakpoint value
     case smallBreakpoint = "--bs-breakpoint-sm"

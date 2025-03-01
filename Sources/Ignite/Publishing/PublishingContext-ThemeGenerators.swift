@@ -354,18 +354,20 @@ extension PublishingContext {
         addProperty(.paragraphMarginBottom, theme.paragraphBottomMargin)
 
         // Container sizes
-        addProperty(.smallContainer, theme.smallMaxWidth)
-        addProperty(.mediumContainer, theme.mediumMaxWidth)
-        addProperty(.largeContainer, theme.largeMaxWidth)
-        addProperty(.xLargeContainer, theme.xLargeMaxWidth)
-        addProperty(.xxLargeContainer, theme.xxLargeMaxWidth)
+        addProperty(.smallContainer, theme.maxWidths.xSmall)
+        addProperty(.smallContainer, theme.maxWidths.small)
+        addProperty(.mediumContainer, theme.maxWidths.medium)
+        addProperty(.largeContainer, theme.maxWidths.large)
+        addProperty(.xLargeContainer, theme.maxWidths.xLarge)
+        addProperty(.xxLargeContainer, theme.maxWidths.xxLarge)
 
         // Breakpoints
-        addProperty(.smallBreakpoint, theme.smallBreakpoint)
-        addProperty(.mediumBreakpoint, theme.mediumBreakpoint)
-        addProperty(.largeBreakpoint, theme.largeBreakpoint)
-        addProperty(.xLargeBreakpoint, theme.xLargeBreakpoint)
-        addProperty(.xxLargeBreakpoint, theme.xxLargeBreakpoint)
+        addProperty(.xSmallBreakpoint, theme.breakpoints.xSmall)
+        addProperty(.smallBreakpoint, theme.breakpoints.small)
+        addProperty(.mediumBreakpoint, theme.breakpoints.medium)
+        addProperty(.largeBreakpoint, theme.breakpoints.large)
+        addProperty(.xLargeBreakpoint, theme.breakpoints.xLarge)
+        addProperty(.xxLargeBreakpoint, theme.breakpoints.xxLarge)
 
         cssProperties.append("    --syntax-highlight-theme: \"\(theme.syntaxHighlighterTheme.description)\"")
 

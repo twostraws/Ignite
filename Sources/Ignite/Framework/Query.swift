@@ -116,6 +116,8 @@ public struct ThemeQuery: Query {
 
 /// Applies styles based on viewport width breakpoints
 public enum BreakpointQuery: Query, CaseIterable, Sendable {
+    /// Extra small breakpoint (typically <576px)
+    case xSmall
     /// Small breakpoint (typically ≥576px)
     case small
     /// Medium breakpoint (typically ≥768px)
@@ -130,6 +132,7 @@ public enum BreakpointQuery: Query, CaseIterable, Sendable {
     /// Creates a breakpoint from a string identifier.
     public init?(stringValue: String) {
         switch stringValue.lowercased() {
+        case "xs": self = .xSmall
         case "sm": self = .small
         case "md": self = .medium
         case "lg": self = .large
@@ -144,11 +147,12 @@ public enum BreakpointQuery: Query, CaseIterable, Sendable {
     /// - Returns: A CSS media query string.
     @MainActor public func condition(with theme: Theme) -> String {
         let breakpointValue = switch self {
-        case .small: theme.smallBreakpoint.stringValue
-        case .medium: theme.mediumBreakpoint.stringValue
-        case .large: theme.largeBreakpoint.stringValue
-        case .xLarge: theme.xLargeBreakpoint.stringValue
-        case .xxLarge: theme.xxLargeBreakpoint.stringValue
+        case .xSmall: theme.breakpoints.xSmall.stringValue
+        case .small: theme.breakpoints.small.stringValue
+        case .medium: theme.breakpoints.medium.stringValue
+        case .large: theme.breakpoints.large.stringValue
+        case .xLarge: theme.breakpoints.xLarge.stringValue
+        case .xxLarge: theme.breakpoints.xxLarge.stringValue
         }
         return "min-width: \(breakpointValue)"
     }

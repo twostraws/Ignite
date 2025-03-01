@@ -171,39 +171,9 @@ public protocol Theme: Sendable {
     /// Bottom margin for paragraphs
     var paragraphBottomMargin: LengthUnit { get }
 
-    /// Extra small breakpoint
-    var xSmallBreakpoint: LengthUnit { get }
+    /// Responsive breakpoints
+    var breakpoints: Breakpoints { get }
 
-    /// Small breakpoint
-    var smallBreakpoint: LengthUnit { get }
-
-    /// Medium breakpoint
-    var mediumBreakpoint: LengthUnit { get }
-
-    /// Large breakpoint
-    var largeBreakpoint: LengthUnit { get }
-
-    /// Extra large breakpoint
-    var xLargeBreakpoint: LengthUnit { get }
-
-    /// Extra extra large breakpoint
-    var xxLargeBreakpoint: LengthUnit { get }
-
-    /// Maximum width for small containers
-    var smallMaxWidth: LengthUnit { get }
-
-    /// Maximum width for medium containers
-    var mediumMaxWidth: LengthUnit { get }
-
-    /// Maximum width for large containers
-    var largeMaxWidth: LengthUnit { get }
-
-    /// Maximum width for extra large containers
-    var xLargeMaxWidth: LengthUnit { get }
-
-    /// Maximum width for extra extra large containers
-    var xxLargeMaxWidth: LengthUnit { get }
-
-    /// The color scheme for syntax highlighting
-    var syntaxHighlighterTheme: HighlighterTheme { get }
+    /// Responsive maximum width for containers
+    var maxWidths: MaxWidths { get }
 }

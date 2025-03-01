@@ -25,6 +25,7 @@ public protocol Responsive {
 ///     .padding(.responsive(small: 4, medium: 6, large: 10)))
 /// ```
 public struct ResponsiveValue<Value>: Hashable, Equatable, Sendable where Value: Equatable & Hashable & Sendable {
+    private let xSmall: Value?
     private let small: Value?
     private let medium: Value?
     private let large: Value?
@@ -33,6 +34,7 @@ public struct ResponsiveValue<Value>: Hashable, Equatable, Sendable where Value:
 
     /// Applies breakpoint-specific values
     public static func responsive(
+        xSmall: Value? = nil,
         small: Value? = nil,
         medium: Value? = nil,
         large: Value? = nil,
@@ -43,12 +45,14 @@ public struct ResponsiveValue<Value>: Hashable, Equatable, Sendable where Value:
     }
 
     private init(
+        xSmall: Value? = nil,
         small: Value? = nil,
         medium: Value? = nil,
         large: Value? = nil,
         xLarge: Value? = nil,
         xxLarge: Value? = nil
     ) {
+        self.xSmall = xSmall
         self.small = small
         self.medium = medium
         self.large = large
@@ -61,8 +65,12 @@ public struct ResponsiveValue<Value>: Hashable, Equatable, Sendable where Value:
     var breakpointValues: [(breakpoint: String?, value: Value)] {
         var results: [(String?, Value)] = []
 
+        if let xSmall {
+            results.append(("xs", xSmall))
+        }
+
         if let small {
-            results.append((nil, small))
+            results.append(("sm", small))
         }
         if let medium {
             results.append(("md", medium))
