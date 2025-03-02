@@ -23,10 +23,6 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     /// to the first heading.
     public var removeTitleFromBody: Bool
 
-    /// A dictionary of metadata specified at the top of the file as YAML front matter.
-    /// See https://jekyllrb.com/docs/front-matter/ for information.
-    public var metadata = [String: String]()
-
     /// Parses Markdown provided as a direct input string.
     /// - Parameters:
     ///   - markdown: The Markdown to parse.
@@ -34,56 +30,8 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     ///   from the final `body` property.
     public init(markdown: String, removeTitleFromBody: Bool) {
         self.removeTitleFromBody = removeTitleFromBody
-        let processed = processMetadata(for: markdown)
-        let document = Markdown.Document(parsing: processed)
+        let document = Markdown.Document(parsing: markdown)
         body = visit(document)
-    }
-
-    /// Parses Markdown provided from a filesystem URL.
-    /// - Parameters:
-    ///   - url: The filesystem URL to load.
-    ///   - removeTitleFromBody: True if the first title should be removed
-    ///   from the final `body` property.
-    public init(url: URL, removeTitleFromBody: Bool) throws {
-        self.removeTitleFromBody = removeTitleFromBody
-        var markdown: String
-        do {
-            markdown = try String(contentsOf: url)
-        } catch {
-            throw PublishingError.unopenableFile(error.localizedDescription)
-        }
-
-        let processed = processMetadata(for: markdown)
-        let document = Markdown.Document(parsing: processed)
-        body = visit(document)
-
-        if title.isEmpty {
-            // Assign a title that's better than the default empty string.
-            title = url.deletingPathExtension().lastPathComponent
-        }
-    }
-
-    /// Looks for and parses any YAML front matter from this Markdown.
-    /// - Parameter markdown: The Markdown string to process.
-    /// - Returns: The remaining Markdown, once front matter has been removed.
-    private mutating func processMetadata(for markdown: String) -> String {
-        if markdown.starts(with: "---") {
-            let parts = markdown.split(separator: "---", maxSplits: 1, omittingEmptySubsequences: true)
-
-            let header = parts[0].split(separator: "\n", omittingEmptySubsequences: true)
-
-            for entry in header {
-                let entryParts = entry.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: true)
-                guard entryParts.count == 2 else { continue }
-
-                let trimmedValue = entryParts[1].trimmingCharacters(in: .whitespaces)
-                metadata[entryParts[0].trimmingCharacters(in: .whitespaces)] = trimmedValue
-            }
-
-            return String(parts[1].trimmingCharacters(in: .whitespacesAndNewlines))
-        } else {
-            return markdown
-        }
     }
 
     /// Visit some markup when no other handler is suitable.
