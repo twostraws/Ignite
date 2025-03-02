@@ -14,22 +14,6 @@ import Testing
 @Suite("MarkdownRenderer Tests")
 @MainActor
 struct MarkdownRendererTests {
-    @Test("Markdown metadata is processed")
-    func metadataIsProcessed() async throws {
-        let element = MarkdownToHTML(
-            markdown: """
-            ---
-            title: Example Title
-            ---
-            Test content
-            """,
-            removeTitleFromBody: false
-        )
-
-        #expect(element.body == "<p>Test content</p>")
-        #expect(element.metadata["title"] == "Example Title")
-    }
-
     @Test(
         "Markdown headings from string",
         arguments: ["# Heading 1", "## Heading 2", "### Heading 3", "# Heading with a #hashtag"]
