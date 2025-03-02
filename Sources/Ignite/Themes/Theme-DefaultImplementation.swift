@@ -75,12 +75,11 @@ public extension Theme {
     var paragraphBottomMargin: LengthUnit { .default }
 
     // Breakpoints
-    var xSmallBreakpoint: LengthUnit { .px(576) }
-    var smallBreakpoint: LengthUnit { .px(576) }
-    var mediumBreakpoint: LengthUnit { .px(768) }
-    var largeBreakpoint: LengthUnit { .px(992) }
-    var xLargeBreakpoint: LengthUnit { .px(1200) }
-    var xxLargeBreakpoint: LengthUnit { .px(1400) }
+    var smallBreakpoint: LengthUnit { .default }
+    var mediumBreakpoint: LengthUnit { .default }
+    var largeBreakpoint: LengthUnit { .default }
+    var xLargeBreakpoint: LengthUnit { .default }
+    var xxLargeBreakpoint: LengthUnit { .default }
 
     // Maximum widths
     var smallMaxWidth: LengthUnit { .default }
@@ -90,21 +89,20 @@ public extension Theme {
     var xxLargeMaxWidth: LengthUnit { .default }
 }
 
-extension Theme {
-
+public extension Theme {
     /// The unique identifier for this theme instance, including any system-generated suffix.
-    public var id: String {
+    var id: String {
         Self.id
     }
 
     /// The display name of this theme instance.
-    public var name: String {
+    var name: String {
         Self.name
     }
 
     /// Internal identifier used for theme switching and CSS selectors.
     /// Automatically appends "-light" or "-dark" suffix based on protocol conformance.
-    public static var id: String {
+    static var id: String {
         let baseID = name.kebabCased()
 
         guard baseID != "light" && baseID != "dark" else {
@@ -116,5 +114,17 @@ extension Theme {
         case is DarkTheme.Type: return baseID + "-dark"
         default: return baseID
         }
+    }
+}
+
+extension Theme {
+    /// The theme's breakpoint values with inheritance applied between breakpoints.
+    var resolvedBreakpoints: ResponsiveValues {
+        PublishingContext.shared.resolveBreakpoints(for: self)
+    }
+
+    /// The theme's container width values with inheritance applied between breakpoints.
+    var resolvedSiteWidths: ResponsiveValues {
+        PublishingContext.shared.resolveSiteWidths(for: self)
     }
 }

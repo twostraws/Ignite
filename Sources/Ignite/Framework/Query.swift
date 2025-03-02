@@ -128,13 +128,13 @@ public enum BreakpointQuery: Query, CaseIterable, Sendable {
     case xxLarge
 
     /// Creates a breakpoint from a string identifier.
-    public init?(stringValue: String) {
-        switch stringValue.lowercased() {
-        case "sm": self = .small
-        case "md": self = .medium
-        case "lg": self = .large
-        case "xl": self = .xLarge
-        case "xxl": self = .xxLarge
+    init?(_ breakpoint: Breakpoint) {
+        switch breakpoint {
+        case .small: self = .small
+        case .medium: self = .medium
+        case .large: self = .large
+        case .xLarge: self = .xLarge
+        case .xxLarge: self = .xxLarge
         default: return nil
         }
     }
@@ -144,11 +144,11 @@ public enum BreakpointQuery: Query, CaseIterable, Sendable {
     /// - Returns: A CSS media query string.
     @MainActor public func condition(with theme: Theme) -> String {
         let breakpointValue = switch self {
-        case .small: theme.smallBreakpoint.stringValue
-        case .medium: theme.mediumBreakpoint.stringValue
-        case .large: theme.largeBreakpoint.stringValue
-        case .xLarge: theme.xLargeBreakpoint.stringValue
-        case .xxLarge: theme.xxLargeBreakpoint.stringValue
+        case .small: theme.resolvedBreakpoints.small.stringValue
+        case .medium: theme.resolvedBreakpoints.medium.stringValue
+        case .large: theme.resolvedBreakpoints.large.stringValue
+        case .xLarge: theme.resolvedBreakpoints.xLarge.stringValue
+        case .xxLarge: theme.resolvedBreakpoints.xxLarge.stringValue
         }
         return "min-width: \(breakpointValue)"
     }

@@ -171,9 +171,6 @@ public protocol Theme: Sendable {
     /// Bottom margin for paragraphs
     var paragraphBottomMargin: LengthUnit { get }
 
-    /// Extra small breakpoint
-    var xSmallBreakpoint: LengthUnit { get }
-
     /// Small breakpoint
     var smallBreakpoint: LengthUnit { get }
 

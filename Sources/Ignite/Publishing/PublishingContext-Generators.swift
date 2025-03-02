@@ -14,21 +14,23 @@ extension PublishingContext {
             fatalError(.missingDefaultTheme)
         }
 
+        let resolved = theme.resolvedSiteWidths
+
         return """
         .container {
-            @media (min-width: \(theme.smallBreakpoint.stringValue)) {
+            @media (min-width: \(resolved.small.stringValue)) {
                 max-width: var(\(BootstrapVariable.smallContainer.rawValue), 540px);
             }
-            @media (min-width: \(theme.mediumBreakpoint.stringValue)) {
+            @media (min-width: \(resolved.medium.stringValue)) {
                 max-width: var(\(BootstrapVariable.mediumContainer.rawValue), 720px);
             }
-            @media (min-width: \(theme.largeBreakpoint.stringValue)) {
+            @media (min-width: \(resolved.large.stringValue)) {
                 max-width: var(\(BootstrapVariable.largeContainer.rawValue), 960px);
             }
-            @media (min-width: \(theme.xLargeBreakpoint.stringValue)) {
+            @media (min-width: \(resolved.xLarge.stringValue)) {
                 max-width: var(\(BootstrapVariable.xLargeContainer.rawValue), 1140px);
             }
-            @media (min-width: \(theme.xxLargeBreakpoint.stringValue)) {
+            @media (min-width: \(resolved.xxLarge.stringValue)) {
                 max-width: var(\(BootstrapVariable.xxLargeContainer.rawValue), 1320px);
             }
         }

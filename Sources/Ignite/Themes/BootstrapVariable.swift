@@ -5,220 +5,236 @@
 // See LICENSE for license information.
 //
 
-/// A collection of CSS variables used by Bootstrap for theming.
-///
-/// Bootstrap variables control various aspects of a theme including colors, typography,
-/// and spacing. Each case represents a specific CSS variable that
-/// Bootstrap uses for consistent styling across components.
-enum BootstrapVariable: String {
-    // MARK: - Brand Colors
+typealias BootstrapVariable = Bootstrap.Variable
 
-    /// The primary brand color
-    case primary = "--bs-primary"
+struct Bootstrap {
+    /// A collection of CSS variables used by Bootstrap for theming.
+    ///
+    /// Bootstrap variables control various aspects of a theme including colors, typography,
+    /// and spacing. Each case represents a specific CSS variable that
+    /// Bootstrap uses for consistent styling across components.
+    enum Variable: String {
+        // MARK: - Brand Colors
 
-    /// The secondary brand color
-    case secondary = "--bs-secondary"
+        /// The primary brand color
+        case primary = "--bs-primary"
 
-    /// Color used for success states
-    case success = "--bs-success"
+        /// The secondary brand color
+        case secondary = "--bs-secondary"
 
-    /// Color used for informational states
-    case info = "--bs-info"
+        /// Color used for success states
+        case success = "--bs-success"
 
-    /// Color used for warning states
-    case warning = "--bs-warning"
+        /// Color used for informational states
+        case info = "--bs-info"
 
-    /// Color used for danger or error states
-    case danger = "--bs-danger"
+        /// Color used for warning states
+        case warning = "--bs-warning"
 
-    /// Color used for light theme elements
-    case light = "--bs-light"
+        /// Color used for danger or error states
+        case danger = "--bs-danger"
 
-    /// Color used for dark theme elements
-    case dark = "--bs-dark"
+        /// Color used for light theme elements
+        case light = "--bs-light"
 
-    // MARK: - Body Settings
+        /// Color used for dark theme elements
+        case dark = "--bs-dark"
 
-    /// Default text color for body content
-    case bodyColor = "--bs-body-color"
+        // MARK: - Body Settings
 
-    /// Default background color for the body
-    case bodyBackground = "--bs-body-bg"
+        /// Default text color for body content
+        case bodyColor = "--bs-body-color"
 
-    // MARK: - Emphasis Colors
+        /// Default background color for the body
+        case bodyBackground = "--bs-body-bg"
 
-    /// Color for emphasized content
-    case emphasisColor = "--bs-emphasis-color"
+        // MARK: - Emphasis Colors
 
-    /// Color for secondary content
-    case secondaryColor = "--bs-secondary-color"
+        /// Color for emphasized content
+        case emphasisColor = "--bs-emphasis-color"
 
-    /// Color for tertiary content
-    case tertiaryColor = "--bs-tertiary-color"
+        /// Color for secondary content
+        case secondaryColor = "--bs-secondary-color"
 
-    // MARK: - Background Colors
+        /// Color for tertiary content
+        case tertiaryColor = "--bs-tertiary-color"
 
-    /// Secondary background color
-    case secondaryBackground = "--bs-secondary-bg"
+        // MARK: - Background Colors
 
-    /// Tertiary background color
-    case tertiaryBackground = "--bs-tertiary-bg"
+        /// Secondary background color
+        case secondaryBackground = "--bs-secondary-bg"
 
-    // MARK: - Link Colors
+        /// Tertiary background color
+        case tertiaryBackground = "--bs-tertiary-bg"
 
-    /// Default color for links
-    case linkColor = "--bs-link-color"
+        // MARK: - Link Colors
 
-    /// Color for links on hover
-    case linkHoverColor = "--bs-link-hover-color"
+        /// Default color for links
+        case linkColor = "--bs-link-color"
 
-    /// Link text decoration
-    case linkDecoration = "--bs-link-decoration"
+        /// Color for links on hover
+        case linkHoverColor = "--bs-link-hover-color"
 
-    // MARK: - Border Colors
+        /// Link text decoration
+        case linkDecoration = "--bs-link-decoration"
 
-    /// Default border color
-    case borderColor = "--bs-border-color"
+        // MARK: - Border Colors
 
-    // MARK: - Font Families
+        /// Default border color
+        case borderColor = "--bs-border-color"
 
-    /// Sans-serif font family
-    case sansSerifFont = "--bs-font-sans-serif"
+        // MARK: - Font Families
 
-    /// Monospace font family
-    case monospaceFont = "--bs-font-monospace"
+        /// Sans-serif font family
+        case sansSerifFont = "--bs-font-sans-serif"
 
-    /// Base body font family
-    case bodyFont = "--bs-body-font-family"
+        /// Monospace font family
+        case monospaceFont = "--bs-font-monospace"
 
-    /// Font family for headings
-    case headingFont = "--bs-headings-font-family"
+        /// Base body font family
+        case bodyFont = "--bs-body-font-family"
 
-    // MARK: - Font Sizes
+        /// Font family for headings
+        case headingFont = "--bs-headings-font-family"
 
-    /// Root element font size
-    case rootFontSize = "--bs-root-font-size"
+        // MARK: - Font Sizes
 
-    /// Base body font size
-    case bodyFontSize = "--bs-body-font-size"
+        /// Root element font size
+        case rootFontSize = "--bs-root-font-size"
 
-    /// Small body font size
-    case smallBodyFontSize = "--bs-body-font-size-sm"
+        /// Base body font size
+        case bodyFontSize = "--bs-body-font-size"
 
-    /// Large body font size
-    case largeBodyFontSize = "--bs-body-font-size-lg"
+        /// Small body font size
+        case smallBodyFontSize = "--bs-body-font-size-sm"
 
-    /// Inline code font size
-    case inlineCodeFontSize = "--bs-code-font-size"
+        /// Large body font size
+        case largeBodyFontSize = "--bs-body-font-size-lg"
 
-    /// Code block font size
-    case codeBlockFontSize = "--code-block-font-size"
+        /// Inline code font size
+        case inlineCodeFontSize = "--bs-code-font-size"
 
-    // MARK: - Heading Sizes
+        /// Code block font size
+        case codeBlockFontSize = "--code-block-font-size"
 
-    /// Font size for h1 elements
-    case h1FontSize = "--bs-h1-font-size"
+        // MARK: - Heading Sizes
 
-    /// Font size for h2 elements
-    case h2FontSize = "--bs-h2-font-size"
+        /// Font size for h1 elements
+        case h1FontSize = "--bs-h1-font-size"
 
-    /// Font size for h3 elements
-    case h3FontSize = "--bs-h3-font-size"
+        /// Font size for h2 elements
+        case h2FontSize = "--bs-h2-font-size"
 
-    /// Font size for h4 elements
-    case h4FontSize = "--bs-h4-font-size"
+        /// Font size for h3 elements
+        case h3FontSize = "--bs-h3-font-size"
 
-    /// Font size for h5 elements
-    case h5FontSize = "--bs-h5-font-size"
+        /// Font size for h4 elements
+        case h4FontSize = "--bs-h4-font-size"
 
-    /// Font size for h6 elements
-    case h6FontSize = "--bs-h6-font-size"
+        /// Font size for h5 elements
+        case h5FontSize = "--bs-h5-font-size"
 
-    // MARK: - Font Weights
+        /// Font size for h6 elements
+        case h6FontSize = "--bs-h6-font-size"
 
-    /// Extra light font weight
-    case lighterFontWeight = "--bs-font-weight-lighter"
+        // MARK: - Font Weights
 
-    /// Light font weight
-    case lightFontWeight = "--bs-font-weight-light"
+        /// Extra light font weight
+        case lighterFontWeight = "--bs-font-weight-lighter"
 
-    /// Normal font weight
-    case normalFontWeight = "--bs-font-weight-normal"
+        /// Light font weight
+        case lightFontWeight = "--bs-font-weight-light"
 
-    /// Bold font weight
-    case boldFontWeight = "--bs-font-weight-bold"
+        /// Normal font weight
+        case normalFontWeight = "--bs-font-weight-normal"
 
-    /// Extra bold font weight
-    case bolderFontWeight = "--bs-font-weight-bolder"
+        /// Bold font weight
+        case boldFontWeight = "--bs-font-weight-bold"
 
-    // MARK: - Line Heights
+        /// Extra bold font weight
+        case bolderFontWeight = "--bs-font-weight-bolder"
 
-    /// Default body line height
-    case bodyLineHeight = "--bs-body-line-height"
+        // MARK: - Line Heights
 
-    /// Condensed line height
-    case condensedLineHeight = "--bs-line-height-sm"
+        /// Default body line height
+        case bodyLineHeight = "--bs-body-line-height"
 
-    /// Expanded line height
-    case expandedLineHeight = "--bs-line-height-lg"
+        /// Condensed line height
+        case condensedLineHeight = "--bs-line-height-sm"
 
-    // MARK: - Heading Properties
+        /// Expanded line height
+        case expandedLineHeight = "--bs-line-height-lg"
 
-    /// Font weight for headings
-    case headingsFontWeight = "--bs-headings-font-weight"
+        // MARK: - Heading Properties
 
-    /// Line height for headings
-    case headingsLineHeight = "--bs-headings-line-height"
+        /// Font weight for headings
+        case headingsFontWeight = "--bs-headings-font-weight"
 
-    // MARK: - Bottom Margins
+        /// Line height for headings
+        case headingsLineHeight = "--bs-headings-line-height"
 
-    /// Bottom margin for headings
-    case headingsMarginBottom = "--bs-headings-margin-bottom"
+        // MARK: - Bottom Margins
 
-    /// Paragraph margin bottom
-    case paragraphMarginBottom = "--bs-paragraph-margin-bottom"
+        /// Bottom margin for headings
+        case headingsMarginBottom = "--bs-headings-margin-bottom"
 
-    // MARK: - Container Sizes
+        /// Paragraph margin bottom
+        case paragraphMarginBottom = "--bs-paragraph-margin-bottom"
 
-    /// Maximum width for small containers
-    case smallContainer = "--theme-container-sm"
+        // MARK: - Container Sizes
 
-    /// Maximum width for medium containers
-    case mediumContainer = "--theme-container-md"
+        /// Maximum width for small containers
+        case xSmallContainer = "--theme-container-xs"
 
-    /// Maximum width for large containers
-    case largeContainer = "--theme-container-lg"
+        /// Maximum width for small containers
+        case smallContainer = "--theme-container-sm"
 
-    /// Maximum width for extra large containers
-    case xLargeContainer = "--theme-container-xl"
+        /// Maximum width for medium containers
+        case mediumContainer = "--theme-container-md"
 
-    /// Maximum width for extra extra large containers
-    case xxLargeContainer = "--theme-container-xxl"
+        /// Maximum width for large containers
+        case largeContainer = "--theme-container-lg"
 
-    // MARK: - Breakpoints
+        /// Maximum width for extra large containers
+        case xLargeContainer = "--theme-container-xl"
 
-    /// Small breakpoint value
-    case smallBreakpoint = "--bs-breakpoint-sm"
+        /// Maximum width for extra extra large containers
+        case xxLargeContainer = "--theme-container-xxl"
 
-    /// Medium breakpoint value
-    case mediumBreakpoint = "--bs-breakpoint-md"
+        // MARK: - Breakpoints
 
-    /// Large breakpoint value
-    case largeBreakpoint = "--bs-breakpoint-lg"
+        /// Small breakpoint value
+        case xSmallBreakpoint = "--bs-breakpoint-xs"
 
-    /// Extra large breakpoint value
-    case xLargeBreakpoint = "--bs-breakpoint-xl"
+        /// Small breakpoint value
+        case smallBreakpoint = "--bs-breakpoint-sm"
 
-    /// Extra extra large breakpoint value
-    case xxLargeBreakpoint = "--bs-breakpoint-xxl"
+        /// Medium breakpoint value
+        case mediumBreakpoint = "--bs-breakpoint-md"
 
-    /// Whether this variable has dependent colors.
-    var isThemeColor: Bool {
-        switch self {
-        case .primary, .secondary, .success, .info, .warning, .danger, .light, .dark:
-            return true
-        default:
-            return false
+        /// Large breakpoint value
+        case largeBreakpoint = "--bs-breakpoint-lg"
+
+        /// Extra large breakpoint value
+        case xLargeBreakpoint = "--bs-breakpoint-xl"
+
+        /// Extra extra large breakpoint value
+        case xxLargeBreakpoint = "--bs-breakpoint-xxl"
+
+        /// Whether this variable has dependent colors.
+        var isThemeColor: Bool {
+            switch self {
+            case .primary, .secondary, .success, .info, .warning, .danger, .light, .dark:
+                return true
+            default:
+                return false
+            }
         }
+    }
+}
+
+extension BootstrapVariable: CustomStringConvertible {
+    var description: String {
+        rawValue
     }
 }
