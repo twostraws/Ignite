@@ -9,7 +9,7 @@ import Foundation
 
 extension PublishingContext {
     /// Contains the various snap dimensions for different Bootstrap widths.
-    var containerDefaults: String {
+    func generateContainers(for theme: any Theme) -> String {
         guard let theme = site.lightTheme ?? site.darkTheme else {
             fatalError(.missingDefaultTheme)
         }
