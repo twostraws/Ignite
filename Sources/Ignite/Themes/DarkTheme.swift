@@ -48,4 +48,32 @@ extension Theme where Self == DefaultDarkTheme {
 /// This theme provides all standard dark mode colors and styling without any customization.
 struct DefaultDarkTheme: DarkTheme {
     static var name: String = "dark"
+
+    var smallBreakpoint: LengthUnit = .default
+    var mediumBreakpoint: LengthUnit = .default
+    var largeBreakpoint: LengthUnit = .default
+    var xLargeBreakpoint: LengthUnit = .default
+    var xxLargeBreakpoint: LengthUnit = .default
+
+    var smallMaxWidth: LengthUnit = .default
+    var mediumMaxWidth: LengthUnit = .default
+    var largeMaxWidth: LengthUnit = .default
+    var xLargeMaxWidth: LengthUnit = .default
+    var xxLargeMaxWidth: LengthUnit = .default
+
+    init() {}
+
+    init(breakpoints: ResponsiveValues, siteWidths: ResponsiveValues) {
+        smallBreakpoint = breakpoints.small
+        mediumBreakpoint = breakpoints.medium
+        largeBreakpoint = breakpoints.large
+        xLargeBreakpoint = breakpoints.xLarge
+        xxLargeBreakpoint = breakpoints.xxLarge
+
+        smallMaxWidth = siteWidths.small
+        mediumMaxWidth = siteWidths.medium
+        largeMaxWidth = siteWidths.large
+        xLargeMaxWidth = siteWidths.xLarge
+        xxLargeMaxWidth = siteWidths.xxLarge
+    }
 }
