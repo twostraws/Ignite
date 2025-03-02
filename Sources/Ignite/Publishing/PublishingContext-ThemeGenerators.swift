@@ -170,7 +170,7 @@ extension PublishingContext {
         :root {
             --supports-light-theme: \(site.supportsLightTheme);
             --supports-dark-theme: \(site.supportsDarkTheme);
-            --light-theme-id: "\(lightTheme.id ?? "")";
+            --light-theme-id: "\(lightTheme.id)";
             --dark-theme-id: "\(darkThemeID ?? "")";
 
             /* Light theme variables (default theme) */
@@ -216,7 +216,7 @@ extension PublishingContext {
                 --supports-light-theme: \(site.supportsLightTheme);
                 --supports-dark-theme: \(site.supportsDarkTheme);
                 --light-theme-id: "\(lightThemeID ?? "")";
-                --dark-theme-id: "\(darkTheme.id ?? "")";
+                --dark-theme-id: "\(darkTheme.id)";
 
                 /* Dark theme variables */
                 \(generateThemeVariables(darkTheme))
