@@ -163,24 +163,10 @@ public extension Site {
     var timeZone: TimeZone? { .gmt }
 
     /// Uses the default light theme based on Bootstrap.
-    var lightTheme: (any Theme)? {
-        if let darkTheme, String(describing: darkTheme) != String(describing: DefaultDarkTheme()) {
-            return DefaultLightTheme(
-                breakpoints: darkTheme.resolvedBreakpoints,
-                siteWidths: darkTheme.resolvedSiteWidths)
-        }
-        return DefaultLightTheme()
-    }
+    var lightTheme: (any Theme)? { DefaultLightTheme() }
 
     /// Uses the default dark theme based on Bootstrap.
-    var darkTheme: (any Theme)? {
-        if let lightTheme, String(describing: lightTheme) != String(describing: DefaultLightTheme()) {
-            return DefaultDarkTheme(
-                breakpoints: lightTheme.resolvedBreakpoints,
-                siteWidths: lightTheme.resolvedSiteWidths)
-        }
-        return DefaultDarkTheme()
-    }
+    var darkTheme: (any Theme)? { DefaultDarkTheme() }
 
     /// No additional themes by default.
     var alternateThemes: [any Theme] { [] }

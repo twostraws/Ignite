@@ -89,6 +89,11 @@ extension PublishingContext {
         }
     }
 
+    /// Helper to check if a theme matches the default configuration
+    private func isDefaultTheme(_ theme: any Theme, defaultTheme: any Theme) -> Bool {
+        String(describing: theme) == String(describing: defaultTheme)
+    }
+
     /// Generates CSS for all themes including font faces, colors, and typography settings, writing to themes.min.css.
     func generateThemes(_ themes: [any Theme]) {
         guard !themes.isEmpty else { return }
@@ -106,12 +111,31 @@ extension PublishingContext {
             fatalError(.missingDefaultTheme)
         }
 
-        if let theme = site.lightTheme {
-            cssContent += generateLightTheme(using: theme)
+        var lightTheme = site.lightTheme
+        var darkTheme = site.darkTheme
+
+        // If a site implicitly uses a default theme, have it use the breakpoints
+        // and site width's of its opposite theme, if explicity set.
+        if darkTheme is DefaultDarkTheme,
+           let lightTheme, !isDefaultTheme(lightTheme, defaultTheme: DefaultLightTheme()) {
+            darkTheme = DefaultDarkTheme(
+                breakpoints: lightTheme.resolvedBreakpoints,
+                siteWidths: lightTheme.resolvedSiteWidths)
         }
 
-        if let theme = site.darkTheme {
-            cssContent += generateDarkTheme(using: theme)
+        if lightTheme is DefaultLightTheme,
+           let darkTheme, !isDefaultTheme(darkTheme, defaultTheme: DefaultDarkTheme()) {
+            lightTheme = DefaultLightTheme(
+                breakpoints: darkTheme.resolvedBreakpoints,
+                siteWidths: darkTheme.resolvedSiteWidths)
+        }
+
+        if let lightTheme {
+            cssContent += generateLightTheme(lightTheme, darkThemeID: darkTheme?.id)
+        }
+
+        if let darkTheme {
+            cssContent += generateDarkTheme(darkTheme, lightThemeID: lightTheme?.id)
         }
 
         for theme in site.alternateThemes {
@@ -135,7 +159,7 @@ extension PublishingContext {
     }
 
     /// Generates CSS for light theme, returning it to be combined with other theme data.
-    private func generateLightTheme(using theme: Theme) -> String {
+    private func generateLightTheme(_ lightTheme: Theme, darkThemeID: String?) -> String {
         var output = ""
 
         // Root variables and default theme (light)
@@ -146,14 +170,14 @@ extension PublishingContext {
         :root {
             --supports-light-theme: \(site.supportsLightTheme);
             --supports-dark-theme: \(site.supportsDarkTheme);
-            --light-theme-id: "\(site.lightTheme?.id ?? "")";
-            --dark-theme-id: "\(site.darkTheme?.id ?? "")";
+            --light-theme-id: "\(lightTheme.id ?? "")";
+            --dark-theme-id: "\(darkThemeID ?? "")";
 
             /* Light theme variables (default theme) */
-            \(generateThemeVariables(theme))
+            \(generateThemeVariables(lightTheme))
         }
 
-        \(containerDefaults)
+        \(generateContainers(for: lightTheme))
 
         \(generateGlobalRules())
         """
@@ -162,8 +186,8 @@ extension PublishingContext {
             output += """
 
             /* Light theme override */
-            [data-bs-theme="\(theme.id)"] {
-                \(generateThemeVariables(theme))
+            [data-bs-theme="\(lightTheme.id)"] {
+                \(generateThemeVariables(lightTheme))
             }
             """
         }
@@ -173,7 +197,7 @@ extension PublishingContext {
 
             /* Auto theme starts with light theme */
             [data-bs-theme="auto"] {
-                \(generateThemeVariables(theme))
+                \(generateThemeVariables(lightTheme))
             }
             """
         }
@@ -182,7 +206,7 @@ extension PublishingContext {
     }
 
     /// Generates CSS for dark theme, returning it to be combined with other theme data.
-    private func generateDarkTheme(using theme: Theme) -> String {
+    private func generateDarkTheme(_ darkTheme: Theme, lightThemeID: String?) -> String {
         var output = ""
 
         if !site.supportsLightTheme && site.alternateThemes.isEmpty {
@@ -191,14 +215,14 @@ extension PublishingContext {
             :root {
                 --supports-light-theme: \(site.supportsLightTheme);
                 --supports-dark-theme: \(site.supportsDarkTheme);
-                --light-theme-id: "\(site.lightTheme?.id ?? "")";
-                --dark-theme-id: "\(site.darkTheme?.id ?? "")";
+                --light-theme-id: "\(lightThemeID ?? "")";
+                --dark-theme-id: "\(darkTheme.id ?? "")";
 
                 /* Dark theme variables */
-                \(generateThemeVariables(theme))
+                \(generateThemeVariables(darkTheme))
             }
 
-            \(containerDefaults)
+            \(generateContainers(for: darkTheme))
 
             \(generateGlobalRules())
             """
@@ -207,8 +231,8 @@ extension PublishingContext {
             output += """
 
             /* Explicit dark theme */
-            [data-bs-theme="\(theme.id)"] {
-                \(generateThemeVariables(theme))
+            [data-bs-theme="\(darkTheme.id)"] {
+                \(generateThemeVariables(darkTheme))
             }
             """
 
@@ -219,7 +243,7 @@ extension PublishingContext {
                 /* Dark theme media query for auto theme */
                 @media (prefers-color-scheme: dark) {
                     [data-bs-theme="auto"] {
-                        \(generateThemeVariables(theme))
+                        \(generateThemeVariables(darkTheme))
                     }
                 }
                 """
