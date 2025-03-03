@@ -70,7 +70,7 @@ struct HTMLDocumentTests {
             pageMetadata: PublishingContext.shared.environment.page,
             pageContent: PublishingContext.shared.site.homePage)
 
-        /// Initialize Document with the test language. 
+        /// Initialize Document with the test language.
         var sut: Document!
         PublishingContext.shared.withEnvironment(values) {
             sut = Document(language: language) {}
