@@ -132,7 +132,7 @@ public extension Theme {
     var codeBlockFontSize: LengthUnit { .default }
 
     // Line Heights
-    var lineHeight: LengthUnit { .default }
+    var lineSpacing: LengthUnit { .default }
 
     // Heading Sizes
     var h1Size: ResponsiveValues { .default }
@@ -145,7 +145,7 @@ public extension Theme {
     // Heading Properties
     var headingFont: Font { .default }
     var headingFontWeight: FontWeight { .default }
-    var headingLineHeight: LengthUnit { .default }
+    var headingLineSpacing: LengthUnit { .default }
 
     // Bottom Margins
     var headingBottomMargin: LengthUnit { .default }

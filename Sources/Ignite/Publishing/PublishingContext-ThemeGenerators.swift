@@ -312,8 +312,8 @@ extension PublishingContext {
         addFontSize(&properties, .h5FontSize, theme.h5Size)
         addFontSize(&properties, .h6FontSize, theme.h6Size)
 
-        addProperty(&properties, .bodyLineHeight, theme.lineHeight)
-        addProperty(&properties, .headingsLineHeight, theme.headingLineHeight)
+        addProperty(&properties, .bodyLineHeight, theme.lineSpacing)
+        addProperty(&properties, .headingsLineHeight, theme.headingLineSpacing)
     }
 
     /// Generates the media queries to update font size variables at different breakpoints

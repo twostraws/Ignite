@@ -100,7 +100,7 @@ public protocol Theme: Sendable {
     var codeBlockFontSize: LengthUnit { get }
 
     /// Base line height
-    var lineHeight: LengthUnit { get }
+    var lineSpacing: LengthUnit { get }
 
     /// Custom font family for headings
     var headingFont: Font { get }
@@ -109,7 +109,7 @@ public protocol Theme: Sendable {
     var headingFontWeight: FontWeight { get }
 
     /// Line height for headings
-    var headingLineHeight: LengthUnit { get }
+    var headingLineSpacing: LengthUnit { get }
 
     /// Bottom margin for headings
     var headingBottomMargin: LengthUnit { get }
