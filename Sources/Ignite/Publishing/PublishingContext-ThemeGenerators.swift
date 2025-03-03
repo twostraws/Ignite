@@ -291,7 +291,7 @@ extension PublishingContext {
         addColor(&properties, .tertiaryBackground, theme.tertiaryBackground, for: theme)
 
         addColor(&properties, .linkColor, theme.link, for: theme)
-        addColor(&properties, .linkHoverColor, theme.linkHover, for: theme)
+        addColor(&properties, .linkHoverColor, theme.hoveredLink, for: theme)
         addColor(&properties, .borderColor, theme.border, for: theme)
     }
 

@@ -112,7 +112,7 @@ public extension Theme {
         Color(hex: "#0d6efd")
     }
 
-    var linkHover: Color {
+    var hoveredLink: Color {
         colorScheme == .dark ?
         Color(hex: "#9ec5fe") :
         Color(hex: "#0a58ca")
