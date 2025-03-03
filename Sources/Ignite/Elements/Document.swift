@@ -15,8 +15,8 @@ struct Document: HTML {
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { true }
 
-    /// Use Environment language as default. 
-    private var language: Language = EnvironmentValues().language
+    /// Use PublishingContext language as default.
+    private var language: Language = PublishingContext.shared.site.language
     private let contents: [any DocumentElement]
 
     init(language: Language = .english, @DocumentElementBuilder contents: () -> [any DocumentElement]) {
