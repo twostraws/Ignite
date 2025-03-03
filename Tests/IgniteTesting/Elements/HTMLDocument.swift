@@ -58,7 +58,24 @@ struct HTMLDocumentTests {
 
     @Test("lang attribute is taken from language property", arguments: Language.allCases)
     func language_property_determines_lang_attribute(_ language: Language) throws {
-        let sut = Document(language: language) {}
+        
+        /// New TestSite initialized with the test language.
+        var site = TestSite()
+        site.language = language
+        
+        let values = EnvironmentValues(
+            sourceDirectory: PublishingContext.shared.sourceDirectory,
+            site: site,
+            allContent: PublishingContext.shared.allContent,
+            pageMetadata: PublishingContext.shared.environment.page,
+            pageContent: PublishingContext.shared.site.homePage)
+
+        /// Initialize Document with the test language. 
+        var sut: Document!
+        PublishingContext.shared.withEnvironment(values) {
+            sut = Document(language: language) {}
+        }
+        
         let output = sut.render()
 
         let langAttribute = try #require(output.htmlTagWithCloseTag("html")?.attributes

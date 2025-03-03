@@ -19,7 +19,7 @@ struct Document: HTML {
     private let contents: [any DocumentElement]
 
     init(language: Language = .english, @DocumentElementBuilder contents: () -> [any DocumentElement]) {
-        self.language = language
+        self.language = PublishingContext.shared.environment.language
         self.contents = contents()
     }
 

@@ -14,6 +14,7 @@ struct TestSite: Site {
     var titleSuffix = " - My Test Site"
     var url = URL(static: "https://www.yoursite.com")
     var timeZone: TimeZone?
+    var language: Language = .english
 
     var homePage = TestLayout()
     var layout = EmptyLayout()
