@@ -30,6 +30,8 @@ public protocol Layout {
 
     /// A unique identifier for this layout instance
     var id: String { get }
+    
+    var language: Language { get }
 }
 
 public extension Layout {
