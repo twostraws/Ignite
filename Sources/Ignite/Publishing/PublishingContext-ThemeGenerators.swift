@@ -171,7 +171,7 @@ extension PublishingContext {
             /* Light theme variables (default theme) */
             \(generateThemeVariables(lightTheme))
         }
-        
+
         \(generateResponsiveVariables(lightTheme))
 
         \(generateContainers(for: lightTheme))
@@ -218,7 +218,7 @@ extension PublishingContext {
                 /* Dark theme variables */
                 \(generateThemeVariables(darkTheme))
             }
-            
+
             \(generateResponsiveVariables(darkTheme))
 
             \(generateContainers(for: darkTheme))

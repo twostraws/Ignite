@@ -15,4 +15,4 @@
 
     /// The browser's color scheme.
     case automatic
-} 
+}

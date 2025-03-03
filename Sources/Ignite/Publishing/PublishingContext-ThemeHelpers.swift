@@ -6,24 +6,42 @@
 //
 
 extension PublishingContext {
+    private struct BreakpointValue {
+        let size: Breakpoint
+        let variable: BootstrapVariable
+        let fallback: LengthUnit
+    }
+
     /// Appends container width CSS variables for each breakpoint to the properties array.
     func addWidthProperties(_ properties: inout [String], _ theme: any Theme) {
         let values = theme.siteWidth.values
-        properties.append("    \(BootstrapVariable.smallContainer): \(values[.small] ?? Bootstrap.smallContainer)")
-        properties.append("    \(BootstrapVariable.mediumContainer): \(values[.medium] ?? Bootstrap.mediumContainer)")
-        properties.append("    \(BootstrapVariable.largeContainer): \(values[.large] ?? Bootstrap.largeContainer)")
-        properties.append("    \(BootstrapVariable.xLargeContainer): \(values[.xLarge] ?? Bootstrap.xLargeContainer)")
-        properties.append("    \(BootstrapVariable.xxLargeContainer): \(values[.xxLarge] ?? Bootstrap.xxLargeContainer)")
+        let containerSizes: [BreakpointValue] = [
+            .init(size: .small, variable: .smallContainer, fallback: Bootstrap.smallContainer),
+            .init(size: .medium, variable: .mediumContainer, fallback: Bootstrap.mediumContainer),
+            .init(size: .large, variable: .largeContainer, fallback: Bootstrap.largeContainer),
+            .init(size: .xLarge, variable: .xLargeContainer, fallback: Bootstrap.xLargeContainer),
+            .init(size: .xxLarge, variable: .xxLargeContainer, fallback: Bootstrap.xxLargeContainer)
+        ]
+
+        for config in containerSizes {
+            properties.append("    \(config.variable): \(values[config.size] ?? config.fallback)")
+        }
     }
 
     /// Appends breakpoint CSS variables for responsive design to the properties array.
     func addBreakpointProperties(_ properties: inout [String], _ theme: any Theme) {
         let values = theme.breakpoints.values
-        properties.append("    \(BootstrapVariable.smallBreakpoint): \(values[.small] ?? Bootstrap.smallBreakpoint)")
-        properties.append("    \(BootstrapVariable.mediumBreakpoint): \(values[.medium] ?? Bootstrap.mediumBreakpoint)")
-        properties.append("    \(BootstrapVariable.largeBreakpoint): \(values[.large] ?? Bootstrap.largeBreakpoint)")
-        properties.append("    \(BootstrapVariable.xLargeBreakpoint): \(values[.xLarge] ?? Bootstrap.xLargeBreakpoint)")
-        properties.append("    \(BootstrapVariable.xxLargeBreakpoint): \(values[.xxLarge] ?? Bootstrap.xxLargeBreakpoint)")
+        let breakpointSizes: [BreakpointValue] = [
+            .init(size: .small, variable: .smallBreakpoint, fallback: Bootstrap.smallBreakpoint),
+            .init(size: .medium, variable: .mediumBreakpoint, fallback: Bootstrap.mediumBreakpoint),
+            .init(size: .large, variable: .largeBreakpoint, fallback: Bootstrap.largeBreakpoint),
+            .init(size: .xLarge, variable: .xLargeBreakpoint, fallback: Bootstrap.xLargeBreakpoint),
+            .init(size: .xxLarge, variable: .xxLargeBreakpoint, fallback: Bootstrap.xxLargeBreakpoint)
+        ]
+
+        for config in breakpointSizes {
+            properties.append("    \(config.variable): \(values[config.size] ?? config.fallback)")
+        }
     }
 
     /// Adds a CSS property if the value is not default
