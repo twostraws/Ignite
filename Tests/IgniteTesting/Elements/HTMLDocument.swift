@@ -63,6 +63,7 @@ struct HTMLDocumentTests {
         var site = TestSite()
         site.language = language
         
+        /// Create an environment and initialize it with the set language. 
         let values = EnvironmentValues(
             sourceDirectory: PublishingContext.shared.sourceDirectory,
             site: site,
@@ -70,10 +71,10 @@ struct HTMLDocumentTests {
             pageMetadata: PublishingContext.shared.environment.page,
             pageContent: PublishingContext.shared.site.homePage)
 
-        /// Initialize Document with the test language.
+        /// Initialize Document with the TestSite language set above.
         var sut: Document!
         PublishingContext.shared.withEnvironment(values) {
-            sut = Document(language: language) {}
+            sut = Document() {}
         }
         
         let output = sut.render()
