@@ -97,27 +97,22 @@ private extension HTML {
     /// Registers CSS classes for responsive font sizes and returns the generated class name.
     /// - Parameter responsiveSize: The responsive font size.
     /// - Returns: A unique class name that applies the font's responsive size rules.
-    func registerClasses(for responsiveSize: ResponsiveFontSize) -> String {
-        let className = "font-" + responsiveSize.values().description.truncatedHash
-
-        // Sort sizes by breakpoint to ensure proper cascading
-        let allSizes = responsiveSize.values().sorted { $0.breakpoint < $1.breakpoint }
-
-        // Find base size and breakpoint sizes
-        let baseSize = allSizes.first { $0.breakpoint == .xSmall }
-
-        let breakpointSizes = allSizes.filter { $0.breakpoint != .xSmall }
+    func registerClasses(for responsiveSize: ResponsiveValues<LengthUnit>) -> String {
+        let values = responsiveSize.values
+        let className = "font-" + values.description.truncatedHash
+        let baseSize = values[.xSmall]
+        let breakpointSizes = values.filter { $0.key != .xSmall }
 
         if let baseSize {
             CSSManager.shared.register(
-                properties: [.init(.fontSize, value: baseSize.value.stringValue)],
+                properties: [.init(.fontSize, value: baseSize.stringValue)],
                 className: className)
         }
 
-        for size in breakpointSizes {
+        for (breakpoint, size) in breakpointSizes {
             CSSManager.shared.register(
-                [.breakpoint(.init(size.breakpoint)!)],
-                properties: [.init(.fontSize, value: size.value.stringValue)],
+                [.breakpoint(.init(breakpoint)!)],
+                properties: [.init(.fontSize, value: size.stringValue)],
                 className: className)
         }
 

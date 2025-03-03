@@ -41,7 +41,7 @@ struct HorizontalAlignmentTests {
         let element = Text("Hello world!")
             .horizontalAlignment(
                 .responsive(
-                    xSmall: alignment,
+                    alignment,
                     small: alignment,
                     medium: alignment,
                     large: alignment,

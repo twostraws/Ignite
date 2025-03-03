@@ -238,3 +238,18 @@ extension BootstrapVariable: CustomStringConvertible {
         rawValue
     }
 }
+
+extension BootstrapVariable {
+    var selector: String {
+        switch self {
+        case .h1FontSize: return "h1"
+        case .h2FontSize: return "h2"
+        case .h3FontSize: return "h3"
+        case .h4FontSize: return "h4"
+        case .h5FontSize: return "h5"
+        case .h6FontSize: return "h6"
+        case .bodyFontSize: return "body"
+        default: return ""
+        }
+    }
+}

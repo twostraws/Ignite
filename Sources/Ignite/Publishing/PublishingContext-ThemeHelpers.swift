@@ -6,6 +6,44 @@
 //
 
 extension PublishingContext {
+    private struct BreakpointValue {
+        let size: Breakpoint
+        let variable: BootstrapVariable
+        let fallback: LengthUnit
+    }
+
+    /// Appends container width CSS variables for each breakpoint to the properties array.
+    func addWidthProperties(_ properties: inout [String], _ theme: any Theme) {
+        let values = theme.siteWidth.values
+        let containerSizes: [BreakpointValue] = [
+            .init(size: .small, variable: .smallContainer, fallback: Bootstrap.smallContainer),
+            .init(size: .medium, variable: .mediumContainer, fallback: Bootstrap.mediumContainer),
+            .init(size: .large, variable: .largeContainer, fallback: Bootstrap.largeContainer),
+            .init(size: .xLarge, variable: .xLargeContainer, fallback: Bootstrap.xLargeContainer),
+            .init(size: .xxLarge, variable: .xxLargeContainer, fallback: Bootstrap.xxLargeContainer)
+        ]
+
+        for config in containerSizes {
+            properties.append("    \(config.variable): \(values[config.size] ?? config.fallback)")
+        }
+    }
+
+    /// Appends breakpoint CSS variables for responsive design to the properties array.
+    func addBreakpointProperties(_ properties: inout [String], _ theme: any Theme) {
+        let values = theme.breakpoints.values
+        let breakpointSizes: [BreakpointValue] = [
+            .init(size: .small, variable: .smallBreakpoint, fallback: Bootstrap.smallBreakpoint),
+            .init(size: .medium, variable: .mediumBreakpoint, fallback: Bootstrap.mediumBreakpoint),
+            .init(size: .large, variable: .largeBreakpoint, fallback: Bootstrap.largeBreakpoint),
+            .init(size: .xLarge, variable: .xLargeBreakpoint, fallback: Bootstrap.xLargeBreakpoint),
+            .init(size: .xxLarge, variable: .xxLargeBreakpoint, fallback: Bootstrap.xxLargeBreakpoint)
+        ]
+
+        for config in breakpointSizes {
+            properties.append("    \(config.variable): \(values[config.size] ?? config.fallback)")
+        }
+    }
+
     /// Adds a CSS property if the value is not default
     func addProperty(_ properties: inout [String], _ variable: BootstrapVariable, _ value: any Defaultable) {
         if value.isDefault == false {
@@ -60,81 +98,15 @@ extension PublishingContext {
         }
     }
 
-    /// Resolves breakpoint values for a theme's responsive design settings.
-    /// - Parameter theme: The theme to resolve breakpoints for.
-    /// - Returns: A collection of resolved breakpoint values.
-    func resolveBreakpoints(for theme: any Theme) -> ResponsiveValues {
-        let breakpoints: [UnresolvedBreakpoint] = [
-            .init(.small, value: theme.smallBreakpoint, default: BootstrapDefault.smallBreakpoint),
-            .init(.medium, value: theme.mediumBreakpoint, default: BootstrapDefault.mediumBreakpoint),
-            .init(.large, value: theme.largeBreakpoint, default: BootstrapDefault.largeBreakpoint),
-            .init(.xLarge, value: theme.xLargeBreakpoint, default: BootstrapDefault.xLargeBreakpoint),
-            .init(.xxLarge, value: theme.xxLargeBreakpoint, default: BootstrapDefault.xxLargeBreakpoint)
-        ]
-
-        return resolve(breakpoints)
-    }
-
-    /// Resolves container width values for a theme's responsive layout.
-    /// - Parameter theme: The theme to resolve container widths for.
-    /// - Returns: A collection of resolved container width values.
-    func resolveSiteWidths(for theme: any Theme) -> ResponsiveValues {
-        let containerSizes: [UnresolvedBreakpoint] = [
-            .init(.small, value: theme.smallMaxWidth, default: BootstrapDefault.smallContainer),
-            .init(.medium, value: theme.mediumMaxWidth, default: BootstrapDefault.mediumContainer),
-            .init(.large, value: theme.largeMaxWidth, default: BootstrapDefault.largeContainer),
-            .init(.xLarge, value: theme.xLargeMaxWidth, default: BootstrapDefault.xLargeContainer),
-            .init(.xxLarge, value: theme.xxLargeMaxWidth, default: BootstrapDefault.xxLargeContainer)
-        ]
-
-        return resolve(containerSizes)
-    }
-
-    /// A breakpoint value that may inherit from previous breakpoints.
-    private struct UnresolvedBreakpoint {
-        /// The responsive design breakpoint this value applies to.
-        var breakpoint: Breakpoint
-
-        /// The optional value for this breakpoint, if specified.
-        var value: LengthUnit
-
-        /// The default value to use if no value is specified or inherited.
-        var `default`: LengthUnit
-
-        init(_ breakpoint: Breakpoint, value: LengthUnit, default: LengthUnit) {
-            self.breakpoint = breakpoint
-            self.value = value
-            self.default = `default`
+    /// Adds a responsive font size for a specific breakpoint if present
+    func addFontSize(
+        _ properties: inout [String],
+        _ variable: BootstrapVariable,
+        _ sizes: ResponsiveValues<LengthUnit>,
+        _ breakpoint: Breakpoint = .xSmall
+    ) {
+        if let size = sizes.values[breakpoint] {
+            properties.append("\(variable): \(size)")
         }
-    }
-
-    /// Processes breakpoint values to handle value inheritance between breakpoints.
-    private func resolve(_ values: [UnresolvedBreakpoint]) -> ResponsiveValues {
-        let resolvedPairs = values.reduce(into: (
-            results: [(Breakpoint, LengthUnit)](),
-            lastValue: nil as LengthUnit?)
-        ) { collected, current in
-            if current.value != .default {
-                collected.results.append((current.breakpoint, current.value))
-                collected.lastValue = current.value
-            } else if let lastValue = collected.lastValue {
-                collected.results.append((current.breakpoint, lastValue))
-            } else {
-                collected.results.append((current.breakpoint, current.default))
-            }
-        }.results
-
-        var values: [Breakpoint: LengthUnit] = [:]
-        for (breakpoint, value) in resolvedPairs {
-            values[breakpoint] = value
-        }
-
-        return ResponsiveValues(
-            small: values[.small]!,
-            medium: values[.medium]!,
-            large: values[.large]!,
-            xLarge: values[.xLarge]!,
-            xxLarge: values[.xxLarge]!
-        )
     }
 }

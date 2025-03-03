@@ -22,7 +22,7 @@ public struct Font: Hashable, Equatable, Sendable {
     let size: LengthUnit?
 
     /// The responsive size for this font.
-    let responsiveSize: ResponsiveFontSize?
+    let responsiveSize: ResponsiveValues<LengthUnit>?
 
     /// The weight (boldness) of the font.
     let weight: Font.Weight
@@ -111,12 +111,12 @@ public struct Font: Hashable, Equatable, Sendable {
     init(
         name: String?,
         style: Font.Style = .body,
-        size: ResponsiveFontSize,
+        size: ResponsiveSize,
         weight: Weight = .regular
     ) {
         self.name = name
         self.style = style
-        self.responsiveSize = size
+        self.responsiveSize = size.values
         self.weight = weight
         self.size = nil
         self.sources = []
@@ -180,7 +180,7 @@ public struct Font: Hashable, Equatable, Sendable {
     /// - Returns: A Font instance configured with responsive sizing.
     public static func system(
         _ style: Font.Style = .body,
-        size: ResponsiveFontSize,
+        size: ResponsiveSize,
         weight: Font.Weight = .regular
     ) -> Font {
         Font(name: nil, style: style, size: size, weight: weight)
@@ -242,9 +242,45 @@ public struct Font: Hashable, Equatable, Sendable {
     public static func custom(
         _ name: String,
         style: Font.Style = .body,
-        size: ResponsiveFontSize,
+        size: ResponsiveSize,
         weight: Font.Weight = .regular
     ) -> Font {
         Font(name: name, style: style, size: size, weight: weight)
+    }
+}
+
+public extension Font {
+    enum ResponsiveSize {
+        /// Creates a responsive value that adapts across different screen sizes.
+        /// - Parameters:
+        ///   - xSmall: The base value, applied to all breakpoints unless overridden.
+        ///   - small: Value for small screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - medium: Value for medium screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - large: Value for large screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - xLarge: Value for extra large screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - xxLarge: Value for extra extra large screens and up. If `nil`, inherits from smaller breakpoints.
+        /// - Returns: A responsive value that adapts to different screen sizes.
+        case responsive(
+            _ xSmall: LengthUnit? = nil,
+            small: LengthUnit? = nil,
+            medium: LengthUnit? = nil,
+            large: LengthUnit? = nil,
+            xLarge: LengthUnit? = nil,
+            xxLarge: LengthUnit? = nil
+        )
+        
+        var values: ResponsiveValues<LengthUnit> {
+            switch self {
+            case let .responsive(xSmall, small, medium, large, xLarge, xxLarge):
+                ResponsiveValues(
+                    xSmall,
+                    small: small,
+                    medium: medium,
+                    large: large,
+                    xLarge: xLarge,
+                    xxLarge: xxLarge
+                )
+            }
+        }
     }
 }
