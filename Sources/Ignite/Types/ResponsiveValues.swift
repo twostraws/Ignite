@@ -23,31 +23,28 @@ public struct ResponsiveValues<Value>: Hashable, Equatable, Sendable
     private let xLarge: Value?
     private let xxLarge: Value?
 
-    /// Creates a responsive value that adapts across different screen sizes.
+    /// Creates responsive values with an optional base size and larger breakpoint sizes.
     /// - Parameters:
-    ///   - xSmall: The base value, applied to all breakpoints unless overridden.
-    ///   - small: Value for small screens and up. If `nil`, inherits from smaller breakpoints.
-    ///   - medium: Value for medium screens and up. If `nil`, inherits from smaller breakpoints.
-    ///   - large: Value for large screens and up. If `nil`, inherits from smaller breakpoints.
-    ///   - xLarge: Value for extra large screens and up. If `nil`, inherits from smaller breakpoints.
-    ///   - xxLarge: Value for extra extra large screens and up. If `nil`, inherits from smaller breakpoints.
-    /// - Returns: A responsive value that adapts to different screen sizes.
-    public static func responsive(
+    ///   - xSmall: The base size, used at the smallest breakpoint
+    ///   - small: Size for the small breakpoint
+    ///   - medium: Size for the medium breakpoint
+    ///   - large: Size for the large breakpoint
+    ///   - xLarge: Size for the extra large breakpoint
+    ///   - xxLarge: Size for the extra extra large breakpoint
+    init(
         _ xSmall: Value? = nil,
         small: Value? = nil,
         medium: Value? = nil,
         large: Value? = nil,
         xLarge: Value? = nil,
         xxLarge: Value? = nil
-    ) -> Self {
-        Self(
-            xSmall: xSmall,
-            small: small,
-            medium: medium,
-            large: large,
-            xLarge: xLarge,
-            xxLarge: xxLarge
-        )
+    ) {
+        self.xSmall = xSmall
+        self.small = small
+        self.medium = medium
+        self.large = large
+        self.xLarge = xLarge
+        self.xxLarge = xxLarge
     }
 
     /// The breakpoint values with cascading behavior applied from smaller to larger screens.
@@ -94,12 +91,6 @@ public struct ResponsiveValues<Value>: Hashable, Equatable, Sendable
     }
 }
 
-/// Defines horizontal alignment behavior across different screen sizes
-public typealias ResponsiveAlignment = ResponsiveValues<HorizontalAlignment>
-
-/// Defines font size behavior across different screen sizes
-public typealias ResponsiveFontSize = ResponsiveValues<LengthUnit>
-
 public extension Theme.ResponsiveValues {
     /// Creates responsive values with an optional base size and larger breakpoint sizes.
     /// - Parameters:
@@ -110,12 +101,12 @@ public extension Theme.ResponsiveValues {
     ///   - xLarge: Size for the extra large breakpoint
     ///   - xxLarge: Size for the extra extra large breakpoint
     init(
-        _ xSmall: Value? = nil,
-        small: Value? = nil,
-        medium: Value? = nil,
-        large: Value? = nil,
-        xLarge: Value? = nil,
-        xxLarge: Value? = nil
+        _ xSmall: LengthUnit? = nil,
+        small: LengthUnit? = nil,
+        medium: LengthUnit? = nil,
+        large: LengthUnit? = nil,
+        xLarge: LengthUnit? = nil,
+        xxLarge: LengthUnit? = nil
     ) {
         self.xSmall = xSmall
         self.small = small

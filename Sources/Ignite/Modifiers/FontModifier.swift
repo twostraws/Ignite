@@ -97,7 +97,7 @@ private extension HTML {
     /// Registers CSS classes for responsive font sizes and returns the generated class name.
     /// - Parameter responsiveSize: The responsive font size.
     /// - Returns: A unique class name that applies the font's responsive size rules.
-    func registerClasses(for responsiveSize: ResponsiveFontSize) -> String {
+    func registerClasses(for responsiveSize: ResponsiveValues<LengthUnit>) -> String {
         let values = responsiveSize.values
         let className = "font-" + values.description.truncatedHash
         let baseSize = values[.xSmall]
