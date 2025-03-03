@@ -81,7 +81,7 @@ struct HTMLDocumentTests {
         let langAttribute = try #require(output.htmlTagWithCloseTag("html")?.attributes
             .htmlAttribute(named: "lang")
         )
-        
+
         #expect(langAttribute == language.rawValue)
     }
 
