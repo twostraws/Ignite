@@ -18,6 +18,7 @@
 public protocol DarkTheme: Theme {}
 
 public extension DarkTheme {
+    static var colorScheme: ColorScheme { .dark }
     var accent: Color { Color(hex: "#0d6efd") }
     var secondaryAccent: Color { Color(hex: "#6c757d") }
     var success: Color { Color(hex: "#198754") }

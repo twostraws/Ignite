@@ -24,6 +24,9 @@ public protocol Theme: Sendable {
     /// The name of the theme, which must be unique
     static var name: String { get set }
 
+    /// The appearance mode this theme represents
+    static var colorScheme: ColorScheme { get }
+
     /// Primary brand color
     var accent: Color { get }
 

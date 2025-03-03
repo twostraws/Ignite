@@ -96,15 +96,20 @@ public extension Theme {
             return baseID
         }
 
-        switch self {
-        case is LightTheme.Type: return baseID + "-light"
-        case is DarkTheme.Type: return baseID + "-dark"
+        switch colorScheme {
+        case .light: return baseID + "-light"
+        case .dark: return baseID + "-dark"
         default: return baseID
         }
     }
 }
 
 extension Theme {
+    /// The appearance mode this theme represents
+    var colorScheme: ColorScheme {
+        Self.colorScheme
+    }
+
     /// The theme's breakpoint values with inheritance applied between breakpoints.
     var resolvedBreakpoints: ResponsiveValues {
         PublishingContext.shared.resolveBreakpoints(for: self)

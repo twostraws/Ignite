@@ -31,16 +31,16 @@ extension PublishingContext {
         _ variable: BootstrapVariable,
         _ color: Color, for theme: Theme
     ) {
-        let bgSubtleColor = theme is DarkTheme ? color.weighted(.darkest) : color.weighted(.lightest)
-        var emphasisColor = theme is DarkTheme ? color.weighted(.light) : color.weighted(.darker)
-        var borderSubtleColor = theme is DarkTheme ? color.weighted(.dark) : color.weighted(.light)
+        let bgSubtleColor = theme.colorScheme == .dark ? color.weighted(.darkest) : color.weighted(.lightest)
+        var emphasisColor = theme.colorScheme == .dark ? color.weighted(.light) : color.weighted(.darker)
+        var borderSubtleColor = theme.colorScheme == .dark ? color.weighted(.dark) : color.weighted(.light)
 
         // Special handling for dark and light roles
         switch variable {
-        case .dark where theme is DarkTheme:
+        case .dark where theme.colorScheme == .dark:
             borderSubtleColor = color.weighted(.semiLight)
             emphasisColor = color.weighted(.lightest)
-        case .light where theme is DarkTheme:
+        case .light where theme.colorScheme == .dark:
             borderSubtleColor = color.weighted(.darker)
         case .light:
             borderSubtleColor = color.weighted(.semiDark)
