@@ -12,6 +12,7 @@
 // See LICENSE for license information.
 //
 
+// swiftlint:disable identifier_name
 /// A collection of responsive font sizes for each heading level
 public struct HeadingSizes {
     /// Font sizes for h1 elements (largest) at different breakpoints
@@ -56,3 +57,4 @@ public struct HeadingSizes {
         self.h6 = h6
     }
 }
+// swiftlint:enable identifier_name

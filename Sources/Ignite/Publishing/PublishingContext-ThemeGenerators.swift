@@ -23,7 +23,7 @@ extension PublishingContext {
 
             // Skip if it's a system font
             guard !Font.systemFonts.contains(family) &&
-                  !Font.monospaceFonts.contains(family)
+                !Font.monospaceFonts.contains(family)
             else {
                 return []
             }
@@ -144,6 +144,8 @@ extension PublishingContext {
             [data-bs-theme="\(theme.id)"] {
                 \(generateThemeVariables(theme))
             }
+
+            \(generateResponsiveTextRules(theme))
             """
         }
 
@@ -176,6 +178,8 @@ extension PublishingContext {
             \(generateThemeVariables(lightTheme))
         }
 
+        \(generateResponsiveTextRules(lightTheme))
+
         \(generateContainers(for: lightTheme))
 
         \(generateGlobalRules())
@@ -188,6 +192,8 @@ extension PublishingContext {
             [data-bs-theme="\(lightTheme.id)"] {
                 \(generateThemeVariables(lightTheme))
             }
+
+            \(generateResponsiveTextRules(lightTheme))
             """
         }
 
@@ -198,6 +204,8 @@ extension PublishingContext {
             [data-bs-theme="auto"] {
                 \(generateThemeVariables(lightTheme))
             }
+
+            \(generateResponsiveTextRules(lightTheme))
             """
         }
 
@@ -209,7 +217,6 @@ extension PublishingContext {
         var output = ""
 
         if !site.supportsLightTheme && site.alternateThemes.isEmpty {
-            // Only dark theme exists and no alternates - use as root
             output += """
             :root {
                 --supports-light-theme: \(site.supportsLightTheme);
@@ -221,18 +228,21 @@ extension PublishingContext {
                 \(generateThemeVariables(darkTheme))
             }
 
+            \(generateResponsiveTextRules(darkTheme))
+
             \(generateContainers(for: darkTheme))
 
             \(generateGlobalRules())
             """
         } else {
-            // Add dark theme override
             output += """
 
             /* Explicit dark theme */
             [data-bs-theme="\(darkTheme.id)"] {
                 \(generateThemeVariables(darkTheme))
             }
+
+            \(generateResponsiveTextRules(darkTheme))
             """
 
             // Only add auto theme dark mode if both themes exist
@@ -244,6 +254,8 @@ extension PublishingContext {
                     [data-bs-theme="auto"] {
                         \(generateThemeVariables(darkTheme))
                     }
+
+                    \(generateResponsiveTextRules(darkTheme))
                 }
                 """
             }
@@ -281,30 +293,56 @@ extension PublishingContext {
         addColor(&properties, .linkHoverColor, theme.links.hover, for: theme)
     }
 
-    /// Generates typography-related properties
     func generateTypographyProperties(_ properties: inout [String], for theme: any Theme) {
         // Font families
         addFont(&properties, .monospaceFont, theme.code.font, defaultFonts: Font.monospaceFonts)
         addFont(&properties, .bodyFont, theme.text.font, defaultFonts: Font.systemFonts)
         addFont(&properties, .headingFont, theme.headings.font, defaultFonts: Font.systemFonts)
-        
-        // Font sizes
+
+        // Base font sizes
         addProperty(&properties, .rootFontSize, theme.rootFontSize)
-        addProperty(&properties, .bodyFontSize, theme.text.sizes?.xSmall)
         addProperty(&properties, .inlineCodeFontSize, theme.code.inlineSize)
         addProperty(&properties, .codeBlockFontSize, theme.code.blockSize)
-        
-        // Heading sizes
-        addProperty(&properties, .h1FontSize, theme.headings.sizes?.h1?.xSmall)
-        addProperty(&properties, .h2FontSize, theme.headings.sizes?.h2?.xSmall)
-        addProperty(&properties, .h3FontSize, theme.headings.sizes?.h3?.xSmall)
-        addProperty(&properties, .h4FontSize, theme.headings.sizes?.h4?.xSmall)
-        addProperty(&properties, .h5FontSize, theme.headings.sizes?.h5?.xSmall)
-        addProperty(&properties, .h6FontSize, theme.headings.sizes?.h6?.xSmall)
-        
+
+        // Base text sizes (xSmall breakpoint)
+        if let textSizes = theme.text.sizes {
+            addProperty(&properties, .bodyFontSize, textSizes.xSmall)
+        }
+
+        // Base heading sizes (xSmall breakpoint)
+        if let headingSizes = theme.headings.sizes {
+            addProperty(&properties, .h1FontSize, headingSizes.h1?.xSmall)
+            addProperty(&properties, .h2FontSize, headingSizes.h2?.xSmall)
+            addProperty(&properties, .h3FontSize, headingSizes.h3?.xSmall)
+            addProperty(&properties, .h4FontSize, headingSizes.h4?.xSmall)
+            addProperty(&properties, .h5FontSize, headingSizes.h5?.xSmall)
+            addProperty(&properties, .h6FontSize, headingSizes.h6?.xSmall)
+        }
+
         // Font weights and line heights
         addProperty(&properties, .bodyLineHeight, theme.text.lineSpacing)
         addProperty(&properties, .headingsLineHeight, theme.headings.lineHeight)
+    }
+
+    private func generateResponsiveTextRules(_ theme: any Theme) -> String {
+        var rules: [String] = []
+
+        // Add responsive text sizes
+        if let textSizes = theme.text.sizes {
+            addBodyFontSizes(&rules, textSizes)
+        }
+
+        // Add responsive heading sizes
+        if let headingSizes = theme.headings.sizes {
+            addH1FontSizes(&rules, headingSizes)
+            addH2FontSizes(&rules, headingSizes)
+            addH3FontSizes(&rules, headingSizes)
+            addH4FontSizes(&rules, headingSizes)
+            addH5FontSizes(&rules, headingSizes)
+            addH6FontSizes(&rules, headingSizes)
+        }
+
+        return rules.joined(separator: "\n\n")
     }
 
     /// Generates CSS variables for a theme

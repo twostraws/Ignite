@@ -99,34 +99,87 @@ extension Bootstrap {
         /// Root element font size
         case rootFontSize = "--bs-root-font-size"
 
-        /// Base body font size
-        case bodyFontSize = "--bs-body-font-size"
-
         /// Inline code font size
         case inlineCodeFontSize = "--bs-code-font-size"
 
         /// Code block font size
         case codeBlockFontSize = "--code-block-font-size"
 
+        // MARK: - Body Sizes
+
+        /// Base body font size
+        case bodyFontSize = "--bs-body-font-size"
+
+        /// Body font size for small screens (≥576px)
+        case smallBodyFontSize = "--ig-body-font-size-sm"
+
+        /// Body font size for medium screens (≥768px)
+        case mediumBodyFontSize = "--ig-body-font-size-md"
+
+        /// Body font size for large screens (≥992px)
+        case largeBodyFontSize = "--ig-body-font-size-lg"
+
+        /// Body font size for extra large screens (≥1200px)
+        case xLargeBodyFontSize = "--ig-body-font-size-xl"
+
+        /// Body font size for extra extra large screens (≥1400px)
+        case xxLargeBodyFontSize = "--ig-body-font-size-xxl"
+
         // MARK: - Heading Sizes
 
         /// Font size for h1 elements
         case h1FontSize = "--bs-h1-font-size"
 
+        case smallH1FontSize = "--ig-h1-font-size-sm"
+        case mediumH1FontSize = "--ig-h1-font-size-md"
+        case largeH1FontSize = "--ig-h1-font-size-lg"
+        case xLargeH1FontSize = "--ig-h1-font-size-xl"
+        case xxLargeH1FontSize = "--ig-h1-font-size-xxl"
+
         /// Font size for h2 elements
         case h2FontSize = "--bs-h2-font-size"
+
+        case smallH2FontSize = "--ig-h2-font-size-sm"
+        case mediumH2FontSize = "--ig-h2-font-size-md"
+        case largeH2FontSize = "--ig-h2-font-size-lg"
+        case xLargeH2FontSize = "--ig-h2-font-size-xl"
+        case xxLargeH2FontSize = "--ig-h2-font-size-xxl"
 
         /// Font size for h3 elements
         case h3FontSize = "--bs-h3-font-size"
 
+        case smallH3FontSize = "--ig-h3-font-size-sm"
+        case mediumH3FontSize = "--ig-h3-font-size-md"
+        case largeH3FontSize = "--ig-h3-font-size-lg"
+        case xLargeH3FontSize = "--ig-h3-font-size-xl"
+        case xxLargeH3FontSize = "--ig-h3-font-size-xxl"
+
         /// Font size for h4 elements
         case h4FontSize = "--bs-h4-font-size"
+
+        case smallH4FontSize = "--ig-h4-font-size-sm"
+        case mediumH4FontSize = "--ig-h4-font-size-md"
+        case largeH4FontSize = "--ig-h4-font-size-lg"
+        case xLargeH4FontSize = "--ig-h4-font-size-xl"
+        case xxLargeH4FontSize = "--ig-h4-font-size-xxl"
 
         /// Font size for h5 elements
         case h5FontSize = "--bs-h5-font-size"
 
+        case smallH5FontSize = "--ig-h5-font-size-sm"
+        case mediumH5FontSize = "--ig-h5-font-size-md"
+        case largeH5FontSize = "--ig-h5-font-size-lg"
+        case xLargeH5FontSize = "--ig-h5-font-size-xl"
+        case xxLargeH5FontSize = "--ig-h5-font-size-xxl"
+
         /// Font size for h6 elements
         case h6FontSize = "--bs-h6-font-size"
+
+        case smallH6FontSize = "--ig-h6-font-size-sm"
+        case mediumH6FontSize = "--ig-h6-font-size-md"
+        case largeH6FontSize = "--ig-h6-font-size-lg"
+        case xLargeH6FontSize = "--ig-h6-font-size-xl"
+        case xxLargeH6FontSize = "--ig-h6-font-size-xxl"
 
         // MARK: - Font Weights
 

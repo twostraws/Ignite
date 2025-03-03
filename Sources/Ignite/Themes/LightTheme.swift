@@ -22,8 +22,7 @@ where
     ColorPaletteConfiguration == ColorPaletteLightConfiguration,
     HeadingConfiguration == HeadingLightConfiguration,
     LinkConfiguration == LinkLightConfiguration,
-    TextConfiguration == TextLightConfiguration
-{ }
+    TextConfiguration == TextLightConfiguration { }
 
 extension Theme where Self == DefaultLightTheme {
     /// Creates a default light theme instance using Bootstrap's light mode colors and styling

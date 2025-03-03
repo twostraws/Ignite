@@ -5,6 +5,7 @@
 // See LICENSE for license information.
 //
 
+// swiftlint:disable nesting
 extension Bootstrap {
     enum Light {
         enum SemanticColors {
@@ -41,3 +42,4 @@ extension Bootstrap {
         }
     }
 }
+// swiftlint:enable nesting

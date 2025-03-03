@@ -59,4 +59,75 @@ extension PublishingContext {
             properties.append("    \(variable.rawValue): \(font.name ?? defaultFonts.joined(separator: ","))")
         }
     }
+
+    /// Adds a responsive CSS property that only applies at a specific breakpoint
+    private func addResponsiveProperty(
+        _ properties: inout [String],
+        _ variable: BootstrapVariable,
+        _ value: LengthUnit?,
+        _ breakpoint: BootstrapVariable
+    ) {
+        guard let value else { return }
+        properties.append("""
+            @media (min-width: var(\(breakpoint))) {
+                \(variable): \(value);
+            }
+        """)
+    }
+
+    func addBodyFontSizes(_ properties: inout [String], _ sizes: ResponsiveValues<LengthUnit>) {
+        addResponsiveProperty(&properties, .bodyFontSize, sizes.small, .smallBreakpoint)
+        addResponsiveProperty(&properties, .bodyFontSize, sizes.medium, .mediumBreakpoint)
+        addResponsiveProperty(&properties, .bodyFontSize, sizes.large, .largeBreakpoint)
+        addResponsiveProperty(&properties, .bodyFontSize, sizes.xLarge, .xLargeBreakpoint)
+        addResponsiveProperty(&properties, .bodyFontSize, sizes.xxLarge, .xxLargeBreakpoint)
+    }
+
+    func addH1FontSizes(_ properties: inout [String], _ sizes: HeadingSizes) {
+        addResponsiveProperty(&properties, .h1FontSize, sizes.h1?.small, .smallBreakpoint)
+        addResponsiveProperty(&properties, .h1FontSize, sizes.h1?.medium, .mediumBreakpoint)
+        addResponsiveProperty(&properties, .h1FontSize, sizes.h1?.large, .largeBreakpoint)
+        addResponsiveProperty(&properties, .h1FontSize, sizes.h1?.xLarge, .xLargeBreakpoint)
+        addResponsiveProperty(&properties, .h1FontSize, sizes.h1?.xxLarge, .xxLargeBreakpoint)
+    }
+
+    func addH2FontSizes(_ properties: inout [String], _ sizes: HeadingSizes) {
+        addResponsiveProperty(&properties, .h2FontSize, sizes.h2?.small, .smallBreakpoint)
+        addResponsiveProperty(&properties, .h2FontSize, sizes.h2?.medium, .mediumBreakpoint)
+        addResponsiveProperty(&properties, .h2FontSize, sizes.h2?.large, .largeBreakpoint)
+        addResponsiveProperty(&properties, .h2FontSize, sizes.h2?.xLarge, .xLargeBreakpoint)
+        addResponsiveProperty(&properties, .h2FontSize, sizes.h2?.xxLarge, .xxLargeBreakpoint)
+    }
+
+    func addH3FontSizes(_ properties: inout [String], _ sizes: HeadingSizes) {
+        addResponsiveProperty(&properties, .h3FontSize, sizes.h3?.small, .smallBreakpoint)
+        addResponsiveProperty(&properties, .h3FontSize, sizes.h3?.medium, .mediumBreakpoint)
+        addResponsiveProperty(&properties, .h3FontSize, sizes.h3?.large, .largeBreakpoint)
+        addResponsiveProperty(&properties, .h3FontSize, sizes.h3?.xLarge, .xLargeBreakpoint)
+        addResponsiveProperty(&properties, .h3FontSize, sizes.h3?.xxLarge, .xxLargeBreakpoint)
+    }
+
+    func addH4FontSizes(_ properties: inout [String], _ sizes: HeadingSizes) {
+        addResponsiveProperty(&properties, .h4FontSize, sizes.h4?.small, .smallBreakpoint)
+        addResponsiveProperty(&properties, .h4FontSize, sizes.h4?.medium, .mediumBreakpoint)
+        addResponsiveProperty(&properties, .h4FontSize, sizes.h4?.large, .largeBreakpoint)
+        addResponsiveProperty(&properties, .h4FontSize, sizes.h4?.xLarge, .xLargeBreakpoint)
+        addResponsiveProperty(&properties, .h4FontSize, sizes.h4?.xxLarge, .xxLargeBreakpoint)
+    }
+
+    func addH5FontSizes(_ properties: inout [String], _ sizes: HeadingSizes) {
+        addResponsiveProperty(&properties, .h5FontSize, sizes.h5?.small, .smallBreakpoint)
+        addResponsiveProperty(&properties, .h5FontSize, sizes.h5?.medium, .mediumBreakpoint)
+        addResponsiveProperty(&properties, .h5FontSize, sizes.h5?.large, .largeBreakpoint)
+        addResponsiveProperty(&properties, .h5FontSize, sizes.h5?.xLarge, .xLargeBreakpoint)
+        addResponsiveProperty(&properties, .h5FontSize, sizes.h5?.xxLarge, .xxLargeBreakpoint)
+    }
+
+    func addH6FontSizes(_ properties: inout [String], _ sizes: HeadingSizes) {
+        addResponsiveProperty(&properties, .h6FontSize, sizes.h6?.small, .smallBreakpoint)
+        addResponsiveProperty(&properties, .h6FontSize, sizes.h6?.medium, .mediumBreakpoint)
+        addResponsiveProperty(&properties, .h6FontSize, sizes.h6?.large, .largeBreakpoint)
+        addResponsiveProperty(&properties, .h6FontSize, sizes.h6?.xLarge, .xLargeBreakpoint)
+        addResponsiveProperty(&properties, .h6FontSize, sizes.h6?.xxLarge, .xxLargeBreakpoint)
+    }
 }

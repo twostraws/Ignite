@@ -21,8 +21,7 @@ where
     ColorPaletteConfiguration == ColorPaletteDarkConfiguration,
     HeadingConfiguration == HeadingDarkConfiguration,
     LinkConfiguration == LinkDarkConfiguration,
-    TextConfiguration == TextDarkConfiguration
-{ }
+    TextConfiguration == TextDarkConfiguration { }
 
 public extension DarkTheme {
     var colorPalette: ColorPaletteConfiguration { .init() }
