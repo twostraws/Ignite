@@ -76,7 +76,7 @@ public protocol Theme: Sendable {
     var link: Color { get }
 
     /// Link color on hover
-    var linkHover: Color { get }
+    var hoveredLink: Color { get }
 
     /// Link text decoration style
     var linkDecoration: TextDecoration { get }
