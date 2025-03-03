@@ -13,8 +13,8 @@ public extension Theme {
     var info: Color { Color(hex: "#0dcaf0") }
     var warning: Color { Color(hex: "#ffc107") }
     var danger: Color { Color(hex: "#dc3545") }
-    var light: Color { Color(hex: "#f8f9fa") }
-    var dark: Color { Color(hex: "#212529") }
+    var offWhite: Color { Color(hex: "#f8f9fa") }
+    var offBlack: Color { Color(hex: "#212529") }
     var primary: Color { Color(hex: "#212529") }
     var emphasis: Color { Color(hex: "#000000") }
     var secondary: Color { Color(red: 33, green: 37, blue: 41, opacity: 0.75) }
@@ -32,30 +32,17 @@ public extension Theme {
     var linkDecoration: TextDecoration { .underline }
 
     // Font Families
-    var sansSerifFont: Font { .default }
     var monospaceFont: Font { .default }
     var font: Font { .default }
-    var alternateFonts: [Font] { [] }
 
     // Font Sizes
     var rootFontSize: LengthUnit { .default }
-    var bodySize: LengthUnit { .default }
-    var smallBodySize: LengthUnit { .default }
-    var largeBodySize: LengthUnit { .default }
+    var bodyFontSize: LengthUnit { .default }
     var inlineCodeFontSize: LengthUnit { .default }
     var codeBlockFontSize: LengthUnit { .default }
 
-    // Font Weights
-    var lighterFontWeight: FontWeight { .default }
-    var lightFontWeight: FontWeight { .default }
-    var regularFontWeight: FontWeight { .default }
-    var boldFontWeight: FontWeight { .default }
-    var bolderFontWeight: FontWeight { .default }
-
     // Line Heights
     var lineHeight: LengthUnit { .default }
-    var smallLineHeight: LengthUnit { .default }
-    var largeLineHeight: LengthUnit { .default }
 
     // Heading Sizes
     var xxLargeHeadingSize: LengthUnit { .default }

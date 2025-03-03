@@ -24,8 +24,8 @@ public extension DarkTheme {
     var info: Color { Color(hex: "#0dcaf0") }
     var warning: Color { Color(hex: "#ffc107") }
     var danger: Color { Color(hex: "#dc3545") }
-    var light: Color { Color(hex: "#f8f9fa") }
-    var dark: Color { Color(hex: "#212529") }
+    var offWhite: Color { Color(hex: "#f8f9fa") }
+    var offBlack: Color { Color(hex: "#212529") }
     var primary: Color { Color(hex: "#dee2e6") }
     var background: Color { Color(hex: "#212529") }
     var emphasis: Color { Color(hex: "#ffffff") }
