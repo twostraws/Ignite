@@ -84,9 +84,6 @@ public protocol Theme: Sendable {
     /// Default border color
     var border: Color { get }
 
-    /// Optional custom color for headings
-    var heading: Color { get }
-
     /// Monospace font family
     var monospaceFont: Font { get }
 
