@@ -18,8 +18,8 @@ struct Document: HTML {
     private let language: Language
     private let contents: [any DocumentElement]
 
-    init(language: Language = .english, @DocumentElementBuilder contents: () -> [any DocumentElement]) {
-        self.language = language
+    init(@DocumentElementBuilder contents: () -> [any DocumentElement]) {
+        self.language = PublishingContext.shared.environment.language
         self.contents = contents()
     }
 
