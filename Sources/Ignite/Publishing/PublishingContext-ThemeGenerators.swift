@@ -11,11 +11,10 @@ extension PublishingContext {
     /// Generates @font-face CSS declarations for custom fonts in a theme, excluding system fonts.
     private func generateFontFaces(_ theme: Theme) -> String {
         let fonts = [
-            theme.sansSerifFont,
             theme.monospaceFont,
             theme.font,
             theme.headingFont
-        ] + theme.alternateFonts
+        ] + CSSManager.shared.customFonts
 
         var uniqueSources: Set<String> = []
 
@@ -262,8 +261,8 @@ extension PublishingContext {
         addColor(&properties, .info, theme.info, for: theme)
         addColor(&properties, .warning, theme.warning, for: theme)
         addColor(&properties, .danger, theme.danger, for: theme)
-        addColor(&properties, .light, theme.light, for: theme)
-        addColor(&properties, .dark, theme.dark, for: theme)
+        addColor(&properties, .light, theme.offWhite, for: theme)
+        addColor(&properties, .dark, theme.offBlack, for: theme)
 
         // Body settings
         addColor(&properties, .bodyColor, theme.primary, for: theme)
@@ -287,16 +286,13 @@ extension PublishingContext {
     /// Generates typography-related properties
     func generateTypographyProperties(_ properties: inout [String], for theme: Theme) {
         // Font families
-        addFont(&properties, .sansSerifFont, theme.sansSerifFont, defaultFonts: Font.systemFonts)
         addFont(&properties, .monospaceFont, theme.monospaceFont, defaultFonts: Font.monospaceFonts)
         addFont(&properties, .bodyFont, theme.font, defaultFonts: Font.systemFonts)
         addFont(&properties, .headingFont, theme.headingFont, defaultFonts: Font.systemFonts)
 
         // Font sizes
         addProperty(&properties, .rootFontSize, theme.rootFontSize)
-        addProperty(&properties, .bodyFontSize, theme.bodySize)
-        addProperty(&properties, .smallBodyFontSize, theme.smallBodySize)
-        addProperty(&properties, .largeBodyFontSize, theme.largeBodySize)
+        addProperty(&properties, .bodyFontSize, theme.bodyFontSize)
         addProperty(&properties, .inlineCodeFontSize, theme.inlineCodeFontSize)
         addProperty(&properties, .codeBlockFontSize, theme.codeBlockFontSize)
 
@@ -309,24 +305,7 @@ extension PublishingContext {
         addProperty(&properties, .h6FontSize, theme.xSmallHeadingSize)
 
         // Font weights and line heights
-        generateFontWeightProperties(&properties, for: theme)
-        generateLineHeightProperties(&properties, for: theme)
-    }
-
-    /// Generates font weight properties
-    func generateFontWeightProperties(_ properties: inout [String], for theme: Theme) {
-        addProperty(&properties, .lighterFontWeight, theme.lighterFontWeight)
-        addProperty(&properties, .lightFontWeight, theme.lightFontWeight)
-        addProperty(&properties, .normalFontWeight, theme.regularFontWeight)
-        addProperty(&properties, .boldFontWeight, theme.boldFontWeight)
-        addProperty(&properties, .bolderFontWeight, theme.bolderFontWeight)
-    }
-
-    /// Generates line height properties
-    func generateLineHeightProperties(_ properties: inout [String], for theme: Theme) {
         addProperty(&properties, .bodyLineHeight, theme.lineHeight)
-        addProperty(&properties, .condensedLineHeight, theme.smallLineHeight)
-        addProperty(&properties, .expandedLineHeight, theme.largeLineHeight)
         addProperty(&properties, .headingsLineHeight, theme.headingLineHeight)
     }
 

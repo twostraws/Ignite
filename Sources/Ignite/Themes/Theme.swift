@@ -43,10 +43,10 @@ public protocol Theme: Sendable {
     var danger: Color { get }
 
     /// Light theme color
-    var light: Color { get }
+    var offWhite: Color { get }
 
     /// Dark theme color
-    var dark: Color { get }
+    var offBlack: Color { get }
 
     /// Default text color for body content
     var primary: Color { get }
@@ -84,29 +84,17 @@ public protocol Theme: Sendable {
     /// Optional custom color for headings
     var heading: Color { get }
 
-    /// Sans-serif font family
-    var sansSerifFont: Font { get }
-
     /// Monospace font family
     var monospaceFont: Font { get }
 
     /// Base font family for body text
     var font: Font { get }
 
-    /// Alternate fonts
-    var alternateFonts: [Font] { get }
-
     /// Root font size nil uses browser default
     var rootFontSize: LengthUnit { get }
 
     /// Base font size
-    var bodySize: LengthUnit { get }
-
-    /// Small font size
-    var smallBodySize: LengthUnit { get }
-
-    /// Large font size
-    var largeBodySize: LengthUnit { get }
+    var bodyFontSize: LengthUnit { get }
 
     /// Inline code font size
     var inlineCodeFontSize: LengthUnit { get }
@@ -114,29 +102,8 @@ public protocol Theme: Sendable {
     /// Code block font size
     var codeBlockFontSize: LengthUnit { get }
 
-    /// Extra light font weight
-    var lighterFontWeight: FontWeight { get }
-
-    /// Light font weight
-    var lightFontWeight: FontWeight { get }
-
-    /// Normal font weight
-    var regularFontWeight: FontWeight { get }
-
-    /// Bold font weight
-    var boldFontWeight: FontWeight { get }
-
-    /// Extra bold font weight
-    var bolderFontWeight: FontWeight { get }
-
     /// Base line height
     var lineHeight: LengthUnit { get }
-
-    /// Condensed line height
-    var smallLineHeight: LengthUnit { get }
-
-    /// Expanded line height
-    var largeLineHeight: LengthUnit { get }
 
     /// Font size for h1 elements
     var xxLargeHeadingSize: LengthUnit { get }
@@ -156,7 +123,7 @@ public protocol Theme: Sendable {
     /// Font size for h6 elements
     var xSmallHeadingSize: LengthUnit { get }
 
-    /// Optional custom font family for headings
+    /// Custom font family for headings
     var headingFont: Font { get }
 
     /// Font weight for headings

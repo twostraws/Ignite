@@ -32,6 +32,14 @@ final class CSSManager {
     /// A mapping of query hashes to their style properties.
     private var styleProperties: [String: [InlineStyle]] = [:]
 
+    /// Custom fonts that need to be included in the CSS output
+    var customFonts: [Font] = []
+
+    /// Registers a custom font for use in the CSS output
+    func registerFont(_ font: Font) {
+        customFonts.append(font)
+    }
+
     /// Processes all registrations
     /// - Parameter themes: Array of themes from the site.
     /// - Returns: A string containing all generated CSS rules, separated by newlines.

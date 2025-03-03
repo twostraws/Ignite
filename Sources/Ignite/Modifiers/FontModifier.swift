@@ -10,7 +10,11 @@ public extension HTML {
     /// - Parameter font: The font configuration to apply.
     /// - Returns: A new instance with the updated font.
     func font(_ font: Font) -> some HTML {
-        AnyHTML(fontModifier(font))
+        if font.name != nil {
+            // Custom font that requires CSS generation
+            CSSManager.shared.registerFont(font)
+        }
+        return AnyHTML(fontModifier(font))
     }
 }
 
@@ -19,7 +23,11 @@ public extension InlineElement {
     /// - Parameter font: The font configuration to apply.
     /// - Returns: A new instance with the updated font.
     func font(_ font: Font) -> some InlineElement {
-        AnyHTML(fontModifier(font))
+        if font.name != nil {
+            // Custom font that requires CSS generation
+            CSSManager.shared.registerFont(font)
+        }
+        return AnyHTML(fontModifier(font))
     }
 }
 
