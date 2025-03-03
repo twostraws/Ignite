@@ -7,7 +7,7 @@
 
 // swiftlint:disable identifier_name
 /// Represents a CSS length value with its unit of measurement
-public enum LengthUnit: Hashable, Equatable, Sendable, CustomStringConvertible, Defaultable {
+public enum LengthUnit: Hashable, Equatable, Sendable, CustomStringConvertible {
     /// Pixels
     case px(Int)
     /// Relative to root element font size
@@ -37,14 +37,5 @@ public enum LengthUnit: Hashable, Equatable, Sendable, CustomStringConvertible, 
 
     /// The string representation of this unit's value
     public var stringValue: String { description }
-
-    /// Special value indicating default
-    static var `default`: LengthUnit { .em(.infinity) }
-
-    /// Indicates whether this unit represents a default value
-    var isDefault: Bool {
-        if self == .default { return true }
-        return false
-    }
 }
 // swiftlint:enable identifier_name

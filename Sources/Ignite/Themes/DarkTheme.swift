@@ -15,28 +15,23 @@
 ///     var primary: String = "#990000" // Override just the primary color
 /// }
 /// ```
-public protocol DarkTheme: Theme {}
+public protocol DarkTheme: Theme
+where
+    CodeConfiguration == CodeDarkConfiguration,
+    ColorPaletteConfiguration == ColorPaletteDarkConfiguration,
+    HeadingConfiguration == HeadingDarkConfiguration,
+    LinkConfiguration == LinkDarkConfiguration,
+    TextConfiguration == TextDarkConfiguration
+{ }
 
 public extension DarkTheme {
-    var accent: Color { Color(hex: "#0d6efd") }
-    var secondaryAccent: Color { Color(hex: "#6c757d") }
-    var success: Color { Color(hex: "#198754") }
-    var info: Color { Color(hex: "#0dcaf0") }
-    var warning: Color { Color(hex: "#ffc107") }
-    var danger: Color { Color(hex: "#dc3545") }
-    var light: Color { Color(hex: "#f8f9fa") }
-    var dark: Color { Color(hex: "#212529") }
-    var primary: Color { Color(hex: "#dee2e6") }
-    var background: Color { Color(hex: "#212529") }
-    var emphasis: Color { Color(hex: "#ffffff") }
-    var secondary: Color { Color(red: 222, green: 226, blue: 230, opacity: 0.75) }
-    var tertiary: Color { Color(red: 222, green: 226, blue: 230, opacity: 0.5) }
-    var secondaryBackground: Color { Color(hex: "#343a40") }
-    var tertiaryBackground: Color { Color(hex: "#2b3035") }
-    var link: Color { Color(hex: "#6ea8fe") }
-    var linkHover: Color { Color(hex: "#8bb9fe") }
-    var border: Color { Color(hex: "#495057") }
-    var syntaxHighlighterTheme: HighlighterTheme { .xcodeDark }
+    var colorPalette: ColorPaletteConfiguration { .init() }
+    var text: TextConfiguration { .init() }
+    var code: CodeConfiguration { .init() }
+    var headings: HeadingConfiguration { .init() }
+    var links: LinkConfiguration { .init() }
+    var siteWidths: SiteWidthConfiguration { .init() }
+    var breakpoints: BreakpointConfiguration { .init() }
 }
 
 extension Theme where Self == DefaultDarkTheme {
@@ -48,32 +43,6 @@ extension Theme where Self == DefaultDarkTheme {
 /// This theme provides all standard dark mode colors and styling without any customization.
 struct DefaultDarkTheme: DarkTheme {
     static var name: String = "dark"
-
-    var smallBreakpoint: LengthUnit = .default
-    var mediumBreakpoint: LengthUnit = .default
-    var largeBreakpoint: LengthUnit = .default
-    var xLargeBreakpoint: LengthUnit = .default
-    var xxLargeBreakpoint: LengthUnit = .default
-
-    var smallMaxWidth: LengthUnit = .default
-    var mediumMaxWidth: LengthUnit = .default
-    var largeMaxWidth: LengthUnit = .default
-    var xLargeMaxWidth: LengthUnit = .default
-    var xxLargeMaxWidth: LengthUnit = .default
-
-    init() {}
-
-    init(breakpoints: ResponsiveValues, siteWidths: ResponsiveValues) {
-        smallBreakpoint = breakpoints.small
-        mediumBreakpoint = breakpoints.medium
-        largeBreakpoint = breakpoints.large
-        xLargeBreakpoint = breakpoints.xLarge
-        xxLargeBreakpoint = breakpoints.xxLarge
-
-        smallMaxWidth = siteWidths.small
-        mediumMaxWidth = siteWidths.medium
-        largeMaxWidth = siteWidths.large
-        xLargeMaxWidth = siteWidths.xLarge
-        xxLargeMaxWidth = siteWidths.xxLarge
-    }
+    var breakpoints: BreakpointConfiguration = .init()
+    var siteWidths: SiteWidthConfiguration = .init()
 }

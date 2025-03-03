@@ -13,7 +13,7 @@ import Foundation
 /// Colors that can be used for backgrounds and foregrounds. Comes with all
 /// the standard HTML color names, can be created using RGB values as
 /// integer or doubles, can be created a grayscale, or using a hex string.
-public struct Color: CustomStringConvertible, Equatable, Sendable {
+public struct Color: CustomStringConvertible, Hashable, Equatable, Sendable {
     /// The CSS representation of this color.
     public var description: String {
         "rgb(\(red) \(green) \(blue) / \(opacity)%)"

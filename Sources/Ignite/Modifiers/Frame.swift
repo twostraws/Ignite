@@ -250,10 +250,6 @@ private extension HTML {
                 classes.append(contentsOf: alignment.bootstrapClasses)
             }
 
-        case .default:
-            // Don't apply any styling for default values
-            break
-
         case .custom(let value):
             modified.attributes.add(styles: .init(dimension.cssProperty, value: value))
 

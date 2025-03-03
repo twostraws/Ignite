@@ -7,7 +7,7 @@
 
 typealias BootstrapVariable = Bootstrap.Variable
 
-struct Bootstrap {
+extension Bootstrap {
     /// A collection of CSS variables used by Bootstrap for theming.
     ///
     /// Bootstrap variables control various aspects of a theme including colors, typography,
@@ -85,9 +85,6 @@ struct Bootstrap {
 
         // MARK: - Font Families
 
-        /// Sans-serif font family
-        case sansSerifFont = "--bs-font-sans-serif"
-
         /// Monospace font family
         case monospaceFont = "--bs-font-monospace"
 
@@ -104,12 +101,6 @@ struct Bootstrap {
 
         /// Base body font size
         case bodyFontSize = "--bs-body-font-size"
-
-        /// Small body font size
-        case smallBodyFontSize = "--bs-body-font-size-sm"
-
-        /// Large body font size
-        case largeBodyFontSize = "--bs-body-font-size-lg"
 
         /// Inline code font size
         case inlineCodeFontSize = "--bs-code-font-size"

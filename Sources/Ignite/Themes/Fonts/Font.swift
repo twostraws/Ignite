@@ -38,7 +38,7 @@ public struct Font: Hashable, Equatable, Sendable {
     }
 
     /// An array of system fonts in order of preference.
-    public static let systemFonts = [
+    static let systemFonts = [
         "system-ui",
         "-apple-system",
         "Segoe UI",
@@ -51,7 +51,7 @@ public struct Font: Hashable, Equatable, Sendable {
     ]
 
     /// An array of monospace fonts in order of preference.
-    public static let monospaceFonts = [
+    static let monospaceFonts = [
         "SFMono-Regular",
         "Menlo",
         "Monaco",
@@ -62,16 +62,16 @@ public struct Font: Hashable, Equatable, Sendable {
     ]
 
     /// The default sans-serif system font.
-    public static let systemSansSerif = Font(name: systemFonts.joined(separator: ","), weight: .regular)
+    static let systemSansSerif = Font(name: systemFonts.joined(separator: ","), weight: .regular)
 
     /// The default monospace system font.
-    public static let systemMonospace = Font(name: monospaceFonts.joined(separator: ","), weight: .regular)
+    static let systemMonospace = Font(name: monospaceFonts.joined(separator: ","), weight: .regular)
 
     /// The default font used for body text.
-    public static let systemBodyFont = systemSansSerif
+    static let systemBodyFont = systemSansSerif
 
     /// The default font used for code blocks.
-    public static let systemCodeFont = systemMonospace
+    static let systemCodeFont = systemMonospace
 
     /// Creates a font with the specified properties.
     /// - Parameters:
@@ -109,7 +109,7 @@ public struct Font: Hashable, Equatable, Sendable {
     }
 
     init(
-        name: String,
+        name: String?,
         style: Font.Style = .body,
         size: ResponsiveFontSize,
         weight: Weight = .regular
@@ -123,7 +123,7 @@ public struct Font: Hashable, Equatable, Sendable {
     }
 
     init(
-        name: String,
+        name: String?,
         style: Font.Style = .body,
         size: LengthUnit? = nil,
         weight: Font.Weight = .regular
@@ -157,7 +157,7 @@ public struct Font: Hashable, Equatable, Sendable {
         size: LengthUnit,
         weight: Font.Weight = .regular
     ) -> Font {
-        Font(name: "", style: style, size: size, weight: weight)
+        Font(name: nil, style: style, size: size, weight: weight)
     }
 
     /// Creates a system font with the specified style.
@@ -170,7 +170,7 @@ public struct Font: Hashable, Equatable, Sendable {
         size: Int,
         weight: Font.Weight = .regular
     ) -> Font {
-        Font(name: "", style: style, size: .px(size), weight: weight)
+        Font(name: nil, style: style, size: .px(size), weight: weight)
     }
 
     /// Creates a system font with responsive sizing.
@@ -183,7 +183,7 @@ public struct Font: Hashable, Equatable, Sendable {
         size: ResponsiveFontSize,
         weight: Font.Weight = .regular
     ) -> Font {
-        Font(name: "", style: style, size: size, weight: weight)
+        Font(name: nil, style: style, size: size, weight: weight)
     }
 
     /// Creates a custom font with the specified name and size.

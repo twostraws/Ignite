@@ -16,7 +16,14 @@
 ///     var primary: String = "#ff0000" // Override just the primary color
 /// }
 /// ```
-public protocol LightTheme: Theme {}
+public protocol LightTheme: Theme
+where
+    CodeConfiguration == CodeLightConfiguration,
+    ColorPaletteConfiguration == ColorPaletteLightConfiguration,
+    HeadingConfiguration == HeadingLightConfiguration,
+    LinkConfiguration == LinkLightConfiguration,
+    TextConfiguration == TextLightConfiguration
+{ }
 
 extension Theme where Self == DefaultLightTheme {
     /// Creates a default light theme instance using Bootstrap's light mode colors and styling
@@ -27,32 +34,6 @@ extension Theme where Self == DefaultLightTheme {
 /// This theme provides all standard light mode colors and styling without any customization.
 struct DefaultLightTheme: LightTheme {
     static var name: String = "light"
-
-    var smallBreakpoint: LengthUnit = .default
-    var mediumBreakpoint: LengthUnit = .default
-    var largeBreakpoint: LengthUnit = .default
-    var xLargeBreakpoint: LengthUnit = .default
-    var xxLargeBreakpoint: LengthUnit = .default
-
-    var smallMaxWidth: LengthUnit = .default
-    var mediumMaxWidth: LengthUnit = .default
-    var largeMaxWidth: LengthUnit = .default
-    var xLargeMaxWidth: LengthUnit = .default
-    var xxLargeMaxWidth: LengthUnit = .default
-
-    init() {}
-
-    init(breakpoints: ResponsiveValues, siteWidths: ResponsiveValues) {
-        smallBreakpoint = breakpoints.small
-        mediumBreakpoint = breakpoints.medium
-        largeBreakpoint = breakpoints.large
-        xLargeBreakpoint = breakpoints.xLarge
-        xxLargeBreakpoint = breakpoints.xxLarge
-
-        smallMaxWidth = siteWidths.small
-        mediumMaxWidth = siteWidths.medium
-        largeMaxWidth = siteWidths.large
-        xLargeMaxWidth = siteWidths.xLarge
-        xxLargeMaxWidth = siteWidths.xxLarge
-    }
+    var breakpoints: BreakpointConfiguration = .init()
+    var siteWidths: SiteWidthConfiguration = .init()
 }

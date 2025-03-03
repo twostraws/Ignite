@@ -11,4 +11,9 @@
 /// dynamically switch between light and dark modes based on the user's system preferences.
 struct AutoTheme: Theme {
     static var name: String = "auto"
+    typealias CodeConfiguration = CodeLightConfiguration
+    typealias ColorPaletteConfiguration = ColorPaletteLightConfiguration
+    typealias HeadingConfiguration = HeadingLightConfiguration
+    typealias LinkConfiguration = LinkLightConfiguration
+    typealias TextConfiguration = TextLightConfiguration
 }

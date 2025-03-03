@@ -5,202 +5,79 @@
 // See LICENSE for license information.
 //
 
-/// A protocol that defines the visual styling and layout properties for a website theme.
+/// A protocol that defines a website theme through a collection of configurations.
 ///
-/// Themes provide comprehensive control over colors, typography, spacing, and responsive
-/// breakpoints. The protocol includes default implementations based on Bootstrap's default
-/// theme, which can be overridden as needed.
+/// Themes are organized into logical configuration groups:
+/// - `colorPalette`: The complete color system
+/// - `typography`: Core font settings and weights
+/// - `text` and `headings`: Element-specific typography
+/// - `links` and `code`: Special element formatting
+/// - `siteWidths` and `breakpoints`: Layout and responsive design
 ///
-/// Example:
+/// Each configuration provides default values that can be selectively overridden:
+///
 /// ```swift
 /// struct CustomTheme: Theme {
 ///     static var name: String = "custom"
-///     var primary: String = "#ff0000"
-///     var fontFamilyBase: Font = .custom("Helvetica")
+///
+///     var colorPalette = ColorPaletteConfiguration(
+///         accent: .hex("#0d6efd"),
+///         primary: .hex("#212529")
+///     )
+///
+///     var typography = TypographyConfiguration(
+///         rootSize: .px(16),
+///         weights: .init(bold: .w700)
+///     )
+///
+///     var text = TextConfiguration(
+///         font: .custom("Georgia"),
+///         lineHeight: .rem(1.6)
+///     )
 /// }
 /// ```
+/// A protocol that defines a complete theme for a website, including all visual styling and layout rules.
 @MainActor
 public protocol Theme: Sendable {
-    /// The name of the theme, which must be unique
+    /// The configuration type for link styling
+    associatedtype LinkConfiguration: LinkThemeConfiguration
+
+    /// The configuration type for heading styling
+    associatedtype HeadingConfiguration: HeadingThemeConfiguration
+
+    /// The configuration type for code block styling
+    associatedtype CodeConfiguration: CodeThemeConfiguration
+
+    /// The configuration type for the theme's color system
+    associatedtype ColorPaletteConfiguration: ColorPaletteThemeConfiguration
+
+    /// The configuration type for text styling
+    associatedtype TextConfiguration: TextThemeConfiguration
+
+    /// The unique identifier for this theme
     static var name: String { get set }
 
-    /// Primary brand color
-    var accent: Color { get }
+    /// The base font size from which relative font sizes are calculated (defaults to 16px)
+    var rootFontSize: LengthUnit? { get }
 
-    /// Secondary brand color
-    var secondaryAccent: Color { get }
+    /// The complete color system including brand, semantic, text, and background colors
+    var colorPalette: ColorPaletteConfiguration { get }
 
-    /// Success state color
-    var success: Color { get }
+    /// Configuration for general text styling including sizes and spacing
+    var text: TextConfiguration { get }
 
-    /// Information state color
-    var info: Color { get }
+    /// Configuration for code formatting in both inline and block contexts
+    var code: CodeConfiguration { get }
 
-    /// Warning state color
-    var warning: Color { get }
+    /// Configuration for link appearance and interaction states
+    var links: LinkConfiguration { get }
 
-    /// Danger/error state color
-    var danger: Color { get }
+    /// Configuration for heading styles across all six heading levels
+    var headings: HeadingConfiguration { get }
 
-    /// Light theme color
-    var light: Color { get }
+    /// Configuration for maximum content widths at each breakpoint
+    var siteWidths: SiteWidthConfiguration { get }
 
-    /// Dark theme color
-    var dark: Color { get }
-
-    /// Default text color for body content
-    var primary: Color { get }
-
-    /// Color for emphasized content
-    var emphasis: Color { get }
-
-    /// Color for secondary content
-    var secondary: Color { get }
-
-    /// Color for tertiary content
-    var tertiary: Color { get }
-
-    /// Default background color
-    var background: Color { get }
-
-    /// Secondary background color
-    var secondaryBackground: Color { get }
-
-    /// Tertiary background color
-    var tertiaryBackground: Color { get }
-
-    /// Default link color
-    var link: Color { get }
-
-    /// Link color on hover
-    var linkHover: Color { get }
-
-    /// Link text decoration style
-    var linkDecoration: TextDecoration { get }
-
-    /// Default border color
-    var border: Color { get }
-
-    /// Optional custom color for headings
-    var heading: Color { get }
-
-    /// Sans-serif font family
-    var sansSerifFont: Font { get }
-
-    /// Monospace font family
-    var monospaceFont: Font { get }
-
-    /// Base font family for body text
-    var font: Font { get }
-
-    /// Alternate fonts
-    var alternateFonts: [Font] { get }
-
-    /// Root font size nil uses browser default
-    var rootFontSize: LengthUnit { get }
-
-    /// Base font size
-    var bodySize: LengthUnit { get }
-
-    /// Small font size
-    var smallBodySize: LengthUnit { get }
-
-    /// Large font size
-    var largeBodySize: LengthUnit { get }
-
-    /// Inline code font size
-    var inlineCodeFontSize: LengthUnit { get }
-
-    /// Code block font size
-    var codeBlockFontSize: LengthUnit { get }
-
-    /// Extra light font weight
-    var lighterFontWeight: FontWeight { get }
-
-    /// Light font weight
-    var lightFontWeight: FontWeight { get }
-
-    /// Normal font weight
-    var regularFontWeight: FontWeight { get }
-
-    /// Bold font weight
-    var boldFontWeight: FontWeight { get }
-
-    /// Extra bold font weight
-    var bolderFontWeight: FontWeight { get }
-
-    /// Base line height
-    var lineHeight: LengthUnit { get }
-
-    /// Condensed line height
-    var smallLineHeight: LengthUnit { get }
-
-    /// Expanded line height
-    var largeLineHeight: LengthUnit { get }
-
-    /// Font size for h1 elements
-    var xxLargeHeadingSize: LengthUnit { get }
-
-    /// Font size for h2 elements
-    var xLargeHeadingSize: LengthUnit { get }
-
-    /// Font size for h3 elements
-    var largeHeadingSize: LengthUnit { get }
-
-    /// Font size for h4 elements
-    var mediumHeadingSize: LengthUnit { get }
-
-    /// Font size for h5 elements
-    var smallHeadingSize: LengthUnit { get }
-
-    /// Font size for h6 elements
-    var xSmallHeadingSize: LengthUnit { get }
-
-    /// Optional custom font family for headings
-    var headingFont: Font { get }
-
-    /// Font weight for headings
-    var headingFontWeight: FontWeight { get }
-
-    /// Line height for headings
-    var headingLineHeight: LengthUnit { get }
-
-    /// Bottom margin for headings
-    var headingBottomMargin: LengthUnit { get }
-
-    /// Bottom margin for paragraphs
-    var paragraphBottomMargin: LengthUnit { get }
-
-    /// Small breakpoint
-    var smallBreakpoint: LengthUnit { get }
-
-    /// Medium breakpoint
-    var mediumBreakpoint: LengthUnit { get }
-
-    /// Large breakpoint
-    var largeBreakpoint: LengthUnit { get }
-
-    /// Extra large breakpoint
-    var xLargeBreakpoint: LengthUnit { get }
-
-    /// Extra extra large breakpoint
-    var xxLargeBreakpoint: LengthUnit { get }
-
-    /// Maximum width for small containers
-    var smallMaxWidth: LengthUnit { get }
-
-    /// Maximum width for medium containers
-    var mediumMaxWidth: LengthUnit { get }
-
-    /// Maximum width for large containers
-    var largeMaxWidth: LengthUnit { get }
-
-    /// Maximum width for extra large containers
-    var xLargeMaxWidth: LengthUnit { get }
-
-    /// Maximum width for extra extra large containers
-    var xxLargeMaxWidth: LengthUnit { get }
-
-    /// The color scheme for syntax highlighting
-    var syntaxHighlighterTheme: HighlighterTheme { get }
+    /// Configuration for responsive design breakpoint dimensions
+    var breakpoints: BreakpointConfiguration { get }
 }

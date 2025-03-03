@@ -12,7 +12,7 @@ public typealias FontWeight = Font.Weight
 /// Note: Bootstrap provides its own font weights as classes,
 /// but these are less close to both regular CSS and SwiftUI.
 public extension Font {
-    enum Weight: Int, Defaultable, CaseIterable, Sendable {
+    enum Weight: Int, CaseIterable, Sendable {
         case ultraLight = 100
         case thin = 200
         case light = 300
@@ -22,14 +22,5 @@ public extension Font {
         case bold = 700
         case heavy = 800
         case black = 900
-
-        /// Special value indicating default
-        static var `default`: Self { .regular }
-
-        /// Indicates whether this unit represents a default value
-        var isDefault: Bool {
-            if self == .default { return true }
-            return false
-        }
     }
 }

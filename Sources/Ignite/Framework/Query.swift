@@ -13,11 +13,11 @@ public protocol Query: Equatable, Hashable, Sendable {
     /// Returns the CSS media feature string for this condition using theme-specific values if relevant.
     /// - Parameter theme: The theme to use for generating the query.
     /// - Returns: A theme-aware CSS media query string.
-    @MainActor func condition(with theme: Theme) -> String
+    @MainActor func condition(with theme: any Theme) -> String
 }
 
 public extension Query {
-    @MainActor func condition(with theme: Theme) -> String {
+    @MainActor func condition(with theme: any Theme) -> String {
         condition
     }
 }
@@ -142,13 +142,13 @@ public enum BreakpointQuery: Query, CaseIterable, Sendable {
     /// Returns the CSS media query string for this breakpoint using the provided theme's values.
     /// - Parameter theme: The theme to use for breakpoint values.
     /// - Returns: A CSS media query string.
-    @MainActor public func condition(with theme: Theme) -> String {
+    @MainActor public func condition(with theme: any Theme) -> String {
         let breakpointValue = switch self {
-        case .small: theme.resolvedBreakpoints.small.stringValue
-        case .medium: theme.resolvedBreakpoints.medium.stringValue
-        case .large: theme.resolvedBreakpoints.large.stringValue
-        case .xLarge: theme.resolvedBreakpoints.xLarge.stringValue
-        case .xxLarge: theme.resolvedBreakpoints.xxLarge.stringValue
+        case .small: theme.breakpoints.small.stringValue
+        case .medium: theme.breakpoints.medium.stringValue
+        case .large: theme.breakpoints.large.stringValue
+        case .xLarge: theme.breakpoints.xLarge.stringValue
+        case .xxLarge: theme.breakpoints.xxLarge.stringValue
         }
         return "min-width: \(breakpointValue)"
     }

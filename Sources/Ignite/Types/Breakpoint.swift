@@ -28,30 +28,12 @@ enum Breakpoint: Sendable, Hashable, CaseIterable, Comparable {
     /// Returns the breakpoint infix for Bootstrap classes, or nil for the default (xs) breakpoint
     var infix: String? {
         switch self {
-        case .xSmall:
-            return nil
-        case .small:
-            return "sm"
-        case .medium:
-            return "md"
-        case .large:
-            return "lg"
-        case .xLarge:
-            return "xl"
-        case .xxLarge:
-            return "xxl"
-        }
-    }
-
-    /// The default width associated with each breakpoint.
-    var defaultWidth: LengthUnit {
-        switch self {
-        case .xSmall: .px(576)
-        case .small: .px(576)
-        case .medium: .px(768)
-        case .large: .px(992)
-        case .xLarge: .px(1200)
-        case .xxLarge: .px(1400)
+        case .xSmall: nil
+        case .small: "sm"
+        case .medium: "md"
+        case .large: "lg"
+        case .xLarge: "xl"
+        case .xxLarge: "xxl"
         }
     }
 

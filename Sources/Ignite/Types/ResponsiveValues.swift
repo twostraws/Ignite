@@ -1,27 +1,51 @@
 //
-// PublishingContext-ResponsiveValues.swift
+// ResponsiveValues.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
 //
 
-/// A collection of length values for each responsive breakpoint.
-struct ResponsiveValues {
-    /// The base value, for extra small screens (typically <576px).
-    let xSmall: LengthUnit? = nil
+/// A collection of values that scale across responsive breakpoints
+public struct ResponsiveValues<Value> {
+    /// The base value for extra small screens (<576px)
+    public let xSmall: Value?
 
-    /// The length value for small screens (typically ≥576px).
-    let small: LengthUnit
+    /// The value for small screens (≥576px)
+    public let small: Value
 
-    /// The length value for medium screens (typically ≥768px).
-    let medium: LengthUnit
+    /// The value for medium screens (≥768px)
+    public let medium: Value
 
-    /// The length value for large screens (typically ≥992px).
-    let large: LengthUnit
+    /// The value for large screens (≥992px)
+    public let large: Value
 
-    /// The length value for extra large screens (typically ≥1200px).
-    let xLarge: LengthUnit
+    /// The value for extra large screens (≥1200px)
+    public let xLarge: Value
 
-    /// The length value for extra extra large screens (typically ≥1400px).
-    let xxLarge: LengthUnit
+    /// The value for extra extra large screens (≥1400px)
+    public let xxLarge: Value
+
+    /// Creates a new collection of responsive values
+    /// - Parameters:
+    ///   - xSmall: The base value for extra small screens. Pass `nil` to inherit from small.
+    ///   - small: The value for small screens
+    ///   - medium: The value for medium screens
+    ///   - large: The value for large screens
+    ///   - xLarge: The value for extra large screens
+    ///   - xxLarge: The value for extra extra large screens
+    public init(
+        xSmall: Value? = nil,
+        small: Value,
+        medium: Value,
+        large: Value,
+        xLarge: Value,
+        xxLarge: Value
+    ) {
+        self.xSmall = xSmall
+        self.small = small
+        self.medium = medium
+        self.large = large
+        self.xLarge = xLarge
+        self.xxLarge = xxLarge
+    }
 }

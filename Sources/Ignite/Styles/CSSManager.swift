@@ -32,10 +32,18 @@ final class CSSManager {
     /// A mapping of query hashes to their style properties.
     private var styleProperties: [String: [InlineStyle]] = [:]
 
+    /// Custom fonts that need to be included in the CSS output
+    var customFonts: [Font] = []
+
+    /// Registers a custom font for use in the CSS output
+    func registerFont(_ font: Font) {
+        customFonts.append(font)
+    }
+
     /// Processes all registrations
     /// - Parameter themes: Array of themes from the site.
     /// - Returns: A string containing all generated CSS rules, separated by newlines.
-    func generateAllRules(themes: [Theme]) -> String {
+    func generateAllRules(themes: [any Theme]) -> String {
         rules.removeAll()
         classNames.removeAll()
         styleProperties.removeAll()
@@ -111,7 +119,7 @@ final class CSSManager {
         for queries: [any Query],
         className: String,
         properties: [InlineStyle],
-        themes: [Theme]
+        themes: [any Theme]
     ) -> String {
         var rules: [String] = []
 
@@ -160,7 +168,7 @@ final class CSSManager {
         for queries: [any Query],
         className: String,
         properties: [InlineStyle],
-        theme: Theme
+        theme: any Theme
     ) -> String {
         let (_, mediaQueries) = queries.reduce(into: (Set<String>(), [String]())) { result, query in
             if let themeQuery = query as? ThemeQuery {

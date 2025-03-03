@@ -211,20 +211,20 @@ public extension Site {
     internal var allHighlighterThemes: OrderedSet<HighlighterTheme> {
         var themes = OrderedSet<HighlighterTheme>()
 
-        if let theme = lightTheme?.syntaxHighlighterTheme {
+        if let theme = lightTheme?.code.syntaxHighlighterTheme {
             themes.append(theme)
         }
-        if let darkTheme = darkTheme?.syntaxHighlighterTheme {
+        if let darkTheme = darkTheme?.code.syntaxHighlighterTheme {
             themes.append(darkTheme)
         }
-        themes.formUnion(alternateThemes.compactMap(\.syntaxHighlighterTheme))
+        themes.formUnion(alternateThemes.compactMap { $0.code.syntaxHighlighterTheme })
         themes.remove(.none)
         return .init(themes.sorted())
     }
 
     /// An array of every site theme.
-    internal var allThemes: [Theme] {
-        var themes = [Theme]()
+    internal var allThemes: [any Theme] {
+        var themes = [any Theme]()
         if let lightTheme = lightTheme {
             themes.append(lightTheme)
         }
