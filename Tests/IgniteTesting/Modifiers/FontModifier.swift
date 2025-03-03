@@ -11,8 +11,9 @@ import Testing
 @testable import Ignite
 
 /// Helper function to simulate registerClasses logic
-private func simulateRegisterClasses(for responsiveSize: ResponsiveFontSize) -> String {
-    let className = "font-" + responsiveSize.values.description.truncatedHash
+private func simulateRegisterClasses(for size: Font.ResponsiveSize) -> String {
+    let responsiveValues = size.values
+    let className = "font-" + responsiveValues.values.description.truncatedHash
     return className
 }
 
@@ -83,7 +84,7 @@ struct FontModifierTests {
     @Test("Responsive Font Size Application")
     func responsiveFontSizeApplication() async throws {
         // Create a responsive font size using the ResponsiveValue.responsive method
-        let responsiveFontSize = ResponsiveFontSize.responsive(
+        let responsiveFontSize = Font.ResponsiveSize.responsive(
             small: .px(12),
             medium: .px(16),
             large: .px(20)
