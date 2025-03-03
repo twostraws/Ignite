@@ -40,7 +40,7 @@ public extension Layout {
     }
     
     var language: Language {
-        PublishingContext.shared.site.language
+        PublishingContext.shared.environment.language
     }
 
     /// Generates a unique identifier for this layout based on its file location and type.
