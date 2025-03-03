@@ -30,8 +30,6 @@ public protocol Layout {
 
     /// A unique identifier for this layout instance
     var id: String { get }
-    
-    var language: Language { get }
 }
 
 public extension Layout {
@@ -39,11 +37,6 @@ public extension Layout {
     /// The current page being rendered.
     var content: some HTML {
         Section(PublishingContext.shared.environment.pageContent)
-    }
-    
-    var language: Language {
-        //PublishingContext.shared.site.language
-        EnvironmentValues().language
     }
 
     /// Generates a unique identifier for this layout based on its file location and type.
