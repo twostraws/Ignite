@@ -16,7 +16,7 @@ public extension Theme {
     var offWhite: Color { Color(hex: "#f8f9fa") }
     var offBlack: Color { Color(hex: "#212529") }
     var primary: Color { Color(hex: "#212529") }
-    var emphasis: Color { Color(hex: "#000000") }
+    var emphasis: Color { Color(hex: "#212529") }
     var secondary: Color { Color(red: 33, green: 37, blue: 41, opacity: 0.75) }
     var tertiary: Color { Color(red: 33, green: 37, blue: 41, opacity: 0.5) }
     var background: Color { Color(hex: "#ffffff") }
