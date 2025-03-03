@@ -15,7 +15,8 @@ struct Document: HTML {
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { true }
 
-    private let language: Language
+    /// Use Environment language as default. 
+    private var language: Language = EnvironmentValues().language
     private let contents: [any DocumentElement]
 
     init(language: Language = .english, @DocumentElementBuilder contents: () -> [any DocumentElement]) {
@@ -25,7 +26,7 @@ struct Document: HTML {
 
     func render() -> String {
         var attributes = attributes
-        attributes.add(customAttributes: .init(name: "lang", value: self.publishingContext.site.language.rawValue))
+        attributes.add(customAttributes: .init(name: "lang", value: language.rawValue))
         attributes.add(customAttributes: .init(name: "data-bs-theme", value: "auto"))
         var output = "<!doctype html>"
         output += "<html \(attributes)>"
