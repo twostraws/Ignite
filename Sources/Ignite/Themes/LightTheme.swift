@@ -18,6 +18,10 @@
 /// ```
 public protocol LightTheme: Theme {}
 
+public extension LightTheme {
+    static var colorScheme: ColorScheme { .light }
+}
+
 extension Theme where Self == DefaultLightTheme {
     /// Creates a default light theme instance using Bootstrap's light mode colors and styling
     static var light: some Theme { DefaultLightTheme() }
