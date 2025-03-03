@@ -93,9 +93,6 @@ public protocol Theme: Sendable {
     /// Root font size nil uses browser default
     var rootFontSize: LengthUnit { get }
 
-    /// Base font size
-    var bodyFontSize: LengthUnit { get }
-
     /// Inline code font size
     var inlineCodeFontSize: LengthUnit { get }
 
@@ -104,24 +101,6 @@ public protocol Theme: Sendable {
 
     /// Base line height
     var lineHeight: LengthUnit { get }
-
-    /// Font size for h1 elements
-    var xxLargeHeadingSize: LengthUnit { get }
-
-    /// Font size for h2 elements
-    var xLargeHeadingSize: LengthUnit { get }
-
-    /// Font size for h3 elements
-    var largeHeadingSize: LengthUnit { get }
-
-    /// Font size for h4 elements
-    var mediumHeadingSize: LengthUnit { get }
-
-    /// Font size for h5 elements
-    var smallHeadingSize: LengthUnit { get }
-
-    /// Font size for h6 elements
-    var xSmallHeadingSize: LengthUnit { get }
 
     /// Custom font family for headings
     var headingFont: Font { get }
@@ -138,36 +117,35 @@ public protocol Theme: Sendable {
     /// Bottom margin for paragraphs
     var paragraphBottomMargin: LengthUnit { get }
 
-    /// Small breakpoint
-    var smallBreakpoint: LengthUnit { get }
-
-    /// Medium breakpoint
-    var mediumBreakpoint: LengthUnit { get }
-
-    /// Large breakpoint
-    var largeBreakpoint: LengthUnit { get }
-
-    /// Extra large breakpoint
-    var xLargeBreakpoint: LengthUnit { get }
-
-    /// Extra extra large breakpoint
-    var xxLargeBreakpoint: LengthUnit { get }
-
-    /// Maximum width for small containers
-    var smallMaxWidth: LengthUnit { get }
-
-    /// Maximum width for medium containers
-    var mediumMaxWidth: LengthUnit { get }
-
-    /// Maximum width for large containers
-    var largeMaxWidth: LengthUnit { get }
-
-    /// Maximum width for extra large containers
-    var xLargeMaxWidth: LengthUnit { get }
-
-    /// Maximum width for extra extra large containers
-    var xxLargeMaxWidth: LengthUnit { get }
-
     /// The color scheme for syntax highlighting
     var syntaxHighlighterTheme: HighlighterTheme { get }
+
+    typealias ResponsiveValues = Ignite.ResponsiveValues<LengthUnit>
+
+    /// Base font size
+    var bodyFontSize: ResponsiveValues { get }
+
+    /// Font size for h1 elements
+    var h1Size: ResponsiveValues { get }
+
+    /// Font size for h2 elements
+    var h2Size: ResponsiveValues { get }
+
+    /// Font size for h3 elements
+    var h3Size: ResponsiveValues { get }
+
+    /// Font size for h4 elements
+    var h4Size: ResponsiveValues { get }
+
+    /// Font size for h5 elements
+    var h5Size: ResponsiveValues { get }
+
+    /// Font size for h6 elements
+    var h6Size: ResponsiveValues { get }
+
+    /// The maximum width of the site's content at different breakpoints.
+    var siteWidth: ResponsiveValues { get }
+
+    /// The values that define the site's responsive breakpoints.
+    var breakpoints: ResponsiveValues { get }
 }

@@ -127,7 +127,7 @@ public extension Theme {
 
     // Font Sizes
     var rootFontSize: LengthUnit { .default }
-    var bodyFontSize: LengthUnit { .default }
+    var bodyFontSize: ResponsiveValues { .default }
     var inlineCodeFontSize: LengthUnit { .default }
     var codeBlockFontSize: LengthUnit { .default }
 
@@ -135,12 +135,12 @@ public extension Theme {
     var lineHeight: LengthUnit { .default }
 
     // Heading Sizes
-    var xxLargeHeadingSize: LengthUnit { .default }
-    var xLargeHeadingSize: LengthUnit { .default }
-    var largeHeadingSize: LengthUnit { .default }
-    var mediumHeadingSize: LengthUnit { .default }
-    var smallHeadingSize: LengthUnit { .default }
-    var xSmallHeadingSize: LengthUnit { .default }
+    var h1Size: ResponsiveValues { .default }
+    var h2Size: ResponsiveValues { .default }
+    var h3Size: ResponsiveValues { .default }
+    var h4Size: ResponsiveValues { .default }
+    var h5Size: ResponsiveValues { .default }
+    var h6Size: ResponsiveValues { .default }
 
     // Heading Properties
     var headingFont: Font { .default }
@@ -152,18 +152,10 @@ public extension Theme {
     var paragraphBottomMargin: LengthUnit { .default }
 
     // Breakpoints
-    var smallBreakpoint: LengthUnit { .default }
-    var mediumBreakpoint: LengthUnit { .default }
-    var largeBreakpoint: LengthUnit { .default }
-    var xLargeBreakpoint: LengthUnit { .default }
-    var xxLargeBreakpoint: LengthUnit { .default }
+    var breakpoints: ResponsiveValues { .default}
 
     // Maximum widths
-    var smallMaxWidth: LengthUnit { .default }
-    var mediumMaxWidth: LengthUnit { .default }
-    var largeMaxWidth: LengthUnit { .default }
-    var xLargeMaxWidth: LengthUnit { .default }
-    var xxLargeMaxWidth: LengthUnit { .default }
+    var siteWidth: ResponsiveValues { .default }
 }
 
 public extension Theme {
@@ -198,15 +190,5 @@ extension Theme {
     /// The appearance mode this theme represents
     var colorScheme: ColorScheme {
         Self.colorScheme
-    }
-
-    /// The theme's breakpoint values with inheritance applied between breakpoints.
-    var resolvedBreakpoints: ResponsiveValues {
-        PublishingContext.shared.resolveBreakpoints(for: self)
-    }
-
-    /// The theme's container width values with inheritance applied between breakpoints.
-    var resolvedSiteWidths: ResponsiveValues {
-        PublishingContext.shared.resolveSiteWidths(for: self)
     }
 }

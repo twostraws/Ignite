@@ -46,21 +46,22 @@ public enum HorizontalAlignment: String, Sendable, Equatable {
     }
 }
 
-extension PartialResponsiveValues where Value == HorizontalAlignment {
+extension ResponsiveValues where Value == HorizontalAlignment {
     // Bootstrap's responsive classes automatically handle cascading behavior,
     // with a class like text-md-center applying to all larger breakpoints
     // until overridden, so our implementation removes any redundant classes
     // for larger breakpoints that share the same value as smaller ones,
     // generating only the minimum necessary classes.
     var breakpointClasses: String {
-        // Get non-cascaded values, sorted by breakpoint
-        let specifiedValues = values(cascaded: false).sorted(by: { $0.breakpoint < $1.breakpoint })
+        let specifiedValues = values(cascaded: false)
 
         // Handle the common empty case first
-        guard let (firstBreakpoint, firstValue) = specifiedValues.first else {
+        guard let firstElement = specifiedValues.elements.first else {
             return ""
         }
 
+        let firstBreakpoint = firstElement.key
+        let firstValue = firstElement.value
         let baseClass = firstValue.rawValue
         let alignmentValue = baseClass.dropFirst(5)
 
@@ -76,11 +77,11 @@ extension PartialResponsiveValues where Value == HorizontalAlignment {
         var lastValue = firstValue
 
         // Process remaining breakpoints
-        for (breakpoint, value) in specifiedValues.dropFirst() where value != lastValue {
-            let baseClass = value.rawValue
+        for element in specifiedValues.elements.dropFirst() where element.value != lastValue {
+            let baseClass = element.value.rawValue
             let alignmentValue = baseClass.dropFirst(5)
-            classes.append("text-\(breakpoint.infix!)-\(alignmentValue)")
-            lastValue = value
+            classes.append("text-\(element.key.infix!)-\(alignmentValue)")
+            lastValue = element.value
         }
 
         return classes.joined(separator: " ")

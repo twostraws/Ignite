@@ -30,33 +30,8 @@ extension Theme where Self == DefaultLightTheme {
 /// The default light theme implementation that uses Bootstrap's light theme values.
 /// This theme provides all standard light mode colors and styling without any customization.
 struct DefaultLightTheme: LightTheme {
+    typealias ResponsiveValues = Ignite.ResponsiveValues<LengthUnit>
     static var name: String = "light"
-
-    var smallBreakpoint: LengthUnit = .default
-    var mediumBreakpoint: LengthUnit = .default
-    var largeBreakpoint: LengthUnit = .default
-    var xLargeBreakpoint: LengthUnit = .default
-    var xxLargeBreakpoint: LengthUnit = .default
-
-    var smallMaxWidth: LengthUnit = .default
-    var mediumMaxWidth: LengthUnit = .default
-    var largeMaxWidth: LengthUnit = .default
-    var xLargeMaxWidth: LengthUnit = .default
-    var xxLargeMaxWidth: LengthUnit = .default
-
-    init() {}
-
-    init(breakpoints: ResponsiveValues, siteWidths: ResponsiveValues) {
-        smallBreakpoint = breakpoints.small
-        mediumBreakpoint = breakpoints.medium
-        largeBreakpoint = breakpoints.large
-        xLargeBreakpoint = breakpoints.xLarge
-        xxLargeBreakpoint = breakpoints.xxLarge
-
-        smallMaxWidth = siteWidths.small
-        mediumMaxWidth = siteWidths.medium
-        largeMaxWidth = siteWidths.large
-        xLargeMaxWidth = siteWidths.xLarge
-        xxLargeMaxWidth = siteWidths.xxLarge
-    }
+    var siteWidth = ResponsiveValues()
+    var breakpoints = ResponsiveValues()
 }

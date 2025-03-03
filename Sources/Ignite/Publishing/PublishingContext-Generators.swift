@@ -14,23 +14,21 @@ extension PublishingContext {
             fatalError(.missingDefaultTheme)
         }
 
-        let resolved = theme.resolvedSiteWidths
-
         return """
         .container {
-            @media (min-width: \(resolved.small.stringValue)) {
+            @media (min-width: \((theme.siteWidth.values[.small] ?? Bootstrap.smallContainer).stringValue)) {
                 max-width: var(\(BootstrapVariable.smallContainer.rawValue), 540px);
             }
-            @media (min-width: \(resolved.medium.stringValue)) {
+            @media (min-width: \((theme.siteWidth.values[.medium] ?? Bootstrap.mediumContainer).stringValue)) {
                 max-width: var(\(BootstrapVariable.mediumContainer.rawValue), 720px);
             }
-            @media (min-width: \(resolved.large.stringValue)) {
+            @media (min-width: \((theme.siteWidth.values[.large] ?? Bootstrap.largeContainer).stringValue)) {
                 max-width: var(\(BootstrapVariable.largeContainer.rawValue), 960px);
             }
-            @media (min-width: \(resolved.xLarge.stringValue)) {
+            @media (min-width: \((theme.siteWidth.values[.xLarge] ?? Bootstrap.xLargeContainer).stringValue)) {
                 max-width: var(\(BootstrapVariable.xLargeContainer.rawValue), 1140px);
             }
-            @media (min-width: \(resolved.xxLarge.stringValue)) {
+            @media (min-width: \((theme.siteWidth.values[.xxLarge] ?? Bootstrap.xxLargeContainer).stringValue)) {
                 max-width: var(\(BootstrapVariable.xxLargeContainer.rawValue), 1320px);
             }
         }

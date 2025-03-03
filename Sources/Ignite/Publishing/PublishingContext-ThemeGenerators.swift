@@ -117,16 +117,12 @@ extension PublishingContext {
         // and site width's of its opposite theme, if explicity set.
         if darkTheme is DefaultDarkTheme,
            let lightTheme, !isDefaultTheme(lightTheme, defaultTheme: DefaultLightTheme()) {
-            darkTheme = DefaultDarkTheme(
-                breakpoints: lightTheme.resolvedBreakpoints,
-                siteWidths: lightTheme.resolvedSiteWidths)
+            darkTheme = DefaultDarkTheme(siteWidth: lightTheme.siteWidth, breakpoints: lightTheme.breakpoints)
         }
 
         if lightTheme is DefaultLightTheme,
            let darkTheme, !isDefaultTheme(darkTheme, defaultTheme: DefaultDarkTheme()) {
-            lightTheme = DefaultLightTheme(
-                breakpoints: darkTheme.resolvedBreakpoints,
-                siteWidths: darkTheme.resolvedSiteWidths)
+            lightTheme = DefaultLightTheme(siteWidth: darkTheme.siteWidth, breakpoints: darkTheme.breakpoints)
         }
 
         if let lightTheme {
@@ -175,6 +171,8 @@ extension PublishingContext {
             /* Light theme variables (default theme) */
             \(generateThemeVariables(lightTheme))
         }
+        
+        \(generateResponsiveVariables(lightTheme))
 
         \(generateContainers(for: lightTheme))
 
@@ -220,6 +218,8 @@ extension PublishingContext {
                 /* Dark theme variables */
                 \(generateThemeVariables(darkTheme))
             }
+            
+            \(generateResponsiveVariables(darkTheme))
 
             \(generateContainers(for: darkTheme))
 
@@ -252,9 +252,25 @@ extension PublishingContext {
         return output
     }
 
+    /// Generates CSS variables for a theme
+    func generateThemeVariables(_ theme: Theme) -> String {
+        var cssProperties: [String] = []
+
+        generateColorProperties(&cssProperties, for: theme)
+        generateTypographyProperties(&cssProperties, for: theme)
+        addProperty(&cssProperties, .linkDecoration, theme.linkDecoration)
+        addProperty(&cssProperties, .headingsMarginBottom, theme.headingBottomMargin)
+        addProperty(&cssProperties, .paragraphMarginBottom, theme.paragraphBottomMargin)
+        addWidthProperties(&cssProperties, theme)
+        addBreakpointProperties(&cssProperties, theme)
+
+        cssProperties.append("    --syntax-highlight-theme: \"\(theme.syntaxHighlighterTheme.description)\"")
+
+        return cssProperties.joined(separator: ";\n") + ";"
+    }
+
     /// Generates brand and theme color properties
     func generateColorProperties(_ properties: inout [String], for theme: Theme) {
-        // Brand colors
         addColor(&properties, .primary, theme.accent, for: theme)
         addColor(&properties, .secondary, theme.secondaryAccent, for: theme)
         addColor(&properties, .success, theme.success, for: theme)
@@ -264,20 +280,16 @@ extension PublishingContext {
         addColor(&properties, .light, theme.offWhite, for: theme)
         addColor(&properties, .dark, theme.offBlack, for: theme)
 
-        // Body settings
         addColor(&properties, .bodyColor, theme.primary, for: theme)
         addColor(&properties, .bodyBackground, theme.background, for: theme)
 
-        // Emphasis colors
         addColor(&properties, .emphasisColor, theme.emphasis, for: theme)
         addColor(&properties, .secondaryColor, theme.secondary, for: theme)
         addColor(&properties, .tertiaryColor, theme.tertiary, for: theme)
 
-        // Background colors
         addColor(&properties, .secondaryBackground, theme.secondaryBackground, for: theme)
         addColor(&properties, .tertiaryBackground, theme.tertiaryBackground, for: theme)
 
-        // Link and border colors
         addColor(&properties, .linkColor, theme.link, for: theme)
         addColor(&properties, .linkHoverColor, theme.linkHover, for: theme)
         addColor(&properties, .borderColor, theme.border, for: theme)
@@ -285,70 +297,58 @@ extension PublishingContext {
 
     /// Generates typography-related properties
     func generateTypographyProperties(_ properties: inout [String], for theme: Theme) {
-        // Font families
         addFont(&properties, .monospaceFont, theme.monospaceFont, defaultFonts: Font.monospaceFonts)
         addFont(&properties, .bodyFont, theme.font, defaultFonts: Font.systemFonts)
         addFont(&properties, .headingFont, theme.headingFont, defaultFonts: Font.systemFonts)
 
-        // Font sizes
         addProperty(&properties, .rootFontSize, theme.rootFontSize)
-        addProperty(&properties, .bodyFontSize, theme.bodyFontSize)
         addProperty(&properties, .inlineCodeFontSize, theme.inlineCodeFontSize)
         addProperty(&properties, .codeBlockFontSize, theme.codeBlockFontSize)
+        addFontSize(&properties, .bodyFontSize, theme.bodyFontSize)
+        addFontSize(&properties, .h1FontSize, theme.h1Size)
+        addFontSize(&properties, .h2FontSize, theme.h2Size)
+        addFontSize(&properties, .h3FontSize, theme.h3Size)
+        addFontSize(&properties, .h4FontSize, theme.h4Size)
+        addFontSize(&properties, .h5FontSize, theme.h5Size)
+        addFontSize(&properties, .h6FontSize, theme.h6Size)
 
-        // Heading sizes
-        addProperty(&properties, .h1FontSize, theme.xxLargeHeadingSize)
-        addProperty(&properties, .h2FontSize, theme.xLargeHeadingSize)
-        addProperty(&properties, .h3FontSize, theme.largeHeadingSize)
-        addProperty(&properties, .h4FontSize, theme.mediumHeadingSize)
-        addProperty(&properties, .h5FontSize, theme.smallHeadingSize)
-        addProperty(&properties, .h6FontSize, theme.xSmallHeadingSize)
-
-        // Font weights and line heights
         addProperty(&properties, .bodyLineHeight, theme.lineHeight)
         addProperty(&properties, .headingsLineHeight, theme.headingLineHeight)
     }
 
-    /// Generates CSS variables for a theme
-    func generateThemeVariables(_ theme: Theme) -> String {
-        var cssProperties: [String] = []
+    /// Generates the media queries to update font size variables at different breakpoints
+    private func generateResponsiveVariables(_ theme: Theme) -> String {
+        var output = ""
+        let breakpoints: [Breakpoint] = [.small, .medium, .large, .xLarge, .xxLarge]
+        let fontSizes: [(BootstrapVariable, ResponsiveValues<LengthUnit>)] = [
+            (.bodyFontSize, theme.bodyFontSize),
+            (.h1FontSize, theme.h1Size),
+            (.h2FontSize, theme.h2Size),
+            (.h3FontSize, theme.h3Size),
+            (.h4FontSize, theme.h4Size),
+            (.h5FontSize, theme.h5Size),
+            (.h6FontSize, theme.h6Size)
+        ]
 
-        generateColorProperties(&cssProperties, for: theme)
-        generateTypographyProperties(&cssProperties, for: theme)
+        for breakpoint in breakpoints {
+            var properties: [String] = []
 
-        // Link decoration
-        addProperty(&cssProperties, .linkDecoration, theme.linkDecoration)
+            for (variable, sizes) in fontSizes {
+                addFontSize(&properties, variable, sizes, breakpoint)
+            }
 
-        // Margins
-        addProperty(&cssProperties, .headingsMarginBottom, theme.headingBottomMargin)
-        addProperty(&cssProperties, .paragraphMarginBottom, theme.paragraphBottomMargin)
+            if !properties.isEmpty {
+                output += """
 
-        // Resolve and add breakpoint values
-        addWidthProperties(&cssProperties, theme)
-        addBreakpointProperties(&cssProperties, theme)
+                @media (min-width: var(--bs-breakpoint-\(breakpoint.infix!))) {
+                    :root {
+                        \(properties.joined(separator: ";\n"))
+                    }
+                }
+                """
+            }
+        }
 
-        cssProperties.append("    --syntax-highlight-theme: \"\(theme.syntaxHighlighterTheme.description)\"")
-
-        return cssProperties.joined(separator: ";\n") + ";"
-    }
-
-    /// Adds resolved container size properties to CSS properties array
-    func addWidthProperties(_ properties: inout [String], _ theme: any Theme) {
-        let resolved = resolveSiteWidths(for: theme)
-        properties.append("    \(BootstrapVariable.smallContainer): \(resolved.small)")
-        properties.append("    \(BootstrapVariable.mediumContainer): \(resolved.medium)")
-        properties.append("    \(BootstrapVariable.largeContainer): \(resolved.large)")
-        properties.append("    \(BootstrapVariable.xLargeContainer): \(resolved.xLarge)")
-        properties.append("    \(BootstrapVariable.xxLargeContainer): \(resolved.xxLarge)")
-    }
-
-    /// Adds resolved breakpoint size properties to CSS properties array
-    func addBreakpointProperties(_ properties: inout [String], _ theme: any Theme) {
-        let resolved = resolveBreakpoints(for: theme)
-        properties.append("    \(BootstrapVariable.smallBreakpoint): \(resolved.small)")
-        properties.append("    \(BootstrapVariable.mediumBreakpoint): \(resolved.medium)")
-        properties.append("    \(BootstrapVariable.largeBreakpoint): \(resolved.large)")
-        properties.append("    \(BootstrapVariable.xLargeBreakpoint): \(resolved.xLarge)")
-        properties.append("    \(BootstrapVariable.xxLargeBreakpoint): \(resolved.xxLarge)")
+        return output
     }
 }
