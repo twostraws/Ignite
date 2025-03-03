@@ -33,9 +33,14 @@ public protocol Layout {
 }
 
 public extension Layout {
+    
     /// The current page being rendered.
     var content: some HTML {
         Section(PublishingContext.shared.environment.pageContent)
+    }
+    
+    var language: Language {
+        PublishingContext.shared.environment.language
     }
 
     /// Generates a unique identifier for this layout based on its file location and type.
