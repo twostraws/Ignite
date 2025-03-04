@@ -12,7 +12,4 @@
 
     /// The dark color scheme.
     case dark
-
-    /// The browser's color scheme.
-    case automatic
 }
