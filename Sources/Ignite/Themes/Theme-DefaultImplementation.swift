@@ -174,13 +174,17 @@ public extension Theme {
     static var id: String {
         let baseID = name.kebabCased()
 
-        guard baseID != "light" && baseID != "dark" else {
+        guard
+            Self.self != DefaultDarkTheme.self &&
+            Self.self != DefaultLightTheme.self &&
+            Self.self != AutoTheme.self
+        else {
             return baseID
         }
 
         switch colorScheme {
-        case .light: return baseID + "-light"
-        case .dark: return baseID + "-dark"
+        case .light where name != "light": return baseID + "-light"
+        case .dark where name != "dark": return baseID + "-dark"
         default: return baseID
         }
     }
