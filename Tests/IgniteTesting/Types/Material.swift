@@ -27,19 +27,19 @@ struct MaterialTests {
     }
 
     @Test("Correct class name with color scheme.", arguments: await [
-        (Material.ultraThinMaterial, Material.ColorScheme.dark, "ultra-thin"),
-        (Material.thinMaterial, Material.ColorScheme.dark, "thin"),
-        (Material.regularMaterial, Material.ColorScheme.dark, "regular"),
-        (Material.thickMaterial, Material.ColorScheme.dark, "thick"),
-        (Material.ultraThickMaterial, Material.ColorScheme.dark, "ultra-thick"),
-        (Material.ultraThinMaterial, Material.ColorScheme.light, "ultra-thin"),
-        (Material.thinMaterial, Material.ColorScheme.light, "thin"),
-        (Material.regularMaterial, Material.ColorScheme.light, "regular"),
-        (Material.thickMaterial, Material.ColorScheme.light, "thick"),
-        (Material.ultraThickMaterial, Material.ColorScheme.light, "ultra-thick")
+        (Material.ultraThinMaterial, ColorScheme.dark, "ultra-thin"),
+        (Material.thinMaterial, ColorScheme.dark, "thin"),
+        (Material.regularMaterial, ColorScheme.dark, "regular"),
+        (Material.thickMaterial, ColorScheme.dark, "thick"),
+        (Material.ultraThickMaterial, ColorScheme.dark, "ultra-thick"),
+        (Material.ultraThinMaterial, ColorScheme.light, "ultra-thin"),
+        (Material.thinMaterial, ColorScheme.light, "thin"),
+        (Material.regularMaterial, ColorScheme.light, "regular"),
+        (Material.thickMaterial, ColorScheme.light, "thick"),
+        (Material.ultraThickMaterial, ColorScheme.light, "ultra-thick")
     ])
 
-    func className(material: Material, colorScheme: Material.ColorScheme, type: String) async throws {
+    func className(material: Material, colorScheme: ColorScheme, type: String) async throws {
         let colorSchemeMaterial = material.colorScheme(colorScheme)
         #expect(colorSchemeMaterial.className == "material-\(type)-\(colorScheme.rawValue)")
     }
