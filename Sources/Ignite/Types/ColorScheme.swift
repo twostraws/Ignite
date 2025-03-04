@@ -6,7 +6,7 @@
 //
 
 /// The color scheme appearance for UI elements.
-@frozen public enum ColorScheme: Sendable, Hashable, Equatable, CaseIterable {
+@frozen public enum ColorScheme: String, Sendable, Hashable, Equatable, CaseIterable {
     /// The light color scheme.
     case light
 
