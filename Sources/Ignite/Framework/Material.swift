@@ -22,12 +22,6 @@ public struct Material: Sendable {
         case ultraThick = "ultra-thick"
     }
 
-    /// The available color schemes for material effects
-    public enum ColorScheme: String, Sendable {
-        case light
-        case dark
-    }
-
     /// Creates a new material with the specified type
     private init(type: MaterialType, colorScheme: ColorScheme? = nil) {
         self.type = type
