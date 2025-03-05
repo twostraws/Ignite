@@ -8,33 +8,6 @@
 import Foundation
 
 extension PublishingContext {
-    /// Contains the various snap dimensions for different Bootstrap widths.
-    func generateContainers(for theme: any Theme) -> String {
-        guard let theme = site.lightTheme ?? site.darkTheme else {
-            fatalError(.missingDefaultTheme)
-        }
-
-        return """
-        .container {
-            @media (min-width: \((theme.siteWidth.values[.small] ?? Bootstrap.smallContainer).stringValue)) {
-                max-width: var(\(BootstrapVariable.smallContainer.rawValue), 540px);
-            }
-            @media (min-width: \((theme.siteWidth.values[.medium] ?? Bootstrap.mediumContainer).stringValue)) {
-                max-width: var(\(BootstrapVariable.mediumContainer.rawValue), 720px);
-            }
-            @media (min-width: \((theme.siteWidth.values[.large] ?? Bootstrap.largeContainer).stringValue)) {
-                max-width: var(\(BootstrapVariable.largeContainer.rawValue), 960px);
-            }
-            @media (min-width: \((theme.siteWidth.values[.xLarge] ?? Bootstrap.xLargeContainer).stringValue)) {
-                max-width: var(\(BootstrapVariable.xLargeContainer.rawValue), 1140px);
-            }
-            @media (min-width: \((theme.siteWidth.values[.xxLarge] ?? Bootstrap.xxLargeContainer).stringValue)) {
-                max-width: var(\(BootstrapVariable.xxLargeContainer.rawValue), 1320px);
-            }
-        }
-        """
-    }
-
     /// Renders static pages and content pages, including the homepage.
     func generateContent() async {
         render(site.homePage, isHomePage: true)

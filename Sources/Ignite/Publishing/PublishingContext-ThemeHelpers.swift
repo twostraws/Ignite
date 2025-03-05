@@ -6,69 +6,164 @@
 //
 
 extension PublishingContext {
-    private struct BreakpointValue {
-        let size: Breakpoint
-        let variable: BootstrapVariable
-        let fallback: LengthUnit
+    /// Creates the root ruleset for light theme
+    func lightRootStyles(for theme: Theme, darkThemeID: String?) -> Ruleset {
+        Ruleset(.pseudoClass("root")) {
+            InlineStyle("--supports-light-theme", value: site.supportsLightTheme.description)
+            InlineStyle("--supports-dark-theme", value: site.supportsDarkTheme.description)
+            InlineStyle("--light-theme-id", value: "\"\(theme.id)\"")
+            InlineStyle("--dark-theme-id", value: "\"\(darkThemeID ?? "")\"")
+            themeStyles(for: theme)
+        }
     }
 
-    /// Appends container width CSS variables for each breakpoint to the properties array.
-    func addWidthProperties(_ properties: inout [String], _ theme: any Theme) {
-        let values = theme.siteWidth.values
-        let containerSizes: [BreakpointValue] = [
-            .init(size: .small, variable: .smallContainer, fallback: Bootstrap.smallContainer),
-            .init(size: .medium, variable: .mediumContainer, fallback: Bootstrap.mediumContainer),
-            .init(size: .large, variable: .largeContainer, fallback: Bootstrap.largeContainer),
-            .init(size: .xLarge, variable: .xLargeContainer, fallback: Bootstrap.xLargeContainer),
-            .init(size: .xxLarge, variable: .xxLargeContainer, fallback: Bootstrap.xxLargeContainer)
+    /// Creates the root ruleset for dark theme
+    func darkRootStyles(for theme: Theme, lightThemeID: String?) -> Ruleset {
+        Ruleset(.pseudoClass("root")) {
+            InlineStyle("--supports-light-theme", value: site.supportsLightTheme.description)
+            InlineStyle("--supports-dark-theme", value: site.supportsDarkTheme.description)
+            InlineStyle("--light-theme-id", value: "\"\(lightThemeID ?? "")\"")
+            InlineStyle("--dark-theme-id", value: "\"\(theme.id)\"")
+            themeStyles(for: theme)
+        }
+    }
+
+    /// Creates all theme-specific CSS styles
+    func themeStyles(for theme: Theme) -> [InlineStyle] {
+        var styles: [InlineStyle?] = []
+
+        styles.append(contentsOf: colorStyles(for: theme))
+        styles.append(contentsOf: typographyStyles(for: theme))
+
+        styles.append(contentsOf: [
+            InlineStyle(.linkDecoration, value: theme.linkDecoration),
+            InlineStyle(.headingsMarginBottom, value: theme.headingBottomMargin),
+            InlineStyle(.paragraphMarginBottom, value: theme.paragraphBottomMargin)
+        ])
+
+        styles.append(contentsOf: widthStyles(theme))
+        styles.append(contentsOf: breakpointStyles(theme))
+
+        styles.append(.init(
+            "--syntax-highlight-theme",
+            value: "\"\(theme.syntaxHighlighterTheme.description)\""
+        ))
+
+        return styles.compactMap { $0 }
+    }
+
+    /// Generates the media queries to update font size variables at different breakpoints
+    func responsiveVariables(for theme: Theme) -> [MediaQuery] {
+        let breakpoints: [(Breakpoint, LengthUnit)] = [
+            (.small, theme.breakpoints.values[.small] ?? Bootstrap.smallBreakpoint),
+            (.medium, theme.breakpoints.values[.medium] ?? Bootstrap.mediumBreakpoint),
+            (.large, theme.breakpoints.values[.large] ?? Bootstrap.largeBreakpoint),
+            (.xLarge, theme.breakpoints.values[.xLarge] ?? Bootstrap.xLargeBreakpoint),
+            (.xxLarge, theme.breakpoints.values[.xxLarge] ?? Bootstrap.xxLargeBreakpoint)
         ]
 
-        for config in containerSizes {
-            properties.append("    \(config.variable): \(values[config.size] ?? config.fallback)")
-        }
-    }
-
-    /// Appends breakpoint CSS variables for responsive design to the properties array.
-    func addBreakpointProperties(_ properties: inout [String], _ theme: any Theme) {
-        let values = theme.breakpoints.values
-        let breakpointSizes: [BreakpointValue] = [
-            .init(size: .small, variable: .smallBreakpoint, fallback: Bootstrap.smallBreakpoint),
-            .init(size: .medium, variable: .mediumBreakpoint, fallback: Bootstrap.mediumBreakpoint),
-            .init(size: .large, variable: .largeBreakpoint, fallback: Bootstrap.largeBreakpoint),
-            .init(size: .xLarge, variable: .xLargeBreakpoint, fallback: Bootstrap.xLargeBreakpoint),
-            .init(size: .xxLarge, variable: .xxLargeBreakpoint, fallback: Bootstrap.xxLargeBreakpoint)
+        let fontSizes: [(BootstrapVariable, ResponsiveValues<LengthUnit>)] = [
+            (.bodyFontSize, theme.bodyFontSize),
+            (.h1FontSize, theme.h1Size),
+            (.h2FontSize, theme.h2Size),
+            (.h3FontSize, theme.h3Size),
+            (.h4FontSize, theme.h4Size),
+            (.h5FontSize, theme.h5Size),
+            (.h6FontSize, theme.h6Size)
         ]
 
-        for config in breakpointSizes {
-            properties.append("    \(config.variable): \(values[config.size] ?? config.fallback)")
-        }
-    }
+        return breakpoints.compactMap { breakpoint, minWidth in
+            let styles = fontSizes.compactMap { variable, sizes -> InlineStyle? in
+                guard let size = sizes.values[breakpoint] else { return nil }
+                return InlineStyle(variable, value: size)
+            }
 
-    /// Adds a CSS property if the value is not default
-    func addProperty(_ properties: inout [String], _ variable: BootstrapVariable, _ value: any Defaultable) {
-        if value.isDefault == false {
-            properties.append("    \(variable.rawValue): \(value)")
-        }
-    }
+            // Only create media query if we have non-empty styles
+            guard !styles.isEmpty, styles.allSatisfy({ !$0.value.isEmpty }) else { return nil }
 
-    /// Adds color properties including RGB and theme variants
-    func addColor(_ properties: inout [String], _ variable: BootstrapVariable, _ color: Color, for theme: Theme) {
-        if !color.isDefault {
-            properties.append("    \(variable.rawValue): \(color)")
-            properties.append("    \(variable.rawValue)-rgb: \(color.red), \(color.green), \(color.blue)")
-
-            if variable.isThemeColor {
-                addColorVariants(&properties, variable, color, for: theme)
+            return MediaQuery(.breakpoint(minWidth)) {
+                Ruleset(.pseudoClass("root")) {
+                    styles
+                }
             }
         }
     }
 
-    /// Adds subtle background, border, and text emphasis variants for theme colors
-    func addColorVariants(
-        _ properties: inout [String],
-        _ variable: BootstrapVariable,
-        _ color: Color, for theme: Theme
-    ) {
+    /// Creates responsive measurement styles
+    private func createResponsiveStyles(
+        from values: ResponsiveValues<LengthUnit>,
+        using variables: [(Breakpoint, BootstrapVariable)]
+    ) -> [InlineStyle] {
+        variables.compactMap { breakpoint, variable in
+            guard let value = values.values[breakpoint] else { return nil }
+            return InlineStyle(variable, value: value)
+        }
+    }
+
+    private func widthStyles(_ theme: Theme) -> [InlineStyle] {
+        let variables: [(Breakpoint, BootstrapVariable)] = [
+            (.small, .smallContainer),
+            (.medium, .mediumContainer),
+            (.large, .largeContainer),
+            (.xLarge, .xLargeContainer),
+            (.xxLarge, .xxLargeContainer)
+        ]
+        return createResponsiveStyles(from: theme.siteWidth, using: variables)
+    }
+
+    private func breakpointStyles(_ theme: Theme) -> [InlineStyle] {
+        let variables: [(Breakpoint, BootstrapVariable)] = [
+            (.small, .smallBreakpoint),
+            (.medium, .mediumBreakpoint),
+            (.large, .largeBreakpoint),
+            (.xLarge, .xLargeBreakpoint),
+            (.xxLarge, .xxLargeBreakpoint)
+        ]
+        return createResponsiveStyles(from: theme.breakpoints, using: variables)
+    }
+
+    /// Creates color-related CSS styles for a theme
+    private func colorStyles(for theme: Theme) -> [InlineStyle] {
+        let brandColors: [(BootstrapVariable, Color)] = [
+            (.primary, theme.accent),
+            (.secondary, theme.secondaryAccent),
+            (.success, theme.success),
+            (.info, theme.info),
+            (.warning, theme.warning),
+            (.danger, theme.danger),
+            (.light, theme.offWhite),
+            (.dark, theme.offBlack)
+        ]
+
+        let themeColors: [(BootstrapVariable, Color)] = [
+            (.bodyColor, theme.primary),
+            (.bodyBackground, theme.background),
+            (.emphasisColor, theme.emphasis),
+            (.secondaryColor, theme.secondary),
+            (.tertiaryColor, theme.tertiary),
+            (.secondaryBackground, theme.secondaryBackground),
+            (.tertiaryBackground, theme.tertiaryBackground),
+            (.linkColor, theme.link),
+            (.linkHoverColor, theme.hoveredLink),
+            (.borderColor, theme.border)
+        ]
+
+        return (brandColors + themeColors).flatMap { variable, color -> [InlineStyle] in
+            var styles: [InlineStyle?] = [
+                InlineStyle(variable, value: color),
+                InlineStyle("\(variable)-rgb", value: "\(color.red), \(color.green), \(color.blue)")
+            ]
+
+            if variable.isThemeColor {
+                styles.append(contentsOf: colorVariants(variable, color, for: theme))
+            }
+
+            return styles.compactMap { $0 }
+        }
+    }
+
+    /// Creates color variant styles for a theme color
+    private func colorVariants(_ variable: BootstrapVariable, _ color: Color, for theme: Theme) -> [InlineStyle] {
         let bgSubtleColor = theme.colorScheme == .dark ? color.weighted(.darkest) : color.weighted(.lightest)
         var emphasisColor = theme.colorScheme == .dark ? color.weighted(.light) : color.weighted(.darker)
         var borderSubtleColor = theme.colorScheme == .dark ? color.weighted(.dark) : color.weighted(.light)
@@ -86,27 +181,67 @@ extension PublishingContext {
         default: break
         }
 
-        properties.append("    \(variable.rawValue)-text-emphasis: \(emphasisColor)")
-        properties.append("    \(variable.rawValue)-bg-subtle: \(bgSubtleColor)")
-        properties.append("    \(variable.rawValue)-border-subtle: \(borderSubtleColor)")
+        return [
+            InlineStyle("\(variable.rawValue)-text-emphasis", value: emphasisColor.description),
+            InlineStyle("\(variable.rawValue)-bg-subtle", value: bgSubtleColor.description),
+            InlineStyle("\(variable.rawValue)-border-subtle", value: borderSubtleColor.description)
+        ]
     }
 
-    /// Adds font properties with fallback to default fonts
-    func addFont(_ properties: inout [String], _ variable: BootstrapVariable, _ font: Font, defaultFonts: [String]) {
-        if !font.isDefault {
-            properties.append("    \(variable.rawValue): \(font.name ?? defaultFonts.joined(separator: ","))")
-        }
-    }
+    /// Creates typography-related CSS styles for a theme
+    private func typographyStyles(for theme: Theme) -> [InlineStyle] {
+        var styles: [InlineStyle] = []
 
-    /// Adds a responsive font size for a specific breakpoint if present
-    func addFontSize(
-        _ properties: inout [String],
-        _ variable: BootstrapVariable,
-        _ sizes: ResponsiveValues<LengthUnit>,
-        _ breakpoint: Breakpoint = .xSmall
-    ) {
-        if let size = sizes.values[breakpoint] {
-            properties.append("\(variable): \(size)")
-        }
+        // Font families
+        let fonts: [(BootstrapVariable, Font)] = [
+            (.monospaceFont, theme.monospaceFont),
+            (.bodyFont, theme.font),
+            (.headingFont, theme.headingFont)
+        ]
+
+        // Add font families that aren't using defaults
+        styles.append(contentsOf: fonts.compactMap {
+            InlineStyle($0, value: $1)
+        })
+
+        // Font sizes
+        let fontSizes: [(BootstrapVariable, any Defaultable)] = [
+            (.rootFontSize, theme.rootFontSize),
+            (.inlineCodeFontSize, theme.inlineCodeFontSize),
+            (.codeBlockFontSize, theme.codeBlockFontSize),
+            (.bodyFontSize, theme.bodyFontSize),
+            (.h1FontSize, theme.h1Size),
+            (.h2FontSize, theme.h2Size),
+            (.h3FontSize, theme.h3Size),
+            (.h4FontSize, theme.h4Size),
+            (.h5FontSize, theme.h5Size),
+            (.h6FontSize, theme.h6Size)
+        ]
+
+        // Add non-default font sizes
+        styles.append(contentsOf: fontSizes.compactMap {
+            InlineStyle($0, value: $1)
+        })
+
+        // Line heights
+        let lineHeights: [(BootstrapVariable, any Defaultable)] = [
+            (.bodyLineHeight, theme.lineSpacing),
+            (.headingsLineHeight, theme.headingLineSpacing)
+        ]
+
+        // Add non-default line heights
+        styles.append(contentsOf: lineHeights.compactMap {
+            InlineStyle($0, value: $1)
+        })
+
+        return styles
+    }
+}
+
+private extension InlineStyle {
+    init?(_ variable: BootstrapVariable, value: any Defaultable) {
+        guard !value.isDefault else { return nil }
+        self.property = variable.rawValue
+        self.value = String(describing: value)
     }
 }

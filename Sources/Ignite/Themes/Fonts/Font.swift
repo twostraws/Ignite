@@ -268,7 +268,7 @@ public extension Font {
             xLarge: LengthUnit? = nil,
             xxLarge: LengthUnit? = nil
         )
-        
+
         var values: ResponsiveValues<LengthUnit> {
             switch self {
             case let .responsive(xSmall, small, medium, large, xLarge, xxLarge):
@@ -282,5 +282,11 @@ public extension Font {
                 )
             }
         }
+    }
+}
+
+extension Font: CustomStringConvertible {
+    public var description: String {
+        name ?? "System"
     }
 }
