@@ -168,7 +168,6 @@ extension PublishingContext {
         var emphasisColor = theme.colorScheme == .dark ? color.weighted(.light) : color.weighted(.darker)
         var borderSubtleColor = theme.colorScheme == .dark ? color.weighted(.dark) : color.weighted(.light)
 
-        // Special handling for dark and light roles
         switch variable {
         case .dark where theme.colorScheme == .dark:
             borderSubtleColor = color.weighted(.semiLight)
