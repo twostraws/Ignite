@@ -215,7 +215,8 @@ extension PublishingContext {
 
 private extension Site {
     var hasMultipleThemes: Bool {
-        supportsDarkTheme || !alternateThemes.isEmpty
+        (supportsLightTheme && supportsDarkTheme) ||
+        !alternateThemes.isEmpty
     }
 
     var hasAutoTheme: Bool {
