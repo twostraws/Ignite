@@ -192,19 +192,16 @@ extension PublishingContext {
     private func typographyStyles(for theme: Theme) -> [InlineStyle] {
         var styles: [InlineStyle] = []
 
-        // Font families
         let fonts: [(BootstrapVariable, Font)] = [
             (.monospaceFont, theme.monospaceFont),
             (.bodyFont, theme.font),
             (.headingFont, theme.headingFont)
         ]
 
-        // Add font families that aren't using defaults
         styles.append(contentsOf: fonts.compactMap {
             InlineStyle($0, value: $1)
         })
 
-        // Font sizes
         let fontSizes: [(BootstrapVariable, any Defaultable)] = [
             (.rootFontSize, theme.rootFontSize),
             (.inlineCodeFontSize, theme.inlineCodeFontSize),
@@ -218,18 +215,15 @@ extension PublishingContext {
             (.h6FontSize, theme.h6Size)
         ]
 
-        // Add non-default font sizes
         styles.append(contentsOf: fontSizes.compactMap {
             InlineStyle($0, value: $1)
         })
 
-        // Line heights
         let lineHeights: [(BootstrapVariable, any Defaultable)] = [
             (.bodyLineHeight, theme.lineSpacing),
             (.headingsLineHeight, theme.headingLineSpacing)
         ]
 
-        // Add non-default line heights
         styles.append(contentsOf: lineHeights.compactMap {
             InlineStyle($0, value: $1)
         })
