@@ -94,7 +94,7 @@ extension PublishingContext {
 
         // Add explicit dark theme override
         rules.append(
-            Ruleset(.attribute(name: "data-bs-theme", value: theme.id)) {
+            Ruleset(.attribute(name: "data-bs-theme", value: theme.cssID)) {
                 themeStyles(for: theme)
             }
         )
@@ -127,16 +127,16 @@ extension PublishingContext {
         let (lightTheme, darkTheme) = configureDefaultThemes(site.lightTheme, site.darkTheme)
 
         if let lightTheme {
-            rules.append(contentsOf: lightThemeRules(lightTheme, darkThemeID: darkTheme?.id))
+            rules.append(contentsOf: lightThemeRules(lightTheme, darkThemeID: darkTheme?.cssID))
         }
 
         if let darkTheme {
-            rules.append(contentsOf: darkThemeRules(darkTheme, lightThemeID: lightTheme?.id))
+            rules.append(contentsOf: darkThemeRules(darkTheme, lightThemeID: lightTheme?.cssID))
         }
 
         for theme in site.alternateThemes {
             rules.append(
-                Ruleset(.attribute(name: "data-bs-theme", value: theme.id)) {
+                Ruleset(.attribute(name: "data-bs-theme", value: theme.cssID)) {
                     themeStyles(for: theme)
                 }
             )
@@ -150,12 +150,12 @@ extension PublishingContext {
         var lightTheme = light
         var darkTheme = dark
 
-        if darkTheme is DefaultDarkTheme, let lightTheme, !lightTheme.isDefaultLightTheme {
-            darkTheme = DefaultDarkTheme(siteWidth: lightTheme.siteWidth, breakpoints: lightTheme.breakpoints)
+        if let dark = darkTheme as? DefaultDarkTheme, let lightTheme, !lightTheme.isDefaultLightTheme {
+            darkTheme = dark.merging(lightTheme)
         }
 
-        if lightTheme is DefaultLightTheme, let darkTheme, !darkTheme.isDefaultDarkTheme {
-            lightTheme = DefaultLightTheme(siteWidth: darkTheme.siteWidth, breakpoints: darkTheme.breakpoints)
+        if let light = lightTheme as? DefaultLightTheme, let darkTheme, !darkTheme.isDefaultDarkTheme {
+            lightTheme = light.merging(darkTheme)
         }
 
         return (lightTheme, darkTheme)
@@ -176,7 +176,7 @@ extension PublishingContext {
 
         if site.hasMultipleThemes {
             overrides.append(
-                Ruleset(.attribute(name: "data-bs-theme", value: theme.id)) {
+                Ruleset(.attribute(name: "data-bs-theme", value: theme.cssID)) {
                     themeStyles(for: theme)
                 }
             )

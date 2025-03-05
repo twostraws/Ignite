@@ -11,7 +11,7 @@ extension PublishingContext {
         Ruleset(.pseudoClass("root")) {
             InlineStyle("--supports-light-theme", value: site.supportsLightTheme.description)
             InlineStyle("--supports-dark-theme", value: site.supportsDarkTheme.description)
-            InlineStyle("--light-theme-id", value: "\"\(theme.id)\"")
+            InlineStyle("--light-theme-id", value: "\"\(theme.cssID)\"")
             InlineStyle("--dark-theme-id", value: "\"\(darkThemeID ?? "")\"")
             themeStyles(for: theme)
         }
@@ -23,7 +23,7 @@ extension PublishingContext {
             InlineStyle("--supports-light-theme", value: site.supportsLightTheme.description)
             InlineStyle("--supports-dark-theme", value: site.supportsDarkTheme.description)
             InlineStyle("--light-theme-id", value: "\"\(lightThemeID ?? "")\"")
-            InlineStyle("--dark-theme-id", value: "\"\(theme.id)\"")
+            InlineStyle("--dark-theme-id", value: "\"\(theme.cssID)\"")
             themeStyles(for: theme)
         }
     }

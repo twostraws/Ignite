@@ -172,13 +172,15 @@ final class CSSManager {
     ) -> String {
         let (_, mediaQueries) = queries.reduce(into: (Set<String>(), [String]())) { result, query in
             if let themeQuery = query as? ThemeQuery {
-                result.0.insert(themeQuery.id.kebabCased())
+                result.0.insert(themeQuery.id)
+            } else if let breakpointQuery = query as? BreakpointQuery {
+                result.1.append(breakpointQuery.condition(for: theme))
             } else {
-                result.1.append(query.condition(with: theme))
+                result.1.append(query.condition)
             }
         }
 
-        let selector = "[data-theme-state=\"\(theme.id)\"]"
+        let selector = "[data-bs-theme^=\"\(theme.cssID)\"]"
         let styleRules = properties.map { "\($0.property): \($0.value);" }.joined(separator: " ")
 
         if mediaQueries.isEmpty {
