@@ -10,6 +10,5 @@
 /// AutoTheme uses the default Bootstrap light theme values but allows JavaScript to
 /// dynamically switch between light and dark modes based on the user's system preferences.
 struct AutoTheme: Theme {
-    static var name: String = "auto"
     static var colorScheme: ColorScheme = .light
 }

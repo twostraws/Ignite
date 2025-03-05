@@ -9,7 +9,6 @@
 /// This theme provides all standard dark mode colors and styling without any customization.
 struct DefaultDarkTheme: Theme {
     typealias ResponsiveValues = Ignite.ResponsiveValues<LengthUnit>
-    static var name: String = "dark"
     static var colorScheme: ColorScheme { .dark }
     var siteWidth = ResponsiveValues()
     var breakpoints = ResponsiveValues()

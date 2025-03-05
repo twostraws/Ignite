@@ -9,7 +9,6 @@
 /// This theme provides all standard light mode colors and styling without any customization.
 struct DefaultLightTheme: Theme {
     typealias ResponsiveValues = Ignite.ResponsiveValues<LengthUnit>
-    static var name: String = "light"
     static var colorScheme: ColorScheme { .light }
     var siteWidth = ResponsiveValues()
     var breakpoints = ResponsiveValues()

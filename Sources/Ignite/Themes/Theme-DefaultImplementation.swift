@@ -159,34 +159,47 @@ public extension Theme {
 }
 
 public extension Theme {
-    /// The unique identifier for this theme instance, including any system-generated suffix.
+    /// A unique identifier derived from the type name, appending "-light" or "-dark" based on `colorScheme`.
     var id: String {
         Self.id
     }
 
-    /// The display name of this theme instance.
+    /// The type name, removing the word "Theme" if present
     var name: String {
-        Self.name
+        Self.baseName.titleCase()
     }
 
-    /// Internal identifier used for theme switching and CSS selectors.
-    /// Automatically appends "-light" or "-dark" suffix based on protocol conformance.
+    /// A unique identifier derived from the type name, appending "-light" or "-dark" based on `colorScheme`.
     static var id: String {
-        let baseID = name.kebabCased()
-
-        guard
-            Self.self != DefaultDarkTheme.self &&
-            Self.self != DefaultLightTheme.self &&
-            Self.self != AutoTheme.self
-        else {
-            return baseID
-        }
+        let baseID = Self.baseName
+            .kebabCased()
+            .lowercased()
 
         switch colorScheme {
-        case .light where name != "light": return baseID + "-light"
-        case .dark where name != "dark": return baseID + "-dark"
+        case .light where
+            baseID != "light" &&
+            Self.self != DefaultLightTheme.self &&
+            Self.self != AutoTheme.self:
+            return baseID + "-light"
+        case .dark where
+            baseID != "dark" &&
+            Self.self != DefaultDarkTheme.self:
+            return baseID + "-dark"
         default: return baseID
         }
+    }
+}
+
+fileprivate extension Theme {
+    static var baseName: String {
+        let name = switch Self.self {
+        case is DefaultDarkTheme.Type: "dark"
+        case is DefaultLightTheme.Type: "light"
+        case is AutoTheme.Type: "auto"
+        default: String(describing: Self.self)
+        }
+
+        return name.replacingOccurrences(of: "Theme", with: "")
     }
 }
 
