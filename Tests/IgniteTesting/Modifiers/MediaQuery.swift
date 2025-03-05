@@ -17,8 +17,8 @@ class MediaQueryTests: IgniteTestSuite {
     @Test("Breakpoint queries", arguments: zip(
         BreakpointQuery.allCases,
         ["min-width: 576px", "min-width: 768px", "min-width: 992px", "min-width: 1200px", "min-width: 1400px"]))
-    func breakpoint_queries_render_correctly(query: any Query, css: String) async throws {
-        let output = query.condition(with: .light)
+    func breakpoint_queries_render_correctly(query: BreakpointQuery, css: String) async throws {
+        let output = query.condition
         #expect(output == css)
     }
 
@@ -26,7 +26,7 @@ class MediaQueryTests: IgniteTestSuite {
         ColorSchemeQuery.allCases,
         ["prefers-color-scheme: dark", "prefers-color-scheme: light"]))
     func color_scheme_queries_render_correctly(query: any Query, css: String) async throws {
-        let output = query.condition(with: .light)
+        let output = query.condition
         #expect(output == css)
     }
 
@@ -36,7 +36,7 @@ class MediaQueryTests: IgniteTestSuite {
          "prefers-contrast: more",
          "prefers-contrast: less"]))
     func contrast_queries_render_correctly(query: any Query, css: String) async throws {
-        let output = query.condition(with: .light)
+        let output = query.condition
         #expect(output == css)
     }
 
@@ -49,7 +49,7 @@ class MediaQueryTests: IgniteTestSuite {
          "display-mode: standalone",
          "display-mode: window-controls-overlay"]))
     func display_mode_queries_render_correctly(query: any Query, css: String) async throws {
-        let output = query.condition(with: .light)
+        let output = query.condition
         #expect(output == css)
     }
 
@@ -57,7 +57,7 @@ class MediaQueryTests: IgniteTestSuite {
         OrientationQuery.allCases,
         ["orientation: portrait", "orientation: landscape"]))
     func orientation_queries_render_correctly(query: any Query, css: String) async throws {
-        let output = query.condition(with: .light)
+        let output = query.condition
         #expect(output == css)
     }
 
@@ -65,7 +65,7 @@ class MediaQueryTests: IgniteTestSuite {
         TransparencyQuery.allCases,
         ["prefers-reduced-transparency: reduce", "prefers-reduced-transparency: no-preference"]))
     func transparency_queries_render_correctly(query: any Query, css: String) async throws {
-        let output = query.condition(with: .light)
+        let output = query.condition
         #expect(output == css)
     }
 
@@ -73,15 +73,15 @@ class MediaQueryTests: IgniteTestSuite {
         MotionQuery.allCases,
         ["prefers-reduced-motion: reduce", "prefers-reduced-motion: no-preference"]))
     func reduced_motion_queries_render_correctly(query: any Query, css: String) async throws {
-        let output = query.condition(with: .light)
+        let output = query.condition
         #expect(output == css)
     }
 
-    @Test("Theme queries", arguments: zip(
-        [ThemeQuery("dark"), ThemeQuery("light"), ThemeQuery("auto")],
-        ["data-theme-state=\"dark\"", "data-theme-state=\"light\"", "data-theme-state=\"auto\""]))
-    func theme_queries_render_correctly(query: any Query, css: String) async throws {
-        let output = query.condition(with: .light)
+    @Test("Theme queries", arguments: await zip(
+        [ThemeQuery(DefaultDarkTheme.self), ThemeQuery(DefaultLightTheme.self), ThemeQuery(AutoTheme.self)],
+        ["data-bs-theme^=\"dark\"", "data-bs-theme^=\"light\"", "data-bs-theme^=\"auto\""]))
+    func theme_queries_render_correctly(query: ThemeQuery, css: String) async throws {
+        let output = query.condition
         #expect(output == css)
     }
 }

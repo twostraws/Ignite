@@ -13,7 +13,7 @@ public struct SwitchTheme: Action {
     /// Creates a new theme switching action
     /// - Parameter theme: The ID of the theme to switch to (will be automatically sanitized)
     @MainActor public init(_ theme: any Theme) {
-        self.themeID = theme.id
+        self.themeID = theme.cssID
     }
 
     /// Compiles the action into JavaScript code that calls the switchTheme function

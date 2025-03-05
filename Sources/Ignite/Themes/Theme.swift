@@ -22,7 +22,7 @@
 @MainActor
 public protocol Theme: Sendable {
     /// The appearance mode this theme represents
-    static var colorScheme: ColorScheme { get }
+    var colorScheme: ColorScheme { get }
 
     /// Primary brand color
     var accent: Color { get }

@@ -159,22 +159,23 @@ public extension Theme {
 }
 
 public extension Theme {
-    /// A unique identifier derived from the type name, appending "-light" or "-dark" based on `colorScheme`.
-    var id: String {
-        Self.id
-    }
-
     /// The type name, removing the word "Theme" if present
     var name: String {
         Self.baseName.titleCase()
     }
+}
 
-    /// A unique identifier derived from the type name, appending "-light" or "-dark" based on `colorScheme`.
-    static var id: String {
-        let baseID = Self.baseName
+extension Theme {
+    /// A unique identifier derived from the type name.
+    static var idPrefix: String {
+        Self.baseName
             .kebabCased()
             .lowercased()
+    }
 
+    /// A unique identifier derived from the type name, appending "-light" or "-dark" based on `colorScheme`.
+    var cssID: String {
+        let baseID = Self.idPrefix
         switch colorScheme {
         case .light where
             baseID != "light" &&
@@ -200,12 +201,5 @@ fileprivate extension Theme {
         }
 
         return name.replacingOccurrences(of: "Theme", with: "")
-    }
-}
-
-extension Theme {
-    /// The appearance mode this theme represents
-    var colorScheme: ColorScheme {
-        Self.colorScheme
     }
 }

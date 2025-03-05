@@ -44,11 +44,11 @@ extension ResponsiveValues: Defaultable where Value == LengthUnit {
     /// The empty values instance used as a default value
     static var `default`: Self {
         .init(
-            small: .custom(""),
-            medium: .custom(""),
-            large: .custom(""),
-            xLarge: .custom(""),
-            xxLarge: .custom("")
+            small: nil,
+            medium: nil,
+            large: nil,
+            xLarge: nil,
+            xxLarge: nil
         )
     }
 }
