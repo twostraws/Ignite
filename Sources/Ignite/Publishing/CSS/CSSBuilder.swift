@@ -39,27 +39,22 @@ struct CSSBuilder<Element> {
         components.flatMap { $0 }
     }
 
-    // Add support for arrays of Elements
     static func buildExpression(_ expression: [Element]) -> [Element] {
         expression
     }
 
-    // Add support for individual Elements
     static func buildExpression(_ expression: Element) -> [Element] {
         [expression]
     }
 
-    // Handle optional elements
     static func buildExpression(_ expression: Element?) -> [Element] {
         expression.map { [$0] } ?? []
     }
 
-    // Handle arrays of optional elements
     static func buildExpression(_ expression: [Element?]) -> [Element] {
         expression.compactMap { $0 }
     }
 
-    // Combine multiple components
     static func buildBlock(_ components: [Element]...) -> [Element] {
         components.flatMap { $0 }
     }
