@@ -81,7 +81,7 @@ extension PublishingContext {
             // Only create media query if we have non-empty styles
             guard !styles.isEmpty, styles.allSatisfy({ !$0.value.isEmpty }) else { return nil }
 
-            return MediaQuery(.breakpoint(minWidth)) {
+            return MediaQuery(.breakpoint(.custom(minWidth))) {
                 Ruleset(.pseudoClass("root")) {
                     styles
                 }

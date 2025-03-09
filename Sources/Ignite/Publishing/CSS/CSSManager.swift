@@ -174,7 +174,7 @@ final class CSSManager {
             if let themeQuery = query as? ThemeQuery {
                 result.0.insert(themeQuery.theme.idPrefix)
             } else if let breakpointQuery = query as? BreakpointQuery {
-                result.1.append(breakpointQuery.condition(for: theme))
+                result.1.append(breakpointQuery.withTheme(theme).condition)
             } else {
                 result.1.append(query.condition)
             }

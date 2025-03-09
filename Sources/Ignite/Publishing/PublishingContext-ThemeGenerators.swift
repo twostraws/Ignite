@@ -206,7 +206,7 @@ extension PublishingContext {
         ]
 
         return breakpoints.map { minWidth in
-            MediaQuery(.breakpoint(minWidth)) {
+            MediaQuery(.breakpoint(.custom(minWidth))) {
                 Ruleset(.class("container")) {
                     InlineStyle(.maxWidth, value: "\(minWidth)")
                 }

@@ -189,34 +189,31 @@ extension StyleManager {
         )
     }
 
-    /// Generates a CSS rule string for media queries
+    /// Converts queries to media features with proper theme handling
     /// - Parameters:
-    ///   - mediaQueries: Array of media queries
+    ///   - mediaQueries: Array of queries to convert
     ///   - themes: Available themes
     ///   - condition: The environment condition
-    /// - Returns: The combined media query string
-    private func generateMediaConditions(
+    /// - Returns: Array of media features
+    private func convertToMediaFeatures(
         from mediaQueries: [any Query],
         themes: [any Theme],
         condition: EnvironmentConditions
-    ) -> String {
-        mediaQueries.map { query in
+    ) -> [MediaFeature] {
+        mediaQueries.compactMap { query -> MediaFeature? in
             if let breakpointQuery = query as? BreakpointQuery {
                 // If we have a theme, use its breakpoint values
-                if let theme = themes.first(where: {
-                    if let theme = condition.theme {
-                        return $0.cssID.starts(with: theme.idPrefix)
-                    } else {
-                        return false
-                    }
+                if let theme = condition.theme.flatMap({ targetTheme in
+                    themes.first { $0.cssID.starts(with: targetTheme.idPrefix) }
                 }) {
-                    return "(\(breakpointQuery.condition(for: theme)))"
+                    // Create a new breakpoint query with theme-specific values
+                    return breakpointQuery.withTheme(theme).asMediaFeature
                 }
                 // If no theme specified, use default theme's values
-                return "(\(breakpointQuery.condition(for: themes[0])))"
+                return breakpointQuery.asMediaFeature
             }
-            return "(\(query.condition))"
-        }.joined(separator: " and ")
+            return query.asMediaFeature
+        }
     }
 
     /// Generates a CSS rule for a specific condition and style
@@ -224,41 +221,56 @@ extension StyleManager {
     ///   - condition: The environment condition
     ///   - styles: The styles to apply
     ///   - className: The CSS class name
-    ///   - mediaConditions: The media conditions string
+    ///   - mediaQueries: The media queries to apply
+    ///   - themes: Available themes
     /// - Returns: The generated CSS rule
     private func generateCSSRule(
         for condition: EnvironmentConditions,
         styles: [InlineStyle],
         className: String,
-        mediaConditions: String
+        mediaQueries: [any Query],
+        themes: [any Theme]
     ) -> String {
-        let stylesString = styles.map { "\($0.property): \($0.value)" }.joined(separator: ";\n        ")
+        let ruleset = Ruleset(.class(className), styles: styles)
 
         if let theme = condition.theme, condition.conditionCount > 1 {
             // Combined theme and media query rule
-            return """
-            @media \(mediaConditions) {
-                [data-bs-theme^="\(theme.idPrefix)"] .\(className) {
-                    \(stylesString)
-                }
+            let mediaFeatures = convertToMediaFeatures(
+                from: mediaQueries,
+                themes: themes,
+                condition: condition
+            )
+
+            let mediaQuery = MediaQuery(mediaFeatures) {
+                Ruleset(
+                    [.attribute(name: "data-bs-theme^", value: theme.idPrefix),
+                     .class(className)],
+                    styles: styles
+                )
             }
-            """
+            return mediaQuery.description
         } else if let theme = condition.theme {
             // Theme-only rule
-            return """
-            [data-bs-theme^="\(theme.idPrefix)"] .\(className) {
-                \(stylesString)
-            }
-            """
-        } else {
+            let themeRuleset = Ruleset(
+                [.attribute(name: "data-bs-theme^", value: theme.idPrefix),
+                 .class(className)],
+                styles: styles
+            )
+            return themeRuleset.description
+        } else if !mediaQueries.isEmpty {
             // Media query-only rule
-            return """
-            @media \(mediaConditions) {
-                .\(className) {
-                    \(stylesString)
-                }
+            let mediaFeatures = convertToMediaFeatures(
+                from: mediaQueries,
+                themes: themes,
+                condition: condition
+            )
+
+            let mediaQuery = MediaQuery(mediaFeatures) {
+                [ruleset]
             }
-            """
+            return mediaQuery.description
+        } else {
+            return ruleset.description
         }
     }
 
@@ -274,12 +286,8 @@ extension StyleManager {
         let stylesMap = generateStylesMap(for: style, themes: themes)
 
         // Generate the default rule
-        let defaultRule = """
-        .\(className(for: style)) {
-            \(stylesMap.defaultStyle.map { "\($0.property): \($0.value)" }.joined(separator: "; "))
-        }
-        """
-        cssRules.append(defaultRule)
+        let defaultRuleset = Ruleset(.class(className(for: style)), styles: stylesMap.defaultStyle)
+        cssRules.append(defaultRuleset.description)
 
         // Generate specific rules for unique conditions
         for (condition, styles) in stylesMap.uniqueConditions {
@@ -288,17 +296,12 @@ extension StyleManager {
                 return true
             }
 
-            let mediaConditions = generateMediaConditions(
-                from: mediaQueries,
-                themes: themes,
-                condition: condition
-            )
-
             let rule = generateCSSRule(
                 for: condition,
                 styles: styles,
                 className: className(for: style),
-                mediaConditions: mediaConditions
+                mediaQueries: mediaQueries,
+                themes: themes
             )
             cssRules.append(rule)
         }
