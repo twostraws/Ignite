@@ -92,14 +92,19 @@ extension PublishingContext {
                 url: site.url.appending(path: path)
             )
 
+            let category: any Category = if let tag {
+                TagCategory(name: tag, articles: content(tagged: tag))
+            } else {
+                AllTagsCategory(articles: content(tagged: nil))
+            }
+
             let values = EnvironmentValues(
                 sourceDirectory: sourceDirectory,
                 site: site,
                 allContent: allContent,
                 pageMetadata: metadata,
                 pageContent: tagLayout,
-                tag: tag,
-                taggedContent: content(tagged: tag))
+                category: category)
 
             let outputString = withEnvironment(values) {
                 tagLayout.parentLayout.body.render()

@@ -58,8 +58,8 @@ public struct EnvironmentValues {
     /// The current piece of Markdown content being rendered.
     var article: Article = .empty
 
-    /// The current tag of the page being rendered.
-    var tag: String?
+    /// The current category of the page being rendered.
+    var category: any Category = EmptyCategory()
 
     /// Content that has the current tag.
     var taggedContent: [Article] = []
@@ -145,8 +145,7 @@ public struct EnvironmentValues {
         allContent: [Article],
         pageMetadata: PageMetadata,
         pageContent: any LayoutContent,
-        tag: String?,
-        taggedContent: [Article]
+        category: any Category
     ) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.articles = ArticleLoader(content: allContent)
@@ -165,8 +164,7 @@ public struct EnvironmentValues {
             description: site.description,
             url: site.url)
 
-        self.tag = tag
-        self.taggedContent = taggedContent
+        self.category = category
 
         self.pageContent = PublishingContext.shared.withEnvironment(self) {
             pageContent.body
