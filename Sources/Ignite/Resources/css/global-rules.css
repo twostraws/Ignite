@@ -334,8 +334,8 @@ code, pre {
     border-color: var(--bs-primary);
 }
 .btn-primary:hover {
-    background-color: rgba(var(--bs-primary-rgb), 0.8);
-    border-color: rgba(var(--bs-primary-rgb), 0.8);
+    background-color: rgb(var(--bs-primary-rgb));
+    border-color: rgb(var(--bs-primary-rgb));
 }
 
 .btn-secondary {
@@ -343,8 +343,8 @@ code, pre {
     border-color: var(--bs-secondary);
 }
 .btn-secondary:hover {
-    background-color: rgba(var(--bs-secondary-rgb), 0.8);
-    border-color: rgba(var(--bs-secondary-rgb), 0.8);
+    background-color: rgb(var(--bs-secondary-rgb));
+    border-color: rgb(var(--bs-secondary-rgb));
 }
 
 .btn-success {
@@ -352,8 +352,8 @@ code, pre {
     border-color: var(--bs-success);
 }
 .btn-success:hover {
-    background-color: rgba(var(--bs-success-rgb), 0.8);
-    border-color: rgba(var(--bs-success-rgb), 0.8);
+    background-color: rgb(var(--bs-success-rgb));
+    border-color: rgb(var(--bs-success-rgb));
 }
 
 .btn-info {
@@ -361,8 +361,8 @@ code, pre {
     border-color: var(--bs-info);
 }
 .btn-info:hover {
-    background-color: rgba(var(--bs-info-rgb), 0.8);
-    border-color: rgba(var(--bs-info-rgb), 0.8);
+    background-color: rgb(var(--bs-info-rgb));
+    border-color: rgb(var(--bs-info-rgb));
 }
 
 .btn-warning {
@@ -370,8 +370,8 @@ code, pre {
     border-color: var(--bs-warning);
 }
 .btn-warning:hover {
-    background-color: rgba(var(--bs-warning-rgb), 0.8);
-    border-color: rgba(var(--bs-warning-rgb), 0.8);
+    background-color: rgb(var(--bs-warning-rgb));
+    border-color: rgb(var(--bs-warning-rgb));
 }
 
 .btn-danger {
@@ -379,8 +379,8 @@ code, pre {
     border-color: var(--bs-danger);
 }
 .btn-danger:hover {
-    background-color: rgba(var(--bs-danger-rgb), 0.8);
-    border-color: rgba(var(--bs-danger-rgb), 0.8);
+    background-color: rgb(var(--bs-danger-rgb));
+    border-color: rgb(var(--bs-danger-rgb));
 }
 
 .btn-light {
@@ -388,8 +388,8 @@ code, pre {
     border-color: var(--bs-light);
 }
 .btn-light:hover {
-    background-color: rgba(var(--bs-light-rgb), 0.8);
-    border-color: rgba(var(--bs-light-rgb), 0.8);
+    background-color: rgb(var(--bs-light-rgb));
+    border-color: rgb(var(--bs-light-rgb));
 }
 
 .btn-dark {
@@ -397,6 +397,6 @@ code, pre {
     border-color: var(--bs-dark);
 }
 .btn-dark:hover {
-    background-color: rgba(var(--bs-dark-rgb), 0.8);
-    border-color: rgba(var(--bs-dark-rgb), 0.8);
+    background-color: rgb(var(--bs-dark-rgb));
+    border-color: rgb(var(--bs-dark-rgb));
 }
