@@ -9,39 +9,27 @@
 /// Default implementation providing Bootstrap's default theme values
 public extension Theme {
     var accent: Color {
-        colorScheme == .dark ?
-        Color(hex: "#6ea8fe") :
-        Color(hex: "#0d6efd")
+        Color(red: 13, green: 110, blue: 253)
     }
 
     var secondaryAccent: Color {
-        colorScheme == .dark ?
-        Color(hex: "#a7acb1") :
-        Color(hex: "#6c757d")
+        Color(red: 108, green: 117, blue: 125)
     }
 
     var success: Color {
-        colorScheme == .dark ?
-        Color(hex: "#75b798") :
-        Color(hex: "#198754")
+        Color(red: 25, green: 135, blue: 84)
     }
 
     var info: Color {
-        colorScheme == .dark ?
-        Color(hex: "#6edff6") :
-        Color(hex: "#0dcaf0")
+        Color(red: 13, green: 202, blue: 240)
     }
 
     var warning: Color {
-        colorScheme == .dark ?
-        Color(hex: "#ffda6a") :
-        Color(hex: "#ffc107")
+        Color(red: 255, green: 193, blue: 7)
     }
 
     var danger: Color {
-        colorScheme == .dark ?
-        Color(hex: "#ea868f") :
-        Color(hex: "#dc3545")
+        Color(red: 220, green: 53, blue: 69)
     }
 
     var offWhite: Color {
