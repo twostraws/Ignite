@@ -52,7 +52,6 @@ public struct VStack: HTML {
 
     public func render() -> String {
         var content = content
-        content.attributes.add(classes: "mb-0")
 
         var attributes = attributes
         attributes.add(classes: "vstack")

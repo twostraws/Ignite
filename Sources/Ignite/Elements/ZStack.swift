@@ -41,8 +41,7 @@ public struct ZStack: HTML {
                 .init(.position, value: "relative"),
                 .init(.display, value: "grid"),
                 .init(.gridArea, value: "1/1"),
-                .init(.zIndex, value: "\(index)"),
-                .init(.marginBottom, value: "0")
+                .init(.zIndex, value: "\(index)")
             ])
 
             elementAttributes.add(styles: alignment.flexAlignmentRules)
