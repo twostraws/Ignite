@@ -18,7 +18,7 @@ class ListTests: IgniteTestSuite {
     func testEmptyListRendering() async throws {
         let list = List {}
         let output = list.render()
-        #expect(output == "<ul><li></li></ul>")
+        #expect(output == "<ul></ul>")
     }
 
     @Test("Basic Unordered List")

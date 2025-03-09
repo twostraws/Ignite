@@ -5,27 +5,49 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that applies font styling to HTML elements.
-struct FontModifier: HTMLModifier {
-    /// The font configuration to apply
-    var font: Font
+public extension HTML {
+    /// Adjusts the font of this text.
+    /// - Parameter font: The font configuration to apply.
+    /// - Returns: A new instance with the updated font.
+    func font(_ font: Font) -> some HTML {
+        if font.name != nil {
+            // Custom font that requires CSS generation
+            CSSManager.shared.registerFont(font)
+        }
+        return AnyHTML(fontModifier(font))
+    }
+}
 
+public extension InlineElement {
+    /// Adjusts the font of this text.
+    /// - Parameter font: The font configuration to apply.
+    /// - Returns: A new instance with the updated font.
+    func font(_ font: Font) -> some InlineElement {
+        if font.name != nil {
+            // Custom font that requires CSS generation
+            CSSManager.shared.registerFont(font)
+        }
+        return AnyHTML(fontModifier(font))
+    }
+}
+
+private extension HTML {
     /// Applies the font styling to the provided HTML content.
     /// - Parameter content: The HTML content to modify
     /// - Returns: The modified HTML content with font styling applied
-    func body(content: some HTML) -> any HTML {
-        if content.isText {
-            applyFontToText(content: content)
+    func fontModifier(_ font: Font) -> any HTML {
+        if self.isText {
+            self.applyToText(font)
         } else {
-            applyFontToNonText(content: content)
+            self.applyToNonText(font)
         }
     }
 
     /// Applies font styling to text content
     /// - Parameter content: The text HTML content to modify
     /// - Returns: The modified HTML content with font styling applied
-    private func applyFontToText(content: some HTML) -> any HTML {
-        var modified: any HTML = content.style(.fontWeight, font.weight.rawValue.formatted())
+    func applyToText(_ font: Font) -> any HTML {
+        var modified: any HTML = self.style(.fontWeight, font.weight.rawValue.formatted())
 
         if let style = font.style {
             modified = modified.fontStyle(style)
@@ -48,7 +70,7 @@ struct FontModifier: HTMLModifier {
     /// Applies font styling to non-text content
     /// - Parameter content: The non-text HTML content to modify
     /// - Returns: The modified HTML content with font styling applied
-    private func applyFontToNonText(content: some HTML) -> any HTML {
+    func applyToNonText(_ font: Font) -> any HTML {
         var styles = [InlineStyle]()
         var classes = [String]()
 
@@ -67,7 +89,7 @@ struct FontModifier: HTMLModifier {
             styles.append(.init(.fontSize, value: style.sizeVariable))
         }
 
-        return Section(content.class("font-inherit"))
+        return Section(self.class("font-inherit"))
             .style(styles)
             .class(classes)
     }
@@ -75,62 +97,25 @@ struct FontModifier: HTMLModifier {
     /// Registers CSS classes for responsive font sizes and returns the generated class name.
     /// - Parameter responsiveSize: The responsive font size.
     /// - Returns: A unique class name that applies the font's responsive size rules.
-    private func registerClasses(for responsiveSize: ResponsiveFontSize) -> String {
-        let className = "font-" + responsiveSize.breakpointValues.description.truncatedHash
-
-        // Sort sizes by breakpoint to ensure proper cascading
-        let allSizes = responsiveSize.breakpointValues.sorted { size1, size2 in
-            let bp1 = size1.breakpoint
-            let bp2 = size2.breakpoint
-
-            // nil (base size) should come first
-            if bp1 == nil { return true }
-            if bp2 == nil { return false }
-            return bp1! < bp2!
-        }
-
-        // Find base size and breakpoint sizes
-        let baseSize = allSizes.first { size in
-            size.breakpoint == nil
-        }
-
-        let breakpointSizes = allSizes.filter { size in
-            size.breakpoint != nil
-        }
+    func registerClasses(for responsiveSize: ResponsiveValues<LengthUnit>) -> String {
+        let values = responsiveSize.values
+        let className = "font-" + values.description.truncatedHash
+        let baseSize = values[.xSmall]
+        let breakpointSizes = values.filter { $0.key != .xSmall }
 
         if let baseSize {
             CSSManager.shared.register(
-                properties: [.init(.fontSize, value: baseSize.value.stringValue)],
+                properties: [.init(.fontSize, value: baseSize.stringValue)],
                 className: className)
         }
 
-        for size in breakpointSizes {
-            if let breakpoint = size.breakpoint {
-                CSSManager.shared.register(
-                    [.breakpoint(.init(stringValue: breakpoint)!)],
-                    properties: [.init(.fontSize, value: size.value.stringValue)],
-                    className: className)
-            }
+        for (breakpoint, size) in breakpointSizes {
+            CSSManager.shared.register(
+                [.breakpoint(.init(breakpoint)!)],
+                properties: [.init(.fontSize, value: size.stringValue)],
+                className: className)
         }
 
         return className
-    }
-}
-
-public extension HTML {
-    /// Adjusts the font of this text.
-    /// - Parameter font: The font configuration to apply.
-    /// - Returns: A new instance with the updated font.
-    func font(_ font: Font) -> some HTML {
-        modifier(FontModifier(font: font))
-    }
-}
-
-public extension InlineElement {
-    /// Adjusts the font of this text.
-    /// - Parameter font: The font configuration to apply.
-    /// - Returns: A new instance with the updated font.
-    func font(_ font: Font) -> some InlineElement {
-        modifier(FontModifier(font: font))
     }
 }

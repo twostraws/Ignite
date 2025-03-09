@@ -29,7 +29,7 @@ public struct Grid: HTML, HorizontalAligning {
     private var spacingAmount: SpacingType?
 
     /// The items to display in this section.
-    private var items: [any HTML]
+    private var items: HTMLCollection
 
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
@@ -37,7 +37,7 @@ public struct Grid: HTML, HorizontalAligning {
     ///   - spacing: The number of pixels between each element. Default is nil.
     ///   - items: The items to use in this section.
     public init(spacing: Int? = nil, @HTMLBuilder items: () -> some HTML) {
-        self.items = flatUnwrap(items())
+        self.items = HTMLCollection(items)
         if let spacing {
             self.spacingAmount = .exact(spacing)
         }
@@ -49,7 +49,7 @@ public struct Grid: HTML, HorizontalAligning {
     ///   - spacing: The predefined size between each element.
     ///   - items: The items to use in this section.
     public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
-        self.items = flatUnwrap(items())
+        self.items = HTMLCollection(items)
         self.spacingAmount = .semantic(spacing)
     }
 
@@ -93,8 +93,8 @@ public struct Grid: HTML, HorizontalAligning {
             ForEach(items) { item in
                 if let passthrough = item as? any PassthroughElement {
                     handlePassthrough(passthrough, attributes: passthrough.attributes)
-                } else if let modified = item as? ModifiedHTML,
-                          let passthrough = modified.unwrapped as? any PassthroughElement {
+                } else if let modified = item as? AnyHTML,
+                          let passthrough = modified.wrapped as? any PassthroughElement {
                     handlePassthrough(passthrough, attributes: modified.attributes)
                 } else {
                     handleItem(item)

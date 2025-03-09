@@ -42,7 +42,7 @@ public struct Column: HTML, HorizontalAligning {
     /// - Parameter items: A page element builder that returns the items
     /// for this column.
     public init(@HTMLBuilder items: () -> some HTML) {
-        self.items = HTMLCollection(items())
+        self.items = HTMLCollection(items)
     }
 
     /// Adjusts how many columns in a row this column should span.
@@ -72,6 +72,6 @@ public struct Column: HTML, HorizontalAligning {
             columnAttributes.add(classes: ["align-\(verticalAlignment.rawValue)"])
         }
         columnAttributes.add(customAttributes: .init(name: "colspan", value: columnSpan.formatted()))
-        return "<td\(columnAttributes)>\(HTMLCollection(items))</td>"
+        return "<td\(columnAttributes)>\(items)</td>"
     }
 }

@@ -42,7 +42,7 @@ struct ContentFinder: Sendable {
         // swiftlint:disable:previous function_body_length
         // lint exception: using local closures to break up logic
         root: URL,
-        suffixes: [String] = [".md", ".md symlink"],
+        suffixes: [String] = [".md"],
         contentMaker: (DeployContent) throws -> Bool
     ) throws {
         enum ParameterError: Error {

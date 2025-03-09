@@ -34,13 +34,14 @@ struct HorizontalAlignmentTests {
 
     @Test("Text with all responsive breakpoints", arguments: zip(
         [HorizontalAlignment.leading, .center, .trailing],
-        ["text-start text-md-start text-lg-start text-xl-start text-xxl-start",
-         "text-center text-md-center text-lg-center text-xl-center text-xxl-center",
-         "text-end text-md-end text-lg-end text-xl-end text-xxl-end"]))
+        ["text-start",
+         "text-center",
+         "text-end"]))
     func allAlignmentsForTextResponsiveAll(alignment: HorizontalAlignment, cssClass: String) async throws {
         let element = Text("Hello world!")
             .horizontalAlignment(
                 .responsive(
+                    alignment,
                     small: alignment,
                     medium: alignment,
                     large: alignment,

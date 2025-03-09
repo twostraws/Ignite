@@ -140,7 +140,7 @@ public protocol Site: Sendable {
     @StaticLayoutBuilder var staticLayouts: [any StaticLayout] { get }
 
     /// An array of all the content layouts you want to include in your site.
-    @ContentLayoutBuilder var contentLayouts: [any ContentLayout] { get }
+    @ArticleLayoutBuilder var articleLayouts: [any ArticleLayout] { get }
 
     /// Publishes this entire site from user space.
     func publish(from file: StaticString, buildDirectoryPath: String) async throws
@@ -199,7 +199,7 @@ public extension Site {
     var staticLayouts: [any StaticLayout] { [] }
 
     /// No content layouts by default.
-    var contentLayouts: [any ContentLayout] { [] }
+    var articleLayouts: [any ArticleLayout] { [] }
 
     /// An empty tag layout by default, which triggers no tag pages being made.
     var tagLayout: EmptyTagLayout { EmptyTagLayout() }

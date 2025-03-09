@@ -21,23 +21,28 @@ struct HTMLCollection: InlineElement, @preconcurrency Sequence {
     var isPrimitive: Bool { true }
 
     /// The array of HTML elements contained in this sequence
-    var elements: [any HTML]
+    var elements: [any HTML] = []
+
+    /// The array of HTML elements with the container's attributes applied.
+    var attributedElements: [any HTML] {
+        elements.map {
+            var item: any HTML = $0
+            item.attributes.merge(attributes)
+            return item
+        }
+    }
 
     /// Creates a new HTML sequence using a result builder
     /// - Parameter content: A closure that returns HTML content
     init(@HTMLBuilder _ content: () -> some HTML) {
         let content = content()
-        self.init(content)
+        self.elements = flatten(content)
     }
 
     /// Creates a new HTML sequence from an array of elements
     /// - Parameter elements: The array of HTML elements to include
     init(_ elements: [any HTML]) {
-        self.elements = flatUnwrap(elements)
-    }
-
-    init(_ content: any HTML) {
-        self.elements = flatUnwrap(content)
+        self.elements = elements.flatMap { flatten($0) }
     }
 
     /// Creates an iterator over the sequence's elements
@@ -54,5 +59,20 @@ struct HTMLCollection: InlineElement, @preconcurrency Sequence {
             item.attributes.merge(attributes)
             return item.render()
         }.joined()
+    }
+
+    /// Recursively flattens nested HTML content into a single array, deconstructing wrapper types.
+    /// - Parameter content: The content to flatten
+    /// - Returns: An array of unwrapped HTML elements
+    private func flatten(_ content: any HTML) -> [any HTML] {
+        if let anyHTML = content as? AnyHTML {
+            flatten(anyHTML.attributedContent)
+        } else if let collection = content as? HTMLCollection {
+            collection.attributedElements.flatMap { flatten($0) }
+        } else if content is EmptyHTML {
+            []
+        } else {
+            [content]
+        }
     }
 }

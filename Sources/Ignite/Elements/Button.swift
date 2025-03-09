@@ -180,7 +180,7 @@ public struct Button: InlineElement {
             buttonAttributes.add(customAttributes: .disabled)
         }
 
-        let output = HTMLCollection(label).render()
+        let output = label.render()
         return "<button type=\"\(type.htmlName)\"\(buttonAttributes)>\(output)</button>"
     }
 }
@@ -190,16 +190,6 @@ extension Button {
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A copy of the current element with the adjusted column width.
     public func width(_ width: Int) -> some InlineElement {
-        let copy = self
-        return copy
-            .columnWidth(width)
-            .class("w-100")
-    }
-}
-
-// Locally renamed to avoid a conflict
-fileprivate extension InlineElement {
-    func columnWidth(_ width: Int) -> some InlineElement {
-        modifier(GridColumnWidthModifier(width: .count(width)))
+        self.class("w-100", ColumnWidth.count(width).className)
     }
 }

@@ -302,6 +302,7 @@ h6 { font-size: var(--bs-h6-font-size, 1rem); }
 code, pre {
     font-family: var(--bs-font-monospace, monospace);
     font-size: var(--code-block-font-size, 1em);
+    margin-bottom: var(--bs-paragraph-margin-bottom, 1rem) !important;
 }
 
 /* Border styles */

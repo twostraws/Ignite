@@ -33,72 +33,22 @@ public enum ContentMode: CaseIterable, Sendable {
     }
 }
 
-/// A modifier that applies aspect ratio constraints to HTML elements.
-struct AspectRatioModifier: HTMLModifier {
-    /// The predefined aspect ratio to apply, if using a standard ratio.
-    var ratio: AspectRatio?
-
-    /// The custom aspect ratio to apply, if using a custom value.
-    var customRatio: Double?
-
-    /// The content mode to apply when used with images.
-    var contentMode: ContentMode?
-
-    /// Applies the aspect ratio to the provided HTML content.
-    /// - Parameter content: The HTML content to modify
-    /// - Returns: The modified HTML content with aspect ratio applied
-    func body(content: some HTML) -> any HTML {
-        if let contentMode {
-            if let ratio {
-                Section {
-                    content.class(contentMode.htmlClass)
-                }
-                .applyAspectRatio(ratio)
-            } else if let customRatio {
-                Section {
-                    content.class(contentMode.htmlClass)
-                }
-                .applyAspectRatio(customRatio)
-            }
-        } else if let ratio {
-            content.applyAspectRatio(ratio)
-        } else if let customRatio {
-            content.applyAspectRatio(customRatio)
-        } else {
-            content
-        }
-    }
-}
-
-// Helper methods to reuse logic
-private extension HTML {
-    /// Applies a fixed aspect ratio to the current element.
-    func applyAspectRatio(_ ratio: AspectRatio) -> some HTML {
-        self.class("ratio", "ratio-\(ratio.rawValue)")
-    }
-
-    /// Applies a custom ratio to the current element.
-    func applyAspectRatio(_ ratio: Double) -> some HTML {
-        let percentage = 100 / ratio
-        return self
-            .class("ratio")
-            .style("--bs-aspect-ratio", "\(percentage)%")
-    }
-}
-
 public extension HTML {
     /// Applies a fixed aspect ratio to the current element.
     /// - Parameter ratio: The aspect ratio to apply.
     /// - Returns: A modified element with the aspect ratio applied.
     func aspectRatio(_ ratio: AspectRatio) -> some HTML {
-        modifier(AspectRatioModifier(ratio: ratio))
+        self.class("ratio", "ratio-\(ratio.rawValue)")
     }
 
     /// Applies a custom ratio to the current element.
     /// - Parameter aspectRatio: The ratio to use, relative to 1.
     /// - Returns: A modified element with the aspect ratio applied.
     func aspectRatio(_ aspectRatio: Double) -> some HTML {
-        modifier(AspectRatioModifier(customRatio: aspectRatio))
+        let percentage = 100 / aspectRatio
+        return self
+            .class("ratio")
+            .style("--bs-aspect-ratio", "\(percentage)%")
     }
 }
 

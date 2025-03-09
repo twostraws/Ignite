@@ -6,115 +6,200 @@
 //
 
 /// Default implementation providing Bootstrap's default light theme values
+/// Default implementation providing Bootstrap's default theme values
 public extension Theme {
-    var accent: Color { Color(hex: "#0d6efd") }
-    var secondaryAccent: Color { Color(hex: "#6c757d") }
-    var success: Color { Color(hex: "#198754") }
-    var info: Color { Color(hex: "#0dcaf0") }
-    var warning: Color { Color(hex: "#ffc107") }
-    var danger: Color { Color(hex: "#dc3545") }
-    var light: Color { Color(hex: "#f8f9fa") }
-    var dark: Color { Color(hex: "#212529") }
-    var primary: Color { Color(hex: "#212529") }
-    var emphasis: Color { Color(hex: "#000000") }
-    var secondary: Color { Color(red: 33, green: 37, blue: 41, opacity: 0.75) }
-    var tertiary: Color { Color(red: 33, green: 37, blue: 41, opacity: 0.5) }
-    var background: Color { Color(hex: "#ffffff") }
-    var secondaryBackground: Color { Color(hex: "#e9ecef") }
-    var tertiaryBackground: Color { Color(hex: "#f8f9fa") }
-    var border: Color { Color(hex: "#dee2e6") }
-    var heading: Color { .default }
-    var syntaxHighlighterTheme: HighlighterTheme { .automatic }
+    var accent: Color {
+        colorScheme == .dark ?
+        Color(hex: "#6ea8fe") :
+        Color(hex: "#0d6efd")
+    }
+
+    var secondaryAccent: Color {
+        colorScheme == .dark ?
+        Color(hex: "#a7acb1") :
+        Color(hex: "#6c757d")
+    }
+
+    var success: Color {
+        colorScheme == .dark ?
+        Color(hex: "#75b798") :
+        Color(hex: "#198754")
+    }
+
+    var info: Color {
+        colorScheme == .dark ?
+        Color(hex: "#6edff6") :
+        Color(hex: "#0dcaf0")
+    }
+
+    var warning: Color {
+        colorScheme == .dark ?
+        Color(hex: "#ffda6a") :
+        Color(hex: "#ffc107")
+    }
+
+    var danger: Color {
+        colorScheme == .dark ?
+        Color(hex: "#ea868f") :
+        Color(hex: "#dc3545")
+    }
+
+    var offWhite: Color {
+        Color(hex: "#f8f9fa")
+    }
+
+    var offBlack: Color {
+        Color(hex: "#212529")
+    }
+
+    var primary: Color {
+        colorScheme == .dark ?
+        Color(hex: "#f8f9fa") :
+        Color(hex: "#212529")
+    }
+
+    var emphasis: Color {
+        colorScheme == .dark ?
+        Color(hex: "#f8f9fa") :
+        Color(hex: "#212529")
+    }
+
+    var secondary: Color {
+        colorScheme == .dark ?
+        Color(red: 248, green: 249, blue: 250, opacity: 0.75) :
+        Color(red: 33, green: 37, blue: 41, opacity: 0.75)
+    }
+
+    var tertiary: Color {
+        colorScheme == .dark ?
+        Color(red: 248, green: 249, blue: 250, opacity: 0.5) :
+        Color(red: 33, green: 37, blue: 41, opacity: 0.5)
+    }
+
+    var background: Color {
+        colorScheme == .dark ?
+        Color(hex: "#212529") :
+        Color(hex: "#ffffff")
+    }
+
+    var secondaryBackground: Color {
+        colorScheme == .dark ?
+        Color(hex: "#343a40") :
+        Color(hex: "#e9ecef")
+    }
+
+    var tertiaryBackground: Color {
+        colorScheme == .dark ?
+        Color(hex: "#2b3035") :
+        Color(hex: "#f8f9fa")
+    }
+
+    var border: Color {
+        colorScheme == .dark ?
+        Color(hex: "#495057") :
+        Color(hex: "#dee2e6")
+    }
+
+    var syntaxHighlighterTheme: HighlighterTheme {
+        colorScheme == .dark ?
+        .xcodeDark :
+        .automatic
+    }
+
+    var link: Color {
+        colorScheme == .dark ?
+        Color(hex: "#6ea8fe") :
+        Color(hex: "#0d6efd")
+    }
+
+    var hoveredLink: Color {
+        colorScheme == .dark ?
+        Color(hex: "#9ec5fe") :
+        Color(hex: "#0a58ca")
+    }
 
     // Links
-    var link: Color { Color(hex: "#0d6efd") }
-    var linkHover: Color { Color(hex: "#0a58ca") }
     var linkDecoration: TextDecoration { .underline }
 
     // Font Families
-    var sansSerifFont: Font { .default }
     var monospaceFont: Font { .default }
     var font: Font { .default }
-    var alternateFonts: [Font] { [] }
 
     // Font Sizes
     var rootFontSize: LengthUnit { .default }
-    var bodySize: LengthUnit { .default }
-    var smallBodySize: LengthUnit { .default }
-    var largeBodySize: LengthUnit { .default }
+    var bodyFontSize: ResponsiveValues { .default }
     var inlineCodeFontSize: LengthUnit { .default }
     var codeBlockFontSize: LengthUnit { .default }
 
-    // Font Weights
-    var lighterFontWeight: FontWeight { .default }
-    var lightFontWeight: FontWeight { .default }
-    var regularFontWeight: FontWeight { .default }
-    var boldFontWeight: FontWeight { .default }
-    var bolderFontWeight: FontWeight { .default }
-
     // Line Heights
-    var lineHeight: LengthUnit { .default }
-    var smallLineHeight: LengthUnit { .default }
-    var largeLineHeight: LengthUnit { .default }
+    var lineSpacing: LengthUnit { .default }
 
     // Heading Sizes
-    var xxLargeHeadingSize: LengthUnit { .default }
-    var xLargeHeadingSize: LengthUnit { .default }
-    var largeHeadingSize: LengthUnit { .default }
-    var mediumHeadingSize: LengthUnit { .default }
-    var smallHeadingSize: LengthUnit { .default }
-    var xSmallHeadingSize: LengthUnit { .default }
+    var h1Size: ResponsiveValues { .default }
+    var h2Size: ResponsiveValues { .default }
+    var h3Size: ResponsiveValues { .default }
+    var h4Size: ResponsiveValues { .default }
+    var h5Size: ResponsiveValues { .default }
+    var h6Size: ResponsiveValues { .default }
 
     // Heading Properties
     var headingFont: Font { .default }
     var headingFontWeight: FontWeight { .default }
-    var headingLineHeight: LengthUnit { .default }
+    var headingLineSpacing: LengthUnit { .default }
 
     // Bottom Margins
     var headingBottomMargin: LengthUnit { .default }
     var paragraphBottomMargin: LengthUnit { .default }
 
     // Breakpoints
-    var xSmallBreakpoint: LengthUnit { .px(576) }
-    var smallBreakpoint: LengthUnit { .px(576) }
-    var mediumBreakpoint: LengthUnit { .px(768) }
-    var largeBreakpoint: LengthUnit { .px(992) }
-    var xLargeBreakpoint: LengthUnit { .px(1200) }
-    var xxLargeBreakpoint: LengthUnit { .px(1400) }
+    var breakpoints: ResponsiveValues { .default}
 
     // Maximum widths
-    var smallMaxWidth: LengthUnit { .default }
-    var mediumMaxWidth: LengthUnit { .default }
-    var largeMaxWidth: LengthUnit { .default }
-    var xLargeMaxWidth: LengthUnit { .default }
-    var xxLargeMaxWidth: LengthUnit { .default }
+    var siteWidth: ResponsiveValues { .default }
+}
+
+public extension Theme {
+    /// The type name, removing the word "Theme" if present
+    var name: String {
+        Self.baseName.titleCase()
+    }
 }
 
 extension Theme {
-
-    /// The unique identifier for this theme instance, including any system-generated suffix.
-    public var id: String {
-        Self.id
+    /// A unique identifier derived from the type name.
+    static var idPrefix: String {
+        Self.baseName
+            .kebabCased()
+            .lowercased()
     }
 
-    /// The display name of this theme instance.
-    public var name: String {
-        Self.name
-    }
-
-    /// Internal identifier used for theme switching and CSS selectors.
-    /// Automatically appends "-light" or "-dark" suffix based on protocol conformance.
-    public static var id: String {
-        let baseID = name.kebabCased()
-
-        guard baseID != "light" && baseID != "dark" else {
-            return baseID
-        }
-
-        switch self {
-        case is LightTheme.Type: return baseID + "-light"
-        case is DarkTheme.Type: return baseID + "-dark"
+    /// A unique identifier derived from the type name, appending "-light" or "-dark" based on `colorScheme`.
+    var cssID: String {
+        let baseID = Self.idPrefix
+        switch colorScheme {
+        case .light where
+            baseID != "light" &&
+            Self.self != DefaultLightTheme.self &&
+            Self.self != AutoTheme.self:
+            return baseID + "-light"
+        case .dark where
+            baseID != "dark" &&
+            Self.self != DefaultDarkTheme.self:
+            return baseID + "-dark"
         default: return baseID
         }
+    }
+}
+
+fileprivate extension Theme {
+    static var baseName: String {
+        let name = switch Self.self {
+        case is DefaultDarkTheme.Type: "dark"
+        case is DefaultLightTheme.Type: "light"
+        case is AutoTheme.Type: "auto"
+        default: String(describing: Self.self)
+        }
+
+        return name.replacingOccurrences(of: "Theme", with: "")
     }
 }

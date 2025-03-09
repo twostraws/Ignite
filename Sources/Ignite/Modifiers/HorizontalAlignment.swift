@@ -5,6 +5,26 @@
 // See LICENSE for license information.
 //
 
+/// Determines which elements can have horizontal alignment attached,
+@MainActor
+public protocol HorizontalAligning: HTML { }
+
+public extension HorizontalAligning {
+    /// Aligns this element using a specific alignment.
+    /// - Parameter alignment: How to align this element.
+    /// - Returns: A modified copy of the element with alignment applied
+    func horizontalAlignment(_ alignment: HorizontalAlignment) -> some HTML {
+        self.class(alignment.rawValue)
+    }
+
+    /// Aligns this element using multiple responsive alignments.
+    /// - Parameter alignment: One or more alignments with optional breakpoints.
+    /// - Returns: A modified copy of the element with alignments applied
+    func horizontalAlignment(_ alignment: HorizontalAlignment.ResponsiveAlignment) -> some HTML {
+        self.class(alignment.values.breakpointClasses)
+    }
+}
+
 /// Controls how elements are horizontally positioned inside their container.
 public enum HorizontalAlignment: String, Sendable, Equatable {
     /// Elements are positioned at the start of their container.
@@ -24,65 +44,82 @@ public enum HorizontalAlignment: String, Sendable, Equatable {
         case .trailing: "justify-content-end"
         }
     }
+}
 
-    /// Converts HorizontalAlignment to CSS justify-content values
-    var justifyContent: String {
-        switch self {
-        case .leading: "flex-start"
-        case .center: "center"
-        case .trailing: "flex-end"
+public extension HorizontalAlignment {
+    enum ResponsiveAlignment {
+        /// Creates a responsive value that adapts across different screen sizes.
+        /// - Parameters:
+        ///   - xSmall: The base value, applied to all breakpoints unless overridden.
+        ///   - small: Value for small screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - medium: Value for medium screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - large: Value for large screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - xLarge: Value for extra large screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - xxLarge: Value for extra extra large screens and up. If `nil`, inherits from smaller breakpoints.
+        /// - Returns: A responsive value that adapts to different screen sizes.
+        case responsive(
+            _ xSmall: HorizontalAlignment? = nil,
+            small: HorizontalAlignment? = nil,
+            medium: HorizontalAlignment? = nil,
+            large: HorizontalAlignment? = nil,
+            xLarge: HorizontalAlignment? = nil,
+            xxLarge: HorizontalAlignment? = nil
+        )
+
+        var values: ResponsiveValues<HorizontalAlignment> {
+            switch self {
+            case let .responsive(xSmall, small, medium, large, xLarge, xxLarge):
+                ResponsiveValues(
+                    xSmall,
+                    small: small,
+                    medium: medium,
+                    large: large,
+                    xLarge: xLarge,
+                    xxLarge: xxLarge
+                )
+            }
         }
     }
 }
 
-extension HorizontalAlignment: Responsive {
-    public func responsiveClass(for breakpoint: String?) -> String {
-        let alignmentClass = rawValue.dropFirst(5) // Remove "text-" prefix
-        if let breakpoint {
-            return "text-\(breakpoint)-\(alignmentClass)"
+extension ResponsiveValues where Value == HorizontalAlignment {
+    // Bootstrap's responsive classes automatically handle cascading behavior,
+    // with a class like text-md-center applying to all larger breakpoints
+    // until overridden, so our implementation removes any redundant classes
+    // for larger breakpoints that share the same value as smaller ones,
+    // generating only the minimum necessary classes.
+    var breakpointClasses: String {
+        let specifiedValues = values(cascaded: false)
+
+        // Handle the common empty case first
+        guard let firstElement = specifiedValues.elements.first else {
+            return ""
         }
-        return "text-\(alignmentClass)"
-    }
-}
 
-/// Determines which elements can have horizontal alignment attached,
-@MainActor
-public protocol HorizontalAligning: HTML { }
+        let firstBreakpoint = firstElement.key
+        let firstValue = firstElement.value
+        let baseClass = firstValue.rawValue
+        let alignmentValue = baseClass.dropFirst(5)
 
-/// A modifier that controls horizontal alignment of HTML elements
-struct HorizontalAlignmentModifier: HTMLModifier {
-    /// The alignment to apply
-    let alignment: ResponsiveAlignment
+        // If there's only one value and it's not the base value, include the infix
+        guard specifiedValues.count > 1 else {
+            return firstBreakpoint == .xSmall ?
+                baseClass :
+                "text-\(firstBreakpoint.infix!)-\(alignmentValue)"
+        }
 
-    init(alignment: HorizontalAlignment) {
-        self.alignment = .responsive(small: alignment)
-    }
+        // First breakpoint gets base class (no prefix)
+        var classes = [baseClass]
+        var lastValue = firstValue
 
-    init(alignment: ResponsiveAlignment) {
-        self.alignment = alignment
-    }
+        // Process remaining breakpoints
+        for element in specifiedValues.elements.dropFirst() where element.value != lastValue {
+            let baseClass = element.value.rawValue
+            let alignmentValue = baseClass.dropFirst(5)
+            classes.append("text-\(element.key.infix!)-\(alignmentValue)")
+            lastValue = element.value
+        }
 
-    /// Applies horizontal alignment to the provided HTML content
-    /// - Parameter content: The HTML element to modify
-    /// - Returns: The modified HTML with alignment applied
-    func body(content: some HTML) -> any HTML {
-        let classes = alignment.breakpointClasses
-        return content.class(classes)
-    }
-}
-
-public extension HorizontalAligning {
-    /// Aligns this element using a specific alignment.
-    /// - Parameter alignment: How to align this element.
-    /// - Returns: A modified copy of the element with alignment applied
-    func horizontalAlignment(_ alignment: HorizontalAlignment) -> some HTML {
-        modifier(HorizontalAlignmentModifier(alignment: alignment))
-    }
-
-    /// Aligns this element using multiple responsive alignments.
-    /// - Parameter alignment: One or more alignments with optional breakpoints.
-    /// - Returns: A modified copy of the element with alignments applied
-    func horizontalAlignment(_ alignment: ResponsiveAlignment) -> some HTML {
-        modifier(HorizontalAlignmentModifier(alignment: alignment))
+        return classes.joined(separator: " ")
     }
 }

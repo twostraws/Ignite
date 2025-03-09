@@ -6,20 +6,10 @@
 //
 
 /// A type that represents a CSS media query condition.
+@MainActor
 public protocol Query: Equatable, Hashable, Sendable {
     /// The raw CSS media feature string.
     var condition: String { get }
-
-    /// Returns the CSS media feature string for this condition using theme-specific values if relevant.
-    /// - Parameter theme: The theme to use for generating the query.
-    /// - Returns: A theme-aware CSS media query string.
-    @MainActor func condition(with theme: Theme) -> String
-}
-
-public extension Query {
-    @MainActor func condition(with theme: Theme) -> String {
-        condition
-    }
 }
 
 /// Applies styles based on the user's preferred color scheme.
@@ -97,19 +87,19 @@ public struct ThemeQuery: Query {
     /// The theme identifier
     let id: String
 
-    public init(_ id: String) {
-        self.id = id
+    public init(_ theme: Theme.Type) {
+        self.id = theme.idPrefix
     }
 
     public var condition: String {
-        "data-theme-state=\"\(id.kebabCased())\""
+        "data-bs-theme^=\"\(id)\""
     }
 
-    public func hash(into hasher: inout Hasher) {
+    nonisolated public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 
-    public static func == (lhs: ThemeQuery, rhs: ThemeQuery) -> Bool {
+    nonisolated public static func == (lhs: ThemeQuery, rhs: ThemeQuery) -> Bool {
         lhs.id == rhs.id
     }
 }
@@ -128,13 +118,13 @@ public enum BreakpointQuery: Query, CaseIterable, Sendable {
     case xxLarge
 
     /// Creates a breakpoint from a string identifier.
-    public init?(stringValue: String) {
-        switch stringValue.lowercased() {
-        case "sm": self = .small
-        case "md": self = .medium
-        case "lg": self = .large
-        case "xl": self = .xLarge
-        case "xxl": self = .xxLarge
+    init?(_ breakpoint: Breakpoint) {
+        switch breakpoint {
+        case .small: self = .small
+        case .medium: self = .medium
+        case .large: self = .large
+        case .xLarge: self = .xLarge
+        case .xxLarge: self = .xxLarge
         default: return nil
         }
     }
@@ -142,21 +132,29 @@ public enum BreakpointQuery: Query, CaseIterable, Sendable {
     /// Returns the CSS media query string for this breakpoint using the provided theme's values.
     /// - Parameter theme: The theme to use for breakpoint values.
     /// - Returns: A CSS media query string.
-    @MainActor public func condition(with theme: Theme) -> String {
+    @MainActor func condition(for theme: Theme) -> String {
+        let responsiveValues = theme.breakpoints.values
         let breakpointValue = switch self {
-        case .small: theme.smallBreakpoint.stringValue
-        case .medium: theme.mediumBreakpoint.stringValue
-        case .large: theme.largeBreakpoint.stringValue
-        case .xLarge: theme.xLargeBreakpoint.stringValue
-        case .xxLarge: theme.xxLargeBreakpoint.stringValue
+        case .small: (responsiveValues[.small] ?? Bootstrap.smallBreakpoint).stringValue
+        case .medium: (responsiveValues[.medium] ?? Bootstrap.mediumBreakpoint).stringValue
+        case .large: (responsiveValues[.large] ?? Bootstrap.largeBreakpoint).stringValue
+        case .xLarge: (responsiveValues[.xLarge] ?? Bootstrap.xLargeBreakpoint).stringValue
+        case .xxLarge: (responsiveValues[.xxLarge] ?? Bootstrap.xxLargeBreakpoint).stringValue
         }
         return "min-width: \(breakpointValue)"
     }
 
-    /// The raw CSS media query string.
-    /// - Note: This property requires theme context. Use `css(for:)` instead.
+    /// The raw CSS media query string for Ignite's default breakpoints.
+    /// - Note: For `Theme`-specific values, use `condition(for:)` instead.
     public var condition: String {
-        preconditionFailure("This query requires theme context. Use css(for:) instead.")
+        let breakpointValue = switch self {
+        case .small: Bootstrap.smallBreakpoint.stringValue
+        case .medium: Bootstrap.mediumBreakpoint.stringValue
+        case .large: Bootstrap.largeBreakpoint.stringValue
+        case .xLarge: Bootstrap.xLargeBreakpoint.stringValue
+        case .xxLarge: Bootstrap.xxLargeBreakpoint.stringValue
+        }
+        return "min-width: \(breakpointValue)"
     }
 }
 
@@ -218,10 +216,10 @@ public extension Query where Self == DisplayModeQuery {
 
 public extension Query where Self == ThemeQuery {
     /// Creates a theme media query.
-    /// - Parameter id: The theme identifier.
+    /// - Parameter theme: The type of theme.
     /// - Returns: A theme media query.
-    static func theme(_ id: String) -> ThemeQuery {
-        ThemeQuery(id)
+    static func theme(_ theme: any Theme.Type) -> ThemeQuery {
+        ThemeQuery(theme)
     }
 }
 

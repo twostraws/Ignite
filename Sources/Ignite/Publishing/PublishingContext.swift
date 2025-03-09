@@ -123,7 +123,7 @@ final class PublishingContext {
     /// if no tag was specified.
     func content(tagged tag: String?) -> [Article] {
         if let tag {
-            allContent.filter { $0.tags.contains(tag) }
+            allContent.filter { $0.tags?.contains(tag) == true }
         } else {
             allContent
         }

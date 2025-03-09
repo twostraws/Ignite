@@ -8,33 +8,6 @@
 import Foundation
 
 extension PublishingContext {
-    /// Contains the various snap dimensions for different Bootstrap widths.
-    var containerDefaults: String {
-        guard let theme = site.lightTheme ?? site.darkTheme else {
-            fatalError(.missingDefaultTheme)
-        }
-
-        return """
-        .container {
-            @media (min-width: \(theme.smallBreakpoint.stringValue)) {
-                max-width: var(\(BootstrapVariable.smallContainer.rawValue), 540px);
-            }
-            @media (min-width: \(theme.mediumBreakpoint.stringValue)) {
-                max-width: var(\(BootstrapVariable.mediumContainer.rawValue), 720px);
-            }
-            @media (min-width: \(theme.largeBreakpoint.stringValue)) {
-                max-width: var(\(BootstrapVariable.largeContainer.rawValue), 960px);
-            }
-            @media (min-width: \(theme.xLargeBreakpoint.stringValue)) {
-                max-width: var(\(BootstrapVariable.xLargeContainer.rawValue), 1140px);
-            }
-            @media (min-width: \(theme.xxLargeBreakpoint.stringValue)) {
-                max-width: var(\(BootstrapVariable.xxLargeContainer.rawValue), 1320px);
-            }
-        }
-        """
-    }
-
     /// Renders static pages and content pages, including the homepage.
     func generateContent() async {
         render(site.homePage, isHomePage: true)

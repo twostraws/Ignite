@@ -5,17 +5,11 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that adds an inline CSS style property to an HTML element.
-struct InlineStyleModifier: HTMLModifier {
-    let styles: [InlineStyle]
-    /// Adds the specified CSS style property to the HTML element
-    /// - Parameter content: The HTML element to modify
-    /// - Returns: The modified HTML with the style property added
-    func body(content: some HTML) -> any HTML {
-        var copy = content
-        for style in styles {
-            copy.attributes.add(styles: .init(style.property, value: style.value))
-        }
+private extension HTML {
+    func inlineStyleModifier(styles: [InlineStyle]) -> any HTML {
+        // Custom elements need to be wrapped in a primitive container to store attributes
+        var copy: any HTML = self.isPrimitive ? self : Section(self)
+        copy.attributes.add(styles: styles)
         return copy
     }
 }
@@ -27,7 +21,7 @@ public extension HTML {
     ///   - value: The value to set for the property
     /// - Returns: A modified copy of the element with the style property added
     func style(_ property: Property, _ value: String) -> some HTML {
-        modifier(InlineStyleModifier(styles: [.init(property, value: value)]))
+        AnyHTML(inlineStyleModifier(styles: [.init(property, value: value)]))
     }
 }
 
@@ -38,6 +32,32 @@ public extension InlineElement {
     ///   - value: The value to set for the property
     /// - Returns: A modified copy of the element with the style property added
     func style(_ property: Property, _ value: String) -> some InlineElement {
-        modifier(InlineStyleModifier(styles: [.init(property, value: value)]))
+        AnyHTML(inlineStyleModifier(styles: [.init(property, value: value)]))
+    }
+}
+
+extension HTML {
+    /// Adds an inline style to the element.
+    /// - Parameters:
+    ///   - property: The CSS property.
+    ///   - value: The value.
+    /// - Returns: The modified `HTML` element
+    func style(_ property: String, _ value: String) -> some HTML {
+        AnyHTML(inlineStyleModifier(styles: [.init(property, value: value)]))
+    }
+
+    /// Adds inline styles to the element.
+    /// - Parameter values: Variable number of `InlineStyle` objects
+    /// - Returns: The modified `HTML` element
+    func style(_ values: InlineStyle?...) -> some HTML {
+        let styles = values.compactMap(\.self)
+        return AnyHTML(inlineStyleModifier(styles: styles))
+    }
+
+    /// Adds inline styles to the element.
+    /// - Parameter styles: An array of `InlineStyle` objects
+    /// - Returns: The modified `HTML` element
+    func style(_ styles: [InlineStyle]) -> some HTML {
+        AnyHTML(inlineStyleModifier(styles: styles))
     }
 }

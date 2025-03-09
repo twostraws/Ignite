@@ -5,67 +5,11 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that applies corner radius styling to HTML elements
-struct CornerRadiusModifier: HTMLModifier {
-    /// The edges to apply corner radius to
-    private let edges: DiagonalEdge
-
-    /// The radius value to apply
-    private let length: String
-
-    /// Creates a new corner radius modifier with a string length
-    /// - Parameters:
-    ///   - edges: Which corners should be rounded
-    ///   - length: The radius value as a string (e.g. "50%", "10px")
-    init(edges: DiagonalEdge, length: String) {
-        self.edges = edges
-        self.length = length
-    }
-
-    /// Creates a new corner radius modifier with a pixel length
-    /// - Parameters:
-    ///   - edges: Which corners should be rounded
-    ///   - pixels: The radius value in pixels
-    init(edges: DiagonalEdge, pixels: Int) {
-        self.edges = edges
-        self.length = "\(pixels)px"
-    }
-
-    /// Applies corner radius styling to the provided HTML content
-    /// - Parameter content: The HTML element to modify
-    /// - Returns: The modified HTML with corner radius applied
-    func body(content: some HTML) -> any HTML {
-        if edges.contains(.all) {
-            return content.style(.borderRadius, "\(length)")
-        }
-
-        var modified: any HTML = content
-
-        if edges.contains(.topLeading) {
-            modified = modified.style(.borderTopLeftRadius, "\(length)")
-        }
-
-        if edges.contains(.topTrailing) {
-            modified = modified.style(.borderTopRightRadius, "\(length)")
-        }
-
-        if edges.contains(.bottomLeading) {
-            modified = modified.style(.borderBottomLeftRadius, "\(length)")
-        }
-
-        if edges.contains(.bottomTrailing) {
-            modified = modified.style(.borderBottomRightRadius, "\(length)")
-        }
-
-        return modified
-    }
-}
-
 public extension HTML {
     /// Rounds all edges of this object by some value specified as a string.
     /// - Parameter length: A string with rounding of your choosing, such as "50%".
     /// - Returns: A modified copy of the element with corner radius applied
-    func cornerRadius(_ length: String) -> some HTML {
+    func cornerRadius(_ length: LengthUnit) -> some HTML {
         cornerRadius(.all, length)
     }
 
@@ -81,8 +25,8 @@ public extension HTML {
     ///   - edges: Which corners should be rounded
     ///   - length: A string with rounding of your choosing, such as "50%"
     /// - Returns: A modified copy of the element with corner radius applied
-    func cornerRadius(_ edges: DiagonalEdge, _ length: String) -> some HTML {
-        modifier(CornerRadiusModifier(edges: edges, length: length))
+    func cornerRadius(_ edges: DiagonalEdge, _ length: LengthUnit) -> some HTML {
+        AnyHTML(cornerRadiusModifier(edges: edges, length: length))
     }
 
     /// Rounds selected edges of this object by some number of pixels.
@@ -91,6 +35,34 @@ public extension HTML {
     ///   - length: An integer specifying a pixel amount to round corners with
     /// - Returns: A modified copy of the element with corner radius applied
     func cornerRadius(_ edges: DiagonalEdge, _ length: Int) -> some HTML {
-        modifier(CornerRadiusModifier(edges: edges, pixels: length))
+        AnyHTML(cornerRadiusModifier(edges: edges, length: .px(length)))
+    }
+}
+
+private extension HTML {
+    func cornerRadiusModifier(edges: DiagonalEdge, length: LengthUnit) -> any HTML {
+        if edges.contains(.all) {
+            return self.style(.borderRadius, "\(length)")
+        }
+
+        var modified: any HTML = self
+
+        if edges.contains(.topLeading) {
+            modified = modified.style(.borderTopLeftRadius, length.stringValue)
+        }
+
+        if edges.contains(.topTrailing) {
+            modified = modified.style(.borderTopRightRadius, length.stringValue)
+        }
+
+        if edges.contains(.bottomLeading) {
+            modified = modified.style(.borderBottomLeftRadius, length.stringValue)
+        }
+
+        if edges.contains(.bottomTrailing) {
+            modified = modified.style(.borderBottomRightRadius, length.stringValue)
+        }
+
+        return modified
     }
 }

@@ -11,7 +11,7 @@
 /// allowing their content and styling to flow through to their child elements.
 @MainActor protocol PassthroughElement: HTML {
     /// The child elements contained within this HTML element.
-    var items: [any HTML] { get }
+    var items: HTMLCollection { get }
 
     /// The attributes that should be passed through to child elements.
     var attributes: CoreAttributes { get set }

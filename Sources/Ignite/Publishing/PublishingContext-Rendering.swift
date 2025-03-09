@@ -74,7 +74,7 @@ extension PublishingContext {
 
         /// Creates a unique list of sorted tags from across the site, starting
         /// with `nil` for the "all tags" page.
-        let tags: [String?] = [nil] + Set(allContent.flatMap(\.tags)).sorted()
+        let tags: [String?] = [nil] + Set(allContent.compactMap(\.tags).flatMap(\.self)).sorted()
 
         for tag in tags {
             let path: String = if let tag {
@@ -114,9 +114,9 @@ extension PublishingContext {
     /// layout in your site's `layouts` property is used.
     /// - Parameter content: The content that is being rendered.
     /// - Returns: The correct `ContentPage` instance to use for this content.
-    func layout(for article: Article) -> any ContentLayout {
+    func layout(for article: Article) -> any ArticleLayout {
         if let contentLayout = article.layout {
-            for layout in site.contentLayouts {
+            for layout in site.articleLayouts {
                 let layoutName = String(describing: type(of: layout))
 
                 if layoutName == contentLayout {
@@ -125,7 +125,7 @@ extension PublishingContext {
             }
 
             fatalError(.missingNamedLayout(contentLayout))
-        } else if let defaultLayout = site.contentLayouts.first {
+        } else if let defaultLayout = site.articleLayouts.first {
             return defaultLayout
         } else {
             fatalError(.missingDefaultLayout)
