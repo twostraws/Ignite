@@ -18,6 +18,6 @@ public struct ArticleLoader {
     }
 
     public func tagged(_ tag: String) -> [Article] {
-        all.filter { $0.tags.contains(tag) }
+        all.filter { $0.tags?.contains(tag) == true }
     }
 }

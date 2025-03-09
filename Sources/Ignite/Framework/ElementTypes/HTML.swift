@@ -14,7 +14,7 @@
 /// You typically don't conform to `HTML` directly. Instead, use one of the built-in elements like
 /// `Div`, `Paragraph`, or `Link`, or create custom components by conforming to `HTMLRootElement`.
 @MainActor
-public protocol HTML: CustomStringConvertible, Sendable {
+public protocol HTML: Stylable, CustomStringConvertible, Sendable {
     /// The standard set of control attributes for HTML elements.
     var attributes: CoreAttributes { get set }
 
@@ -82,7 +82,7 @@ extension HTML {
 
     /// A Boolean value indicating whether this represents `Text`.
     var isText: Bool {
-        body is Text || (body as? ModifiedHTML)?.unwrapped is Text
+        body is Text || (body as? AnyHTML)?.wrapped is Text
     }
 }
 
@@ -111,62 +111,4 @@ extension HTML {
     mutating func columnWidth(_ width: ColumnWidth) {
         attributes.classes.insert(width.className)
     }
-}
-
-// MARK: - Helper Methods
-
-/// Recursively flattens nested HTML content into a single array, unwrapping any body properties.
-/// - Parameter content: The content to flatten and unwrap
-/// - Returns: An array of unwrapped HTML elements
-@MainActor func flatUnwrap(_ content: Any) -> [any HTML] {
-    if let array = content as? [Any] {
-        array.flatMap { flatUnwrap($0) }
-    } else if let html = content as? any HTML {
-        if let anyHTML = html as? AnyHTML {
-            flatUnwrap([anyHTML.wrapped.body])
-        } else if let collection = html as? HTMLCollection {
-            flatUnwrap(collection.elements)
-        } else {
-            [html.body]
-        }
-    } else {
-        []
-    }
-}
-
-/// Recursively flattens nested `InlineHTML` content into a single array, unwrapping any body properties.
-/// - Parameter content: The content to flatten and unwrap
-/// - Returns: An array of unwrapped `InlineHTML` elements
-@MainActor func flatUnwrap(_ content: Any) -> [any InlineElement] {
-    if let array = content as? [Any] {
-        array.flatMap { flatUnwrap($0) }
-    } else if let html = content as? any InlineElement {
-        if let anyHTML = html as? AnyHTML, let wrapped = anyHTML.wrapped.body as? (any InlineElement) {
-            flatUnwrap([wrapped])
-        } else if let collection = html as? HTMLCollection, let elements = collection.elements as? [any InlineElement] {
-            flatUnwrap(elements)
-        } else {
-            [html]
-        }
-    } else {
-        []
-    }
-}
-
-/// Unwraps HTML content to its most basic form, collecting multiple elements into an HTMLCollection if needed.
-/// - Parameter content: The content to unwrap
-/// - Returns: A single HTML element or collection
-@MainActor func unwrap(_ content: Any) -> any HTML {
-    if let array = content as? [Any] {
-        if let flattened = array.flatMap({ flatUnwrap($0) }) as? [any HTML] {
-            return HTMLCollection(flattened)
-        }
-    } else if let html = content as? any HTML {
-        if let anyHTML = html as? AnyHTML {
-            return anyHTML.wrapped.body
-        }
-        return html.body
-    }
-
-    return EmptyHTML()
 }

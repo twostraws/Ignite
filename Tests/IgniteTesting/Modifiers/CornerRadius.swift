@@ -16,9 +16,9 @@ import Testing
 class CornerRadiusTests: IgniteTestSuite {
     @Test("CornerRadius Modifier with All Edges (String)")
     func cornerRadiusWithAllEdgesString() async throws {
-        let element = Text("Hello").cornerRadius("50%")
+        let element = Text("Hello").cornerRadius(.percent(50%))
         let output = element.render()
-        #expect(output == "<p style=\"border-radius: 50%\">Hello</p>")
+        #expect(output == "<p style=\"border-radius: 50.0%\">Hello</p>")
     }
 
     @Test("CornerRadius Modifier with All Edges (Pixels)")
@@ -30,7 +30,7 @@ class CornerRadiusTests: IgniteTestSuite {
 
     @Test("CornerRadius Modifier with Specific Edges (String)")
     func cornerRadiusWithSpecificEdgesString() async throws {
-        let element = Text("Hello").cornerRadius([.topLeading, .bottomTrailing], "10px")
+        let element = Text("Hello").cornerRadius([.topLeading, .bottomTrailing], .px(10))
         let output = element.render()
         #expect(output.contains("border-top-left-radius: 10px"))
         #expect(output.contains("border-bottom-right-radius: 10px"))

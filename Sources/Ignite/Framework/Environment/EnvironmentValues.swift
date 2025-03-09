@@ -83,7 +83,7 @@ public struct EnvironmentValues {
         site: any Site,
         allContent: [Article],
         pageMetadata: PageMetadata,
-        pageContent: any PageContentLayout
+        pageContent: any LayoutContent
     ) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
         self.articles = ArticleLoader(content: allContent)
@@ -112,7 +112,7 @@ public struct EnvironmentValues {
         site: any Site,
         allContent: [Article],
         pageMetadata: PageMetadata,
-        pageContent: any PageContentLayout,
+        pageContent: any LayoutContent,
         article: Article
     ) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)
@@ -144,7 +144,7 @@ public struct EnvironmentValues {
         site: any Site,
         allContent: [Article],
         pageMetadata: PageMetadata,
-        pageContent: any PageContentLayout,
+        pageContent: any LayoutContent,
         category: any Category
     ) {
         self.decode = DecodeAction(sourceDirectory: sourceDirectory)

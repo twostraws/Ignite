@@ -36,3 +36,19 @@ extension TextDecoration: Defaultable {
     /// Indicates whether this decoration is the default (underline) decoration
     var isDefault: Bool { self == .underline }
 }
+
+extension ResponsiveValues: Defaultable where Value == LengthUnit {
+    /// Indicates whether these values are the default (empty)
+    var isDefault: Bool { self == .default }
+
+    /// The empty values instance used as a default value
+    static var `default`: Self {
+        .init(
+            small: nil,
+            medium: nil,
+            large: nil,
+            xLarge: nil,
+            xxLarge: nil
+        )
+    }
+}

@@ -17,29 +17,24 @@ import Foundation
 @MainActor
 public struct Article {
     /// The main title for this content.
-    public var title: String
+    public var title: String = ""
 
     /// A summary of this content.
-    public var description: String
+    public var description: String = ""
 
     /// A relative path for this content.
-    public var path: String
+    public var path: String = ""
 
     /// Extra metadata as extracted from YAML front matter.
     /// See https://jekyllrb.com/docs/front-matter/
-    public var metadata: [String: any Sendable]
+    public var metadata: [String: any Sendable] = [:]
 
     /// The main text of this content. Excludes its title.
-    public var text: String
+    public var text: String = ""
 
     /// Set to true when no specific date was found for this content,
     /// so one was provided by examining the filesystem date.
     public var hasAutomaticDate = false
-
-    /// True if this content has tags attached to it.
-    public var hasTags: Bool {
-        tags.isEmpty == false
-    }
 
     /// The publication date of this content.
     public var date: Date {
@@ -73,12 +68,11 @@ public struct Article {
     }
 
     /// An array of the tags used to describe this content.
-    public var tags: [String] {
+    public var tags: [String]? {
         if let tags = metadata["tags"] as? String {
-            tags.splitAndTrim()
-        } else {
-            []
+            return tags.splitAndTrim()
         }
+        return nil
     }
 
     /// The author for this content, if set.
@@ -100,7 +94,7 @@ public struct Article {
     /// An accessibility description for the image.
     public var imageDescription: String {
         metadata["alt"] as? String
-        ?? ""
+            ?? ""
     }
 
     /// Whether this content should be published on the site or not. Defaults to true.
@@ -123,6 +117,9 @@ public struct Article {
         Int(ceil(Double(estimatedWordCount) / 250))
     }
 
+    /// Keys for resources required on initialization
+    static nonisolated let resourceKeys: [URLResourceKey] = [.creationDateKey, .contentModificationDateKey]
+
     /// Creates a new `Content` instance by parsing a filesystem URL.
     /// - Parameters:
     ///   - url: The filesystem URL that contains Markdown to parse.
@@ -138,58 +135,89 @@ public struct Article {
         resourceValues: URLResourceValues,
         deployPath: String
     ) throws {
+        var markdown: String
+
+        do {
+            markdown = try String(contentsOf: url)
+        } catch {
+            throw PublishingError.unopenableFile(error.localizedDescription)
+        }
+
+        let processed = processMetadata(for: markdown)
+
         // Use whatever Markdown renderer was configured
         // for the site we're publishing.
-        let parser = try context.site.markdownRenderer.init(url: url, removeTitleFromBody: true)
+        let parser = try context.site.markdownRenderer.init(markdown: processed, removeTitleFromBody: true)
 
-        text = parser.body
-        metadata = parser.metadata
-        title = parser.title.strippingTags()
-        description = parser.description.strippingTags()
-        path = metadata["path"] as? String ?? deployPath
+        self.text = parser.body
+        self.description = parser.description.strippingTags()
+
+        resolveTitle(parser.title, url: url)
+        populateMetadataDates(urlValues: resourceValues)
+
+        self.path = metadata["path"] as? String ?? deployPath
 
         // Save the first subfolder in the path as the article's type
         let pathParts = path.split(separator: "/") // removes empty
-        if 1 < pathParts.count { // no type if not in subdirectory
+        if pathParts.count > 1 { // no type if not in subdirectory
             metadata["type"] = pathParts[0]
         }
+    }
 
+    /// Determines the article title using metadata, parsed content, or the URL filename.
+    /// Prioritizes title from metadata, falls back to parsed title, and uses filename as last resort.
+    /// - Parameters:
+    ///   - title: The title from the parsed content
+    ///   - url: The URL of the source file, used as fallback for the title
+    private mutating func resolveTitle(_ title: String, url: URL) {
+        if let title = metadata["title"] as? String {
+            self.title = title
+        } else if title.isEmpty {
+            // Assign a title that's better than the default empty string.
+            self.title = url.deletingPathExtension().lastPathComponent
+        } else {
+            self.title = title.strippingTags()
+        }
+    }
+
+    /// Looks for and parses any YAML front matter from this Markdown.
+    /// - Parameter markdown: The Markdown string to process.
+    /// - Returns: The remaining Markdown, once front matter has been removed.
+    private mutating func processMetadata(for markdown: String) -> String {
+        if markdown.starts(with: "---") {
+            let parts = markdown.split(separator: "---", maxSplits: 1, omittingEmptySubsequences: true)
+
+            let header = parts[0].split(separator: "\n", omittingEmptySubsequences: true)
+
+            for entry in header {
+                let entryParts = entry.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: true)
+                guard entryParts.count == 2 else { continue }
+
+                let trimmedValue = entryParts[1].trimmingCharacters(in: .whitespaces)
+                metadata[entryParts[0].trimmingCharacters(in: .whitespaces)] = trimmedValue
+            }
+
+            return String(parts[1].trimmingCharacters(in: .whitespacesAndNewlines))
+        } else {
+            return markdown
+        }
+    }
+
+    /// Populates the article's metadata with publication and modification dates.
+    /// Uses filesystem dates when metadata dates are unavailable or invalid.
+    /// - Parameter urlValues: Resource values containing filesystem creation and modification dates
+    private mutating func populateMetadataDates(urlValues: URLResourceValues) {
         if let date = parseMetadataDate(for: "date") {
             metadata["date"] = date
         } else {
-            metadata["date"] = resourceValues.creationDate ?? Date.now
+            metadata["date"] = urlValues.creationDate ?? Date.now
             hasAutomaticDate = true
         }
 
         if let lastModified = parseMetadataDate(for: "modified", "lastModified") {
             metadata["lastModified"] = lastModified
         } else {
-            metadata["lastModified"] = resourceValues.contentModificationDate ?? Date.now
-        }
-    }
-
-    /// Get the full URL to this content. Useful for creating feed XML that includes
-    /// this content.
-    public func path(in site: any Site) -> String {
-        site.url.appending(path: self.path).absoluteString
-    }
-
-    /// An array of `Link` objects that show badges for the tags of this
-    /// content, and also link to the tag pages.
-    @InlineElementBuilder public func tagLinks() -> (some InlineElement)? {
-        if let tags = metadata["tags"] as? String {
-            let targets: [(name: String, path: String)] = tags.splitAndTrim().map { tag in
-                let tagPath = tag.convertedToSlug() ?? tag
-                return (name: tag, path: "/tags/\(tagPath)")
-            }
-            ForEach(targets) { target in
-                Link(target: target.path) {
-                    Badge(target.name)
-                        .role(.primary)
-                        .margin(.trailing, .px(5))
-                }
-                .relationship(.tag)
-            }
+            metadata["lastModified"] = urlValues.contentModificationDate ?? Date.now
         }
     }
 
@@ -216,7 +244,6 @@ public struct Article {
     /// - Returns: A parsed `Date` if found, `nil` otherwise
     /// - Throws: An error if date parsing fails
     private func parseMetadataDate(for ids: String...) -> Date? {
-
         for id in ids {
             guard let dateString = metadata[id] as? String else { continue }
             if let date = process(date: dateString) {
@@ -230,11 +257,30 @@ public struct Article {
         return nil
     }
 
-    /// Keys for resources required on initialization
+    /// Get the full URL to this content. Useful for creating feed XML that includes
+    /// this content.
+    public func path(in site: any Site) -> String {
+        site.url.appending(path: path).absoluteString
+    }
 
-    public static nonisolated let resourceKeys: [URLResourceKey]
-        = [.creationDateKey, .contentModificationDateKey]
-
+    /// An array of `Link` objects that show badges for the tags of this
+    /// content, and also link to the tag pages.
+    @InlineElementBuilder public func tagLinks() -> (some InlineElement)? {
+        if let tags = metadata["tags"] as? String {
+            let targets: [(name: String, path: String)] = tags.splitAndTrim().map { tag in
+                let tagPath = tag.convertedToSlug() ?? tag
+                return (name: tag, path: "/tags/\(tagPath)")
+            }
+            ForEach(targets) { target in
+                Link(target: target.path) {
+                    Badge(target.name)
+                        .role(.primary)
+                        .margin(.trailing, .px(5))
+                }
+                .relationship(.tag)
+            }
+        }
+    }
 }
 
 extension Article {

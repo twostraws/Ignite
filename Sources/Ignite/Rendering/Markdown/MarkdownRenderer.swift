@@ -26,21 +26,10 @@ public protocol MarkdownRenderer {
     /// to the first heading.
     var removeTitleFromBody: Bool { get }
 
-    /// A dictionary of metadata specified at the top of the file as YAML front matter.
-    /// See https://jekyllrb.com/docs/front-matter/ for information.
-    var metadata: [String: String] { get }
-
     /// Parses Markdown provided as a direct input string.
     /// - Parameters:
     ///   - markdown: The Markdown to parse.
     ///   - removeTitleFromBody: True if the first title should be removed
     ///   from the final `body` property.
     init(markdown: String, removeTitleFromBody: Bool) throws
-
-    /// Parses Markdown provided from a filesystem URL.
-    /// - Parameters:
-    ///   - url: The filesystem URL to load.
-    ///   - removeTitleFromBody: True if the first title should be removed
-    ///   from the final `body` property.
-    init(url: URL, removeTitleFromBody: Bool) throws
 }

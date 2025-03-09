@@ -5,16 +5,11 @@
 // See LICENSE for license information.
 //
 
-/// A modifier that adds a custom attribute to the element.
-struct AttributeModifier: HTMLModifier {
-    let attribute: Attribute?
-
-    /// Adds a custom attribute to the element.
-    /// - Parameter content: The HTML element to modify
-    /// - Returns: The modified HTML with the style property added
-    func body(content: some HTML) -> any HTML {
-        guard let attribute else { return content }
-        var copy = content
+private extension HTML {
+    func attributeModifier(_ attribute: Attribute?) -> any HTML {
+        guard let attribute else { return self }
+        // Custom elements need to be wrapped in a primitive container to store attributes
+        var copy: any HTML = self.isPrimitive ? self : Section(self)
         copy.attributes.add(customAttributes: attribute)
         return copy
     }
@@ -27,14 +22,14 @@ public extension HTML {
     ///   - value: The value of the attribute
     /// - Returns: The modified element
     func attribute(_ name: String, _ value: String) -> some HTML {
-        modifier(AttributeModifier(attribute: .init(name: name, value: value)))
+        AnyHTML(attributeModifier(.init(name: name, value: value)))
     }
 
     /// Adds a custom boolean attribute to the element.
     /// - Parameter name: The name of the attribute
     /// - Returns: The modified element
     func attribute(_ name: String) -> some HTML {
-        modifier(AttributeModifier(attribute: .init(name)))
+        AnyHTML(attributeModifier(.init(name)))
     }
 }
 
@@ -45,13 +40,64 @@ public extension InlineElement {
     ///   - value: The value of the attribute
     /// - Returns: The modified element
     func attribute(_ name: String, _ value: String) -> some InlineElement {
-        modifier(AttributeModifier(attribute: .init(name: name, value: value)))
+        AnyHTML(attributeModifier(.init(name: name, value: value)))
     }
 
     /// Adds a custom boolean attribute to the element.
     /// - Parameter name: The name of the attribute
     /// - Returns: The modified element
     func attribute(_ name: String) -> some InlineElement {
-        modifier(AttributeModifier(attribute: .init(name)))
+        AnyHTML(attributeModifier(.init(name)))
+    }
+}
+
+extension HTML {
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(name: String, value: String) -> some HTML {
+        AnyHTML(attributeModifier(.init(name: name, value: value)))
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(_ attribute: Attribute?) -> some HTML {
+        AnyHTML(attributeModifier(attribute))
+    }
+}
+
+extension InlineElement {
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(name: String, value: String) -> some InlineElement {
+        AnyHTML(attributeModifier(.init(name: name, value: value)))
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(_ attribute: Attribute?) -> some HTML {
+        AnyHTML(attributeModifier(attribute))
+    }
+}
+
+extension HeadElement {
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(name: String, value: String) -> some HeadElement {
+        AnyHTML(attributeModifier(.init(name: name, value: value)))
     }
 }

@@ -19,10 +19,9 @@
 ///     var fontFamilyBase: Font = .custom("Helvetica")
 /// }
 /// ```
-@MainActor
 public protocol Theme: Sendable {
-    /// The name of the theme, which must be unique
-    static var name: String { get set }
+    /// The appearance mode this theme represents
+    var colorScheme: ColorScheme { get }
 
     /// Primary brand color
     var accent: Color { get }
@@ -43,10 +42,10 @@ public protocol Theme: Sendable {
     var danger: Color { get }
 
     /// Light theme color
-    var light: Color { get }
+    var offWhite: Color { get }
 
     /// Dark theme color
-    var dark: Color { get }
+    var offBlack: Color { get }
 
     /// Default text color for body content
     var primary: Color { get }
@@ -73,7 +72,7 @@ public protocol Theme: Sendable {
     var link: Color { get }
 
     /// Link color on hover
-    var linkHover: Color { get }
+    var hoveredLink: Color { get }
 
     /// Link text decoration style
     var linkDecoration: TextDecoration { get }
@@ -81,32 +80,14 @@ public protocol Theme: Sendable {
     /// Default border color
     var border: Color { get }
 
-    /// Optional custom color for headings
-    var heading: Color { get }
-
-    /// Sans-serif font family
-    var sansSerifFont: Font { get }
-
     /// Monospace font family
     var monospaceFont: Font { get }
 
     /// Base font family for body text
     var font: Font { get }
 
-    /// Alternate fonts
-    var alternateFonts: [Font] { get }
-
     /// Root font size nil uses browser default
     var rootFontSize: LengthUnit { get }
-
-    /// Base font size
-    var bodySize: LengthUnit { get }
-
-    /// Small font size
-    var smallBodySize: LengthUnit { get }
-
-    /// Large font size
-    var largeBodySize: LengthUnit { get }
 
     /// Inline code font size
     var inlineCodeFontSize: LengthUnit { get }
@@ -114,56 +95,17 @@ public protocol Theme: Sendable {
     /// Code block font size
     var codeBlockFontSize: LengthUnit { get }
 
-    /// Extra light font weight
-    var lighterFontWeight: FontWeight { get }
-
-    /// Light font weight
-    var lightFontWeight: FontWeight { get }
-
-    /// Normal font weight
-    var regularFontWeight: FontWeight { get }
-
-    /// Bold font weight
-    var boldFontWeight: FontWeight { get }
-
-    /// Extra bold font weight
-    var bolderFontWeight: FontWeight { get }
-
     /// Base line height
-    var lineHeight: LengthUnit { get }
+    var lineSpacing: LengthUnit { get }
 
-    /// Condensed line height
-    var smallLineHeight: LengthUnit { get }
-
-    /// Expanded line height
-    var largeLineHeight: LengthUnit { get }
-
-    /// Font size for h1 elements
-    var xxLargeHeadingSize: LengthUnit { get }
-
-    /// Font size for h2 elements
-    var xLargeHeadingSize: LengthUnit { get }
-
-    /// Font size for h3 elements
-    var largeHeadingSize: LengthUnit { get }
-
-    /// Font size for h4 elements
-    var mediumHeadingSize: LengthUnit { get }
-
-    /// Font size for h5 elements
-    var smallHeadingSize: LengthUnit { get }
-
-    /// Font size for h6 elements
-    var xSmallHeadingSize: LengthUnit { get }
-
-    /// Optional custom font family for headings
+    /// Custom font family for headings
     var headingFont: Font { get }
 
     /// Font weight for headings
     var headingFontWeight: FontWeight { get }
 
     /// Line height for headings
-    var headingLineHeight: LengthUnit { get }
+    var headingLineSpacing: LengthUnit { get }
 
     /// Bottom margin for headings
     var headingBottomMargin: LengthUnit { get }
@@ -171,39 +113,35 @@ public protocol Theme: Sendable {
     /// Bottom margin for paragraphs
     var paragraphBottomMargin: LengthUnit { get }
 
-    /// Extra small breakpoint
-    var xSmallBreakpoint: LengthUnit { get }
-
-    /// Small breakpoint
-    var smallBreakpoint: LengthUnit { get }
-
-    /// Medium breakpoint
-    var mediumBreakpoint: LengthUnit { get }
-
-    /// Large breakpoint
-    var largeBreakpoint: LengthUnit { get }
-
-    /// Extra large breakpoint
-    var xLargeBreakpoint: LengthUnit { get }
-
-    /// Extra extra large breakpoint
-    var xxLargeBreakpoint: LengthUnit { get }
-
-    /// Maximum width for small containers
-    var smallMaxWidth: LengthUnit { get }
-
-    /// Maximum width for medium containers
-    var mediumMaxWidth: LengthUnit { get }
-
-    /// Maximum width for large containers
-    var largeMaxWidth: LengthUnit { get }
-
-    /// Maximum width for extra large containers
-    var xLargeMaxWidth: LengthUnit { get }
-
-    /// Maximum width for extra extra large containers
-    var xxLargeMaxWidth: LengthUnit { get }
-
     /// The color scheme for syntax highlighting
     var syntaxHighlighterTheme: HighlighterTheme { get }
+
+    typealias ResponsiveValues = Ignite.ResponsiveValues<LengthUnit>
+
+    /// Base font size
+    var bodyFontSize: ResponsiveValues { get }
+
+    /// Font size for h1 elements
+    var h1Size: ResponsiveValues { get }
+
+    /// Font size for h2 elements
+    var h2Size: ResponsiveValues { get }
+
+    /// Font size for h3 elements
+    var h3Size: ResponsiveValues { get }
+
+    /// Font size for h4 elements
+    var h4Size: ResponsiveValues { get }
+
+    /// Font size for h5 elements
+    var h5Size: ResponsiveValues { get }
+
+    /// Font size for h6 elements
+    var h6Size: ResponsiveValues { get }
+
+    /// The maximum width of the site's content at different breakpoints.
+    var siteWidth: ResponsiveValues { get }
+
+    /// The values that define the site's responsive breakpoints.
+    var breakpoints: ResponsiveValues { get }
 }

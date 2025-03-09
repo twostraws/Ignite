@@ -14,6 +14,7 @@ struct TestSite: Site {
     var titleSuffix = " - My Test Site"
     var url = URL(static: "https://www.yoursite.com")
     var timeZone: TimeZone?
+    var language: Language = .english
 
     var homePage = TestLayout()
     var layout = EmptyLayout()
@@ -25,7 +26,7 @@ struct TestSite: Site {
         image: .init(url: "path/to/image.png", width: 100, height: 100)
     )
 
-    var contentLayouts: [any ContentLayout] = [
+    var articleLayouts: [any ArticleLayout] = [
         TestStory()
     ]
 
@@ -57,7 +58,7 @@ struct TestSitePublisher {
     }
 }
 
-struct TestStory: ContentLayout {
+struct TestStory: ArticleLayout {
     var body: some HTML {
         EmptyHTML()
     }

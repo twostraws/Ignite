@@ -22,7 +22,7 @@ public struct Font: Hashable, Equatable, Sendable {
     let size: LengthUnit?
 
     /// The responsive size for this font.
-    let responsiveSize: ResponsiveFontSize?
+    let responsiveSize: ResponsiveValues<LengthUnit>?
 
     /// The weight (boldness) of the font.
     let weight: Font.Weight
@@ -38,7 +38,7 @@ public struct Font: Hashable, Equatable, Sendable {
     }
 
     /// An array of system fonts in order of preference.
-    public static let systemFonts = [
+    static let systemFonts = [
         "system-ui",
         "-apple-system",
         "Segoe UI",
@@ -51,7 +51,7 @@ public struct Font: Hashable, Equatable, Sendable {
     ]
 
     /// An array of monospace fonts in order of preference.
-    public static let monospaceFonts = [
+    static let monospaceFonts = [
         "SFMono-Regular",
         "Menlo",
         "Monaco",
@@ -62,16 +62,16 @@ public struct Font: Hashable, Equatable, Sendable {
     ]
 
     /// The default sans-serif system font.
-    public static let systemSansSerif = Font(name: systemFonts.joined(separator: ","), weight: .regular)
+    static let systemSansSerif = Font(name: systemFonts.joined(separator: ","), weight: .regular)
 
     /// The default monospace system font.
-    public static let systemMonospace = Font(name: monospaceFonts.joined(separator: ","), weight: .regular)
+    static let systemMonospace = Font(name: monospaceFonts.joined(separator: ","), weight: .regular)
 
     /// The default font used for body text.
-    public static let systemBodyFont = systemSansSerif
+    static let systemBodyFont = systemSansSerif
 
     /// The default font used for code blocks.
-    public static let systemCodeFont = systemMonospace
+    static let systemCodeFont = systemMonospace
 
     /// Creates a font with the specified properties.
     /// - Parameters:
@@ -109,21 +109,21 @@ public struct Font: Hashable, Equatable, Sendable {
     }
 
     init(
-        name: String,
+        name: String?,
         style: Font.Style = .body,
-        size: ResponsiveFontSize,
+        size: ResponsiveSize,
         weight: Weight = .regular
     ) {
         self.name = name
         self.style = style
-        self.responsiveSize = size
+        self.responsiveSize = size.values
         self.weight = weight
         self.size = nil
         self.sources = []
     }
 
     init(
-        name: String,
+        name: String?,
         style: Font.Style = .body,
         size: LengthUnit? = nil,
         weight: Font.Weight = .regular
@@ -144,7 +144,7 @@ public struct Font: Hashable, Equatable, Sendable {
         _ style: Font.Style,
         weight: Font.Weight = .regular
     ) -> Font {
-        Font(name: "", style: style, weight: weight)
+        Font(name: nil, style: style, weight: weight)
     }
 
     /// Creates a system font with the specified style.
@@ -157,7 +157,7 @@ public struct Font: Hashable, Equatable, Sendable {
         size: LengthUnit,
         weight: Font.Weight = .regular
     ) -> Font {
-        Font(name: "", style: style, size: size, weight: weight)
+        Font(name: nil, style: style, size: size, weight: weight)
     }
 
     /// Creates a system font with the specified style.
@@ -170,7 +170,7 @@ public struct Font: Hashable, Equatable, Sendable {
         size: Int,
         weight: Font.Weight = .regular
     ) -> Font {
-        Font(name: "", style: style, size: .px(size), weight: weight)
+        Font(name: nil, style: style, size: .px(size), weight: weight)
     }
 
     /// Creates a system font with responsive sizing.
@@ -180,10 +180,10 @@ public struct Font: Hashable, Equatable, Sendable {
     /// - Returns: A Font instance configured with responsive sizing.
     public static func system(
         _ style: Font.Style = .body,
-        size: ResponsiveFontSize,
+        size: ResponsiveSize,
         weight: Font.Weight = .regular
     ) -> Font {
-        Font(name: "", style: style, size: size, weight: weight)
+        Font(name: nil, style: style, size: size, weight: weight)
     }
 
     /// Creates a custom font with the specified name and size.
@@ -242,9 +242,51 @@ public struct Font: Hashable, Equatable, Sendable {
     public static func custom(
         _ name: String,
         style: Font.Style = .body,
-        size: ResponsiveFontSize,
+        size: ResponsiveSize,
         weight: Font.Weight = .regular
     ) -> Font {
         Font(name: name, style: style, size: size, weight: weight)
+    }
+}
+
+public extension Font {
+    enum ResponsiveSize {
+        /// Creates a responsive value that adapts across different screen sizes.
+        /// - Parameters:
+        ///   - xSmall: The base value, applied to all breakpoints unless overridden.
+        ///   - small: Value for small screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - medium: Value for medium screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - large: Value for large screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - xLarge: Value for extra large screens and up. If `nil`, inherits from smaller breakpoints.
+        ///   - xxLarge: Value for extra extra large screens and up. If `nil`, inherits from smaller breakpoints.
+        /// - Returns: A responsive value that adapts to different screen sizes.
+        case responsive(
+            _ xSmall: LengthUnit? = nil,
+            small: LengthUnit? = nil,
+            medium: LengthUnit? = nil,
+            large: LengthUnit? = nil,
+            xLarge: LengthUnit? = nil,
+            xxLarge: LengthUnit? = nil
+        )
+
+        var values: ResponsiveValues<LengthUnit> {
+            switch self {
+            case let .responsive(xSmall, small, medium, large, xLarge, xxLarge):
+                ResponsiveValues(
+                    xSmall,
+                    small: small,
+                    medium: medium,
+                    large: large,
+                    xLarge: xLarge,
+                    xxLarge: xxLarge
+                )
+            }
+        }
+    }
+}
+
+extension Font: CustomStringConvertible {
+    public var description: String {
+        name ?? "System"
     }
 }

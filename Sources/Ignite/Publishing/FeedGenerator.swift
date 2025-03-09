@@ -61,7 +61,7 @@ struct FeedGenerator {
                     itemXML += "<dc:creator><![CDATA[\(authorName)]]></dc:creator>"
                 }
 
-                for tag in item.tags {
+                item.tags?.forEach { tag in
                     itemXML += "<category><![CDATA[\(tag)]]></category>"
                 }
 

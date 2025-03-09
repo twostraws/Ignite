@@ -13,11 +13,7 @@ import Testing
 /// Tests for the `HTMLDocument` element.
 @Suite("HTMLDocument Tests")
 @MainActor
-struct HTMLDocumentTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class HTMLDocumentTests: IgniteTestSuite {
     @Test("Starts with doctype html")
     func containsHTMLDoctype() {
         let sut = Document {}
@@ -58,7 +54,24 @@ struct HTMLDocumentTests {
 
     @Test("lang attribute is taken from language property", arguments: Language.allCases)
     func language_property_determines_lang_attribute(_ language: Language) throws {
-        let sut = Document(language: language) {}
+
+        /// New TestSite initialized with the test language.
+        var site = TestSite()
+        site.language = language
+
+        /// Create an environment and initialize it with the set language. 
+        let values = EnvironmentValues(
+            sourceDirectory: publishingContext.sourceDirectory,
+            site: site,
+            allContent: publishingContext.allContent,
+            pageMetadata: publishingContext.environment.page,
+            pageContent: publishingContext.site.homePage)
+
+        /// Initialize Document with the TestSite language set above.
+        let sut = publishingContext.withEnvironment(values) {
+            Document {}
+        }
+
         let output = sut.render()
 
         let langAttribute = try #require(output.htmlTagWithCloseTag("html")?.attributes

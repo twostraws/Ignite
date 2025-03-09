@@ -82,9 +82,9 @@ public struct Modal: HTML {
         @HTMLBuilder footer: () -> some HTML = { EmptyHTML() }
     ) {
         self.htmlID = modalId
-        self.items = HTMLCollection(body)
-        self.header = HTMLCollection(header)
-        self.footer = HTMLCollection(footer)
+        self.items = HTMLCollection([body()])
+        self.header = HTMLCollection([header()])
+        self.footer = HTMLCollection([footer()])
     }
 
     /// Adjusts the size of the modal.
