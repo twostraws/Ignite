@@ -1,5 +1,5 @@
 //
-//  MarkdownRenderer.swift
+//  ArticleRenderer.swift
 //  Ignite
 //  https://www.github.com/twostraws/Ignite
 //  See LICENSE for license information.
@@ -10,15 +10,15 @@ import Testing
 
 @testable import Ignite
 
-/// Tests for `MarkdownRenderer`.
-@Suite("MarkdownRenderer Tests")
+/// Tests for `ArticleRenderer`.
+@Suite("ArticleRenderer Tests")
 @MainActor
-struct MarkdownRendererTests {
+struct ArticleRendererTests {
     @Test(
         "Markdown headings from string",
         arguments: ["# Heading 1", "## Heading 2", "### Heading 3", "# Heading with a #hashtag"]
     )
-    func convertHeadingsToHTML(markdown: String) async throws {
+    func convertMarkdownHeadingsToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         let expectedTag = "h\(numberOfHashtags(in: markdown))"
@@ -28,7 +28,7 @@ struct MarkdownRendererTests {
     }
 
     @Test("Markdown heading remove title from body")
-    func removeTitleFromBody() async throws {
+    func removeMarkdownTitleFromBody() async throws {
         let element = MarkdownToHTML(
             markdown: "# Test Heading\n\nTest content",
             removeTitleFromBody: true
@@ -38,7 +38,7 @@ struct MarkdownRendererTests {
     }
 
     @Test("Markdown paragraphs from string", arguments: ["Paragraph one\n\nParagraph two"])
-    func convertParagraphsToHTML(markdown: String) async throws {
+    func convertMarkdownParagraphsToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         let paragraphs = markdown.split(separator: "\n\n")
@@ -51,7 +51,7 @@ struct MarkdownRendererTests {
     }
 
     @Test("Markdown block quotes from string", arguments: ["> Here is an example quote"])
-    func convertBlockQuotesToHTML(markdown: String) async throws {
+    func convertMarkdownBlockQuotesToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         let content = markdown.replacingOccurrences(of: "> ", with: "")
@@ -59,7 +59,7 @@ struct MarkdownRendererTests {
     }
 
     @Test("Markdown image from string", arguments: ["Here is an ![Image description](path/to/example/image.jpg)"])
-    func convertImageToHTML(markdown: String) async throws {
+    func convertMarkdownImageToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         let expectedImageHTML = "<img src=\"path/to/example/image.jpg\" alt=\"Image description\" class=\"img-fluid\">"
@@ -67,28 +67,28 @@ struct MarkdownRendererTests {
     }
 
     @Test("Markdown code block from string", arguments: ["Here is some `var code = \"great\"`"])
-    func convertCodeBlockToHTML(markdown: String) async throws {
+    func convertMarkdownCodeBlockToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(element.body == "<p>Here is some <code>var code = \"great\"</code></p>")
     }
 
     @Test("Markdown emphasis from string", arguments: ["Here is some *emphasized* text"])
-    func convertEmphasisToHTML(markdown: String) async throws {
+    func convertMarkdownEmphasisToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(element.body == "<p>Here is some <em>emphasized</em> text</p>")
     }
 
     @Test("Markdown link from string", arguments: ["Here is a [link](https://example.com)"])
-    func convertLinkToHTML(markdown: String) async throws {
+    func convertMarkdownLinkToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(element.body == "<p>Here is a <a href=\"https://example.com\">link</a></p>")
     }
 
     @Test("Markdown list from string")
-    func convertListToHTML() async throws {
+    func convertMarkdownListToHTML() async throws {
         let markdown = """
         - Item 1
         - Item 2
@@ -99,7 +99,7 @@ struct MarkdownRendererTests {
     }
 
     @Test("Markdown ordered list from string")
-    func convertOrderedListToHTML() async throws {
+    func convertMarkdownOrderedListToHTML() async throws {
         let markdown = """
         1. Item 1
         2. Item 2
@@ -110,7 +110,7 @@ struct MarkdownRendererTests {
     }
 
     @Test("Markdown strikethrough from string")
-    func convertStrikethroughToHTML() async throws {
+    func convertMarkdownStrikethroughToHTML() async throws {
         let markdown = "Example text with some of it ~crossed out~"
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
@@ -118,7 +118,7 @@ struct MarkdownRendererTests {
     }
 
     @Test("Markdown strong from string")
-    func convertStrongToHTML() async throws {
+    func convertMarkdownStrongToHTML() async throws {
         let markdown = "Example of **strong** text"
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
@@ -126,7 +126,7 @@ struct MarkdownRendererTests {
     }
 
     @Test("Markdown table from string")
-    func convertTableToHTML() async throws {
+    func convertMarkdownTableToHTML() async throws {
         let markdown = """
         | Title 1 | Title 2 |
         | --- | --- |
@@ -151,7 +151,7 @@ struct MarkdownRendererTests {
     }
 
     @Test("Markdown thematic break from string")
-    func convertThematicBreakToHTML() async throws {
+    func convertMarkdownThematicBreakToHTML() async throws {
         let markdown = """
         Text above
 
@@ -165,7 +165,7 @@ struct MarkdownRendererTests {
     }
 }
 
-extension MarkdownRendererTests {
+extension ArticleRendererTests {
     private func numberOfHashtags(in markdown: String) -> Int {
         return markdown.prefix(while: { $0 == "#" }).count
     }

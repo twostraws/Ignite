@@ -147,7 +147,7 @@ public struct Article {
 
         // Use whatever Markdown renderer was configured
         // for the site we're publishing.
-        let parser = try context.site.markdownRenderer.init(markdown: processed, removeTitleFromBody: true)
+        let parser = try context.site.articleRenderer.init(markdown: processed, removeTitleFromBody: true)
 
         self.text = parser.body
         self.description = parser.description.strippingTags()

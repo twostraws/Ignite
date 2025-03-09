@@ -1,5 +1,5 @@
 //
-// MarkdownRenderer.swift
+// ArticleRenderer.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -8,11 +8,11 @@
 import Foundation
 
 /// A protocol defining the basic information we need to get good
-/// Markdown parsing. This is implemented by the default
+/// article parsing. This is implemented by the default
 /// MarkdownToHTML parser included with Ignite, but users
 /// can override that default in their `Site` conformance to
 /// get a custom parser if needed.
-public protocol MarkdownRenderer {
+public protocol ArticleRenderer {
     /// The title of this document.
     var title: String { get }
 
@@ -22,7 +22,7 @@ public protocol MarkdownRenderer {
     /// The body text of this file, which includes its title by default.
     var body: String { get }
 
-    /// Whether to remove the Markdown title from its body. This only applies
+    /// Whether to remove the article's title from its body. This only applies
     /// to the first heading.
     var removeTitleFromBody: Bool { get }
 

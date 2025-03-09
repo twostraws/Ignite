@@ -9,7 +9,7 @@ import Foundation
 import Markdown
 
 /// A simple Markdown to HTML parser powered by Apple's swift-markdown.
-public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
+public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     /// The title of this document.
     public var title = ""
 

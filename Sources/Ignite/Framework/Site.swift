@@ -42,8 +42,8 @@ public protocol Site: Sendable {
     /// The type that defines the base layout structure for all pages.
     associatedtype LayoutType: Layout
 
-    /// The Markdown parser to use for Content pages.
-    associatedtype MarkdownRendererType: MarkdownRenderer
+    /// The article parser to use for Content pages.
+    associatedtype ArticleRendererType: ArticleRenderer
 
     /// A robots.txt configuration for your site. A default is provided that means
     /// all robots can index all pages.
@@ -84,11 +84,11 @@ public protocol Site: Sendable {
     /// Visit https://icons.getbootstrap.com for the full list.
     var builtInIconsEnabled: BootstrapOptions { get }
 
-    /// The Markdown renderer to use for content in this site. Note: This
+    /// The article renderer to use for content in this site. Note: This
     /// only applies to content pages rendered from the Content folder;
     /// the standard MarkdownToHTML parser is used for `Text` and
     /// other built-in elements regardless of the setting here.
-    var markdownRenderer: MarkdownRendererType.Type { get }
+    var articleRenderer: ArticleRendererType.Type { get }
 
     /// Controls how the RSS feed for your site should be generated. The default
     /// configuration sends back content description only for 20 items. To disable
@@ -184,7 +184,7 @@ public extension Site {
     var builtInIconsEnabled: BootstrapOptions { .localBootstrap }
 
     /// Use the standard MarkdownToHTML renderer by default.
-    var markdownRenderer: MarkdownToHTML.Type {
+    var articleRenderer: MarkdownToHTML.Type {
         MarkdownToHTML.self
     }
 
