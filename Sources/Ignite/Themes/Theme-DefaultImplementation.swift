@@ -54,7 +54,7 @@ public extension Theme {
 
     var primary: Color {
         colorScheme == .dark ?
-        Color(hex: "#f8f9fa") :
+        Color(hex: "#dee2e6") :
         Color(hex: "#212529")
     }
 
