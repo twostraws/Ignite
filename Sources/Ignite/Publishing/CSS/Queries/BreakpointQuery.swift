@@ -16,10 +16,10 @@ public struct BreakpointQuery: Query, Sendable {
         case xxLarge
         case custom(LengthUnit)
     }
-    
+
     private let value: Value
     private let theme: (any Theme)?
-    
+
     /// Small breakpoint (typically ≥576px)
     public static let small = BreakpointQuery(value: .small)
     /// Medium breakpoint (typically ≥768px)
@@ -30,26 +30,26 @@ public struct BreakpointQuery: Query, Sendable {
     public static let xLarge = BreakpointQuery(value: .xLarge)
     /// Extra extra large breakpoint (typically ≥1400px)
     public static let xxLarge = BreakpointQuery(value: .xxLarge)
-    
+
     /// Creates a custom breakpoint query
     /// - Parameter value: The length unit for the breakpoint
     /// - Returns: A breakpoint query with the custom value
     public static func custom(_ value: LengthUnit) -> BreakpointQuery {
         BreakpointQuery(value: .custom(value))
     }
-    
+
     /// Creates a breakpoint query with a specific theme
     /// - Parameter theme: The theme to use for breakpoint values
     /// - Returns: A new breakpoint query with the theme
     public func withTheme(_ theme: any Theme) -> BreakpointQuery {
         BreakpointQuery(value: value, theme: theme)
     }
-    
+
     private init(value: Value, theme: (any Theme)? = nil) {
         self.value = value
         self.theme = theme
     }
-    
+
     /// Creates a breakpoint from a string identifier.
     init?(_ breakpoint: Breakpoint) {
         switch breakpoint {
@@ -62,7 +62,7 @@ public struct BreakpointQuery: Query, Sendable {
         }
         self.theme = nil
     }
-    
+
     /// The raw CSS media query string.
     /// If a theme is set, uses theme-specific values; otherwise uses Ignite's default values.
     public var condition: String {

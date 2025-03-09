@@ -5,7 +5,6 @@
 // See LICENSE for license information.
 //
 
-
 /// Applies styles based on the user's preferred color scheme.
 public enum ColorSchemeQuery: String, Query, CaseIterable {
     /// Dark mode preference
