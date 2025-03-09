@@ -31,9 +31,9 @@ class ZStackTests: IgniteTestSuite {
         #expect(output == """
         <div style="display: grid">\
         <label style="align-self: center; display: grid; grid-area: 1/1; \
-        justify-self: center; margin-bottom: 0; position: relative; z-index: 0">Top Label</label>\
+        justify-self: center; position: relative; z-index: 0">Top Label</label>\
         <label style="align-self: center; display: grid; grid-area: 1/1; \
-        justify-self: center; margin-bottom: 0; position: relative; z-index: 1">Bottom Label</label>\
+        justify-self: center; position: relative; z-index: 1">Bottom Label</label>\
         </div>
         """)
     }
