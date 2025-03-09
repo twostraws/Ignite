@@ -5,12 +5,12 @@
 // See LICENSE for license information.
 //
 
-/// Article layouts describe custom layout structures for articles. You can provide
-/// one layout in your site to use that for all articles, or create custom layouts and
+/// Article pages describe custom page structures for articles. You can provide
+/// one page in your site to use that for all articles, or create custom pages and
 /// assign them uniquely to individual articles.
 ///
 /// ```swift
-/// struct MyArticle: ArticleLayout {
+/// struct MyArticle: ArticlePage {
 ///
 ///     var body: some HTML {
 ///         Heading(content.title)
@@ -19,9 +19,9 @@
 /// }
 /// ```
 @MainActor
-public protocol ArticleLayout: LayoutContent {}
+public protocol ArticlePage: LayoutContent {}
 
-public extension ArticleLayout {
+public extension ArticlePage {
     /// The current Markdown content being rendered.
     var article: Article {
         PublishingContext.shared.environment.article

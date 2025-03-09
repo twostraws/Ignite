@@ -13,7 +13,7 @@ extension PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render(_ staticLayout: any StaticLayout, isHomePage: Bool = false) {
+    func render(_ staticLayout: any StaticPage, isHomePage: Bool = false) {
         let path = isHomePage ? "" : staticLayout.path
         currentRenderingPath = isHomePage ? "/" : staticLayout.path
 
@@ -70,7 +70,7 @@ extension PublishingContext {
 
     /// Generates all tags pages, including the "all tags" page.
     func renderTagLayouts() async {
-        if site.tagLayout is EmptyTagLayout { return }
+        if site.tagPage is EmptyTagPage { return }
 
         /// Creates a unique list of sorted tags from across the site, starting
         /// with `nil` for the "all tags" page.
@@ -84,7 +84,7 @@ extension PublishingContext {
             }
 
             let outputDirectory = buildDirectory.appending(path: path)
-            let tagLayout = site.tagLayout
+            let tagLayout = site.tagPage
 
             let metadata = PageMetadata(
                 title: "Tags",
@@ -119,9 +119,9 @@ extension PublishingContext {
     /// layout in your site's `layouts` property is used.
     /// - Parameter content: The content that is being rendered.
     /// - Returns: The correct `ContentPage` instance to use for this content.
-    func layout(for article: Article) -> any ArticleLayout {
+    func layout(for article: Article) -> any ArticlePage {
         if let contentLayout = article.layout {
-            for layout in site.articleLayouts {
+            for layout in site.articlePages {
                 let layoutName = String(describing: type(of: layout))
 
                 if layoutName == contentLayout {
@@ -130,7 +130,7 @@ extension PublishingContext {
             }
 
             fatalError(.missingNamedLayout(contentLayout))
-        } else if let defaultLayout = site.articleLayouts.first {
+        } else if let defaultLayout = site.articlePages.first {
             return defaultLayout
         } else {
             fatalError(.missingDefaultLayout)

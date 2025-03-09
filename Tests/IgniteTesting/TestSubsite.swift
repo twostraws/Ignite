@@ -20,7 +20,7 @@ struct TestSubsite: Site {
 }
 
 /// An example page used in tests.
-struct TestSubsiteLayout: StaticLayout {
+struct TestSubsiteLayout: StaticPage {
     var title = "Subsite Home"
 
     var body: some HTML {
