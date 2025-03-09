@@ -35,9 +35,6 @@ public struct MetaLink: HeadElement, Sendable {
     /// The CSS responsible for applying CSS relating to animations and themes..
     static let igniteCoreCSS = MetaLink(href: "/css/ignite-core.min.css", rel: .stylesheet)
 
-    /// The CSS responsible for handling media query-based visibility rules.
-    static let mediaQueryCSS = MetaLink(href: "/css/media-queries.min.css", rel: .stylesheet)
-
     /// The CSS used in Prism plugins like line numbering and line highlighting.
     static let prismPluginCSS = MetaLink(href: "/css/prism-plugins.css", rel: .stylesheet)
 

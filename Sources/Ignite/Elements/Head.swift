@@ -98,10 +98,6 @@ public struct Head: DocumentElement {
 
         MetaLink.igniteCoreCSS
 
-        if CSSManager.shared.hasCSS {
-            MetaLink.mediaQueryCSS
-        }
-
         MetaLink(href: environment.page.url, rel: "canonical")
 
         if let favicon = site.favicon {

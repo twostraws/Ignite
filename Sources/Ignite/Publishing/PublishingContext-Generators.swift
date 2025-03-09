@@ -81,10 +81,12 @@ extension PublishingContext {
             .joined(separator: "\n\n")
 
         do {
-            let cssPath = buildDirectory.appending(path: "css/media-queries.min.css")
-            try combinedCSS.write(to: cssPath, atomically: true, encoding: .utf8)
+            let igniteCoreDirectory = buildDirectory.appending(path: "css/ignite-core.min.css")
+            let existingContent = try String(contentsOf: igniteCoreDirectory, encoding: .utf8)
+            let newContent = existingContent + "\n\n" + combinedCSS
+            try newContent.write(to: igniteCoreDirectory, atomically: true, encoding: .utf8)
         } catch {
-            addError(.failedToWriteFile("css/media-queries.min.css"))
+            addError(.failedToWriteFile("css/ignite-core.min.css"))
         }
     }
 
