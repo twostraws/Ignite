@@ -6,7 +6,6 @@
 //
 
 /// A type that represents a CSS media query condition.
-@MainActor
 public protocol Query: Equatable, Hashable, Sendable {
     /// The raw CSS media feature string.
     var condition: String { get }
@@ -85,22 +84,22 @@ public enum DisplayModeQuery: String, Query, CaseIterable {
 /// Applies styles based on the current theme.
 public struct ThemeQuery: Query {
     /// The theme identifier
-    let id: String
+    let theme: any Theme.Type
 
-    public init(_ theme: Theme.Type) {
-        self.id = theme.idPrefix
+    public init(_ theme: any Theme.Type) {
+        self.theme = theme
     }
 
     public var condition: String {
-        "data-bs-theme^=\"\(id)\""
+        "data-bs-theme^=\"\(theme.idPrefix)\""
     }
 
     nonisolated public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        hasher.combine(theme.idPrefix)
     }
 
     nonisolated public static func == (lhs: ThemeQuery, rhs: ThemeQuery) -> Bool {
-        lhs.id == rhs.id
+        lhs.theme.idPrefix == rhs.theme.idPrefix
     }
 }
 
@@ -132,7 +131,7 @@ public enum BreakpointQuery: Query, CaseIterable, Sendable {
     /// Returns the CSS media query string for this breakpoint using the provided theme's values.
     /// - Parameter theme: The theme to use for breakpoint values.
     /// - Returns: A CSS media query string.
-    @MainActor func condition(for theme: Theme) -> String {
+    @MainActor func condition(for theme: any Theme) -> String {
         let responsiveValues = theme.breakpoints.values
         let breakpointValue = switch self {
         case .small: (responsiveValues[.small] ?? Bootstrap.smallBreakpoint).stringValue

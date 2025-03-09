@@ -12,7 +12,7 @@ final class StyleManager {
     /// The shared instance used for managing styles across the application
     static let shared = StyleManager()
 
-    /// Private initializer to enforce singleton pattern
+    // Private initializer to enforce singleton pattern
     private init() {}
 
     /// Cache of generated CSS class names for styles
@@ -61,7 +61,7 @@ final class StyleManager {
     /// Generates CSS for all registered styles using the provided themes
     /// - Parameter themes: Array of themes to generate theme-specific styles for
     /// - Returns: Complete CSS string for all styles
-    func generateAllCSS(themes: [Theme]) -> String {
+    func generateAllCSS(themes: [any Theme]) -> String {
         cssRulesCache.removeAll()
 
         for (_, style) in registeredStyles {
@@ -101,7 +101,7 @@ final class StyleManager {
             case let query as ContrastQuery:
                 testCondition.contrast = query
             case let query as ThemeQuery:
-                testCondition.theme = query.id
+                testCondition.theme = query.theme
             case let query as BreakpointQuery:
                 testCondition.breakpoint = query
             default:
@@ -148,7 +148,7 @@ final class StyleManager {
     ///   - style: The style to analyze
     ///   - themes: Available themes to consider when generating variations
     /// - Returns: A `StyleMapResult` containing the default style and unique style variations
-    private func generateStylesMap(for style: any Style, themes: [Theme]) -> StyleMapResult {
+    private func generateStylesMap(for style: any Style, themes: [any Theme]) -> StyleMapResult {
         let collector = StyledHTML()
         var tempMap: [EnvironmentConditions: [InlineStyle]] = [:]
         var uniqueConditions: [EnvironmentConditions: [InlineStyle]] = [:]
@@ -200,7 +200,7 @@ final class StyleManager {
     /// - Parameters:
     ///   - style: The style to generate CSS for
     ///   - themes: Array of themes to generate theme-specific styles for
-    private func generateCSS(for style: any Style, themes: [Theme]) {
+    private func generateCSS(for style: any Style, themes: [any Theme]) {
         let typeName = String(describing: type(of: style))
         var cssRules: OrderedSet<String> = []
 
@@ -228,29 +228,35 @@ final class StyleManager {
             let mediaConditions = mediaQueries.map { query in
                 if let breakpointQuery = query as? BreakpointQuery {
                     // If we have a theme, use its breakpoint values
-                    if let theme = themes.first(where: { $0.id == condition.theme }) {
-                        return "(\(breakpointQuery.condition(with: theme)))"
+                    if let theme = themes.first(where: {
+                        if let theme = condition.theme {
+                            return $0.cssID.starts(with: theme.idPrefix)
+                        } else {
+                            return false
+                        }
+                    }) {
+                        return "(\(breakpointQuery.condition(for: theme)))"
                     }
                     // If no theme specified, use default theme's values
-                    return "(\(breakpointQuery.condition(with: themes[0])))"
+                    return "(\(breakpointQuery.condition(for: themes[0])))"
                 }
                 return "(\(query.condition))"
             }.joined(separator: " and ")
 
-            if condition.theme != nil, condition.conditionCount > 1 {
+            if let theme = condition.theme, condition.conditionCount > 1 {
                 // Combined theme and media query rule
                 let combinedRule = """
                 @media \(mediaConditions) {
-                    [data-theme-state="\(condition.theme!.kebabCased())"] .\(className(for: style)) {
+                    [data-bs-theme^="\(theme.idPrefix)"] .\(className(for: style)) {
                         \(stylesString)
                     }
                 }
                 """
                 cssRules.append(combinedRule)
-            } else if condition.theme != nil {
+            } else if let theme = condition.theme {
                 // Theme-only rule
                 let themeRule = """
-                [data-theme-state="\(condition.theme!.kebabCased())"] .\(className(for: style)) {
+                [data-bs-theme^="\(theme.idPrefix)"] .\(className(for: style)) {
                     \(stylesString)
                 }
                 """
@@ -274,7 +280,7 @@ final class StyleManager {
     /// Generates an array of all possible media queries that styles should be tested against.
     /// - Parameter themes: Array of themes to generate theme-specific queries for.
     /// - Returns: An array of all possible `EnvironmentConditions` instances.
-    private func generateAllPossibleEnvironmentConditions(themes: [Theme]) -> [EnvironmentConditions] {
+    private func generateAllPossibleEnvironmentConditions(themes: [any Theme]) -> [EnvironmentConditions] {
         // Define all possible values for each property
         let colorSchemes: [ColorSchemeQuery?] = [nil] + ColorSchemeQuery.allCases.map { Optional($0) }
         let orientations: [OrientationQuery?] = [nil] + OrientationQuery.allCases.map { Optional($0) }
@@ -283,7 +289,7 @@ final class StyleManager {
         let motions: [MotionQuery?] = [nil] + MotionQuery.allCases.map { Optional($0) }
         let contrasts: [ContrastQuery?] = [nil] + ContrastQuery.allCases.map { Optional($0) }
         let breakpoints: [BreakpointQuery?] = [nil] + BreakpointQuery.allCases.map { Optional($0) }
-        let themeIDs: [String?] = [nil] + themes.map { $0.id }
+        let themes: [(any Theme.Type)?] = [nil] + themes.map { type(of: $0) }
 
         var allConditions: [EnvironmentConditions] = []
 
@@ -294,7 +300,7 @@ final class StyleManager {
                     for displayMode in displayModes {
                         for motion in motions {
                             for contrast in contrasts {
-                                for themeID in themeIDs {
+                                for themeID in themes {
                                     for breakpoint in breakpoints {
                                         var condition = EnvironmentConditions()
                                         condition.colorScheme = colorScheme

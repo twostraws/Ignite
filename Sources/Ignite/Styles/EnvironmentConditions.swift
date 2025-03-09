@@ -44,7 +44,7 @@ public struct EnvironmentConditions: Equatable, Hashable, Sendable {
     public var breakpoint: BreakpointQuery?
 
     /// The current theme identifier.
-    public var theme: String?
+    public var theme: (any Theme.Type)?
 
     /// Creates a new environment conditions instance.
     /// - Parameters:
@@ -64,7 +64,7 @@ public struct EnvironmentConditions: Equatable, Hashable, Sendable {
         orientation: OrientationQuery? = nil,
         displayMode: DisplayModeQuery? = nil,
         breakpoint: BreakpointQuery? = nil,
-        theme: String? = nil
+        theme: (any Theme.Type)? = nil
     ) {
         self.colorScheme = colorScheme
         self.motion = motion
@@ -102,5 +102,29 @@ public struct EnvironmentConditions: Equatable, Hashable, Sendable {
         if breakpoint != nil { count += 1 }
         if theme != nil { count += 1 }
         return count
+    }
+
+    public static func == (lhs: EnvironmentConditions, rhs: EnvironmentConditions) -> Bool {
+        lhs.colorScheme == rhs.colorScheme &&
+        lhs.motion == rhs.motion &&
+        lhs.contrast == rhs.contrast &&
+        lhs.transparency == rhs.transparency &&
+        lhs.orientation == rhs.orientation &&
+        lhs.displayMode == rhs.displayMode &&
+        lhs.breakpoint == rhs.breakpoint &&
+        lhs.theme == rhs.theme
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(colorScheme)
+        hasher.combine(motion)
+        hasher.combine(contrast)
+        hasher.combine(transparency)
+        hasher.combine(orientation)
+        hasher.combine(displayMode)
+        hasher.combine(breakpoint)
+        if let theme = theme {
+            hasher.combine(theme.idPrefix)
+        }
     }
 }
