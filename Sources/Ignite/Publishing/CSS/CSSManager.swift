@@ -18,9 +18,6 @@ final class CSSManager {
         let className: String?
     }
 
-    /// Returns true if custom CSS has been registered.
-    var hasCSS: Bool { !pendingRegistrations.isEmpty }
-
     private var pendingRegistrations: [PendingRegistration] = []
 
     /// A mapping of query hashes to their corresponding CSS class names.
