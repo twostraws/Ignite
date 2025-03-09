@@ -223,8 +223,8 @@ public extension Site {
     }
 
     /// An array of every site theme.
-    internal var allThemes: [Theme] {
-        var themes = [Theme]()
+    internal var allThemes: [any Theme] {
+        var themes = [any Theme]()
         if let lightTheme = lightTheme {
             themes.append(lightTheme)
         }

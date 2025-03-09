@@ -45,7 +45,7 @@ struct DefaultLightTheme: Theme {
     /// Creates a new instance by copying all non-color scheme properties from another theme
     /// - Parameter other: The theme to copy properties from
     /// - Returns: A new `DefaultLightTheme` with properties from the other theme
-    func merging(_ other: Theme) -> Self {
+    func merging(_ other: any Theme) -> Self {
         var lightTheme = self
 
         lightTheme.font = other.font

@@ -36,6 +36,11 @@ struct Ruleset: CustomStringConvertible {
         self.styles = styles
     }
 
+    init(_ selectors: [Selector], styles: [InlineStyle] = []) {
+        self.selectors = selectors
+        self.styles = styles
+    }
+
     init(_ selectors: Selector..., @StyleBuilder styles: () -> [InlineStyle]) {
         self.selectors = selectors
         self.styles = styles()
@@ -44,16 +49,20 @@ struct Ruleset: CustomStringConvertible {
     func render() -> String {
         if selectors.isEmpty {
             return styles.map { $0.description + ";" }.joined(separator: "\n")
-        } else {
-            let combinedSelector = selectors.map(\.description).joined()
-            let styleBlock = styles.isEmpty ? "" :
-                styles.map { "    " + $0.description + ";" }.joined(separator: "\n")
+        } else if !styles.isEmpty {
+            let combinedSelector = selectors.map(\.description).joined(separator: " ")
+
+            let styleBlock = styles
+                .map { "    " + $0.description + ";" }
+                .joined(separator: "\n")
 
             return """
             \(combinedSelector) {
             \(styleBlock)
             }
             """
+        } else {
+            return ""
         }
     }
 

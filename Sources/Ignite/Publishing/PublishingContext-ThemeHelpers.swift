@@ -7,7 +7,7 @@
 
 extension PublishingContext {
     /// Creates the root ruleset for light theme
-    func lightRootStyles(for theme: Theme, darkThemeID: String?) -> Ruleset {
+    func lightRootStyles(for theme: any Theme, darkThemeID: String?) -> Ruleset {
         Ruleset(.pseudoClass("root")) {
             InlineStyle("--supports-light-theme", value: site.supportsLightTheme.description)
             InlineStyle("--supports-dark-theme", value: site.supportsDarkTheme.description)
@@ -18,7 +18,7 @@ extension PublishingContext {
     }
 
     /// Creates the root ruleset for dark theme
-    func darkRootStyles(for theme: Theme, lightThemeID: String?) -> Ruleset {
+    func darkRootStyles(for theme: any Theme, lightThemeID: String?) -> Ruleset {
         Ruleset(.pseudoClass("root")) {
             InlineStyle("--supports-light-theme", value: site.supportsLightTheme.description)
             InlineStyle("--supports-dark-theme", value: site.supportsDarkTheme.description)
@@ -29,7 +29,7 @@ extension PublishingContext {
     }
 
     /// Creates all theme-specific CSS styles
-    func themeStyles(for theme: Theme) -> [InlineStyle] {
+    func themeStyles(for theme: any Theme) -> [InlineStyle] {
         var styles: [InlineStyle?] = []
 
         styles.append(contentsOf: colorStyles(for: theme))
@@ -53,7 +53,7 @@ extension PublishingContext {
     }
 
     /// Generates the media queries to update font size variables at different breakpoints
-    func responsiveVariables(for theme: Theme) -> [MediaQuery] {
+    func responsiveVariables(for theme: any Theme) -> [MediaQuery] {
         let breakpoints: [(Breakpoint, LengthUnit)] = [
             (.small, theme.breakpoints.values[.small] ?? Bootstrap.smallBreakpoint),
             (.medium, theme.breakpoints.values[.medium] ?? Bootstrap.mediumBreakpoint),
@@ -81,7 +81,7 @@ extension PublishingContext {
             // Only create media query if we have non-empty styles
             guard !styles.isEmpty, styles.allSatisfy({ !$0.value.isEmpty }) else { return nil }
 
-            return MediaQuery(.breakpoint(minWidth)) {
+            return MediaQuery(.breakpoint(.custom(minWidth))) {
                 Ruleset(.pseudoClass("root")) {
                     styles
                 }
@@ -100,7 +100,7 @@ extension PublishingContext {
         }
     }
 
-    private func widthStyles(_ theme: Theme) -> [InlineStyle] {
+    private func widthStyles(_ theme: any Theme) -> [InlineStyle] {
         let variables: [(Breakpoint, BootstrapVariable)] = [
             (.small, .smallContainer),
             (.medium, .mediumContainer),
@@ -111,7 +111,7 @@ extension PublishingContext {
         return createResponsiveStyles(from: theme.siteWidth, using: variables)
     }
 
-    private func breakpointStyles(_ theme: Theme) -> [InlineStyle] {
+    private func breakpointStyles(_ theme: any Theme) -> [InlineStyle] {
         let variables: [(Breakpoint, BootstrapVariable)] = [
             (.small, .smallBreakpoint),
             (.medium, .mediumBreakpoint),
@@ -123,7 +123,7 @@ extension PublishingContext {
     }
 
     /// Creates color-related CSS styles for a theme
-    private func colorStyles(for theme: Theme) -> [InlineStyle] {
+    private func colorStyles(for theme: any Theme) -> [InlineStyle] {
         let brandColors: [(BootstrapVariable, Color)] = [
             (.primary, theme.accent),
             (.secondary, theme.secondaryAccent),
@@ -163,7 +163,7 @@ extension PublishingContext {
     }
 
     /// Creates color variant styles for a theme color
-    private func colorVariants(_ variable: BootstrapVariable, _ color: Color, for theme: Theme) -> [InlineStyle] {
+    private func colorVariants(_ variable: BootstrapVariable, _ color: Color, for theme: any Theme) -> [InlineStyle] {
         let bgSubtleColor = theme.colorScheme == .dark ? color.weighted(.darkest) : color.weighted(.lightest)
         var emphasisColor = theme.colorScheme == .dark ? color.weighted(.light) : color.weighted(.darker)
         var borderSubtleColor = theme.colorScheme == .dark ? color.weighted(.dark) : color.weighted(.light)
@@ -188,7 +188,7 @@ extension PublishingContext {
     }
 
     /// Creates typography-related CSS styles for a theme
-    private func typographyStyles(for theme: Theme) -> [InlineStyle] {
+    private func typographyStyles(for theme: any Theme) -> [InlineStyle] {
         var styles: [InlineStyle] = []
 
         let fonts: [(BootstrapVariable, Font)] = [

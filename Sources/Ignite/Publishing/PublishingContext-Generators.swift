@@ -71,15 +71,22 @@ extension PublishingContext {
         }
     }
 
-    /// Generates the CSS file containing all media query rules.
+    /// Generates the CSS file containing all media query rules, including styles.
     func generateMediaQueryCSS() {
-        guard CSSManager.shared.hasCSS else { return }
+        print("Generating CSS for custom styles. This may take a moment...")
         let mediaQueryCSS = CSSManager.shared.generateAllRules(themes: site.allThemes)
-        let cssPath = buildDirectory.appending(path: "css/media-queries.min.css")
+        let stylesCSS = StyleManager.shared.generateAllCSS(themes: site.allThemes)
+        let combinedCSS = [mediaQueryCSS, stylesCSS]
+            .filter { !$0.isEmpty }
+            .joined(separator: "\n\n")
+
         do {
-            try mediaQueryCSS.write(to: cssPath, atomically: true, encoding: .utf8)
+            let igniteCoreDirectory = buildDirectory.appending(path: "css/ignite-core.min.css")
+            let existingContent = try String(contentsOf: igniteCoreDirectory, encoding: .utf8)
+            let newContent = existingContent + "\n\n" + combinedCSS
+            try newContent.write(to: igniteCoreDirectory, atomically: true, encoding: .utf8)
         } catch {
-            fatalError(.failedToWriteFile("media-queries.min.css"))
+            addError(.failedToWriteFile("css/ignite-core.min.css"))
         }
     }
 

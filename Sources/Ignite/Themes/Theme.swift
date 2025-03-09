@@ -19,7 +19,6 @@
 ///     var fontFamilyBase: Font = .custom("Helvetica")
 /// }
 /// ```
-@MainActor
 public protocol Theme: Sendable {
     /// The appearance mode this theme represents
     var colorScheme: ColorScheme { get }
