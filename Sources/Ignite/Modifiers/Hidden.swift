@@ -21,6 +21,13 @@ public extension HTML {
     }
 }
 
+public extension StyledHTML {
+    /// Hides the view in the view hierarchy.
+    func hidden() -> Self {
+        self.style(.display, "none")
+    }
+}
+
 private extension HTML {
     func hiddenModifier(_ isHidden: Bool = false, queries: [any Query] = []) -> any HTML {
         if queries.isEmpty {

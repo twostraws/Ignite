@@ -22,3 +22,12 @@ public extension InlineElement {
         self.style(.fontWeight, weight.rawValue.formatted())
     }
 }
+
+public extension StyledHTML {
+    /// Adjusts the font weight (boldness) of this font.
+    /// - Parameter weight: The new font weight.
+    /// - Returns: A new instance with the updated weight.
+    func fontWeight(_ weight: Font.Weight) -> Self {
+        self.style(.fontWeight, weight.description)
+    }
+}

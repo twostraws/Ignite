@@ -26,7 +26,8 @@ public extension HTML {
     ///   - length: A string with rounding of your choosing, such as "50%"
     /// - Returns: A modified copy of the element with corner radius applied
     func cornerRadius(_ edges: DiagonalEdge, _ length: LengthUnit) -> some HTML {
-        AnyHTML(cornerRadiusModifier(edges: edges, length: length))
+        let cornerRadiusStyles = cornerRadiusModifier(edges: edges, length: length)
+        return AnyHTML(self.style(cornerRadiusStyles))
     }
 
     /// Rounds selected edges of this object by some number of pixels.
@@ -35,34 +36,34 @@ public extension HTML {
     ///   - length: An integer specifying a pixel amount to round corners with
     /// - Returns: A modified copy of the element with corner radius applied
     func cornerRadius(_ edges: DiagonalEdge, _ length: Int) -> some HTML {
-        AnyHTML(cornerRadiusModifier(edges: edges, length: .px(length)))
+        let cornerRadiusStyles = cornerRadiusModifier(edges: edges, length: .px(length))
+        return AnyHTML(self.style(cornerRadiusStyles))
     }
 }
 
-private extension HTML {
-    func cornerRadiusModifier(edges: DiagonalEdge, length: LengthUnit) -> any HTML {
-        if edges.contains(.all) {
-            return self.style(.borderRadius, "\(length)")
-        }
+private func cornerRadiusModifier(edges: DiagonalEdge, length: LengthUnit) -> [InlineStyle] {
+    var styles = [InlineStyle]()
 
-        var modified: any HTML = self
-
-        if edges.contains(.topLeading) {
-            modified = modified.style(.borderTopLeftRadius, length.stringValue)
-        }
-
-        if edges.contains(.topTrailing) {
-            modified = modified.style(.borderTopRightRadius, length.stringValue)
-        }
-
-        if edges.contains(.bottomLeading) {
-            modified = modified.style(.borderBottomLeftRadius, length.stringValue)
-        }
-
-        if edges.contains(.bottomTrailing) {
-            modified = modified.style(.borderBottomRightRadius, length.stringValue)
-        }
-
-        return modified
+    if edges.contains(.all) {
+        styles.append(.init(.borderRadius, value: "\(length)"))
+        return styles
     }
+
+    if edges.contains(.topLeading) {
+        styles.append(.init(.borderTopLeftRadius, value: length.stringValue))
+    }
+
+    if edges.contains(.topTrailing) {
+        styles.append(.init(.borderTopRightRadius, value: length.stringValue))
+    }
+
+    if edges.contains(.bottomLeading) {
+        styles.append(.init(.borderBottomLeftRadius, value: length.stringValue))
+    }
+
+    if edges.contains(.bottomTrailing) {
+        styles.append(.init(.borderBottomRightRadius, value: length.stringValue))
+    }
+
+    return styles
 }

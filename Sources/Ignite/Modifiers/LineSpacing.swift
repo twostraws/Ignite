@@ -46,6 +46,15 @@ public extension HTML {
     }
 }
 
+public extension StyledHTML {
+    /// Sets the line height of the element using a custom value.
+    /// - Parameter height: The line height multiplier to use
+    /// - Returns: The modified HTML element
+    func lineSpacing(_ height: Double) -> Self {
+        self.style(.lineHeight, String(height))
+    }
+}
+
 private enum LineSpacingType {
     case exact(Double), semantic(LineSpacing)
 }
