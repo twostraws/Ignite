@@ -81,6 +81,15 @@ public extension HTML where Self == Image {
     }
 }
 
+public extension StyledHTML {
+    /// Applies a foreground color to the current element.
+    /// - Parameter color: The style to apply, specified as a `Color` object.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ color: Color) -> Self {
+        self.style(.color, color.description)
+    }
+}
+
 /// The type of style this contains.
 private enum StyleType {
     case none

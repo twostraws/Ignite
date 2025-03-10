@@ -11,11 +11,22 @@
     var attributes = CoreAttributes()
 
     /// Adds inline styles to the element.
-    /// - Parameter values: Variable number of `AttributeValue` objects
+    /// - Parameter values: Variable number of `InlineStyle` objects
     /// - Returns: The modified `HTML` element
     public func style(_ property: Property, _ value: String) -> Self {
         var copy = self
         copy.attributes.add(styles: .init(property, value: value))
+        return copy
+    }
+}
+
+extension StyledHTML {
+    /// Adds inline styles to the element.
+    /// - Parameter values: An array of `InlineStyle` objects
+    /// - Returns: The modified `HTML` element
+    func style(_ styles: [InlineStyle]) -> Self {
+        var copy = self
+        copy.attributes.add(styles: styles)
         return copy
     }
 }
