@@ -42,7 +42,7 @@ public protocol Site: Sendable {
     /// The type that defines the base layout structure for all pages.
     associatedtype LayoutType: Layout
 
-    /// The article parser to use for Content pages.
+    /// The article parser to use for each `ArticlePage`.
     associatedtype ArticleRendererType: ArticleRenderer
 
     /// A robots.txt configuration for your site. A default is provided that means
@@ -102,7 +102,7 @@ public protocol Site: Sendable {
     /// The homepage for your site; what users land on when visiting your root domain.
     var homePage: HomePageType { get }
 
-    /// A type that conforms to `TagLayout`, to be used when rendering individual
+    /// A type that conforms to `TagPage`, to be used when rendering individual
     /// tag pages or the "all tags" page.
     var tagPage: TagPageType { get }
 
@@ -136,10 +136,10 @@ public protocol Site: Sendable {
     /// The path to the favicon
     var favicon: URL? { get }
 
-    /// An array of all the static layouts you want to include in your site.
-    @StaticPageBuilder var pages: [any StaticPage] { get }
+    /// An array of all the static pages you want to include in your site.
+    @StaticPageBuilder var staticPages: [any StaticPage] { get }
 
-    /// An array of all the content layouts you want to include in your site.
+    /// An array of all the article pages you want to include in your site.
     @ArticlePageBuilder var articlePages: [any ArticlePage] { get }
 
     /// Publishes this entire site from user space.
@@ -195,13 +195,13 @@ public extension Site {
     /// A default robots.txt configuration that allows all robots to index all pages.
     var robotsConfiguration: DefaultRobotsConfiguration { DefaultRobotsConfiguration() }
 
-    /// No static layouts by default.
-    var pages: [any StaticPage] { [] }
+    /// No static pages by default.
+    var staticPages: [any StaticPage] { [] }
 
-    /// No content layouts by default.
+    /// No content pages by default.
     var articlePages: [any ArticlePage] { [] }
 
-    /// An empty tag layout by default, which triggers no tag pages being made.
+    /// An empty tag page by default, which triggers no tag pages being made.
     var tagPage: EmptyTagPage { EmptyTagPage() }
 
     /// The default favicon being nil
