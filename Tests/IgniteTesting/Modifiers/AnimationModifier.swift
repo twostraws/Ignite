@@ -21,7 +21,7 @@ class AnimationModifierTests: IgniteTestSuite {
         }.animation(Animation.bounce, on: .hover)
 
         let output = element.render()
-        print(output)
+
         // Example output:
         // <div class="animation-H57c1-hover" style="transform-style: preserve-3d">
         // <div class="animation-H57c1-hover"><p><span>This is a Span</span></p></div></div>

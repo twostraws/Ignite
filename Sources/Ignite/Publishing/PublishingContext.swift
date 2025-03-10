@@ -201,12 +201,10 @@ final class PublishingContext {
 
     /// Removes all content from the Build folder, so we're okay to recreate it.
     func clearBuildFolder() {
-        do {
-            // Apple's docs for fileExists() recommend _not_ to check existence and then make change to file system
-            try FileManager.default.removeItem(at: buildDirectory)
-        } catch {
-            print("Could not remove buildDirectory (\(buildDirectory)), but it will be re-created anyway.")
-        }
+        // Apple's docs for fileExists() recommend _not_ to check
+        // existence and then make change to the file system, so we
+        // just try our best and silently fail.
+        try? FileManager.default.removeItem(at: buildDirectory)
 
         do {
             try FileManager.default.createDirectory(at: buildDirectory, withIntermediateDirectories: true)
