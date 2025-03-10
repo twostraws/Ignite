@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-/// Creates a container that stacks its children along the z-axis (depth),
+/// Creates a container that stacks its Subviews along the z-axis (depth),
 /// with each subsequent child appearing in front of the previous one.
 public struct ZStack: HTML {
     /// The content and behavior of this HTML.
@@ -23,11 +23,22 @@ public struct ZStack: HTML {
     /// The child elements to be stacked.
     private var items: HTMLCollection
 
+    /// Whether the `ZStack` should ignore its subviews' implicit
+    /// styles, like the bottom margins of paragraphs.
+    private var shouldNormalizeSubviews: Bool = false
+
     /// Creates a new ZStack with the specified alignment and content.
     /// - Parameters:
-    ///   - alignment: The point within the stack where elements should be aligned (default: .center).
+    ///   - alignment: The point within the stack where elements should be aligned. Defaults to `.center`.
+    ///   - normalizeSubviews: Whether the `ZStack` should ignore its subviews' implicit
+    /// styles, like the bottom margins of paragraphs.
     ///   - items: A closure that returns the elements to be stacked.
-    public init(alignment: Alignment = .center, @HTMLBuilder _ items: () -> some HTML) {
+    public init(
+        alignment: Alignment = .center,
+        normalizeSubviews: Bool = false,
+        @HTMLBuilder _ items: () -> some HTML
+    ) {
+        self.shouldNormalizeSubviews = normalizeSubviews
         self.items = HTMLCollection(items)
         self.alignment = alignment
     }
@@ -43,6 +54,10 @@ public struct ZStack: HTML {
                 .init(.gridArea, value: "1/1"),
                 .init(.zIndex, value: "\(index)")
             ])
+
+            if shouldNormalizeSubviews, !item.attributes.setsBottomMargin {
+                elementAttributes.add(classes: "mb-0")
+            }
 
             elementAttributes.add(styles: alignment.flexAlignmentRules)
             return item.attributes(elementAttributes)

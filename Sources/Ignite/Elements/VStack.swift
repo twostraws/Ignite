@@ -22,6 +22,10 @@ public struct VStack: HTML {
     /// The child elements contained in the stack.
     private var content: HTMLCollection
 
+    /// Whether the `VStack` should ignore its subviews' implicit
+    /// styles, like the bottom margins paragraphs.
+    private var shouldNormalizeSubviews: Bool = false
+
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameter items: The items to use in this section.
@@ -34,8 +38,15 @@ public struct VStack: HTML {
     /// that returns an array of items to use in this section.
     /// - Parameters:
     ///   - pixels: The number of pixels between elements.
+    ///   - normalizeSubviews: Whether the `VStack` should ignore its subviews' implicit
+    /// styles, like the bottom margins paragraphs.
     ///   - items: The items to use in this section.
-    public init(spacing pixels: Int, @HTMLBuilder items: () -> some HTML) {
+    public init(
+        spacing pixels: Int,
+        normalizeSubviews: Bool = false,
+        @HTMLBuilder items: () -> some HTML
+    ) {
+        self.shouldNormalizeSubviews = normalizeSubviews
         self.content = HTMLCollection(items)
         self.spacingAmount = .exact(pixels)
     }
@@ -44,13 +55,21 @@ public struct VStack: HTML {
     /// that returns an array of items to use in this section.
     /// - Parameters:
     ///   - spacing: The predefined size between elements.
+    ///   - normalizeSubviews: Whether the `VStack` should ignore its subviews' implicit
+    /// styles, like the bottom margins paragraphs.
     ///   - items: The items to use in this section.
-    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
+    public init(spacing: SpacingAmount, normalizeSubviews: Bool = false, @HTMLBuilder items: () -> some HTML) {
+        self.shouldNormalizeSubviews = normalizeSubviews
         self.content = HTMLCollection(items)
         self.spacingAmount = .semantic(spacing)
     }
 
     public func render() -> String {
+        var content = content
+        if shouldNormalizeSubviews, !content.attributes.setsBottomMargin {
+            content.attributes.add(classes: "mb-0")
+        }
+
         var attributes = attributes
         attributes.add(classes: "vstack")
 
@@ -61,5 +80,16 @@ public struct VStack: HTML {
         }
 
         return "<div\(attributes)>\(content)</div>"
+    }
+}
+
+extension CoreAttributes {
+    var setsBottomMargin: Bool {
+        styles.contains(where: { $0.property == Property.marginBottom.rawValue }) ||
+        classes.contains(where: { className in
+            className.range(
+                of: "\\b(m|my|mb)-([0-9]|[1-5]|auto|n[1-5])\\b",
+                options: .regularExpression) != nil
+        })
     }
 }
