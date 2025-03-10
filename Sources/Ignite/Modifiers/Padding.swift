@@ -113,6 +113,19 @@ public extension DocumentElement {
     }
 }
 
+public extension StyledHTML {
+    /// Applies padding on selected sides of this element. Defaults to 20 pixels.
+    /// - Parameters:
+    ///   - edges: The edges where this padding should be applied.
+    ///   - length: The amount of padding to apply, specified in
+    /// units of your choosing.
+    /// - Returns: A copy of the current element with the new padding applied.
+    func padding(_ edges: Edge, _ length: LengthUnit) -> Self {
+        let styles = self.edgeAdjustedStyles(prefix: "padding", edges, length.stringValue)
+        return self.style(styles)
+    }
+}
+
 enum PaddingType {
     case exact(LengthUnit), semantic(SpacingAmount)
 }
@@ -121,9 +134,10 @@ private extension HTML {
     func paddingModifier(_ padding: PaddingType, edges: Edge = .all) -> any HTML {
         switch padding {
         case .exact(let unit):
-            self.edgeAdjust(prefix: "padding", edges, unit.stringValue)
+            let styles = self.edgeAdjustedStyles(prefix: "padding", edges, unit.stringValue)
+            return self.style(styles)
         case .semantic(let amount):
-            self.edgeAdjust(prefix: "p", edges, amount)
+            return self.edgeAdjust(prefix: "p", edges, amount)
         }
     }
 }

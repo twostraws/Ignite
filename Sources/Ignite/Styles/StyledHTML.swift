@@ -29,4 +29,13 @@ extension StyledHTML {
         copy.attributes.add(styles: styles)
         return copy
     }
+
+    /// Adds inline styles to the element.
+    /// - Parameter values: An array of `InlineStyle` objects
+    /// - Returns: The modified `HTML` element
+    func style(_ styles: InlineStyle...) -> Self {
+        var copy = self
+        copy.attributes.add(styles: styles)
+        return copy
+    }
 }

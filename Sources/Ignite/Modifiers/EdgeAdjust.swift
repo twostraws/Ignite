@@ -9,38 +9,6 @@
 /// name of the CSS attribute they change, so their functionality is wrapped up here
 /// to avoid code duplication. This should not be called directly.
 extension HTML {
-    /// Adjusts the edge value (margin or padding) for a view.
-    /// - Parameters:
-    ///   - prefix: Specifies what we are changing, e.g. "padding"
-    ///   - edges: Which edges we are changing.
-    ///   - length: The value we are changing it to.
-    /// - Returns: A copy of the current element with the updated edge adjustment.
-    func edgeAdjust(prefix: String, _ edges: Edge = .all, _ length: String = "20px") -> any HTML {
-        if edges.contains(.all) {
-            return self.style("\(prefix)", length)
-        }
-
-        var copy: any HTML = self
-
-        if edges.contains(.leading) {
-            copy = copy.style("\(prefix)-left", length)
-        }
-
-        if edges.contains(.trailing) {
-            copy = copy.style("\(prefix)-right", length)
-        }
-
-        if edges.contains(.top) {
-            copy = copy.style("\(prefix)-top", length)
-        }
-
-        if edges.contains(.bottom) {
-            copy = copy.style("\(prefix)-bottom", length)
-        }
-
-        return copy
-    }
-
     /// Adjusts the edge value (margin or padding) for a view using an adaptive amount.
     /// - Parameters:
     ///   - prefix: Specifies what we are changing, e.g. "padding"
@@ -79,5 +47,40 @@ extension HTML {
         }
 
         return copy
+    }
+}
+
+extension Stylable {
+    /// Adjusts the edge value (margin or padding) for a view.
+    /// - Parameters:
+    ///   - prefix: Specifies what we are changing, e.g. "padding"
+    ///   - edges: Which edges we are changing.
+    ///   - length: The value we are changing it to.
+    /// - Returns: An array of InlineStyle with the edge adjustments.
+    func edgeAdjustedStyles(prefix: String, _ edges: Edge = .all, _ length: String = "20px") -> [InlineStyle] {
+        var styles = [InlineStyle]()
+
+        if edges.contains(.all) {
+            styles.append(.init(prefix, value: length))
+            return styles
+        }
+
+        if edges.contains(.leading) {
+            styles.append(.init("\(prefix)-left", value: length))
+        }
+
+        if edges.contains(.trailing) {
+            styles.append(.init("\(prefix)-right", value: length))
+        }
+
+        if edges.contains(.top) {
+            styles.append(.init("\(prefix)-top", value: length))
+        }
+
+        if edges.contains(.bottom) {
+            styles.append(.init("\(prefix)-bottom", value: length))
+        }
+
+        return styles
     }
 }
