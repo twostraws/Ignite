@@ -39,7 +39,8 @@ struct SiteTests {
 
         try markdownContent.write(to: markdownFileURL, atomically: false, encoding: .utf8)
 
-        try await TestSitePublisher().publish()
+        var site = TestSitePublisher()
+        try await site.publish()
 
         #expect(package.checkIndexFileExists() == true)
 
@@ -60,7 +61,8 @@ struct SiteTests {
 
         try markdownContent.write(to: markdownFileURL, atomically: false, encoding: .utf8)
 
-        try await TestSitePublisher().publish()
+        var site = TestSitePublisher()
+        try await site.publish()
 
         #expect(package.checkIndexFileExists() == true)
 

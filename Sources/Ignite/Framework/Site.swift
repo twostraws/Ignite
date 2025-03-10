@@ -143,7 +143,11 @@ public protocol Site: Sendable {
     @ArticlePageBuilder var articlePages: [any ArticlePage] { get }
 
     /// Publishes this entire site from user space.
-    func publish(from file: StaticString, buildDirectoryPath: String) async throws
+    mutating func publish(from file: StaticString, buildDirectoryPath: String) async throws
+
+    /// Override this if you need to do custom work to your site before the build begins,
+    /// such as downloading data, creating your staticPages array dynamically, etc.
+    mutating func prepare() async throws
 }
 
 public extension Site {
@@ -255,12 +259,24 @@ public extension Site {
     ///   - buildDirectoryPath: This path will generate the necessary
     ///   artifacts for the web page. Please modify as needed.
     ///   The default is "Build".
-    func publish(from file: StaticString = #filePath, buildDirectoryPath: String = "Build") async throws {
+    mutating func publish(from file: StaticString = #filePath, buildDirectoryPath: String = "Build") async throws {
         let context = try PublishingContext.initialize(
             for: self,
             from: file,
             buildDirectoryPath: buildDirectoryPath
         )
+
+        // This is a hack! This enables sites to dynamically
+        // generate their URLs, e.g. loading pages from JSON.
+        // But because the context owns its site, we need to
+        // re-copy the site across after calling prepare.
+        // Note: We can't call prepare() before initializing
+        // the publishing context, because things like decoding
+        // JSON require @Environment(\.decode) to work, which
+        // in turn requires the publishing context to exist.
+        try await prepare()
+        context.site = self
+
         try await context.publish()
 
         if !context.warnings.isEmpty || !context.errors.isEmpty {
@@ -270,5 +286,10 @@ public extension Site {
         } else {
             print("📗 Publish completed!")
         }
+    }
+
+    /// The default implementation does nothing.
+    mutating func prepare() async throws {
+
     }
 }
