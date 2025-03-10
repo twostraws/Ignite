@@ -12,7 +12,7 @@ extension PublishingContext {
     func generateContent() async {
         render(site.homePage, isHomePage: true)
 
-        for page in site.pages {
+        for page in site.staticPages {
             render(page)
         }
 
