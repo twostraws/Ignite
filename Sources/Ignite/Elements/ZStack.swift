@@ -55,7 +55,7 @@ public struct ZStack: HTML {
             ])
 
             if shouldIgnoreMargins {
-                elementAttributes.add(styles: .init(.marginBottom, value: "0"))
+                elementAttributes.add(classes: "mb-0")
             }
 
             elementAttributes.add(styles: alignment.flexAlignmentRules)
