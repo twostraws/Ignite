@@ -111,7 +111,7 @@ public struct Font: Hashable, Equatable, Sendable {
     init(
         name: String?,
         style: Font.Style = .body,
-        size: ResponsiveSize,
+        size: Responsive.Size,
         weight: Weight = .regular
     ) {
         self.name = name
@@ -173,19 +173,6 @@ public struct Font: Hashable, Equatable, Sendable {
         Font(name: nil, style: style, size: .px(size), weight: weight)
     }
 
-    /// Creates a system font with responsive sizing.
-    /// - Parameter style: The semantic level of the font. Defaults to `.body`.
-    /// - Parameter size: Responsive sizes for each breakpoint.
-    /// - Parameter weight: The font weight to use.
-    /// - Returns: A Font instance configured with responsive sizing.
-    public static func system(
-        _ style: Font.Style = .body,
-        size: ResponsiveSize,
-        weight: Font.Weight = .regular
-    ) -> Font {
-        Font(name: nil, style: style, size: size, weight: weight)
-    }
-
     /// Creates a custom font with the specified name and size.
     /// - Parameters:
     ///   - name: The name of the font file including its extension.
@@ -230,58 +217,6 @@ public struct Font: Hashable, Equatable, Sendable {
         weight: Font.Weight = .regular
     ) -> Font {
         Font(name: name, style: style, size: nil, weight: weight)
-    }
-
-    /// Creates a custom font with the specified name and size.
-    /// - Parameters:
-    ///   - name: The name of the font file including its extension.
-    ///   - style: The semantic level of the font. Defaults to `.body`.
-    ///   - size: Responsive sizes for each breakpoint.
-    ///   - weight: The weight (boldness) of the font.
-    /// - Returns: A Font instance configured with the custom font.
-    public static func custom(
-        _ name: String,
-        style: Font.Style = .body,
-        size: ResponsiveSize,
-        weight: Font.Weight = .regular
-    ) -> Font {
-        Font(name: name, style: style, size: size, weight: weight)
-    }
-}
-
-public extension Font {
-    enum ResponsiveSize {
-        /// Creates a responsive value that adapts across different screen sizes.
-        /// - Parameters:
-        ///   - xSmall: The base value, applied to all breakpoints unless overridden.
-        ///   - small: Value for small screens and up. If `nil`, inherits from smaller breakpoints.
-        ///   - medium: Value for medium screens and up. If `nil`, inherits from smaller breakpoints.
-        ///   - large: Value for large screens and up. If `nil`, inherits from smaller breakpoints.
-        ///   - xLarge: Value for extra large screens and up. If `nil`, inherits from smaller breakpoints.
-        ///   - xxLarge: Value for extra extra large screens and up. If `nil`, inherits from smaller breakpoints.
-        /// - Returns: A responsive value that adapts to different screen sizes.
-        case responsive(
-            _ xSmall: LengthUnit? = nil,
-            small: LengthUnit? = nil,
-            medium: LengthUnit? = nil,
-            large: LengthUnit? = nil,
-            xLarge: LengthUnit? = nil,
-            xxLarge: LengthUnit? = nil
-        )
-
-        var values: ResponsiveValues<LengthUnit> {
-            switch self {
-            case let .responsive(xSmall, small, medium, large, xLarge, xxLarge):
-                ResponsiveValues(
-                    xSmall,
-                    small: small,
-                    medium: medium,
-                    large: large,
-                    xLarge: xLarge,
-                    xxLarge: xxLarge
-                )
-            }
-        }
     }
 }
 
