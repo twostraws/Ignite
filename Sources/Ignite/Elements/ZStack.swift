@@ -23,11 +23,21 @@ public struct ZStack: HTML {
     /// The child elements to be stacked.
     private var items: HTMLCollection
 
+    /// Whether the `ZStack` should ignore any margins automatically
+    /// applied to its children, like the bottom margin of a paragraph.
+    private var shouldIgnoreMargins: Bool = false
+
     /// Creates a new ZStack with the specified alignment and content.
     /// - Parameters:
     ///   - alignment: The point within the stack where elements should be aligned (default: .center).
+    ///   - ignoreMargins: Whether the `VStack` should ignore any margins automatically
+    /// applied to its children, like the bottom margin of a paragraph.
     ///   - items: A closure that returns the elements to be stacked.
-    public init(alignment: Alignment = .center, @HTMLBuilder _ items: () -> some HTML) {
+    public init(
+        alignment: Alignment = .center,
+        ignoreMargins: Bool = false,
+        @HTMLBuilder _ items: () -> some HTML
+    ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
     }
@@ -43,6 +53,10 @@ public struct ZStack: HTML {
                 .init(.gridArea, value: "1/1"),
                 .init(.zIndex, value: "\(index)")
             ])
+
+            if shouldIgnoreMargins {
+                elementAttributes.add(styles: .init(.marginBottom, value: "0"))
+            }
 
             elementAttributes.add(styles: alignment.flexAlignmentRules)
             return item.attributes(elementAttributes)
