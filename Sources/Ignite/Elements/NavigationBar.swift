@@ -210,7 +210,6 @@ public struct NavigationBar: HTML {
             dropdownItem.configuredAsNavigationItem()
         }
         .class("nav-item", "dropdown")
-        .data("bs-theme", "light")
     }
 
     private func renderLinkItem(_ link: Link) -> some HTML {
