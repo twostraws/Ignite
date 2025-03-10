@@ -22,9 +22,9 @@ public struct VStack: HTML {
     /// The child elements contained in the stack.
     private var content: HTMLCollection
 
-    /// Whether the `VStack` should ignore any margins automatically
-    /// applied to its children, like the bottom margin of a paragraph.
-    private var shouldIgnoreMargins: Bool = false
+    /// Whether the `VStack` should ignore its subviews' implicit
+    /// styles, like the bottom margins paragraphs.
+    private var shouldNormalizeSubviews: Bool = false
 
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
@@ -38,15 +38,15 @@ public struct VStack: HTML {
     /// that returns an array of items to use in this section.
     /// - Parameters:
     ///   - pixels: The number of pixels between elements.
-    ///   - ignoreMargins: Whether the `VStack` should ignore any margins automatically
-    /// applied to its children, like the bottom margin of a paragraph.
+    ///   - normalizeSubviews: Whether the `VStack` should ignore its subviews' implicit
+    /// styles, like the bottom margins paragraphs.
     ///   - items: The items to use in this section.
     public init(
         spacing pixels: Int,
-        ignoreMargins: Bool = false,
+        normalizeSubviews: Bool = false,
         @HTMLBuilder items: () -> some HTML
     ) {
-        self.shouldIgnoreMargins = ignoreMargins
+        self.shouldNormalizeSubviews = normalizeSubviews
         self.content = HTMLCollection(items)
         self.spacingAmount = .exact(pixels)
     }
@@ -55,16 +55,18 @@ public struct VStack: HTML {
     /// that returns an array of items to use in this section.
     /// - Parameters:
     ///   - spacing: The predefined size between elements.
+    ///   - normalizeSubviews: Whether the `VStack` should ignore its subviews' implicit
+    /// styles, like the bottom margins paragraphs.
     ///   - items: The items to use in this section.
-    public init(spacing: SpacingAmount, ignoreMargins: Bool = false, @HTMLBuilder items: () -> some HTML) {
-        self.shouldIgnoreMargins = ignoreMargins
+    public init(spacing: SpacingAmount, normalizeSubviews: Bool = false, @HTMLBuilder items: () -> some HTML) {
+        self.shouldNormalizeSubviews = normalizeSubviews
         self.content = HTMLCollection(items)
         self.spacingAmount = .semantic(spacing)
     }
 
     public func render() -> String {
         var content = content
-        if shouldIgnoreMargins, !content.attributes.setsBottomMargin {
+        if shouldNormalizeSubviews, !content.attributes.setsBottomMargin {
             content.attributes.add(classes: "mb-0")
         }
 
