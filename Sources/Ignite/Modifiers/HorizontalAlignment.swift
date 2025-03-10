@@ -25,6 +25,15 @@ public extension HorizontalAligning {
     }
 }
 
+public extension StyledHTML {
+    /// Aligns this element using a specific alignment.
+    /// - Parameter alignment: How to align this element.
+    /// - Returns: A modified copy of the element with alignment applied
+    func horizontalAlignment(_ alignment: HorizontalAlignment) -> Self {
+        self.style(alignment.style)
+    }
+}
+
 /// Controls how elements are horizontally positioned inside their container.
 public enum HorizontalAlignment: String, Sendable, Equatable {
     /// Elements are positioned at the start of their container.
@@ -42,6 +51,14 @@ public enum HorizontalAlignment: String, Sendable, Equatable {
         case .leading: "justify-content-start"
         case .center: "justify-content-center"
         case .trailing: "justify-content-end"
+        }
+    }
+
+    var style: InlineStyle {
+        switch self {
+        case .leading: .init(.textAlign, value: "left")
+        case .center: .init(.textAlign, value: "center")
+        case .trailing: .init(.textAlign, value: "right")
         }
     }
 }

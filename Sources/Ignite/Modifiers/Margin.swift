@@ -113,6 +113,19 @@ public extension InlineElement {
     }
 }
 
+public extension StyledHTML {
+    /// Applies margins on selected sides of this element. Defaults to 20 pixels.
+    /// - Parameters:
+    ///   - edges: The edges where this margin should be applied.
+    ///   - length: The amount of margin to apply, specified in
+    /// units of your choosing.
+    /// - Returns: A copy of the current element with the new margins applied.
+    func margin(_ edges: Edge, _ length: LengthUnit = .px(20)) -> Self {
+        let styles = self.edgeAdjustedStyles(prefix: "margin", edges, length.stringValue)
+        return self.style(styles)
+    }
+}
+
 enum MarginType {
     case exact(LengthUnit), semantic(SpacingAmount)
 }
@@ -121,9 +134,10 @@ private extension HTML {
     func marginModifier(_ margin: MarginType, edges: Edge = .all) -> any HTML {
         switch margin {
         case .exact(let unit):
-            self.edgeAdjust(prefix: "margin", edges, unit.stringValue)
+            let styles = self.edgeAdjustedStyles(prefix: "margin", edges, unit.stringValue)
+            return self.style(styles)
         case .semantic(let amount):
-            self.edgeAdjust(prefix: "m", edges, amount)
+            return self.edgeAdjust(prefix: "m", edges, amount)
         }
     }
 }
