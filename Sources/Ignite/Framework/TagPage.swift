@@ -1,5 +1,5 @@
 //
-// TagLayout.swift
+// TagPage.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -10,7 +10,7 @@
 /// on those pages by making a custom type that conforms to this protocol.
 ///
 /// ```swift
-/// struct TagLayout: TagPage {
+/// struct MyTagPage: TagPage {
 ///     var body: some HTML {
 ///         Article {
 ///             Heading(tag ?? "All Posts")
