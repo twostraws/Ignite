@@ -10,6 +10,7 @@ extension Font {
     public struct Responsive {
         let font: Font
 
+        // swiftlint:disable nesting
         public enum Size {
             case responsive(
                 _ xSmall: LengthUnit? = nil,
@@ -34,6 +35,7 @@ extension Font {
                 }
             }
         }
+        // swiftlint:enable nesting
 
         /// Creates a system font with responsive sizing.
         /// - Parameter style: The semantic level of the font. Defaults to `.body`.
