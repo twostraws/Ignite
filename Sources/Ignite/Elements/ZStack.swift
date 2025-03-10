@@ -54,7 +54,7 @@ public struct ZStack: HTML {
                 .init(.zIndex, value: "\(index)")
             ])
 
-            if shouldIgnoreMargins {
+            if shouldIgnoreMargins, !item.attributes.setsBottomMargin {
                 elementAttributes.add(classes: "mb-0")
             }
 

@@ -64,7 +64,7 @@ public struct VStack: HTML {
 
     public func render() -> String {
         var content = content
-        if shouldIgnoreMargins {
+        if shouldIgnoreMargins, !content.attributes.setsBottomMargin {
             content.attributes.add(classes: "mb-0")
         }
 
@@ -78,5 +78,16 @@ public struct VStack: HTML {
         }
 
         return "<div\(attributes)>\(content)</div>"
+    }
+}
+
+extension CoreAttributes {
+    var setsBottomMargin: Bool {
+        styles.contains(where: { $0.property == Property.marginBottom.rawValue }) ||
+        classes.contains(where: { className in
+            className.range(
+                of: "\\b(m|my|mb)-([0-9]|[1-5]|auto|n[1-5])\\b",
+                options: .regularExpression) != nil
+        })
     }
 }
