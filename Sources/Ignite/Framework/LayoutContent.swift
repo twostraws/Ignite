@@ -15,13 +15,13 @@ public protocol LayoutContent: Sendable {
     @HTMLBuilder var body: Body { get }
 
     /// The page layout this content should use.
-    var parentLayout: any Layout { get }
+    var layout: any Layout { get }
 }
 
 public extension LayoutContent {
     // Default to `MissingLayout`, which will cause the main
     // site layout to be used instead.
-    var parentLayout: any Layout {
+    var layout: any Layout {
         PublishingContext.shared.site.layout
     }
 }

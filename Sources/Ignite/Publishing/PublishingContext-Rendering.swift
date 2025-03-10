@@ -32,7 +32,7 @@ extension PublishingContext {
             pageContent: staticLayout)
 
         let outputString = withEnvironment(values) {
-            staticLayout.parentLayout.body.render()
+            staticLayout.layout.body.render()
         }
 
         let outputDirectory = buildDirectory.appending(path: path)
@@ -61,7 +61,7 @@ extension PublishingContext {
             article: article)
 
         let outputString = withEnvironment(values) {
-            layout.parentLayout.body.render()
+            layout.layout.body.render()
         }
 
         let outputDirectory = buildDirectory.appending(path: article.path)
@@ -107,7 +107,7 @@ extension PublishingContext {
                 category: category)
 
             let outputString = withEnvironment(values) {
-                tagLayout.parentLayout.body.render()
+                tagLayout.layout.body.render()
             }
 
             write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
