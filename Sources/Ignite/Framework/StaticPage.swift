@@ -29,18 +29,9 @@ public extension StaticPage {
     /// A default description for this page, which is just an empty string.
     var description: String { "" }
 
-    /// Attempts to auto-generate a path for this page using its name then title.
+    /// Auto-generates a path for this page using its Swift type name.
     var path: String {
-        // Attempt to use our Swift filename.
-        if let suggestedName = String(describing: Self.self).convertedToSlug() {
-            "/\(suggestedName)"
-        } else if let result = title.convertedToSlug() {
-            // If that failed, attempt to convert our title.
-            "/\(result)"
-        } else {
-            // If somehow we're still here, a last gasp: the lowercased title without spaces.
-            "/\(title.lowercased().replacing(" ", with: "-"))"
-        }
+        String(describing: Self.self).convertedToSlug()
     }
 
     /// Defaults to no sharing image

@@ -268,7 +268,7 @@ public struct Article {
     @InlineElementBuilder public func tagLinks() -> (some InlineElement)? {
         if let tags = metadata["tags"] as? String {
             let targets: [(name: String, path: String)] = tags.splitAndTrim().map { tag in
-                let tagPath = tag.convertedToSlug() ?? tag
+                let tagPath = tag.convertedToSlug()
                 return (name: tag, path: "/tags/\(tagPath)")
             }
             ForEach(targets) { target in

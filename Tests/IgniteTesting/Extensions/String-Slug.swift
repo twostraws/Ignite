@@ -28,25 +28,6 @@ struct StringSlugTests {
         #expect(string.convertedToSlug() == string)
     }
 
-    /// Strings that don't contain latin characters output nil
-    @Test("Nil Cases", arguments: [
-        "", // empty string
-        "!", // single punctuation
-        "#&?$#+", // group of punctuation together
-        " ", // whitespace
-        "  ",
-        "\t",
-        "\n",
-        "\n\n",
-        "😄", // single emoji
-        "🤞👍😄", // multiple emoji
-        "~", // home path in the shell
-        "/" // empty path
-    ])
-    func returns_nil_for_strings_with_no_latin_characters(string: String) async throws {
-        #expect(string.convertedToSlug() == nil)
-    }
-
     @Test("Converts Title-Cased Single Words To Lowercase", arguments: [
         "A",
         "Cars",
@@ -169,9 +150,9 @@ struct StringSlugTests {
     //    a second dash is inserted and the uppercase letter is converted to lowercase.
     //    which results in two dashes in a row
     @Test("Replaces dash before uppercase letter with two dashes before lowercase letter", arguments: [
-        Instance(input: "hello-World", expected: "hello--world"),
-        Instance(input: "Hello-World", expected: "hello--world"),
-        Instance(input: "Happy-Go-Lucky", expected: "happy--go--lucky")
+        Instance(input: "hello-World", expected: "hello-world"),
+        Instance(input: "Hello-World", expected: "hello-world"),
+        Instance(input: "Happy-Go-Lucky", expected: "happy-go-lucky")
     ])
     func double_dash_for_dash_then_uppercase(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
@@ -189,8 +170,8 @@ struct StringSlugTests {
     }
 
     @Test("Acronyms are lowercased and double-dash-separated", arguments: [
-        Instance(input: "Y.M.C.A.", expected: "y--m--c--a"),
-        Instance(input: "F.B.I.", expected: "f--b--i")
+        Instance(input: "Y.M.C.A.", expected: "y-m-c-a"),
+        Instance(input: "F.B.I.", expected: "f-b-i")
     ])
     func acronyms_are_lowercased_and_dash_separated(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
@@ -206,19 +187,19 @@ struct StringSlugTests {
     }
 
     @Test("URL Strings", arguments: [
-        Instance(input: "https://github.com/twostraws/Ignite", expected: "https-github-com-twostraws--ignite"),
-        Instance(input: "https://github.com/twostraws/Ignite/", expected: "https-github-com-twostraws--ignite"),
-        Instance(input: "file:/Users/george/Documents", expected: "file--users-george--documents")
+        Instance(input: "https://github.com/twostraws/Ignite", expected: "https-github-com-twostraws-ignite"),
+        Instance(input: "https://github.com/twostraws/Ignite/", expected: "https-github-com-twostraws-ignite"),
+        Instance(input: "file:/Users/george/Documents", expected: "file-users-george-documents")
     ])
     func url_strings(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
     @Test("Paths", arguments: [
-        Instance(input: "/Users/george/Documents", expected: "-users-george--documents"),
-        Instance(input: "/twostraws/Ignite", expected: "twostraws--ignite"),
+        Instance(input: "/Users/george/Documents", expected: "-users-george-documents"),
+        Instance(input: "/twostraws/Ignite", expected: "twostraws-ignite"),
         Instance(input: "~/Documents", expected: "-documents"),
-        Instance(input: "~/Documents/Resumé", expected: "-documents--resume")
+        Instance(input: "~/Documents/Resumé", expected: "-documents-resume")
     ])
     func path_strings(instance: Instance) async throws {
         #expect(instance.input.convertedToSlug() == instance.expected)

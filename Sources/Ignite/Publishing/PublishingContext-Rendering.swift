@@ -78,7 +78,7 @@ extension PublishingContext {
 
         for tag in tags {
             let path: String = if let tag {
-                "tags/\(tag.convertedToSlug() ?? tag)"
+                "tags/\(tag.convertedToSlug())"
             } else {
                 "tags"
             }
