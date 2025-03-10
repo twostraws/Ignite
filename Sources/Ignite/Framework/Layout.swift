@@ -27,20 +27,11 @@ public protocol Layout {
 
     /// The main content of the layout, built using the HTML DSL
     @DocumentBuilder var body: Document { get }
-
-    /// A unique identifier for this layout instance
-    var id: String { get }
 }
 
 public extension Layout {
     /// The current page being rendered.
     var content: some HTML {
         Section(PublishingContext.shared.environment.pageContent)
-    }
-
-    /// Generates a unique identifier for this layout based on its file location and type.
-    /// The identifier is used internally for tracking and caching purposes.
-    var id: String {
-        String(describing: self).truncatedHash
     }
 }
