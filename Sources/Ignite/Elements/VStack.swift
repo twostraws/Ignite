@@ -22,6 +22,10 @@ public struct VStack: HTML {
     /// The child elements contained in the stack.
     private var content: HTMLCollection
 
+    /// Whether the `VStack` should ignore any margins automatically
+    /// applied to its children, like the bottom margin of a paragraph.
+    private var shouldIgnoreMargins: Bool = false
+
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameter items: The items to use in this section.
@@ -34,8 +38,15 @@ public struct VStack: HTML {
     /// that returns an array of items to use in this section.
     /// - Parameters:
     ///   - pixels: The number of pixels between elements.
+    ///   - ignoreMargins: Whether the `VStack` should ignore any margins automatically
+    /// applied to its children, like the bottom margin of a paragraph.
     ///   - items: The items to use in this section.
-    public init(spacing pixels: Int, @HTMLBuilder items: () -> some HTML) {
+    public init(
+        spacing pixels: Int,
+        ignoreMargins: Bool = false,
+        @HTMLBuilder items: () -> some HTML
+    ) {
+        self.shouldIgnoreMargins = ignoreMargins
         self.content = HTMLCollection(items)
         self.spacingAmount = .exact(pixels)
     }
@@ -45,12 +56,18 @@ public struct VStack: HTML {
     /// - Parameters:
     ///   - spacing: The predefined size between elements.
     ///   - items: The items to use in this section.
-    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
+    public init(spacing: SpacingAmount, ignoreMargins: Bool = false, @HTMLBuilder items: () -> some HTML) {
+        self.shouldIgnoreMargins = ignoreMargins
         self.content = HTMLCollection(items)
         self.spacingAmount = .semantic(spacing)
     }
 
     public func render() -> String {
+        var content = content
+        if shouldIgnoreMargins {
+            content.attributes.add(classes: "mb-0")
+        }
+
         var attributes = attributes
         attributes.add(classes: "vstack")
 
