@@ -16,6 +16,18 @@ public extension HTML {
         }
         return AnyHTML(fontModifier(font))
     }
+
+    /// Adjusts the font of this text using responsive sizing.
+    /// - Parameter font: The responsive font configuration to apply.
+    /// - Returns: A new instance with the updated font.
+    func font(_ font: Font.Responsive) -> some HTML {
+        let baseFont = font.font
+        if baseFont.name != nil {
+            // Custom font that requires CSS generation
+            CSSManager.shared.registerFont(baseFont)
+        }
+        return AnyHTML(fontModifier(baseFont))
+    }
 }
 
 public extension InlineElement {
@@ -28,6 +40,48 @@ public extension InlineElement {
             CSSManager.shared.registerFont(font)
         }
         return AnyHTML(fontModifier(font))
+    }
+
+    /// Adjusts the font of this text using responsive sizing.
+    /// - Parameter font: The responsive font configuration to apply.
+    /// - Returns: A new instance with the updated font.
+    func font(_ font: Font.Responsive) -> some InlineElement {
+        let baseFont = font.font
+        if baseFont.name != nil {
+            // Custom font that requires CSS generation
+            CSSManager.shared.registerFont(baseFont)
+        }
+        return AnyHTML(fontModifier(baseFont))
+    }
+}
+
+public extension StyledHTML {
+    /// Adjusts the font of this text.
+    /// - Parameter font: The font configuration to apply.
+    /// - Returns: A new instance with the updated font.
+    func font(_ font: Font) -> Self {
+        if font.name != nil {
+            // Custom font that requires CSS generation
+            CSSManager.shared.registerFont(font)
+        }
+
+        var styles = [InlineStyle]()
+
+        styles.append(.init(.fontWeight, value: font.weight.description))
+
+        if let style = font.style {
+            styles.append(.init(.fontStyle, value: style.rawValue))
+        }
+
+        if let name = font.name, name.isEmpty == false {
+            styles.append(.init(.fontFamily, value: name))
+        }
+
+        if let size = font.size {
+            styles.append(.init(.fontSize, value: size.stringValue))
+        }
+
+        return self.style(styles)
     }
 }
 
