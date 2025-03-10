@@ -77,7 +77,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == css)
     }
 
-    @Test("Theme queries", arguments: await zip(
+    @Test("Theme queries", arguments: zip(
         [ThemeQuery(DefaultDarkTheme.self), ThemeQuery(DefaultLightTheme.self), ThemeQuery(AutoTheme.self)],
         ["data-bs-theme^=\"dark\"", "data-bs-theme^=\"light\"", "data-bs-theme^=\"auto\""]))
     func theme_queries_render_correctly(query: ThemeQuery, css: String) async throws {

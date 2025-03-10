@@ -7,8 +7,8 @@
 
 typealias HeadElementBuilder = ElementBuilder<any HeadElement>
 typealias DocumentElementBuilder = ElementBuilder<any DocumentElement>
-typealias StaticLayoutBuilder = ElementBuilder<any StaticLayout>
-typealias ArticleLayoutBuilder = ElementBuilder<any ArticleLayout>
+typealias StaticPageBuilder = ElementBuilder<any StaticPage>
+typealias ArticlePageBuilder = ElementBuilder<any ArticlePage>
 typealias ActionBuilder = ElementBuilder<any Action>
 
 /// A result builder that lets us generically build arrays of some content.

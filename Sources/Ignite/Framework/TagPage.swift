@@ -5,12 +5,12 @@
 // See LICENSE for license information.
 //
 
-/// Tag layouts show all articles on your site that match a specific tag,
+/// Tag pages show all articles on your site that match a specific tag,
 /// or all articles period if `tag` is nil. You get to decide what is shown
-/// on those layouts by making a custom type that conforms to this protocol.
+/// on those pages by making a custom type that conforms to this protocol.
 ///
 /// ```swift
-/// struct TagLayout: TagLayout {
+/// struct TagLayout: TagPage {
 ///     var body: some HTML {
 ///         Article {
 ///             Heading(tag ?? "All Posts")
@@ -20,9 +20,9 @@
 /// }
 /// ```
 @MainActor
-public protocol TagLayout: LayoutContent {}
+public protocol TagPage: LayoutContent {}
 
-extension TagLayout {
+extension TagPage {
     /// The current tag during page generation.
     public var tag: any Category {
         PublishingContext.shared.environment.category
