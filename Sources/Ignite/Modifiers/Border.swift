@@ -21,7 +21,12 @@ public extension HTML {
         cornerRadii: CornerRadii = CornerRadii(),
         edges: Edge = .all
     ) -> some HTML {
-        let borderStyles = borderModifier(color: color, width: width, style: style, cornerRadii: cornerRadii, edges: edges)
+        let borderStyles = borderModifier(
+            color: color,
+            width: width,
+            style: style,
+            cornerRadii: cornerRadii,
+            edges: edges)
         return AnyHTML(self.style(borderStyles))
     }
 }
@@ -42,7 +47,12 @@ public extension InlineElement {
         cornerRadii: CornerRadii = CornerRadii(),
         edges: Edge = .all
     ) -> some InlineElement {
-        let borderStyles = borderModifier(color: color, width: width, style: style, cornerRadii: cornerRadii, edges: edges)
+        let borderStyles = borderModifier(
+            color: color,
+            width: width,
+            style: style,
+            cornerRadii: cornerRadii,
+            edges: edges)
         return AnyHTML(self.style(borderStyles))
     }
 }
@@ -63,7 +73,12 @@ public extension StyledHTML {
         cornerRadii: CornerRadii = CornerRadii(),
         edges: Edge = .all
     ) -> Self {
-        let borderStyles = borderModifier(color: color, width: width, style: style, cornerRadii: cornerRadii, edges: edges)
+        let borderStyles = borderModifier(
+            color: color,
+            width: width,
+            style: style,
+            cornerRadii: cornerRadii,
+            edges: edges)
         return self.style(borderStyles)
     }
 }
