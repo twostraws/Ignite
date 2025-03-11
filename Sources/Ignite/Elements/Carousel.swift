@@ -37,9 +37,19 @@ public struct Carousel: HTML {
 
     /// Creates a new carousel from an element builder that generates slides.
     /// - Parameter items: An element builder that returns an array of
-    /// slides to place in this carousel.
+    ///   slides to place in this carousel.
     public init(@ElementBuilder<Slide> _ items: () -> [Slide]) {
         self.items = items()
+    }
+
+    /// Creates a new carousel from an collection of items, along with a function that converts
+    /// a single object from the collection into a `Slide`.
+    /// - Parameters:
+    ///   - items: A sequence of items you want to convert into slides.
+    ///   - content: A function that accepts a single value from the sequence, and
+    ///     returns a slide representing that value in the carousel.
+    public init<T>(_ items: any Sequence<T>, content: (T) -> Slide) {
+        self.items = items.map(content)
     }
 
     /// Adjusts the style of this carousel.
