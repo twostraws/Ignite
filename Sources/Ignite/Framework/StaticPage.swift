@@ -31,7 +31,7 @@ public extension StaticPage {
 
     /// Auto-generates a path for this page using its Swift type name.
     var path: String {
-        String(describing: Self.self).convertedToSlug()
+        "/" + String(describing: Self.self).convertedToSlug()
     }
 
     /// Defaults to no sharing image
