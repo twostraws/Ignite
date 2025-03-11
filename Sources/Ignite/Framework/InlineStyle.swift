@@ -34,6 +34,6 @@ public struct InlineStyle: Hashable, Equatable, Sendable, Comparable, CustomStri
     }
 
     public static func < (lhs: InlineStyle, rhs: InlineStyle) -> Bool {
-        lhs.property < rhs.property
+        lhs.description < rhs.description
     }
 }

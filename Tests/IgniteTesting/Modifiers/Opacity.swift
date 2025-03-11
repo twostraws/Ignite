@@ -27,7 +27,7 @@ class OpacityTests: IgniteTestSuite {
         let element = Image(image.path, description: image.description).opacity(0.2)
         let output = element.render()
 
-        #expect(output == "<img alt=\"\(image.description)\" src=\"\(image.path)\" style=\"opacity: 0.2\" />")
+        #expect(output == "<img src=\"\(image.path)\" alt=\"\(image.description)\" style=\"opacity: 0.2\" />")
     }
 
     @Test("Checks that the opacity value is correctly formatted", arguments: zip(

@@ -39,12 +39,12 @@ public struct EmptyHoverEffect: HTML {
 }
 
 private struct ApplyHoverEffects: Action {
-    let styles: Set<InlineStyle>
+    let styles: OrderedSet<InlineStyle>
 
     func compile() -> String {
         """
         this.unhoveredStyle = this.style.cssText;
-        \(self.styles.sorted().map {
+        \(self.styles.map {
             "this.style.\($0.property.convertingCSSNamesToJS()) = '\($0.value)'"
         }.joined(separator: "; "))
         """

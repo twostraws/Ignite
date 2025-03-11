@@ -29,7 +29,7 @@ class AspectRatioTests: IgniteTestSuite {
 
         #expect(output == """
         <div class="ratio ratio-\(ratio.rawValue)">\
-        <img alt="" src="/images/example.jpg" class="\(mode.htmlClass)" /></div>
+        <img src="/images/example.jpg" alt="" class="\(mode.htmlClass)" /></div>
         """)
     }
 }

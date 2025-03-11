@@ -36,7 +36,7 @@ class CardTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <div class="card"><img alt="" src="dog.jpg" class="card-img-top" />\
+        <div class="card"><img src="dog.jpg" alt="" class="card-img-top" />\
         <div class="card-body">Some text wrapped in a card</div></div>
         """)
     }
@@ -73,15 +73,15 @@ class CardTests: IgniteTestSuite {
 
         #expect(output == """
         <div class="card" style="max-width: min(500px, 100%)">\
-        <img alt="" src="/images/photos/dishwasher.jpg" class="card-img-top" /><div class="card-body">\
+        <img src="/images/photos/dishwasher.jpg" alt="" class="card-img-top" /><div class="card-body">\
         <p class="card-text">Before putting your dishes into the dishwasher, give them a quick pre-clean.</p>\
-        <a href="/" class="btn btn-primary card-link">Back to the homepage</a></div></div>
+        <a href="/" class="card-link btn btn-primary">Back to the homepage</a></div></div>
         """)
     }
 
     @Test("Card Styles", arguments: zip(
         Card.Style.allCases,
-        ["card", "card text-bg-default", "border-default card"]))
+        ["card", "card text-bg-default", "card border-default"]))
     func cardStyles(style: Card.Style, expectedClass: String) async throws {
         let element = Card {
             "Placeholder"
@@ -106,7 +106,7 @@ class CardTests: IgniteTestSuite {
 
         #expect(output == """
         <div class="card"><div class="card-body">Placeholder</div>\
-        <img alt="" src="image.jpg" class="card-img-bottom" /></div>
+        <img src="image.jpg" alt="" class="card-img-bottom" /></div>
         """)
     }
 
@@ -120,7 +120,7 @@ class CardTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <div class="card"><img alt="" src="image.jpg" class="card-img-top" />\
+        <div class="card"><img src="image.jpg" alt="" class="card-img-top" />\
         <div class="card-body">Placeholder</div></div>
         """)
     }
@@ -135,8 +135,8 @@ class CardTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <div class="card"><img alt="" src="image.jpg" class="card-img" />\
-        <div class="align-content-start card-img-overlay text-start">Placeholder</div></div>
+        <div class="card"><img src="image.jpg" alt="" class="card-img" />\
+        <div class="card-img-overlay text-start align-content-start">Placeholder</div></div>
         """)
     }
 }

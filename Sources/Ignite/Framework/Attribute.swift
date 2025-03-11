@@ -32,6 +32,6 @@ struct Attribute: Hashable, Equatable, Sendable, Comparable, CustomStringConvert
     }
 
     public static func < (lhs: Attribute, rhs: Attribute) -> Bool {
-        lhs.name < rhs.name
+        lhs.description < rhs.description
     }
 }

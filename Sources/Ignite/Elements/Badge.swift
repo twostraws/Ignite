@@ -27,7 +27,7 @@ public struct Badge: InlineElement {
 
     var badgeClasses: [String] {
         var outputClasses = ["badge"]
-        outputClasses.append(contentsOf: attributes.classes.sorted())
+        outputClasses.append(contentsOf: attributes.classes)
 
         switch style {
         case .default:
