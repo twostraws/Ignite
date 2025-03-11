@@ -10,10 +10,10 @@ import Testing
 
 @testable import Ignite
 
-/// Tests for the `ContentPreview` element.
-@Suite("ContentPreview Tests")
+/// Tests for the `ArticlePreview` element.
+@Suite("ArticlePreview Tests")
 @MainActor
-class ContentPreviewTests: IgniteTestSuite {
+class ArticlePreviewTests: IgniteTestSuite {
     @Test("ExampleTest")
     func example() async throws {
 
