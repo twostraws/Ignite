@@ -6,6 +6,10 @@
 //
 
 /// A container that arranges its child elements vertically in a stack.
+///
+/// - Note: To ensure spacing is consistent, `VStack` strips its subviews of
+/// implicit styles, such as the bottom margin automatically applied to paragraphs.
+/// All styles explicitly applied through modifiers like `.margin()` will be respected.
 public struct VStack: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
@@ -51,6 +55,9 @@ public struct VStack: HTML {
     }
 
     public func render() -> String {
+        var content = content
+        content.attributes.add(classes: "mb-0")
+
         var attributes = attributes
         attributes.add(classes: "vstack")
 
