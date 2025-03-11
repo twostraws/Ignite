@@ -19,7 +19,7 @@ import Testing
         let output = element.render()
 
         let expectedPath = PublishingContext.shared.path(for: URL(string: file)!)
-        #expect(output == "<img alt=\"\(description)\" src=\"\(expectedPath)\" />")
+        #expect(output == "<img src=\"\(expectedPath)\" alt=\"\(description)\" />")
     }
 
     @Test("Remote Image", arguments: ["https://example.com"], ["Example image"])
@@ -28,7 +28,7 @@ import Testing
         let output = element.render()
 
         let expectedPath = PublishingContext.shared.path(for: URL(string: url)!)
-        #expect(output == "<img alt=\"\(description)\" src=\"\(expectedPath)\" />")
+        #expect(output == "<img src=\"\(expectedPath)\" alt=\"\(description)\" />")
     }
 
     @Test("Icon Image", arguments: ["browser-safari"], ["Safari logo"])

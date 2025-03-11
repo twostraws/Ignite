@@ -35,8 +35,8 @@ struct ItemTests {
         #expect(output == """
         <div class="accordion-item">\
         <h2 class="accordion-header">\
-        <button type="button" class="accordion-button btn collapsed" data-bs-target="#\(itemID)" \
-        data-bs-toggle="collapse" aria-controls="\(itemID)" aria-expanded="false">First item</button>\
+        <button type="button" class="accordion-button collapsed btn" data-bs-toggle="collapse" \
+        data-bs-target="#\(itemID)" aria-expanded="false" aria-controls="\(itemID)">First item</button>\
         </h2>\
         <div id="\(itemID)" class="accordion-collapse collapse" data-bs-parent="#\(accordianID)">\
         <div class="accordion-body">\

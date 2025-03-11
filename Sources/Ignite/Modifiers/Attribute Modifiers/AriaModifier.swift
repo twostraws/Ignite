@@ -10,7 +10,7 @@ private extension HTML {
         guard let value else { return self }
         // Custom elements need to be wrapped in a primitive container to store attributes
         var copy: any HTML = self.isPrimitive ? self : Section(self)
-        copy.attributes.aria.insert(.init(name: key.rawValue, value: value))
+        copy.attributes.aria.append(.init(name: key.rawValue, value: value))
         return copy
     }
 }

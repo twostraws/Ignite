@@ -21,7 +21,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         let element = Image(path, description: description)
         let output = element.render()
         let path = publishingContext.path(for: URL(string: path)!)
-        #expect(output == "<img alt=\"Example image\" src=\"\(path)\" />")
+        #expect(output == "<img src=\"\(path)\" alt=\"Example image\" />")
     }
 
     // MARK: - Body

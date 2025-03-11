@@ -14,16 +14,16 @@ import Testing
 class AttributesTest: IgniteTestSuite {
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "nav", "section"]
 
-    @Test("Classes are sorted", arguments: tags)
-    func classes_areSorted(tag: String) async throws {
+    @Test("Classes are ordered", arguments: tags)
+    func classes_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}.class("foo", "bar", "baz", "qux")
         let output = element.render()
-        let expected = "<\(tag) class=\"bar baz foo qux\"></\(tag)>"
+        let expected = "<\(tag) class=\"foo bar baz qux\"></\(tag)>"
         #expect(output == expected)
     }
 
-    @Test("Custom attributes are sorted", arguments: tags)
-    func customAttributes_areSorted(tag: String) async throws {
+    @Test("Custom attributes are ordered", arguments: tags)
+    func customAttributes_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .customAttribute(name: "qux", value: "qux")
             .customAttribute(name: "baz", value: "baz")
@@ -31,11 +31,11 @@ class AttributesTest: IgniteTestSuite {
             .customAttribute(name: "bar", value: "bar")
 
         let output = element.render()
-        #expect(output == "<\(tag) bar=\"bar\" baz=\"baz\" foo=\"foo\" qux=\"qux\"></\(tag)>")
+        #expect(output == "<\(tag) qux=\"qux\" baz=\"baz\" foo=\"foo\" bar=\"bar\"></\(tag)>")
     }
 
-    @Test("Events are sorted", arguments: tags)
-    func events_areSorted(tag: String) async throws {
+    @Test("Events are ordered", arguments: tags)
+    func events_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .onEvent(.mouseUp, [ShowAlert(message: "bar")])
             .onEvent(.mouseDown, [ShowAlert(message: "baz")])
@@ -43,12 +43,12 @@ class AttributesTest: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <\(tag) onmousedown=\"alert('baz')\" onmouseup=\"alert('bar')\"></\(tag)>
+        <\(tag) onmouseup=\"alert('bar')\" onmousedown=\"alert('baz')\"></\(tag)>
         """)
     }
 
-    @Test("Styles are sorted", arguments: tags)
-    func styles_areSorted(tag: String) async throws {
+    @Test("Styles are ordered", arguments: tags)
+    func styles_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .style(
                 .init(.zIndex, value: "1"),
@@ -56,11 +56,11 @@ class AttributesTest: IgniteTestSuite {
                 .init(.cursor, value: "pointer")
             )
         let output = element.render()
-        #expect(output == "<\(tag) style=\"accent-color: red; cursor: pointer; z-index: 1\"></\(tag)>")
+        #expect(output == "<\(tag) style=\"z-index: 1; accent-color: red; cursor: pointer\"></\(tag)>")
     }
 
-    @Test("Aria attributes are sorted", arguments: tags)
-    func ariaAttributes_areSorted(tag: String) async throws {
+    @Test("Aria attributes are ordered", arguments: tags)
+    func ariaAttributes_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .aria(.atomic, "bar")
             .aria(.checked, "qux")
@@ -70,8 +70,8 @@ class AttributesTest: IgniteTestSuite {
         #expect(output == "<\(tag) aria-atomic=\"bar\" aria-checked=\"qux\" aria-setsize=\"foo\"></\(tag)>")
     }
 
-    @Test("Data attributes are sorted", arguments: tags)
-    func dataAttributes_areSorted(tag: String) async throws {
+    @Test("Data attributes are ordered", arguments: tags)
+    func dataAttributes_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .data("foo", "bar")
             .data("baz", "qux")
@@ -79,11 +79,11 @@ class AttributesTest: IgniteTestSuite {
             .data("bar", "baz")
 
         let output = element.render()
-        #expect(output == "<\(tag) data-bar=\"baz\" data-baz=\"qux\" data-foo=\"bar\" data-qux=\"foo\"></\(tag)>")
+        #expect(output == "<\(tag) data-foo=\"bar\" data-baz=\"qux\" data-qux=\"foo\" data-bar=\"baz\"></\(tag)>")
     }
 
-    @Test("Boolean attributes are sorted", arguments: tags)
-    func booleanAttributes_areSorted(tag: String) async throws {
+    @Test("Boolean attributes are ordered", arguments: tags)
+    func booleanAttributes_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .customAttribute(.disabled)
             .customAttribute(.required)

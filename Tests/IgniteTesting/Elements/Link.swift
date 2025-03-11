@@ -78,8 +78,8 @@ import Testing
 
         #expect(output == """
         <a href="\(expectedPath)" \
-        class="link-underline link-underline-opacity-100 \
-        link-underline-opacity-100-hover link-warning\">\
+        class="link-warning link-underline link-underline-opacity-100 \
+        link-underline-opacity-100-hover\">\
         Link with warning role.\
         </a>
         """)

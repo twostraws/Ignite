@@ -95,7 +95,7 @@ extension HTML {
     mutating func addEvent(name: String, actions: [Action]) {
         guard !actions.isEmpty else { return }
         let event = Event(name: name, actions: actions)
-        attributes.events.insert(event)
+        attributes.events.append(event)
     }
 
     /// Sets the tabindex behavior for this element.
@@ -109,6 +109,6 @@ extension HTML {
     /// Adjusts the number of columns assigned to this element.
     /// - Parameter width: The new number of columns to use.
     mutating func columnWidth(_ width: ColumnWidth) {
-        attributes.classes.insert(width.className)
+        attributes.classes.append(width.className)
     }
 }

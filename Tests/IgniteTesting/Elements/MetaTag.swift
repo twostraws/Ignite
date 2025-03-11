@@ -19,7 +19,7 @@ class MetaTagTests: IgniteTestSuite {
         let element = MetaTag(.twitterDomain, content: URL(string: "https://example.com?s=searching#target")!)
         let output = element.render()
 
-        #expect(output == "<meta content=\"https://example.com?s=searching#target\" name=\"twitter:domain\" />")
+        #expect(output == "<meta name=\"twitter:domain\" content=\"https://example.com?s=searching#target\" />")
     }
 
     @Test("Meta tag with name and content both strings")
@@ -27,7 +27,7 @@ class MetaTagTests: IgniteTestSuite {
         let element = MetaTag(name: "tagname", content: "my content")
         let output = element.render()
 
-        #expect(output == "<meta content=\"my content\" name=\"tagname\" />")
+        #expect(output == "<meta name=\"tagname\" content=\"my content\" />")
     }
 
     @Test("Meta tag with property and content both strings")
@@ -35,7 +35,7 @@ class MetaTagTests: IgniteTestSuite {
         let element = MetaTag(property: "unique", content: "my value")
         let output = element.render()
 
-        #expect(output == "<meta content=\"my value\" property=\"unique\" />")
+        #expect(output == "<meta property=\"unique\" content=\"my value\" />")
     }
 
     @Test("Meta tag with character set only")
