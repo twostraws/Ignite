@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// An image on your page. Can be vector (SVG) or raster (JPG, PNG, GIF).
 public struct Image: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
@@ -93,15 +95,33 @@ public struct Image: InlineElement, LazyLoadable {
     /// - Parameters:
     ///   - path: The user image to render.
     ///   - description: The accessibility label to use.
-    ///   - context: The active publishing context.
     /// - Returns: The HTML for this element.
     private func render(path: String, description: String) -> String {
         var attributes = attributes
         attributes.add(customAttributes:
             .init(name: "src", value: path),
-            .init(name: "alt", value: description)
-        )
-        return "<img\(attributes) />"
+            .init(name: "alt", value: description))
+
+        let (lightVariants, darkVariants) = findVariants(for: path)
+
+        if let sourceSet = generateSourceSet(lightVariants) {
+            attributes.add(customAttributes: sourceSet)
+        }
+
+        if darkVariants.isEmpty {
+            return "<img\(attributes) />"
+        }
+
+        var output = "<picture>"
+
+        if let darkSourceSet = generateSourceSet(darkVariants), let value = darkSourceSet.value {
+            output += "<source media=\"(prefers-color-scheme: dark)\" srcset=\"\(value)\">"
+        }
+
+        // Add the fallback img tag
+        output += "<img\(attributes) />"
+        output += "</picture>"
+        return output
     }
 
     /// Renders this element using publishing context passed in.
@@ -126,5 +146,71 @@ public struct Image: InlineElement, LazyLoadable {
             """)
             return ""
         }
+    }
+}
+
+private extension Image {
+    /// Checks if a filename contains a pixel density descriptor (e.g., "@2x").
+    func isDensityVariant(_ name: String) -> Bool {
+        let densityPattern = /.*@\d+x.*/
+        return name.contains(densityPattern)
+    }
+
+    /// Extracts the pixel density descriptor from a filename (e.g., "2x" from "image@2x.jpg").
+    func getDensityDescriptor(_ name: String) -> String? {
+        let densityPattern = /@(\d+)x/
+        guard let match = name.firstMatch(of: densityPattern) else { return nil }
+        return "\(match.output.1)x"
+    }
+
+    /// Locates image variants with appearance modifiers (`~dark`) and scale modifiers (`@2x`),
+    /// supporting combined modifiers like `@2x~dark`.
+    /// - Parameter path: The path to the original image file
+    /// - Returns: A tuple containing arrays of URLs for light and dark variants
+    func findVariants(for path: String) -> (light: [URL], dark: [URL]) {
+        let url = URL(fileURLWithPath: path)
+        let assetPath = publishingContext.assetsDirectory.appendingPathComponent(url.deletingLastPathComponent().path)
+        let pathExtension = url.pathExtension
+
+        let baseImageName = url.deletingPathExtension().lastPathComponent
+            .split(separator: "@").first?
+            .split(separator: "~").first
+
+        guard let files = try? FileManager.default.contentsOfDirectory(at: assetPath, includingPropertiesForKeys: nil)
+            .filter({ $0.pathExtension == pathExtension })
+        else {
+            publishingContext.addWarning("Could not read the assets directory. Please file a bug report.")
+            return ([], [])
+        }
+
+        return files.reduce(into: ([URL](), [URL]())) { result, file in
+            let filename = file.deletingPathExtension().lastPathComponent
+            let baseFilename = filename.split(separator: "@").first?.split(separator: "~").first
+            guard baseFilename == baseImageName else { return }
+
+            if filename.hasSuffix("~dark") {
+                result.1.append(file)
+            } else if filename.hasSuffix("~light") || isDensityVariant(filename) {
+                result.0.append(file)
+            }
+        }
+    }
+
+    /// Creates a `srcset` string from image variants with their corresponding pixel density descriptors,
+    /// e.g., `"/images/hero@2x.jpg 2x"`
+    /// - Parameter variants: An array of image variant URLs
+    /// - Returns: An HTML attribute containing the srcset value, or nil if no valid variants exist
+    func generateSourceSet(_ variants: [URL]) -> Attribute? {
+        let assetsDirectory = publishingContext.assetsDirectory
+
+        let sources = variants.compactMap { variant in
+            let filename = variant.deletingPathExtension().lastPathComponent
+            guard let densityDescriptor = getDensityDescriptor(filename) else { return nil }
+            let relativePath = variant.path.replacingOccurrences(of: assetsDirectory.path, with: "")
+            let webPath = relativePath.split(separator: "/").joined(separator: "/")
+            return "/\(webPath) \(densityDescriptor)"
+        }.joined(separator: ", ")
+
+        return sources.isEmpty ? nil : .init(name: "srcset", value: sources)
     }
 }
