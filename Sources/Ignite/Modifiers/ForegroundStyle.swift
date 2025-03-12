@@ -58,6 +58,36 @@ public extension HTML {
     }
 }
 
+public extension InlineElement {
+    /// Applies a foreground color to the current element.
+    /// - Parameter color: The style to apply, specified as a `Color` object.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ color: Color) -> some InlineElement {
+        AnyHTML(foregroundStyleModifier(.color(color)))
+    }
+
+    /// Applies a foreground color to the current element.
+    /// - Parameter color: The style to apply, specified as a string.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ color: String) -> some InlineElement {
+        AnyHTML(foregroundStyleModifier(.string(color)))
+    }
+
+    /// Applies a foreground color to the current element.
+    /// - Parameter style: The style to apply, specified as a `Color` object.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ style: ForegroundStyle) -> some InlineElement {
+        AnyHTML(foregroundStyleModifier(.style(style)))
+    }
+
+    /// Applies a foreground color to the current element.
+    /// - Parameter gradient: The style to apply, specified as a `Gradient` object.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ gradient: Gradient) -> some InlineElement {
+        AnyHTML(foregroundStyleModifier(.gradient(gradient)))
+    }
+}
+
 public extension HTML where Self == Image {
     /// Applies a foreground color to the current element.
     /// - Parameter color: The style to apply, specified as a `Color` object.

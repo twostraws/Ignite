@@ -51,6 +51,19 @@ public struct Dropdown: HTML, NavigationItem {
         self.items = items()
     }
 
+    /// Creates a new dropdown button using a title and an element that builder
+    /// that returns an array of types conforming to `DropdownItem`.
+    /// - Parameters:
+    ///   - items: The elements to place inside the dropdown menu.
+    ///   - title: The title to show on this dropdown button.
+    public init(
+        @ElementBuilder<any DropdownItem> items: () -> [any DropdownItem],
+        @InlineElementBuilder title: () -> any InlineElement
+    ) {
+        self.items = items()
+        self.title = title()
+    }
+
     /// Adjusts the size of this dropdown.
     /// - Parameter size: The new size.
     /// - Returns: A new `Dropdown` instance with the updated size.
@@ -101,15 +114,18 @@ public struct Dropdown: HTML, NavigationItem {
     private func renderDropdownContent() -> some HTML {
         Group {
             if isNavigationItem {
+                let titleAttributes = title.attributes
+                let title = title.clearingAttributes()
                 let hasActiveItem = items.contains {
                     publishingContext.currentRenderingPath == ($0 as? Link)?.url
                 }
 
-                Link(title, target: "#")
+                Link(title.style(.display, "inline"), target: "#")
                     .customAttribute(name: "role", value: "button")
                     .class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
                     .data("bs-toggle", "dropdown")
                     .aria(.expanded, "false")
+                    .attributes(titleAttributes)
             } else {
                 Button(title)
                     .class(Button.classes(forRole: role, size: size))
@@ -136,5 +152,14 @@ public struct Dropdown: HTML, NavigationItem {
             .listMarkerStyle(.unordered(.automatic))
             .class("dropdown-menu")
         }
+    }
+}
+
+private extension InlineElement {
+    /// Returns a copy of the element with all attributes removed.
+    func clearingAttributes() -> some InlineElement {
+        var copy = self
+        copy.attributes = CoreAttributes()
+        return copy
     }
 }
