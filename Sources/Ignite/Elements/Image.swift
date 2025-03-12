@@ -173,8 +173,8 @@ private extension Image {
         let pathExtension = url.pathExtension
 
         let baseImageName = url.deletingPathExtension().lastPathComponent
-            .split(separator: "@").first?
-            .split(separator: "~").first
+            .split(separator: "~").first?
+            .split(separator: "@").first
 
         guard let files = try? FileManager.default.contentsOfDirectory(at: assetPath, includingPropertiesForKeys: nil)
             .filter({ $0.pathExtension == pathExtension })
@@ -185,12 +185,12 @@ private extension Image {
 
         return files.reduce(into: ([URL](), [URL]())) { result, file in
             let filename = file.deletingPathExtension().lastPathComponent
-            let baseFilename = filename.split(separator: "@").first?.split(separator: "~").first
+            let baseFilename = filename.split(separator: "~").first?.split(separator: "@").first
             guard baseFilename == baseImageName else { return }
 
-            if filename.hasSuffix("~dark") {
+            if filename.contains("~dark") {
                 result.1.append(file)
-            } else if filename.hasSuffix("~light") || isDensityVariant(filename) {
+            } else if filename.contains("~light") || isDensityVariant(filename) {
                 result.0.append(file)
             }
         }
