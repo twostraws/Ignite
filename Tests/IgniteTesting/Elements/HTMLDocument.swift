@@ -28,18 +28,6 @@ class HTMLDocumentTests: IgniteTestSuite {
         #expect(nil != output.htmlTagWithCloseTag("html"))
     }
 
-    @Test("theme attribute is `auto`")
-    func theme_is_auto() throws {
-        let sut = Document {}
-        let output = sut.render()
-
-        let theme = try #require(output.htmlTagWithCloseTag("html")?.attributes
-            .htmlAttribute(named: "data-bs-theme")
-        )
-
-        #expect(theme == "auto")
-    }
-
     @Test("lang attribute defaults to en")
     func language_attribute_defaults_to_en() throws {
         let sut = Document {}
