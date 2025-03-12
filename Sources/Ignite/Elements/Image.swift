@@ -205,10 +205,10 @@ private extension Image {
 
         let sources = variants.compactMap { variant in
             let filename = variant.deletingPathExtension().lastPathComponent
-            guard let densityDescriptor = getDensityDescriptor(filename) else { return nil }
+            let densityDescriptor = getDensityDescriptor(filename).map { " \($0)" } ?? ""
             let relativePath = variant.path.replacingOccurrences(of: assetsDirectory.path, with: "")
             let webPath = relativePath.split(separator: "/").joined(separator: "/")
-            return "/\(webPath) \(densityDescriptor)"
+            return "/\(webPath)\(densityDescriptor)"
         }.joined(separator: ", ")
 
         return sources.isEmpty ? nil : .init(name: "srcset", value: sources)
