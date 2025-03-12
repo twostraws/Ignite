@@ -58,6 +58,16 @@ public struct List: HTML {
         self.items = HTMLCollection(items)
     }
 
+    /// Creates a new list from a collection of items, along with a function that converts
+    /// a single object from the collection into a list item.
+    /// - Parameters:
+    ///   - items: A sequence of items you want to convert into list items.
+    ///   - content: A function that accepts a single value from the sequence, and
+    ///     returns an item representing that value in the list.
+    public init<T>(_ items: any Sequence<T>, content: (T) -> some HTML) {
+        self.items = HTMLCollection(items.map(content))
+    }
+
     /// Adjusts the style of this list.
     /// - Parameter style: The new style.
     /// - Returns: A new `List` instance with the updated style.
