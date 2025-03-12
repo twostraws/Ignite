@@ -8,12 +8,22 @@
 /// A collection of slides the user can swipe through.
 public struct Carousel: HTML {
     /// Whether moving between slides should cause movement or a crossfade.
-    public enum CarouselStyle {
+    public enum CarouselStyle: Equatable {
         /// Slides should move.
-        case move
+        case move(_ duration: Double, curve: TimingCurve = .easeInOut)
 
         /// Slides should crossfade.
-        case crossfade
+        case crossfade(_ duration: Double, curve: TimingCurve = .easeInOut)
+
+        /// The default slide movement transition with 1-second duration and ease-in-out curve.
+        public static var move: CarouselStyle {
+            .move(1, curve: .easeInOut)
+        }
+
+        /// The default crossfade transition with 1-second duration and ease-in-out curve.
+        public static var crossfade: CarouselStyle {
+            .crossfade(1, curve: .easeInOut)
+        }
     }
 
     /// The content and behavior of this HTML.
@@ -33,7 +43,16 @@ public struct Carousel: HTML {
     var items: [Slide]
 
     /// The animation style used to move between slides.
-    var style = CarouselStyle.move
+    var style: CarouselStyle = .move
+
+    /// The amount of time, in seconds, a slide is shown before the next appears.
+    var duration: Double?
+
+    /// A computed property that determines if the carousel uses crossfade transitions.
+    private var doesCrossfade: Bool {
+        if case .crossfade = style { true }
+        else { false }
+    }
 
     /// Creates a new carousel from an element builder that generates slides.
     /// - Parameter items: An element builder that returns an array of
@@ -61,12 +80,39 @@ public struct Carousel: HTML {
         return copy
     }
 
+    /// Sets the display duration for each slide in the carousel.
+    /// - Parameter duration: The amount of time, in seconds, each slide will be displayed before advancing.
+    /// - Returns: A modified carousel with the updated slide duration.
+    public func slideDuration(_ duration: Double) -> Carousel {
+        var copy = self
+        copy.duration = duration
+        return copy
+    }
+
+    /// Creates a transition style definition based on the specified carousel style.
+    /// - Parameter style: The carousel style that determines the transition properties.
+    /// - Returns: An inline style for the transition, or `nil` for default styles.
+    private func slideTransition(for style: CarouselStyle) -> InlineStyle? {
+        switch style {
+        case .move(let duration, let curve):
+            if style == .move { return nil }
+            let transformTransition = "transform \(duration)s \(curve.css)"
+            return .init(.transition, value: transformTransition)
+
+        case .crossfade(let duration, let curve):
+            if style == .crossfade { return nil }
+            let transformTransition = "transform \(duration)s \(curve.css)"
+            let opacityTransition = "opacity \(duration)s \(curve.css)"
+            return .init(.transition, value: "\(transformTransition), \(opacityTransition)")
+        }
+    }
+
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
         Section {
             Section {
-                ForEach(0..<items.count) { index in
+                ForEach(0 ..< items.count) { index in
                     Button()
                         .data("bs-target", "#\(carouselID)")
                         .data("bs-slide-to", String(index))
@@ -80,6 +126,7 @@ public struct Carousel: HTML {
             Section {
                 ForEach(items.enumerated()) { index, item in
                     item.assigned(at: index)
+                        .style(slideTransition(for: style))
                 }
             }
             .class("carousel-inner")
@@ -110,8 +157,9 @@ public struct Carousel: HTML {
         }
         .attributes(attributes)
         .id(carouselID)
-        .class("carousel", "slide", style == .crossfade ? "carousel-fade" : nil)
+        .class("carousel", "slide", doesCrossfade ? "carousel-fade" : nil)
         .data("bs-ride", "carousel")
+        .data("bs-interval", duration != nil ? Int(duration! * 1000).formatted() : "")
         .render()
     }
 }

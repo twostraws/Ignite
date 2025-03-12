@@ -8,6 +8,7 @@
 private extension HTML {
     func dataModifier(name: String, value: String) -> any HTML {
         // Custom elements need to be wrapped in a primitive container to store attributes
+        guard value.isEmpty == false else { return self }
         var copy: any HTML = self.isPrimitive ? self : Section(self)
         copy.attributes.data.append(.init(name: name, value: value))
         return copy
