@@ -68,7 +68,7 @@ public struct Table: HTML {
         self.header = HTMLCollection(header)
     }
 
-    /// Creates a new `Table` instance from an collection of items, along with a function
+    /// Creates a new `Table` instance from a collection of items, along with a function
     /// that converts a single object from the collection into one row in the table.
     /// - Parameters:
     ///   - items: A sequence of items you want to convert into rows.
@@ -78,7 +78,7 @@ public struct Table: HTML {
         self.rows = HTMLCollection(items.map(content))
     }
 
-    /// Creates a new `Table` instance from an collection of items, along with a function
+    /// Creates a new `Table` instance from a collection of items, along with a function
     /// that converts a single object from the collection into one row in the table.
     /// - Parameters:
     ///   - items: A sequence of items you want to convert into rows.

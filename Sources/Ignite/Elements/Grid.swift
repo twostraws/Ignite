@@ -54,7 +54,7 @@ public struct Grid: HTML, HorizontalAligning {
         self.spacingAmount = .semantic(spacing)
     }
 
-    /// Creates a new grid from an collection of items, along with a function that converts
+    /// Creates a new grid from a collection of items, along with a function that converts
     /// a single object from the collection into one grid column.
     /// - Parameters:
     ///   - spacing: The number of pixels between each element. Default is nil.
@@ -69,7 +69,7 @@ public struct Grid: HTML, HorizontalAligning {
         }
     }
 
-    /// Creates a new grid from an collection of items, along with a function that converts
+    /// Creates a new grid from a collection of items, along with a function that converts
     /// a single object from the collection into one grid column.
     /// - Parameters:
     ///   - spacing: The predefined size between each element.

@@ -42,7 +42,7 @@ public struct Carousel: HTML {
         self.items = items()
     }
 
-    /// Creates a new carousel from an collection of items, along with a function that converts
+    /// Creates a new carousel from a collection of items, along with a function that converts
     /// a single object from the collection into a `Slide`.
     /// - Parameters:
     ///   - items: A sequence of items you want to convert into slides.

@@ -41,7 +41,7 @@ public struct Accordion: HTML {
         self.items = items()
     }
 
-    /// Creates a new `Accordion` instance from an collection of items, along with a function
+    /// Creates a new `Accordion` instance from a collection of items, along with a function
     /// that converts a single object from the collection into one item in the accordion.
     /// - Parameters:
     ///   - items: A sequence of items you want to convert into items.
