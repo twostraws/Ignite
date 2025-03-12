@@ -227,7 +227,7 @@ public extension Link {
     /// - Parameters:
     ///   - content: The user-facing content to show inside the `Link`.
     ///   - target: The URL you want to link to.
-    init(_ content: some HTML, target: String) {
+    init(_ content: any InlineElement, target: String) {
         self.content = content
         self.url = target
     }
