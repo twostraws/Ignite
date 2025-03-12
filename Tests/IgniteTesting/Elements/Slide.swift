@@ -13,22 +13,18 @@ import Testing
 /// Tests for the `Slide` element.
 @Suite("Slide Tests")
 @MainActor
-struct SlideTests {
-    init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
-    }
-
+class SlideTests: IgniteTestSuite {
     @Test("Slide with Background Image")
     func slideWithBackgroundImage() async throws {
         let slide = Slide(background: "/images/dog.jpg")
         let output = slide.assigned(at: 0)
 
         #expect(output.contains("""
-        <div class=\"active carousel-item\" style=\"background-color: black\">\
-        <img alt=\"\" src=\"/images/dog.jpg\" class=\"d-block w-100\" \
-        style=\"height: 100%; object-fit: cover; opacity: 1\" />\
-        <div class=\"container\">\
-        <div class=\"carousel-caption\">\
+        <div class="carousel-item active" style="background-color: black">\
+        <img src="/images/dog.jpg" alt="" class="d-block w-100" \
+        style="height: 100%; object-fit: cover; opacity: 1" />\
+        <div class="container">\
+        <div class="carousel-caption">\
         </div>\
         </div>\
         </div>
@@ -61,11 +57,11 @@ struct SlideTests {
         let output = slide.assigned(at: 0)
 
         #expect(output.contains("""
-        <div class=\"active carousel-item\" style=\"background-color: black\">\
-        <img alt=\"\" src=\"/images/dog.jpg\" class=\"d-block w-100\" \
-        style=\"height: 100%; object-fit: cover; opacity: 0.5\" />\
-        <div class=\"container\">\
-        <div class=\"carousel-caption\">\
+        <div class="carousel-item active" style="background-color: black">\
+        <img src="/images/dog.jpg" alt="" class="d-block w-100" \
+        style="height: 100%; object-fit: cover; opacity: 0.5" />\
+        <div class="container">\
+        <div class="carousel-caption">\
         </div>\
         </div>\
         </div>

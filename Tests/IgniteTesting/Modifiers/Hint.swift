@@ -24,9 +24,9 @@ class HintTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <p><span data-bs-html="true" \
+        <p><span data-bs-toggle="tooltip" \
         data-bs-title="Why, <em>hello</em> there!" \
-        data-bs-toggle="tooltip">Hover over me\
+        data-bs-html="true">Hover over me\
         </span>\
         </p>
         """)
@@ -42,9 +42,9 @@ class HintTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <p><span data-bs-html="true" \
+        <p><span data-bs-toggle="tooltip" \
         data-bs-title="www.example.com" \
-        data-bs-toggle="tooltip">Hover over me\
+        data-bs-html="true">Hover over me\
         </span>\
         </p>
         """)
@@ -60,8 +60,8 @@ class HintTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <p><span data-bs-title="Why, hello there!" \
-        data-bs-toggle="tooltip">Hover over me\
+        <p><span data-bs-toggle="tooltip" \
+        data-bs-title="Why, hello there!">Hover over me\
         </span>\
         </p>
         """)

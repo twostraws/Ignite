@@ -34,22 +34,22 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
 
     /// ARIA attributes that add accessibility information.
     /// See https://www.w3.org/TR/html-aria/
-    var aria = Set<Attribute>()
+    var aria = OrderedSet<Attribute>()
 
     /// CSS classes.
-    var classes = Set<String>()
+    var classes = OrderedSet<String>()
 
     /// Inline CSS styles.
-    var styles = Set<InlineStyle>()
+    var styles = OrderedSet<InlineStyle>()
 
     /// Data attributes.
-    var data = Set<Attribute>()
+    var data = OrderedSet<Attribute>()
 
     /// JavaScript events, such as onclick.
-    var events = Set<Event>()
+    var events = OrderedSet<Event>()
 
     /// Custom attributes not covered by the above, e.g. loading="lazy"
-    var customAttributes = Set<Attribute>()
+    var customAttributes = OrderedSet<Attribute>()
 
     /// Whether this set of attributes is empty.
     var isEmpty: Bool { self == CoreAttributes() }
@@ -76,7 +76,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
             var output = ""
 
             // Arium? Look, just give me this one…
-            for arium in aria.sorted() {
+            for arium in aria {
                 output += " " + arium.description
             }
 
@@ -89,7 +89,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         if classes.isEmpty {
             ""
         } else {
-            " class=\"\(classes.sorted().joined(separator: " "))\""
+            " class=\"\(classes.joined(separator: " "))\""
         }
     }
 
@@ -98,7 +98,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         if styles.isEmpty {
             return ""
         } else {
-            let stringified = styles.sorted().map(\.description).joined(separator: "; ")
+            let stringified = styles.map(\.description).joined(separator: "; ")
             return " style=\"\(stringified)\""
         }
     }
@@ -110,7 +110,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         } else {
             var output = ""
 
-            for datum in data.sorted() {
+            for datum in data {
                 output += " data-\(datum)"
             }
 
@@ -122,7 +122,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     var eventString: String {
         var result = ""
 
-        for event in events.sorted() where event.actions.isEmpty == false {
+        for event in events where event.actions.isEmpty == false {
             let actions = event.actions.map { $0.compile() }.joined(separator: "; ")
 
             result += " \(event.name)=\"\(actions)\""
@@ -138,7 +138,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         } else {
             var output = ""
 
-            for attribute in customAttributes.sorted() {
+            for attribute in customAttributes {
                 output += " " + attribute.description
             }
 
@@ -176,7 +176,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         guard let aria else { return self }
 
         var copy = self
-        copy.aria.insert(aria)
+        copy.aria.append(aria)
         return copy
     }
 
@@ -190,7 +190,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     ///  - Parameter style: The style name, e.g. background-color
     ///  - Parameter value: The style value, e.g. steelblue
     mutating func add(style: Property, value: String) {
-        styles.insert(InlineStyle(style, value: value))
+        styles.append(InlineStyle(style, value: value))
     }
 
     /// Adds a data attribute.
@@ -234,7 +234,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         for property in properties {
             styles.removeAll(where: { $0.property == property.rawValue })
         }
-        self.styles = Set(styles)
+        self.styles = OrderedSet(styles)
     }
 
     /// Retrieves the inline styles for specified CSS properties.

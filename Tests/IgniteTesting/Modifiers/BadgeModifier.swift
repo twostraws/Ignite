@@ -21,7 +21,7 @@ class BadgeModifierTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <li class=\"align-items-center d-flex justify-content-between\">\
+        <li class=\"d-flex justify-content-between align-items-center\">\
         <p>Notifications</p>\
         <span class=\"badge rounded-pill\">3</span>\
         </li>
@@ -37,7 +37,7 @@ class BadgeModifierTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <li class=\"align-items-center d-flex justify-content-between\">\
+        <li class=\"d-flex justify-content-between align-items-center\">\
         <p>Messages</p>\
         </li>
         """)

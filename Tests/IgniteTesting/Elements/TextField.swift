@@ -20,7 +20,7 @@ class TextFieldTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <input placeholder="Enter your name here" type="text" class="form-control" />
+        <input type="text" placeholder="Enter your name here" class="form-control" />
         """)
     }
 
@@ -30,7 +30,7 @@ class TextFieldTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <input placeholder="Enter your name here" type="\(textType.rawValue)" class="form-control" />
+        <input type="\(textType.rawValue)" placeholder="Enter your name here" class="form-control" />
         """)
     }
 
@@ -40,7 +40,7 @@ class TextFieldTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <input placeholder="Enter your name here" required type="text" class="form-control" />
+        <input type="text" placeholder="Enter your name here" required class="form-control" />
         """)
     }
 
@@ -50,7 +50,7 @@ class TextFieldTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <input disabled placeholder="Enter your name here" type="text" class="form-control" />
+        <input type="text" placeholder="Enter your name here" disabled class="form-control" />
         """)
     }
 
@@ -60,7 +60,7 @@ class TextFieldTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <input placeholder="Enter your name here" readonly type="text" class="form-control" />
+        <input type="text" placeholder="Enter your name here" readonly class="form-control" />
         """)
     }
 
@@ -72,6 +72,6 @@ class TextFieldTests: IgniteTestSuite {
             .required()
         let output = textField.render()
 
-        #expect(output == #"<input disabled readonly required type="text" class="form-control" />"#)
+        #expect(output == #"<input type="text" required disabled readonly class="form-control" />"#)
     }
 }

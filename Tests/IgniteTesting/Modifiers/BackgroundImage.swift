@@ -24,10 +24,10 @@ struct BackgroundImageTests {
 
         #expect(element.render() == """
         <p \
-        style=\"background-image: url('assets/image.png'); \
-        background-position: center center; \
+        style="background-image: url('assets/image.png'); \
+        background-size: \(contentMode.css); \
         background-repeat: no-repeat; \
-        background-size: \(contentMode.css)\">Hello World!\
+        background-position: center center">Hello World!\
         </p>
         """)
     }
@@ -45,9 +45,9 @@ struct BackgroundImageTests {
         #expect(element.render() == """
         <p \
         style=\"background-image: url('assets/image.png'); \
-        background-position: \(position.css); \
+        background-size: cover; \
         background-repeat: no-repeat; \
-        background-size: cover\">Hello World!\
+        background-position: \(position.css)">Hello World!\
         </p>
         """)
     }

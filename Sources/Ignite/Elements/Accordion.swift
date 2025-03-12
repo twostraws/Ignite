@@ -41,6 +41,16 @@ public struct Accordion: HTML {
         self.items = items()
     }
 
+    /// Creates a new `Accordion` instance from an collection of items, along with a function
+    /// that converts a single object from the collection into one item in the accordion.
+    /// - Parameters:
+    ///   - items: A sequence of items you want to convert into items.
+    ///   - content: A function that accepts a single value from the sequence, and
+    ///     returns a row representing that value in the accordion.
+    public init<T>(_ items: any Sequence<T>, content: (T) -> Item) {
+        self.items = items.map(content)
+    }
+
     /// Adjusts the open mode for this Accordion.
     /// - Parameter mode: The new open mode.
     /// - Returns: A copy of this Accordion with the new open mode set.

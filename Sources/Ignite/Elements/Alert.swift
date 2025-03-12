@@ -23,7 +23,7 @@ public struct Alert: HTML {
 
     var alertClasses: [String] {
         var outputClasses = ["alert"]
-        outputClasses.append(contentsOf: attributes.classes.sorted())
+        outputClasses.append(contentsOf: attributes.classes)
 
         switch role {
         case .default:

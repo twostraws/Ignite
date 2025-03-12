@@ -5,15 +5,15 @@
 // See LICENSE for license information.
 //
 
-/// A protocol for customizing the layout of ContentPreview.
-public protocol ContentPreviewStyle {
+/// A protocol for customizing the layout of `ArticlePreview`.
+public protocol ArticlePreviewStyle {
     func body(content: Article) -> any HTML
 }
 
-/// A wrapper around Card, specifically aimed at presenting details about
-/// some content on your site. This automatically links to your content page
+/// A wrapper around `Card`, specifically aimed at presenting details about
+/// an article on your site. This automatically links to your article page
 /// and adds in tags.
-public struct ContentPreview: HTML {
+public struct ArticlePreview: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -23,31 +23,31 @@ public struct ContentPreview: HTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    var content: Article
+    var article: Article
 
-    /// Custom style for the content preview.
-    private var style: ContentPreviewStyle?
+    /// Custom style for the article preview.
+    private var style: ArticlePreviewStyle?
 
-    /// Initializes the content preview
+    /// Initializes the article preview
     /// - Parameters:
-    ///   - content: The content to display.
-    public init(for content: Article) {
-        self.content = content
+    ///   - article: The article to display.
+    public init(for article: Article) {
+        self.article = article
     }
 
-    public func contentPreviewStyle<S: ContentPreviewStyle>(_ style: S) -> ContentPreview {
+    public func articlePreviewStyle<S: ArticlePreviewStyle>(_ style: S) -> ArticlePreview {
         var copy = self
         copy.style = style
         return copy
     }
 
-    /// Renders the content preview with either a custom layout or the default card.
+    /// Renders the article preview with either a custom layout or the default card.
     /// - Returns: A rendered string of HTML.
     public func render() -> String {
         // If custom style is provided, use it; otherwise,
         // fallback to default layout.
         if let style {
-            style.body(content: content)
+            style.body(content: article)
                 .attributes(attributes)
                 .render()
         } else {
@@ -57,19 +57,19 @@ public struct ContentPreview: HTML {
         }
     }
 
-    /// Default card layout for rendering the content preview.
-    /// - Returns: A BlockElement representing the card layout.
+    /// Default card layout for rendering the article preview.
+    /// - Returns: The article preview with the default card layout.
     private func defaultCardLayout() -> some HTML {
-        Card(imageName: content.image) {
-            Text(content.description)
+        Card(imageName: article.image) {
+            Text(article.description)
                 .margin(.bottom, .none)
         } header: {
             Text {
-                Link(content)
+                Link(article)
             }
             .font(.title2)
         } footer: {
-            let tagLinks = content.tagLinks()
+            let tagLinks = article.tagLinks()
 
             if let tagLinks {
                 Section {

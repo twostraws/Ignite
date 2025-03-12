@@ -71,7 +71,7 @@ struct MarginTests {
         let element = Text("Hello, world!").margin(.top, 25).margin(.leading, 10)
         let output = element.render()
 
-        #expect(output == "<p style=\"margin-left: 10px; margin-top: 25px\">Hello, world!</p>")
+        #expect(output == "<p style=\"margin-top: 25px; margin-left: 10px\">Hello, world!</p>")
     }
 
     @Test("Margin on selected side with specified unit")

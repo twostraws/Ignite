@@ -150,7 +150,7 @@ import Testing
             .components(separatedBy: " ")
         )
 
-        let expected = "col container-fluid".components(separatedBy: " ")
+        let expected = "container-fluid col".components(separatedBy: " ")
         #expect(divClasses == expected)
     }
 
@@ -181,15 +181,14 @@ import Testing
             .htmlTagWithCloseTag("div")?.contents
         )
 
-        let expected = """
+        #expect(divContents.contains("""
         <button type="button" \
-        class="btn navbar-toggler" \
-        data-bs-target="#navbarCollapse" \
-        data-bs-toggle="collapse" aria-controls="navbarCollapse" \
+        class="navbar-toggler btn" \
+        data-bs-toggle="collapse" \
+        data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" \
         aria-expanded="false" aria-label="Toggle navigation">\
         <span class="navbar-toggler-icon"></span></button>
-        """
-        #expect(divContents.contains(expected))
+        """))
     }
 
     @Test("Div Tag contains unordered list if items is not nil")

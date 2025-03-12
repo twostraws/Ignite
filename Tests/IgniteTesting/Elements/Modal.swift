@@ -25,10 +25,10 @@ struct ModalTests {
         let output = element.render()
 
         #expect(output == """
-        <div id="showModalId" tabindex="-1" class="modal fade" aria-hidden="true" aria-labelledby="modalLabel">\
+        <div id="showModalId" tabindex="-1" class="modal fade" aria-labelledby="modalLabel" aria-hidden="true">\
         <div class="modal-dialog modal-dialog-centered">\
         <div class="modal-content"><div class="modal-body">\
-        <h3 class="m-5 text-center">Dismiss me by clicking on the backdrop.</h3>\
+        <h3 class="text-center m-5">Dismiss me by clicking on the backdrop.</h3>\
         </div></div></div></div>
         """)
     }
@@ -51,14 +51,14 @@ struct ModalTests {
         let output = element.render()
 
         #expect(output == """
-        <div id="dismissModalId" tabindex="-1" class="modal fade" aria-hidden="true" aria-labelledby="modalLabel">\
+        <div id="dismissModalId" tabindex="-1" class="modal fade" aria-labelledby="modalLabel" aria-hidden="true">\
         <div class="modal-dialog modal-dialog-centered"><div class="modal-content">\
         <div class="modal-body"><div class="text-end">\
         <button type="button" class="btn btn-close" label="Close" onclick="\
         const modal = document.getElementById('dismissModalId');
         const modalInstance = bootstrap.Modal.getInstance(modal);
         if (modalInstance) { modalInstance.hide(); }"></button></div>\
-        <h3 class="m-5 text-center">Dismiss me by clicking on the close button.</h3></div></div></div></div>
+        <h3 class="text-center m-5">Dismiss me by clicking on the close button.</h3></div></div></div></div>
         """)
     }
 
@@ -76,7 +76,7 @@ struct ModalTests {
 
         if let htmlClass = sizeOption.htmlClass {
             #expect(output.contains("""
-            <div class="modal-dialog modal-dialog-centered \(htmlClass)">
+            <div class="modal-dialog \(htmlClass) modal-dialog-centered">
             """))
         } else {
             #expect(output.contains("""
@@ -122,14 +122,13 @@ struct ModalTests {
         let output = element.render()
 
         #expect(output == """
-        <div id="headerModalId" tabindex="-1" class="modal fade" aria-hidden="true" aria-labelledby="modalLabel">\
+        <div id="headerModalId" tabindex="-1" class="modal fade" aria-labelledby="modalLabel" aria-hidden="true">\
         <div class="modal-dialog modal-dialog-centered"><div class="modal-content">\
         <div class="modal-header"><h5>Header</h5>\
         <button type="button" class="btn btn-close" label="Close" onclick="\
         const modal = document.getElementById('headerModalId');
         const modalInstance = bootstrap.Modal.getInstance(modal);
-        if (modalInstance) { modalInstance.hide(); }">\
-        </button></div><div class="modal-body"><p>Body</p></div></div></div></div>
+        if (modalInstance) { modalInstance.hide(); }"></button></div><div class="modal-body"><p>Body</p></div></div></div></div>
         """)
     }
 
@@ -151,7 +150,7 @@ struct ModalTests {
         let output = element.render()
 
         #expect(output == """
-        <div id="footerModalId" tabindex="-1" class="modal fade" aria-hidden="true" aria-labelledby="modalLabel">\
+        <div id="footerModalId" tabindex="-1" class="modal fade" aria-labelledby="modalLabel" aria-hidden="true">\
         <div class="modal-dialog modal-dialog-centered"><div class="modal-content">\
         <div class="modal-body"><p>Body</p></div><div class="modal-footer">\
         <button type="button" class="btn btn-secondary" onclick="\
@@ -186,8 +185,7 @@ struct ModalTests {
         let output = element.render()
 
         #expect(output == """
-        <div id="headerAndFooterModalId" tabindex="-1" class="\
-        modal fade" aria-hidden="true" aria-labelledby="modalLabel">\
+        <div id="headerAndFooterModalId" tabindex="-1" class="modal fade" aria-labelledby="modalLabel" aria-hidden="true">\
         <div class="modal-dialog modal-dialog-centered">\
         <div class="modal-content"><div class="modal-header"><h5>Header</h5>\
         <button type="button" class="btn btn-close" label="Close" onclick="\
@@ -216,7 +214,7 @@ struct ModalTests {
 
         let output = element.render()
         #expect(output.contains("""
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         """))
     }
 

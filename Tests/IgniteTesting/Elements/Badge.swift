@@ -30,23 +30,23 @@ class BadgeTests: IgniteTestSuite {
         }
 
         let output = element.render()
-        #expect(output == "<p><span class=\"badge rounded-pill \(cssClass)\">Some text</span></p>")
+        #expect(output == "<p><span class=\"badge \(cssClass) rounded-pill\">Some text</span></p>")
     }
 
     @Test("All roles for subtle badge variant rendered correctly", arguments: zip(await Role.badgeRoles, [
-        "bg-primary-subtle rounded-pill text-primary-emphasis",
-        "bg-secondary-subtle rounded-pill text-secondary-emphasis",
-        "bg-success-subtle rounded-pill text-success-emphasis",
-        "bg-danger-subtle rounded-pill text-danger-emphasis",
-        "bg-warning-subtle rounded-pill text-warning-emphasis",
-        "bg-info-subtle rounded-pill text-info-emphasis",
-        "bg-light-subtle rounded-pill text-light-emphasis",
-        "bg-dark-subtle rounded-pill text-dark-emphasis"]))
+        "bg-primary-subtle text-primary-emphasis rounded-pill",
+        "bg-secondary-subtle text-secondary-emphasis rounded-pill",
+        "bg-success-subtle text-success-emphasis rounded-pill",
+        "bg-danger-subtle text-danger-emphasis rounded-pill",
+        "bg-warning-subtle text-warning-emphasis rounded-pill",
+        "bg-info-subtle text-info-emphasis rounded-pill",
+        "bg-light-subtle text-light-emphasis rounded-pill",
+        "bg-dark-subtle text-dark-emphasis rounded-pill"]))
     func allRolesForSubtleBadgeVariant(role: Role, cssClasses: String) async throws {
         let element = Text {
             Badge("Some text")
-                .badgeStyle(.subtle)
                 .role(role)
+                .badgeStyle(.subtle)
         }
 
         let output = element.render()
@@ -54,14 +54,14 @@ class BadgeTests: IgniteTestSuite {
     }
 
     @Test("All roles for subtleBordered badge variant rendered correctly", arguments: zip(await Role.badgeRoles, [
-        "bg-primary-subtle border border-primary-subtle rounded-pill text-primary-emphasis",
-        "bg-secondary-subtle border border-secondary-subtle rounded-pill text-secondary-emphasis",
-        "bg-success-subtle border border-success-subtle rounded-pill text-success-emphasis",
-        "bg-danger-subtle border border-danger-subtle rounded-pill text-danger-emphasis",
-        "bg-warning-subtle border border-warning-subtle rounded-pill text-warning-emphasis",
-        "bg-info-subtle border border-info-subtle rounded-pill text-info-emphasis",
-        "bg-light-subtle border border-light-subtle rounded-pill text-light-emphasis",
-        "bg-dark-subtle border border-dark-subtle rounded-pill text-dark-emphasis"]))
+        "bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill",
+        "bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill",
+        "bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill",
+        "bg-danger-subtle border border-danger-subtle text-danger-emphasis rounded-pill",
+        "bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill",
+        "bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill",
+        "bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill",
+        "bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill"]))
     func allRolesForSubtleBorderedBadgeVariant(role: Role, cssClasses: String) async throws {
         let element = Text {
             Badge("Some text")
