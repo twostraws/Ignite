@@ -57,11 +57,11 @@ public struct Grid: HTML, HorizontalAligning {
     /// Creates a new grid from a collection of items, along with a function that converts
     /// a single object from the collection into one grid column.
     /// - Parameters:
-    ///   - spacing: The number of pixels between each element. Default is nil.
     ///   - items: A sequence of items you want to convert into columns.
+    ///   - spacing: The number of pixels between each element. Default is nil.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a some HTML representing that value in the grid.
-    public init<T>(spacing: Int? = nil, _ items: any Sequence<T>, content: (T) -> some HTML) {
+    public init<T>(_ items: any Sequence<T>, spacing: Int? = nil, content: (T) -> some HTML) {
         self.items = HTMLCollection(items.map(content))
 
         if let spacing {
@@ -72,11 +72,11 @@ public struct Grid: HTML, HorizontalAligning {
     /// Creates a new grid from a collection of items, along with a function that converts
     /// a single object from the collection into one grid column.
     /// - Parameters:
-    ///   - spacing: The predefined size between each element.
     ///   - items: A sequence of items you want to convert into columns.
+    ///   - spacing: The predefined size between each element.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a some HTML representing that value in the grid.
-    public init<T>(spacing: SpacingAmount, _ items: any Sequence<T>, content: (T) -> some HTML) {
+    public init<T>(_ items: any Sequence<T>, spacing: SpacingAmount, content: (T) -> some HTML) {
         self.items = HTMLCollection(items.map(content))
         self.spacingAmount = .semantic(spacing)
     }
