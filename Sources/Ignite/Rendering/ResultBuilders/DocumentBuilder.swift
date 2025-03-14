@@ -23,3 +23,9 @@ public struct DocumentBuilder {
         }
     }
 }
+
+extension DocumentBuilder {
+    static func buildBlock(_ component: Document) -> Document {
+        component
+    }
+}
