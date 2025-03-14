@@ -33,11 +33,11 @@ public extension Theme {
     }
 
     var offWhite: Color {
-        Color(hex: "#f8f9fa")
+        Color(red: 248, green: 249, blue: 250)
     }
 
     var offBlack: Color {
-        Color(hex: "#212529")
+        Color(red: 33, green: 37, blue: 41)
     }
 
     var primary: Color {
@@ -48,19 +48,19 @@ public extension Theme {
 
     var emphasis: Color {
         colorScheme == .dark ?
-        Color(hex: "#f8f9fa") :
-        Color(hex: "#212529")
+        Color(hex: "#ffffff") :
+        Color(hex: "#000000")
     }
 
     var secondary: Color {
         colorScheme == .dark ?
-        Color(red: 248, green: 249, blue: 250, opacity: 0.75) :
+        Color(red: 222, green: 226, blue: 230, opacity: 0.75) :
         Color(red: 33, green: 37, blue: 41, opacity: 0.75)
     }
 
     var tertiary: Color {
         colorScheme == .dark ?
-        Color(red: 248, green: 249, blue: 250, opacity: 0.5) :
+        Color(red: 222, green: 226, blue: 230, opacity: 0.5) :
         Color(red: 33, green: 37, blue: 41, opacity: 0.5)
     }
 
