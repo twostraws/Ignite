@@ -21,7 +21,7 @@ extension PublishingContext {
         }
         currentRenderingPath = nil
 
-        await renderTagLayouts()
+        await renderTagPages()
     }
 
     /// Generates a sitemap.xml file for this site.

@@ -1,5 +1,5 @@
 //
-// Theme.swift
+// Layout.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -12,9 +12,8 @@
 /// ```swift
 /// struct BlogLayout: Layout {
 ///     var body: some HTML {
-///         HTMLDocument {
-///             Header("My Blog")
-///             Body(for: page)
+///         Body {
+///             content
 ///             Footer()
 ///         }
 ///     }

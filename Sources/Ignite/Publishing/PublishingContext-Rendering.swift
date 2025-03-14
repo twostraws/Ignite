@@ -13,15 +13,15 @@ extension PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render(_ staticLayout: any StaticPage, isHomePage: Bool = false) {
-        let path = isHomePage ? "" : staticLayout.path
-        currentRenderingPath = isHomePage ? "/" : staticLayout.path
+    func render(_ page: any StaticPage, isHomePage: Bool = false) {
+        let path = isHomePage ? "" : page.path
+        currentRenderingPath = isHomePage ? "/" : page.path
 
         let metadata = PageMetadata(
-            title: staticLayout.title,
-            description: staticLayout.description,
+            title: page.title,
+            description: page.description,
             url: site.url.appending(path: path),
-            image: staticLayout.image
+            image: page.image
         )
 
         let values = EnvironmentValues(
@@ -29,10 +29,10 @@ extension PublishingContext {
             site: site,
             allContent: allContent,
             pageMetadata: metadata,
-            pageContent: staticLayout)
+            pageContent: page)
 
         let outputString = withEnvironment(values) {
-            staticLayout.layout.body.render()
+            page.layout.body.render()
         }
 
         let outputDirectory = buildDirectory.appending(path: path)
@@ -69,7 +69,7 @@ extension PublishingContext {
     }
 
     /// Generates all tags pages, including the "all tags" page.
-    func renderTagLayouts() async {
+    func renderTagPages() async {
         if site.tagPage is EmptyTagPage { return }
 
         /// Creates a unique list of sorted tags from across the site, starting
