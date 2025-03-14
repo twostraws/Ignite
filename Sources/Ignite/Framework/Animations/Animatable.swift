@@ -8,10 +8,7 @@
 import OrderedCollections
 
 /// A protocol that defines the core animation capabilities for Ignite's animation system.
-protocol Animatable: Hashable, Sendable {
-    /// A unique identifier generated from the animation type name
-    static var id: String { get }
-}
+protocol Animatable: Hashable, Sendable {}
 
 extension Animatable {
     var id: String {
