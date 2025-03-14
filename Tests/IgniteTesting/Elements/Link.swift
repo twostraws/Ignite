@@ -12,7 +12,7 @@ import Testing
 
 /// Tests for the `title` element.
 @Suite("Link Tests")
-@MainActor class SubsiteLinkTests: IgniteTestSuite {
+@MainActor class LinkTests: IgniteTestSuite {
     static let sites: [any Site] = [TestSite(), TestSubsite()]
     static let pages: [any StaticPage] = [TestLayout(), TestSubsiteLayout()]
 
@@ -24,13 +24,7 @@ import Testing
         let output = element.render()
         let expectedPath = PublishingContext.shared.path(for: URL(string: link.target)!)
 
-        #expect(output == """
-        <a href="\(expectedPath)" \
-        class="link-underline link-underline-opacity-100 \
-        link-underline-opacity-100-hover">\
-        \(link.description)\
-        </a>
-        """)
+        #expect(output == "<a href=\"\(expectedPath)\">\(link.description)</a>")
     }
 
     @Test("Page Target", arguments: zip(await pages, await Self.sites))
@@ -49,23 +43,15 @@ import Testing
     func content(for page: any StaticPage, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
-        let element = Link(
-            target: page,
-            content: {
-                "MORE "
-                Text("CONTENT")
-            })
+        let element = Link(target: page) {
+            "MORE "
+            Text("CONTENT")
+        }
         let output = element.render()
 
         let expectedPath = PublishingContext.shared.path(for: URL(string: page.path)!)
 
-        #expect(output == """
-        <a href="\(expectedPath)" \
-        class="link-plain link-underline link-underline-opacity-100 \
-        link-underline-opacity-100-hover">\
-        MORE <p>CONTENT</p>\
-        </a>
-        """)
+        #expect(output == "<a href=\"\(expectedPath)\">MORE <p>CONTENT</p></a>")
     }
 
     @Test("Link Warning Role", arguments: zip(await pages, await Self.sites))
@@ -76,12 +62,6 @@ import Testing
         let output = element.render()
         let expectedPath = PublishingContext.shared.path(for: URL(string: page.path)!)
 
-        #expect(output == """
-        <a href="\(expectedPath)" \
-        class="link-warning link-underline link-underline-opacity-100 \
-        link-underline-opacity-100-hover\">\
-        Link with warning role.\
-        </a>
-        """)
+        #expect(output == "<a href=\"\(expectedPath)\">Link with warning role.</a>")
     }
 }

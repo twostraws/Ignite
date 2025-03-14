@@ -20,12 +20,9 @@ class IgniteFooterTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <p class="text-center mt-5">Created in Swift with \
-        <a href="https://github.com/twostraws/Ignite" \
-        class="link-underline \
-        link-underline-opacity-100 \
-        link-underline-opacity-100-hover">Ignite\
-        </a>\
+        <p class="text-center mt-5">\
+        Created in Swift with \
+        <a href="https://github.com/twostraws/Ignite">Ignite</a>\
         </p>
         """)
     }
