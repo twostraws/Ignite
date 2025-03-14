@@ -94,16 +94,15 @@ public struct Carousel: HTML {
     /// - Returns: An inline style for the transition, or `nil` for default styles.
     private func slideTransition(for style: CarouselStyle) -> InlineStyle? {
         switch style {
-        case .move(let duration, let curve):
-            if style == .move { return nil }
+        case .move(let duration, let curve) where style != .move:
             let transformTransition = "transform \(duration)s \(curve.css)"
             return .init(.transition, value: transformTransition)
-
-        case .crossfade(let duration, let curve):
-            if style == .crossfade { return nil }
+        case .crossfade(let duration, let curve) where style != .crossfade:
             let transformTransition = "transform \(duration)s \(curve.css)"
             let opacityTransition = "opacity \(duration)s \(curve.css)"
             return .init(.transition, value: "\(transformTransition), \(opacityTransition)")
+        default:
+            return nil
         }
     }
 
