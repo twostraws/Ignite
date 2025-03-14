@@ -36,16 +36,16 @@ public struct Animation: Animatable, Hashable {
     var repeatCount: Double = 1
 
     /// The delay in seconds before the animation begins
-    public var delay: Double = 0
+    var delay: Double = 0
 
     /// The timing function that controls the animation's acceleration curve
-    public var timing: TimingCurve = .easeInOut
+    var timing: TimingCurve = .easeInOut
 
     /// The duration of the complete animation sequence in seconds
-    public var duration: Double = 1
+    var duration: Double = 1
 
     /// Creates a new keyframe animation.
-    public init() {
+    init() {
         self.frames = []
     }
 
