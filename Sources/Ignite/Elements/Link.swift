@@ -19,7 +19,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     public var isPrimitive: Bool { true }
 
     /// The visual style to apply to the link.
-    public enum LinkStyle {
+    public enum LinkStyle: Equatable {
         /// A link with an underline effect.
         /// - Parameters:
         ///   - base: The underline prominence in the link's normal state.
@@ -46,7 +46,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     /// The location to which this link should direct users.
     var url: String
 
-    /// The style for this link. Defaults to `.default`.
+    /// The style for this link. Defaults to `.automatic`.
     var style = LinkStyle.automatic
 
     /// When rendered with the `.button` style, this controls the button's size.
@@ -62,7 +62,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         switch style {
         case .button:
             outputClasses.append(contentsOf: Button.classes(forRole: role, size: size))
-        case .underline(let baseDecoration, hover: let hoverDecoration):
+        case .underline(let baseDecoration, hover: let hoverDecoration) where style != .automatic:
             if role == .none {
                 outputClasses.append("link-plain")
             } else if role != .default {
@@ -72,6 +72,8 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
             outputClasses.append("link-underline")
             outputClasses.append("link-underline-opacity-\(baseDecoration)")
             outputClasses.append("link-underline-opacity-\(hoverDecoration)-hover")
+        default:
+            break
         }
 
         return outputClasses

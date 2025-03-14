@@ -70,14 +70,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         let element = Link(description, target: target)
         let output = element.render()
         let expectedPath = publishingContext.path(for: URL(string: target)!)
-
-        #expect(output == """
-        <a href="\(expectedPath)" \
-        class="link-underline link-underline-opacity-100 \
-        link-underline-opacity-100-hover">\
-        \(description)\
-        </a>
-        """)
+        #expect(output == "<a href=\"\(expectedPath)\">\(description)</a>")
     }
 
     @Test("Page Target Test")
@@ -97,12 +90,6 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         }
         let output = element.render()
 
-        #expect(output == """
-        <a href="\(page.path)" \
-        class="link-plain link-underline link-underline-opacity-100 \
-        link-underline-opacity-100-hover">\
-        MORE <p>CONTENT</p>\
-        </a>
-        """)
+        #expect(output == "<a href=\"\(page.path)\">MORE <p>CONTENT</p></a>")
     }
 }
