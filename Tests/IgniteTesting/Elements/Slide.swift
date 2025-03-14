@@ -17,9 +17,9 @@ class SlideTests: IgniteTestSuite {
     @Test("Slide with Background Image")
     func slideWithBackgroundImage() async throws {
         let slide = Slide(background: "/images/dog.jpg")
-        let output = slide.assigned(at: 0)
+        let output = slide.assigned(at: 0).render()
 
-        #expect(output.contains("""
+        #expect(output == """
         <div class="carousel-item active" style="background-color: black">\
         <img src="/images/dog.jpg" alt="" class="d-block w-100" \
         style="height: 100%; object-fit: cover; opacity: 1" />\
@@ -28,7 +28,7 @@ class SlideTests: IgniteTestSuite {
         </div>\
         </div>\
         </div>
-        """))
+        """)
     }
 
     @Test("Slide with Items")
@@ -37,9 +37,9 @@ class SlideTests: IgniteTestSuite {
             Text("Item 1")
             Text("Item 2")
         }
-        let output = slide.assigned(at: 1)
+        let output = slide.assigned(at: 1).render()
 
-        #expect(output.contains("""
+        #expect(output == """
         <div class=\"carousel-item\" style=\"background-color: black\">\
         <div class=\"container\">\
         <div class=\"carousel-caption\">\
@@ -48,15 +48,15 @@ class SlideTests: IgniteTestSuite {
         </div>\
         </div>\
         </div>
-        """))
+        """)
     }
 
     @Test("Slide with Background Opacity")
     func slideWithBackgroundOpacity() async throws {
         let slide = Slide(background: "/images/dog.jpg").backgroundOpacity(0.5)
-        let output = slide.assigned(at: 0)
+        let output = slide.assigned(at: 0).render()
 
-        #expect(output.contains("""
+        #expect(output == """
         <div class="carousel-item active" style="background-color: black">\
         <img src="/images/dog.jpg" alt="" class="d-block w-100" \
         style="height: 100%; object-fit: cover; opacity: 0.5" />\
@@ -65,6 +65,6 @@ class SlideTests: IgniteTestSuite {
         </div>\
         </div>\
         </div>
-        """))
+        """)
     }
 }

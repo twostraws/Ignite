@@ -61,7 +61,7 @@ public struct Slide: HTML {
 
     /// Used during rendering to assign this carousel slide to a particular parent,
     /// so our open paging behavior works correctly.
-    func assigned(at index: Int) -> String {
+    func assigned(at index: Int) -> some HTML {
         Section {
             if let slideBackground = background {
                 Image(slideBackground, description: "")
@@ -74,17 +74,15 @@ public struct Slide: HTML {
             }
 
             Section {
-                Section {
-                    render()
-                }
-                .class("carousel-caption")
+                Section(items)
+                    .class("carousel-caption")
             }
             .class("container")
         }
+        .attributes(attributes)
         .class("carousel-item")
         .class(index == 0 ? "active" : nil)
         .style(.backgroundColor, "black")
-        .render()
     }
 
     /// Renders this element using publishing context passed in.
