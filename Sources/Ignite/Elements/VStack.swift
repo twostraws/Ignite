@@ -23,14 +23,20 @@ public struct VStack: HTML {
     /// The spacing between elements.
     private var spacingAmount: SpacingType?
 
+    /// The alignment point for positioning elements within the stack.
+    private var alignment: HorizontalAlignment
+
     /// The child elements contained in the stack.
-    private var content: HTMLCollection
+    private var items: HTMLCollection
 
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
-    /// - Parameter items: The items to use in this section.
-    public init(@HTMLBuilder items: () -> some HTML) {
-        self.content = HTMLCollection(items)
+    /// - Parameters:
+    ///   - alignment: The horizontal alignment of the subviews.
+    ///   - items: The items to use in this section.
+    public init(alignment: HorizontalAlignment = .leading, @HTMLBuilder items: () -> some HTML) {
+        self.items = HTMLCollection(items)
+        self.alignment = alignment
         self.spacingAmount = nil
     }
 
@@ -38,9 +44,11 @@ public struct VStack: HTML {
     /// that returns an array of items to use in this section.
     /// - Parameters:
     ///   - pixels: The number of pixels between elements.
+    ///   - alignment: The horizontal alignment of the subviews.
     ///   - items: The items to use in this section.
-    public init(spacing pixels: Int, @HTMLBuilder items: () -> some HTML) {
-        self.content = HTMLCollection(items)
+    public init(alignment: HorizontalAlignment = .leading, spacing pixels: Int, @HTMLBuilder items: () -> some HTML) {
+        self.items = HTMLCollection(items)
+        self.alignment = alignment
         self.spacingAmount = .exact(pixels)
     }
 
@@ -48,18 +56,42 @@ public struct VStack: HTML {
     /// that returns an array of items to use in this section.
     /// - Parameters:
     ///   - spacing: The predefined size between elements.
+    ///   - alignment: The horizontal alignment of the subviews.
     ///   - items: The items to use in this section.
-    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
-        self.content = HTMLCollection(items)
+    public init(alignment: HorizontalAlignment = .leading, spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
+        self.items = HTMLCollection(items)
+        self.alignment = alignment
         self.spacingAmount = .semantic(spacing)
     }
 
     public func render() -> String {
-        var content = content
-        content.attributes.add(classes: "mb-0")
+        let items = items.elements.map {
+            var elementAttributes = CoreAttributes()
+            elementAttributes.add(classes: "mb-0")
+
+            switch alignment {
+            case .leading:
+                elementAttributes.add(styles: .init(.alignSelf, value: "start"))
+            case .center:
+                elementAttributes.add(styles: .init(.alignSelf, value: "center"))
+            case .trailing:
+                elementAttributes.add(styles: .init(.alignSelf, value: "end"))
+            }
+
+            return $0.attributes(elementAttributes)
+        }
 
         var attributes = attributes
         attributes.add(classes: "vstack")
+
+        switch alignment {
+        case .center:
+            attributes.add(styles: .init(.textAlign, value: "center"))
+        case .trailing:
+            attributes.add(styles: .init(.textAlign, value: "end"))
+        case .leading:
+            break
+        }
 
         if case let .exact(pixels) = spacingAmount {
             attributes.add(styles: .init(.gap, value: "\(pixels)px"))
@@ -67,6 +99,7 @@ public struct VStack: HTML {
             attributes.add(classes: "gap-\(amount.rawValue)")
         }
 
+        let content = items.map { $0.render() }.joined()
         return "<div\(attributes)>\(content)</div>"
     }
 }
