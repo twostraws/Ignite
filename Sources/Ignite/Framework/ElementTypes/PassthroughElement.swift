@@ -12,7 +12,4 @@
 @MainActor protocol PassthroughElement: HTML {
     /// The child elements contained within this HTML element.
     var items: HTMLCollection { get }
-
-    /// The attributes that should be passed through to child elements.
-    var attributes: CoreAttributes { get set }
 }
