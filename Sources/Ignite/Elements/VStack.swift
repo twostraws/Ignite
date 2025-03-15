@@ -9,8 +9,23 @@
 ///
 /// - Note: To ensure spacing is consistent, `VStack` strips its subviews of
 /// implicit styles, such as the bottom margin automatically applied to paragraphs.
-/// All styles explicitly applied through modifiers like `.margin()` will be respected.
+/// To retain these implicit styles, set `spacing` to `nil`.
 public struct VStack: HTML {
+    /// A type that represents spacing values in either exact pixels or semantic spacing amounts.
+    private enum SpacingType: Equatable {
+        case exact(Int), semantic(SpacingAmount)
+    }
+
+    /// Adaptive spacing amounts that are used by Bootstrap to provide consistency
+    /// in site design.
+    public enum SpacingAmount: Int, CaseIterable, Sendable {
+        case xSmall = 1
+        case small
+        case medium
+        case large
+        case xLarge
+    }
+
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -32,28 +47,19 @@ public struct VStack: HTML {
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameters:
-    ///   - alignment: The horizontal alignment of the subviews.
-    ///   - items: The items to use in this section.
-    public init(alignment: HorizontalAlignment = .leading, @HTMLBuilder items: () -> some HTML) {
-        self.items = HTMLCollection(items)
-        self.alignment = .responsive(alignment)
-        self.spacingAmount = nil
-    }
-
-    /// Creates a new `Section` object using a block element builder
-    /// that returns an array of items to use in this section.
-    /// - Parameters:
-    ///   - pixels: The number of pixels between elements.
+    ///   - pixels: The number of pixels between elements. Defaults to `0.`
     ///   - alignment: The horizontal alignment of the subviews.
     ///   - items: The items to use in this section.
     public init(
         alignment: HorizontalAlignment = .leading,
-        spacing pixels: Int,
+        spacing pixels: Int? = 0,
         @HTMLBuilder items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
         self.alignment = .responsive(alignment)
-        self.spacingAmount = .exact(pixels)
+        if let pixels {
+            self.spacingAmount = .exact(pixels)
+        }
     }
 
     /// Creates a new `Section` object using a block element builder
@@ -64,8 +70,8 @@ public struct VStack: HTML {
     ///   - items: The items to use in this section.
     public init(
         alignment: HorizontalAlignment = .leading,
-        spacing: SpacingAmount, @HTMLBuilder
-        items: () -> some HTML
+        spacing: SpacingAmount,
+        @HTMLBuilder items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
         self.alignment = .responsive(alignment)
@@ -75,31 +81,19 @@ public struct VStack: HTML {
     /// Creates a new `Section` object using a block element builder
     /// that returns an array of items to use in this section.
     /// - Parameters:
+    ///   - pixels: The number of pixels between elements. Defaults to `0.`
     ///   - alignment: The responsive horizontal alignment of the subviews.
     ///   - items: The items to use in this section.
     public init(
         alignment: HorizontalAlignment.ResponsiveAlignment,
+        spacing pixels: Int? = 0,
         @HTMLBuilder items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
-        self.spacingAmount = nil
-    }
-
-    /// Creates a new `Section` object using a block element builder
-    /// that returns an array of items to use in this section.
-    /// - Parameters:
-    ///   - pixels: The number of pixels between elements.
-    ///   - alignment: The responsive horizontal alignment of the subviews.
-    ///   - items: The items to use in this section.
-    public init(
-        alignment: HorizontalAlignment.ResponsiveAlignment,
-        spacing pixels: Int, @HTMLBuilder
-        items: () -> some HTML
-    ) {
-        self.items = HTMLCollection(items)
-        self.alignment = alignment
-        self.spacingAmount = .exact(pixels)
+        if let pixels {
+            self.spacingAmount = .exact(pixels)
+        }
     }
 
     /// Creates a new `Section` object using a block element builder
@@ -121,7 +115,9 @@ public struct VStack: HTML {
     public func render() -> String {
         let items = items.elements.map {
             var elementAttributes = CoreAttributes()
-            elementAttributes.add(classes: "mb-0")
+            if spacingAmount != nil {
+                elementAttributes.add(classes: "mb-0")
+            }
             elementAttributes.add(classes: alignment.itemAlignmentClasses)
             return $0.attributes(elementAttributes)
         }
@@ -133,7 +129,7 @@ public struct VStack: HTML {
             attributes.add(classes: alignment.containerAlignmentClasses)
         }
 
-        if case let .exact(pixels) = spacingAmount {
+        if case let .exact(pixels) = spacingAmount, pixels != 0 {
             attributes.add(styles: .init(.gap, value: "\(pixels)px"))
         } else if case let .semantic(amount) = spacingAmount {
             attributes.add(classes: "gap-\(amount.rawValue)")

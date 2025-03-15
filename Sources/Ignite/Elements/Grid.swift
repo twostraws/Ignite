@@ -26,7 +26,7 @@ public struct Grid: HTML, HorizontalAligning {
     var columnCount: Int?
 
     /// The amount of space between elements.
-    private var spacingAmount: SpacingType?
+    private var spacingAmount: SpacingType = .semantic(.none)
 
     /// The items to display in this grid.
     private var items: HTMLCollection
@@ -34,22 +34,19 @@ public struct Grid: HTML, HorizontalAligning {
     /// Creates a new `Grid` object using a block element builder
     /// that returns an array of items to use in this grid.
     /// - Parameters:
-    ///   - spacing: The number of pixels between each element. Default is nil.
+    ///   - spacing: The number of pixels between each element.
     ///   - items: The items to use in this grid.
-    public init(spacing: Int? = nil, @HTMLBuilder items: () -> some HTML) {
+    public init(spacing: Int, @HTMLBuilder items: () -> some HTML) {
         self.items = HTMLCollection(items)
-
-        if let spacing {
-            self.spacingAmount = .exact(spacing)
-        }
+        self.spacingAmount = .exact(spacing)
     }
 
     /// Creates a new `Grid` object using a block element builder
     /// that returns an array of items to use in this grid.
     /// - Parameters:
-    ///   - spacing: The predefined size between each element.
+    ///   - spacing: The predefined size between each element. Defaults to `.none`.
     ///   - items: The items to use in this grid.
-    public init(spacing: SpacingAmount, @HTMLBuilder items: () -> some HTML) {
+    public init(spacing: SpacingAmount = .none, @HTMLBuilder items: () -> some HTML) {
         self.items = HTMLCollection(items)
         self.spacingAmount = .semantic(spacing)
     }
@@ -58,25 +55,22 @@ public struct Grid: HTML, HorizontalAligning {
     /// a single object from the collection into one grid column.
     /// - Parameters:
     ///   - items: A sequence of items you want to convert into columns.
-    ///   - spacing: The number of pixels between each element. Default is nil.
+    ///   - spacing: The number of pixels between each element.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a some HTML representing that value in the grid.
-    public init<T>(_ items: any Sequence<T>, spacing: Int? = nil, content: (T) -> some HTML) {
+    public init<T>(_ items: any Sequence<T>, spacing: Int, content: (T) -> some HTML) {
         self.items = HTMLCollection(items.map(content))
-
-        if let spacing {
-            self.spacingAmount = .exact(spacing)
-        }
+        self.spacingAmount = .exact(spacing)
     }
 
     /// Creates a new grid from a collection of items, along with a function that converts
     /// a single object from the collection into one grid column.
     /// - Parameters:
     ///   - items: A sequence of items you want to convert into columns.
-    ///   - spacing: The predefined size between each element.
+    ///   - spacing: The predefined size between each element. Defaults to `.none`
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a some HTML representing that value in the grid.
-    public init<T>(_ items: any Sequence<T>, spacing: SpacingAmount, content: (T) -> some HTML) {
+    public init<T>(_ items: any Sequence<T>, spacing: SpacingAmount = .none, content: (T) -> some HTML) {
         self.items = HTMLCollection(items.map(content))
         self.spacingAmount = .semantic(spacing)
     }
@@ -108,13 +102,12 @@ public struct Grid: HTML, HorizontalAligning {
 
         var gutterClass = ""
 
-        if let spacingAmount {
-            switch spacingAmount {
-            case .exact(let pixels):
-                gridAttributes.add(styles: .init(.rowGap, value: "\(pixels)px"))
-            case .semantic(let amount):
-                gutterClass = "gy-\(amount.rawValue)"
-            }
+        switch spacingAmount {
+        case .exact(let pixels) where pixels != 0:
+            gridAttributes.add(styles: .init(.rowGap, value: "\(pixels)px"))
+        case .semantic(let amount) where spacingAmount != .semantic(.none):
+            gutterClass = "gy-\(amount.rawValue)"
+        default: break
         }
 
         return Section {
