@@ -6,7 +6,7 @@
 //
 
 /// A type that represents spacing values in either exact pixels or semantic spacing amounts.
-enum SpacingType {
+enum SpacingType: Equatable {
     /// An exact spacing value in pixels.
     case exact(Int)
 
