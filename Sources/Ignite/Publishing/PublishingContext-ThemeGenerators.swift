@@ -99,17 +99,6 @@ extension PublishingContext {
             }
         )
 
-        // Add auto theme dark mode if both themes exist
-        if site.supportsLightTheme {
-            rules.append(
-                MediaQuery(.colorScheme(.dark)) {
-                    Ruleset(.attribute(name: "data-bs-theme", value: "auto")) {
-                        themeStyles(for: theme)
-                    }
-                }
-            )
-        }
-
         return rules
     }
 
@@ -184,14 +173,6 @@ extension PublishingContext {
             )
         }
 
-        if site.hasAutoTheme {
-            overrides.append(
-                Ruleset(.attribute(name: "data-bs-theme", value: "auto")) {
-                    themeStyles(for: theme)
-                }
-            )
-        }
-
         return overrides
     }
 
@@ -219,10 +200,6 @@ private extension Site {
     var hasMultipleThemes: Bool {
         (supportsLightTheme && supportsDarkTheme) ||
         !alternateThemes.isEmpty
-    }
-
-    var hasAutoTheme: Bool {
-        supportsLightTheme && supportsDarkTheme
     }
 }
 

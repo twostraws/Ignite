@@ -44,6 +44,7 @@ final class CSSManager {
         rules.removeAll()
         classNames.removeAll()
         styleProperties.removeAll()
+        let themes = themes.filter { !($0 is AutoTheme) }
 
         // Process all registrations
         for registration in pendingRegistrations {
