@@ -15,7 +15,7 @@ public enum VerticalAlignment: Equatable, Sendable {
     case bottom
 
     /// The Bootstrap class that implements this alignment
-    var bootstrapClass: String {
+    var flexAlignmentClass: String {
         switch self {
         case .top: "align-items-start"
         case .center: "align-items-center"
