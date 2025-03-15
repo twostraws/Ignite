@@ -215,7 +215,10 @@ extension PublishingContext {
         ]
 
         styles.append(contentsOf: fontSizes.compactMap {
-            InlineStyle($0, value: $1)
+            if let responsiveValues = $1 as? ResponsiveValues<LengthUnit> {
+                return InlineStyle($0, value: responsiveValues.values[.xSmall] ?? .default)
+            }
+            return InlineStyle($0, value: $1)
         })
 
         let lineHeights: [(BootstrapVariable, any Defaultable)] = [
