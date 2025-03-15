@@ -230,6 +230,10 @@ extension PublishingContext {
             InlineStyle($0, value: $1)
         })
 
+        if let headingFontWeight = InlineStyle(.headingsFontWeight, value: theme.headingFontWeight) {
+            styles.append(headingFontWeight)
+        }
+
         return styles
     }
 }
