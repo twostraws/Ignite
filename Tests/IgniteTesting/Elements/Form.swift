@@ -20,9 +20,8 @@ class FormTests: IgniteTestSuite {
             TextField("MyLabel", placeholder: "MyPlaceholder")
             Button("Submit").type(.submit)
         } onSubmit: {
-            SubscribeAction(.sendFox("myListID"))
+            SubscribeAction(.sendFox(listID: "myListID", formID: "myID"))
         }
-        .id("myID")
 
         let output = element.render()
 
@@ -55,10 +54,9 @@ class FormTests: IgniteTestSuite {
             TextField("MyLabel", placeholder: "MyPlaceholder")
             Button("Submit").type(.submit)
         } onSubmit: {
-            SubscribeAction(.sendFox("myListID"))
+            SubscribeAction(.sendFox(listID: "myListID", formID: "myID"))
         }
         .labelStyle(style)
-        .id("myID")
 
         let output = element.render()
 
@@ -119,15 +117,14 @@ class FormTests: IgniteTestSuite {
             TextField("MyLabel", placeholder: "MyPlaceholder")
             Button("Submit").type(.submit)
         } onSubmit: {
-            SubscribeAction(.sendFox("myID"))
+            SubscribeAction(.sendFox(listID: "myListID", formID: "myID"))
         }
         .controlSize(controlSize)
-        .id("myID")
 
         let output = element.render()
 
         #expect(output == """
-        <form id="myID" method="post" action="https://sendfox.com/form/myID/myID" \
+        <form id="myID" method="post" action="https://sendfox.com/form/myListID/myID" \
         class="sendfox-form" data-async="true" data-recaptcha="true">\
         <div class="row g-3 gy-3 align-items-stretch">\
         <div class="col">\

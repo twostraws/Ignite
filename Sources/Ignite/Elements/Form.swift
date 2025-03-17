@@ -162,16 +162,14 @@ public struct Form: HTML {
     }
 
     public func render() -> String {
-        guard var action = action as? SubscribeAction else {
+        guard let action = action as? SubscribeAction else {
             fatalError("Form supports only SubscribeAction at this time.")
         }
-
-        action = action.setFormID(attributes.id)
 
         var attributes = attributes
 
         attributes.add(customAttributes: .init(name: "method", value: "post"))
-        attributes.add(customAttributes: .init(name: "action", value: action.service.endpoint(formID: action.formID)))
+        attributes.add(customAttributes: .init(name: "action", value: action.service.endpoint))
         attributes.data.formUnion(action.service.dataAttributes)
 
         if let formClass = action.service.formClass {
@@ -180,6 +178,10 @@ public struct Form: HTML {
 
         if case .mailchimp = action.service {
             attributes.add(customAttributes: .init(name: "target", value: "_blank"))
+        }
+
+        if case .sendFox(_, let formID) = action.service {
+            attributes.id = formID
         }
 
         let formContent = formContent(for: action)
