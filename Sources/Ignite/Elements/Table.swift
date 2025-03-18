@@ -30,6 +30,9 @@ public struct Table: HTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
+    /// What text to use for an optional filter text field.
+    var filterTitle: String?
+
     /// The rows that are inside this table.
     var rows: HTMLCollection
 
@@ -49,8 +52,15 @@ public struct Table: HTML {
 
     /// Creates a new `Table` instance from an element builder that returns
     /// an array of rows to use in the table.
-    /// - Parameter rows: An array of rows to use in the table.
-    public init(@ElementBuilder<Row> rows: () -> [Row]) {
+    /// - Parameters:
+    ///   - filterTitle: When provided, this is used to for the placeholder in a
+    ///     text field that filters the table data.
+    ///   - rows: An array of rows to use in the table.
+    public init(
+        filterTitle: String? = nil,
+        @ElementBuilder<Row> rows: () -> [Row]
+    ) {
+        self.filterTitle = filterTitle
         self.rows = HTMLCollection(rows())
     }
 
@@ -58,12 +68,16 @@ public struct Table: HTML {
     /// an array of rows to use in the table, and also a page element builder
     /// that returns an array of headers to use at the top of the table.
     /// - Parameters:
+    ///   - filterTitle: When provided, this is used to for the placeholder in a
+    ///     text field that filters the table data.
     ///   - rows: An array of rows to use in the table.
     ///   - header: An array of headers to use at the top of the table.
     public init(
+        filterTitle: String? = nil,
         @ElementBuilder<Row> rows: () -> [Row],
         @HTMLBuilder header: () -> some HTML
     ) {
+        self.filterTitle = filterTitle
         self.rows = HTMLCollection(rows())
         self.header = HTMLCollection(header)
     }
@@ -72,9 +86,16 @@ public struct Table: HTML {
     /// that converts a single object from the collection into one row in the table.
     /// - Parameters:
     ///   - items: A sequence of items you want to convert into rows.
+    ///   - filterTitle: When provided, this is used to for the placeholder in a
+    ///     text field that filters the table data.
     ///   - content: A function that accepts a single value from the sequence, and
     /// returns a row representing that value in the table.
-    public init<T>(_ items: any Sequence<T>, content: (T) -> Row) {
+    public init<T>(
+        _ items: any Sequence<T>,
+        filterTitle: String? = nil,
+        content: (T) -> Row
+    ) {
+        self.filterTitle = filterTitle
         self.rows = HTMLCollection(items.map(content))
     }
 
@@ -82,10 +103,18 @@ public struct Table: HTML {
     /// that converts a single object from the collection into one row in the table.
     /// - Parameters:
     ///   - items: A sequence of items you want to convert into rows.
+    ///   - filterTitle: When provided, this is used to for the placeholder in a
+    ///     text field that filters the table data.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a row representing that value in the table.
     ///   - header: An array of headers to use at the top of the table.
-    public init<T>(_ items: any Sequence<T>, content: (T) -> Row, @HTMLBuilder header: () -> some HTML) {
+    public init<T>(
+        _ items: any Sequence<T>,
+        filterTitle: String? = nil,
+        content: (T) -> Row,
+        @HTMLBuilder header: () -> some HTML
+    ) {
+        self.filterTitle = filterTitle
         self.rows = HTMLCollection(items.map(content))
         self.header = HTMLCollection(header)
     }
@@ -135,7 +164,18 @@ public struct Table: HTML {
             tableAttributes.add(classes: ["table-striped-columns"])
         }
 
-        var output = "<table\(tableAttributes)>"
+        let tableID = "table-\(UUID().uuidString.truncatedHash)"
+        var output = ""
+
+        if let filterTitle {
+            output += """
+            <input class=\"form-control mb-2\" type=\"text\" \
+            placeholder=\"\(filterTitle)\" \
+            onkeyup=\"igniteFilterTable(this.value, '\(tableID)')\">
+            """
+        }
+
+        output += "<table\(tableAttributes) id=\"\(tableID)\">"
 
         if let caption {
             output += "<caption>\(caption)</caption>"

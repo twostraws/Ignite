@@ -127,3 +127,29 @@ function igniteToggleClickAnimation(element) {
     }
     return false;
 }
+
+// This function removes rows from a table when some filter text is supplied.
+// We need to actually remove the rows to ensure that any zebra striping is
+// maintained correctly, but we need to a way to reinsert rows later on if
+// the search text changes.
+function igniteFilterTable(searchText, tableId) {
+    let input = searchText.toLowerCase();
+    let table = document.getElementById(tableId);
+    let tbody = table.querySelector("tbody");
+
+    // The very first time we filter this table, take a back-up copy of the
+    // original rows. This uses Array.from() to make a deep copy of the rows.
+    if (!("igniteFilterOriginalRows" in tbody)) {
+        tbody.igniteFilterOriginalRows = Array.from(tbody.rows);
+    }
+
+    // Filter based on our original backup row data.
+    let rows = tbody.igniteFilterOriginalRows;
+
+    // Filter rows and detach them to force reflow, to ensure zebra striping is correct.
+    let matchingRows = rows.filter(row => row.textContent.toLowerCase().includes(input));
+
+    // Clear tbody and reappend only matching rows; Bootstrap will auto re-stripe.
+    tbody.innerHTML = "";
+    matchingRows.forEach(row => tbody.appendChild(row));
+}
