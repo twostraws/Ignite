@@ -263,21 +263,38 @@ public struct Article {
         site.url.appending(path: path).absoluteString
     }
 
-    /// An array of `Link` objects that show badges for the tags of this
-    /// content, and also link to the tag pages.
-    @InlineElementBuilder public func tagLinks() -> (some InlineElement)? {
-        if let tags = metadata["tags"] as? String {
-            let targets: [(name: String, path: String)] = tags.splitAndTrim().map { tag in
-                let tagPath = tag.convertedToSlug()
-                return (name: tag, path: "/tags/\(tagPath)")
-            }
-            ForEach(targets) { target in
+    /// The visual style for tag links.
+    public enum TagLinkStyle: Hashable, CaseIterable, Sendable {
+        /// Displays tags as badge components with primary role and margin.
+        case automatic
+        /// Displays tags as simple text links.
+        case plain
+    }
+
+    /// Creates an array of links for the article's tags
+    /// - Parameter style: The visual style to use for the tag links. Defaults to `.automatic`
+    /// - Returns: An array of `Link` objects for each tag, or `nil` if the article has no tags
+    public func tagLinks(style: TagLinkStyle = .automatic) -> [Link]? {
+        guard let tags = metadata["tags"] as? String else { return nil }
+
+        let targets: [(name: String, path: String)] = tags.splitAndTrim().map { tag in
+            let tagPath = tag.convertedToSlug()
+            return (name: tag, path: "/tags/\(tagPath)")
+        }
+
+        guard !targets.isEmpty else { return nil }
+
+        return targets.map { target in
+            if style == .automatic {
                 Link(target: target.path) {
                     Badge(target.name)
                         .role(.primary)
                         .margin(.trailing, .px(5))
                 }
                 .relationship(.tag)
+            } else {
+                Link(target.name, target: target.path)
+                    .relationship(.tag)
             }
         }
     }
