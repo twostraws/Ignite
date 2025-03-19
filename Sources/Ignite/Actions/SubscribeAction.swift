@@ -12,22 +12,22 @@ public struct SubscribeAction: Action {
         /// Mailchimp newsletter integration
         case mailchimp(username: String, uValue: String, listID: String)
         /// SendFox newsletter integration
-        case sendFox(String)
+        case sendFox(listID: String, formID: String)
         /// Kit (ConvertKit) newsletter integration
         case kit(String)
         /// Buttondown newsletter integration
         case buttondown(String)
 
-        func endpoint(formID: String) -> String {
+        var endpoint: String {
             switch self {
             case .mailchimp(let username, let uValue, let listID):
                 "https://\(username).us1.list-manage.com/subscribe/post?u=\(uValue)&id=\(listID)"
             case .kit(let token):
                 "https://app.convertkit.com/forms/\(token)/subscriptions"
-            case .sendFox(let listID):
+            case .sendFox(let listID, let formID):
                 "https://sendfox.com/form/\(listID)/\(formID)"
-            case .buttondown(let token):
-                "https://buttondown.email/api/emails/embed-subscribe/\(token)"
+            case .buttondown(let username):
+                "https://buttondown.com/api/emails/embed-subscribe/\(username)"
             }
         }
 
@@ -57,6 +57,8 @@ public struct SubscribeAction: Action {
                 "validate"
             case .sendFox:
                 "sendfox-form"
+            case .buttondown:
+                "embeddable-buttondown-form"
             default:
                 nil
             }
@@ -68,6 +70,8 @@ public struct SubscribeAction: Action {
                 "mce-EMAIL"
             case .sendFox:
                 "sendfox_form_email"
+            case .buttondown:
+                "bd-email"
             default:
                 ""
             }
@@ -86,8 +90,8 @@ public struct SubscribeAction: Action {
 
         var honeypotFieldName: String? {
             switch self {
-            case .mailchimp(_, let uValue, let listId):
-                "b_\(uValue)_\(listId)"
+            case .mailchimp(_, let uValue, let listID):
+                "b_\(uValue)_\(listID)"
             case .sendFox:
                 "a_password"
             default:
@@ -99,24 +103,11 @@ public struct SubscribeAction: Action {
     /// The email platform to use
     let service: EmailPlatform
 
-    /// The ID of the form this action is attached to
-    var formID: String
-
-    /// Sets the form identifier for this subscription action.
-    /// - Parameter formID: A string that uniquely identifies the form in the newsletter service.
-    /// - Returns: A new `SubscribeAction` instance with the updated form identifier.
-    func setFormID(_ formID: String) -> Self {
-        var copy = self
-        copy.formID = formID
-        return copy
-    }
-
     /// Creates a new subscribe action for a specific form.
     /// - Parameters:
     ///   - service: The email service to use for subscription.
     public init(_ service: EmailPlatform) {
         self.service = service
-        self.formID = ""
     }
 
     /// Renders this action using publishing context passed in.
