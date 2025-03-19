@@ -37,8 +37,8 @@ struct HiddenTests {
     @Test("Hidden Modifier for Column")
     func hiddenForColumn() async throws {
         let element = Column {
-            Label(text: "Left Label")
-            Label(text: "Right Label")
+            FormFieldLabel(text: "Left Label")
+            FormFieldLabel(text: "Right Label")
         }.hidden()
         let output = element.render()
 

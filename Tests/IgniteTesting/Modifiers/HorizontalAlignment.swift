@@ -65,8 +65,8 @@ struct HorizontalAlignmentTests {
         ["text-start", "text-center", "text-end"]))
     func allAlignmentsForColumn(alignment: HorizontalAlignment, cssClass: String) async throws {
         let element = Column {
-            Label(text: "Left Label")
-            Label(text: "Right Label")
+            FormFieldLabel(text: "Left Label")
+            FormFieldLabel(text: "Right Label")
         }
         .horizontalAlignment(alignment)
 
@@ -83,8 +83,8 @@ struct HorizontalAlignmentTests {
     @Test("Column with mixed responsive breakpoints")
     func allAlignmentsForColumnResponsiveMixed() async throws {
         let element = Column {
-            Label(text: "Left Label")
-            Label(text: "Right Label")
+            FormFieldLabel(text: "Left Label")
+            FormFieldLabel(text: "Right Label")
         }
         .horizontalAlignment(.responsive(small: .leading, medium: .center, large: .trailing))
 

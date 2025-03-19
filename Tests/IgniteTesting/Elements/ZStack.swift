@@ -23,8 +23,8 @@ class ZStackTests: IgniteTestSuite {
     @Test("ZStack with elements")
     func basicZStack() async throws {
         let element = ZStack {
-            Label(text: "Top Label")
-            Label(text: "Bottom Label")
+            FormFieldLabel(text: "Top Label")
+            FormFieldLabel(text: "Bottom Label")
         }
         let output = element.render()
 

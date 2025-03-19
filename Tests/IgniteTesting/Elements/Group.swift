@@ -17,7 +17,7 @@ class GroupTests: IgniteTestSuite {
     @Test("Group does not change HTML structure")
     func groupDoesNotAddAnyAdditionalHTML() async throws {
         let element = Group {
-            Label(text: "Top Label")
+            FormFieldLabel(text: "Top Label")
             Text("Middle Text")
             Button("Bottom Button") {
                 ShowAlert(message: "Bottom Button Tapped")
@@ -38,7 +38,7 @@ class GroupTests: IgniteTestSuite {
         let attributeName = "data-info"
         let attributeValue = "Ignite"
         let element = Group {
-            Label(text: "Top Label")
+            FormFieldLabel(text: "Top Label")
             Text("Middle Text")
             Button("Bottom Button") {
                 ShowAlert(message: "Bottom Button Tapped")
