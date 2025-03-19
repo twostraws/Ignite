@@ -25,7 +25,7 @@ struct Document: HTML {
 
     func render() -> String {
         var attributes = attributes
-        attributes.add(customAttributes: .init(name: "lang", value: language.rawValue))
+        attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
         var output = "<!doctype html>"
         output += "<html \(attributes)>"
         output += contents.map { $0.render() }.joined()

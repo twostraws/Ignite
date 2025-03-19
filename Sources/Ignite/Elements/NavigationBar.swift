@@ -234,7 +234,7 @@ fileprivate extension Link {
         guard content.isText else { return self }
         var link = self
         var text = content
-        text.attributes.add(classes: "mb-0")
+        text.attributes.append(classes: "mb-0")
         link.content = text
         return link
     }
@@ -249,7 +249,7 @@ fileprivate extension HTML {
     func data(_ name: String, _ value: String?) -> Self {
         guard let value else { return self }
         var copy = self
-        copy.attributes.add(dataAttributes: .init(name: name, value: value))
+        copy.attributes.append(dataAttributes: .init(name: name, value: value))
         return copy
     }
 }

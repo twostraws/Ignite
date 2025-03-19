@@ -15,7 +15,7 @@
     /// - Returns: The modified `HTML` element
     public func style(_ property: Property, _ value: String) -> Self {
         var copy = self
-        copy.attributes.add(styles: .init(property, value: value))
+        copy.attributes.appending(styles: .init(property, value: value))
         return copy
     }
 }
@@ -26,7 +26,7 @@ extension StyledHTML {
     /// - Returns: The modified `HTML` element
     func style(_ styles: [InlineStyle]) -> Self {
         var copy = self
-        copy.attributes.add(styles: styles)
+        copy.attributes.append(styles: styles)
         return copy
     }
 
@@ -35,7 +35,7 @@ extension StyledHTML {
     /// - Returns: The modified `HTML` element
     func style(_ styles: InlineStyle...) -> Self {
         var copy = self
-        copy.attributes.add(styles: styles)
+        copy.attributes.append(styles: styles)
         return copy
     }
 }

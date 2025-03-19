@@ -116,23 +116,23 @@ public struct VStack: HTML {
         let items = items.elements.map {
             var elementAttributes = CoreAttributes()
             if spacingAmount != nil {
-                elementAttributes.add(classes: "mb-0")
+                elementAttributes.append(classes: "mb-0")
             }
-            elementAttributes.add(classes: alignment.itemAlignmentClasses)
+            elementAttributes.append(classes: alignment.itemAlignmentClasses)
             return $0.attributes(elementAttributes)
         }
 
         var attributes = attributes
-        attributes.add(classes: "vstack")
+        attributes.append(classes: "vstack")
 
         if alignment != .responsive(.leading) {
-            attributes.add(classes: alignment.containerAlignmentClasses)
+            attributes.append(classes: alignment.containerAlignmentClasses)
         }
 
         if case let .exact(pixels) = spacingAmount, pixels != 0 {
-            attributes.add(styles: .init(.gap, value: "\(pixels)px"))
+            attributes.appending(styles: .init(.gap, value: "\(pixels)px"))
         } else if case let .semantic(amount) = spacingAmount {
-            attributes.add(classes: "gap-\(amount.rawValue)")
+            attributes.append(classes: "gap-\(amount.rawValue)")
         }
 
         let content = items.map { $0.render() }.joined()
