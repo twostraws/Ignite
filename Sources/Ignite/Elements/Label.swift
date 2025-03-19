@@ -49,23 +49,23 @@ public struct Label: InlineElement {
         var title = title
 
         if !(title is String) {
-            title.attributes.add(classes: "mb-0")
+            title.attributes.append(classes: "mb-0")
         }
 
         var icon = icon
 
         if !(icon is String) {
-            icon.attributes.add(classes: "mb-0")
+            icon.attributes.append(classes: "mb-0")
         }
 
         if !icon.attributes.styles.contains(where: { $0.property == Property.marginRight() }) &&
            !title.attributes.styles.contains(where: { $0.property == Property.marginLeft() }) {
-            icon.attributes.add(styles: .init(.marginRight, value: "10px"))
+            icon.attributes.append(styles: .init(.marginRight, value: "10px"))
         }
 
         var attributes = attributes
-        attributes.add(styles: .init(.display, value: "inline-flex"))
-        attributes.add(styles: .init(.alignItems, value: "center"))
+        attributes.append(styles: .init(.display, value: "inline-flex"))
+        attributes.append(styles: .init(.alignItems, value: "center"))
         return "<span\(attributes)>\(icon)\(title)</span>"
     }
 }
