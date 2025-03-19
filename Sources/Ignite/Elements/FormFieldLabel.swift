@@ -6,7 +6,7 @@
 //
 
 /// A form label with support for various styles
-struct Label: InlineElement {
+struct FormFieldLabel: InlineElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

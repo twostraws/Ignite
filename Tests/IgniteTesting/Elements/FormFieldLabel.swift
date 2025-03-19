@@ -16,7 +16,7 @@ import Testing
 class LabelTests: IgniteTestSuite {
     @Test("Basic Label")
     func basicLabel() async throws {
-        let element = Label(text: "This is a text for label")
+        let element = FormFieldLabel(text: "This is a text for label")
         let output = element.render()
 
         #expect(output == "<label>This is a text for label</label>")

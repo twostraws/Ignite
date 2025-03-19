@@ -242,7 +242,7 @@ public struct Form: HTML {
 
         // If no label text, return just the field
         if let textLabel = textField.label {
-            let label = Label(text: textLabel)
+            let label = FormFieldLabel(text: textLabel)
                 .class(controlSize.labelClass)
                 .customAttribute(name: "for", value: action.service.emailFieldID)
 
