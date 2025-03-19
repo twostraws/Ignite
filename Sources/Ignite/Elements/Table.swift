@@ -164,18 +164,18 @@ public struct Table: HTML {
             tableAttributes.add(classes: ["table-striped-columns"])
         }
 
-        let tableID = "table-\(UUID().uuidString.truncatedHash)"
         var output = ""
 
         if let filterTitle {
+            tableAttributes.id = "table-\(UUID().uuidString.truncatedHash)"
             output += """
             <input class=\"form-control mb-2\" type=\"text\" \
             placeholder=\"\(filterTitle)\" \
-            onkeyup=\"igniteFilterTable(this.value, '\(tableID)')\">
+            onkeyup=\"igniteFilterTable(this.value, '\(tableAttributes.id)')\">
             """
         }
 
-        output += "<table\(tableAttributes) id=\"\(tableID)\">"
+        output += "<table\(tableAttributes)>"
 
         if let caption {
             output += "<caption>\(caption)</caption>"
