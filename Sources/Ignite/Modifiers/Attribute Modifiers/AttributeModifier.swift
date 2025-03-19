@@ -10,7 +10,7 @@ private extension HTML {
         guard let attribute else { return self }
         // Custom elements need to be wrapped in a primitive container to store attributes
         var copy: any HTML = self.isPrimitive ? self : Section(self)
-        copy.attributes.add(customAttributes: attribute)
+        copy.attributes.append(customAttributes: attribute)
         return copy
     }
 }

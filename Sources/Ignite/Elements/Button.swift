@@ -173,11 +173,11 @@ public struct Button: InlineElement {
     /// - Returns: The HTML for this element.
     public func render() -> String {
         var buttonAttributes = attributes
-            .adding(classes: Button.classes(forRole: role, size: size))
-            .adding(aria: Button.aria(forRole: role))
+            .appending(classes: Button.classes(forRole: role, size: size))
+            .appending(aria: Button.aria(forRole: role))
 
         if isDisabled {
-            buttonAttributes.add(customAttributes: .disabled)
+            buttonAttributes.append(customAttributes: .disabled)
         }
 
         let output = label.render()

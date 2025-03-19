@@ -90,9 +90,9 @@ public struct List: HTML {
         var listAttributes = attributes
 
         if listStyle != .plain {
-            listAttributes.add(classes: "list-group")
+            listAttributes.append(classes: "list-group")
         } else if listStyle == .flushGroup {
-            listAttributes.add(classes: "list-group-flush")
+            listAttributes.append(classes: "list-group-flush")
         }
 
         var listMarkerType = ""
@@ -105,7 +105,7 @@ public struct List: HTML {
             }
 
             if listStyle == .group {
-                listAttributes.add(classes: "list-group-numbered")
+                listAttributes.append(classes: "list-group-numbered")
             }
         } else if case .unordered(let unorderedListStyle) = markerStyle {
             // Only add the extra styling if we aren't using
@@ -127,7 +127,7 @@ public struct List: HTML {
         }
 
         if listMarkerType.isEmpty == false {
-            listAttributes.add(style: .listStyleType, value: listMarkerType)
+            listAttributes.append(style: .listStyleType, value: listMarkerType)
         }
 
         return listAttributes
@@ -146,13 +146,13 @@ public struct List: HTML {
             // be allowed to handle that itself.
             if let listableItem = item as? ListableElement {
                 if listStyle != .plain {
-                    item.attributes.add(classes: "list-group-item")
+                    item.attributes.append(classes: "list-group-item")
                 }
 
                 output += listableItem.renderInList()
             } else {
                 let styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
-                item.attributes.add(classes: "m-0")
+                item.attributes.append(classes: "m-0")
                 output += "<li\(styleClass)>\(item.render())</li>"
             }
         }

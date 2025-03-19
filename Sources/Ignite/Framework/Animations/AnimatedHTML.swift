@@ -43,7 +43,7 @@ struct AnimatedHTML: HTML {
         let registeredAnimations = registerAnimations()
 
         var innerAttributes = CoreAttributes()
-        innerAttributes.add(styles: baseStyles)
+        innerAttributes.append(styles: baseStyles)
 
         var outerAttributes = CoreAttributes()
 
@@ -68,21 +68,21 @@ struct AnimatedHTML: HTML {
             guard let appearAnimations = registeredAnimations[.appear] else { return }
             let animationClasses = Set(appearAnimations.map { "animation-\($0.id)" })
             let newClasses = animationClasses.subtracting(outerAttributes.classes)
-            attributes.add(classes: newClasses)
+            attributes.append(classes: newClasses)
         }
 
         func assignClickClasses(outer outerAttr: inout CoreAttributes, inner innerAttr: inout CoreAttributes) {
             guard let clickAnimations = registeredAnimations[.click] else { return }
-            innerAttr.add(classes: clickAnimations.map { "click-\($0.id)" })
-            outerAttr.add(classes: clickAnimations.map { "animation-\($0.id)" })
+            innerAttr.append(classes: clickAnimations.map { "click-\($0.id)" })
+            outerAttr.append(classes: clickAnimations.map { "animation-\($0.id)" })
             let clickEvent = Event(.click, actions: [CustomAction("igniteToggleClickAnimation(this)")])
             outerAttr.events.append(clickEvent)
         }
 
         func assignHoverClass(_ attributes: inout CoreAttributes) {
             guard let hoverAnimations = registeredAnimations[.hover] else { return }
-            attributes.add(styles: .init(.transformStyle, value: "preserve-3d"))
-            attributes.add(classes: hoverAnimations.map { "animation-\($0.id)-hover" })
+            attributes.appending(styles: .init(.transformStyle, value: "preserve-3d"))
+            attributes.append(classes: hoverAnimations.map { "animation-\($0.id)-hover" })
 
             let classes = hoverAnimations.compactMap { $0 as? Animation }.compactMap {
                 if $0.fillMode == .backwards || $0.fillMode == .both {
@@ -91,7 +91,7 @@ struct AnimatedHTML: HTML {
                 return nil
             }
 
-            attributes.add(classes: classes)
+            attributes.append(classes: classes)
         }
     }
 

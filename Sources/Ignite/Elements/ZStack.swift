@@ -42,20 +42,20 @@ public struct ZStack: HTML {
 
         items = items.enumerated().map { index, item in
             var elementAttributes = CoreAttributes()
-            elementAttributes.add(classes: "mb-0")
-            elementAttributes.add(styles: [
+            elementAttributes.append(classes: "mb-0")
+            elementAttributes.append(styles: [
                 .init(.position, value: "relative"),
                 .init(.display, value: "grid"),
                 .init(.gridArea, value: "1/1"),
                 .init(.zIndex, value: "\(index)")
             ])
 
-            elementAttributes.add(styles: alignment.flexAlignmentRules)
+            elementAttributes.append(styles: alignment.flexAlignmentRules)
             return item.attributes(elementAttributes)
         }
 
         var attributes = attributes
-        attributes.add(styles: .init(.display, value: "grid"))
+        attributes.appending(styles: .init(.display, value: "grid"))
 
         let content = items.map { $0.render() }.joined()
         return "<div\(attributes)>\(content)</div>"
