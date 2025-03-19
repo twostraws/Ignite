@@ -10,7 +10,7 @@ private extension HTML {
         guard !classNames.filter({ !$0.isEmpty }).isEmpty else { return self }
         // Custom elements need to be wrapped in a primitive container to store attributes
         var copy: any HTML = self.isPrimitive ? self : Section(self)
-        copy.attributes.add(classes: classNames)
+        copy.attributes.append(classes: classNames)
         return copy
     }
 }

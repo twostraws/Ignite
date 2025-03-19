@@ -182,11 +182,11 @@ public struct MetaTag: HeadElement, Sendable {
         var attributes = attributes
 
         if charset.isEmpty {
-            attributes.add(customAttributes:
+            attributes.append(customAttributes:
                 .init(name: type, value: value),
                 .init(name: "content", value: content))
         } else {
-            attributes.add(customAttributes:
+            attributes.append(customAttributes:
                 .init(name: "charset", value: charset)
             )
         }

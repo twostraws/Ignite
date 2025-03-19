@@ -45,7 +45,7 @@ public struct CodeBlock: HTML {
         var copy = self
         let highlights = lines.map { "\($0)" }
         let dataLine = highlights.joined(separator: ",")
-        copy.attributes.add(dataAttributes: .init(name: "line", value: dataLine))
+        copy.attributes.append(dataAttributes: .init(name: "line", value: dataLine))
         return copy
     }
 
@@ -56,7 +56,7 @@ public struct CodeBlock: HTML {
         var copy = self
         let highlights = ranges.map { "\($0.lowerBound)-\($0.upperBound)" }
         let dataLine = highlights.joined(separator: ",")
-        copy.attributes.add(dataAttributes: .init(name: "line", value: dataLine))
+        copy.attributes.append(dataAttributes: .init(name: "line", value: dataLine))
         return copy
     }
 
@@ -72,7 +72,7 @@ public struct CodeBlock: HTML {
 
         var copy = self
         let dataLine = allHighlights.joined(separator: ",")
-        copy.attributes.add(dataAttributes: .init(name: "line", value: dataLine))
+        copy.attributes.append(dataAttributes: .init(name: "line", value: dataLine))
         return copy
     }
 
@@ -86,24 +86,24 @@ public struct CodeBlock: HTML {
 
         switch (siteVisibility, visibility) {
         case (.visible, .hidden):
-            copy.attributes.add(classes: "no-line-numbers")
+            copy.attributes.append(classes: "no-line-numbers")
 
         case (.hidden, .visible(let elementFirstLine, let elementWrapped)):
-            copy.attributes.add(classes: "line-numbers")
+            copy.attributes.append(classes: "line-numbers")
 
             if elementFirstLine != 1 {
-                copy.attributes.add(dataAttributes: .init(name: "start", value: elementFirstLine.formatted()))
+                copy.attributes.append(dataAttributes: .init(name: "start", value: elementFirstLine.formatted()))
             }
             if elementWrapped {
-                copy.attributes.add(styles: .init(.whiteSpace, value: "pre-wrap"))
+                copy.attributes.appending(styles: .init(.whiteSpace, value: "pre-wrap"))
             }
 
         case (.visible(let siteFirstLine, let siteWrapped), .visible(let elementFirstLine, let elementWrapped)):
             if elementFirstLine != siteFirstLine {
-                copy.attributes.add(dataAttributes: .init(name: "start", value: elementFirstLine.formatted()))
+                copy.attributes.append(dataAttributes: .init(name: "start", value: elementFirstLine.formatted()))
             }
             if elementWrapped != siteWrapped {
-                copy.attributes.add(styles: .init(.whiteSpace, value: elementWrapped ? "pre-wrap" : "pre"))
+                copy.attributes.appending(styles: .init(.whiteSpace, value: elementWrapped ? "pre-wrap" : "pre"))
             }
 
         default:

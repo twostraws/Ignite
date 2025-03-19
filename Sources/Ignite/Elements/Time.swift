@@ -57,7 +57,7 @@ public struct Time: InlineElement {
     public func render() -> String {
         var attributes = attributes
         if let dateTime {
-            attributes.add(customAttributes: .init(name: "datetime", value: dateTime.asISO8601))
+            attributes.append(customAttributes: .init(name: "datetime", value: dateTime.asISO8601))
         }
 
         return "<time\(attributes)>\(contents)</time>"

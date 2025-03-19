@@ -27,7 +27,7 @@ private extension HTML {
     func gridColumnWidthModifier(_ width: Int) -> any HTML {
         // Custom elements need to be wrapped in a primitive container to store attributes
         var copy: any HTML = self.isPrimitive ? self : Section(self)
-        copy.attributes.add(classes: ColumnWidth.count(width).className)
+        copy.attributes.append(classes: ColumnWidth.count(width).className)
         return copy
     }
 }

@@ -255,15 +255,15 @@ private extension HTML {
             break
 
         case .custom(let value):
-            modified.attributes.add(styles: .init(dimension.cssProperty, value: value))
+            modified.attributes.appending(styles: .init(dimension.cssProperty, value: value))
 
         case value where dimension == .maxWidth || dimension == .width:
             // For max-width and width, ensure all units are responsive
-            modified.attributes.add(styles: .init(dimension.cssProperty, value: "min(\(value.stringValue), 100%)"))
+            modified.attributes.appending(styles: .init(dimension.cssProperty, value: "min(\(value.stringValue), 100%)"))
 
         default:
             // For other dimensions, use the original value
-            modified.attributes.add(styles: .init(dimension.cssProperty, value: value.stringValue))
+            modified.attributes.appending(styles: .init(dimension.cssProperty, value: value.stringValue))
         }
     }
 }

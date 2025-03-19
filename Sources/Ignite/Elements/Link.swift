@@ -118,7 +118,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         if let name = target.name {
             var copy = self
             let attribute = Attribute(name: "target", value: name)
-            copy.attributes.add(customAttributes: attribute)
+            copy.attributes.append(customAttributes: attribute)
             return copy
         } else {
             return self
@@ -168,7 +168,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         var copy = self
         let attributeValue = relationship.map(\.rawValue).joined(separator: " ")
         let attribute = Attribute(name: "rel", value: attributeValue)
-        copy.attributes.add(customAttributes: attribute)
+        copy.attributes.append(customAttributes: attribute)
         return copy
     }
 
@@ -198,10 +198,10 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         default: displayText
         }
 
-        var linkAttributes = attributes.adding(classes: linkClasses)
-        linkAttributes.add(classes: "protected-link")
-        linkAttributes.add(dataAttributes: .init(name: "encoded-url", value: encodedUrl))
-        linkAttributes.add(customAttributes: .init(name: "href", value: "#"))
+        var linkAttributes = attributes.appending(classes: linkClasses)
+        linkAttributes.append(classes: "protected-link")
+        linkAttributes.append(dataAttributes: .init(name: "encoded-url", value: encodedUrl))
+        linkAttributes.append(customAttributes: .init(name: "href", value: "#"))
 
         return "a\(linkAttributes)>\(displayContent)</a>"
     }
@@ -209,7 +209,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     /// Renders a standard link with the provided URL and content.
     /// - Returns: An HTML anchor tag with the appropriate href and content.
     private func renderStandardLink() -> String {
-        var linkAttributes = attributes.adding(classes: linkClasses)
+        var linkAttributes = attributes.appending(classes: linkClasses)
 
         guard let url = URL(string: url) else {
             publishingContext.addWarning("One of your links uses an invalid URL.")
@@ -217,7 +217,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         }
 
         let path = publishingContext.path(for: url)
-        linkAttributes.add(customAttributes: .init(name: "href", value: path))
+        linkAttributes.append(customAttributes: .init(name: "href", value: path))
         return "<a\(linkAttributes)>\(content)</a>"
     }
 }
