@@ -62,7 +62,7 @@ public struct Body: DocumentElement {
                 attributes.append(dataAttributes: .init(name: "start", value: firstLine.formatted()))
             }
             if shouldWrap {
-                attributes.appending(styles: .init(.whiteSpace, value: "pre-wrap"))
+                attributes.append(styles: .init(.whiteSpace, value: "pre-wrap"))
             }
         }
 

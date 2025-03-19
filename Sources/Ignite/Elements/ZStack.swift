@@ -55,7 +55,7 @@ public struct ZStack: HTML {
         }
 
         var attributes = attributes
-        attributes.appending(styles: .init(.display, value: "grid"))
+        attributes.append(styles: .init(.display, value: "grid"))
 
         let content = items.map { $0.render() }.joined()
         return "<div\(attributes)>\(content)</div>"
