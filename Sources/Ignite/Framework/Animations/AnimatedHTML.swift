@@ -81,7 +81,7 @@ struct AnimatedHTML: HTML {
 
         func assignHoverClass(_ attributes: inout CoreAttributes) {
             guard let hoverAnimations = registeredAnimations[.hover] else { return }
-            attributes.appending(styles: .init(.transformStyle, value: "preserve-3d"))
+            attributes.append(styles: .init(.transformStyle, value: "preserve-3d"))
             attributes.append(classes: hoverAnimations.map { "animation-\($0.id)-hover" })
 
             let classes = hoverAnimations.compactMap { $0 as? Animation }.compactMap {

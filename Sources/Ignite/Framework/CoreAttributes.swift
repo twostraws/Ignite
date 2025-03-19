@@ -182,7 +182,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
 
     /// Appends multiple extra inline CSS styles.
     /// - Parameter classes: The inline CSS styles to append.
-    mutating func appending(styles: InlineStyle...) {
+    mutating func append(styles: InlineStyle...) {
         self.styles.formUnion(styles)
     }
 
