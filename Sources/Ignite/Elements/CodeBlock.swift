@@ -95,7 +95,7 @@ public struct CodeBlock: HTML {
                 copy.attributes.append(dataAttributes: .init(name: "start", value: elementFirstLine.formatted()))
             }
             if elementWrapped {
-                copy.attributes.appending(styles: .init(.whiteSpace, value: "pre-wrap"))
+                copy.attributes.append(styles: .init(.whiteSpace, value: "pre-wrap"))
             }
 
         case (.visible(let siteFirstLine, let siteWrapped), .visible(let elementFirstLine, let elementWrapped)):
@@ -103,7 +103,7 @@ public struct CodeBlock: HTML {
                 copy.attributes.append(dataAttributes: .init(name: "start", value: elementFirstLine.formatted()))
             }
             if elementWrapped != siteWrapped {
-                copy.attributes.appending(styles: .init(.whiteSpace, value: elementWrapped ? "pre-wrap" : "pre"))
+                copy.attributes.append(styles: .init(.whiteSpace, value: elementWrapped ? "pre-wrap" : "pre"))
             }
 
         default:

@@ -104,7 +104,7 @@ public struct Grid: HTML, HorizontalAligning {
 
         switch spacingAmount {
         case .exact(let pixels) where pixels != 0:
-            gridAttributes.appending(styles: .init(.rowGap, value: "\(pixels)px"))
+            gridAttributes.append(styles: .init(.rowGap, value: "\(pixels)px"))
         case .semantic(let amount) where spacingAmount != .semantic(.none):
             gutterClass = "gy-\(amount.rawValue)"
         default: break

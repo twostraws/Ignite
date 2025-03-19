@@ -15,7 +15,7 @@
     /// - Returns: The modified `HTML` element
     public func style(_ property: Property, _ value: String) -> Self {
         var copy = self
-        copy.attributes.appending(styles: .init(property, value: value))
+        copy.attributes.append(styles: .init(property, value: value))
         return copy
     }
 }

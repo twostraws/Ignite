@@ -130,7 +130,7 @@ public struct VStack: HTML {
         }
 
         if case let .exact(pixels) = spacingAmount, pixels != 0 {
-            attributes.appending(styles: .init(.gap, value: "\(pixels)px"))
+            attributes.append(styles: .init(.gap, value: "\(pixels)px"))
         } else if case let .semantic(amount) = spacingAmount {
             attributes.append(classes: "gap-\(amount.rawValue)")
         }
