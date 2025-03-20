@@ -62,6 +62,6 @@ import Testing
         let output = element.render()
         let expectedPath = PublishingContext.shared.path(for: URL(string: page.path)!)
 
-        #expect(output == "<a href=\"\(expectedPath)\">Link with warning role.</a>")
+        #expect(output == "<a href=\"\(expectedPath)\" class=\"link-warning\">Link with warning role.</a>")
     }
 }
