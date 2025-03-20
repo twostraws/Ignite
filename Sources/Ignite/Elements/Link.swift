@@ -63,17 +63,16 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         case .button:
             outputClasses.append(contentsOf: Button.classes(forRole: role, size: size))
         case .underline(let baseDecoration, hover: let hoverDecoration) where style != .automatic:
+            outputClasses.append("link-underline")
+            outputClasses.append("link-underline-opacity-\(baseDecoration)")
+            outputClasses.append("link-underline-opacity-\(hoverDecoration)-hover")
+            fallthrough
+        default:
             if role == .none {
                 outputClasses.append("link-plain")
             } else if role != .default {
                 outputClasses.append("link-\(role.rawValue)")
             }
-
-            outputClasses.append("link-underline")
-            outputClasses.append("link-underline-opacity-\(baseDecoration)")
-            outputClasses.append("link-underline-opacity-\(hoverDecoration)-hover")
-        default:
-            break
         }
 
         return outputClasses
