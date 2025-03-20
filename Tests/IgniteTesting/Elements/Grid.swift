@@ -31,13 +31,13 @@ class GridTests: IgniteTestSuite {
 
         #expect(output == """
         <div class="row">\
-        <div class="col">\
+        <div class="col g-3">\
         <img src="/images/photos/shades.jpg" alt="A pair of sunglasses." class="img-fluid" />\
         </div>\
-        <div class="col">\
+        <div class="col g-3">\
         <img src="/images/photos/stack.jpg" alt="A door partly open." class="img-fluid" />\
         </div>\
-        <div class="col">\
+        <div class="col g-3">\
         <img src="/images/photos/wind.jpg" alt="A windy day." class="img-fluid" />\
         </div>\
         </div>
@@ -64,12 +64,12 @@ class GridTests: IgniteTestSuite {
 
         #expect(output == """
         <div class="row">\
-        <div class="col-md-4">\
+        <div class="col-md-4 g-3">\
         <img src="/images/photos/shades.jpg" alt="A pair of sunglasses." class="img-fluid" />\
         </div>\
-        <div class="col-md-4"><img src="/images/photos/stack.jpg" alt="A door partly open." class="img-fluid" />\
+        <div class="col-md-4 g-3"><img src="/images/photos/stack.jpg" alt="A door partly open." class="img-fluid" />\
         </div>\
-        <div class="col-md-4">\
+        <div class="col-md-4 g-3">\
         <img src="/images/photos/wind.jpg" alt="A windy day." class="img-fluid" />\
         </div>\
         </div>
@@ -100,15 +100,15 @@ class GridTests: IgniteTestSuite {
 
         #expect(output == """
         <div class="row">\
-        <div class="col-md-4">\
+        <div class="col-md-4 g-3">\
         <img src="/images/photos/shades.jpg" alt="A pair of sunglasses." class="img-fluid" />\
         </div>\
-        <div class="col-md-4">\
+        <div class="col-md-4 g-3">\
         <img src="/images/photos/stack.jpg" alt="A door partly open." class="img-fluid" />\
         </div>\
-        <div class="col-md-4"><img src="/images/photos/rug.jpg" alt="A nice rug." class="img-fluid" />\
+        <div class="col-md-4 g-3"><img src="/images/photos/rug.jpg" alt="A nice rug." class="img-fluid" />\
         </div>\
-        <div class="col-md-4">\
+        <div class="col-md-4 g-3">\
         <img src="/images/photos/car.jpg" alt="The window of a car." class="img-fluid" />\
         </div>\
         </div>
@@ -136,16 +136,16 @@ class GridTests: IgniteTestSuite {
 
         #expect(output == """
         <div class="row row-cols-1 row-cols-md-2">\
-        <div class="col">\
+        <div class="col g-3">\
         <img src="/images/photos/shades.jpg" alt="A pair of sunglasses." class="img-fluid" />\
         </div>\
-        <div class="col">\
+        <div class="col g-3">\
         <img src="/images/photos/stack.jpg" alt="A door partly open." class="img-fluid" />\
         </div>\
-        <div class="col">\
+        <div class="col g-3">\
         <img src="/images/photos/rug.jpg" alt="A nice rug." class="img-fluid" />\
         </div>\
-        <div class="col"><img src="/images/photos/car.jpg" alt="The window of a car." class="img-fluid" />\
+        <div class="col g-3"><img src="/images/photos/car.jpg" alt="The window of a car." class="img-fluid" />\
         </div>\
         </div>
         """)
