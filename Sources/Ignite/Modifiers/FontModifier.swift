@@ -143,7 +143,7 @@ private extension HTML {
             styles.append(.init(.fontSize, value: style.sizeVariable))
         }
 
-        return Section(self.class("font-inherit"))
+        return Container(self.class("font-inherit"))
             .style(styles)
             .class(classes)
     }

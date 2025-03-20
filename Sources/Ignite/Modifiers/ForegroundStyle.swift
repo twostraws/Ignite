@@ -138,23 +138,23 @@ private func styles(for gradient: Gradient) -> [InlineStyle] {
 
 private extension HTML {
     func foregroundStyleModifier(_ style: StyleType) -> any HTML {
-        switch style {
+        return switch style {
         case .none:
             self
         case .gradient(let gradient) where self.isText:
             self.style(styles(for: gradient))
         case .gradient(let gradient):
-            Section(self.class("color-inherit"))
+            Container(self.class("color-inherit"))
                 .style(styles(for: gradient))
         case .string(let string) where self.isText:
             self.style(.color, string)
         case .string(let string):
-            Section(self.class("color-inherit"))
+            Container(self.class("color-inherit"))
                 .style(.color, string)
-        case .color(let color) where self.isText:
+        case .color(let color) where self.isText || self.isImage:
             self.style(.color, color.description)
         case .color(let color):
-            Section(self.class("color-inherit"))
+            Container(self.class("color-inherit"))
                 .style(.color, color.description)
         case .style(let foregroundStyle):
             self.class(foregroundStyle.rawValue)

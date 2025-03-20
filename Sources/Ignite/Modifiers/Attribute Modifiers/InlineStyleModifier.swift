@@ -8,7 +8,7 @@
 private extension HTML {
     func inlineStyleModifier(styles: [InlineStyle]) -> any HTML {
         // Custom elements need to be wrapped in a primitive container to store attributes
-        var copy: any HTML = self.isPrimitive ? self : Section(self)
+        var copy: any HTML = self.isPrimitive ? self : Container(self)
         copy.attributes.append(styles: styles)
         return copy
     }

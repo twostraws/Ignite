@@ -46,7 +46,7 @@ public struct Grid: HTML, HorizontalAligning {
     /// - Parameters:
     ///   - spacing: The predefined size between each element. Defaults to `.none`.
     ///   - items: The items to use in this grid.
-    public init(spacing: SpacingAmount = .none, @HTMLBuilder items: () -> some HTML) {
+    public init(spacing: SpacingAmount = .medium, @HTMLBuilder items: () -> some HTML) {
         self.items = HTMLCollection(items)
         self.spacingAmount = .semantic(spacing)
     }
@@ -70,7 +70,7 @@ public struct Grid: HTML, HorizontalAligning {
     ///   - spacing: The predefined size between each element. Defaults to `.none`
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a some HTML representing that value in the grid.
-    public init<T>(_ items: any Sequence<T>, spacing: SpacingAmount = .none, content: (T) -> some HTML) {
+    public init<T>(_ items: any Sequence<T>, spacing: SpacingAmount = .medium, content: (T) -> some HTML) {
         self.items = HTMLCollection(items.map(content))
         self.spacingAmount = .semantic(spacing)
     }

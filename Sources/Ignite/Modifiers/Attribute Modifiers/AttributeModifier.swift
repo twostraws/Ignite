@@ -9,7 +9,7 @@ private extension HTML {
     func attributeModifier(_ attribute: Attribute?) -> any HTML {
         guard let attribute else { return self }
         // Custom elements need to be wrapped in a primitive container to store attributes
-        var copy: any HTML = self.isPrimitive ? self : Section(self)
+        var copy: any HTML = self.isPrimitive ? self : Container(self)
         copy.attributes.append(customAttributes: attribute)
         return copy
     }

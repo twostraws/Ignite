@@ -80,10 +80,10 @@ private extension HTML {
     func applyToNonText(_ spacing: LineSpacingType) -> any HTML {
         switch spacing {
         case .exact(let spacing):
-            Section(self.class("line-height-inherit"))
+            Container(self.class("line-height-inherit"))
                 .style(.lineHeight, spacing.formatted(.nonLocalizedDecimal))
         case .semantic(let spacing):
-            Section(self.class("line-height-inherit"))
+            Container(self.class("line-height-inherit"))
                 .class("lh-\(spacing.rawValue)")
         }
     }

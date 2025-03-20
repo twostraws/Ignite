@@ -9,7 +9,7 @@ private extension HTML {
     func idModifier(_ id: String) -> any HTML {
         guard !id.isEmpty else { return self }
         // Custom elements need to be wrapped in a primitive container to store attributes
-        var copy: any HTML = self.isPrimitive ? self : Section(self)
+        var copy: any HTML = self.isPrimitive ? self : Container(self)
         copy.attributes.id = id
         return copy
     }

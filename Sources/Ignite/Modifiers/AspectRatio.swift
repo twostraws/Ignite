@@ -59,10 +59,8 @@ public extension Image {
     ///   - contentMode: The content mode to apply.
     /// - Returns: A new instance of this element with the ratio and content mode applied.
     func aspectRatio(_ ratio: AspectRatio, contentMode: ContentMode) -> some HTML {
-        Section {
-            self.class(contentMode.htmlClass)
-        }
-        .aspectRatio(ratio)
+        Container(self.class(contentMode.htmlClass))
+            .aspectRatio(ratio)
     }
 
     /// Applies a fixed aspect ratio to the image element.
@@ -71,9 +69,7 @@ public extension Image {
     ///   - contentMode: The content mode to apply.
     /// - Returns: A new instance of this element with the ratio and content mode applied.
     func aspectRatio(_ ratio: Double, contentMode: ContentMode) -> some HTML {
-        Section {
-            self.class(contentMode.htmlClass)
-        }
-        .aspectRatio(ratio)
+        Container(self.class(contentMode.htmlClass))
+            .aspectRatio(ratio)
     }
 }

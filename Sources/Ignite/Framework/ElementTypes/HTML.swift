@@ -84,6 +84,12 @@ extension HTML {
     var isText: Bool {
         body is Text || (body as? AnyHTML)?.wrapped is Text
     }
+
+    /// Whether this element represents a `div` wrapper.
+    var isSection: Bool {
+        self is Section ||
+        (self as? AnyHTML)?.wrapped is Section
+    }
 }
 
 extension HTML {

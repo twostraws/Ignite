@@ -9,7 +9,7 @@ public extension HTML {
     /// Forces an element to be sized based on its content rather than expanding to fill its container.
     /// - Returns: A modified copy of the element with fixed sizing applied
     func fixedSize() -> some HTML {
-        Section(self)
+        Container(self)
             .style(.display, "inline-block")
     }
 }
