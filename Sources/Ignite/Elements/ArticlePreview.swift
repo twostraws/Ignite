@@ -73,7 +73,9 @@ public struct ArticlePreview: HTML {
 
             if let tagLinks {
                 Section {
-                    tagLinks
+                    ForEach(tagLinks) { link in
+                        link
+                    }
                 }
                 .style(.marginTop, "-5px")
             }
