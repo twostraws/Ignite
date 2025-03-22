@@ -19,6 +19,6 @@ class SpacerTests: IgniteTestSuite {
         let element = Spacer()
         let output = element.render()
 
-        #expect(output == "<div style=\"height: 20px\"></div>")
+        #expect(output == "<div class=\"ms-auto\" style=\"height: 20px\"></div>")
     }
 }
