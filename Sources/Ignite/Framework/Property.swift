@@ -1012,4 +1012,8 @@ public enum Property: String, Sendable {
     /// Sets the zoom level of an element
     case zoom = "zoom"
 }
+
+extension Property {
+    func callAsFunction() -> String { rawValue }
+}
 // swiftlint:enable file_length type_body_length
