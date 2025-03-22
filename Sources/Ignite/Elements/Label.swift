@@ -27,10 +27,10 @@ public struct Label: InlineElement {
     /// Creates a label with a string title and image icon.
     /// - Parameters:
     ///   - title: The text to display in the label.
-    ///   - name: The image to use as the label's icon.
-    public init(_ title: String, image name: String) {
+    ///   - path: The image to use as the label's icon.
+    public init(_ title: String, image path: String) {
         self.title = title
-        self.icon = Image(decorative: name)
+        self.icon = Image(path, description: title)
     }
 
     /// Creates a label with a string title and a built-in icon.
@@ -39,7 +39,7 @@ public struct Label: InlineElement {
     ///   - systemImage: An image name chosen from https://icons.getbootstrap.com
     public init(_ title: String, systemImage: String) {
         self.title = title
-        self.icon = Image(systemName: systemImage, description: "")
+        self.icon = Image(systemName: systemImage, description: title)
     }
 
     /// Creates a label with custom title and icon content.
