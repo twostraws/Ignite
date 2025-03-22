@@ -29,26 +29,8 @@ struct RunCommand: ParsableCommand {
     @Flag(help: "Whether to open the server in your preferred web browser immediately.")
     var preview = false
 
-    /// Whether to automatically terminate any existing web
-    /// server running on the port, if there is one. Defaults to false.
-    @Flag(help: "Whether to force quit any existing server on the current port number before starting a new one.")
-    var force = false
-
     /// Runs this command. Automatically called by Argument Parser.
     func run() throws {
-        // Immediately kill any server if applicable, but only
-        // if they asked us to.
-        if force {
-            try terminateAnyExistingServer()
-        }
-
-        // If we're still here and a server is already running
-        // on their current port, we can't proceed.
-        guard try isServerRunning() == false else {
-            print("❌ A local web server is already running on port \(port).")
-            return
-        }
-
         // Make sure we actually have a folder to serve up.
         guard FileManager.default.fileExists(atPath: "./\(directory)") else {
             print("❌ Failed to find directory named '\(directory)'.")
@@ -64,46 +46,39 @@ struct RunCommand: ParsableCommand {
             }
         }
 
-        print("✅ Starting local web server on http://localhost:\(port)")
+        // Find an available port
+        var currentPort = port
+        while try isServerRunning(on: currentPort) {
+            currentPort += 1
+            if currentPort >= 9000 {
+                print("❌ No available ports found in range 8000-8999.")
+                return
+            }
+        }
+
+        print("✅ Starting local web server on http://localhost:\(currentPort)")
         print("Press ↵ Return to exit.")
 
-        let previewCommand: String
-
-        // Automatically open a web browser pointing to their
-        // local server if requested.
-        if preview {
-            previewCommand = "open http://localhost:\(port)"
+        let previewCommand = if preview {
+            // Automatically open a web browser pointing to their
+            // local server if requested.
+            "open http://localhost:\(currentPort)"
         } else {
             // Important: The empty space below is enough to
             // make the Process.execute() wait for a key press
             // before exiting.
-            previewCommand = " "
+            " "
         }
 
         try Process.execute(
-            command: "python3 -m http.server -d \(directory) \(port)",
+            command: "python3 -m http.server -d \(directory) \(currentPort)",
             then: previewCommand
         )
     }
 
-    /// Locates and terminates any server running on the user's port.
-    private func terminateAnyExistingServer() throws {
-        if try isServerRunning() {
-            let pid = try getRunningServerPID()
-            try Process.execute(command: "kill \(pid)")
-        }
-    }
-
-    /// Finds the process ID for any server running on the user's port.
-    /// - Returns: The process ID (PID) for the server, or empty/
-    private func getRunningServerPID() throws -> String {
+    /// Returns true if there is a server running on the specified port.
+    private func isServerRunning(on port: Int) throws -> Bool {
         let result = try Process.execute(command: "lsof -t -i tcp:\(port)")
-        return result.output
-    }
-
-    /// Returns true if there is a server running on the user's port.
-    /// - Returns: True if there is a server running there, otherwise false.
-    private func isServerRunning() throws -> Bool {
-        try getRunningServerPID().isEmpty == false
+        return !result.output.isEmpty
     }
 }
