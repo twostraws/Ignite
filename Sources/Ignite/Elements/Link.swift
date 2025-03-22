@@ -86,6 +86,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     public init(target: String, @HTMLBuilder content: @escaping () -> some HTML) {
         self.content = content()
         self.url = target
+        self.role = .none
     }
 
     /// Creates a Link wrapping the provided content and pointing to the given page
@@ -95,6 +96,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     public init(target: any StaticPage, @HTMLBuilder content: @escaping () -> some HTML) {
         self.content = content()
         self.url = target.path
+        self.role = .none
     }
 
     /// Creates a `Link` wrapping the provided content and pointing to the path
@@ -105,6 +107,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     public init(target article: Article, @HTMLBuilder content: @escaping () -> some HTML) {
         self.content = content()
         self.url = article.path
+        self.role = .none
     }
 
     /// Controls in which window this page should be opened.
