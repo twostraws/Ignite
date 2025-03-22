@@ -40,10 +40,12 @@ public struct Spacer: HTML {
         if case let .semantic(spacingAmount) = spacingAmount {
             Section {}
                 .margin(.top, spacingAmount)
+                .class("ms-auto")
                 .render()
         } else if case let .exact(int) = spacingAmount {
             Section {}
                 .frame(height: .px(int))
+                .class("ms-auto")
                 .render()
         } else {
             fatalError("Unknown spacing amount: \(String(describing: spacingAmount))")
