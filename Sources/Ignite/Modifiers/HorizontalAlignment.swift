@@ -54,14 +54,6 @@ public enum HorizontalAlignment: String, Sendable, Equatable {
         }
     }
 
-    var containerAlignmentStyle: InlineStyle {
-        switch self {
-        case .leading: .init(.textAlign, value: "left")
-        case .center: .init(.textAlign, value: "center")
-        case .trailing: .init(.textAlign, value: "right")
-        }
-    }
-
     var itemAlignmentStyle: InlineStyle {
         switch self {
         case .leading: .init(.alignSelf, value: "start")

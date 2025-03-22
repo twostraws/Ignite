@@ -24,8 +24,8 @@ class VStackTests: IgniteTestSuite {
 
         #expect(output == """
         <div class="vstack">\
-        <label class="mb-0 align-self-start">Top Label</label>\
-        <label class="mb-0 align-self-start">Bottom Label</label>\
+        <label class="mb-0 align-self-center">Top Label</label>\
+        <label class="mb-0 align-self-center">Bottom Label</label>\
         </div>
         """)
     }
@@ -40,8 +40,8 @@ class VStackTests: IgniteTestSuite {
 
         #expect(output == """
         <div class="vstack" style="gap: 10px">\
-        <label class="mb-0 align-self-start">Top Label</label>\
-        <label class="mb-0 align-self-start">Bottom Label</label>\
+        <label class="mb-0 align-self-center">Top Label</label>\
+        <label class="mb-0 align-self-center">Bottom Label</label>\
         </div>
         """)
     }
