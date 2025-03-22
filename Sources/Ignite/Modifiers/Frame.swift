@@ -15,7 +15,9 @@ public extension HTML {
     ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
     ///   - maxHeight: A maximum height for this element
-    ///   - alignment: How to align this element inside its frame
+    ///   - alignment: How to align this element inside its frame. When `nil`, dimensions are applied directly 
+    ///     to the element. When specified, creates an invisible frame with the given dimensions
+    ///     and aligns the element within it according to the alignment value.
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
         width: LengthUnit? = nil,
@@ -24,7 +26,7 @@ public extension HTML {
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
-        alignment: Alignment = .topLeading
+        alignment: Alignment? = nil
     ) -> some HTML {
         AnyHTML(frameModifier(
             width: width,
@@ -45,7 +47,9 @@ public extension HTML {
     ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
     ///   - maxHeight: A maximum height for this element
-    ///   - alignment: How to align this element inside its frame
+    ///   - alignment: How to align this element inside its frame. When `nil`, dimensions are applied directly 
+    ///     to the element. When specified, creates an invisible frame with the given dimensions
+    ///     and aligns the element within it according to the alignment value.
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
         width: Int? = nil,
@@ -54,7 +58,7 @@ public extension HTML {
         height: Int? = nil,
         minHeight: Int? = nil,
         maxHeight: Int? = nil,
-        alignment: Alignment = .topLeading
+        alignment: Alignment? = nil
     ) -> some HTML {
         AnyHTML(frameModifier(
             width: width.map { .px($0) },
@@ -84,7 +88,6 @@ public extension InlineElement {
     ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
     ///   - maxHeight: A maximum height for this element
-    ///   - alignment: How to align this element inside its frame
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
         width: LengthUnit? = nil,
@@ -92,8 +95,7 @@ public extension InlineElement {
         maxWidth: LengthUnit? = nil,
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
-        maxHeight: LengthUnit? = nil,
-        alignment: Alignment = .topLeading
+        maxHeight: LengthUnit? = nil
     ) -> some InlineElement {
         AnyHTML(frameModifier(
             width: width,
@@ -101,8 +103,7 @@ public extension InlineElement {
             maxWidth: maxWidth,
             height: height,
             minHeight: minHeight,
-            maxHeight: maxHeight,
-            alignment: alignment))
+            maxHeight: maxHeight))
     }
 
     /// Creates a specific frame for this element, either using exact pixel values or
@@ -114,7 +115,6 @@ public extension InlineElement {
     ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
     ///   - maxHeight: A maximum height for this element
-    ///   - alignment: How to align this element inside its frame
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
         width: Int? = nil,
@@ -122,8 +122,7 @@ public extension InlineElement {
         maxWidth: Int? = nil,
         height: Int? = nil,
         minHeight: Int? = nil,
-        maxHeight: Int? = nil,
-        alignment: Alignment = .topLeading
+        maxHeight: Int? = nil
     ) -> some InlineElement {
         AnyHTML(frameModifier(
             width: width.map { .px($0) },
@@ -131,61 +130,7 @@ public extension InlineElement {
             maxWidth: maxWidth.map { .px($0) },
             height: height.map { .px($0) },
             minHeight: minHeight.map { .px($0) },
-            maxHeight: maxHeight.map { .px($0) },
-            alignment: alignment))
-    }
-
-    /// A convenience method for setting only the alignment.
-    /// - Parameter alignment: The desired alignment
-    /// - Returns: A modified element with the specified alignment
-    func frame(alignment: Alignment) -> some InlineElement {
-        AnyHTML(frameModifier(alignment: alignment))
-    }
-}
-
-/// Represents the different types of dimensional constraints that can be applied to an element.
-private enum Dimension {
-    /// The exact width, minimum width, or maximum width constraints
-    case width, minWidth, maxWidth
-    /// The exact height, minimum height, or maximum height constraints
-    case height, minHeight, maxHeight
-
-    /// The CSS property name for this dimension.
-    var cssProperty: Property {
-        switch self {
-        case .width: .width
-        case .minWidth: .minWidth
-        case .maxWidth: .maxWidth
-        case .height: .height
-        case .minHeight: .minHeight
-        case .maxHeight: .maxHeight
-        }
-    }
-
-    /// The Bootstrap class to use when the dimension should fill its container.
-    var bootstrapClass: String {
-        switch self {
-        case .width, .minWidth, .maxWidth: "w-100"
-        case .height, .minHeight, .maxHeight: "h-100"
-        }
-    }
-
-    /// The Bootstrap class to use when the dimension should fill the viewport.
-    var viewportClass: String {
-        switch self {
-        case .width, .maxWidth: "vw-100"
-        case .minWidth: "min-vw-100"
-        case .height, .maxHeight: "vh-100"
-        case .minHeight: "min-vh-100"
-        }
-    }
-
-    /// Whether this dimension requires flex alignment when using viewport sizing.
-    var needsFlexAlignment: Bool {
-        switch self {
-        case .width, .maxWidth, .height, .maxHeight: true
-        case .minWidth, .minHeight: false
-        }
+            maxHeight: maxHeight.map { .px($0) }))
     }
 }
 
@@ -197,73 +142,45 @@ private extension HTML {
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
-        alignment: Alignment = .topLeading
+        alignment: Alignment? = nil
     ) -> any HTML {
-        var modified: any HTML = self
-        var classes = [String]()
+        var dimensions = [InlineStyle]()
 
-        handleDimension(width, dimension: .width, alignment: alignment, classes: &classes, modified: &modified)
-        handleDimension(minWidth, dimension: .minWidth, alignment: alignment, classes: &classes, modified: &modified)
-        handleDimension(maxWidth, dimension: .maxWidth, alignment: alignment, classes: &classes, modified: &modified)
-        handleDimension(height, dimension: .height, alignment: alignment, classes: &classes, modified: &modified)
-        handleDimension(minHeight, dimension: .minHeight, alignment: alignment, classes: &classes, modified: &modified)
-        handleDimension(maxHeight, dimension: .maxHeight, alignment: alignment, classes: &classes, modified: &modified)
-
-        if alignment != .topLeading {
-            classes.append(contentsOf: alignment.bootstrapClasses)
+        if let minWidth {
+            dimensions.append(.init(.minWidth, value: minWidth.stringValue))
         }
 
-        if !classes.isEmpty {
-            modified = modified.class(classes.joined(separator: " "))
+        if let width {
+            dimensions.append(.init(.width, value: width.stringValue))
         }
 
-        return modified
-    }
-
-    /// Processes a single dimensional constraint and applies the appropriate styling.
-    /// - Parameters:
-    ///   - value: The length value to apply, if any
-    ///   - dimension: The type of dimension being processed (width, height, etc.)
-    ///   - classes: The collection of Bootstrap classes to append to
-    ///   - modified: The HTML element being modified
-    private func handleDimension(
-        _ value: LengthUnit?,
-        dimension: Dimension,
-        alignment: Alignment,
-        classes: inout [String],
-        modified: inout any HTML
-    ) {
-        guard let value else { return }
-
-        switch value {
-        case .vh(100%), .vw(100%):
-            classes.append(dimension.viewportClass)
-            if dimension.needsFlexAlignment {
-                classes.append("d-flex")
-                classes.append(contentsOf: alignment.bootstrapClasses)
-            }
-
-        case .percent(100%):
-            classes.append(dimension.bootstrapClass)
-            if dimension.needsFlexAlignment {
-                classes.append("d-flex")
-                classes.append(contentsOf: alignment.bootstrapClasses)
-            }
-
-        case .default:
-            // Don't apply any styling for default values
-            break
-
-        case .custom(let value):
-            modified.attributes.append(styles: .init(dimension.cssProperty, value: value))
-
-        case value where dimension == .maxWidth || dimension == .width:
-            // For max-width and width, ensure all units are responsive
-            modified.attributes.append(styles: .init(dimension.cssProperty, value: "min(\(value.stringValue), 100%)"))
-
-        default:
-            // For other dimensions, use the original value
-            modified.attributes.append(styles: .init(dimension.cssProperty, value: value.stringValue))
+        if let maxWidth {
+            dimensions.append(.init(.maxWidth, value: "min(\(maxWidth.stringValue), 100%)"))
         }
+
+        if let minHeight {
+            dimensions.append(.init(.minHeight, value: minHeight.stringValue))
+        }
+
+        if let height {
+            dimensions.append(.init(.height, value: height.stringValue))
+        }
+
+        if let maxHeight {
+            dimensions.append(.init(.maxHeight, value: maxHeight.stringValue))
+        }
+
+        if let alignment {
+            // Create a positioning context with the specified frame for the modified element
+            return Section(self)
+                .style(.display, "flex")
+                .style(.flexDirection, "column")
+                .style(.overflow, "hidden")
+                .style(alignment.flexAlignmentRules)
+                .style(dimensions)
+        }
+
+        // Apply the frame to the modified element directly
+        return self.style(dimensions)
     }
 }
