@@ -16,7 +16,7 @@ import Testing
 class LabelTests: IgniteTestSuite {
     @Test("Basic Label")
     func basicLabel() async throws {
-        let element = Label("Logo", image: .init(decorative: "/images/logo.png"))
+        let element = Label("Logo", image: "/images/logo.png")
         let output = element.render()
 
         #expect(output == """
