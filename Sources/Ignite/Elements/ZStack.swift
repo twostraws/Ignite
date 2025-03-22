@@ -28,9 +28,9 @@ public struct ZStack: HTML {
     /// The child elements to be stacked.
     private var items: HTMLCollection
 
-    /// Creates a new ZStack with the specified alignment and content.
+    /// Creates a new `ZStack` with the specified alignment and content.
     /// - Parameters:
-    ///   - alignment: The point within the stack where elements should be aligned (default: .center).
+    ///   - alignment: The point within the stack where elements should be aligned. Defaults `.center`.
     ///   - items: A closure that returns the elements to be stacked.
     public init(alignment: Alignment = .center, @HTMLBuilder _ items: () -> some HTML) {
         self.items = HTMLCollection(items)
@@ -50,7 +50,7 @@ public struct ZStack: HTML {
                 .init(.zIndex, value: "\(index)")
             ])
 
-            elementAttributes.append(styles: alignment.flexAlignmentRules)
+            elementAttributes.append(styles: alignment.itemAlignmentRules)
             return item.attributes(elementAttributes)
         }
 
@@ -62,9 +62,9 @@ public struct ZStack: HTML {
     }
 }
 
-fileprivate extension Alignment {
-    /// Grid container rules for aligning content
-    var flexAlignmentRules: [InlineStyle] {
+private extension Alignment {
+    /// Alignment rules for the items of containers
+    var itemAlignmentRules: [InlineStyle] {
         switch (horizontal, vertical) {
         case (.leading, .top):      [.init(.alignSelf, value: "flex-start"), .init(.justifySelf, value: "flex-start")]
         case (.center, .top):       [.init(.alignSelf, value: "flex-start"), .init(.justifySelf, value: "center")]
