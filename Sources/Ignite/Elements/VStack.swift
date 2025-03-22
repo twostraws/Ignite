@@ -44,14 +44,14 @@ public struct VStack: HTML {
     /// The child elements contained in the stack.
     private var items: HTMLCollection
 
-    /// Creates a new `Section` object using a block element builder
-    /// that returns an array of items to use in this section.
+    /// Creates a container that stacks its subviews vertically.
     /// - Parameters:
-    ///   - pixels: The number of pixels between elements. Defaults to `0.`
-    ///   - alignment: The horizontal alignment of the subviews.
-    ///   - items: The items to use in this section.
+    ///   - alignment: The horizontal alignment of items within the stack. Defaults to `.center`.
+    ///   - pixels: The exact spacing between elements in pixels.
+    ///   Pass `nil` to preserve implicit margins. Defaults to `0`.
+    ///   - items: A view builder that creates the content of the stack.
     public init(
-        alignment: HorizontalAlignment = .leading,
+        alignment: HorizontalAlignment = .center,
         spacing pixels: Int? = 0,
         @HTMLBuilder items: () -> some HTML
     ) {
@@ -62,14 +62,13 @@ public struct VStack: HTML {
         }
     }
 
-    /// Creates a new `Section` object using a block element builder
-    /// that returns an array of items to use in this section.
+    /// Creates a container that stacks its subviews vertically.
     /// - Parameters:
-    ///   - spacing: The predefined size between elements.
-    ///   - alignment: The horizontal alignment of the subviews.
-    ///   - items: The items to use in this section.
+    ///   - alignment: The horizontal alignment of items within the stack. Defaults to `.center`.
+    ///   - spacing: The predefined size between each element.
+    ///   - items: A view builder that creates the content of the stack.
     public init(
-        alignment: HorizontalAlignment = .leading,
+        alignment: HorizontalAlignment = .center,
         spacing: SpacingAmount,
         @HTMLBuilder items: () -> some HTML
     ) {
@@ -78,12 +77,12 @@ public struct VStack: HTML {
         self.spacingAmount = .semantic(spacing)
     }
 
-    /// Creates a new `Section` object using a block element builder
-    /// that returns an array of items to use in this section.
+    /// Creates a container that stacks its subviews vertically.
     /// - Parameters:
-    ///   - pixels: The number of pixels between elements. Defaults to `0.`
-    ///   - alignment: The responsive horizontal alignment of the subviews.
-    ///   - items: The items to use in this section.
+    ///   - alignment: The responsive horizontal alignment of items that can vary across breakpoints.
+    ///   - pixels: The exact spacing between elements in pixels.
+    ///   Pass `nil` to preserve implicit margins. Defaults to `0`.
+    ///   - items: A view builder that creates the content of the stack.
     public init(
         alignment: HorizontalAlignment.ResponsiveAlignment,
         spacing pixels: Int? = 0,
@@ -96,12 +95,11 @@ public struct VStack: HTML {
         }
     }
 
-    /// Creates a new `Section` object using a block element builder
-    /// that returns an array of items to use in this section.
+    /// Creates a container that stacks its subviews vertically.
     /// - Parameters:
-    ///   - spacing: The predefined size between elements.
-    ///   - alignment: The responsive horizontal alignment of the subviews.
-    ///   - items: The items to use in this section.
+    ///   - alignment: The responsive horizontal alignment of items that can vary across breakpoints.
+    ///   - spacing: The predefined size between each element.
+    ///   - items: A view builder that creates the content of the stack.
     public init(
         alignment: HorizontalAlignment.ResponsiveAlignment,
         spacing: SpacingAmount,
@@ -124,10 +122,6 @@ public struct VStack: HTML {
 
         var attributes = attributes
         attributes.append(classes: "vstack")
-
-        if alignment != .responsive(.leading) {
-            attributes.append(classes: alignment.containerAlignmentClasses)
-        }
 
         if case let .exact(pixels) = spacingAmount, pixels != 0 {
             attributes.append(styles: .init(.gap, value: "\(pixels)px"))
