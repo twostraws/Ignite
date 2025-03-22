@@ -58,6 +58,7 @@ public struct Image: InlineElement, LazyLoadable {
     /// of your site, e.g. /images/dog.jpg.
     public init(decorative name: String) {
         self.path = URL(string: name)
+        self.description = ""
     }
 
     /// Allows this image to be scaled up or down from its natural size in
