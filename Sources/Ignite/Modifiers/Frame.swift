@@ -15,7 +15,9 @@ public extension HTML {
     ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
     ///   - maxHeight: A maximum height for this element
-    ///   - alignment: How to align this element inside its frame. Defaults to `nil`.
+    ///   - alignment: How to align this element inside its frame. When `nil`, dimensions are applied directly 
+    ///     to the element. When specified, creates an invisible frame with the given dimensions
+    ///     and aligns the element within it according to the alignment value.
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
         width: LengthUnit? = nil,
@@ -45,7 +47,9 @@ public extension HTML {
     ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
     ///   - maxHeight: A maximum height for this element
-    ///   - alignment: How to align this element inside its frame. Defaults to `nil`.
+    ///   - alignment: How to align this element inside its frame. When `nil`, dimensions are applied directly 
+    ///     to the element. When specified, creates an invisible frame with the given dimensions
+    ///     and aligns the element within it according to the alignment value.
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
         width: Int? = nil,
@@ -84,7 +88,6 @@ public extension InlineElement {
     ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
     ///   - maxHeight: A maximum height for this element
-    ///   - alignment: How to align this element inside its frame. Defaults to `nil`.
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
         width: LengthUnit? = nil,
@@ -92,8 +95,7 @@ public extension InlineElement {
         maxWidth: LengthUnit? = nil,
         height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
-        maxHeight: LengthUnit? = nil,
-        alignment: Alignment? = nil
+        maxHeight: LengthUnit? = nil
     ) -> some InlineElement {
         AnyHTML(frameModifier(
             width: width,
@@ -101,8 +103,7 @@ public extension InlineElement {
             maxWidth: maxWidth,
             height: height,
             minHeight: minHeight,
-            maxHeight: maxHeight,
-            alignment: alignment))
+            maxHeight: maxHeight))
     }
 
     /// Creates a specific frame for this element, either using exact pixel values or
@@ -114,7 +115,6 @@ public extension InlineElement {
     ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
     ///   - maxHeight: A maximum height for this element
-    ///   - alignment: How to align this element inside its frame. Defaults to `nil`.
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
         width: Int? = nil,
@@ -122,8 +122,7 @@ public extension InlineElement {
         maxWidth: Int? = nil,
         height: Int? = nil,
         minHeight: Int? = nil,
-        maxHeight: Int? = nil,
-        alignment: Alignment? = nil
+        maxHeight: Int? = nil
     ) -> some InlineElement {
         AnyHTML(frameModifier(
             width: width.map { .px($0) },
@@ -131,61 +130,7 @@ public extension InlineElement {
             maxWidth: maxWidth.map { .px($0) },
             height: height.map { .px($0) },
             minHeight: minHeight.map { .px($0) },
-            maxHeight: maxHeight.map { .px($0) },
-            alignment: alignment))
-    }
-
-    /// A convenience method for setting only the alignment.
-    /// - Parameter alignment: The desired alignment
-    /// - Returns: A modified element with the specified alignment
-    func frame(alignment: Alignment) -> some InlineElement {
-        AnyHTML(frameModifier(alignment: alignment))
-    }
-}
-
-/// Represents the different types of dimensional constraints that can be applied to an element.
-private enum Dimension {
-    /// The exact width, minimum width, or maximum width constraints
-    case width, minWidth, maxWidth
-    /// The exact height, minimum height, or maximum height constraints
-    case height, minHeight, maxHeight
-
-    /// The CSS property name for this dimension.
-    var cssProperty: Property {
-        switch self {
-        case .width: .width
-        case .minWidth: .minWidth
-        case .maxWidth: .maxWidth
-        case .height: .height
-        case .minHeight: .minHeight
-        case .maxHeight: .maxHeight
-        }
-    }
-
-    /// The Bootstrap class to use when the dimension should fill its container.
-    var bootstrapClass: String {
-        switch self {
-        case .width, .minWidth, .maxWidth: "w-100"
-        case .height, .minHeight, .maxHeight: "h-100"
-        }
-    }
-
-    /// The Bootstrap class to use when the dimension should fill the viewport.
-    var viewportClass: String {
-        switch self {
-        case .width, .maxWidth: "vw-100"
-        case .minWidth: "min-vw-100"
-        case .height, .maxHeight: "vh-100"
-        case .minHeight: "min-vh-100"
-        }
-    }
-
-    /// Whether this dimension requires flex alignment when using viewport sizing.
-    var needsFlexAlignment: Bool {
-        switch self {
-        case .width, .maxWidth, .height, .maxHeight: true
-        case .minWidth, .minHeight: false
-        }
+            maxHeight: maxHeight.map { .px($0) }))
     }
 }
 
