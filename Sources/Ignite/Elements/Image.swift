@@ -48,7 +48,7 @@ public struct Image: InlineElement, LazyLoadable {
     ///   - description: An description of your image suitable for screen readers.
     public init(systemName: String, description: String? = nil) {
         self.systemImage = systemName
-        self.description = ""
+        self.description = description
     }
 
     /// Creates a new decorative `Image` instance from the name of an
@@ -58,7 +58,6 @@ public struct Image: InlineElement, LazyLoadable {
     /// of your site, e.g. /images/dog.jpg.
     public init(decorative name: String) {
         self.path = URL(string: name)
-        self.description = ""
     }
 
     /// Allows this image to be scaled up or down from its natural size in
