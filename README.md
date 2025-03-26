@@ -54,7 +54,6 @@ Once you've built your site and are ready to see how it looks, do *not* just dou
 Instead, the best way to preview your site is using the Ignite CLI tool, which you installed in Getting Started above:
 
 - Run `ignite run --preview` to preview your site and open it in your web browser.
-- If Ignite tells you there is already a web server running on that port, run `ignite run --preview --force`.
 
 That will open your web browser straight to your site. You can then return to Xcode and make changes to your site freely – every time you press Cmd+R to build your site, you can refresh your browser to see the changes.
 
@@ -121,13 +120,13 @@ Accordion {
 It has automatic code syntax highlighting for a dozen languages:
 
 ```swift
-CodeBlock(language: "swift", """
+CodeBlock(.swift) { """
 struct ContentView: View {
     var body: some View {
         Text("Hello, Swift!")
     }
 }
-""")
+""" }
 ```
 
 ![Swift code with syntax highlighting.](images/code.png)
@@ -174,38 +173,38 @@ And it results inn this **Build** structure:
 
 **A precondition for this to work is to have a layout available to render your content.** If you don't have a valid layout in place, Ignite will issue a warning saying "Your site must provide at least one layout in order to render Markdown."
 
-You can create custom content layouts by making types conform to the `ContentLayout` protocol, which will automatically be given a `content` property to access the content it is displaying. For example:
+You can create custom layouts for articles by making types conform to the `ArticlePage` protocol, which will automatically be given an `article` property to access the content it is displaying. For example:
 
 ```swift
 import Foundation
 import Ignite
 
-struct CustomContentLayout: ContentLayout {
+struct CustomArticleLayout: ArticlePage {
     var body: some HTML {
-        Text(content.title)
+        Text(article.title)
             .font(.title1)
 
-        if let image = content.image {
-            Image(image, description: content.imageDescription)
+        if let image = article.image {
+            Image(image, description: article.imageDescription)
                 .resizable()
                 .cornerRadius(20)
                 .frame(maxHeight: 300)
         }
 
-        if content.hasTags {
+        if let tags = article.tags {
             Section {
-                Text("Tagged with: \(content.tags.joined(separator: ", "))")
+                Text("Tagged with: \(tags.joined(separator: ", "))")
 
-                Text("\(content.estimatedWordCount) words; \(content.estimatedReadingMinutes) minutes to read.")
+                Text("\(article.estimatedWordCount) words; \(article.estimatedReadingMinutes) minutes to read.")
             }
         }
 
-        Text(content.body)
+        Text(article.text)
     }
 }
 ```
 
-Once you've defined a custom layout, you should add it to your `Site` struct. This can be done by adding this new layout to the `layouts` property of the site, like this:
+Once you've defined a custom layout, you should add it to your `Site` struct. This can be done by adding this new layout to the `articlePages` property of the site, like this:
 
 ```swift
 struct ExampleSite: Site {    
@@ -216,8 +215,8 @@ struct ExampleSite: Site {
     var layout = MyLayout()
 
     /* This part adds the custom layout */
-    var layouts: [any ContentLayout] {
-        CustomContentLayout()
+    var articlePages: [any ArticlePage] {
+        CustomArticleLayout()
     }
 }
 ```
@@ -268,6 +267,7 @@ That will launch a local web server you should use to preview your site, and als
 
 | Website                | Repository                                |
 |------------------------|-------------------------------------------|
+| [Lighting Ignite on Fire](https://jptoro.dev/lighting-ignite-on-fire/) | [GitHub](https://github.com/JPToroDev/Lighting-Ignite-on-Fire) |
 | [jcalderita Portfolio](https://jcalderita.com) | [GitHub](https://github.com/jcalderita/portfolio-web-ignite) |
 | [Fotogroep de Gender](http://www.vdhamer.com/fgDeGender) | [GitHub](https://github.com/vdhamer/Photo-Club-Hub-HTML) |
 | [sookim-1's T.W.L](https://sookim-1.github.io) | [GitHub](https://github.com/sookim-1/blog-website) |
