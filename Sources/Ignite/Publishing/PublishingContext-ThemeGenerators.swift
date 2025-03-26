@@ -76,8 +76,8 @@ extension PublishingContext {
     /// Creates CSS rules for light theme
     private func lightThemeRules(_ theme: any Theme, darkThemeID: String?) -> [CustomStringConvertible] {
         var rules: [CustomStringConvertible] = []
-        rules.append(lightRootStyles(for: theme, darkThemeID: darkThemeID))
-        rules.append(contentsOf: baseThemeRules(theme, otherThemeID: darkThemeID))
+        rules.append(rootStyles(for: theme))
+        rules.append(contentsOf: baseThemeRules(theme))
         rules.append(contentsOf: themeOverrides(for: theme))
         return rules
     }
@@ -88,8 +88,8 @@ extension PublishingContext {
 
         // If this is the only theme, use it as root theme
         if !site.supportsLightTheme, site.alternateThemes.isEmpty {
-            rules.append(darkRootStyles(for: theme, lightThemeID: lightThemeID))
-            return baseThemeRules(theme, otherThemeID: lightThemeID)
+            rules.append(rootStyles(for: theme))
+            return baseThemeRules(theme)
         }
 
         // Add explicit dark theme override
@@ -153,7 +153,7 @@ extension PublishingContext {
     }
 
     /// Creates base theme rules (for root theme)
-    private func baseThemeRules(_ theme: any Theme, otherThemeID: String?) -> [CustomStringConvertible] {
+    private func baseThemeRules(_ theme: any Theme) -> [CustomStringConvertible] {
         var rules: [CustomStringConvertible] = []
         rules.append(contentsOf: responsiveVariables(for: theme))
         rules.append(contentsOf: containerMediaQueries(for: theme))
@@ -197,6 +197,14 @@ extension PublishingContext {
 }
 
 private extension Site {
+    var supportsLightTheme: Bool {
+        lightTheme != nil
+    }
+
+    var supportsDarkTheme: Bool {
+        darkTheme != nil
+    }
+
     var hasMultipleThemes: Bool {
         (supportsLightTheme && supportsDarkTheme) ||
         !alternateThemes.isEmpty
