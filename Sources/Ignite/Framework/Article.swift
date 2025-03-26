@@ -289,7 +289,6 @@ public struct Article {
                 Link(target: target.path) {
                     Badge(target.name)
                         .role(.primary)
-                        .margin(.trailing, .px(5))
                 }
                 .relationship(.tag)
             } else {
