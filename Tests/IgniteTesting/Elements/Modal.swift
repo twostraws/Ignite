@@ -128,7 +128,8 @@ struct ModalTests {
         <button type="button" class="btn btn-close" label="Close" onclick="\
         const modal = document.getElementById('headerModalId');
         const modalInstance = bootstrap.Modal.getInstance(modal);
-        if (modalInstance) { modalInstance.hide(); }"></button></div><div class="modal-body"><p>Body</p></div></div></div></div>
+        if (modalInstance) { modalInstance.hide(); }"></button></div>\
+        <div class="modal-body"><p>Body</p></div></div></div></div>
         """)
     }
 
@@ -185,7 +186,8 @@ struct ModalTests {
         let output = element.render()
 
         #expect(output == """
-        <div id="headerAndFooterModalId" tabindex="-1" class="modal fade" aria-labelledby="modalLabel" aria-hidden="true">\
+        <div id="headerAndFooterModalId" tabindex="-1" class="modal fade" \
+        aria-labelledby="modalLabel" aria-hidden="true">\
         <div class="modal-dialog modal-dialog-centered">\
         <div class="modal-content"><div class="modal-header"><h5>Header</h5>\
         <button type="button" class="btn btn-close" label="Close" onclick="\
