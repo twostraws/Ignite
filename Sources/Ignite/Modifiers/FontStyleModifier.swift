@@ -28,8 +28,7 @@ private extension HTML {
         if self.isText {
             self.fontStyle(style)
         } else {
-            Section(self.class("font-inherit"))
-                .class(style.fontSizeClass)
+            self.class(style.fontSizeClass)
         }
     }
 }
