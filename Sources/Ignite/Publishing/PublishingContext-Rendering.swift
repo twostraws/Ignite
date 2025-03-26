@@ -24,7 +24,7 @@ extension PublishingContext {
             image: page.image
         )
 
-        let values = EnvironmentValues(
+        let values = DynamicEnvironmentValues(
             sourceDirectory: sourceDirectory,
             site: site,
             allContent: allContent,
@@ -52,7 +52,7 @@ extension PublishingContext {
             image: article.image.flatMap { URL(string: $0) }
         )
 
-        let values = EnvironmentValues(
+        let values = DynamicEnvironmentValues(
             sourceDirectory: sourceDirectory,
             site: site,
             allContent: allContent,
@@ -98,7 +98,7 @@ extension PublishingContext {
                 AllTagsCategory(articles: content(tagged: nil))
             }
 
-            let values = EnvironmentValues(
+            let values = DynamicEnvironmentValues(
                 sourceDirectory: sourceDirectory,
                 site: site,
                 allContent: allContent,

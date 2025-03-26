@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// A type that stores global configuration and Layout settings for your site.
+/// A type that stores global configuration and layout settings for your site.
 ///
 /// Environment values are propagated through your site's view hierarchy and can be accessed
 /// using the `@Environment` property wrapper. For example:
@@ -18,7 +18,7 @@ import Foundation
 /// }
 /// ```
 @MainActor
-public struct EnvironmentValues {
+public struct DynamicEnvironmentValues {
     /// Provides access to the Markdown articles on this site.
     public var articles: ArticleLoader
 

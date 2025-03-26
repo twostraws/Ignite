@@ -59,7 +59,7 @@ final class PublishingContext {
     private(set) var errors = [PublishingError]()
 
     /// The current environment values for the application.
-    var environment = EnvironmentValues()
+    var environment = DynamicEnvironmentValues()
 
     /// All the Markdown content this user has inside their Content folder.
     private(set) var allContent = [Article]()
@@ -97,6 +97,8 @@ final class PublishingContext {
         fontsDirectory = sourceDirectory.appending(path: "Fonts")
         contentDirectory = sourceDirectory.appending(path: "Content")
         includesDirectory = sourceDirectory.appending(path: "Includes")
+
+        try parseContent()
     }
 
     /// Creates and sets the shared instance of `PublishingContext`
@@ -187,7 +189,6 @@ final class PublishingContext {
 
     /// Performs all steps required to publish a site.
     func publish() async throws {
-        try parseContent()
         clearBuildFolder()
         await generateContent()
         copyResources()
@@ -300,7 +301,7 @@ final class PublishingContext {
     ///   - environment: The new environment values to use
     ///   - operation: A closure that executes with the temporary environment
     /// - Returns: The value returned by the operation
-    func withEnvironment<T>(_ environment: EnvironmentValues, operation: () -> T) -> T {
+    func withEnvironment<T>(_ environment: DynamicEnvironmentValues, operation: () -> T) -> T {
         let previous = self.environment
         self.environment = environment
         defer { self.environment = previous }

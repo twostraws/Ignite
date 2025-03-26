@@ -49,6 +49,9 @@ public protocol Site: Sendable {
     /// all robots can index all pages.
     associatedtype RobotsType: RobotsConfiguration
 
+    /// The global site settings available to use before the site is published.
+    typealias EnvironmentValues = StaticEnvironmentValues
+
     /// The author of your site, which should be your name.
     /// Defaults to an empty string.
     var author: String { get }
@@ -147,7 +150,7 @@ public protocol Site: Sendable {
 
     /// Override this if you need to do custom work to your site before the build begins,
     /// such as downloading data, creating your staticPages array dynamically, etc.
-    mutating func prepare() async throws
+    mutating func prepare(environment: EnvironmentValues) async throws
 }
 
 public extension Site {
@@ -255,8 +258,12 @@ public extension Site {
         let context = try PublishingContext.initialize(
             for: self,
             from: file,
-            buildDirectoryPath: buildDirectoryPath
-        )
+            buildDirectoryPath: buildDirectoryPath)
+
+        let environment = StaticEnvironmentValues(
+            sourceDirectory: context.sourceDirectory,
+            site: self,
+            allContent: context.allContent)
 
         // This is a hack! This enables sites to dynamically
         // generate their URLs, e.g. loading pages from JSON.
@@ -266,7 +273,7 @@ public extension Site {
         // the publishing context, because things like decoding
         // JSON require @Environment(\.decode) to work, which
         // in turn requires the publishing context to exist.
-        try await prepare()
+        try await prepare(environment: environment)
         context.site = self
 
         try await context.publish()
@@ -281,7 +288,5 @@ public extension Site {
     }
 
     /// The default implementation does nothing.
-    mutating func prepare() async throws {
-
-    }
+    mutating func prepare(environment: EnvironmentValues) async throws {}
 }

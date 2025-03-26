@@ -16,6 +16,9 @@
 /// ```
 @MainActor
 @propertyWrapper public struct Environment<Value> {
+    /// A type that stores global configuration and layout settings for your site.
+    public typealias EnvironmentValues = DynamicEnvironmentValues
+
     /// The key path to the desired environment value.
     private let keyPath: KeyPath<EnvironmentValues, Value>
 
