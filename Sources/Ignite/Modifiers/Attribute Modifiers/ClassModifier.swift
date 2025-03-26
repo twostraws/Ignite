@@ -33,7 +33,7 @@ public extension InlineElement {
     }
 }
 
-extension HTML {
+public extension HTML {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
@@ -50,7 +50,7 @@ extension HTML {
     }
 }
 
-extension InlineElement {
+public extension InlineElement {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
