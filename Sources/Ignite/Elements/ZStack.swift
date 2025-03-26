@@ -45,7 +45,6 @@ public struct ZStack: HTML {
             elementAttributes.append(classes: "mb-0")
             elementAttributes.append(styles: [
                 .init(.position, value: "relative"),
-                .init(.display, value: "grid"),
                 .init(.gridArea, value: "1/1"),
                 .init(.zIndex, value: "\(index)")
             ])
@@ -59,22 +58,5 @@ public struct ZStack: HTML {
 
         let content = items.map { $0.render() }.joined()
         return "<div\(attributes)>\(content)</div>"
-    }
-}
-
-private extension Alignment {
-    /// Alignment rules for the items of containers
-    var itemAlignmentRules: [InlineStyle] {
-        switch (horizontal, vertical) {
-        case (.leading, .top):      [.init(.alignSelf, value: "flex-start"), .init(.justifySelf, value: "flex-start")]
-        case (.center, .top):       [.init(.alignSelf, value: "flex-start"), .init(.justifySelf, value: "center")]
-        case (.trailing, .top):     [.init(.alignSelf, value: "flex-start"), .init(.justifySelf, value: "flex-end")]
-        case (.leading, .center):   [.init(.alignSelf, value: "center"), .init(.justifySelf, value: "flex-start")]
-        case (.center, .center):    [.init(.alignSelf, value: "center"), .init(.justifySelf, value: "center")]
-        case (.trailing, .center):  [.init(.alignSelf, value: "center"), .init(.justifySelf, value: "flex-end")]
-        case (.leading, .bottom):   [.init(.alignSelf, value: "flex-end"), .init(.justifySelf, value: "flex-start")]
-        case (.center, .bottom):    [.init(.alignSelf, value: "flex-end"), .init(.justifySelf, value: "center")]
-        case (.trailing, .bottom):  [.init(.alignSelf, value: "flex-end"), .init(.justifySelf, value: "flex-end")]
-        }
     }
 }
