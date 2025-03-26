@@ -50,8 +50,11 @@ public struct Carousel: HTML {
 
     /// A computed property that determines if the carousel uses crossfade transitions.
     private var doesCrossfade: Bool {
-        if case .crossfade = style { true }
-        else { false }
+        if case .crossfade = style {
+            true
+        } else {
+            false
+        }
     }
 
     /// Creates a new carousel from an element builder that generates slides.
