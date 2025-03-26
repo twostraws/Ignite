@@ -68,4 +68,19 @@ extension Alignment {
         case (.trailing, .bottom): [.init(.alignItems, value: "flex-end"), .init(.justifyContent, value: "flex-end")]
         }
     }
+
+    /// Alignment rules for the items of containers
+    var itemAlignmentRules: [InlineStyle] {
+        switch (horizontal, vertical) {
+        case (.leading, .top):      [.init(.alignSelf, value: "flex-start"), .init(.justifySelf, value: "flex-start")]
+        case (.center, .top):       [.init(.alignSelf, value: "flex-start"), .init(.justifySelf, value: "center")]
+        case (.trailing, .top):     [.init(.alignSelf, value: "flex-start"), .init(.justifySelf, value: "flex-end")]
+        case (.leading, .center):   [.init(.alignSelf, value: "center"), .init(.justifySelf, value: "flex-start")]
+        case (.center, .center):    [.init(.alignSelf, value: "center"), .init(.justifySelf, value: "center")]
+        case (.trailing, .center):  [.init(.alignSelf, value: "center"), .init(.justifySelf, value: "flex-end")]
+        case (.leading, .bottom):   [.init(.alignSelf, value: "flex-end"), .init(.justifySelf, value: "flex-start")]
+        case (.center, .bottom):    [.init(.alignSelf, value: "flex-end"), .init(.justifySelf, value: "center")]
+        case (.trailing, .bottom):  [.init(.alignSelf, value: "flex-end"), .init(.justifySelf, value: "flex-end")]
+        }
+    }
 }

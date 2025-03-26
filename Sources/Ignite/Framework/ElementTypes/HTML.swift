@@ -84,6 +84,11 @@ extension HTML {
     var isText: Bool {
         body is Text || (body as? AnyHTML)?.wrapped is Text
     }
+
+    /// A Boolean value indicating whether this represents `Image`.
+    var isImage: Bool {
+        self is Image || (self as? AnyHTML)?.wrapped is Image
+    }
 }
 
 extension HTML {

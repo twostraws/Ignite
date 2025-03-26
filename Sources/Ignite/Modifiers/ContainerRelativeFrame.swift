@@ -23,13 +23,19 @@ private let edgeAlignmentRules: [InlineStyle] = [
 
 private extension HTML {
     func containerRelativeFrameModifer(_ alignment: Alignment) -> any HTML {
-        let frameableContent: any HTML = self is Section ?
-            self.style(.marginBottom, "0") :
-            Section(self.style(.marginBottom, "0"))
+        var frameableContent: any HTML = self
+            .style(.marginBottom, "0")
+            .style(alignment.itemAlignmentRules)
+
+        frameableContent = if self is Section {
+            frameableContent
+        } else {
+            Section(frameableContent)
+        }
 
         return frameableContent
             .style(.display, "flex")
-            .style(.flexDirection, "column")
+            .style(self.isImage ? .init(.flexDirection, value: "column") : nil)
             .style(.overflow, "hidden")
             .style(edgeAlignmentRules)
             .style(alignment.flexAlignmentRules)

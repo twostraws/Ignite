@@ -172,12 +172,15 @@ private extension HTML {
 
         if let alignment {
             // Create a positioning context with the specified frame for the modified element
-            return Section(self)
-                .style(.display, "flex")
-                .style(.flexDirection, "column")
-                .style(.overflow, "hidden")
-                .style(alignment.flexAlignmentRules)
-                .style(dimensions)
+            return Section {
+                self.style(alignment.itemAlignmentRules)
+                    .style(self.isImage ? dimensions : [])
+            }
+            .style(.display, "flex")
+            .style(self.isImage ? .init(.flexDirection, value: "column") : nil)
+            .style(.overflow, "hidden")
+            .style(alignment.flexAlignmentRules)
+            .style(dimensions)
         }
 
         // Apply the frame to the modified element directly
