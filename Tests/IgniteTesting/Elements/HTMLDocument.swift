@@ -48,7 +48,7 @@ class HTMLDocumentTests: IgniteTestSuite {
         site.language = language
 
         /// Create an environment and initialize it with the set language. 
-        let values = EnvironmentValues(
+        let values = DynamicEnvironmentValues(
             sourceDirectory: publishingContext.sourceDirectory,
             site: site,
             allContent: publishingContext.allContent,
