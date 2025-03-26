@@ -64,7 +64,7 @@ public struct EnvironmentValues {
     /// Content that has the current tag.
     var taggedContent: [Article] = []
 
-    public init() {
+    init() {
         self.articles = ArticleLoader(content: [])
         self.feedConfiguration = FeedConfiguration(mode: .full, contentCount: 0)
         self.themes = []
@@ -76,6 +76,25 @@ public struct EnvironmentValues {
         self.timeZone = .gmt
         self.page = .empty
         self.site = .empty
+    }
+
+    init(sourceDirectory: URL, site: any Site, allContent: [Article]) {
+        self.decode = DecodeAction(sourceDirectory: sourceDirectory)
+        self.articles = ArticleLoader(content: allContent)
+        self.feedConfiguration = site.feedConfiguration
+        self.themes = site.allThemes
+        self.author = site.author
+        self.language = site.language
+        self.favicon = site.favicon
+        self.builtInIconsEnabled = site.builtInIconsEnabled
+        self.timeZone = site.timeZone
+        self.page = .empty
+
+        self.site = SiteMetadata(
+            name: site.name,
+            titleSuffix: site.titleSuffix,
+            description: site.description,
+            url: site.url)
     }
 
     init(

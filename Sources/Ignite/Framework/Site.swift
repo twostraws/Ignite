@@ -255,8 +255,12 @@ public extension Site {
         let context = try PublishingContext.initialize(
             for: self,
             from: file,
-            buildDirectoryPath: buildDirectoryPath
-        )
+            buildDirectoryPath: buildDirectoryPath)
+
+        context.environment = EnvironmentValues(
+            sourceDirectory: context.sourceDirectory,
+            site: self,
+            allContent: context.allContent)
 
         // This is a hack! This enables sites to dynamically
         // generate their URLs, e.g. loading pages from JSON.
@@ -281,7 +285,5 @@ public extension Site {
     }
 
     /// The default implementation does nothing.
-    mutating func prepare() async throws {
-
-    }
+    mutating func prepare() async throws {}
 }
