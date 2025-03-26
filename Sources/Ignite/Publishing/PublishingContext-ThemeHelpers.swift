@@ -6,24 +6,9 @@
 //
 
 extension PublishingContext {
-    /// Creates the root ruleset for light theme
-    func lightRootStyles(for theme: any Theme, darkThemeID: String?) -> Ruleset {
+    /// Creates the root ruleset for a theme
+    func rootStyles(for theme: any Theme) -> Ruleset {
         Ruleset(.pseudoClass("root")) {
-            InlineStyle("--supports-light-theme", value: site.supportsLightTheme.description)
-            InlineStyle("--supports-dark-theme", value: site.supportsDarkTheme.description)
-            InlineStyle("--light-theme-id", value: "\"\(theme.cssID)\"")
-            InlineStyle("--dark-theme-id", value: "\"\(darkThemeID ?? "")\"")
-            themeStyles(for: theme)
-        }
-    }
-
-    /// Creates the root ruleset for dark theme
-    func darkRootStyles(for theme: any Theme, lightThemeID: String?) -> Ruleset {
-        Ruleset(.pseudoClass("root")) {
-            InlineStyle("--supports-light-theme", value: site.supportsLightTheme.description)
-            InlineStyle("--supports-dark-theme", value: site.supportsDarkTheme.description)
-            InlineStyle("--light-theme-id", value: "\"\(lightThemeID ?? "")\"")
-            InlineStyle("--dark-theme-id", value: "\"\(theme.cssID)\"")
             themeStyles(for: theme)
         }
     }
