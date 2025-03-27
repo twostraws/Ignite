@@ -89,6 +89,11 @@ extension HTML {
     var isImage: Bool {
         self is Image || (self as? AnyHTML)?.wrapped is Image
     }
+
+    /// A Boolean value indicating whether this represents `Section`.
+    var isSection: Bool {
+        self is Section || (self as? AnyHTML)?.wrapped is Section
+    }
 }
 
 extension HTML {
