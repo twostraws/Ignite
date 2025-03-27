@@ -149,6 +149,7 @@ public struct Grid: HTML, HorizontalAligning {
                 } else {
                     handleItem(item)
                         .class(gutterClass)
+                        .render()
                 }
             }
         }
@@ -157,7 +158,7 @@ public struct Grid: HTML, HorizontalAligning {
     }
 
     /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.
-    private func handleItem(_ item: any HTML) -> some HTML {
+    private func handleItem(_ item: any HTML) -> any HTML {
         var item = item
         var name: String?
         if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }) {
@@ -165,7 +166,9 @@ public struct Grid: HTML, HorizontalAligning {
             name = scaleWidthClass(widthClass)
         }
 
-        return Section(item)
+        item = item.isSection ? item : Section(item)
+
+        return item
             .class(name ?? "col")
             .class(alignment.vertical.itemAlignmentClass)
     }
@@ -185,6 +188,7 @@ public struct Grid: HTML, HorizontalAligning {
         return ForEach(passthrough.items) { item in
             handleItem(item.attributes(attributes))
                 .class(gutterClass)
+                .render()
         }
     }
 
