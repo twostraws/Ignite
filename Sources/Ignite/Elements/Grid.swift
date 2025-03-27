@@ -28,26 +28,41 @@ public struct Grid: HTML, HorizontalAligning {
     /// The amount of space between elements.
     private var spacingAmount: SpacingType = .semantic(.none)
 
+    /// The alignment of the items within the grid.
+    private var alignment: Alignment = .center
+
     /// The items to display in this grid.
     private var items: HTMLCollection
 
     /// Creates a new `Grid` object using a block element builder
     /// that returns an array of items to use in this grid.
     /// - Parameters:
+    ///   - alignment: The alignment of items in the grid. Defaults to `.center`.
     ///   - spacing: The number of pixels between each element.
     ///   - items: The items to use in this grid.
-    public init(spacing: Int, @HTMLBuilder items: () -> some HTML) {
+    public init(
+        alignment: Alignment = .center,
+        spacing: Int,
+        @HTMLBuilder items: () -> some HTML
+    ) {
         self.items = HTMLCollection(items)
+        self.alignment = alignment
         self.spacingAmount = .exact(spacing)
     }
 
     /// Creates a new `Grid` object using a block element builder
     /// that returns an array of items to use in this grid.
     /// - Parameters:
+    ///   - alignment: The alignment of items in the grid. Defaults to `.center`.
     ///   - spacing: The predefined size between each element. Defaults to `.none`.
     ///   - items: The items to use in this grid.
-    public init(spacing: SpacingAmount = .medium, @HTMLBuilder items: () -> some HTML) {
+    public init(
+        alignment: Alignment = .center,
+        spacing: SpacingAmount = .medium,
+        @HTMLBuilder items: () -> some HTML
+    ) {
         self.items = HTMLCollection(items)
+        self.alignment = alignment
         self.spacingAmount = .semantic(spacing)
     }
 
@@ -55,11 +70,17 @@ public struct Grid: HTML, HorizontalAligning {
     /// a single object from the collection into one grid column.
     /// - Parameters:
     ///   - items: A sequence of items you want to convert into columns.
+    ///   - alignment: The alignment of items in the grid. Defaults to `.center`.
     ///   - spacing: The number of pixels between each element.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a some HTML representing that value in the grid.
-    public init<T>(_ items: any Sequence<T>, spacing: Int, content: (T) -> some HTML) {
+    public init<T>(
+        _ items: any Sequence<T>,
+        alignment: Alignment = .center,
+        spacing: Int, content: (T) -> some HTML
+    ) {
         self.items = HTMLCollection(items.map(content))
+        self.alignment = alignment
         self.spacingAmount = .exact(spacing)
     }
 
@@ -67,11 +88,18 @@ public struct Grid: HTML, HorizontalAligning {
     /// a single object from the collection into one grid column.
     /// - Parameters:
     ///   - items: A sequence of items you want to convert into columns.
+    ///   - alignment: The alignment of items in the grid. Defaults to `.center`.
     ///   - spacing: The predefined size between each element. Defaults to `.none`
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a some HTML representing that value in the grid.
-    public init<T>(_ items: any Sequence<T>, spacing: SpacingAmount = .medium, content: (T) -> some HTML) {
+    public init<T>(
+        _ items: any Sequence<T>,
+        alignment: Alignment = .center,
+        spacing: SpacingAmount = .medium,
+        content: (T) -> some HTML
+    ) {
         self.items = HTMLCollection(items.map(content))
+        self.alignment = alignment
         self.spacingAmount = .semantic(spacing)
     }
 
@@ -88,6 +116,7 @@ public struct Grid: HTML, HorizontalAligning {
     /// - Returns: The HTML for this element.
     public func render() -> String {
         var gridAttributes = attributes.appending(classes: ["row"])
+        gridAttributes.append(classes: alignment.horizontal.containerAlignmentClass)
 
         // If a column count is set, we want to use that for all
         // page sizes that are medium and above. Below that we
@@ -138,6 +167,7 @@ public struct Grid: HTML, HorizontalAligning {
 
         return Section(item)
             .class(name ?? "col")
+            .class(alignment.vertical.itemAlignmentClass)
     }
 
     /// Renders a group of HTML elements with consistent styling and attributes.

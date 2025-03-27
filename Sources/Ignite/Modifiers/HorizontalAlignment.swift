@@ -46,7 +46,7 @@ public enum HorizontalAlignment: String, Sendable, Equatable {
     case trailing = "text-end"
 
     /// The Bootstrap class for flex justify-content alignment
-    var flexAlignmentClass: String {
+    var containerAlignmentClass: String {
         switch self {
         case .leading: "justify-content-start"
         case .center: "justify-content-center"

@@ -80,14 +80,3 @@ public struct HStack: HTML {
         return "<div\(attributes)>\(content)</div>"
     }
 }
-
-private extension VerticalAlignment {
-    /// The Bootstrap alignment class for items within a flexbox
-    var itemAlignmentClass: String {
-        switch self {
-        case .top: "align-self-start"
-        case .center: "align-self-center"
-        case .bottom: "align-self-end"
-        }
-    }
-}

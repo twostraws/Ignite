@@ -51,7 +51,7 @@ public struct Alignment: Equatable {
 extension Alignment {
     /// The appropriate Bootstrap classes for this alignment
     var bootstrapClasses: [String] {
-        [horizontal.flexAlignmentClass, vertical.flexAlignmentClass]
+        [horizontal.containerAlignmentClass, vertical.containerAlignmentClass]
     }
 
     /// Flex container rules for aligning content
