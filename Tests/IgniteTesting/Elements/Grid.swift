@@ -67,7 +67,8 @@ class GridTests: IgniteTestSuite {
         <div class="col-md-4 align-self-center g-3">\
         <img src="/images/photos/shades.jpg" alt="A pair of sunglasses." class="img-fluid" />\
         </div>\
-        <div class="col-md-4 align-self-center g-3"><img src="/images/photos/stack.jpg" alt="A door partly open." class="img-fluid" />\
+        <div class="col-md-4 align-self-center g-3">\
+        <img src="/images/photos/stack.jpg" alt="A door partly open." class="img-fluid" />\
         </div>\
         <div class="col-md-4 align-self-center g-3">\
         <img src="/images/photos/wind.jpg" alt="A windy day." class="img-fluid" />\
@@ -106,7 +107,8 @@ class GridTests: IgniteTestSuite {
         <div class="col-md-4 align-self-center g-3">\
         <img src="/images/photos/stack.jpg" alt="A door partly open." class="img-fluid" />\
         </div>\
-        <div class="col-md-4 align-self-center g-3"><img src="/images/photos/rug.jpg" alt="A nice rug." class="img-fluid" />\
+        <div class="col-md-4 align-self-center g-3">\
+        <img src="/images/photos/rug.jpg" alt="A nice rug." class="img-fluid" />\
         </div>\
         <div class="col-md-4 align-self-center g-3">\
         <img src="/images/photos/car.jpg" alt="The window of a car." class="img-fluid" />\
@@ -145,7 +147,8 @@ class GridTests: IgniteTestSuite {
         <div class="col align-self-center g-3">\
         <img src="/images/photos/rug.jpg" alt="A nice rug." class="img-fluid" />\
         </div>\
-        <div class="col align-self-center g-3"><img src="/images/photos/car.jpg" alt="The window of a car." class="img-fluid" />\
+        <div class="col align-self-center g-3">\
+        <img src="/images/photos/car.jpg" alt="The window of a car." class="img-fluid" />\
         </div>\
         </div>
         """)
