@@ -13,10 +13,26 @@ extension PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render(_ page: any StaticPage, isHomePage: Bool = false) {
-        let path = isHomePage ? "" : page.path
-        currentRenderingPath = isHomePage ? "/" : page.path
+    func render(_ page: any StaticPage) {
+        render(page, rootPath: page.path, pagePath: page.path)
+    }
 
+    func render(homePage: any StaticPage) {
+        render(homePage, rootPath: "/", pagePath: "", priority: 1)
+    }
+
+    func render(notFoundPage: any StaticPage) {
+        render(notFoundPage, rootPath: "/", pagePath: "", priority: nil, filename: "404.html")
+    }
+
+    /// Renders a static page.
+    /// - Parameters:
+    ///   - page: The page to render.
+    ///   - isHomePage: True if this is your site's homepage; this affects the
+    ///   final path that is written to.
+    func render(_ page: any StaticPage, rootPath: String, pagePath: String, priority: Double? = 0.9, filename: String = "index.html") {
+        let path = pagePath
+        currentRenderingPath = rootPath
         let metadata = PageMetadata(
             title: page.title,
             description: page.description,
@@ -36,7 +52,7 @@ extension PublishingContext {
         }
 
         let outputDirectory = buildDirectory.appending(path: path)
-        write(outputString, to: outputDirectory, priority: isHomePage ? 1 : 0.9)
+        write(outputString, to: outputDirectory, priority: priority, filename: filename)
     }
 
     /// Renders one piece of Markdown content.

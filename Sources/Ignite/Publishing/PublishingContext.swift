@@ -268,7 +268,7 @@ final class PublishingContext {
     ///   appended to it, so users are directed to the correct page immediately.
     ///   - priority: A priority value to control how important this content
     ///   is for the sitemap.
-    func write(_ string: String, to directory: URL, priority: Double) {
+    func write(_ string: String, to directory: URL, priority: Double?, filename: String = "index.html") {
         let relativePath = directory.relative(to: buildDirectory)
 
         if siteMap.contains(relativePath) {
@@ -281,7 +281,7 @@ final class PublishingContext {
             errors.append(PublishingError.failedToCreateBuildDirectory(directory))
         }
 
-        let outputURL = directory.appending(path: "index.html")
+        let outputURL = directory.appending(path: filename)
         var html = string
 
         if site.prettifyHTML {
@@ -290,7 +290,9 @@ final class PublishingContext {
 
         do {
             try html.write(to: outputURL, atomically: true, encoding: .utf8)
-            addToSiteMap(relativePath, priority: priority)
+            if let priority {
+                addToSiteMap(relativePath, priority: priority)
+            }
         } catch {
             errors.append(PublishingError.failedToCreateBuildFile(outputURL))
         }
