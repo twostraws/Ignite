@@ -34,11 +34,9 @@ public struct SubscribeAction: Action {
         var customAttributes: [Attribute] {
             switch self {
             case .mailchimp:
-                [.init(name: "method", value: "post"),
-                 .init(name: "name", value: "mc-embedded-subscribe-form"),
-                 .init(name: "target", value: "_blank")]
+                [.init(name: "name", value: "mc-embedded-subscribe-form")]
             default:
-                [.init(name: "method", value: "post")]
+                []
             }
         }
 

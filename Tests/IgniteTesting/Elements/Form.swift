@@ -26,7 +26,7 @@ class FormTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <form id="myID" method="post" action="https://sendfox.com/form/myListID/myID" \
+        <form id="myID" method="post" target="_blank" action="https://sendfox.com/form/myListID/myID" \
         class="sendfox-form" data-async="true" data-recaptcha="true">\
         <div class="row g-3 gy-3 align-items-stretch"><div class="col">\
         <div class="form-floating"><input id="sendfox_form_email" name="email" \
@@ -94,7 +94,7 @@ class FormTests: IgniteTestSuite {
         }
 
         #expect(output == """
-        <form id="myID" method="post" action="https://sendfox.com/form/myListID/myID" \
+        <form id="myID" method="post" target="_blank" action="https://sendfox.com/form/myListID/myID" \
         class="sendfox-form" data-async="true" data-recaptcha="true">\
         <div class="row g-3 gy-3 \(alignClass)">\
         <div class="col">\(formContent)</div>\
@@ -124,7 +124,7 @@ class FormTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <form id="myID" method="post" action="https://sendfox.com/form/myListID/myID" \
+        <form id="myID" method="post" target="_blank" action="https://sendfox.com/form/myListID/myID" \
         class="sendfox-form" data-async="true" data-recaptcha="true">\
         <div class="row g-3 gy-3 align-items-stretch">\
         <div class="col">\
