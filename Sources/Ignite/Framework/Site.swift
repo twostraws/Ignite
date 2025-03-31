@@ -102,6 +102,9 @@ public protocol Site: Sendable {
     /// The homepage for your site; what users land on when visiting your root domain.
     var homePage: HomePageType { get }
 
+    /// The 404 page for your site; what users see when they visit a page that doesn't exist.
+    var notFoundPage: (any StaticPage)? { get }
+
     /// A type that conforms to `TagPage`, to be used when rendering individual
     /// tag pages or the "all tags" page.
     var tagPage: TagPageType { get }
@@ -198,6 +201,9 @@ public extension Site {
 
     /// A default robots.txt configuration that allows all robots to index all pages.
     var robotsConfiguration: DefaultRobotsConfiguration { DefaultRobotsConfiguration() }
+
+    /// No 404 page by default.
+    var notFoundPage: (any StaticPage)? { nil }
 
     /// No static pages by default.
     var staticPages: [any StaticPage] { [] }
