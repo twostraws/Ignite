@@ -130,10 +130,6 @@ extension PublishingContext {
         }
     }
 
-    func renderErrorPage<T: ErrorPage>(_ page: T) async {
-        
-    }
-
     /// Locates the best layout to use for a piece of Markdown content. Layouts
     /// are specified using YAML front matter, but if none are found then the first
     /// layout in your site's `layouts` property is used.

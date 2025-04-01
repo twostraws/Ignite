@@ -293,3 +293,4 @@ public extension Site {
     /// The default implementation does nothing.
     mutating func prepare() async throws {}
 }
+
