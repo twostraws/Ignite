@@ -105,7 +105,7 @@ public protocol Site: Sendable {
     var homePage: HomePageType { get }
 
     /// The 404 page for your site; what users see when they visit a page that doesn't exist.
-    var pageNotFoundPage: PageNotFoundPageType? { get }
+    var pageNotFoundPage: PageNotFoundPageType { get }
 
     /// A type that conforms to `TagPage`, to be used when rendering individual
     /// tag pages or the "all tags" page.
@@ -204,9 +204,6 @@ public extension Site {
     /// A default robots.txt configuration that allows all robots to index all pages.
     var robotsConfiguration: DefaultRobotsConfiguration { DefaultRobotsConfiguration() }
 
-    /// No 404 page by default.
-    var pageNotFoundPage: PageNotFoundPageType? { nil }
-
     /// No static pages by default.
     var staticPages: [any StaticPage] { [] }
 
@@ -294,4 +291,9 @@ public extension Site {
 
     /// The default implementation does nothing.
     mutating func prepare() async throws {}
+}
+
+public extension Site where PageNotFoundPageType == EmptyStaticPage {
+    /// No 404 page by default.
+    var pageNotFoundPage: PageNotFoundPageType { .init() }
 }

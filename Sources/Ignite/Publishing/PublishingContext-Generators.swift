@@ -12,8 +12,8 @@ extension PublishingContext {
     func generateContent() async {
         render(homePage: site.homePage)
 
-        if let pageNotFoundPage = site.pageNotFoundPage {
-            render(pageNotFoundPage: pageNotFoundPage)
+        if type(of: site.pageNotFoundPage) != EmptyStaticPage.self {
+            render(pageNotFoundPage: site.pageNotFoundPage)
         }
 
         for page in site.staticPages {
