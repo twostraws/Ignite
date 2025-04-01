@@ -11,9 +11,9 @@ extension PublishingContext {
     /// Renders static pages and content pages, including the homepage.
     func generateContent() async {
         render(homePage: site.homePage)
-        
-        if let notFoundPage = site.notFoundPage {
-            render(notFoundPage: notFoundPage)
+
+        if let pageNotFoundPage = site.pageNotFoundPage {
+            render(pageNotFoundPage: pageNotFoundPage)
         }
 
         for page in site.staticPages {

@@ -35,6 +35,8 @@ public protocol Site: Sendable {
     /// The type of your homepage. Required.
     associatedtype HomePageType: StaticPage
 
+    associatedtype PageNotFoundPageType: StaticPage = EmptyStaticPage
+
     /// The type used to generate your tag pages. A default is provided that means
     /// no tags pages are generated.
     associatedtype TagPageType: TagPage
@@ -103,7 +105,7 @@ public protocol Site: Sendable {
     var homePage: HomePageType { get }
 
     /// The 404 page for your site; what users see when they visit a page that doesn't exist.
-    var notFoundPage: (any StaticPage)? { get }
+    var pageNotFoundPage: PageNotFoundPageType? { get }
 
     /// A type that conforms to `TagPage`, to be used when rendering individual
     /// tag pages or the "all tags" page.
@@ -203,7 +205,7 @@ public extension Site {
     var robotsConfiguration: DefaultRobotsConfiguration { DefaultRobotsConfiguration() }
 
     /// No 404 page by default.
-    var notFoundPage: (any StaticPage)? { nil }
+    var pageNotFoundPage: PageNotFoundPageType? { nil }
 
     /// No static pages by default.
     var staticPages: [any StaticPage] { [] }

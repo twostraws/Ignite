@@ -21,8 +21,8 @@ extension PublishingContext {
         render(homePage, rootPath: "/", pagePath: "", priority: 1)
     }
 
-    func render(notFoundPage: any StaticPage) {
-        render(notFoundPage, rootPath: "/", pagePath: "", priority: nil, filename: "404.html")
+    func render(pageNotFoundPage: any StaticPage) {
+        render(pageNotFoundPage, rootPath: "/", pagePath: "", priority: nil, filename: "404")
     }
 
     /// Renders a static page.
@@ -30,7 +30,7 @@ extension PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render(_ page: any StaticPage, rootPath: String, pagePath: String, priority: Double? = 0.9, filename: String = "index.html") {
+    func render(_ page: any StaticPage, rootPath: String, pagePath: String, priority: Double? = 0.9, filename: String = "index") {
         let path = pagePath
         currentRenderingPath = rootPath
         let metadata = PageMetadata(
