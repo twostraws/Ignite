@@ -16,7 +16,7 @@
 ///         attributes to multiple elements without affecting the document
 ///         structure. If you need a containing `div` element, use
 ///         ``Section`` instead.
-public struct Group: PassthroughElement {
+public struct Group<Content: HTML>: PassthroughElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -28,16 +28,12 @@ public struct Group: PassthroughElement {
 
     var items: HTMLCollection
 
-    public init(@HTMLBuilder _ content: () -> some HTML) {
+    public init(@HTMLBuilder _ content: () -> Content) {
         self.items = HTMLCollection(content)
     }
 
-    public init(_ items: any HTML) {
+    public init(_ items: Content) {
         self.items = HTMLCollection([items])
-    }
-
-    init(context: PublishingContext, items: [any HTML]) {
-        self.items = HTMLCollection(items)
     }
 
     public func render() -> String {
@@ -46,5 +42,11 @@ public struct Group: PassthroughElement {
             item.attributes.merge(attributes)
             return item.render()
         }.joined()
+    }
+}
+
+extension Group: InlineElement where Content: InlineElement {
+    public init(@InlineElementBuilder _ content: () -> Content) {
+        self.items = HTMLCollection(content)
     }
 }
