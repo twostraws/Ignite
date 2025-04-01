@@ -141,17 +141,17 @@ private extension HTML {
         switch style {
         case .none:
             self
-        case .gradient(let gradient) where self.isText:
+        case .gradient(let gradient) where self.isInlineElement:
             self.style(styles(for: gradient))
         case .gradient(let gradient):
             Section(self.class("color-inherit"))
                 .style(styles(for: gradient))
-        case .string(let string) where self.isText:
+        case .string(let string) where self.isInlineElement:
             self.style(.color, string)
         case .string(let string):
             Section(self.class("color-inherit"))
                 .style(.color, string)
-        case .color(let color) where self.isText:
+        case .color(let color) where self.isInlineElement:
             self.style(.color, color.description)
         case .color(let color):
             Section(self.class("color-inherit"))

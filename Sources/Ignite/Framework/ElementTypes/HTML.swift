@@ -80,9 +80,13 @@ extension HTML {
         }
     }
 
-    /// A Boolean value indicating whether this represents `Text`.
-    var isText: Bool {
-        body is Text || (body as? AnyHTML)?.wrapped is Text
+    /// A Boolean value indicating whether this represents an inline element.
+    var isInlineElement: Bool {
+        if let anyHTML = body as? AnyHTML {
+            anyHTML.wrapped is any InlineElement
+        } else {
+            body is any InlineElement
+        }
     }
 
     /// A Boolean value indicating whether this represents `Image`.

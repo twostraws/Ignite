@@ -231,7 +231,7 @@ public struct NavigationBar: HTML {
 
 fileprivate extension Link {
     func trimmingMargin() -> Self {
-        guard content.isText else { return self }
+        guard content.isInlineElement else { return self }
         var link = self
         var text = content
         text.attributes.append(classes: "mb-0")
