@@ -25,7 +25,7 @@ public extension InlineElement {
 
 private extension HTML {
     func fontStyleModifier(style: Font.Style) -> any HTML {
-        if self.isTextualElement {
+        if self.isText {
             self.fontStyle(style)
         } else {
             self.class(style.fontSizeClass)

@@ -104,7 +104,7 @@ private extension HTML {
         var modified: any HTML = self.style(.fontWeight, font.weight.rawValue.formatted())
 
         if let style = font.style {
-            modified = modified.fontStyle(style)
+            modified = modified.font(style)
         }
 
         if let name = font.name, name.isEmpty == false {
