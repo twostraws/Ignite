@@ -12,7 +12,7 @@
 ///
 /// **Note**: A 12-column grid is the default, but you can adjust that downwards
 /// by using the `columns()` modifier.
-public struct Grid: HTML, HorizontalAligning {
+public struct Grid: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

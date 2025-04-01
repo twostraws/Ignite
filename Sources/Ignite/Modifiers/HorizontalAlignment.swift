@@ -5,23 +5,19 @@
 // See LICENSE for license information.
 //
 
-/// Determines which elements can have horizontal alignment attached,
-@MainActor
-public protocol HorizontalAligning: HTML {}
-
-public extension HorizontalAligning {
+public extension HTML {
     /// Aligns this element using a specific alignment.
     /// - Parameter alignment: How to align this element.
     /// - Returns: A modified copy of the element with alignment applied
     func horizontalAlignment(_ alignment: HorizontalAlignment) -> some HTML {
-        self.class(alignment.rawValue)
+        AnyHTML(horizontalAlignmentModifier(.universal(alignment)))
     }
 
     /// Aligns this element using multiple responsive alignments.
     /// - Parameter alignment: One or more alignments with optional breakpoints.
     /// - Returns: A modified copy of the element with alignments applied
     func horizontalAlignment(_ alignment: HorizontalAlignment.ResponsiveAlignment) -> some HTML {
-        self.class(alignment.containerAlignmentClasses)
+        AnyHTML(horizontalAlignmentModifier(.responsive(alignment)))
     }
 }
 
@@ -31,6 +27,30 @@ public extension StyledHTML {
     /// - Returns: A modified copy of the element with alignment applied
     func horizontalAlignment(_ alignment: HorizontalAlignment) -> Self {
         style(alignment.itemAlignmentStyle)
+    }
+}
+
+private enum AlignmentType {
+    case universal(HorizontalAlignment)
+    case responsive(HorizontalAlignment.ResponsiveAlignment)
+}
+
+private extension HTML {
+    func horizontalAlignmentModifier(_ alignment: AlignmentType) -> any HTML {
+        switch alignment {
+        case .universal(let alignment):
+            var modified: any HTML = self.class(alignment.rawValue)
+            if self.isInlineElement {
+                modified = modified.style(.display, "block")
+            }
+            return modified
+        case .responsive(let alignment):
+            var modified: any HTML = self.class(alignment.containerAlignmentClasses)
+            if self.isInlineElement {
+                modified = modified.style(.display, "block")
+            }
+            return modified
+        }
     }
 }
 

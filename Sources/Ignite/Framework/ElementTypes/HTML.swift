@@ -80,13 +80,9 @@ extension HTML {
         }
     }
 
-    /// A Boolean value indicating whether this represents an inline element.
-    var isInlineElement: Bool {
-        if let anyHTML = body as? AnyHTML {
-            anyHTML.wrapped is any InlineElement
-        } else {
-            body is any InlineElement
-        }
+    /// A Boolean value indicating whether this represents `Text`.
+    var isText: Bool {
+        body is Text || (body as? AnyHTML)?.wrapped is Text
     }
 
     /// A Boolean value indicating whether this represents `Image`.
@@ -97,6 +93,26 @@ extension HTML {
     /// A Boolean value indicating whether this represents `Section`.
     var isSection: Bool {
         self is Section || (self as? AnyHTML)?.wrapped is Section
+    }
+
+    /// A Boolean value indicating whether this represents a textual element.
+    var isTextualElement: Bool {
+        self.isText || self.isInlineElement
+    }
+
+    /// A Boolean value indicating whether this element's default display is inline.
+    var isInlineElement: Bool {
+        if let anyHTML = body as? AnyHTML {
+            // Because Text and Divider conform to DropdownItem, they conform
+            // to InlineElement, but they are truly block-level elements
+            anyHTML.wrapped is any InlineElement &&
+            !(anyHTML.wrapped is Text) &&
+            !(anyHTML.wrapped is Divider)
+        } else {
+            body is any InlineElement &&
+            !(body is Text) &&
+            !(body is Divider)
+        }
     }
 }
 

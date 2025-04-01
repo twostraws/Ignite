@@ -61,7 +61,7 @@ private enum LineSpacingType {
 
 private extension HTML {
     func lineSpacingModifier(_ spacing: LineSpacingType) -> any HTML {
-        if self.isInlineElement {
+        if self.isTextualElement {
             self.applyToText(spacing)
         } else {
             self.applyToNonText(spacing)
