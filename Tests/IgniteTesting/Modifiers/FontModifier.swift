@@ -31,8 +31,7 @@ struct FontModifierTests {
         let output = element.render()
 
         #expect(output == """
-        <p><div style="font-weight: 400; font-family: Arial; font-size: 16px">\
-        <span class="font-inherit">Sample text</span></div></p>
+        <p><span style="font-weight: 400; font-family: Arial; font-size: 16px">Sample text</span></p>
         """)
     }
 
@@ -46,8 +45,7 @@ struct FontModifierTests {
         let output = element.render()
 
         #expect(output == """
-        <p><div style="font-weight: 700; font-family: Arial; font-size: 16px">\
-        <span class="font-inherit">Sample text</span></div></p>
+        <p><span style="font-weight: 700; font-family: Arial; font-size: 16px">Sample text</span></p>
         """)
     }
 
@@ -61,8 +59,7 @@ struct FontModifierTests {
         let output = element.render()
 
         #expect(output == """
-        <p><div style="font-weight: 400; font-family: Arial; font-size: 1.5em">\
-        <span class="font-inherit">Sample text</span></div></p>
+        <p><span style="font-weight: 400; font-family: Arial; font-size: 1.5em">Sample text</span></p>
         """)
     }
 
@@ -76,8 +73,7 @@ struct FontModifierTests {
         let output = element.render()
 
         #expect(output == """
-        <p><div style="font-weight: 400; font-family: Times New Roman; font-size: 16px">\
-        <span class="font-inherit">Sample text</span></div></p>
+        <p><span style="font-weight: 400; font-family: Times New Roman; font-size: 16px">Sample text</span></p>
         """)
     }
 
