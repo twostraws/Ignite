@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-/// A default static page that does nothing; used to disable tag pages entirely.
+/// A default static page that does nothing; used to disable pages entirely.
 public struct EmptyStaticPage: StaticPage {
     public var title: String = ""
 
