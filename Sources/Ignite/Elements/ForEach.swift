@@ -19,11 +19,8 @@ public struct ForEach<Data: Sequence, Content: HTML>: PassthroughElement, Listab
     /// The sequence of data to iterate over.
     private let data: Data
 
-    /// The closure that transforms each data element into HTML content.
-    private let content: (Data.Element) -> Content
-
     /// The child elements contained within this HTML element.
-    var items: HTMLCollection { HTMLCollection(data.map(content)) }
+    var items: HTMLCollection
 
     /// Creates a new ForEach instance that generates HTML content from a sequence.
     /// - Parameters:
@@ -31,13 +28,12 @@ public struct ForEach<Data: Sequence, Content: HTML>: PassthroughElement, Listab
     ///   - content: A closure that converts each element into HTML content.
     public init(_ data: Data, @HTMLBuilder content: @escaping (Data.Element) -> Content) {
         self.data = data
-        self.content = content
+        self.items = HTMLCollection(data.map(content))
     }
 
     /// Renders the ForEach content when this isn't part of a list.
     /// - Returns: The rendered HTML string.
     public func render() -> String {
-        let items = data.map(content)
         return items.map {
             var item: any HTML = $0
             item.attributes.merge(attributes)
@@ -60,6 +56,6 @@ extension ForEach: InlineElement where Content: InlineElement {
     ///   - content: A closure that converts each element into inline content.
     public init(_ data: Data, @InlineElementBuilder content: @escaping (Data.Element) -> Content) {
         self.data = data
-        self.content = content
+        self.items = HTMLCollection(data.map(content))
     }
 }

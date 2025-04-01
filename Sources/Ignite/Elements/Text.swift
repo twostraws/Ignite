@@ -9,6 +9,9 @@
 /// placing content inside a list, table, table header, and so on, you can usually
 /// just use a simple string. Using `Text` is required if you want a specific paragraph
 /// of text with some styling, or a header of a particular size.
+///
+/// - Important: For types that accept only `InlineElement` or use `@InlineElementBuilder`,
+/// use `Span` instead of `Text`.
 @MainActor
 public struct Text: HTML, DropdownItem {
     /// The content and behavior of this HTML.

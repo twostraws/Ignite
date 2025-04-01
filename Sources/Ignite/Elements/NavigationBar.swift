@@ -6,7 +6,7 @@
 //
 
 /// Describes elements that can be placed into navigation bars.
-public protocol NavigationItem: InlineElement {}
+public protocol NavigationItem: HTML {}
 
 /// A bar that sits across the top of your page to provide top-level navigation
 /// throughout your site.
