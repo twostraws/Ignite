@@ -90,7 +90,7 @@ private extension HTML {
     /// - Parameter content: The HTML content to modify
     /// - Returns: The modified HTML content with font styling applied
     func fontModifier(_ font: Font) -> any HTML {
-        if self.isInlineElement {
+        if self.isTextualElement {
             self.applyToText(font)
         } else {
             self.applyToNonText(font)
