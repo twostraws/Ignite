@@ -103,15 +103,9 @@ extension HTML {
     /// A Boolean value indicating whether this element's default display is inline.
     var isInlineElement: Bool {
         if let anyHTML = body as? AnyHTML {
-            // Because Text and Divider conform to DropdownItem, they conform
-            // to InlineElement, but they are truly block-level elements
-            anyHTML.wrapped is any InlineElement &&
-            !(anyHTML.wrapped is Text) &&
-            !(anyHTML.wrapped is Divider)
+            anyHTML.wrapped is any InlineElement
         } else {
-            body is any InlineElement &&
-            !(body is Text) &&
-            !(body is Divider)
+            body is any InlineElement
         }
     }
 }

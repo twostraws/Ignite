@@ -7,7 +7,7 @@
 
 /// Elements that conform to `DropdownItem` can be shown inside
 /// Dropdown objects.
-public protocol DropdownItem: InlineElement {}
+public protocol DropdownItem: HTML {}
 
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
@@ -120,7 +120,7 @@ public struct Dropdown: HTML, NavigationItem {
                     publishingContext.currentRenderingPath == ($0 as? Link)?.url
                 }
 
-                Link(title.style(.display, "inline"), target: "#")
+                Link(title, target: "#")
                     .customAttribute(name: "role", value: "button")
                     .class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
                     .data("bs-toggle", "dropdown")
