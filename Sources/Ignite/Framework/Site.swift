@@ -208,6 +208,9 @@ public extension Site {
     /// No content pages by default.
     var articlePages: [any ArticlePage] { [] }
 
+    /// No error pages by default.
+    var errorPages: [any ErrorPage] { [] }
+
     /// An empty tag page by default, which triggers no tag pages being made.
     var tagPage: EmptyTagPage { EmptyTagPage() }
 

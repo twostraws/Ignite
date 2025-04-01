@@ -22,7 +22,7 @@ extension PublishingContext {
     }
 
     func render(errorPage: any ErrorPage) {
-        render(errorPage, rootPath: "/", pagePath: errorPage.path, priority: nil, filename: errorPage.name)
+        render(errorPage, rootPath: "/", pagePath: errorPage.path, priority: nil, filename: errorPage.filename)
     }
 
     /// Renders a static page.
