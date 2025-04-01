@@ -6,7 +6,7 @@
 //
 
 /// A structure that creates HTML content by mapping over a sequence of data.
-public struct ForEach<Data: Sequence, Content: HTML>: InlineElement, PassthroughElement, ListableElement, HeadElement {
+public struct ForEach<Data: Sequence, Content: HTML>: PassthroughElement, ListableElement, HeadElement {
     /// The body content created by mapping over the data sequence.
     public var body: some HTML { self }
 
@@ -50,5 +50,16 @@ public struct ForEach<Data: Sequence, Content: HTML>: InlineElement, Passthrough
     func renderInList() -> String {
         // ListableElement conformance ensures other views never wrap ForEach in <li> tags.
         render()
+    }
+}
+
+extension ForEach: InlineElement where Content: InlineElement {
+    /// Creates a new `ForEach` instance that generates inline content from a sequence.
+    /// - Parameters:
+    ///   - data: The sequence to iterate over.
+    ///   - content: A closure that converts each element into inline content.
+    public init(_ data: Data, @InlineElementBuilder content: @escaping (Data.Element) -> Content) {
+        self.data = data
+        self.content = content
     }
 }
