@@ -21,8 +21,8 @@ extension PublishingContext {
         render(homePage, rootPath: "/", pagePath: "", priority: 1)
     }
 
-    func render(pageNotFoundPage: any StaticPage) {
-        render(pageNotFoundPage, rootPath: "/", pagePath: "", priority: nil, filename: "404")
+    func render(errorPage: any ErrorPage) {
+        render(errorPage, rootPath: "/", pagePath: errorPage.path, priority: nil, filename: errorPage.name)
     }
 
     /// Renders a static page.
@@ -128,6 +128,10 @@ extension PublishingContext {
 
             write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }
+    }
+
+    func renderErrorPage<T: ErrorPage>(_ page: T) async {
+        
     }
 
     /// Locates the best layout to use for a piece of Markdown content. Layouts

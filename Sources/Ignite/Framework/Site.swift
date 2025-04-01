@@ -35,8 +35,6 @@ public protocol Site: Sendable {
     /// The type of your homepage. Required.
     associatedtype HomePageType: StaticPage
 
-    associatedtype PageNotFoundPageType: StaticPage = EmptyStaticPage
-
     /// The type used to generate your tag pages. A default is provided that means
     /// no tags pages are generated.
     associatedtype TagPageType: TagPage
@@ -104,9 +102,6 @@ public protocol Site: Sendable {
     /// The homepage for your site; what users land on when visiting your root domain.
     var homePage: HomePageType { get }
 
-    /// The 404 page for your site; what users see when they visit a page that doesn't exist.
-    var pageNotFoundPage: PageNotFoundPageType { get }
-
     /// A type that conforms to `TagPage`, to be used when rendering individual
     /// tag pages or the "all tags" page.
     var tagPage: TagPageType { get }
@@ -146,6 +141,9 @@ public protocol Site: Sendable {
 
     /// An array of all the article pages you want to include in your site.
     @ArticlePageBuilder var articlePages: [any ArticlePage] { get }
+
+    /// An array of all the error pages you want to include in your site.
+    @ErrorPageBuilder var errorPages: [any ErrorPage] { get }
 
     /// Publishes this entire site from user space.
     mutating func publish(from file: StaticString, buildDirectoryPath: String) async throws
@@ -291,9 +289,4 @@ public extension Site {
 
     /// The default implementation does nothing.
     mutating func prepare() async throws {}
-}
-
-public extension Site where PageNotFoundPageType == EmptyStaticPage {
-    /// No 404 page by default.
-    var pageNotFoundPage: PageNotFoundPageType { .init() }
 }

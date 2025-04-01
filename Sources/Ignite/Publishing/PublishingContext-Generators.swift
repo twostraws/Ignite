@@ -12,10 +12,6 @@ extension PublishingContext {
     func generateContent() async {
         render(homePage: site.homePage)
 
-        if type(of: site.pageNotFoundPage) != EmptyStaticPage.self {
-            render(pageNotFoundPage: site.pageNotFoundPage)
-        }
-
         for page in site.staticPages {
             render(page)
         }
@@ -23,6 +19,11 @@ extension PublishingContext {
         for content in allContent {
             render(content)
         }
+
+        for errorPage in site.errorPages {
+            render(errorPage: errorPage)
+        }
+
         currentRenderingPath = nil
 
         await renderTagPages()
