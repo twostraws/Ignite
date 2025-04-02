@@ -149,7 +149,7 @@ public protocol Site: Sendable {
     @ArticlePageBuilder var articlePages: [any ArticlePage] { get }
 
     /// An array of all the status code errors you want to generate pages for  in your site.
-    var supportedStatusCodeErrors: [StatusCodeError] { get }
+    var supportedStatusCodeErrors: [any StatusCodeError] { get }
 
     /// Publishes this entire site from user space.
     mutating func publish(from file: StaticString, buildDirectoryPath: String) async throws
