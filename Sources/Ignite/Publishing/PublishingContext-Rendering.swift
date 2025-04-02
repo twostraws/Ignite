@@ -24,10 +24,15 @@ extension PublishingContext {
     /// Renders a static page.
     /// - Parameters:
     ///   - page: The page to render.
-    ///   - isHomePage: True if this is your site's homepage; this affects the
-    ///   final path that is written to.
+    ///   - rootPath: The root path to render the page to.
+    ///   - pagePath: The path to render the page to.
+    ///   - priority: The priority of this page in the sitemap. Defaults to `0.9`.
+    ///   - filename: The filename to use for the rendered page. Defaults to `index`.
     func render(
-        _ page: any StaticPage, rootPath: String, pagePath: String, priority: Double? = 0.9,
+        _ page: any StaticPage,
+        rootPath: String,
+        pagePath: String,
+        priority: Double? = 0.9,
         filename: String = "index"
     ) {
         let path = pagePath
@@ -133,15 +138,25 @@ extension PublishingContext {
         if site.errorPage is EmptyErrorPage { return }
 
         for statusCodeError in site.supportedStatusCodeErrors where type(of: statusCodeError) != EmptyErrorPage.self {
-            render(errorPage: site.errorPage, with: statusCodeError)
-        }
-    }
+            let metadata = PageMetadata(
+                title: statusCodeError.title,
+                description: statusCodeError.description,
+                url: site.url
+            )
 
-    func render(errorPage: any ErrorPage, with statusCodeError: any StatusCodeError) {
-        environment.statusCodeError = statusCodeError
-        render(
-            errorPage, rootPath: "/", pagePath: errorPage.path, priority: nil,
-            filename: "\(statusCodeError.filename)")
+            let values = EnvironmentValues(
+                sourceDirectory: sourceDirectory,
+                site: site,
+                allContent: allContent,
+                pageMetadata: metadata,
+                pageContent: site.errorPage)
+
+            let outputString = withEnvironment(values) {
+                site.errorPage.layout.body.render()
+            }
+
+            write(outputString, to: buildDirectory, priority: nil, filename: statusCodeError.filename)
+        }
     }
 
     /// Locates the best layout to use for a piece of Markdown content. Layouts

@@ -35,7 +35,7 @@
 ///     }
 /// }
 @MainActor
-public protocol ErrorPage: StaticPage {
+public protocol ErrorPage: LayoutContent {
     /// The current status code error being rendered.
     var error: StatusCodeError { get }
 }
