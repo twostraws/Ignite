@@ -139,6 +139,7 @@ extension PublishingContext {
 
         for statusCodeError in site.supportedStatusCodeErrors where type(of: statusCodeError) != EmptyErrorPage.self {
             environment.statusCodeError = statusCodeError
+
             let metadata = PageMetadata(
                 title: site.errorPage.title,
                 description: site.errorPage.description,
@@ -158,6 +159,8 @@ extension PublishingContext {
 
             write(outputString, to: buildDirectory, priority: nil, filename: statusCodeError.filename)
         }
+        
+        environment.statusCodeError = EmptyStatusCodeError()
     }
 
     /// Locates the best layout to use for a piece of Markdown content. Layouts
