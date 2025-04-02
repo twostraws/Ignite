@@ -20,13 +20,10 @@ extension PublishingContext {
             render(content)
         }
 
-        for errorPage in site.errorPages {
-            render(errorPage: errorPage)
-        }
-
         currentRenderingPath = nil
 
         await renderTagPages()
+        await renderErrorPages()
     }
 
     /// Generates a sitemap.xml file for this site.

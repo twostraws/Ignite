@@ -21,16 +21,15 @@ extension PublishingContext {
         render(homePage, rootPath: "/", pagePath: "", priority: 1)
     }
 
-    func render(errorPage: any ErrorPage) {
-        render(errorPage, rootPath: "/", pagePath: errorPage.path, priority: nil, filename: errorPage.filename)
-    }
-
     /// Renders a static page.
     /// - Parameters:
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render(_ page: any StaticPage, rootPath: String, pagePath: String, priority: Double? = 0.9, filename: String = "index") {
+    func render(
+        _ page: any StaticPage, rootPath: String, pagePath: String, priority: Double? = 0.9,
+        filename: String = "index"
+    ) {
         let path = pagePath
         currentRenderingPath = rootPath
         let metadata = PageMetadata(
@@ -93,11 +92,12 @@ extension PublishingContext {
         let tags: [String?] = [nil] + Set(allContent.compactMap(\.tags).flatMap(\.self)).sorted()
 
         for tag in tags {
-            let path: String = if let tag {
-                "tags/\(tag.convertedToSlug())"
-            } else {
-                "tags"
-            }
+            let path: String =
+                if let tag {
+                    "tags/\(tag.convertedToSlug())"
+                } else {
+                    "tags"
+                }
 
             let outputDirectory = buildDirectory.appending(path: path)
             let tagLayout = site.tagPage
@@ -108,11 +108,12 @@ extension PublishingContext {
                 url: site.url.appending(path: path)
             )
 
-            let category: any Category = if let tag {
-                TagCategory(name: tag, articles: content(tagged: tag))
-            } else {
-                AllTagsCategory(articles: content(tagged: nil))
-            }
+            let category: any Category =
+                if let tag {
+                    TagCategory(name: tag, articles: content(tagged: tag))
+                } else {
+                    AllTagsCategory(articles: content(tagged: nil))
+                }
 
             let values = EnvironmentValues(
                 sourceDirectory: sourceDirectory,
@@ -128,6 +129,21 @@ extension PublishingContext {
 
             write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }
+    }
+
+    func renderErrorPages() async {
+        if site.errorPage is EmptyErrorPage { return }
+
+        for status in site.supportedErrorPages {
+            render(errorPage: site.errorPage, with: status)
+        }
+    }
+
+    func render(errorPage: any ErrorPage, with status: ErrorPageStatus) {
+        environment.errorPageStatus = status
+        render(
+            errorPage, rootPath: "/", pagePath: errorPage.path, priority: nil,
+            filename: "\(status.rawValue)")
     }
 
     /// Locates the best layout to use for a piece of Markdown content. Layouts

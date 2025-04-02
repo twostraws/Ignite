@@ -39,6 +39,9 @@ public protocol Site: Sendable {
     /// no tags pages are generated.
     associatedtype TagPageType: TagPage
 
+    /// The type of your custom error page. No custom error page is provided by default.
+    associatedtype ErrorPageType: ErrorPage = EmptyErrorPage
+
     /// The type that defines the base layout structure for all pages.
     associatedtype LayoutType: Layout
 
@@ -106,6 +109,9 @@ public protocol Site: Sendable {
     /// tag pages or the "all tags" page.
     var tagPage: TagPageType { get }
 
+    /// A type that conforms to `ErrorPage`, to be used when rendering error pages.
+    var errorPage: ErrorPageType { get }
+
     /// The base layout applied to all pages. This is used to render all pages that don't
     /// explicitly override the layout with something custom.
     var layout: LayoutType { get }
@@ -143,7 +149,7 @@ public protocol Site: Sendable {
     @ArticlePageBuilder var articlePages: [any ArticlePage] { get }
 
     /// An array of all the error pages you want to include in your site.
-    @ErrorPageBuilder var errorPages: [any ErrorPage] { get }
+    var supportedErrorPages: [ErrorPageStatus] { get }
 
     /// Publishes this entire site from user space.
     mutating func publish(from file: StaticString, buildDirectoryPath: String) async throws
@@ -208,11 +214,16 @@ public extension Site {
     /// No content pages by default.
     var articlePages: [any ArticlePage] { [] }
 
-    /// No error pages by default.
-    var errorPages: [any ErrorPage] { [] }
-
-    /// An empty tag page by default, which triggers no tag pages being made.
+    /// An empty tag page by default, which triggers no tag pages being generated.
     var tagPage: EmptyTagPage { EmptyTagPage() }
+
+    /// An empty error page by default, which triggers no error pages being generated.
+    var errorPage: EmptyErrorPage { EmptyErrorPage() }
+
+    /// Supports Page Not Found only by default.
+    var supportedErrorPages: [ErrorPageStatus] {
+        [.pageNotFound]
+    }
 
     /// The default favicon being nil
     var favicon: URL? { nil }
@@ -293,4 +304,3 @@ public extension Site {
     /// The default implementation does nothing.
     mutating func prepare() async throws {}
 }
-

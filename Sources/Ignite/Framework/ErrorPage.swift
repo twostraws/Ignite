@@ -11,13 +11,10 @@
 ///
 /// ```swift
 /// struct MyErrorPage: ErrorPage {
-///     var title: "Page Not Found"
-///     var filename: "404"
-/// 
 ///     var body: some HTML {
 ///         Section {
-///             Text("404 - Page Not Found").font(.title1)
-///             Text("Sorry, the page you are looking for does not exist.")
+///             Text(error.title).font(.title1)
+///             Text(error.description)
 ///             Link("Go back to the homepage", destination: "/")
 ///                 .buttonStyle(.primary)
 ///         }
@@ -26,16 +23,20 @@
 /// ```
 @MainActor
 public protocol ErrorPage: StaticPage {
-    /// The filename of the error page, such as "404" for a 404 error page.
-    /// 
-    /// This property represents the name of the error page file, which will be saved 
-    /// as an HTML file (e.g., `404.html`) in the specified output directory. It is 
-    /// used to uniquely identify and locate the error page within the generated output.
-    var filename: String { get }
+    /// The current error page being rendered.
+    var error: ErrorPageStatus { get }
 }
 
 extension ErrorPage {
+    public var title: String {
+        error.title
+    }
+
     public var path: String {
         ""
+    }
+
+    public var error: ErrorPageStatus {
+        PublishingContext.shared.environment.errorPageStatus
     }
 }
