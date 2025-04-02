@@ -92,12 +92,11 @@ extension PublishingContext {
         let tags: [String?] = [nil] + Set(allContent.compactMap(\.tags).flatMap(\.self)).sorted()
 
         for tag in tags {
-            let path: String =
-                if let tag {
-                    "tags/\(tag.convertedToSlug())"
-                } else {
-                    "tags"
-                }
+            let path: String = if let tag {
+                "tags/\(tag.convertedToSlug())"
+            } else {
+                "tags"
+            }
 
             let outputDirectory = buildDirectory.appending(path: path)
             let tagLayout = site.tagPage
@@ -108,12 +107,11 @@ extension PublishingContext {
                 url: site.url.appending(path: path)
             )
 
-            let category: any Category =
-                if let tag {
-                    TagCategory(name: tag, articles: content(tagged: tag))
-                } else {
-                    AllTagsCategory(articles: content(tagged: nil))
-                }
+            let category: any Category = if let tag {
+                TagCategory(name: tag, articles: content(tagged: tag))
+            } else {
+                AllTagsCategory(articles: content(tagged: nil))
+            }
 
             let values = EnvironmentValues(
                 sourceDirectory: sourceDirectory,
