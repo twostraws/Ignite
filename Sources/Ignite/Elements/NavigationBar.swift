@@ -189,17 +189,22 @@ public struct NavigationBar: HTML {
     private func renderNavItems() -> some HTML {
         Section {
             List {
-                ForEach(items) { item in
-                    if let dropdownItem = item as? Dropdown {
+                ForEach(items.filter { !($0 is Span) }) { item in
+                    switch item {
+                    case let dropdownItem as Dropdown:
                         renderDropdownItem(dropdownItem)
-                    } else if let link = item as? Link {
+                    case let link as Link:
                         renderLinkItem(link)
-                    } else {
+                    default:
                         AnyHTML(item)
                     }
                 }
             }
             .class("navbar-nav", "mb-2", "mb-md-0", "col", itemAlignment.rawValue)
+
+            ForEach(items.compactMap { $0 as? Span }) { text in
+                renderTextItem(text)
+            }
         }
         .class("collapse", "navbar-collapse")
         .id("navbarCollapse")
@@ -216,10 +221,17 @@ public struct NavigationBar: HTML {
         ListItem {
             let isActive = publishingContext.currentRenderingPath == link.url
             link.trimmingMargin() // Remove the default margin applied to text
-                .class("nav-link", isActive ? "active" : nil)
+                .class(link.style == .button ? nil : "nav-link")
+                .class(isActive ? "active" : nil)
                 .aria(.current, isActive ? "page" : nil)
         }
         .class("nav-item")
+    }
+
+    private func renderTextItem(_ text: Span) -> some InlineElement {
+        var text = text
+        text.attributes.append(classes: "navbar-text")
+        return text
     }
 
     private func renderLogo(_ logo: any InlineElement) -> some InlineElement {

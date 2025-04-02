@@ -55,17 +55,7 @@ public struct Label: InlineElement {
     }
 
     public func render() -> String {
-        var title = title
-
-        if !(title is String) {
-            title.attributes.append(classes: "mb-0")
-        }
-
         var icon = icon
-
-        if !(icon is String) {
-            icon.attributes.append(classes: "mb-0")
-        }
 
         if !icon.attributes.styles.contains(where: { $0.property == Property.marginRight() }) &&
            !title.attributes.styles.contains(where: { $0.property == Property.marginLeft() }) {
