@@ -5,34 +5,42 @@
 // See LICENSE for license information.
 //
 
-/// An enumeration representing the various error pages that can be displayed.
-public enum ErrorPageStatus: Int, Sendable, CaseIterable {
+/// An type representing the status of an error page that can be displayed.
+public struct ErrorPageStatus: Sendable, CaseIterable {
 
-    /// The status when a page was not found (404).
-    case pageNotFound = 404
-
-    /// The status when the server encountered an internal error (500).
-    case internalServerError = 500
+    /// The filename of the generated error page.
+    ///
+    /// - important: The extension of the file is added automatically. Do not include it in the filename.
+    public let filename: String
 
     /// The title of the error page.
-    public var title: String {
-        switch self {
-        case .pageNotFound:
-            return "Page Not Found"
-
-        case .internalServerError:
-            return "Internal Server Error"
-        }
-    }
+    public let title: String
 
     /// The description of the error page.
-    public var description: String {
-        switch self {
-        case .pageNotFound:
-            return "The page you are looking for could not be found."
+    public let description: String
 
-        case .internalServerError:
-            return "The server encountered an internal error. Please try again later."
-        }
+    public init(filename: String, title: String, description: String) {
+        self.filename = filename
+        self.title = title
+        self.description = description
     }
+
+    public static var allCases: [ErrorPageStatus] {
+        [
+            .pageNotFound,
+            .internalServerError
+        ]
+    }
+}
+
+// MARK: - Default Error Statuses
+
+public extension ErrorPageStatus {
+
+    /// The status when a page could not be found.
+    static let pageNotFound = ErrorPageStatus(filename: "404", title: "Page Not Found", description: "The page you are looking for could not be found.")
+
+    /// The status when an internal server error occurred.
+    static let internalServerError = ErrorPageStatus(filename: "500", title: "Internal Server Error", description: "The server encountered an internal error. Please try again later.")
+
 }

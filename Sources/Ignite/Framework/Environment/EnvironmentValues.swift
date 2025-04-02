@@ -61,6 +61,7 @@ public struct EnvironmentValues {
     /// The current category of the page being rendered.
     var category: any Category = EmptyCategory()
 
+    /// The current error page status being rendered.
     var errorPageStatus: ErrorPageStatus = .pageNotFound
 
     /// Content that has the current tag.

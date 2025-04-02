@@ -5,9 +5,9 @@
 // See LICENSE for license information.
 //
 
-/// Error pages are special pages that are shown when a specific HTTP status code is encountered.
-/// They are used to provide a custom error message or page to the user.
-/// For example, a 404 error page can be used to inform the user that the requested page was not found.
+/// Allows you to define a custom error page for your site.
+///
+/// The error page is a  special page that is shown when a specific HTTP status code is encountered.
 ///
 /// ```swift
 /// struct MyErrorPage: ErrorPage {
@@ -21,6 +21,19 @@
 ///     }
 /// }
 /// ```
+///
+/// Ignite supports a few basic error statuses such as 404 and 500, but you can also create your own by adding them under your Site's `supportedErrorStatuses` property.
+///
+/// ```swift
+/// extension ErrorPageStatus {
+///     static let unauthorized = ErrorPageStatus(filename: "401", title: "Unauthorized", description: "You don't have permission to access this page.")
+/// }
+///
+/// struct MySite: Site {
+///     var supportedErrorStatuses: [ErrorPageStatus] {
+///         [.unauthorized]
+///     }
+/// }
 @MainActor
 public protocol ErrorPage: StaticPage {
     /// The current error page being rendered.

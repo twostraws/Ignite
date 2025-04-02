@@ -149,7 +149,7 @@ public protocol Site: Sendable {
     @ArticlePageBuilder var articlePages: [any ArticlePage] { get }
 
     /// An array of all the error pages you want to include in your site.
-    var supportedErrorPages: [ErrorPageStatus] { get }
+    var supportedErrorStatuses: [ErrorPageStatus] { get }
 
     /// Publishes this entire site from user space.
     mutating func publish(from file: StaticString, buildDirectoryPath: String) async throws
@@ -221,7 +221,7 @@ public extension Site {
     var errorPage: EmptyErrorPage { EmptyErrorPage() }
 
     /// Supports Page Not Found only by default.
-    var supportedErrorPages: [ErrorPageStatus] {
+    var supportedErrorStatuses: [ErrorPageStatus] {
         [.pageNotFound]
     }
 
