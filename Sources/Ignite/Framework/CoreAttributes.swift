@@ -183,6 +183,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     /// Appends multiple extra inline CSS styles.
     /// - Parameter classes: The inline CSS styles to append.
     mutating func append(styles: InlineStyle...) {
+        let styles = styles.filter { !$0.value.isEmpty }
         self.styles.formUnion(styles)
     }
 
@@ -190,7 +191,8 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     ///  - Parameter style: The style name, e.g. background-color
     ///  - Parameter value: The style value, e.g. steelblue
     mutating func append(style: Property, value: String) {
-        styles.append(InlineStyle(style, value: value))
+        guard !value.isEmpty else { return }
+        styles.append(.init(style, value: value))
     }
 
     /// Appends a data attribute.
@@ -211,6 +213,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     ///   CSS style properties and their values to be appended.
     mutating func append(styles newStyles: some Collection<InlineStyle>) {
         var styles = self.styles
+        let newStyles = newStyles.filter { !$0.value.isEmpty }
         styles.formUnion(newStyles)
         self.styles = styles
     }
@@ -230,11 +233,11 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     /// Removes specified CSS properties from the element's inline styles.
     /// - Parameter properties: Variable number of CSS properties to remove.
     mutating func remove(styles properties: Property...) {
-        var styles = Array(self.styles)
+        var styles = self.styles
         for property in properties {
             styles.removeAll(where: { $0.property == property.rawValue })
         }
-        self.styles = OrderedSet(styles)
+        self.styles = styles
     }
 
     /// Retrieves the inline styles for specified CSS properties.

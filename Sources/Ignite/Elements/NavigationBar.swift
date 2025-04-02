@@ -61,8 +61,11 @@ public struct NavigationBar: HTML {
     /// clickable to let users navigate to your homepage.
     let logo: (any InlineElement)?
 
-    /// An array of items to show in this navigation bar.
+    /// An array of collapsible items to show in this navigation bar.
     let items: [any NavigationItem]
+
+    /// An array of permanent elements to show in this navigation bar.
+    let controls: any HTML
 
     /// The style to use when rendering this bar.
     var style = NavigationBarStyle.default
@@ -78,33 +81,42 @@ public struct NavigationBar: HTML {
     ) {
         self.logo = logo
         self.items = []
+        self.controls = EmptyHTML()
     }
 
-    /// Creates a new `NavigationBar` instance from the `logo` and
-    /// `items` provided.
+    /// Creates a new `NavigationBar` instance from the `logo`,
+    /// `items`, and `controls` provided.
     /// - Parameters:
     ///   - logo: The logo to use in the top-left edge of your bar.
-    ///   - items: An element builder that returns an array of
-    /// `NavigationItem` objects.
+    ///   - items: Basic navigation items like `Link` and `Span` that will be
+    ///   collapsed into a hamburger menu at small screen sizes.
+    ///   - controls: Elements positioned at the end of the navigation bar and
+    ///   visible across all screen sizes.
     public init(
         logo: (any InlineElement)? = nil,
-        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem]
+        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @HTMLBuilder controls: () -> some HTML = { EmptyHTML() }
     ) {
         self.logo = logo
         self.items = items()
+        self.controls = controls()
     }
 
-    /// Creates a new `NavigationBar` instance from the `logo` and
-    /// `items` provided.
+    /// Creates a new `NavigationBar` instance from the `logo`,
+    /// `items`, and `controls` provided.
     /// - Parameters:
-    ///   - items: An element builder that returns an array of
-    /// `NavigationItem` objects.
+    ///   - items: Basic navigation items like `Link` and `Span` that will be
+    ///   collapsed into a hamburger menu at small screen sizes.
+    ///   - controls: Elements positioned at the end of the navigation bar and
+    ///   visible across all screen sizes.
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @HTMLBuilder controls: () -> some HTML = { EmptyHTML() },
         logo: (() -> (any InlineElement))? = nil
     ) {
         self.items = items()
+        self.controls = controls()
         self.logo = logo?()
     }
 
@@ -158,7 +170,12 @@ public struct NavigationBar: HTML {
                 Section {
                     if let logo {
                         renderLogo(logo)
+                            .class("me-auto me-md-0")
                     }
+
+                    AnyHTML(controls)
+                        .class("order-md-last", "ms-auto me-2")
+
                     if !items.isEmpty {
                         renderToggleButton()
                         renderNavItems()
@@ -237,6 +254,8 @@ public struct NavigationBar: HTML {
     private func renderLogo(_ logo: any InlineElement) -> some InlineElement {
         Link(logo, target: "/")
             .trimmingMargin()
+            // To investigate: Label takes up more space than needed
+            .style(.width, logo.is(Label.self) ? "min-content" : "")
             .class("navbar-brand")
     }
 }
