@@ -11,28 +11,34 @@
 ///
 /// ```swift
 /// struct MyErrorPage: ErrorPage {
-///     var body: some HTML {
-///         Section {
-///             Text(error.title).font(.title1)
-///             Text(error.description)
-///             Link("Go back to the homepage", destination: "/")
-///                 .buttonStyle(.primary)
-///         }
+///   var body: some HTML {
+///     Section {
+///       Text(error.title).font(.title1)
+///       Text(error.description)
+///       Link("Go back to the homepage", destination: "/")
+///         .buttonStyle(.primary)
 ///     }
+///   }
 /// }
 /// ```
 ///
-/// Ignite supports a few basic status code errors such as 404 and 500, but you can also create your own by extending the `HTTPStatusCodeError` type.
+/// Ignite supports a few basic status code errors such as 404 and 500, but you can also create your own by extending the `StatusCodeError` protocol.
 ///
 /// ```swift
-/// struct HTTPStatusCodeError {
-///     static let unauthorized = HTTPStatusCodeError(401, title: "Unauthorized", description: "You don't have permission to access this page.")
+/// struct extension StatusCodeError where Self == HTTPStatusCodeError {
+///   static var unauthorized: StatusCodeError {
+///     HTTPStatusCodeError(
+///       401,
+///       title: "Unauthorized",
+///       description: "You don't have permission to access this page."
+///     )
+///   }
 /// }
 ///
 /// struct MySite: Site {
-///     var supportedErrorStatuses: [StatusCodeError] {
-///         [HTTPStatusCodeError.unauthorized]
-///     }
+///   var supportedErrorStatuses: [StatusCodeError] {
+///     [.unauthorized]
+///   }
 /// }
 /// ```
 ///

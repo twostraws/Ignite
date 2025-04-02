@@ -20,11 +20,23 @@ public struct HTTPStatusCodeError: StatusCodeError {
 
 // MARK: - Default Error Statuses
 
-public extension HTTPStatusCodeError {
+public extension StatusCodeError where Self == HTTPStatusCodeError {
 
-    /// The HTTP status code when a page could not be found.
-    static let notFound: HTTPStatusCodeError = .init(404, title: "Page Not Found", description: "The page you are looking for could not be found.")
+    /// The status code error when a page could not be found.
+    static var pageNotFound: StatusCodeError {
+        HTTPStatusCodeError(
+            404,
+            title: "Page Not Found",
+            description: "The page you are looking for could not be found."
+        )
+    }
 
-    /// The HTTP status code when an internal server error occurred.
-    static let internalServerError: HTTPStatusCodeError = .init(500, title: "Internal Server Error", description: "The server encountered an internal error. Please try again later.")
+    /// The status code error when an internal server error occurred.
+    static var internalServerError: StatusCodeError {
+        HTTPStatusCodeError(
+            500,
+            title: "Internal Server Error",
+            description: "The server encountered an internal error. Please try again later."
+        )
+    }
 }

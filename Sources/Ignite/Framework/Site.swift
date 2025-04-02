@@ -222,7 +222,7 @@ public extension Site {
 
     /// Supports Page Not Found only by default.
     var supportedStatusCodeErrors: [StatusCodeError] {
-        [HTTPStatusCodeError.notFound]
+        [.pageNotFound]
     }
 
     /// The default favicon being nil
