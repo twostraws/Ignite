@@ -62,10 +62,24 @@
 public protocol ErrorPage: LayoutContent {
     /// The current status code error being rendered.
     var error: StatusCodeError { get }
+
+    /// The title of the error page. Defaults to the title of the error.
+    var title: String { get }
+
+    /// The description of the error page. Defaults to the description of the error.
+    var description: String { get }
 }
 
 extension ErrorPage {
     public var error: StatusCodeError {
         PublishingContext.shared.environment.statusCodeError
+    }
+
+    public var title: String {
+        error.title
+    }
+
+    public var description: String {
+        error.description
     }
 }

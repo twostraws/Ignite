@@ -138,9 +138,10 @@ extension PublishingContext {
         if site.errorPage is EmptyErrorPage { return }
 
         for statusCodeError in site.supportedStatusCodeErrors where type(of: statusCodeError) != EmptyErrorPage.self {
+            environment.statusCodeError = statusCodeError
             let metadata = PageMetadata(
-                title: statusCodeError.title,
-                description: statusCodeError.description,
+                title: site.errorPage.title,
+                description: site.errorPage.description,
                 url: site.url
             )
 
