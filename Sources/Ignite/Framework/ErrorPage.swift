@@ -36,8 +36,8 @@
 /// }
 @MainActor
 public protocol ErrorPage: StaticPage {
-    /// The current error page being rendered.
-    var error: ErrorPageStatus { get }
+    /// The current status code error being rendered.
+    var error: StatusCodeError { get }
 }
 
 extension ErrorPage {
@@ -49,7 +49,7 @@ extension ErrorPage {
         ""
     }
 
-    public var error: ErrorPageStatus {
-        PublishingContext.shared.environment.errorPageStatus
+    public var error: StatusCodeError {
+        PublishingContext.shared.environment.statusCodeError
     }
 }

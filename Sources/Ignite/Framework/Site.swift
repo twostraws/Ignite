@@ -109,7 +109,7 @@ public protocol Site: Sendable {
     /// tag pages or the "all tags" page.
     var tagPage: TagPageType { get }
 
-    /// A type that conforms to `ErrorPage`, to be used when rendering error pages.
+    /// A type that conforms to `ErrorPage`, to be used when rendering status code errors.
     var errorPage: ErrorPageType { get }
 
     /// The base layout applied to all pages. This is used to render all pages that don't
@@ -148,8 +148,8 @@ public protocol Site: Sendable {
     /// An array of all the article pages you want to include in your site.
     @ArticlePageBuilder var articlePages: [any ArticlePage] { get }
 
-    /// An array of all the error pages you want to include in your site.
-    var supportedErrorStatuses: [ErrorPageStatus] { get }
+    /// An array of all the status code errors you want to generate pages for  in your site.
+    var supportedStatusCodeErrors: [StatusCodeError] { get }
 
     /// Publishes this entire site from user space.
     mutating func publish(from file: StaticString, buildDirectoryPath: String) async throws
@@ -221,8 +221,8 @@ public extension Site {
     var errorPage: EmptyErrorPage { EmptyErrorPage() }
 
     /// Supports Page Not Found only by default.
-    var supportedErrorStatuses: [ErrorPageStatus] {
-        [.pageNotFound]
+    var supportedStatusCodeErrors: [StatusCodeError] {
+        [HTTPStatusCodeError.notFound]
     }
 
     /// The default favicon being nil

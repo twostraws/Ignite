@@ -132,16 +132,16 @@ extension PublishingContext {
     func renderErrorPages() async {
         if site.errorPage is EmptyErrorPage { return }
 
-        for status in site.supportedErrorStatuses {
-            render(errorPage: site.errorPage, with: status)
+        for statusCodeError in site.supportedStatusCodeErrors where type(of: statusCodeError) != EmptyErrorPage.self {
+            render(errorPage: site.errorPage, with: statusCodeError)
         }
     }
 
-    func render(errorPage: any ErrorPage, with status: ErrorPageStatus) {
-        environment.errorPageStatus = status
+    func render(errorPage: any ErrorPage, with statusCodeError: any StatusCodeError) {
+        environment.statusCodeError = statusCodeError
         render(
             errorPage, rootPath: "/", pagePath: errorPage.path, priority: nil,
-            filename: "\(status.filename)")
+            filename: "\(statusCodeError.filename)")
     }
 
     /// Locates the best layout to use for a piece of Markdown content. Layouts
