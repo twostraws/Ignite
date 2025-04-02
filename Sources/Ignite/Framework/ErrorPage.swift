@@ -65,14 +65,6 @@ public protocol ErrorPage: LayoutContent {
 }
 
 extension ErrorPage {
-    public var title: String {
-        error.title
-    }
-
-    public var path: String {
-        ""
-    }
-
     public var error: StatusCodeError {
         PublishingContext.shared.environment.statusCodeError
     }
