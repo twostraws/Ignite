@@ -6,7 +6,7 @@
 //
 
 /// A type that represents a status code error that can be displayed as an error page.
-public protocol StatusCodeError: Sendable {
+public protocol ResponseError: Sendable {
 
     /// The filename of the generated error page.
     var filename: String { get }

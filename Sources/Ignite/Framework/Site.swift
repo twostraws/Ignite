@@ -148,9 +148,6 @@ public protocol Site: Sendable {
     /// An array of all the article pages you want to include in your site.
     @ArticlePageBuilder var articlePages: [any ArticlePage] { get }
 
-    /// An array of all the status code errors you want to generate pages for  in your site.
-    var supportedStatusCodeErrors: [any StatusCodeError] { get }
-
     /// Publishes this entire site from user space.
     mutating func publish(from file: StaticString, buildDirectoryPath: String) async throws
 
@@ -219,11 +216,6 @@ public extension Site {
 
     /// An empty error page by default, which triggers no error pages being generated.
     var errorPage: EmptyErrorPage { EmptyErrorPage() }
-
-    /// Supports Page Not Found only by default.
-    var supportedStatusCodeErrors: [StatusCodeError] {
-        [.pageNotFound]
-    }
 
     /// The default favicon being nil
     var favicon: URL? { nil }

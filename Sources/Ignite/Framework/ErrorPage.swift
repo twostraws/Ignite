@@ -22,46 +22,11 @@
 /// }
 /// ```
 ///
-/// Ignite supports a few basic status code errors such as 404 and 500, but you can also create your own by extending the `StatusCodeError` protocol.
-///
-/// ```swift
-/// struct extension StatusCodeError where Self == HTTPStatusCodeError {
-///   static var unauthorized: StatusCodeError {
-///     HTTPStatusCodeError(
-///       401,
-///       title: "Unauthorized",
-///       description: "You don't have permission to access this page."
-///     )
-///   }
-/// }
-///
-/// struct MySite: Site {
-///   var supportedErrorStatuses: [StatusCodeError] {
-///     [.unauthorized]
-///   }
-/// }
-/// ```
-///
-/// You could also create a completely custom status code error type by conforming to the `StatusCodeError` protocol directly.
-///
-/// ```swift
-/// struct MyCustomError: StatusCodeError {
-///   var filename: String { "my-custom-error" }
-///   var title: String { "My Custom Error" }
-///   var description: String { "This is a custom error that I created." }
-///   var someOtherProperty: String { "This is a custom property." }
-/// }
-///
-/// struct MySite: Site {
-///    var supportedErrorStatuses: [StatusCodeError] {
-///        [MyCustomError()]
-///    }
-///  }
-/// ```
+/// Ignite currently only supports a 404 response error
 @MainActor
 public protocol ErrorPage: LayoutContent {
-    /// The current status code error being rendered.
-    var error: StatusCodeError { get }
+    /// The current response error being rendered.
+    var error: ResponseError { get }
 
     /// The title of the error page. Defaults to the title of the error.
     var title: String { get }
@@ -71,8 +36,8 @@ public protocol ErrorPage: LayoutContent {
 }
 
 extension ErrorPage {
-    public var error: StatusCodeError {
-        PublishingContext.shared.environment.statusCodeError
+    public var error: ResponseError {
+        PublishingContext.shared.environment.responseError
     }
 
     public var title: String {

@@ -5,8 +5,8 @@
 // See LICENSE for license information.
 //
 
-/// A status code error that represents a page not found.
-public struct PageNotFoundStatusCode: StatusCodeError {
+/// A response error that represents a page not found.
+public struct PageNotFoundResponseError: ResponseError {
     public let filename: String
     public let title: String
     public let description: String
@@ -18,9 +18,9 @@ public struct PageNotFoundStatusCode: StatusCodeError {
     }
 }
 
-public extension StatusCodeError where Self == PageNotFoundStatusCode {
-    /// A status code error that represents a page not found.
-    static var pageNotFound: StatusCodeError {
-        PageNotFoundStatusCode()
+public extension ResponseError where Self == PageNotFoundResponseError {
+    /// A response error that represents a page not found.
+    static var pageNotFound: ResponseError {
+        PageNotFoundResponseError()
     }
 }

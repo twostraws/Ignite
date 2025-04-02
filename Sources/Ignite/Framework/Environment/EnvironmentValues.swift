@@ -62,7 +62,7 @@ public struct EnvironmentValues {
     var category: any Category = EmptyCategory()
 
     /// The current status code error being rendered.
-    var statusCodeError: StatusCodeError = EmptyStatusCodeError()
+    var responseError: ResponseError = EmptyResponseError()
 
     /// Content that has the current tag.
     var taggedContent: [Article] = []
