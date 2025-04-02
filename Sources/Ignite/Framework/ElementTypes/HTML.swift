@@ -81,7 +81,7 @@ extension HTML {
     }
 
     /// Whether this element represents a specific type.
-    func `is`(_ elementType: HTML.Type) -> Bool {
+    func `is`(_ elementType: any HTML.Type) -> Bool {
         if let anyHTML = body as? AnyHTML {
             type(of: anyHTML.wrapped) == elementType
         } else {
