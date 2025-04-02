@@ -7,7 +7,7 @@
 
 /// Allows you to define a custom error page for your site.
 ///
-/// The error page is a  special page that is shown when a specific HTTP status code is encountered.
+/// The error page is a  special page that is shown when a specific status code or error is encountered.
 ///
 /// ```swift
 /// struct MyErrorPage: ErrorPage {
@@ -22,18 +22,36 @@
 /// }
 /// ```
 ///
-/// Ignite supports a few basic error statuses such as 404 and 500, but you can also create your own by adding them under your Site's `supportedErrorStatuses` property.
+/// Ignite supports a few basic status code errors such as 404 and 500, but you can also create your own by extending the `HTTPStatusCodeError` type.
 ///
 /// ```swift
-/// extension ErrorPageStatus {
-///     static let unauthorized = ErrorPageStatus(filename: "401", title: "Unauthorized", description: "You don't have permission to access this page.")
+/// struct HTTPStatusCodeError {
+///     static let unauthorized = HTTPStatusCodeError(401, title: "Unauthorized", description: "You don't have permission to access this page.")
 /// }
 ///
 /// struct MySite: Site {
-///     var supportedErrorStatuses: [ErrorPageStatus] {
-///         [.unauthorized]
+///     var supportedErrorStatuses: [StatusCodeError] {
+///         [HTTPStatusCodeError.unauthorized]
 ///     }
 /// }
+/// ```
+///
+/// You could also create a completely custom status code error type by conforming to the `StatusCodeError` protocol directly.
+///
+/// ```swift
+/// struct MyCustomError: StatusCodeError {
+///   var filename: String { "my-custom-error" }
+///   var title: String { "My Custom Error" }
+///   var description: String { "This is a custom error that I created." }
+///   var someOtherProperty: String { "This is a custom property." }
+/// }
+///
+/// struct MySite: Site {
+///    var supportedErrorStatuses: [StatusCodeError] {
+///        [MyCustomError()]
+///    }
+///  }
+/// ```
 @MainActor
 public protocol ErrorPage: LayoutContent {
     /// The current status code error being rendered.
