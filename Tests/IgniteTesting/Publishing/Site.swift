@@ -93,9 +93,11 @@ struct SiteTests {
 
     @Test("Site published with a custom ErrorPage and custom content")
     func publishingWithCustomErrorPageAndContent() async throws {
-        var site = TestSitePublisher(site: TestSiteWithErrorPage(errorPage: TestErrorPage(title: "A different title", description: "A different description")))
+        let errorPage = TestErrorPage(title: "A different title", description: "A different description")
+        let site = TestSiteWithErrorPage(errorPage: errorPage)
+        var publisher = TestSitePublisher(site: site)
 
-        try await site.publish()
+        try await publisher.publish()
 
         #expect(package.checkFileExists(at: "404.html"))
         #expect(try package.contentsOfFile(at: "404.html").contains("A different title"))

@@ -8,7 +8,6 @@
 import Foundation
 import Ignite
 
-
 /// An example page used in tests.
 struct TestLayout: StaticPage {
     var title = "Home"
