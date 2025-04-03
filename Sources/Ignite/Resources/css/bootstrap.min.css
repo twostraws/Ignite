@@ -253,3 +253,23 @@ div.alert p:last-child {
         backdrop-filter: blur(70px) saturate(180%);
     }
 }
+
+.ig-footer1 {
+    font-size: 0.9rem;
+}
+
+.ig-footer2 {
+    font-size: 0.8rem;
+}
+
+.ig-footer3 {
+    font-size: 0.75rem;
+}
+
+.ig-footer4 {
+    font-size: 0.65rem;
+}
+
+.ig-footer5 {
+    font-size: 0.55rem;
+}

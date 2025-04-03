@@ -34,10 +34,25 @@ public extension Font {
         /// A larger variant of body text using Bootstrap's large font size (1.25rem)
         case lead
 
+        /// A small variant of body text suitable for components like footers (0.9rem)
+        case footer1
+
+        /// A smaller variant of body text suitable for components like footers (0.8rem)
+        case footer2
+
+        /// A very small variant of body text suitable for components like footers (0.75rem)
+        case footer3
+
+        /// A tiny variant of body text suitable for components like footers (0.65rem)
+        case footer4
+
+        /// A very tiny variant of body text suitable for components like footers (0.55rem)
+        case footer5
+
         public var description: String { rawValue }
 
         /// The Bootstrap CSS variable that defines this style's font size
-        var sizeVariable: String {
+        var sizeVariable: String? {
             switch self {
             case .title1: "var(--bs-h1-font-size)"
             case .title2: "var(--bs-h2-font-size)"
@@ -46,43 +61,32 @@ public extension Font {
             case .title5: "var(--bs-h5-font-size)"
             case .title6: "var(--bs-h6-font-size)"
             case .body: "var(--bs-body-font-size)"
-            case .lead: "var(--bs-body-font-size-lg)"
+            default: nil
             }
         }
 
-        /// The Bootstrap font-size utility class for this style
-        var fontSizeClass: String {
-            switch self {
-            case .title1: return "fs-1"
-            case .title2: return "fs-2"
-            case .title3: return "fs-3"
-            case .title4: return "fs-4"
-            case .title5: return "fs-5"
-            case .title6: return "fs-6"
-            case .body: return "" // Default body size doesn't need a class
-            case .lead: return "lead" // Lead already has its own class
-            }
-        }
-
-        /// A list of font styles that generate tags, as opposed to CSS classes.
+        /// A list of font styles that generate CSS classes, as opposed to HTML tags.
         @MainActor
-        public static let tagCases: [Style] = [
-            .title1, .title2, .title3, .title4, .title5, .title6, .body
+        public static let classCases: [Style] = [
+            .lead, .footer1, .footer2, .footer3, .footer4, .footer5
         ]
 
-        /// Creates a new text level from a raw string value.
-        /// - Parameter rawValue: The HTML tag name to convert into a text level (e.g., "h1", "p")
-        public init?(rawValue: String) {
-            switch rawValue.lowercased() {
-            case "h1": self = .title1
-            case "h2": self = .title2
-            case "h3": self = .title3
-            case "h4": self = .title4
-            case "h5": self = .title5
-            case "h6": self = .title6
-            case "p": self = .body
-            case "lead": self = .lead
-            default: return nil
+        /// The Bootstrap font-size utility class for this style
+        var fontSizeClass: String? {
+            switch self {
+            case .title1: "fs-1"
+            case .title2: "fs-2"
+            case .title3: "fs-3"
+            case .title4: "fs-4"
+            case .title5: "fs-5"
+            case .title6: "fs-6"
+            case .body: nil // Default body size doesn't need a class
+            case .lead: "lead"
+            case .footer1: "ig-footer1"
+            case .footer2: "ig-footer2"
+            case .footer3: "ig-footer3"
+            case .footer4: "ig-footer4"
+            case .footer5: "ig-footer5"
             }
         }
     }

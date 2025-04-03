@@ -113,8 +113,8 @@ public struct Text: HTML, DropdownItem {
 extension HTML {
     func fontStyle(_ font: Font.Style) -> any HTML {
         var copy: any HTML = self
-        if font == .lead {
-            copy.attributes.append(classes: font.rawValue)
+        if Font.Style.classCases.contains(font), let sizeClass = font.fontSizeClass {
+            copy.attributes.append(classes: sizeClass)
         } else if var text = copy as? Text {
             text.font = font
             copy = text
