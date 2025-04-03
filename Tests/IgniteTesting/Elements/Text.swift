@@ -55,9 +55,9 @@ import Testing
         let element = Text("Hello").font(font)
         let output = element.render()
 
-        if font == .lead {
+        if FontStyle.classBasedStyles.contains(font), let sizeClass = font.sizeClass {
             // This applies a paragraph class rather than a different tag.
-            #expect(output == "<p class=\"lead\">Hello</p>")
+            #expect(output == "<p class=\"\(sizeClass)\">Hello</p>")
         } else {
             #expect(output == "<\(font.rawValue)>Hello</\(font.rawValue)>")
         }

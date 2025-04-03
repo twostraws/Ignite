@@ -66,13 +66,12 @@ public extension Font {
         }
 
         /// A list of font styles that generate CSS classes, as opposed to HTML tags.
-        @MainActor
-        public static let classCases: [Style] = [
+        static let classBasedStyles: [Style] = [
             .lead, .footer1, .footer2, .footer3, .footer4, .footer5
         ]
 
         /// The Bootstrap font-size utility class for this style
-        var fontSizeClass: String? {
+        var sizeClass: String? {
             switch self {
             case .title1: "fs-1"
             case .title2: "fs-2"
