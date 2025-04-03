@@ -254,7 +254,17 @@ public extension Link {
     }
 
     /// Convenience initializer that creates a new `Link` instance using the
-    /// title and path of the `MarkdownContent` instance you provide.
+    /// path of the `Article` instance you provide.
+    /// - Parameters:
+    ///    - content: The user-facing content to show inside the `Link`.
+    ///    - article: A piece of content from your site.
+    init(_ content: String, target: Article) {
+        self.content = content
+        self.url = target.path
+    }
+
+    /// Convenience initializer that creates a new `Link` instance using the
+    /// title and path of the `Article` instance you provide.
     /// - Parameter article: A piece of content from your site.
     init(_ article: Article) {
         self.content = article.title
