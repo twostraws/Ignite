@@ -102,21 +102,6 @@ public struct NavigationBar: HTML {
         self.controls = controls()
     }
 
-    /// Creates a new `NavigationBar` instance from the `logo`
-    /// and `controls` provided.
-    /// - Parameters:
-    ///   - logo: The logo to use in the top-left edge of your bar.
-    ///   - controls: Elements positioned at the end of the navigation bar and
-    ///   visible across all screen sizes.
-    public init(
-        logo: (any InlineElement)? = nil,
-        @HTMLBuilder controls: () -> some HTML
-    ) {
-        self.logo = logo
-        self.items = []
-        self.controls = controls()
-    }
-
     /// Creates a new `NavigationBar` instance from the `logo`,
     /// `items`, and `controls` provided.
     /// - Parameters:
@@ -131,21 +116,6 @@ public struct NavigationBar: HTML {
         logo: (() -> (any InlineElement))? = nil
     ) {
         self.items = items()
-        self.controls = controls()
-        self.logo = logo?()
-    }
-
-    /// Creates a new `NavigationBar` instance from the `logo`
-    /// and `controls` provided.
-    /// - Parameters:
-    ///   - controls: Elements positioned at the end of the navigation bar and
-    ///   visible across all screen sizes.
-    ///   - logo: The logo to use in the top-left edge of your bar.
-    public init(
-        @HTMLBuilder controls: () -> some HTML,
-        logo: (() -> (any InlineElement))? = nil
-    ) {
-        self.items = []
         self.controls = controls()
         self.logo = logo?()
     }
