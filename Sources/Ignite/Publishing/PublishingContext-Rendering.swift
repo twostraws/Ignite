@@ -157,7 +157,7 @@ extension PublishingContext {
                 site.errorPage.layout.body.render()
             }
 
-            write(outputString, to: buildDirectory, priority: nil, filename: error.filename)
+            write(outputString, to: buildDirectory, priority: nil, filename: String(error.statusCode))
         }
 
         environment.httpError = EmptyHTTPError()
