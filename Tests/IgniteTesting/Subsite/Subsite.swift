@@ -75,7 +75,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
 
     @Test("Page Target Test")
     func target() async throws {
-        let page = TestSubsiteLayout()
+        let page = TestSubsitePage()
         let element = Link("This is a test", target: page).linkStyle(.button)
         let output = element.render()
         #expect(output == "<a href=\"\(page.path)\" class=\"btn btn-primary\">This is a test</a>")
