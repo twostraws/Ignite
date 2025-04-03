@@ -8,6 +8,8 @@
 /// A default error page that does nothing.
 public struct EmptyErrorPage: ErrorPage {
 
+    public init() {}
+
     public var title: String {
         ""
     }
