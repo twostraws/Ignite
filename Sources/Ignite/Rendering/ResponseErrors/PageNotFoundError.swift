@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-/// A response error that represents a page not found.
+/// An HTTP error that represents a page not found.
 public struct PageNotFoundError: HTTPError {
     public let filename: String
     public let title: String
@@ -19,7 +19,7 @@ public struct PageNotFoundError: HTTPError {
 }
 
 public extension HTTPError where Self == PageNotFoundError {
-    /// A response error that represents a page not found.
+    /// An HTTP error that represents a page not found.
     static var pageNotFound: HTTPError {
         PageNotFoundError()
     }
