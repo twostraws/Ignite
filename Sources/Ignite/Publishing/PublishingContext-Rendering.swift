@@ -159,7 +159,7 @@ extension PublishingContext {
 
             write(outputString, to: buildDirectory, priority: nil, filename: responseError.filename)
         }
-        
+
         environment.responseError = EmptyResponseError()
     }
 
