@@ -16,7 +16,7 @@ struct TestSite: Site {
     var timeZone: TimeZone?
     var language: Language = .english
 
-    var homePage = TestLayout()
+    var homePage = TestPage()
     var layout = EmptyLayout()
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
 
