@@ -137,8 +137,8 @@ extension PublishingContext {
     func renderErrorPages() async {
         if site.errorPage is EmptyErrorPage { return }
 
-        for responseError in [PageNotFoundResponseError()] {
-            environment.responseError = responseError
+        for error in [PageNotFoundError()] {
+            environment.httpError = error
 
             let metadata = PageMetadata(
                 title: site.errorPage.title,
@@ -157,10 +157,10 @@ extension PublishingContext {
                 site.errorPage.layout.body.render()
             }
 
-            write(outputString, to: buildDirectory, priority: nil, filename: responseError.filename)
+            write(outputString, to: buildDirectory, priority: nil, filename: error.filename)
         }
 
-        environment.responseError = EmptyResponseError()
+        environment.httpError = EmptyHTTPError()
     }
 
     /// Locates the best layout to use for a piece of Markdown content. Layouts
