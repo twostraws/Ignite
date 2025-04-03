@@ -8,8 +8,8 @@
 /// A type that represents an HTTP status code error that can be displayed as an error page.
 public protocol HTTPError: Sendable {
 
-    /// The filename of the generated error page.
-    var filename: String { get }
+    /// The status code of the HTTP error.
+    var statusCode: Int { get }
 
     /// The title of the error.
     var title: String { get }
