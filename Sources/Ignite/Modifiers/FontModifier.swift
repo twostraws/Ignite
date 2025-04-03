@@ -12,7 +12,7 @@ public extension HTML {
     func font(_ font: Font) -> some HTML {
         if font.name != nil {
             // Custom font that requires CSS generation
-            CSSManager.shared.registerFont(font)
+            CSSManager.shared.registerFontFamily(font)
         }
         return AnyHTML(fontModifier(font))
     }
@@ -24,7 +24,7 @@ public extension HTML {
         let baseFont = font.font
         if baseFont.name != nil {
             // Custom font that requires CSS generation
-            CSSManager.shared.registerFont(baseFont)
+            CSSManager.shared.registerFontFamily(baseFont)
         }
         return AnyHTML(fontModifier(baseFont))
     }
@@ -37,7 +37,7 @@ public extension InlineElement {
     func font(_ font: Font) -> some InlineElement {
         if font.name != nil {
             // Custom font that requires CSS generation
-            CSSManager.shared.registerFont(font)
+            CSSManager.shared.registerFontFamily(font)
         }
         return AnyHTML(fontModifier(font))
     }
@@ -49,7 +49,7 @@ public extension InlineElement {
         let baseFont = font.font
         if baseFont.name != nil {
             // Custom font that requires CSS generation
-            CSSManager.shared.registerFont(baseFont)
+            CSSManager.shared.registerFontFamily(baseFont)
         }
         return AnyHTML(fontModifier(baseFont))
     }
@@ -62,7 +62,7 @@ public extension StyledHTML {
     func font(_ font: Font) -> Self {
         if font.name != nil {
             // Custom font that requires CSS generation
-            CSSManager.shared.registerFont(font)
+            CSSManager.shared.registerFontFamily(font)
         }
 
         var styles = [InlineStyle]()
@@ -112,7 +112,7 @@ private extension HTML {
         }
 
         if let responsiveSize = font.responsiveSize {
-            let classNames = registerClasses(for: responsiveSize)
+            let classNames = CSSManager.shared.registerFont(responsiveSize)
             modified = modified.class(classNames)
         } else if let size = font.size {
             modified = modified.style(.fontSize, size.stringValue)
@@ -135,7 +135,7 @@ private extension HTML {
         }
 
         if let responsiveSize = font.responsiveSize {
-            let classNames = registerClasses(for: responsiveSize)
+            let classNames = CSSManager.shared.registerFont(responsiveSize)
             classes.append(classNames)
         } else if let size = font.size {
             styles.append(.init(.fontSize, value: size.stringValue))
@@ -146,30 +146,5 @@ private extension HTML {
         return Section(self.class("font-inherit"))
             .style(styles)
             .class(classes)
-    }
-
-    /// Registers CSS classes for responsive font sizes and returns the generated class name.
-    /// - Parameter responsiveSize: The responsive font size.
-    /// - Returns: A unique class name that applies the font's responsive size rules.
-    func registerClasses(for responsiveSize: ResponsiveValues<LengthUnit>) -> String {
-        let values = responsiveSize.values
-        let className = "font-" + values.description.truncatedHash
-        let baseSize = values[.xSmall]
-        let breakpointSizes = values.filter { $0.key != .xSmall }
-
-        if let baseSize {
-            CSSManager.shared.register(
-                properties: [.init(.fontSize, value: baseSize.stringValue)],
-                className: className)
-        }
-
-        for (breakpoint, size) in breakpointSizes {
-            CSSManager.shared.register(
-                [.breakpoint(.init(breakpoint)!)],
-                properties: [.init(.fontSize, value: size.stringValue)],
-                className: className)
-        }
-
-        return className
     }
 }

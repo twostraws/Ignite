@@ -33,10 +33,8 @@ private extension HTML {
         if queries.isEmpty {
             return self.class(isHidden ? "d-none" : nil)
         } else {
-            CSSManager.shared.register(queries)
-            let hash = CSSManager.shared.hashForQueries(queries)
-            let className = "style-\(hash)"
-            CSSManager.shared.register(queries)
+            let manager = CSSManager.shared
+            let className = manager.registerStyles(queries, styles: [.init(.display, value: "none")])
             return self.class(className)
         }
     }
