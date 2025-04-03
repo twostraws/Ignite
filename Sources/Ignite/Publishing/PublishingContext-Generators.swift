@@ -10,7 +10,7 @@ import Foundation
 extension PublishingContext {
     /// Renders static pages and content pages, including the homepage.
     func generateContent() async {
-        render(site.homePage, isHomePage: true)
+        render(homePage: site.homePage)
 
         for page in site.staticPages {
             render(page)
@@ -19,9 +19,11 @@ extension PublishingContext {
         for content in allContent {
             render(content)
         }
+
         currentRenderingPath = nil
 
         await renderTagPages()
+        await renderErrorPages()
     }
 
     /// Generates a sitemap.xml file for this site.

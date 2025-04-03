@@ -39,6 +39,9 @@ public protocol Site: Sendable {
     /// no tags pages are generated.
     associatedtype TagPageType: TagPage
 
+    /// The type of your custom error page. No custom error page is provided by default.
+    associatedtype ErrorPageType: ErrorPage = EmptyErrorPage
+
     /// The type that defines the base layout structure for all pages.
     associatedtype LayoutType: Layout
 
@@ -105,6 +108,9 @@ public protocol Site: Sendable {
     /// A type that conforms to `TagPage`, to be used when rendering individual
     /// tag pages or the "all tags" page.
     var tagPage: TagPageType { get }
+
+    /// A type that conforms to `ErrorPage`, to be used when rendering status code errors.
+    var errorPage: ErrorPageType { get }
 
     /// The base layout applied to all pages. This is used to render all pages that don't
     /// explicitly override the layout with something custom.
@@ -205,8 +211,11 @@ public extension Site {
     /// No content pages by default.
     var articlePages: [any ArticlePage] { [] }
 
-    /// An empty tag page by default, which triggers no tag pages being made.
+    /// An empty tag page by default, which triggers no tag pages being generated.
     var tagPage: EmptyTagPage { EmptyTagPage() }
+
+    /// An empty error page by default, which triggers no error pages being generated.
+    var errorPage: EmptyErrorPage { EmptyErrorPage() }
 
     /// The default favicon being nil
     var favicon: URL? { nil }

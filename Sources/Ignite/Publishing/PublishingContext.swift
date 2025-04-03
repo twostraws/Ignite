@@ -264,14 +264,15 @@ final class PublishingContext {
     /// Writes a single string of data to a URL.
     /// - Parameters:
     ///   - string: The string to write.
-    ///   - directory: The directory to write to. This has "index.html"
+    ///   - directory: The directory to write to. This has "<filename>.html"
     ///   appended to it, so users are directed to the correct page immediately.
     ///   - priority: A priority value to control how important this content
     ///   is for the sitemap.
-    func write(_ string: String, to directory: URL, priority: Double) {
+    ///   - filename: The filename to use. Defaults to "index". Do not include the MIME type.
+    func write(_ string: String, to directory: URL, priority: Double?, filename: String = "index") {
         let relativePath = directory.relative(to: buildDirectory)
 
-        if siteMap.contains(relativePath) {
+        if relativePath != "/" && siteMap.contains(relativePath) {
             errors.append(PublishingError.duplicateDirectory(directory))
         }
 
@@ -281,7 +282,7 @@ final class PublishingContext {
             errors.append(PublishingError.failedToCreateBuildDirectory(directory))
         }
 
-        let outputURL = directory.appending(path: "index.html")
+        let outputURL = directory.appending(path: filename.appending(".html"))
         var html = string
 
         if site.prettifyHTML {
@@ -290,7 +291,9 @@ final class PublishingContext {
 
         do {
             try html.write(to: outputURL, atomically: true, encoding: .utf8)
-            addToSiteMap(relativePath, priority: priority)
+            if let priority {
+                addToSiteMap(relativePath, priority: priority)
+            }
         } catch {
             errors.append(PublishingError.failedToCreateBuildFile(outputURL))
         }

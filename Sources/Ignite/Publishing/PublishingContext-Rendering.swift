@@ -13,10 +13,30 @@ extension PublishingContext {
     ///   - page: The page to render.
     ///   - isHomePage: True if this is your site's homepage; this affects the
     ///   final path that is written to.
-    func render(_ page: any StaticPage, isHomePage: Bool = false) {
-        let path = isHomePage ? "" : page.path
-        currentRenderingPath = isHomePage ? "/" : page.path
+    func render(_ page: any StaticPage) {
+        render(page, rootPath: page.path, pagePath: page.path)
+    }
 
+    func render(homePage: any StaticPage) {
+        render(homePage, rootPath: "/", pagePath: "", priority: 1)
+    }
+
+    /// Renders a static page.
+    /// - Parameters:
+    ///   - page: The page to render.
+    ///   - rootPath: The root path to render the page to.
+    ///   - pagePath: The path to render the page to.
+    ///   - priority: The priority of this page in the sitemap. Defaults to `0.9`.
+    ///   - filename: The filename to use for the rendered page. Defaults to `index`.
+    func render(
+        _ page: any StaticPage,
+        rootPath: String,
+        pagePath: String,
+        priority: Double? = 0.9,
+        filename: String = "index"
+    ) {
+        let path = pagePath
+        currentRenderingPath = rootPath
         let metadata = PageMetadata(
             title: page.title,
             description: page.description,
@@ -36,7 +56,7 @@ extension PublishingContext {
         }
 
         let outputDirectory = buildDirectory.appending(path: path)
-        write(outputString, to: outputDirectory, priority: isHomePage ? 1 : 0.9)
+        write(outputString, to: outputDirectory, priority: priority, filename: filename)
     }
 
     /// Renders one piece of Markdown content.
@@ -112,6 +132,35 @@ extension PublishingContext {
 
             write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
         }
+    }
+
+    func renderErrorPages() async {
+        if site.errorPage is EmptyErrorPage { return }
+
+        for responseError in [PageNotFoundResponseError()] {
+            environment.responseError = responseError
+
+            let metadata = PageMetadata(
+                title: site.errorPage.title,
+                description: site.errorPage.description,
+                url: site.url
+            )
+
+            let values = EnvironmentValues(
+                sourceDirectory: sourceDirectory,
+                site: site,
+                allContent: allContent,
+                pageMetadata: metadata,
+                pageContent: site.errorPage)
+
+            let outputString = withEnvironment(values) {
+                site.errorPage.layout.body.render()
+            }
+
+            write(outputString, to: buildDirectory, priority: nil, filename: responseError.filename)
+        }
+        
+        environment.responseError = EmptyResponseError()
     }
 
     /// Locates the best layout to use for a piece of Markdown content. Layouts
