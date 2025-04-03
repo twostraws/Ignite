@@ -15,12 +15,12 @@ struct TestSubsite: Site {
 
     var builtInIconsEnabled: BootstrapOptions = .localBootstrap
 
-    var homePage = TestSubsiteLayout()
+    var homePage = TestSubsitePage()
     var layout = EmptyLayout()
 }
 
 /// An example page used in tests.
-struct TestSubsiteLayout: StaticPage {
+struct TestSubsitePage: StaticPage {
     var title = "Subsite Home"
 
     var body: some HTML {
