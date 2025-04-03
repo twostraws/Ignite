@@ -16,7 +16,7 @@ struct TestSiteWithErrorPage: Site {
     var timeZone: TimeZone?
     var language: Language = .english
 
-    var homePage = TestLayout()
+    var homePage = TestPage()
     var layout = EmptyLayout()
 
     var errorPage = TestErrorPage()
@@ -26,7 +26,7 @@ struct TestSiteWithErrorPage: Site {
     ]
 
     var staticPages: [any StaticPage] = [
-        TestLayout()
+        TestPage()
     ]
 
     init() {}

@@ -1,5 +1,5 @@
 //
-// TestStory 2.swift
+// TestErrorPage.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
