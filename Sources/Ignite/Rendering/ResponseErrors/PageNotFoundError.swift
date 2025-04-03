@@ -6,7 +6,7 @@
 //
 
 /// A response error that represents a page not found.
-public struct PageNotFoundResponseError: ResponseError {
+public struct PageNotFoundError: HTTPError {
     public let filename: String
     public let title: String
     public let description: String
@@ -18,9 +18,9 @@ public struct PageNotFoundResponseError: ResponseError {
     }
 }
 
-public extension ResponseError where Self == PageNotFoundResponseError {
+public extension HTTPError where Self == PageNotFoundError {
     /// A response error that represents a page not found.
-    static var pageNotFound: ResponseError {
-        PageNotFoundResponseError()
+    static var pageNotFound: HTTPError {
+        PageNotFoundError()
     }
 }

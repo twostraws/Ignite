@@ -5,8 +5,8 @@
 // See LICENSE for license information.
 //
 
-/// A type that represents a status code error that can be displayed as an error page.
-public protocol ResponseError: Sendable {
+/// A type that represents a HTTP status code error that can be displayed as an error page.
+public protocol HTTPError: Sendable {
 
     /// The filename of the generated error page.
     var filename: String { get }

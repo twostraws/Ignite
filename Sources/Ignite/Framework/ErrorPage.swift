@@ -26,7 +26,7 @@
 @MainActor
 public protocol ErrorPage: LayoutContent {
     /// The current response error being rendered.
-    var error: ResponseError { get }
+    var error: HTTPError { get }
 
     /// The title of the error page. Defaults to the title of the error.
     var title: String { get }
@@ -36,8 +36,8 @@ public protocol ErrorPage: LayoutContent {
 }
 
 extension ErrorPage {
-    public var error: ResponseError {
-        PublishingContext.shared.environment.responseError
+    public var error: HTTPError {
+        PublishingContext.shared.environment.httpError
     }
 
     public var title: String {
