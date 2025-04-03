@@ -61,7 +61,7 @@ public struct EnvironmentValues {
     /// The current category of the page being rendered.
     var category: any Category = EmptyCategory()
 
-    /// The current status code error being rendered.
+    /// The current response error being rendered.
     var responseError: ResponseError = EmptyResponseError()
 
     /// Content that has the current tag.
