@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Represents the absence of a HTTP error.
+/// Represents the absence of an HTTP error.
 struct EmptyHTTPError: HTTPError {
     var filename: String { "" }
     var title: String { "" }
