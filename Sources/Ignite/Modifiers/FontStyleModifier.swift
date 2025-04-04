@@ -28,7 +28,7 @@ private extension HTML {
         if self.isText {
             self.fontStyle(style)
         } else {
-            self.class(style.fontSizeClass)
+            self.class(style.sizeClass)
         }
     }
 }
