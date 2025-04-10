@@ -85,38 +85,38 @@ public struct NavigationBar: HTML {
     }
 
     /// Creates a new `NavigationBar` instance from the `logo`,
-    /// `items`, and `controls` provided.
+    /// `items`, and `actions` provided.
     /// - Parameters:
     ///   - logo: The logo to use in the top-left edge of your bar.
     ///   - items: Basic navigation items like `Link` and `Span` that will be
     ///   collapsed into a hamburger menu at small screen sizes.
-    ///   - controls: Elements positioned at the end of the navigation bar and
-    ///   visible across all screen sizes.
+    ///   - actions: Elements positioned at the end of the navigation bar, like
+    ///   call-to-action buttons and search fields, and visible across all screen sizes.
     public init(
         logo: (any InlineElement)? = nil,
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @HTMLBuilder controls: () -> some HTML = { EmptyHTML() }
+        @HTMLBuilder actions: () -> some HTML = { EmptyHTML() }
     ) {
         self.logo = logo
         self.items = items()
-        self.controls = controls()
+        self.controls = actions()
     }
 
     /// Creates a new `NavigationBar` instance from the `logo`,
-    /// `items`, and `controls` provided.
+    /// `items`, and `actions` provided.
     /// - Parameters:
     ///   - items: Basic navigation items like `Link` and `Span` that will be
     ///   collapsed into a hamburger menu at small screen sizes.
-    ///   - controls: Elements positioned at the end of the navigation bar and
-    ///   visible across all screen sizes.
+    ///   - actions: Elements positioned at the end of the navigation bar, like
+    ///   call-to-action buttons and search fields, and visible across all screen sizes.
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @HTMLBuilder controls: () -> some HTML = { EmptyHTML() },
+        @HTMLBuilder actions: () -> some HTML = { EmptyHTML() },
         logo: (() -> (any InlineElement))? = nil
     ) {
         self.items = items()
-        self.controls = controls()
+        self.controls = actions()
         self.logo = logo?()
     }
 
