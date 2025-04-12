@@ -188,11 +188,13 @@ public struct NavigationBar: HTML {
                             .class("me-auto me-md-0")
                     }
 
-                    Section(HTMLCollection(controls))
-                        .class("gap-2")
-                        .class("ms-md-2")
-                        .class("d-inline-flex", "align-items-center")
-                        .class("order-md-last", "ms-auto me-2")
+                    if controls.isEmpty == false {
+                        Section(HTMLCollection(controls))
+                            .class("gap-2")
+                            .class("ms-md-2")
+                            .class("d-inline-flex", "align-items-center")
+                            .class("order-md-last", "ms-auto me-2")
+                    }
 
                     if items.isEmpty == false {
                         renderToggleButton()
