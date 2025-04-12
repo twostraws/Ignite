@@ -139,8 +139,8 @@ private extension HTML {
             classes.append(classNames)
         } else if let size = font.size {
             styles.append(.init(.fontSize, value: size.stringValue))
-        } else if let style = font.style {
-            styles.append(.init(.fontSize, value: style.sizeVariable))
+        } else if let style = font.style, let sizeVariable = style.sizeVariable {
+            styles.append(.init(.fontSize, value: sizeVariable))
         }
 
         return Section(self.class("font-inherit"))
