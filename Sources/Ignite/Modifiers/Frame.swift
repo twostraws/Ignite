@@ -155,7 +155,7 @@ private extension HTML {
         }
 
         if let maxWidth {
-            dimensions.append(.init(.maxWidth, value: "min(\(maxWidth.stringValue), 100%)"))
+            dimensions.append(.init(.maxWidth, value: maxWidth.stringValue))
         }
 
         if let minHeight {

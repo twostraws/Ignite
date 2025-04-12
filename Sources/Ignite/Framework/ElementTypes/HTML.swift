@@ -80,6 +80,26 @@ extension HTML {
         }
     }
 
+    /// Whether this element represents a specific type.
+    func `is`(_ elementType: any HTML.Type) -> Bool {
+        if let anyHTML = body as? AnyHTML {
+            type(of: anyHTML.wrapped) == elementType
+        } else {
+            type(of: body) == elementType
+        }
+    }
+
+    /// The underlying content, conditionally cast to the specified type.
+    func `as`<T: HTML>(_ elementType: T.Type) -> T? {
+        if let anyHTML = body as? AnyHTML, let element = anyHTML.attributedContent as? T {
+            element
+        } else if let element = body as? T {
+            element
+        } else {
+            nil
+        }
+    }
+
     /// A Boolean value indicating whether this represents `Text`.
     var isText: Bool {
         body is Text || (body as? AnyHTML)?.wrapped is Text

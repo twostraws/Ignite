@@ -59,7 +59,7 @@ public struct NavigationBar: HTML {
 
     /// The main logo for your site, such as an image or some text. This becomes
     /// clickable to let users navigate to your homepage.
-    let logo: (any InlineElement)?
+    let logo: any InlineElement
 
     /// An array of items to show in this navigation bar.
     let items: [any NavigationItem]
@@ -76,7 +76,7 @@ public struct NavigationBar: HTML {
     public init(
         logo: (any InlineElement)? = nil
     ) {
-        self.logo = logo
+        self.logo = logo ?? EmptyHTML()
         self.items = []
     }
 
@@ -90,7 +90,7 @@ public struct NavigationBar: HTML {
         logo: (any InlineElement)? = nil,
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem]
     ) {
-        self.logo = logo
+        self.logo = logo ?? EmptyHTML()
         self.items = items()
     }
 
@@ -102,10 +102,10 @@ public struct NavigationBar: HTML {
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        logo: (() -> (any InlineElement))? = nil
+        @InlineElementBuilder logo: () -> any InlineElement = { EmptyHTML() }
     ) {
         self.items = items()
-        self.logo = logo?()
+        self.logo = logo()
     }
 
     /// Adjusts the style of this navigation bar.
@@ -156,10 +156,10 @@ public struct NavigationBar: HTML {
         Tag("header") {
             Tag("nav") {
                 Section {
-                    if let logo {
+                    if logo.isEmpty == false {
                         renderLogo(logo)
                     }
-                    if !items.isEmpty {
+                    if items.isEmpty == false {
                         renderToggleButton()
                         renderNavItems()
                     }
@@ -235,8 +235,15 @@ public struct NavigationBar: HTML {
     }
 
     private func renderLogo(_ logo: any InlineElement) -> some InlineElement {
-        Link(logo, target: "/")
+        let logo: Link = if let link = logo.as(Link.self) {
+            link
+        } else {
+            Link(logo, target: "/")
+        }
+
+        return logo
             .trimmingMargin()
+            .class("d-inline-flex align-items-center")
             .class("navbar-brand")
     }
 }
