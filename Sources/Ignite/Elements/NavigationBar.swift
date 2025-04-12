@@ -62,7 +62,7 @@ public struct NavigationBar: HTML {
     let items: [any NavigationItem]
 
     /// An array of permanent elements to show in this navigation bar.
-    let controls: any HTML
+    let controls: [any NavigationItem]
 
     /// The style to use when rendering this bar.
     var style = NavigationBarStyle.default
@@ -78,7 +78,7 @@ public struct NavigationBar: HTML {
     ) {
         self.logo = logo ?? EmptyHTML()
         self.items = []
-        self.controls = EmptyHTML()
+        self.controls = []
     }
 
     /// Creates a new `NavigationBar` instance from the `logo`,
@@ -92,7 +92,7 @@ public struct NavigationBar: HTML {
     public init(
         logo: (any InlineElement)? = nil,
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @HTMLBuilder actions: () -> some HTML = { EmptyHTML() }
+        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
     ) {
         self.logo = logo ?? EmptyHTML()
         self.items = items()
@@ -109,10 +109,27 @@ public struct NavigationBar: HTML {
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] },
         @InlineElementBuilder logo: () -> any InlineElement = { EmptyHTML() }
     ) {
         self.items = items()
+        self.controls = actions()
         self.logo = logo()
+    }
+
+    /// Creates a new `NavigationBar` instance from the `items` and `actions` provided.
+    /// - Parameters:
+    ///   - items: Basic navigation items like `Link` and `Span` that will be
+    ///   collapsed into a hamburger menu at small screen sizes.
+    ///   - actions: Elements positioned at the end of the navigation bar, like
+    ///   call-to-action buttons and search fields, and visible across all screen sizes.
+    public init(
+        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
+    ) {
+        self.items = items()
+        self.controls = actions()
+        self.logo = EmptyHTML()
     }
 
     /// Adjusts the style of this navigation bar.
@@ -167,6 +184,13 @@ public struct NavigationBar: HTML {
                         renderLogo(logo)
                             .class("me-auto me-md-0")
                     }
+
+                    Section(HTMLCollection(controls))
+                        .class("gap-2")
+                        .class("ms-md-2")
+                        .class("d-inline-flex", "align-items-center")
+                        .class("order-md-last", "ms-auto me-2")
+
                     if items.isEmpty == false {
                         renderToggleButton()
                         renderNavItems()
@@ -251,7 +275,7 @@ public struct NavigationBar: HTML {
 
         return logo
             .trimmingMargin()
-            .class("d-inline-flex align-items-center")
+            .class("d-inline-flex", "align-items-center")
             .class("navbar-brand")
     }
 }
