@@ -155,6 +155,12 @@ private extension HTML {
         }
 
         if let maxWidth {
+            if width == nil {
+                // If no width has been explicitly set, allow content
+                // to scale with screen sizes smaller than the max width
+                // as a sensible default
+                dimensions.append(.init(.width, value: "100%"))
+            }
             dimensions.append(.init(.maxWidth, value: maxWidth.stringValue))
         }
 
