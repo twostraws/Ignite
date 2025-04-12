@@ -6,7 +6,7 @@
 //
 
 /// A form container for collecting user input
-public struct Form: HTML {
+public struct Form: NavigationItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -83,7 +83,7 @@ public struct Form: HTML {
     /// Sets the style for form labels
     /// - Parameter style: How labels should be displayed
     /// - Returns: A modified form with the specified label style
-    public func labelStyle(_ style: LabelStyle) -> Self {
+    public func labelStyle(_ style: LabelStyle) -> some HTML {
         var copy = self
         copy.labelStyle = style
         return copy
@@ -101,7 +101,7 @@ public struct Form: HTML {
     /// Adjusts the number of columns that can be fitted into this section.
     /// - Parameter columns: The number of columns to use
     /// - Returns: A new `Section` instance with the updated column count.
-    public func columns(_ columns: Int) -> Self {
+    public func columns(_ columns: Int) -> some HTML {
         var copy = self
         copy.columnCount = columns
         return copy
@@ -130,7 +130,9 @@ public struct Form: HTML {
             attributes.id = UUID().uuidString.truncatedHash
         }
     }
+}
 
+extension Form {
     @HTMLBuilder
     func formContent(for action: SubscribeAction) -> some HTML {
         Section {
@@ -274,5 +276,62 @@ public struct Form: HTML {
         } else {
             return "col"
         }
+    }
+}
+
+extension Form {
+    public func renderInNavigationBar() -> String {
+        guard let action = action as? SubscribeAction else {
+            fatalError("Form supports only SubscribeAction at this time.")
+        }
+
+        var attributes = attributes
+
+        attributes.append(customAttributes: .init(name: "method", value: "post"))
+        attributes.append(customAttributes: .init(name: "target", value: "_blank"))
+        attributes.append(customAttributes: .init(name: "action", value: action.service.endpoint))
+        attributes.data.formUnion(action.service.dataAttributes)
+        attributes.customAttributes.formUnion(action.service.customAttributes)
+        attributes.append(classes: "d-flex")
+        attributes.append(customAttributes: .init(name: "role", value: "search"))
+
+        if let formClass = action.service.formClass {
+            attributes.append(classes: formClass)
+        }
+
+        if case .sendFox(_, let formID) = action.service {
+            attributes.id = formID
+        }
+
+        var items = items.map {
+            if $0.is(Button.self) {
+                $0.class(controlSize.buttonClass)
+            } else {
+                $0.class(controlSize.controlClass)
+            }
+        }
+
+        let last = items.last
+
+        items = items.dropLast().map {
+            $0.class("me-2")
+        }
+
+        if let last {
+            items.append(last)
+        }
+
+        let formContent = items.map { $0.render() }.joined()
+
+        var formOutput = "<form\(attributes)>\(formContent)</form>"
+
+        // Add custom SendFox JavaScript if needed.
+        if case .sendFox = action.service {
+            formOutput += Script(file: URL(static: "https://cdn.sendfox.com/js/form.js"))
+                .customAttribute(name: "charset", value: "utf-8")
+                .render()
+        }
+
+        return formOutput
     }
 }
