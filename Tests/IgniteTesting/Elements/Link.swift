@@ -14,7 +14,7 @@ import Testing
 @Suite("Link Tests")
 @MainActor class LinkTests: IgniteTestSuite {
     static let sites: [any Site] = [TestSite(), TestSubsite()]
-    static let pages: [any StaticPage] = [TestLayout(), TestSubsiteLayout()]
+    static let pages: [any StaticPage] = [TestPage(), TestSubsitePage()]
 
     @Test("String Target", arguments: [(target: "/", description: "Go Home")], await Self.sites)
     func target(for link: (target: String, description: String), for site: any Site) async throws {

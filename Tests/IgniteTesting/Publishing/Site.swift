@@ -42,7 +42,7 @@ struct SiteTests {
         var site = TestSitePublisher()
         try await site.publish()
 
-        #expect(package.checkIndexFileExists() == true)
+        #expect(package.checkIndexFileExists())
 
         try package.clearBuildFolderAndTestContent()
     }
@@ -64,10 +64,48 @@ struct SiteTests {
         var site = TestSitePublisher()
         try await site.publish()
 
-        #expect(package.checkIndexFileExists() == true)
+        #expect(package.checkIndexFileExists())
 
         try package.clearBuildFolderAndTestContent()
     }
+
+    @Test("Sites published without an ErrorPage")
+    func publishingWithoutErrorPage() async throws {
+        var site = TestSitePublisher()
+
+        try await site.publish()
+
+        #expect(package.checkFileExists(at: "404.html") == false)
+
+        try package.clearBuildFolderAndTestContent()
+    }
+
+    @Test("Site published with a custom ErrorPage")
+    func publishingWithCustomErrorPage() async throws {
+        var site = TestSitePublisher(site: TestSiteWithErrorPage())
+
+        try await site.publish()
+
+        #expect(package.checkFileExists(at: "404.html"))
+
+        try package.clearBuildFolderAndTestContent()
+    }
+
+    @Test("Site published with a custom ErrorPage and custom content")
+    func publishingWithCustomErrorPageAndContent() async throws {
+        let errorPage = TestErrorPage(title: "A different title", description: "A different description")
+        let site = TestSiteWithErrorPage(errorPage: errorPage)
+        var publisher = TestSitePublisher(site: site)
+
+        try await publisher.publish()
+
+        #expect(package.checkFileExists(at: "404.html"))
+        #expect(try package.contentsOfFile(at: "404.html").contains("A different title"))
+        #expect(try package.contentsOfFile(at: "404.html").contains("A different description"))
+
+        try package.clearBuildFolderAndTestContent()
+    }
+
 }
 
 private struct TestPackage {
@@ -86,6 +124,16 @@ private struct TestPackage {
 
     func checkIndexFileExists() -> Bool {
         (try? buildDirectoryURL.appending(path: "index.html").checkPromisedItemIsReachable()) ?? false
+    }
+
+    func checkFileExists(at path: String) -> Bool {
+        let fileURL = buildDirectoryURL.appending(path: path)
+        return (try? fileURL.checkPromisedItemIsReachable()) ?? false
+    }
+
+    func contentsOfFile(at path: String) throws -> String {
+        let fileURL = buildDirectoryURL.appending(path: path)
+        return try String(contentsOf: fileURL, encoding: .utf8)
     }
 
     func clearBuildFolderAndTestContent() throws {

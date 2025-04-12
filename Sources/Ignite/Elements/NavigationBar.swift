@@ -59,7 +59,7 @@ public struct NavigationBar: HTML {
 
     /// The main logo for your site, such as an image or some text. This becomes
     /// clickable to let users navigate to your homepage.
-    let logo: (any InlineElement)?
+    let logo: any InlineElement
 
     /// An array of collapsible items to show in this navigation bar.
     let items: [any NavigationItem]
@@ -79,7 +79,7 @@ public struct NavigationBar: HTML {
     public init(
         logo: (any InlineElement)? = nil
     ) {
-        self.logo = logo
+        self.logo = logo ?? EmptyHTML()
         self.items = []
         self.controls = []
     }
@@ -97,7 +97,7 @@ public struct NavigationBar: HTML {
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
         @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
     ) {
-        self.logo = logo
+        self.logo = logo ?? EmptyHTML()
         self.items = items()
         self.controls = actions()
     }
@@ -113,7 +113,7 @@ public struct NavigationBar: HTML {
     public init(
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
         @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] },
-        logo: (() -> (any InlineElement))? = nil
+        @InlineElementBuilder logo: () -> any InlineElement = { EmptyHTML() }
     ) {
         self.items = items()
         self.controls = actions()
@@ -183,7 +183,7 @@ public struct NavigationBar: HTML {
         Tag("header") {
             Tag("nav") {
                 Section {
-                    if let logo {
+                    if logo.isEmpty == false {
                         renderLogo(logo)
                             .class("me-auto me-md-0")
                     }
@@ -194,7 +194,7 @@ public struct NavigationBar: HTML {
                         .class("d-flex", "align-items-center")
                         .class("order-md-last", "ms-auto me-2")
 
-                    if !items.isEmpty {
+                    if items.isEmpty == false {
                         renderToggleButton()
                         renderNavItems()
                     }
@@ -270,8 +270,15 @@ public struct NavigationBar: HTML {
     }
 
     private func renderLogo(_ logo: any InlineElement) -> some InlineElement {
-        Link(logo, target: "/")
+        let logo: Link = if let link = logo.as(Link.self) {
+            link
+        } else {
+            Link(logo, target: "/")
+        }
+
+        return logo
             .trimmingMargin()
+            .class("d-inline-flex align-items-center")
             .class("navbar-brand")
     }
 }
