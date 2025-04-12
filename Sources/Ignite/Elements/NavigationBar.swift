@@ -61,8 +61,11 @@ public struct NavigationBar: HTML {
     /// clickable to let users navigate to your homepage.
     let logo: any InlineElement
 
-    /// An array of items to show in this navigation bar.
+    /// An array of collapsible items to show in this navigation bar.
     let items: [any NavigationItem]
+
+    /// An array of permanent elements to show in this navigation bar.
+    let controls: [any NavigationItem]
 
     /// The style to use when rendering this bar.
     var style = NavigationBarStyle.default
@@ -78,34 +81,58 @@ public struct NavigationBar: HTML {
     ) {
         self.logo = logo ?? EmptyHTML()
         self.items = []
+        self.controls = []
     }
 
-    /// Creates a new `NavigationBar` instance from the `logo` and
-    /// `items` provided.
+    /// Creates a new `NavigationBar` instance from the `logo`,
+    /// `items`, and `actions` provided.
     /// - Parameters:
     ///   - logo: The logo to use in the top-left edge of your bar.
-    ///   - items: An element builder that returns an array of
-    /// `NavigationItem` objects.
+    ///   - items: Basic navigation items like `Link` and `Span` that will be
+    ///   collapsed into a hamburger menu at small screen sizes.
+    ///   - actions: Elements positioned at the end of the navigation bar, like
+    ///   call-to-action buttons and search fields, and visible across all screen sizes.
     public init(
         logo: (any InlineElement)? = nil,
-        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem]
+        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
     ) {
         self.logo = logo ?? EmptyHTML()
         self.items = items()
+        self.controls = actions()
     }
 
-    /// Creates a new `NavigationBar` instance from the `logo` and
-    /// `items` provided.
+    /// Creates a new `NavigationBar` instance from the `logo`,
+    /// `items`, and `actions` provided.
     /// - Parameters:
-    ///   - items: An element builder that returns an array of
-    /// `NavigationItem` objects.
+    ///   - items: Basic navigation items like `Link` and `Span` that will be
+    ///   collapsed into a hamburger menu at small screen sizes.
+    ///   - actions: Elements positioned at the end of the navigation bar, like
+    ///   call-to-action buttons and search fields, and visible across all screen sizes.
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] },
         @InlineElementBuilder logo: () -> any InlineElement = { EmptyHTML() }
     ) {
         self.items = items()
+        self.controls = actions()
         self.logo = logo()
+    }
+
+    /// Creates a new `NavigationBar` instance from the `items` and `actions` provided.
+    /// - Parameters:
+    ///   - items: Basic navigation items like `Link` and `Span` that will be
+    ///   collapsed into a hamburger menu at small screen sizes.
+    ///   - actions: Elements positioned at the end of the navigation bar, like
+    ///   call-to-action buttons and search fields, and visible across all screen sizes.
+    public init(
+        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
+    ) {
+        self.items = items()
+        self.controls = actions()
+        self.logo = EmptyHTML()
     }
 
     /// Adjusts the style of this navigation bar.
@@ -158,7 +185,17 @@ public struct NavigationBar: HTML {
                 Section {
                     if logo.isEmpty == false {
                         renderLogo(logo)
+                            .class("me-auto me-md-0")
                     }
+
+                    if controls.isEmpty == false {
+                        Section(HTMLCollection(controls))
+                            .class("gap-2")
+                            .class("ms-md-2")
+                            .class("d-inline-flex", "align-items-center")
+                            .class("order-md-last", "ms-auto me-2")
+                    }
+
                     if items.isEmpty == false {
                         renderToggleButton()
                         renderNavItems()
@@ -243,7 +280,7 @@ public struct NavigationBar: HTML {
 
         return logo
             .trimmingMargin()
-            .class("d-inline-flex align-items-center")
+            .class("d-inline-flex", "align-items-center")
             .class("navbar-brand")
     }
 }

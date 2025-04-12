@@ -102,17 +102,17 @@ extension HTML {
 
     /// A Boolean value indicating whether this represents `Text`.
     var isText: Bool {
-        body is Text || (body as? AnyHTML)?.wrapped is Text
+        self.is(Text.self)
     }
 
     /// A Boolean value indicating whether this represents `Image`.
     var isImage: Bool {
-        self is Image || (self as? AnyHTML)?.wrapped is Image
+        self.is(Image.self)
     }
 
     /// A Boolean value indicating whether this represents `Section`.
     var isSection: Bool {
-        self is Section || (self as? AnyHTML)?.wrapped is Section
+        self.is(Section.self)
     }
 
     /// A Boolean value indicating whether this represents a textual element.
