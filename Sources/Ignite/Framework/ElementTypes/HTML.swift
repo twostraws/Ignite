@@ -89,6 +89,17 @@ extension HTML {
         }
     }
 
+    /// The underlying content, conditionally cast to the specified type.
+    func `as`<T: HTML>(_ elementType: T.Type) -> T? {
+        if let anyHTML = body as? AnyHTML, let element = anyHTML.attributedContent as? T {
+            element
+        } else if let element = body as? T {
+            element
+        } else {
+            nil
+        }
+    }
+
     /// A Boolean value indicating whether this represents `Text`.
     var isText: Bool {
         self.is(Text.self)

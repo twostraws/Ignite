@@ -61,6 +61,9 @@ public struct EnvironmentValues {
     /// The current category of the page being rendered.
     var category: any Category = EmptyCategory()
 
+    /// The current HTTP error of the page being rendered.
+    var httpError: HTTPError = EmptyHTTPError()
+
     /// Content that has the current tag.
     var taggedContent: [Article] = []
 

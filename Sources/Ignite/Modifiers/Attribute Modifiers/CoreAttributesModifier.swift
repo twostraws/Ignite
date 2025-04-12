@@ -29,7 +29,7 @@ extension InlineElement {
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified HTML element
     /// - Note: Uses AttributeStore for persistent storage and merging
-    func attribute(_ attributes: CoreAttributes) -> some InlineElement {
+    func attributes(_ attributes: CoreAttributes) -> some InlineElement {
         AnyHTML(coreAttributesModifier(attributes))
     }
 }

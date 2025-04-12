@@ -59,19 +59,32 @@ struct RunCommand: ParsableCommand {
         print("✅ Starting local web server on http://localhost:\(currentPort)")
         print("Press ↵ Return to exit.")
 
-        let previewCommand = if preview {
-            // Automatically open a web browser pointing to their
-            // local server if requested.
-            "open http://localhost:\(currentPort)"
-        } else {
-            // Important: The empty space below is enough to
-            // make the Process.execute() wait for a key press
-            // before exiting.
-            " "
+        let previewCommand =
+            if preview {
+                // Automatically open a web browser pointing to their
+                // local server if requested.
+                "open http://localhost:\(currentPort)"
+            } else {
+                // Important: The empty space below is enough to
+                // make the Process.execute() wait for a key press
+                // before exiting.
+                " "
+            }
+
+        // Get the installed location of the server script
+        let serverScriptURL = URL(filePath: "/usr/local/bin/ignite-server.py")
+
+        // Verify server script exists
+        guard FileManager.default.fileExists(atPath: serverScriptURL.path) else {
+            print("❌ Critical server component missing")
+            print("   This suggests a corrupted installation. Please reinstall with:")
+            print("   make install && make clean")
+            return
         }
 
+        print("✅ Starting local web server on http://localhost:\(currentPort)")
         try Process.execute(
-            command: "python3 -m http.server -d \(directory) \(currentPort)",
+            command: "python3 \(serverScriptURL.path) -d \(directory) \(currentPort)",
             then: previewCommand
         )
     }
