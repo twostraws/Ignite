@@ -117,7 +117,7 @@ public struct NavigationBar: HTML {
     ) {
         self.items = items()
         self.controls = actions()
-        self.logo = logo?()
+        self.logo = logo()
     }
 
     /// Creates a new `NavigationBar` instance from the `items` and `actions` provided.
@@ -132,7 +132,7 @@ public struct NavigationBar: HTML {
     ) {
         self.items = items()
         self.controls = actions()
-        self.logo = nil
+        self.logo = EmptyHTML()
     }
 
     /// Adjusts the style of this navigation bar.
@@ -191,7 +191,7 @@ public struct NavigationBar: HTML {
                     Section(HTMLCollection(controls))
                         .class("gap-2")
                         .class("ms-md-2")
-                        .class("d-flex", "align-items-center")
+                        .class("d-inline-flex", "align-items-center")
                         .class("order-md-last", "ms-auto me-2")
 
                     if items.isEmpty == false {
@@ -278,7 +278,7 @@ public struct NavigationBar: HTML {
 
         return logo
             .trimmingMargin()
-            .class("d-inline-flex align-items-center")
+            .class("d-inline-flex", "align-items-center")
             .class("navbar-brand")
     }
 }
