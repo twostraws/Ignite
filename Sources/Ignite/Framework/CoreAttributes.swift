@@ -241,9 +241,9 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         self.styles = styles
     }
 
-    /// Removes specified CSS properties from the element's inline styles.
-    /// - Parameter properties: Variable number of CSS properties to remove.
-    mutating func remove(customAttributes names: String...) {
+    /// Removes specified custom attributes with the given names from the element.
+    /// - Parameter names: Variable number of attribute names to remove.
+    mutating func remove(attributesNamed names: String...) {
         var customAttributes = self.customAttributes
         for name in names {
             customAttributes.removeAll(where: { $0.name == name })

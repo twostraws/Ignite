@@ -60,16 +60,19 @@ public struct TextField: InlineElement, FormItem {
     /// - Parameters:
     ///   - label: The label text to display with the field.
     ///   - placeholder: The text to display when the field is empty.
-    public init(_ label: (any InlineElement)? = nil, prompt: String?) {
+    public init(_ label: any InlineElement, prompt: String? = nil) {
+        let id = UUID().uuidString.truncatedHash
+        input.attributes.id = id
         input.attributes.append(classes: "form-control")
+        input.attributes.append(customAttributes: .init(name: "type", value: TextType.text.rawValue))
 
         if let prompt {
             input.attributes.append(customAttributes: .init(name: "placeholder", value: prompt))
         }
 
-        if let label {
-            self.label = ControlLabel(label)
-        }
+        var label = ControlLabel(label)
+        label.attributes.append(customAttributes: .init(name: "for", value: id))
+        self.label = label
     }
 
     /// Makes this field required for form submission.
@@ -86,6 +89,7 @@ public struct TextField: InlineElement, FormItem {
     public func id(_ id: String) -> Self {
         var copy = self
         copy.input.attributes.id = id
+        copy.label?.attributes.remove(attributesNamed: "for")
         copy.label?.attributes.append(customAttributes: .init(name: "for", value: id))
         return copy
     }
@@ -106,7 +110,7 @@ public struct TextField: InlineElement, FormItem {
     public func readOnly(_ value: String, displayMode: ReadOnlyDisplayMode = .automatic) -> Self {
         var copy = self
         copy.input.attributes.append(customAttributes: .readOnly)
-        copy.input.attributes.remove(customAttributes: "placeholder")
+        copy.input.attributes.remove(attributesNamed: "placeholder")
         copy.input.attributes.append(customAttributes: .init(name: "value", value: value))
 
         if case .plainText = displayMode {
@@ -132,6 +136,7 @@ public struct TextField: InlineElement, FormItem {
     /// - Returns: A modified text field configured for the specified input type.
     public func type(_ type: TextType) -> Self {
         var copy = self
+        copy.input.attributes.remove(attributesNamed: "type")
         copy.input.attributes.append(customAttributes: .init(name: "type", value: type.rawValue))
         return copy
     }

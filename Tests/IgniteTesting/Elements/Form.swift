@@ -18,6 +18,7 @@ class FormTests: IgniteTestSuite {
     func form() async throws {
         let element = Form {
             TextField("MyLabel", prompt: "MyPlaceholder")
+                .id("field")
             Button("Submit").type(.submit)
         }
 
@@ -27,8 +28,8 @@ class FormTests: IgniteTestSuite {
         <form id="\(element.attributes.id)" class="row g-3">\
         <div class="col-auto">\
         <div class="form-floating">\
-        <input placeholder="MyPlaceholder" class="form-control" />\
-        <label>MyLabel</label>\
+        <input id="field" type="text" placeholder="MyPlaceholder" class="form-control" />\
+        <label for="field">MyLabel</label>\
         </div>\
         </div>\
         <div class="col-auto d-flex align-items-stretch">\
@@ -43,60 +44,70 @@ class FormTests: IgniteTestSuite {
     func form_withLabelStyle(style: ControlLabelStyle) async throws {
         let element = Form {
             TextField("MyLabel", prompt: "MyPlaceholder")
+                .id("field")
             Button("Submit").type(.submit)
         }
         .labelStyle(style)
 
         let output = element.render()
 
-        let alignClass = style == .floating ? "align-items-stretch" : "align-items-end"
-        let formContent = switch style {
+        let expected = switch style {
         case .leading:
             """
+            <form id="\(element.attributes.id)">\
             <div class="row">\
-            <label for="sendfox_form_email" class="col-form-label col-sm-2">MyLabel</label>\
+            <label for="field" class="col-form-label col-sm-2">MyLabel</label>\
             <div class="col-sm-10">\
-            <input id="sendfox_form_email" name="email" \
-            type="text" placeholder="MyPlaceholder" class="form-control" />\
+            <input id="field" type="text" placeholder="MyPlaceholder" class="form-control mb-3" />\
             </div>\
-            </div>
+            </div>\
+            <div class="col-auto d-flex align-items-end">\
+            <button type="submit" class="mb-3 btn">Submit</button>\
+            </div>\
+            </form>
             """
         case .floating:
             """
+            <form id="\(element.attributes.id)" class="row g-3">\
+            <div class="col-auto">\
             <div class="form-floating">\
-            <input id="sendfox_form_email" name="email" \
-            type="text" placeholder="MyPlaceholder" class="form-control" />\
-            <label for="sendfox_form_email">MyLabel</label>\
-            </div>
+            <input id="field" type="text" placeholder="MyPlaceholder" class="form-control" />\
+            <label for="field">MyLabel</label>\
+            </div>\
+            </div>\
+            <div class="col-auto d-flex align-items-stretch">\
+            <button type="submit" class="btn">Submit</button>\
+            </div>\
+            </form>
             """
         case .top:
             """
-            <label for="sendfox_form_email" class="form-label">MyLabel</label>\
-            <input id="sendfox_form_email" name="email" \
-            type="text" placeholder="MyPlaceholder" class="form-control" />
+            <form id="\(element.attributes.id)" class="row g-3">\
+            <div class="col-auto">\
+            <div>\
+            <label for="field" class="form-label">MyLabel</label>\
+            <input id="field" type="text" placeholder="MyPlaceholder" class="form-control" />\
+            </div>\
+            </div>\
+            <div class="col-auto d-flex align-items-end">\
+            <button type="submit" class="btn">Submit</button>\
+            </div>\
+            </form>
             """
         case .hidden:
             """
-            <input id="sendfox_form_email" name="email" \
-            type="text" placeholder="MyPlaceholder" class="form-control" />
+            <form id="\(element.attributes.id)" class="row g-3">\
+            <div class="col-auto">\
+            <input id="field" type="text" placeholder="MyPlaceholder" class="form-control" />\
+            </div>\
+            <div class="col-auto d-flex align-items-end">\
+            <button type="submit" class="btn">Submit</button>\
+            </div>\
+            </form>
             """
         }
 
-        #expect(output == """
-        <form id="myID" method="post" target="_blank" action="https://sendfox.com/form/myListID/myID" \
-        class="sendfox-form" data-async="true" data-recaptcha="true">\
-        <div class="row g-3 gy-3 \(alignClass)">\
-        <div class="col">\(formContent)</div>\
-        <div class="col d-flex align-items-stretch">\
-        <button type="submit" class="btn">Submit</button></div>\
-        <div style="position: absolute; left: -5000px;" aria-hidden="true">\
-        <input name="a_password" tabindex="-1" value="" autocomplete="off" \
-        type="text" class="form-control" />\
-        </div>\
-        </div>\
-        </form>\
-        <script charset="utf-8" src="https://cdn.sendfox.com/js/form.js"></script>
-        """)
+        #expect(output == expected)
     }
     // swiftlint:enable function_body_length
 
@@ -104,6 +115,7 @@ class FormTests: IgniteTestSuite {
     func form_withControlSize(controlSize: ControlSize) async throws {
         let element = Form {
             TextField("MyLabel", prompt: "MyPlaceholder")
+                .id("field")
             Button("Submit").type(.submit)
         }
         .controlSize(controlSize)
@@ -111,25 +123,19 @@ class FormTests: IgniteTestSuite {
         let output = element.render()
 
         #expect(output == """
-        <form id="myID" method="post" target="_blank" action="https://sendfox.com/form/myListID/myID" \
-        class="sendfox-form" data-async="true" data-recaptcha="true">\
-        <div class="row g-3 gy-3 align-items-stretch">\
-        <div class="col">\
+        <form id="\(element.attributes.id)" class="row g-3">\
+        <div class="col-auto">\
         <div class="form-floating">\
-        <input id="sendfox_form_email" name="email" type="text" placeholder="MyPlaceholder" \
-        class="\(controlSize.controlClass.map { $0 + " " } ?? "")form-control" />\
-        <label for="sendfox_form_email"\(controlSize.labelClass.map { " class=\"" + $0 + "\"" } ?? "")>MyLabel</label>\
+        <input id="field" type="text" placeholder="MyPlaceholder" \
+        class="form-control\(controlSize.controlClass.map { " " + $0 } ?? "")" />\
+        <label for="field"\(controlSize.labelClass.map { " class=\"" + $0 + "\"" } ?? "")>MyLabel</label>\
         </div>\
         </div>\
-        <div class="col d-flex align-items-stretch">\
-        <button type="submit" class="\(controlSize.buttonClass.map { $0 + " " } ?? "")btn">Submit</button>\
+        <div class="col-auto d-flex align-items-stretch">\
+        <button type="submit" \
+        class="\(controlSize.buttonClass.map { $0 + " " } ?? "")btn">Submit</button>\
         </div>\
-        <div style="position: absolute; left: -5000px;" aria-hidden="true">\
-        <input name="a_password" tabindex="-1" value="" autocomplete="off" type="text" class="form-control" />\
-        </div>\
-        </div>\
-        </form>\
-        <script charset="utf-8" src="https://cdn.sendfox.com/js/form.js"></script>
+        </form>
         """)
     }
 }

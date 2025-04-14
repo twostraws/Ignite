@@ -247,8 +247,8 @@ public struct SubscribeForm: HTML, NavigationItem {
     @HTMLBuilder private var honeypotField: some HTML {
         if let honeypotName = service.honeypotFieldName {
             Section {
-                TextField(prompt: nil)
-                    .type(.text)
+                TextField(EmptyHTML(), prompt: nil)
+                    .id("")
                     .labelStyle(.hidden)
                     .customAttribute(name: "name", value: honeypotName)
                     .customAttribute(name: "tabindex", value: "-1")
