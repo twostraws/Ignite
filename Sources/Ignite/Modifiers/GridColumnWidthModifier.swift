@@ -23,6 +23,15 @@ public extension InlineElement {
     }
 }
 
+public extension FormItem {
+    /// Adjusts the number of columns assigned to this element.
+    /// - Parameter width: The new number of columns to use.
+    /// - Returns: A new element with the adjusted column width.
+    func width(_ width: Int) -> some FormItem {
+        AnyHTML(gridColumnWidthModifier(width))
+    }
+}
+
 private extension HTML {
     func gridColumnWidthModifier(_ width: Int) -> any HTML {
         // Custom elements need to be wrapped in a primitive container to store attributes

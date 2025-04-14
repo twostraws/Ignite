@@ -6,24 +6,26 @@
 //
 
 /// A form label with support for various styles
-struct FormFieldLabel: InlineElement {
+struct ControlLabel: InlineElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
+    var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
+    var isPrimitive: Bool { true }
 
     /// The text content of the label
-    private var text: String
+    private let text: any InlineElement
 
-    init(text: String) {
+    /// Creates a new control label with the specified text content.
+    /// - Parameter text: The inline element to display within the label.
+    init(_ text: any InlineElement) {
         self.text = text
     }
 
-    public func render() -> String {
+    func render() -> String {
         "<label\(attributes)>\(text)</label>"
     }
 }

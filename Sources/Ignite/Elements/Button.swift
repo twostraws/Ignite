@@ -6,7 +6,7 @@
 //
 
 /// A clickable button with a label and styling.
-public struct Button: InlineElement {
+public struct Button: InlineElement, FormItem {
     /// Controls the display size of buttons. Medium is the default.
     public enum Size: String, CaseIterable {
         case small, medium, large
@@ -185,11 +185,11 @@ public struct Button: InlineElement {
     }
 }
 
-extension Button {
+public extension Button {
     /// Adjusts the number of columns assigned to this element.
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A copy of the current element with the adjusted column width.
-    public func width(_ width: Int) -> some InlineElement {
+    func width(_ width: Int) -> some InlineElement {
         self.class("w-100", ColumnWidth.count(width).className)
     }
 }

@@ -5,8 +5,8 @@
 // See LICENSE for license information.
 //
 
-/// A text input field with support for various states
-public struct TextField: InlineElement {
+/// A text input field for collecting user information in forms.
+public struct TextField: InlineElement, FormItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -17,22 +17,16 @@ public struct TextField: InlineElement {
     public var isPrimitive: Bool { true }
 
     /// The label text for the field
-    var label: String?
+    var label: ControlLabel?
 
-    /// The placeholder text shown when the field is empty.
-    private var placeholder: String?
+    /// The underlying HTML input element.
+    private var input = Input()
 
-    /// Whether the field must have a value before the form can be submitted.
-    private var isRequired = false
+    /// The size configuration for the text field and its label.
+    private var size: ControlSize = .medium
 
-    /// Whether the field is disabled and cannot be interacted with.
-    private var isDisabled = false
-
-    /// Whether the field is read-only and cannot be edited.
-    private var isReadOnly = false
-
-    /// The type of input this text field accepts.
-    private var type = TextType.text
+    /// The positioning style for the field's label.
+    private var style: ControlLabelStyle = .floating
 
     /// The type of text field
     public enum TextType: String, CaseIterable, Sendable {
@@ -52,64 +46,158 @@ public struct TextField: InlineElement {
         case number
     }
 
+    /// Controls how read-only fields are displayed.
+    public enum ReadOnlyDisplayMode: Sendable {
+        /// Renders as a standard form control but non-editable.
+        case control
+        /// Renders as plain text without form styling.
+        case plainText
+        /// The appropriate display mode based on context.
+        public static var automatic: Self { .control }
+    }
+
     /// Creates a new text field with the specified label and placeholder text.
     /// - Parameters:
     ///   - label: The label text to display with the field.
     ///   - placeholder: The text to display when the field is empty.
-    public init(_ label: String? = nil, placeholder: String?) {
-        self.label = label
-        self.placeholder = placeholder
+    public init(_ label: (any InlineElement)? = nil, prompt: String?) {
+        input.attributes.append(classes: "form-control")
+
+        if let prompt {
+            input.attributes.append(customAttributes: .init(name: "placeholder", value: prompt))
+        }
+
+        if let label {
+            self.label = ControlLabel(label)
+        }
     }
 
-    /// Makes this field required
-    public func required(_ required: Bool = true) -> Self {
+    /// Makes this field required for form submission.
+    /// - Returns: A modified text field marked as required.
+    public func required() -> Self {
         var copy = self
-        copy.isRequired = required
+        copy.input.attributes.append(customAttributes: .required)
         return copy
     }
 
-    /// Disables this field
-    public func disabled(_ disabled: Bool = true) -> Self {
+    /// Sets the `HTML` `id` attribute of the input, and the `for` attribute of the label.
+    /// - Parameter id: The HTML ID value to set
+    /// - Returns: A modified copy of the element with the HTML id added
+    public func id(_ id: String) -> Self {
         var copy = self
-        copy.isDisabled = disabled
+        copy.input.attributes.id = id
+        copy.label?.attributes.append(customAttributes: .init(name: "for", value: id))
         return copy
     }
 
-    /// Makes this field read-only
-    public func readOnly(_ readOnly: Bool = true) -> Self {
+    /// Disables this field, preventing user interaction.
+    /// - Returns: A modified text field in a disabled state.
+    public func disabled() -> Self {
         var copy = self
-        copy.isReadOnly = readOnly
+        copy.input.attributes.append(customAttributes: .disabled)
         return copy
     }
 
-    /// Sets the input type (e.g., "email", "password")
+    /// Makes this field read-only with a predetermined value.
+    /// - Parameters:
+    ///   - value: The value to display in the field.
+    ///   - displayMode: How the read-only field should be presented.
+    /// - Returns: A modified text field in a read-only state.
+    public func readOnly(_ value: String, displayMode: ReadOnlyDisplayMode = .automatic) -> Self {
+        var copy = self
+        copy.input.attributes.append(customAttributes: .readOnly)
+        copy.input.attributes.remove(customAttributes: "placeholder")
+        copy.input.attributes.append(customAttributes: .init(name: "value", value: value))
+
+        if case .plainText = displayMode {
+            copy.input.attributes.remove(classes: "form-control")
+            copy.input.attributes.append(classes: "form-control-plaintext")
+        }
+
+        return copy
+    }
+
+    /// Sets the size of this text field.
+    /// - Parameter size: The desired control size.
+    /// - Returns: A modified text field with the specified size.
+    public func size(_ size: ControlSize) -> Self {
+        var copy = self
+        copy.input.attributes.append(classes: size.controlClass)
+        copy.label?.attributes.append(classes: size.labelClass)
+        return copy
+    }
+
+    /// Sets the input type to control validation and keyboard appearance.
+    /// - Parameter type: The type of input this field will collect.
+    /// - Returns: A modified text field configured for the specified input type.
     public func type(_ type: TextType) -> Self {
         var copy = self
-        copy.type = type
+        copy.input.attributes.append(customAttributes: .init(name: "type", value: type.rawValue))
+        return copy
+    }
+
+    /// Sets how the label is displayed relative to the input field.
+    /// - Parameter style: The style determining label placement.
+    /// - Returns: A modified text field with the specified label style.
+    func labelStyle(_ style: ControlLabelStyle) -> Self {
+        var copy = self
+        copy.style = style
         return copy
     }
 
     public func render() -> String {
-        var attributes = attributes
-        attributes.append(classes: "form-control")
-        attributes.append(customAttributes: .init(name: "type", value: type.rawValue))
-
-        if let placeholder {
-            attributes.append(customAttributes: .init(name: "placeholder", value: placeholder))
+        switch style {
+        case .top:
+            renderTopLabeledTextField()
+        case .leading:
+            renderFrontLabeledTextField()
+        case .floating:
+            renderFloatingTextField()
+        case .hidden:
+            renderPlainTextField()
         }
+    }
 
-        if isRequired {
-            attributes.append(customAttributes: .required)
+    private func renderTopLabeledTextField() -> String {
+        Section {
+            if let label {
+                label.class("form-label")
+            }
+            input
+                .attributes(attributes)
         }
+        .render()
+    }
 
-        if isDisabled {
-            attributes.append(customAttributes: .disabled)
+    private func renderFrontLabeledTextField() -> String {
+        Section {
+            if let label {
+                label.class("col-form-label col-sm-2")
+            }
+            Section {
+                input
+                    .attributes(attributes)
+            }.class("col-sm-10")
         }
+        .class("row")
+        .render()
+    }
 
-        if isReadOnly {
-            attributes.append(customAttributes: .readOnly)
+    private func renderFloatingTextField() -> String {
+        Section {
+            input
+                .attributes(attributes)
+            if let label {
+                label
+            }
         }
+        .class("form-floating")
+        .render()
+    }
 
-        return "<input\(attributes) />"
+    private func renderPlainTextField() -> String {
+        input
+            .attributes(attributes)
+            .render()
     }
 }

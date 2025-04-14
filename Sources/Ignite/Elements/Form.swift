@@ -5,8 +5,11 @@
 // See LICENSE for license information.
 //
 
+/// Describes elements that can be placed into forms.
+public protocol FormItem: HTML {}
+
 /// A form container for collecting user input
-public struct Form: NavigationItem {
+public struct Form: HTML, NavigationItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -20,70 +23,25 @@ public struct Form: NavigationItem {
     private var columnCount: Int = 12
 
     /// The amount of vertical spacing between form elements.
-    private var verticalSpacing: SpacingAmount
-
-    /// The amount of horizontal spacing between form elements.
-    private var horizontalSpacing: SpacingAmount
+    private var spacing: SpacingAmount
 
     /// The form elements to be rendered.
     private var items: HTMLCollection
 
-    /// The action to perform when the form is submitted.
-    private var action: any Action
-
     /// The style of labels in the form
-    private var labelStyle: LabelStyle = .floating
+    private var labelStyle: ControlLabelStyle = .floating
 
     /// The size of form controls and labels
-    private var controlSize: FormControlSize = .medium
+    private var controlSize: ControlSize = .medium
 
-    /// Controls how form labels are displayed
-    public enum LabelStyle: CaseIterable, Sendable {
-        /// Labels appear above their fields
-        case top
-        /// Labels appear to the left of their fields
-        case front
-        /// Labels float when the field has content
-        case floating
-        /// No labels are shown
-        case hidden
-    }
-
-    /// Controls the size of form controls and labels
-    public enum FormControlSize: CaseIterable, Sendable {
-        case small
-        case medium
-        case large
-
-        var controlClass: String? {
-            switch self {
-            case .small: "form-control-sm"
-            case .large: "form-control-lg"
-            case .medium: nil
-            }
-        }
-
-        var labelClass: String? {
-            switch self {
-            case .small: "col-form-label-sm"
-            case .large: "col-form-label-lg"
-            case .medium: nil
-            }
-        }
-
-        var buttonClass: String? {
-            switch self {
-            case .small: "btn-sm"
-            case .large: "btn-lg"
-            case .medium: nil
-            }
-        }
-    }
+    /// Controls whether this dropdown needs to be created as its own element,
+    /// or whether it uses the structure provided by a parent `NavigationBar`.
+    private var isNavigationItem = false
 
     /// Sets the style for form labels
     /// - Parameter style: How labels should be displayed
     /// - Returns: A modified form with the specified label style
-    public func labelStyle(_ style: LabelStyle) -> some HTML {
+    public func labelStyle(_ style: ControlLabelStyle) -> some HTML {
         var copy = self
         copy.labelStyle = style
         return copy
@@ -92,7 +50,7 @@ public struct Form: NavigationItem {
     /// Sets the size of form controls and labels
     /// - Parameter size: The desired size
     /// - Returns: A modified form with the specified control size
-    public func controlSize(_ size: FormControlSize) -> Self {
+    public func controlSize(_ size: ControlSize) -> Self {
         var copy = self
         copy.controlSize = size
         return copy
@@ -107,159 +65,129 @@ public struct Form: NavigationItem {
         return copy
     }
 
+    /// Configures this dropdown to be placed inside a `NavigationBar`.
+    /// - Returns: A new `Form` instance suitable for placement
+    /// inside a `NavigationBar`.
+    func configuredAsNavigationItem() -> Self {
+        var copy = self
+        copy.isNavigationItem = true
+        return copy
+    }
+
     /// Creates a new form with the specified spacing and content.
     /// - Parameters:
-    ///   - horizontalSpacing: The amount of horizontal space between elements. Defaults to `.medium`.
-    ///   - verticalSpacing: The amount of vertical space between elements. Defaults to `.medium`.
+    ///   - spacing: The amount of horizontal space between elements. Defaults to `.medium`.
     ///   - content: A closure that returns the form's elements.
-    ///   - onSubmit: A closure that takes the form's ID as a parameter and returns
-    ///   the action to perform when the form is submitted.
     public init(
-        horizontalSpacing: SpacingAmount = .medium,
-        verticalSpacing: SpacingAmount = .medium,
-        @InlineElementBuilder content: () -> some InlineElement,
-        onSubmit: () -> any Action
+        spacing: SpacingAmount = .medium,
+        @ElementBuilder<FormItem> content: () -> [any FormItem]
     ) {
-        self.items = HTMLCollection(content)
-        self.action = onSubmit()
-        self.verticalSpacing = verticalSpacing
-        self.horizontalSpacing = horizontalSpacing
-        if let action = action as? SubscribeAction, case .mailchimp = action.service {
-            attributes.id = "mc-embedded-subscribe-form"
-        } else {
-            attributes.id = UUID().uuidString.truncatedHash
-        }
-    }
-}
-
-extension Form {
-    @HTMLBuilder
-    func formContent(for action: SubscribeAction) -> some HTML {
-        Section {
-            ForEach(items) { item in
-                if let textField = item as? TextField {
-                    formField(textField: textField, action: action)
-                } else if let button = item as? Button {
-                    styledButton(button)
-                } else {
-                    simpleItem(item)
-                }
-            }
-
-            if let honeypotName = action.service.honeypotFieldName {
-                Section {
-                    TextField(placeholder: nil)
-                        .type(.text)
-                        .customAttribute(name: "name", value: honeypotName)
-                        .customAttribute(name: "tabindex", value: "-1")
-                        .customAttribute(name: "value", value: "")
-                        .customAttribute(name: "autocomplete", value: "off")
-                }
-                .customAttribute(name: "style", value: "position: absolute; left: -5000px;")
-                .customAttribute(name: "aria-hidden", value: "true")
-            }
-        }
-        .class("row", "g-\(horizontalSpacing.rawValue)", "gy-\(verticalSpacing.rawValue)")
-        .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
+        self.items = HTMLCollection(content())
+        self.spacing = spacing
+        attributes.id = UUID().uuidString.truncatedHash
     }
 
     public func render() -> String {
-        guard let action = action as? SubscribeAction else {
-            fatalError("Form supports only SubscribeAction at this time.")
+        if isNavigationItem {
+            renderInNavigationBar()
+        } else {
+            renderStandalone()
+        }
+    }
+
+    /// Renders the form in a compact format suitable for navigation bars.
+    /// - Returns: A string containing the rendered HTML optimized for navigation contexts.
+    private func renderInNavigationBar() -> String {
+        var items = items.map {
+            if let textField = $0.as(TextField.self) {
+                textField
+                    .labelStyle(.hidden)
+                    .size(controlSize)
+            } else if $0.is(Button.self) {
+                $0.class(controlSize.buttonClass)
+            } else {
+                $0
+            }
+        }
+
+        let last = items.last
+
+        items = items.dropLast().map {
+            $0.class("me-2")
+        }
+
+        if let last {
+            items.append(last)
         }
 
         var attributes = attributes
-
-        attributes.append(customAttributes: .init(name: "method", value: "post"))
-        attributes.append(customAttributes: .init(name: "target", value: "_blank"))
-        attributes.append(customAttributes: .init(name: "action", value: action.service.endpoint))
-        attributes.data.formUnion(action.service.dataAttributes)
-        attributes.customAttributes.formUnion(action.service.customAttributes)
-
-        if let formClass = action.service.formClass {
-            attributes.append(classes: formClass)
-        }
-
-        if case .sendFox(_, let formID) = action.service {
-            attributes.id = formID
-        }
-
-        let formContent = formContent(for: action)
-
-        var formOutput = "<form\(attributes)>\(formContent)</form>"
-
-        // Add custom SendFox JavaScript if needed.
-        if case .sendFox = action.service {
-            formOutput += Script(file: URL(static: "https://cdn.sendfox.com/js/form.js"))
-                .customAttribute(name: "charset", value: "utf-8")
-                .render()
-        }
-
-        return formOutput
+        attributes.append(classes: "d-flex")
+        let content = items.map { $0.render() }.joined()
+        return "<form\(attributes)>\(content)</form>"
     }
 
-    @HTMLBuilder
-    func labeledTextField(label: some InlineElement, field: some InlineElement) -> some HTML {
+    private func renderStandalone() -> String {
+        let items = items.map { item in
+            if labelStyle == .leading {
+                var item = item
+                item.attributes.append(classes: "mb-\(spacing.rawValue)")
+                return item
+            } else {
+                return item
+            }
+        }
+
+        return Tag("form") {
+            ForEach(items) { item in
+                switch item {
+                case let textField as TextField:
+                    renderTextField(textField)
+                case let button as Button:
+                    renderButton(button)
+                case let group as ControlGroup:
+                    renderControlGroup(group)
+                case let span as Span:
+                    renderText(span)
+                default:
+                    renderItem(item)
+                }
+            }
+        }
+        .attributes(attributes)
+        .class(labelStyle == .leading ? nil : "row g-\(spacing.rawValue)")
+        .render()
+    }
+
+    @HTMLBuilder private func renderTextField(_ textField: TextField) -> some HTML {
+        let styledTextField = textField.size(controlSize).labelStyle(labelStyle)
         switch labelStyle {
-        case .hidden:
-            simpleItem(field)
-
-        case .floating:
-            Section {
-                Section {
-                    field
-                    label
-                }
-                .class("form-floating")
-            }
-            .class(getColumnClass(for: field, totalColumns: columnCount))
-
-        case .front:
-            Section {
-                Section {
-                    label.class("col-form-label col-sm-2")
-                    Section(field).class("col-sm-10")
-                }
-                .class("row")
-            }
-            .class(getColumnClass(for: field, totalColumns: columnCount))
-
-        case .top:
-            Section {
-                label.class("form-label")
-                field
-            }
-            .class(getColumnClass(for: field, totalColumns: columnCount))
+        case .leading: styledTextField
+        default: Section(styledTextField).class(getColumnClass(for: textField, totalColumns: columnCount))
         }
     }
 
-    @HTMLBuilder
-    private func formField(textField: TextField, action: SubscribeAction) -> some HTML {
-        let sizedTextField = textField
-            .id(action.service.emailFieldID)
-            .class(controlSize.controlClass)
-            .customAttribute(name: "name", value: action.service.emailFieldName!)
-
-        // If no label text, return just the field
-        if let textLabel = textField.label {
-            let label = FormFieldLabel(text: textLabel)
-                .class(controlSize.labelClass)
-                .customAttribute(name: "for", value: action.service.emailFieldID)
-
-            labeledTextField(label: label, field: sizedTextField)
-        } else {
-            simpleItem(sizedTextField)
-        }
+    private func renderControlGroup(_ group: ControlGroup) -> some HTML {
+        group.labelStyle(labelStyle)
     }
 
-    private func styledButton(_ button: Button) -> some HTML {
+    private func renderButton(_ button: Button) -> some HTML {
         Section(button.class(controlSize.buttonClass))
             .class(getColumnClass(for: button, totalColumns: columnCount))
-            .class("d-flex", "align-items-stretch")
+            .class("d-flex")
+            .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
     }
 
-    private func simpleItem(_ item: any HTML) -> some HTML {
+    private func renderText(_ text: Span) -> some HTML {
+        print("""
+        For proper alignment within Form, prefer a read-only, \
+        plain-text TextField over a Span.
+        """)
+        return renderItem(text)
+    }
+
+    private func renderItem(_ item: any HTML) -> some HTML {
         Section(item)
+            .class("d-flex", "align-items-center")
             .class(getColumnClass(for: item, totalColumns: columnCount))
     }
 
@@ -274,64 +202,7 @@ extension Form {
             let bootstrapColumns = 12 * width / totalColumns
             return "col-md-\(bootstrapColumns)"
         } else {
-            return "col"
+            return "col-auto"
         }
-    }
-}
-
-extension Form {
-    public func renderInNavigationBar() -> String {
-        guard let action = action as? SubscribeAction else {
-            fatalError("Form supports only SubscribeAction at this time.")
-        }
-
-        var attributes = attributes
-
-        attributes.append(customAttributes: .init(name: "method", value: "post"))
-        attributes.append(customAttributes: .init(name: "target", value: "_blank"))
-        attributes.append(customAttributes: .init(name: "action", value: action.service.endpoint))
-        attributes.data.formUnion(action.service.dataAttributes)
-        attributes.customAttributes.formUnion(action.service.customAttributes)
-        attributes.append(classes: "d-flex")
-        attributes.append(customAttributes: .init(name: "role", value: "search"))
-
-        if let formClass = action.service.formClass {
-            attributes.append(classes: formClass)
-        }
-
-        if case .sendFox(_, let formID) = action.service {
-            attributes.id = formID
-        }
-
-        var items = items.map {
-            if $0.is(Button.self) {
-                $0.class(controlSize.buttonClass)
-            } else {
-                $0.class(controlSize.controlClass)
-            }
-        }
-
-        let last = items.last
-
-        items = items.dropLast().map {
-            $0.class("me-2")
-        }
-
-        if let last {
-            items.append(last)
-        }
-
-        let formContent = items.map { $0.render() }.joined()
-
-        var formOutput = "<form\(attributes)>\(formContent)</form>"
-
-        // Add custom SendFox JavaScript if needed.
-        if case .sendFox = action.service {
-            formOutput += Script(file: URL(static: "https://cdn.sendfox.com/js/form.js"))
-                .customAttribute(name: "charset", value: "utf-8")
-                .render()
-        }
-
-        return formOutput
     }
 }

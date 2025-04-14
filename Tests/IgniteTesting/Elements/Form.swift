@@ -17,44 +17,33 @@ class FormTests: IgniteTestSuite {
     @Test("Basic Form")
     func form() async throws {
         let element = Form {
-            TextField("MyLabel", placeholder: "MyPlaceholder")
+            TextField("MyLabel", prompt: "MyPlaceholder")
             Button("Submit").type(.submit)
-        } onSubmit: {
-            SubscribeAction(.sendFox(listID: "myListID", formID: "myID"))
         }
 
         let output = element.render()
 
         #expect(output == """
-        <form id="myID" method="post" target="_blank" action="https://sendfox.com/form/myListID/myID" \
-        class="sendfox-form" data-async="true" data-recaptcha="true">\
-        <div class="row g-3 gy-3 align-items-stretch"><div class="col">\
-        <div class="form-floating"><input id="sendfox_form_email" name="email" \
-        type="text" placeholder="MyPlaceholder" class="form-control" />\
-        <label for="sendfox_form_email">MyLabel</label>\
+        <form id="\(element.attributes.id)" class="row g-3">\
+        <div class="col-auto">\
+        <div class="form-floating">\
+        <input placeholder="MyPlaceholder" class="form-control" />\
+        <label>MyLabel</label>\
         </div>\
         </div>\
-        <div class="col d-flex align-items-stretch">\
+        <div class="col-auto d-flex align-items-stretch">\
         <button type="submit" class="btn">Submit</button>\
         </div>\
-        <div style="position: absolute; left: -5000px;" aria-hidden="true">\
-        <input name="a_password" tabindex="-1" value="" autocomplete="off" type="text" \
-        class="form-control" />\
-        </div>\
-        </div>\
-        </form>\
-        <script charset="utf-8" src="https://cdn.sendfox.com/js/form.js"></script>
+        </form>
         """)
     }
 
     // swiftlint:disable function_body_length
-    @Test("Form with Label Style", arguments: Form.LabelStyle.allCases)
-    func form_withLabelStyle(style: Form.LabelStyle) async throws {
+    @Test("Form with Label Style", arguments: ControlLabelStyle.allCases)
+    func form_withLabelStyle(style: ControlLabelStyle) async throws {
         let element = Form {
-            TextField("MyLabel", placeholder: "MyPlaceholder")
+            TextField("MyLabel", prompt: "MyPlaceholder")
             Button("Submit").type(.submit)
-        } onSubmit: {
-            SubscribeAction(.sendFox(listID: "myListID", formID: "myID"))
         }
         .labelStyle(style)
 
@@ -62,7 +51,7 @@ class FormTests: IgniteTestSuite {
 
         let alignClass = style == .floating ? "align-items-stretch" : "align-items-end"
         let formContent = switch style {
-        case .front:
+        case .leading:
             """
             <div class="row">\
             <label for="sendfox_form_email" class="col-form-label col-sm-2">MyLabel</label>\
@@ -111,13 +100,11 @@ class FormTests: IgniteTestSuite {
     }
     // swiftlint:enable function_body_length
 
-    @Test("Form with Control Size", arguments: Form.FormControlSize.allCases)
-    func form_withControlSize(controlSize: Form.FormControlSize) async throws {
+    @Test("Form with Control Size", arguments: ControlSize.allCases)
+    func form_withControlSize(controlSize: ControlSize) async throws {
         let element = Form {
-            TextField("MyLabel", placeholder: "MyPlaceholder")
+            TextField("MyLabel", prompt: "MyPlaceholder")
             Button("Submit").type(.submit)
-        } onSubmit: {
-            SubscribeAction(.sendFox(listID: "myListID", formID: "myID"))
         }
         .controlSize(controlSize)
 

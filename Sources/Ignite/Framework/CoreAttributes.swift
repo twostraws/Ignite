@@ -154,7 +154,8 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
 
     /// Appends multiple CSS classes.
     /// - Parameter classes: The CSS classes to append.
-    mutating func append(classes: String...) {
+    mutating func append(classes: String?...) {
+        let classes = classes.compactMap(\.self)
         self.classes.formUnion(classes)
     }
 
@@ -238,6 +239,16 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
             styles.removeAll(where: { $0.property == property.rawValue })
         }
         self.styles = styles
+    }
+
+    /// Removes specified CSS properties from the element's inline styles.
+    /// - Parameter properties: Variable number of CSS properties to remove.
+    mutating func remove(customAttributes names: String...) {
+        var customAttributes = self.customAttributes
+        for name in names {
+            customAttributes.removeAll(where: { $0.name == name })
+        }
+        self.customAttributes = customAttributes
     }
 
     /// Retrieves the inline styles for specified CSS properties.

@@ -5,6 +5,9 @@
 // See LICENSE for license information.
 //
 
+/// Describes elements that can be placed into navigation bars.
+public protocol NavigationItem: HTML {}
+
 /// A bar that sits across the top of your page to provide top-level navigation
 /// throughout your site.
 public struct NavigationBar: HTML {
@@ -166,14 +169,6 @@ public struct NavigationBar: HTML {
         return copy
     }
 
-    func theme(for style: NavigationBarStyle) -> String? {
-        switch style {
-        case .default: nil
-        case .light: "light"
-        case .dark: "dark"
-        }
-    }
-
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
@@ -185,11 +180,9 @@ public struct NavigationBar: HTML {
                             .class("me-auto me-md-0")
                     }
 
-                    Section(HTMLCollection(controls))
-                        .class("gap-2")
-                        .class("ms-md-2")
-                        .class("d-inline-flex", "align-items-center")
-                        .class("order-md-last", "ms-auto me-2")
+                    if controls.isEmpty == false {
+                        renderNavActions()
+                    }
 
                     if items.isEmpty == false {
                         renderToggleButton()
@@ -203,6 +196,22 @@ public struct NavigationBar: HTML {
             .data("bs-theme", theme(for: style))
         }
         .render()
+    }
+
+    private func renderNavActions() -> some HTML {
+        Section {
+            ForEach(controls) { control in
+                if let form = control as? Form {
+                    form.configuredAsNavigationItem()
+                } else {
+                    control
+                }
+            }
+        }
+        .class("gap-2")
+        .class("ms-md-2")
+        .class("d-inline-flex", "align-items-center")
+        .class("order-md-last", "ms-auto me-2")
     }
 
     private func renderToggleButton() -> some InlineElement {
@@ -221,22 +230,22 @@ public struct NavigationBar: HTML {
     private func renderNavItems() -> some HTML {
         Section {
             List {
-                ForEach(items.filter { !($0 is Span) }) { item in
+                ForEach(items) { item in
                     switch item {
                     case let dropdownItem as Dropdown:
                         renderDropdownItem(dropdownItem)
                     case let link as Link:
                         renderLinkItem(link)
+                    case let text as Span:
+                        renderTextItem(text)
+                    case let form as Form:
+                        form.configuredAsNavigationItem()
                     default:
                         AnyHTML(item)
                     }
                 }
             }
             .class("navbar-nav", "mb-2", "mb-md-0", "col", itemAlignment.rawValue)
-
-            ForEach(items.compactMap { $0 as? Span }) { text in
-                renderTextItem(text)
-            }
         }
         .class("collapse", "navbar-collapse")
         .id("navbarCollapse")
@@ -244,7 +253,7 @@ public struct NavigationBar: HTML {
 
     private func renderDropdownItem(_ dropdownItem: Dropdown) -> some HTML {
         ListItem {
-            dropdownItem.configuredAsNavigationItem()
+            dropdownItem.configuration(.navigationBarItem)
         }
         .class("nav-item", "dropdown")
     }
@@ -277,6 +286,14 @@ public struct NavigationBar: HTML {
             .trimmingMargin()
             .class("d-inline-flex", "align-items-center")
             .class("navbar-brand")
+    }
+
+    private func theme(for style: NavigationBarStyle) -> String? {
+        switch style {
+        case .default: nil
+        case .light: "light"
+        case .dark: "dark"
+        }
     }
 }
 
