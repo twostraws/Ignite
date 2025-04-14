@@ -13,10 +13,15 @@ public protocol DropdownItem: HTML {}
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
 public struct Dropdown: HTML, NavigationItem, FormItem {
+    /// How the dropdown should be rendered based on its context.
     enum Configuration: Sendable {
+        /// Renders as a complete standalone dropdown.
         case standalone
+        /// Renders for placement inside a navigation bar.
         case navigationBarItem
+        /// Renders for placement inside a control group.
         case controlGroupItem
+        /// Renders as the last item in a control group with special positioning.
         case lastControlGroupItem
     }
 
@@ -30,16 +35,16 @@ public struct Dropdown: HTML, NavigationItem, FormItem {
     public var isPrimitive: Bool { true }
 
     /// The title for this `Dropdown`.
-    var title: any InlineElement
+    private var title: any InlineElement
 
     /// The array of items to shown in this `Dropdown`.
-    var items: [any DropdownItem]
+    private var items: [any DropdownItem]
 
     /// How large this dropdown should be drawn. Defaults to `.medium`.
-    var size = Button.Size.medium
+    private var size = Button.Size.medium
 
     /// How this dropdown should be styled on the screen. Defaults to `.defaut`.
-    var role = Role.default
+    private var role = Role.default
 
     /// Controls whether this dropdown needs to be created as its own element,
     /// or whether it uses the structure provided by a parent like `NavigationBar`.
