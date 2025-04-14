@@ -12,7 +12,7 @@
 ///
 /// - Note: Unlike ``Group``, modifiers applied to a `Section` affect the
 ///         containing element rather than being propagated to child elements.
-public struct Section: HTML {
+public struct Section: HTML, FormItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

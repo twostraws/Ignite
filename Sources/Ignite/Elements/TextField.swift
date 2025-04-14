@@ -70,9 +70,11 @@ public struct TextField: InlineElement, FormItem {
             input.attributes.append(customAttributes: .init(name: "placeholder", value: prompt))
         }
 
-        var label = ControlLabel(label)
-        label.attributes.append(customAttributes: .init(name: "for", value: id))
-        self.label = label
+        if label.isEmpty == false {
+            var label = ControlLabel(label)
+            label.attributes.append(customAttributes: .init(name: "for", value: id))
+            self.label = label
+        }
     }
 
     /// Makes this field required for form submission.

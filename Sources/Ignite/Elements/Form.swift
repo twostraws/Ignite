@@ -26,7 +26,7 @@ public struct Form: HTML, NavigationItem {
     private var spacing: SpacingAmount
 
     /// The form elements to be rendered.
-    private var items: HTMLCollection
+    private var items: [any FormItem]
 
     /// The style of labels in the form
     private var labelStyle: ControlLabelStyle = .floating
@@ -68,9 +68,9 @@ public struct Form: HTML, NavigationItem {
     /// Configures this dropdown to be placed inside a `NavigationBar`.
     /// - Returns: A new `Form` instance suitable for placement
     /// inside a `NavigationBar`.
-    func configuredAsNavigationItem() -> Self {
+    func configuredAsNavigationItem(_ isNavItem: Bool = true) -> Self {
         var copy = self
-        copy.isNavigationItem = true
+        copy.isNavigationItem = isNavItem
         return copy
     }
 
@@ -82,7 +82,7 @@ public struct Form: HTML, NavigationItem {
         spacing: SpacingAmount = .medium,
         @ElementBuilder<FormItem> content: () -> [any FormItem]
     ) {
-        self.items = HTMLCollection(content())
+        self.items = content()
         self.spacing = spacing
         attributes.id = UUID().uuidString.truncatedHash
     }
@@ -91,7 +91,7 @@ public struct Form: HTML, NavigationItem {
         if isNavigationItem {
             renderInNavigationBar()
         } else {
-            renderStandalone()
+            renderNormally()
         }
     }
 
@@ -122,11 +122,12 @@ public struct Form: HTML, NavigationItem {
 
         var attributes = attributes
         attributes.append(classes: "d-flex")
+
         let content = items.map { $0.render() }.joined()
         return "<form\(attributes)>\(content)</form>"
     }
 
-    private func renderStandalone() -> String {
+    private func renderNormally() -> String {
         let items = items.map { item in
             if labelStyle == .leading {
                 var item = item
@@ -139,16 +140,17 @@ public struct Form: HTML, NavigationItem {
 
         return Tag("form") {
             ForEach(items) { item in
-                switch item {
-                case let textField as TextField:
+                if let textField = item.as(TextField.self) {
                     renderTextField(textField)
-                case let button as Button:
+                } else if let button = item.as(Button.self) {
                     renderButton(button)
-                case let group as ControlGroup:
+                } else if let group = item.as(ControlGroup.self) {
                     renderControlGroup(group)
-                case let span as Span:
+                } else if let span = item.as(Span.self) {
                     renderText(span)
-                default:
+                } else if let section = item.as(Section.self) {
+                    renderSection(section)
+                } else {
                     renderItem(item)
                 }
             }
@@ -168,6 +170,42 @@ public struct Form: HTML, NavigationItem {
 
     private func renderControlGroup(_ group: ControlGroup) -> some HTML {
         group.labelStyle(labelStyle)
+    }
+
+    private func renderSection(_ section: Section) -> some HTML {
+        var items = HTMLCollection([section.content]).elements
+
+        let last = items.last
+
+        items = items.dropLast().map {
+            $0.class("mb-\(spacing.rawValue)")
+        }
+
+        if let last {
+            items.append(last)
+        }
+
+        return Tag("fieldset") {
+            if let header = section.header {
+                Tag("legend") {
+                    header
+                }
+                .class(labelStyle == .leading ? "col-form-label col-sm-2" : nil)
+            }
+
+            ForEach(items) { item in
+                if let controlGroup = item.as(ControlGroup.self) {
+                    controlGroup
+                        .labelStyle(labelStyle)
+                } else if let textField = item.as(TextField.self) {
+                    textField
+                        .labelStyle(labelStyle)
+                } else {
+                    item
+                }
+            }
+        }
+        .attributes(section.attributes)
     }
 
     private func renderButton(_ button: Button) -> some HTML {
@@ -201,6 +239,8 @@ public struct Form: HTML, NavigationItem {
            let width = Int(widthClass.dropFirst("col-md-".count)) {
             let bootstrapColumns = 12 * width / totalColumns
             return "col-md-\(bootstrapColumns)"
+        } else if item.attributes.classes.contains("col") {
+            return "col"
         } else {
             return "col-auto"
         }

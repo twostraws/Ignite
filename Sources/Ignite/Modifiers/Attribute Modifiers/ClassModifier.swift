@@ -54,7 +54,16 @@ public extension InlineElement {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
-    func `class`(_ newClasses: String?...) -> some InlineElement {
+    func `class`(_ newClasses: String...) -> some InlineElement {
+        AnyHTML(classModifier(classNames: newClasses))
+    }
+}
+
+public extension FormItem {
+    /// Adds multiple optional CSS classes to the element.
+    /// - Parameter newClasses: Variable number of optional class names
+    /// - Returns: The modified HTML element
+    func `class`(_ newClasses: String?...) -> some FormItem {
         let classes = newClasses.compactMap(\.self)
         return AnyHTML(classModifier(classNames: classes))
     }

@@ -169,52 +169,38 @@ public struct SubscribeForm: HTML, NavigationItem {
     }
 
     public func render() -> String {
-        if isNavigationItem {
-            renderInNavigationBar()
-        } else {
-            renderStandalone()
-        }
-    }
+        var formOutput = Form {
+            TextField(emailFieldLabel, prompt: emailFieldLabel)
+                .type(.text)
+                .id(service.emailFieldID)
+                .class(controlSize.controlClass)
+                .customAttribute(name: "name", value: service.emailFieldName!)
+                .class(formStyle == .inline ? "col" : "col-md-12")
 
-    /// Renders the form in a compact format suitable for navigation bars.
-    /// - Returns: A string containing the rendered HTML optimized for navigation contexts.
-    private func renderInNavigationBar() -> String {
-        var formOutput = Tag("form") {
-            emailField
-                .class("me-2")
-            subscribeButton
-            honeypotField
-        }
-        .attributes(attributes)
-        .class("d-flex")
-        .render()
-
-        if let script = service.script {
-            formOutput += Script(file: URL(static: script))
-                .customAttribute(name: "charset", value: "utf-8")
-                .render()
-        }
-
-        return formOutput
-    }
-
-    private func renderStandalone() -> String {
-        var formOutput = Tag("form") {
-            Section {
-                Section(emailField)
-                    .class(formStyle == .inline ? "col" : "col-md-12")
-
-                Section {
-                    subscribeButton
-                        .class(formStyle == .inline ? nil : "w-100")
-                }
+            Button(subscribeButtonLabel)
+                .type(.submit)
+                .role(subscribeButtonRole)
+                .style(.color, subscribeButtonForegroundStyle != nil ? subscribeButtonForegroundStyle!.description : "")
+                .class(controlSize.buttonClass)
+                .class(formStyle == .inline ? nil : "w-100")
                 .class(formStyle == .inline ? "col-auto" : "col")
-                .class("d-flex", "align-items-stretch")
 
-                honeypotField
+            if let honeypotName = service.honeypotFieldName {
+                Section {
+                    TextField(EmptyHTML(), prompt: nil)
+                        .id("")
+                        .labelStyle(.hidden)
+                        .customAttribute(name: "name", value: honeypotName)
+                        .customAttribute(name: "tabindex", value: "-1")
+                        .customAttribute(name: "value", value: "")
+                        .customAttribute(name: "autocomplete", value: "off")
+                }
+                .customAttribute(name: "style", value: "position: absolute; left: -5000px;")
+                .customAttribute(name: "aria-hidden", value: "true")
             }
-            .class("row", "g-\(spacing.rawValue)")
         }
+        .configuredAsNavigationItem(isNavigationItem)
+        .labelStyle(labelStyle == .floating ? .floating : .hidden)
         .attributes(attributes)
         .render()
 
@@ -225,38 +211,5 @@ public struct SubscribeForm: HTML, NavigationItem {
         }
 
         return formOutput
-    }
-
-    private var emailField: some HTML {
-        TextField(emailFieldLabel, prompt: emailFieldLabel)
-            .labelStyle(labelStyle == .floating ? .floating : .hidden)
-            .type(.text)
-            .id(service.emailFieldID)
-            .class(controlSize.controlClass)
-            .customAttribute(name: "name", value: service.emailFieldName!)
-    }
-
-    private var subscribeButton: some HTML {
-        Button(subscribeButtonLabel)
-            .type(.submit)
-            .role(subscribeButtonRole)
-            .style(.color, subscribeButtonForegroundStyle != nil ? subscribeButtonForegroundStyle!.description : "")
-            .class(controlSize.buttonClass)
-    }
-
-    @HTMLBuilder private var honeypotField: some HTML {
-        if let honeypotName = service.honeypotFieldName {
-            Section {
-                TextField(EmptyHTML(), prompt: nil)
-                    .id("")
-                    .labelStyle(.hidden)
-                    .customAttribute(name: "name", value: honeypotName)
-                    .customAttribute(name: "tabindex", value: "-1")
-                    .customAttribute(name: "value", value: "")
-                    .customAttribute(name: "autocomplete", value: "off")
-            }
-            .customAttribute(name: "style", value: "position: absolute; left: -5000px;")
-            .customAttribute(name: "aria-hidden", value: "true")
-        }
     }
 }

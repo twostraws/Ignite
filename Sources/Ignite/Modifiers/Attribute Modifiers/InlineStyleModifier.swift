@@ -36,6 +36,17 @@ public extension InlineElement {
     }
 }
 
+extension HTML where Self: FormItem {
+    /// Adds an inline CSS style property to the HTML element
+    /// - Parameters:
+    ///   - property: The CSS property to set
+    ///   - value: The value to set for the property
+    /// - Returns: A modified copy of the element with the style property added
+    public func style(_ property: Property, _ value: String) -> some FormItem {
+        AnyHTML(inlineStyleModifier(styles: [.init(property, value: value)]))
+    }
+}
+
 extension HTML {
     /// Adds an inline style to the element.
     /// - Parameters:

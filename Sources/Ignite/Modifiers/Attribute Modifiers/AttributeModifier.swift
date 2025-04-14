@@ -101,3 +101,14 @@ extension HeadElement {
         AnyHTML(attributeModifier(.init(name: name, value: value)))
     }
 }
+
+extension FormItem {
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(name: String, value: String) -> some FormItem {
+        AnyHTML(attributeModifier(.init(name: name, value: value)))
+    }
+}
