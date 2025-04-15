@@ -2,35 +2,14 @@
 let idx;
 let documents = [];
 
-// Function to load the search index
-function loadSearchIndex() {
-    return fetch('/search-index.json')
-    .then(response => response.json())
-    .then(data => {
-        documents = data;
-        // Create the Lunr index
-        idx = lunr(function () {
-            this.ref('id');
-            this.field('title');
-            this.field('description');
-            this.field('body');
-            this.field('tags');
-
-            documents.forEach(function (doc) {
-                this.add(doc);
-            }, this);
-        });
+// Function to update all search fields and their clear buttons
+function updateAllSearchFields(value) {
+    document.querySelectorAll('[id^="search-input-"]').forEach(input => {
+        input.value = value;
+        const clearButton = input.parentElement.querySelector('.bi-x-circle-fill').closest('button');
+        clearButton.style.visibility = value.trim() ? 'visible' : 'hidden';
     });
 }
-
-// Load the index when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    loadSearchIndex();
-});
-
-// Global variables for search
-window.searchIndex = null;
-window.searchDocuments = [];
 
 // Function to load the search index
 function loadSearchIndex() {
@@ -79,22 +58,59 @@ function performSearch(query) {
         mainContent.insertBefore(mainSearchResults, mainContent.firstChild);
     }
 
+    // Find the search form in the main content area
+    const mainSearchForm = mainContent.querySelector('form');
+
     // Add check for empty query
     if (!query || query.trim() === '') {
-        mainSearchResults.innerHTML = '<p>Please enter a search term</p>';
-        Array.from(mainContent.children).forEach(child => {
-            if (child !== mainSearchResults) child.style.display = '';
-        });
-        return;
+        return; // Just return without doing anything
     }
 
     const results = window.searchIndex.search(query);
 
     if (results.length === 0) {
-        mainSearchResults.innerHTML = '<p>No results found</p>';
+        // Clone the search form if it's in main content
+        if (mainSearchForm) {
+            const clonedForm = mainSearchForm.cloneNode(true);
+            clonedForm.classList.add('my-3');
+            mainSearchResults.innerHTML = '';
+            mainSearchResults.appendChild(clonedForm);
+            mainSearchResults.insertAdjacentHTML('beforeend', '<p>No results found</p>');
+
+            // Set up event handlers for the cloned form
+            const clonedInput = clonedForm.querySelector('[id^="search-input-"]');
+            const clonedClearButton = clonedForm.querySelector('.bi-x-circle-fill').closest('button');
+            const clonedSearchButton = clonedForm.querySelector('button[type="submit"]');
+
+            // Input handler
+            clonedInput.addEventListener('input', function() {
+                updateAllSearchFields(this.value);
+            });
+
+            // Clear button handler
+            clonedClearButton.addEventListener('click', function() {
+                updateAllSearchFields('');
+                Array.from(mainContent.children).forEach(child => {
+                    child.style.display = '';
+                });
+                mainSearchResults.innerHTML = '';
+            });
+
+            // Search button handler
+            clonedSearchButton.onclick = function() {
+                performSearch(clonedInput.value);
+            };
+
+            updateAllSearchFields(query);
+        } else {
+            mainSearchResults.innerHTML = '<p>No results found</p>';
+        }
+
         // Hide other content
         Array.from(mainContent.children).forEach(child => {
-            if (child !== mainSearchResults) child.style.display = 'none';
+            if (child !== mainSearchResults) {
+                child.style.display = 'none';
+            }
         });
         return;
     }
@@ -102,9 +118,19 @@ function performSearch(query) {
     // Clear and prepare search results
     mainSearchResults.innerHTML = '';
 
+    // Clone the search form if it's in main content and add it to results
+    if (mainSearchForm) {
+        const clonedForm = mainSearchForm.cloneNode(true);
+        clonedForm.classList.add('my-3');
+        mainSearchResults.appendChild(clonedForm);
+        updateAllSearchFields(query);
+    }
+
     // Hide other content
     Array.from(mainContent.children).forEach(child => {
-        if (child !== mainSearchResults) child.style.display = 'none';
+        if (child !== mainSearchResults) {
+            child.style.display = 'none';
+        }
     });
 
     results.forEach(result => {
@@ -156,6 +182,34 @@ function performSearch(query) {
 
         mainSearchResults.appendChild(resultItem);
     });
+
+    // Set up event handlers for the cloned form
+    if (mainSearchForm) {
+        const clonedForm = mainSearchResults.querySelector('form');
+        const clonedInput = clonedForm.querySelector('[id^="search-input-"]');
+        const clonedSearchButton = clonedForm.querySelector('button[type="submit"]');
+        const clonedClearButton = clonedForm.querySelector('.bi-x-circle-fill').closest('button');
+
+        // Input handler will be handled by updateAllSearchFields
+        clonedInput.addEventListener('input', function() {
+            updateAllSearchFields(this.value);
+        });
+
+        // Clear button handler
+        clonedClearButton.addEventListener('click', function() {
+            updateAllSearchFields(''); // This will clear all search fields including nav bar
+
+            // Show original content
+            Array.from(mainContent.children).forEach(child => {
+                child.style.display = '';
+            });
+            mainSearchResults.innerHTML = '';
+        });
+
+        clonedSearchButton.onclick = function() {
+            performSearch(clonedInput.value);
+        };
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -171,13 +225,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Show/hide clear button based on input content
         searchInput.addEventListener('input', function() {
-            clearButton.style.visibility = this.value.trim() ? 'visible' : 'hidden';
+            updateAllSearchFields(this.value);
         });
 
         // Clear button click handler
         clearButton.addEventListener('click', function() {
-            searchInput.value = '';
-            clearButton.style.visibility = 'hidden';
+            updateAllSearchFields('');
 
             // Clear search results and show main content
             const mainContent = document.querySelector('.ig-main-content');
