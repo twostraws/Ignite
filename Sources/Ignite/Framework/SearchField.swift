@@ -14,6 +14,11 @@ struct SearchAction: Action {
 
 /// A search field component that enables site-wide search of articles.
 public struct SearchField: HTML, NavigationItem {
+    /// The appearance of the search-button label.
+    public enum SearchButtonStyle: Sendable, Equatable, CaseIterable {
+        case iconOnly, titleAndIcon, titleOnly
+    }
+
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -36,6 +41,21 @@ public struct SearchField: HTML, NavigationItem {
     /// or whether it uses the structure provided by a parent `NavigationBar`.
     private var isNavigationItem = false
 
+    /// The text displayed on the search button.
+    private var searchButtonLabel: String? = "Search"
+
+    /// The appearance of the search-button label.
+    private var searchButtonStyle: SearchButtonStyle = .iconOnly
+
+    /// The visual style of the search button.
+    private var searchButtonRole: Role = .primary
+
+    /// The size of the form controls
+    private var controlSize: ControlSize = .medium
+
+    /// The text color for the search button.
+    private var searchButtonForegroundStyle: Color?
+
     /// Creates a new search field with customizable result view.
     /// - Parameters:
     ///   - label: The label text displayed for the search field
@@ -50,6 +70,51 @@ public struct SearchField: HTML, NavigationItem {
         self.prompt = prompt
         self.label = label
         publishingContext.isSearchEnabled = true
+    }
+
+    /// Sets the text displayed on the search button.
+    /// - Parameter label: The text to display on the button.
+    /// - Returns: A modified form with the updated button text.
+    public func searchButtonLabel(_ label: String) -> Self {
+        var copy = self
+        copy.searchButtonLabel = label
+        return copy
+    }
+
+    /// Sets the icon and label visibility of the search button.
+    /// - Parameter style: The style to apply to the button.
+    /// - Returns: A modified form with the updated button style.
+    public func searchButtonStyle(_ style: SearchButtonStyle) -> Self {
+        var copy = self
+        copy.searchButtonStyle = style
+        return copy
+    }
+
+    /// Sets the size of form controls and labels
+    /// - Parameter size: The desired size
+    /// - Returns: A modified form with the specified control size
+    public func controlSize(_ size: ControlSize) -> Self {
+        var copy = self
+        copy.controlSize = size
+        return copy
+    }
+
+    /// Sets the visual role of the search button.
+    /// - Parameter role: The role determining the button's appearance.
+    /// - Returns: A modified form with the specified button role.
+    public func searchButtonRole(_ role: Role) -> Self {
+        var copy = self
+        copy.searchButtonRole = role
+        return copy
+    }
+
+    /// Sets the text color of the search button.
+    /// - Parameter style: The color to apply to the button text.
+    /// - Returns: A modified form with the specified button text color.
+    public func searchButtonForegroundStyle(_ style: Color) -> Self {
+        var copy = self
+        copy.searchButtonForegroundStyle = style
+        return copy
     }
 
     /// Configures this dropdown to be placed inside a `NavigationBar`.
@@ -68,6 +133,7 @@ public struct SearchField: HTML, NavigationItem {
                     TextField(label, prompt: prompt)
                         .id("search-input-\(UUID().uuidString.truncatedHash)")
                         .labelStyle(.hidden)
+                        .size(controlSize)
                         .style(.paddingRight, "35px")
 
                     Button(Span("").class("bi bi-x-circle-fill"))
@@ -78,19 +144,29 @@ public struct SearchField: HTML, NavigationItem {
                         .style(.top, "0px")
                 }
                 .style(.width, "fit-content")
-                .style(.minWidth, "175px")
+                .style(.minWidth, "125px")
                 .style(.flex, "1")
                 .class(isNavigationItem ? nil : "col-auto")
                 .class("me-2")
                 .style(.position, "relative")
 
-                Button("Search") {
+                Button {
+                    if searchButtonStyle != .titleOnly {
+                        Span("").class("bi bi-search")
+                    }
+                    if searchButtonStyle != .iconOnly, let searchButtonLabel {
+                        " " + searchButtonLabel
+                    }
+                } actions: {
                     SearchAction()
                 }
                 .type(.submit)
-                .role(.primary)
+                .role(searchButtonRole)
+                .style(.color, searchButtonForegroundStyle != nil ?
+                       searchButtonForegroundStyle!.description : "")
             }
             .configuredAsNavigationItem(isNavigationItem)
+            .controlSize(controlSize)
             .labelStyle(.hidden)
             .id("search-form")
             .class("align-items-center")

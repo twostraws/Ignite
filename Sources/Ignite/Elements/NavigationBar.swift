@@ -269,6 +269,7 @@ public struct NavigationBar: HTML {
                 .class(link.style == .button ? nil : "nav-link")
                 .class(isActive ? "active" : nil)
                 .aria(.current, isActive ? "page" : nil)
+                .class("text-nowrap")
         }
         .class("nav-item")
     }
