@@ -2,6 +2,16 @@
 let idx;
 let documents = [];
 
+/**
+ * @typedef {Object} SearchContext
+ * @property {Array} results - The search results
+ * @property {HTMLFormElement} mainSearchForm - The main search form
+ * @property {HTMLElement} mainContent - The main content container
+ * @property {HTMLElement} mainSearchResults - The search results container
+ * @property {DocumentFragment} templateContent - The search result template content
+ * @property {string} query - The search query
+ */
+
 // DOM Element Helpers
 function getMainContent() {
     return document.querySelector('.ig-main-content');
@@ -131,7 +141,8 @@ function updateTags(wrapperLink, doc) {
 }
 
 // Cloned Form Management
-function setupClonedForm(mainSearchForm, mainContent, mainSearchResults, query) {
+function setupClonedForm(context) {
+    const { mainSearchForm, mainContent, mainSearchResults, query } = context;
     const clonedForm = mainSearchForm.cloneNode(true);
     clonedForm.classList.add('my-3');
     mainSearchResults.appendChild(clonedForm);
@@ -215,18 +226,29 @@ function performSearch(query) {
     const mainSearchForm = mainContent.querySelector('form');
     const results = window.searchIndex.search(query);
 
+    const searchContext = {
+        results,
+        mainSearchForm,
+        mainContent,
+        mainSearchResults,
+        templateContent,
+        query
+    };
+
     if (results.length === 0) {
-        handleNoResults(mainSearchForm, mainContent, mainSearchResults, query);
+        handleNoResults(searchContext);
         return;
     }
 
-    displaySearchResults(results, mainSearchForm, mainContent, mainSearchResults, templateContent, query);
+    displaySearchResults(searchContext);
 }
 
-function handleNoResults(mainSearchForm, mainContent, mainSearchResults, query) {
+function handleNoResults(context) {
+    const { mainSearchForm, mainContent, mainSearchResults, query } = context;
+
     if (mainSearchForm) {
         mainSearchResults.innerHTML = '';
-        setupClonedForm(mainSearchForm, mainContent, mainSearchResults, query);
+        setupClonedForm(context);
         mainSearchResults.insertAdjacentHTML('beforeend', '<p>No results found</p>');
     } else {
         mainSearchResults.innerHTML = '<p>No results found</p>';
@@ -234,11 +256,13 @@ function handleNoResults(mainSearchForm, mainContent, mainSearchResults, query) 
     hideOtherContent(mainContent, mainSearchResults);
 }
 
-function displaySearchResults(results, mainSearchForm, mainContent, mainSearchResults, templateContent, query) {
+function displaySearchResults(context) {
+    const { results, mainSearchForm, mainContent, mainSearchResults, templateContent, query } = context;
+
     mainSearchResults.innerHTML = '';
 
     if (mainSearchForm) {
-        setupClonedForm(mainSearchForm, mainContent, mainSearchResults, query);
+        setupClonedForm(context);
     }
 
     hideOtherContent(mainContent, mainSearchResults);
