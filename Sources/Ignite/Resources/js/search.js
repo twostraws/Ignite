@@ -224,16 +224,24 @@ function performSearch(query) {
         return;
     }
 
-    const template = document.getElementById('search-results');
+    // Get the search form that triggered this search
+    const activeForm = event.target.closest('form');
+    // Find the template that's closest to this form
+    const template = activeForm.nextElementSibling;
+
+    if (!template || template.tagName !== 'TEMPLATE') {
+        console.error('No template found next to the search form');
+        return;
+    }
+
     const templateContent = template.content;
     const mainContent = getMainContent();
     const mainSearchResults = getOrCreateSearchResults(mainContent);
-    const mainSearchForm = mainContent.querySelector('form');
     const results = window.searchIndex.search(query);
 
     const searchContext = {
         results,
-        mainSearchForm,
+        mainSearchForm: activeForm,
         mainContent,
         mainSearchResults,
         templateContent,
@@ -249,10 +257,17 @@ function performSearch(query) {
 }
 
 function handleNoResults(context) {
-    const { mainSearchForm, mainContent, mainSearchResults, query } = context;
+    const { mainSearchForm, mainContent, mainSearchResults, templateContent, query } = context;
+
+    mainSearchResults.innerHTML = '';
+
+    const header = templateContent.querySelector('.search-results-header');
+    if (header) {
+        const clonedHeader = header.cloneNode(true);
+        mainSearchResults.appendChild(clonedHeader);
+    }
 
     if (mainSearchForm) {
-        mainSearchResults.innerHTML = '';
         setupClonedForm(context);
         mainSearchResults.insertAdjacentHTML('beforeend', '<p>No results found</p>');
     } else {
@@ -263,8 +278,13 @@ function handleNoResults(context) {
 
 function displaySearchResults(context) {
     const { results, mainSearchForm, mainContent, mainSearchResults, templateContent, query } = context;
-
     mainSearchResults.innerHTML = '';
+    const header = templateContent.querySelector('.search-results-header');
+
+    if (header) {
+        const clonedHeader = header.cloneNode(true);
+        mainSearchResults.insertBefore(clonedHeader, mainSearchResults.firstChild);
+    }
 
     if (mainSearchForm) {
         setupClonedForm(context);

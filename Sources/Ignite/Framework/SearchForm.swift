@@ -31,6 +31,9 @@ public struct SearchForm: HTML, NavigationItem {
     /// The view displayed for each search result.
     private var searchResultView: any HTML
 
+    /// A view displayed at the top of the search results page.
+    private var searchPageHeader: any HTML
+
     /// This text provides a hint to users about what they can search for.
     private var prompt: String?
 
@@ -61,12 +64,16 @@ public struct SearchForm: HTML, NavigationItem {
     ///   - label: The label text displayed for the search field
     ///   - prompt: Optional placeholder text shown when the field is empty
     ///   - searchResultView: A closure that returns a custom HTML view for displaying search results
+    ///   - searchPageHeader: A closure that returns a custom HTML view to display
+    ///   at the top of the search result page.
     public init(
         _ label: any InlineElement,
         prompt: String? = nil,
-        @HTMLBuilder searchResultView: (SearchResult) -> some HTML
+        @HTMLBuilder searchResultView: (SearchResult) -> some HTML,
+        @HTMLBuilder searchPageHeader: () -> some HTML = { EmptyHTML() }
     ) {
         self.searchResultView = searchResultView(SearchResult())
+        self.searchPageHeader = searchPageHeader()
         self.prompt = prompt
         self.label = label
         publishingContext.isSearchEnabled = true
@@ -173,6 +180,8 @@ public struct SearchForm: HTML, NavigationItem {
             .customAttribute(name: "onsubmit", value: "return false")
 
             Tag("template") {
+                AnyHTML(searchPageHeader)
+                    .class("search-results-header")
                 Section(searchResultView)
                     .class("search-results-item")
                     .margin(.bottom, .medium)
