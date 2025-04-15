@@ -32,6 +32,10 @@ public struct SearchField: HTML, NavigationItem {
     /// The label text displayed for the search field.
     private var label: any InlineElement
 
+    /// Controls whether this dropdown needs to be created as its own element,
+    /// or whether it uses the structure provided by a parent `NavigationBar`.
+    private var isNavigationItem = false
+
     /// Creates a new search field with customizable result view.
     /// - Parameters:
     ///   - label: The label text displayed for the search field
@@ -48,15 +52,23 @@ public struct SearchField: HTML, NavigationItem {
         publishingContext.isSearchEnabled = true
     }
 
+    /// Configures this dropdown to be placed inside a `NavigationBar`.
+    /// - Returns: A new `Form` instance suitable for placement
+    /// inside a `NavigationBar`.
+    func configuredAsNavigationItem() -> Self {
+        var copy = self
+        copy.isNavigationItem = true
+        return copy
+    }
+
     public func render() -> String {
         Section {
             Form(spacing: .none) {
                 Section {
                     TextField(label, prompt: prompt)
-                        .id("search-input")
+                        .id("search-input-\(UUID().uuidString.truncatedHash)")
                         .labelStyle(.hidden)
                         .style(.paddingRight, "35px")
-                        .style(.maxWidth, "150px")
 
                     Button(Span("").class("bi bi-x-circle-fill"))
                         .id("search-clear")
@@ -65,7 +77,11 @@ public struct SearchField: HTML, NavigationItem {
                         .style(.right, "0px")
                         .style(.top, "0px")
                 }
-                .class("col-auto", "me-2")
+                .style(.width, "fit-content")
+                .style(.minWidth, "175px")
+                .style(.flex, "1")
+                .class(isNavigationItem ? nil : "col-auto")
+                .class("me-2")
                 .style(.position, "relative")
 
                 Button("Search") {
@@ -74,6 +90,7 @@ public struct SearchField: HTML, NavigationItem {
                 .type(.submit)
                 .role(.primary)
             }
+            .configuredAsNavigationItem(isNavigationItem)
             .labelStyle(.hidden)
             .id("search-form")
             .class("align-items-center")

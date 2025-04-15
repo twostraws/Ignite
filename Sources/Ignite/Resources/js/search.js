@@ -161,37 +161,25 @@ function performSearch(query) {
 document.addEventListener('DOMContentLoaded', function() {
     loadSearchIndex();
 
-    const searchInput = document.getElementById('search-input');
-    const clearButton = document.querySelector('.bi-x-circle-fill').closest('button');
+    // Handle all search inputs that start with "search-input-"
+    document.querySelectorAll('[id^="search-input-"]').forEach((searchInput) => {
+        const clearButton = searchInput.parentElement.querySelector('.bi-x-circle-fill').closest('button');
+        const searchButton = searchInput.closest('form').querySelector('button[type="submit"]');
 
-    // Initially hide the clear button
-    clearButton.style.visibility = 'hidden'; // Changed from display to visibility
-
-    // Show/hide clear button based on input content
-    searchInput.addEventListener('input', function() {
-        clearButton.style.visibility = this.value.trim() ? 'visible' : 'hidden';
-    });
-
-    // Clear button click handler
-    clearButton.addEventListener('click', function() {
-        searchInput.value = '';
+        // Initially hide the clear button
         clearButton.style.visibility = 'hidden';
 
-        // Clear search results and show main content
-        const mainContent = document.querySelector('.ig-main-content');
-        const mainSearchResults = mainContent.querySelector('.main-search-results');
-        if (mainSearchResults) {
-            mainSearchResults.innerHTML = '';
-        }
-        // Show all content again
-        Array.from(mainContent.children).forEach(child => {
-            child.style.display = '';
+        // Show/hide clear button based on input content
+        searchInput.addEventListener('input', function() {
+            clearButton.style.visibility = this.value.trim() ? 'visible' : 'hidden';
         });
-    });
 
-    // Keep existing blur handler
-    searchInput.addEventListener('blur', function() {
-        if (!this.value.trim()) {
+        // Clear button click handler
+        clearButton.addEventListener('click', function() {
+            searchInput.value = '';
+            clearButton.style.visibility = 'hidden';
+
+            // Clear search results and show main content
             const mainContent = document.querySelector('.ig-main-content');
             const mainSearchResults = mainContent.querySelector('.main-search-results');
             if (mainSearchResults) {
@@ -201,6 +189,26 @@ document.addEventListener('DOMContentLoaded', function() {
             Array.from(mainContent.children).forEach(child => {
                 child.style.display = '';
             });
-        }
+        });
+
+        // Add search button click handler
+        searchButton.onclick = function() {
+            performSearch(searchInput.value);
+        };
+
+        // Keep existing blur handler
+        searchInput.addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                const mainContent = document.querySelector('.ig-main-content');
+                const mainSearchResults = mainContent.querySelector('.main-search-results');
+                if (mainSearchResults) {
+                    mainSearchResults.innerHTML = '';
+                }
+                // Show all content again
+                Array.from(mainContent.children).forEach(child => {
+                    child.style.display = '';
+                });
+            }
+        });
     });
 });

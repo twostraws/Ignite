@@ -240,6 +240,10 @@ public struct NavigationBar: HTML {
                         renderTextItem(text)
                     case let form as Form:
                         form.configuredAsNavigationItem()
+                    case let form as SubscribeForm:
+                        form.configuredAsNavigationItem()
+                    case let searchField as SearchField:
+                        searchField.configuredAsNavigationItem()
                     default:
                         AnyHTML(item)
                     }
