@@ -2,7 +2,6 @@
 let idx;
 let documents = [];
 
-// Function to update all search fields and their clear buttons
 function updateAllSearchFields(value) {
     document.querySelectorAll('[id^="search-input-"]').forEach(input => {
         input.value = value;
@@ -11,7 +10,6 @@ function updateAllSearchFields(value) {
     });
 }
 
-// Function to load the search index
 function loadSearchIndex() {
     return fetch('/search-index.json')
     .then(response => response.json())
