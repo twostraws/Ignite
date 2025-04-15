@@ -79,9 +79,12 @@ public struct SearchField: HTML, NavigationItem {
             .class("align-items-center")
             .customAttribute(name: "onsubmit", value: "return false")
 
-            Section(searchResultView.style(.display, "none"))
-                .id("search-results")
-                .class("search-results")
+            Tag("template") {
+                Section(searchResultView)
+                    .class("search-results-item")
+                    .margin(.bottom, .medium)
+            }
+            .id("search-results")
         }
         .render()
     }

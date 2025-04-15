@@ -64,8 +64,9 @@ function performSearch(query) {
         return;
     }
 
-    // Get the template from the nav
-    const searchTemplate = document.getElementById('search-results').querySelector('.search-result-item');
+    // Get the template and its content
+    const template = document.getElementById('search-results');
+    const templateContent = template.content;
 
     // Get the main content area using class
     const mainContent = document.querySelector('.ig-main-content');
@@ -108,11 +109,8 @@ function performSearch(query) {
 
     results.forEach(result => {
         const doc = window.searchDocuments.find(doc => doc.id === result.ref);
-        const clone = searchTemplate.cloneNode(true);
-
-        // Make the clone visible and add styling
-        clone.style.display = 'block';
-        clone.style.marginBottom = '1.5rem';
+        const clone = templateContent.cloneNode(true);
+        const resultItem = clone.querySelector('.search-results-item');
 
         // Create a wrapper link for the entire item
         const wrapperLink = document.createElement('a');
@@ -120,13 +118,13 @@ function performSearch(query) {
         wrapperLink.className = 'link-plain text-reset';
 
         // Move all the content into the link
-        while (clone.firstChild) {
-            wrapperLink.appendChild(clone.firstChild);
+        while (resultItem.firstChild) {
+            wrapperLink.appendChild(resultItem.firstChild);
         }
 
-        // Clear the clone and add the wrapper link
-        clone.innerHTML = '';
-        clone.appendChild(wrapperLink);
+        // Clear the result item and add the wrapper link
+        resultItem.innerHTML = '';
+        resultItem.appendChild(wrapperLink);
 
         // Update the content inside the wrapper
         const title = wrapperLink.querySelector('.result-title');
@@ -148,15 +146,15 @@ function performSearch(query) {
         if (tags) {
             if (doc.tags && doc.tags.trim()) {  // Check if tags exist and aren't just whitespace
                 tags.innerHTML = doc.tags.split(' ').map(tag =>
-                                                         `<span class="tag">${tag}</span>`
-                                                         ).join('');
+                    `<span class="tag">${tag}</span>`
+                ).join('');
                 tags.style.display = 'block';  // Show if there are tags
             } else {
                 tags.style.display = 'none';  // Hide if no tags
             }
         }
 
-        mainSearchResults.appendChild(clone);
+        mainSearchResults.appendChild(resultItem);
     });
 }
 
