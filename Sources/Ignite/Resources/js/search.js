@@ -5,22 +5,22 @@ let documents = [];
 // Function to load the search index
 function loadSearchIndex() {
     return fetch('/search-index.json')
-        .then(response => response.json())
-        .then(data => {
-            documents = data;
-            // Create the Lunr index
-            idx = lunr(function () {
-                this.ref('id');
-                this.field('title');
-                this.field('description');
-                this.field('body');
-                this.field('tags');
+    .then(response => response.json())
+    .then(data => {
+        documents = data;
+        // Create the Lunr index
+        idx = lunr(function () {
+            this.ref('id');
+            this.field('title');
+            this.field('description');
+            this.field('body');
+            this.field('tags');
 
-                documents.forEach(function (doc) {
-                    this.add(doc);
-                }, this);
-            });
+            documents.forEach(function (doc) {
+                this.add(doc);
+            }, this);
         });
+    });
 }
 
 // Load the index when the page loads
@@ -35,22 +35,22 @@ window.searchDocuments = [];
 // Function to load the search index
 function loadSearchIndex() {
     return fetch('/search-index.json')
-        .then(response => response.json())
-        .then(data => {
-            window.searchDocuments = data;
-            // Create the Lunr index
-            window.searchIndex = lunr(function () {
-                this.ref('id');
-                this.field('title');
-                this.field('description');
-                this.field('body');
-                this.field('tags');
+    .then(response => response.json())
+    .then(data => {
+        window.searchDocuments = data;
+        // Create the Lunr index
+        window.searchIndex = lunr(function () {
+            this.ref('id');
+            this.field('title');
+            this.field('description');
+            this.field('body');
+            this.field('tags');
 
-                window.searchDocuments.forEach(function (doc) {
-                    this.add(doc);
-                }, this);
-            });
+            window.searchDocuments.forEach(function (doc) {
+                this.add(doc);
+            }, this);
         });
+    });
 }
 
 // Load the index when the page loads
@@ -132,20 +132,28 @@ function performSearch(query) {
         const title = wrapperLink.querySelector('.result-title');
         if (title) {
             title.textContent = doc.title;
-            title.style.marginBottom = '0.5rem';
         }
 
         const description = wrapperLink.querySelector('.result-description');
         if (description) {
             description.textContent = (doc.description || '') + '...';
-            description.style.marginBottom = '0.5rem';
+        }
+
+        const date = wrapperLink.querySelector('.result-date');
+        if (date && doc.date) {
+            date.textContent = doc.date;
         }
 
         const tags = wrapperLink.querySelector('.result-tags');
-        if (tags && doc.tags) {
-            tags.innerHTML = doc.tags.split(' ').map(tag =>
-                `<span class="tag">${tag}</span>`
-            ).join('');
+        if (tags) {
+            if (doc.tags && doc.tags.trim()) {  // Check if tags exist and aren't just whitespace
+                tags.innerHTML = doc.tags.split(' ').map(tag =>
+                                                         `<span class="tag">${tag}</span>`
+                                                         ).join('');
+                tags.style.display = 'block';  // Show if there are tags
+            } else {
+                tags.style.display = 'none';  // Hide if no tags
+            }
         }
 
         mainSearchResults.appendChild(clone);

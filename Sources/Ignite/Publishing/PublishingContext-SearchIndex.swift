@@ -11,7 +11,7 @@ extension PublishingContext {
                 "description": article.description,
                 "body": article.text,
                 "tags": article.tags?.joined(separator: " ") ?? "",
-                "date": article.date.description
+                "date": article.date.formatted(date: .long, time: .omitted)
             ]
         }
 

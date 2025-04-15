@@ -5,12 +5,14 @@
 // See LICENSE for license information.
 //
 
+/// An action that triggers the search functionality.
 struct SearchAction: Action {
     func compile() -> String {
         "performSearch(document.getElementById('search-input').value)"
     }
 }
 
+/// A search field component that enables site-wide search of articles.
 public struct SearchField: HTML, NavigationItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
@@ -21,12 +23,20 @@ public struct SearchField: HTML, NavigationItem {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
+    /// The view displayed for each search result.
     private var searchResultView: any HTML
 
+    /// This text provides a hint to users about what they can search for.
     private var prompt: String?
 
+    /// The label text displayed for the search field.
     private var label: any InlineElement
 
+    /// Creates a new search field with customizable result view.
+    /// - Parameters:
+    ///   - label: The label text displayed for the search field
+    ///   - prompt: Optional placeholder text shown when the field is empty
+    ///   - searchResultView: A closure that returns a custom HTML view for displaying search results
     public init(
         _ label: any InlineElement,
         prompt: String? = nil,
@@ -35,11 +45,11 @@ public struct SearchField: HTML, NavigationItem {
         self.searchResultView = searchResultView(SearchResult())
         self.prompt = prompt
         self.label = label
+        publishingContext.isSearchEnabled = true
     }
 
     public func render() -> String {
-        publishingContext.isSearchEnabled = true
-        return Section {
+        Section {
             Form(spacing: .none) {
                 Section {
                     TextField(label, prompt: prompt)
@@ -76,4 +86,3 @@ public struct SearchField: HTML, NavigationItem {
         .render()
     }
 }
-
