@@ -2,6 +2,36 @@
 let idx;
 let documents = [];
 
+// DOM Element Helpers
+function getMainContent() {
+    return document.querySelector('.ig-main-content');
+}
+
+function getOrCreateSearchResults(mainContent) {
+    let mainSearchResults = mainContent.querySelector('.main-search-results');
+    if (!mainSearchResults) {
+        mainSearchResults = document.createElement('div');
+        mainSearchResults.className = 'main-search-results';
+        mainContent.insertBefore(mainSearchResults, mainContent.firstChild);
+    }
+    return mainSearchResults;
+}
+
+function hideOtherContent(mainContent, mainSearchResults) {
+    Array.from(mainContent.children).forEach(child => {
+        if (child !== mainSearchResults) {
+            child.style.display = 'none';
+        }
+    });
+}
+
+function showAllContent(mainContent) {
+    Array.from(mainContent.children).forEach(child => {
+        child.style.display = '';
+    });
+}
+
+// Search Field Management
 function updateAllSearchFields(value) {
     document.querySelectorAll('[id^="search-input-"]').forEach(input => {
         input.value = value;
@@ -10,256 +40,218 @@ function updateAllSearchFields(value) {
     });
 }
 
+// Search Index Management
 function loadSearchIndex() {
     return fetch('/search-index.json')
     .then(response => response.json())
     .then(data => {
         window.searchDocuments = data;
-        // Create the Lunr index
-        window.searchIndex = lunr(function () {
-            this.ref('id');
-            this.field('title');
-            this.field('description');
-            this.field('body');
-            this.field('tags');
-
-            window.searchDocuments.forEach(function (doc) {
-                this.add(doc);
-            }, this);
-        });
+        window.searchIndex = createLunrIndex(data);
     });
 }
 
-// Load the index when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    loadSearchIndex();
-});
+function createLunrIndex(data) {
+    return lunr(function () {
+        this.ref('id');
+        this.field('title');
+        this.field('description');
+        this.field('body');
+        this.field('tags');
 
+        data.forEach(function (doc) {
+            this.add(doc);
+        }, this);
+    });
+}
+
+// Result Item Creation
+function createResultItem(doc, templateContent) {
+    const clone = templateContent.cloneNode(true);
+    const resultItem = clone.querySelector('.search-results-item');
+    const wrapperLink = createWrapperLink(doc);
+
+    while (resultItem.firstChild) {
+        wrapperLink.appendChild(resultItem.firstChild);
+    }
+
+    resultItem.innerHTML = '';
+    resultItem.appendChild(wrapperLink);
+    updateResultContent(wrapperLink, doc);
+
+    return resultItem;
+}
+
+function createWrapperLink(doc) {
+    const wrapperLink = document.createElement('a');
+    wrapperLink.href = doc.id;
+    wrapperLink.className = 'link-plain text-reset';
+    return wrapperLink;
+}
+
+function updateResultContent(wrapperLink, doc) {
+    updateTitle(wrapperLink, doc);
+    updateDescription(wrapperLink, doc);
+    updateDate(wrapperLink, doc);
+    updateTags(wrapperLink, doc);
+}
+
+function updateTitle(wrapperLink, doc) {
+    const title = wrapperLink.querySelector('.result-title');
+    if (title) {
+        title.textContent = doc.title;
+    }
+}
+
+function updateDescription(wrapperLink, doc) {
+    const description = wrapperLink.querySelector('.result-description');
+    if (description) {
+        description.textContent = (doc.description || '') + '...';
+    }
+}
+
+function updateDate(wrapperLink, doc) {
+    const date = wrapperLink.querySelector('.result-date');
+    if (date && doc.date) {
+        date.textContent = doc.date;
+    }
+}
+
+function updateTags(wrapperLink, doc) {
+    const tags = wrapperLink.querySelector('.result-tags');
+    if (tags) {
+        if (doc.tags && doc.tags.trim()) {
+            tags.innerHTML = doc.tags.split(' ').map(tag =>
+                `<span class="tag">${tag}</span>`
+            ).join('');
+            tags.style.display = 'block';
+        } else {
+            tags.style.display = 'none';
+        }
+    }
+}
+
+// Cloned Form Management
+function setupClonedForm(mainSearchForm, mainContent, mainSearchResults, query) {
+    const clonedForm = mainSearchForm.cloneNode(true);
+    clonedForm.classList.add('my-3');
+    mainSearchResults.appendChild(clonedForm);
+    setupClonedFormEventHandlers(clonedForm, mainContent, mainSearchResults);
+    updateAllSearchFields(query);
+    return clonedForm;
+}
+
+function setupClonedFormEventHandlers(clonedForm, mainContent, mainSearchResults) {
+    const clonedInput = clonedForm.querySelector('[id^="search-input-"]');
+    const clonedSearchButton = clonedForm.querySelector('button[type="submit"]');
+    const clonedClearButton = clonedForm.querySelector('.bi-x-circle-fill').closest('button');
+
+    clonedInput.addEventListener('input', function() {
+        updateAllSearchFields(this.value);
+    });
+
+    clonedClearButton.addEventListener('click', function() {
+        updateAllSearchFields('');
+        showAllContent(mainContent);
+        mainSearchResults.innerHTML = '';
+    });
+
+    clonedSearchButton.onclick = function() {
+        performSearch(clonedInput.value);
+    };
+}
+
+// Search Input Setup
+function setupSearchInput(searchInput) {
+    const clearButton = searchInput.parentElement.querySelector('.bi-x-circle-fill').closest('button');
+    const searchButton = searchInput.closest('form').querySelector('button[type="submit"]');
+
+    clearButton.style.visibility = 'hidden';
+    setupSearchInputEventHandlers(searchInput, clearButton, searchButton);
+}
+
+function setupSearchInputEventHandlers(searchInput, clearButton, searchButton) {
+    searchInput.addEventListener('input', function() {
+        updateAllSearchFields(this.value);
+    });
+
+    clearButton.addEventListener('click', function() {
+        updateAllSearchFields('');
+        const mainContent = getMainContent();
+        const mainSearchResults = mainContent.querySelector('.main-search-results');
+        if (mainSearchResults) {
+            mainSearchResults.innerHTML = '';
+        }
+        showAllContent(mainContent);
+    });
+
+    searchButton.onclick = function() {
+        performSearch(searchInput.value);
+    };
+
+    searchInput.addEventListener('blur', handleSearchInputBlur);
+}
+
+function handleSearchInputBlur() {
+    if (!this.value.trim()) {
+        const mainContent = getMainContent();
+        const mainSearchResults = mainContent.querySelector('.main-search-results');
+        if (mainSearchResults) {
+            mainSearchResults.innerHTML = '';
+        }
+        showAllContent(mainContent);
+    }
+}
+
+// Main Search Function
 function performSearch(query) {
-    if (!window.searchIndex) {
-        console.error('Search index not loaded yet');
+    if (!window.searchIndex || !query || !query.trim()) {
         return;
     }
 
-    // Get the template and its content
     const template = document.getElementById('search-results');
     const templateContent = template.content;
-
-    // Get the main content area using class
-    const mainContent = document.querySelector('.ig-main-content');
-
-    // Get or create the search results container in main content
-    let mainSearchResults = mainContent.querySelector('.main-search-results');
-    if (!mainSearchResults) {
-        mainSearchResults = document.createElement('div');
-        mainSearchResults.className = 'main-search-results';
-        mainContent.insertBefore(mainSearchResults, mainContent.firstChild);
-    }
-
-    // Find the search form in the main content area
+    const mainContent = getMainContent();
+    const mainSearchResults = getOrCreateSearchResults(mainContent);
     const mainSearchForm = mainContent.querySelector('form');
-
-    // Add check for empty query
-    if (!query || query.trim() === '') {
-        return; // Just return without doing anything
-    }
-
     const results = window.searchIndex.search(query);
 
     if (results.length === 0) {
-        // Clone the search form if it's in main content
-        if (mainSearchForm) {
-            const clonedForm = mainSearchForm.cloneNode(true);
-            clonedForm.classList.add('my-3');
-            mainSearchResults.innerHTML = '';
-            mainSearchResults.appendChild(clonedForm);
-            mainSearchResults.insertAdjacentHTML('beforeend', '<p>No results found</p>');
-
-            // Set up event handlers for the cloned form
-            const clonedInput = clonedForm.querySelector('[id^="search-input-"]');
-            const clonedClearButton = clonedForm.querySelector('.bi-x-circle-fill').closest('button');
-            const clonedSearchButton = clonedForm.querySelector('button[type="submit"]');
-
-            // Input handler
-            clonedInput.addEventListener('input', function() {
-                updateAllSearchFields(this.value);
-            });
-
-            // Clear button handler
-            clonedClearButton.addEventListener('click', function() {
-                updateAllSearchFields('');
-                Array.from(mainContent.children).forEach(child => {
-                    child.style.display = '';
-                });
-                mainSearchResults.innerHTML = '';
-            });
-
-            // Search button handler
-            clonedSearchButton.onclick = function() {
-                performSearch(clonedInput.value);
-            };
-
-            updateAllSearchFields(query);
-        } else {
-            mainSearchResults.innerHTML = '<p>No results found</p>';
-        }
-
-        // Hide other content
-        Array.from(mainContent.children).forEach(child => {
-            if (child !== mainSearchResults) {
-                child.style.display = 'none';
-            }
-        });
+        handleNoResults(mainSearchForm, mainContent, mainSearchResults, query);
         return;
     }
 
-    // Clear and prepare search results
+    displaySearchResults(results, mainSearchForm, mainContent, mainSearchResults, templateContent, query);
+}
+
+function handleNoResults(mainSearchForm, mainContent, mainSearchResults, query) {
+    if (mainSearchForm) {
+        mainSearchResults.innerHTML = '';
+        setupClonedForm(mainSearchForm, mainContent, mainSearchResults, query);
+        mainSearchResults.insertAdjacentHTML('beforeend', '<p>No results found</p>');
+    } else {
+        mainSearchResults.innerHTML = '<p>No results found</p>';
+    }
+    hideOtherContent(mainContent, mainSearchResults);
+}
+
+function displaySearchResults(results, mainSearchForm, mainContent, mainSearchResults, templateContent, query) {
     mainSearchResults.innerHTML = '';
 
-    // Clone the search form if it's in main content and add it to results
     if (mainSearchForm) {
-        const clonedForm = mainSearchForm.cloneNode(true);
-        clonedForm.classList.add('my-3');
-        mainSearchResults.appendChild(clonedForm);
-        updateAllSearchFields(query);
+        setupClonedForm(mainSearchForm, mainContent, mainSearchResults, query);
     }
 
-    // Hide other content
-    Array.from(mainContent.children).forEach(child => {
-        if (child !== mainSearchResults) {
-            child.style.display = 'none';
-        }
-    });
+    hideOtherContent(mainContent, mainSearchResults);
 
     results.forEach(result => {
         const doc = window.searchDocuments.find(doc => doc.id === result.ref);
-        const clone = templateContent.cloneNode(true);
-        const resultItem = clone.querySelector('.search-results-item');
-
-        // Create a wrapper link for the entire item
-        const wrapperLink = document.createElement('a');
-        wrapperLink.href = doc.id;
-        wrapperLink.className = 'link-plain text-reset';
-
-        // Move all the content into the link
-        while (resultItem.firstChild) {
-            wrapperLink.appendChild(resultItem.firstChild);
-        }
-
-        // Clear the result item and add the wrapper link
-        resultItem.innerHTML = '';
-        resultItem.appendChild(wrapperLink);
-
-        // Update the content inside the wrapper
-        const title = wrapperLink.querySelector('.result-title');
-        if (title) {
-            title.textContent = doc.title;
-        }
-
-        const description = wrapperLink.querySelector('.result-description');
-        if (description) {
-            description.textContent = (doc.description || '') + '...';
-        }
-
-        const date = wrapperLink.querySelector('.result-date');
-        if (date && doc.date) {
-            date.textContent = doc.date;
-        }
-
-        const tags = wrapperLink.querySelector('.result-tags');
-        if (tags) {
-            if (doc.tags && doc.tags.trim()) {  // Check if tags exist and aren't just whitespace
-                tags.innerHTML = doc.tags.split(' ').map(tag =>
-                    `<span class="tag">${tag}</span>`
-                ).join('');
-                tags.style.display = 'block';  // Show if there are tags
-            } else {
-                tags.style.display = 'none';  // Hide if no tags
-            }
-        }
-
+        const resultItem = createResultItem(doc, templateContent);
         mainSearchResults.appendChild(resultItem);
     });
-
-    // Set up event handlers for the cloned form
-    if (mainSearchForm) {
-        const clonedForm = mainSearchResults.querySelector('form');
-        const clonedInput = clonedForm.querySelector('[id^="search-input-"]');
-        const clonedSearchButton = clonedForm.querySelector('button[type="submit"]');
-        const clonedClearButton = clonedForm.querySelector('.bi-x-circle-fill').closest('button');
-
-        // Input handler will be handled by updateAllSearchFields
-        clonedInput.addEventListener('input', function() {
-            updateAllSearchFields(this.value);
-        });
-
-        // Clear button handler
-        clonedClearButton.addEventListener('click', function() {
-            updateAllSearchFields(''); // This will clear all search fields including nav bar
-
-            // Show original content
-            Array.from(mainContent.children).forEach(child => {
-                child.style.display = '';
-            });
-            mainSearchResults.innerHTML = '';
-        });
-
-        clonedSearchButton.onclick = function() {
-            performSearch(clonedInput.value);
-        };
-    }
 }
 
+// Initialize
 document.addEventListener('DOMContentLoaded', function() {
     loadSearchIndex();
-
-    // Handle all search inputs that start with "search-input-"
-    document.querySelectorAll('[id^="search-input-"]').forEach((searchInput) => {
-        const clearButton = searchInput.parentElement.querySelector('.bi-x-circle-fill').closest('button');
-        const searchButton = searchInput.closest('form').querySelector('button[type="submit"]');
-
-        // Initially hide the clear button
-        clearButton.style.visibility = 'hidden';
-
-        // Show/hide clear button based on input content
-        searchInput.addEventListener('input', function() {
-            updateAllSearchFields(this.value);
-        });
-
-        // Clear button click handler
-        clearButton.addEventListener('click', function() {
-            updateAllSearchFields('');
-
-            // Clear search results and show main content
-            const mainContent = document.querySelector('.ig-main-content');
-            const mainSearchResults = mainContent.querySelector('.main-search-results');
-            if (mainSearchResults) {
-                mainSearchResults.innerHTML = '';
-            }
-            // Show all content again
-            Array.from(mainContent.children).forEach(child => {
-                child.style.display = '';
-            });
-        });
-
-        // Add search button click handler
-        searchButton.onclick = function() {
-            performSearch(searchInput.value);
-        };
-
-        // Keep existing blur handler
-        searchInput.addEventListener('blur', function() {
-            if (!this.value.trim()) {
-                const mainContent = document.querySelector('.ig-main-content');
-                const mainSearchResults = mainContent.querySelector('.main-search-results');
-                if (mainSearchResults) {
-                    mainSearchResults.innerHTML = '';
-                }
-                // Show all content again
-                Array.from(mainContent.children).forEach(child => {
-                    child.style.display = '';
-                });
-            }
-        });
-    });
+    document.querySelectorAll('[id^="search-input-"]').forEach(setupSearchInput);
 });
