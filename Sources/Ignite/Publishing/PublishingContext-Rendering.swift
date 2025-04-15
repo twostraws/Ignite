@@ -37,7 +37,7 @@ extension PublishingContext {
     ) {
         let path = pagePath
         currentRenderingPath = rootPath
-        let metadata = PageMetadata(
+        let pageMetadata = PageMetadata(
             title: page.title,
             description: page.description,
             url: site.url.appending(path: path),
@@ -48,7 +48,7 @@ extension PublishingContext {
             sourceDirectory: sourceDirectory,
             site: site,
             allContent: allContent,
-            pageMetadata: metadata,
+            pageMetadata: pageMetadata,
             pageContent: page)
 
         let outputString = withEnvironment(values) {
@@ -57,6 +57,18 @@ extension PublishingContext {
 
         let outputDirectory = buildDirectory.appending(path: path)
         write(outputString, to: outputDirectory, priority: priority, filename: filename)
+
+        if isSearchEnabled {
+            if page.description.isEmpty {
+                addWarning("\(page.title) lacks a page description and will be omitted from search results.")
+            } else {
+                let pageSearchMetadata = SearchMetadata(
+                    id: pageMetadata.url.lastPathComponent,
+                    title: pageMetadata.title,
+                    description: pageMetadata.description)
+                searchMetadata.append(pageSearchMetadata)
+            }
+        }
     }
 
     /// Renders one piece of Markdown content.
@@ -65,7 +77,7 @@ extension PublishingContext {
         let layout = layout(for: article)
         currentRenderingPath = article.path
 
-        let metadata = PageMetadata(
+        let pageMetadata = PageMetadata(
             title: article.title,
             description: article.description,
             url: site.url.appending(path: article.path),
@@ -76,7 +88,7 @@ extension PublishingContext {
             sourceDirectory: sourceDirectory,
             site: site,
             allContent: allContent,
-            pageMetadata: metadata,
+            pageMetadata: pageMetadata,
             pageContent: layout,
             article: article)
 
@@ -87,7 +99,14 @@ extension PublishingContext {
         let outputDirectory = buildDirectory.appending(path: article.path)
         write(outputString, to: outputDirectory, priority: 0.8)
 
-        generateSearchIndex()
+        let pageSearchMetadata = SearchMetadata(
+            id: article.path,
+            title: article.title,
+            description: article.description,
+            tags: article.tags,
+            date: article.date)
+
+        searchMetadata.append(pageSearchMetadata)
     }
 
     /// Generates all tags pages, including the "all tags" page.

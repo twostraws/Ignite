@@ -70,6 +70,9 @@ final class PublishingContext {
     /// Whether the site has enabled searching articles.
     var isSearchEnabled: Bool = false
 
+    /// The metadata of every searchable page.
+    var searchMetadata: [SearchMetadata] = []
+
     /// Whether the site uses syntax highlighters.
     var hasSyntaxHighlighters: Bool {
         !syntaxHighlighters.isEmpty || !site.syntaxHighlighterConfiguration.languages.isEmpty
@@ -194,6 +197,7 @@ final class PublishingContext {
     func publish() async throws {
         clearBuildFolder()
         await generateContent()
+        generateSearchIndex()
         copyResources()
         generateThemes(site.allThemes)
         generateMediaQueryCSS()

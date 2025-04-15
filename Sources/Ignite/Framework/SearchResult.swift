@@ -18,7 +18,7 @@ public struct SearchResult: Sendable {
     public var description: some HTML = Text("").class("result-description")
 
     /// The publication date of the content.
-    public var date: some HTML = Text("").class("result-date")
+    public var date: (some HTML)? = Text("").class("result-date")
 
     /// Optional tags associated with the search result.
     public var tags: (some HTML)? = Text("").class("result-tags")

@@ -12,8 +12,8 @@ struct SearchAction: Action {
     }
 }
 
-/// A search field component that enables site-wide search of articles.
-public struct SearchField: HTML, NavigationItem {
+/// A form that enables site-wide search.
+public struct SearchForm: HTML, NavigationItem {
     /// The appearance of the search-button label.
     public enum SearchButtonStyle: Sendable, Equatable, CaseIterable {
         case iconOnly, titleAndIcon, titleOnly

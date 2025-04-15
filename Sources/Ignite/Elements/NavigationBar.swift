@@ -242,7 +242,7 @@ public struct NavigationBar: HTML {
                         form.configuredAsNavigationItem()
                     case let form as SubscribeForm:
                         form.configuredAsNavigationItem()
-                    case let searchField as SearchField:
+                    case let searchField as SearchForm:
                         searchField.configuredAsNavigationItem()
                     default:
                         AnyHTML(item)

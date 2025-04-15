@@ -121,8 +121,13 @@ function updateDescription(wrapperLink, doc) {
 
 function updateDate(wrapperLink, doc) {
     const date = wrapperLink.querySelector('.result-date');
-    if (date && doc.date) {
-        date.textContent = doc.date;
+    if (date) {
+        if (doc.date && doc.date.trim()) {
+            date.textContent = doc.date;
+            date.style.display = 'unset';
+        } else {
+            date.style.display = 'none';
+        }
     }
 }
 
@@ -133,7 +138,7 @@ function updateTags(wrapperLink, doc) {
             tags.innerHTML = doc.tags.split(' ').map(tag =>
                 `<span class="tag">${tag}</span>`
             ).join('');
-            tags.style.display = 'block';
+            tags.style.display = 'unset';
         } else {
             tags.style.display = 'none';
         }
