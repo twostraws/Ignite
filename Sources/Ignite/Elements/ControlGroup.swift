@@ -135,7 +135,7 @@ public struct ControlGroup: HTML, FormItem {
     }
 
     private func renderTextField(_ textField: TextField) -> any InlineElement {
-        var textField = textField
+        var textField = textField.labelStyle(labelStyle)
         if labelStyle != .floating {
             textField.label = nil
         }
