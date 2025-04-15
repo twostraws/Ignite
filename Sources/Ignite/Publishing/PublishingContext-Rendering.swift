@@ -86,6 +86,8 @@ extension PublishingContext {
 
         let outputDirectory = buildDirectory.appending(path: article.path)
         write(outputString, to: outputDirectory, priority: 0.8)
+
+        generateSearchIndex()
     }
 
     /// Generates all tags pages, including the "all tags" page.

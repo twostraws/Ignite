@@ -53,11 +53,8 @@ public struct Head: DocumentElement {
         return "<head\(attributes)>\(HTMLCollection(items))</head>"
     }
 
-    /// A static function, returning the standard set of headers used for a `Page` instance.
-    ///
-    /// This function can be used when defining a custom header based on the standard set of headers.
-    @HeadElementBuilder
-    public static func standardHeaders() -> [any HeadElement] {
+    /// Returns the standard set of headers used for a `Page` instance.
+    @HeadElementBuilder static func standardHeaders() -> [any HeadElement] {
         MetaTag.utf8
         MetaTag.flexibleViewport
 

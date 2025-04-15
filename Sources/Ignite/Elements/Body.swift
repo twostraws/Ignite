@@ -75,6 +75,11 @@ public struct Body: DocumentElement {
 
         output += Script(file: "/js/ignite-core.js").render()
 
+        if publishingContext.isSearchEnabled {
+            output += Script(file: "/js/lunr.js").render()
+            output += Script(file: "/js/search.js").render()
+        }
+
         if isBoundByContainer {
             attributes.append(classes: ["container"])
         }

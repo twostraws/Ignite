@@ -67,6 +67,9 @@ final class PublishingContext {
     /// An ordered set of syntax highlighters pulled from code blocks throughout the site.
     var syntaxHighlighters = OrderedSet<HighlighterLanguage>()
 
+    /// Whether the site has enabled searching articles.
+    var isSearchEnabled: Bool = false
+
     /// Whether the site uses syntax highlighters.
     var hasSyntaxHighlighters: Bool {
         !syntaxHighlighters.isEmpty || !site.syntaxHighlighterConfiguration.languages.isEmpty
@@ -238,6 +241,11 @@ final class PublishingContext {
             copy(resource: "css/bootstrap-icons.min.css")
             copy(resource: "fonts/bootstrap-icons.woff")
             copy(resource: "fonts/bootstrap-icons.woff2")
+        }
+
+        if isSearchEnabled {
+            copy(resource: "js/lunr.js")
+            copy(resource: "js/search.js")
         }
 
         if hasSyntaxHighlighters {
