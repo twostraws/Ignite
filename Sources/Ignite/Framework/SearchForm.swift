@@ -177,6 +177,7 @@ public struct SearchForm: HTML, NavigationItem {
             .labelStyle(.hidden)
             .id("search-form")
             .class("align-items-center")
+            .customAttribute(name: "role", value: "search")
             .customAttribute(name: "onsubmit", value: "return false")
 
             Tag("template") {
