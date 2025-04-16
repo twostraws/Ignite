@@ -59,6 +59,9 @@ public struct SearchForm: HTML, NavigationItem {
     /// The text color for the search button.
     private var searchButtonForegroundStyle: Color?
 
+    /// Whether the search results HTML `<template>` block should be included.
+    private var isSearchResultsTemplateHidden = false
+
     /// Creates a new search field with customizable result view.
     /// - Parameters:
     ///   - label: The label text displayed for the search field
@@ -133,6 +136,14 @@ public struct SearchForm: HTML, NavigationItem {
         return copy
     }
 
+    /// Hides the search results `<template>` block from the rendered HTML.
+    /// - Returns: A modified form with the specified template visibility.
+    private func searchResultsTemplateHidden() -> Self {
+        var copy = self
+        copy.isSearchResultsTemplateHidden = true
+        return copy
+    }
+
     public func render() -> String {
         Section {
             Form(spacing: .none) {
@@ -175,19 +186,25 @@ public struct SearchForm: HTML, NavigationItem {
             .configuredAsNavigationItem(isNavigationItem)
             .controlSize(controlSize)
             .labelStyle(.hidden)
-            .id("search-form")
             .class("align-items-center")
             .customAttribute(name: "role", value: "search")
             .customAttribute(name: "onsubmit", value: "return false")
+            .attributes(attributes)
 
-            Tag("template") {
-                AnyHTML(searchPageHeader)
-                    .class("search-results-header")
-                Section(searchResultView)
-                    .class("search-results-item")
-                    .margin(.bottom, .medium)
+            if !isSearchResultsTemplateHidden {
+                Tag("template") {
+                    AnyHTML(searchPageHeader)
+                        .class("search-results-header")
+                    SearchForm("Search") { _ in EmptyHTML() }
+                        .searchResultsTemplateHidden()
+                        .class("results-search-form")
+                        .margin(.bottom)
+                    Section(searchResultView)
+                        .class("search-results-item")
+                        .margin(.bottom, .medium)
+                }
+                .id("search-results-\(UUID().uuidString.truncatedHash)")
             }
-            .id("search-results")
         }
         .render()
     }

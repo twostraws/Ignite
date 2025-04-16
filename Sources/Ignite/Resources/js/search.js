@@ -41,15 +41,6 @@ function showAllContent(mainContent) {
     });
 }
 
-// Search Field Management
-function updateAllSearchFields(value) {
-    document.querySelectorAll('[id^="search-input-"]').forEach(input => {
-        input.value = value;
-        const clearButton = input.parentElement.querySelector('.bi-x-circle-fill').closest('button');
-        clearButton.style.visibility = value.trim() ? 'visible' : 'hidden';
-    });
-}
-
 // Search Index Management
 function loadSearchIndex() {
     return fetch('/search-index.json')
@@ -172,7 +163,6 @@ function setupClonedForm(context) {
     clonedForm.classList.add('my-3');
     mainSearchResults.appendChild(clonedForm);
     setupClonedFormEventHandlers(clonedForm, mainContent, mainSearchResults);
-    updateAllSearchFields(query);
     return clonedForm;
 }
 
@@ -182,17 +172,23 @@ function setupClonedFormEventHandlers(clonedForm, mainContent, mainSearchResults
     const clonedClearButton = clonedForm.querySelector('.bi-x-circle-fill').closest('button');
 
     clonedInput.addEventListener('input', function() {
-        updateAllSearchFields(this.value);
+        clonedClearButton.style.visibility = this.value.trim() ? 'visible' : 'hidden';
     });
 
     clonedClearButton.addEventListener('click', function() {
-        updateAllSearchFields('');
+        clonedInput.value = '';
+        clonedClearButton.style.visibility = 'hidden';
         showAllContent(mainContent);
         mainSearchResults.innerHTML = '';
     });
 
     clonedSearchButton.onclick = function() {
-        performSearch(clonedInput.value);
+        const query = clonedInput.value;
+        // Clear and blur the input after search
+        clonedInput.value = '';
+        clonedInput.blur();
+        clonedClearButton.style.visibility = 'hidden';
+        performSearch(query);
     };
 }
 
@@ -207,11 +203,13 @@ function setupSearchInput(searchInput) {
 
 function setupSearchInputEventHandlers(searchInput, clearButton, searchButton) {
     searchInput.addEventListener('input', function() {
-        updateAllSearchFields(this.value);
+        clearButton.style.visibility = this.value.trim() ? 'visible' : 'hidden';
     });
 
     clearButton.addEventListener('click', function() {
-        updateAllSearchFields('');
+        // Clear the input text
+        searchInput.value = '';
+        clearButton.style.visibility = 'hidden';
         const mainContent = getMainContent();
         const mainSearchResults = mainContent.querySelector('.main-search-results');
         if (mainSearchResults) {
@@ -221,7 +219,12 @@ function setupSearchInputEventHandlers(searchInput, clearButton, searchButton) {
     });
 
     searchButton.onclick = function() {
-        performSearch(searchInput.value);
+        const query = searchInput.value;
+        // Clear and blur the input after search
+        searchInput.value = '';
+        searchInput.blur();
+        clearButton.style.visibility = 'hidden';
+        performSearch(query);
     };
 
     searchInput.addEventListener('blur', handleSearchInputBlur);
@@ -244,13 +247,20 @@ function performSearch(query) {
         return;
     }
 
-    // Get the search form that triggered this search
     const activeForm = event.target.closest('form');
-    // Find the template that's closest to this form
-    const template = activeForm.nextElementSibling;
+
+    // Find the template - it's either next to the form or we need to find the original template
+    let template;
+    if (activeForm.classList.contains('results-search-form')) {
+        // If this is the results form, find the original template
+        template = document.querySelector('[id^="search-results-"]');
+    } else {
+        // If this is the original form, the template is next to it
+        template = activeForm.nextElementSibling;
+    }
 
     if (!template || template.tagName !== 'TEMPLATE') {
-        console.error('No template found next to the search form');
+        console.error('No template found');
         return;
     }
 
@@ -290,8 +300,18 @@ function displaySearchResults(context) {
         mainSearchResults.insertBefore(clonedHeader, mainSearchResults.firstChild);
     }
 
-    if (mainSearchForm && !isInNavbar(mainSearchForm)) {
-        setupClonedForm(context);
+    const resultsForm = templateContent.querySelector('.results-search-form');
+    if (resultsForm) {
+        const clonedResultsForm = resultsForm.cloneNode(true);
+        mainSearchResults.appendChild(clonedResultsForm);
+        setupClonedFormEventHandlers(clonedResultsForm, mainContent, mainSearchResults);
+
+        const resultsInput = clonedResultsForm.querySelector('[id^="search-input-"]');
+        if (resultsInput) {
+            resultsInput.value = query;
+            const resultsClearButton = resultsInput.parentElement.querySelector('.bi-x-circle-fill').closest('button');
+            resultsClearButton.style.visibility = query.trim() ? 'visible' : 'hidden';
+        }
     }
 
     hideOtherContent(mainContent, mainSearchResults);
@@ -314,13 +334,24 @@ function handleNoResults(context) {
         mainSearchResults.appendChild(clonedHeader);
     }
 
-    if (mainSearchForm && !isInNavbar(mainSearchForm)) {
-        setupClonedForm(context);
+    const resultsForm = templateContent.querySelector('.results-search-form');
+    if (resultsForm) {
+        const clonedResultsForm = resultsForm.cloneNode(true);
+        mainSearchResults.appendChild(clonedResultsForm);
+        setupClonedFormEventHandlers(clonedResultsForm, mainContent, mainSearchResults);
+
+        const resultsInput = clonedResultsForm.querySelector('[id^="search-input-"]');
+        if (resultsInput) {
+            resultsInput.value = query;
+            const resultsClearButton = resultsInput.parentElement.querySelector('.bi-x-circle-fill').closest('button');
+            resultsClearButton.style.visibility = query.trim() ? 'visible' : 'hidden';
+        }
     }
 
     mainSearchResults.insertAdjacentHTML('beforeend', '<p>No results found</p>');
     hideOtherContent(mainContent, mainSearchResults);
 }
+
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
     loadSearchIndex();
