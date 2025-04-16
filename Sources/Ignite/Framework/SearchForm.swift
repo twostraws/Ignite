@@ -8,7 +8,7 @@
 /// An action that triggers the search functionality.
 struct SearchAction: Action {
     func compile() -> String {
-        "performSearch(document.getElementById('search-input').value)"
+        "performSearch(document.querySelector('[id^=\"search-input-\"]').value)"
     }
 }
 
@@ -35,10 +35,7 @@ public struct SearchForm: HTML, NavigationItem {
     private var searchPageHeader: any HTML
 
     /// This text provides a hint to users about what they can search for.
-    private var prompt: String?
-
-    /// The label text displayed for the search field.
-    private var label: any InlineElement
+    private var prompt: String = "Search"
 
     /// Controls whether this dropdown needs to be created as its own element,
     /// or whether it uses the structure provided by a parent `NavigationBar`.
@@ -67,21 +64,15 @@ public struct SearchForm: HTML, NavigationItem {
 
     /// Creates a new search field with customizable result view.
     /// - Parameters:
-    ///   - label: The label text displayed for the search field
-    ///   - prompt: Optional placeholder text shown when the field is empty
     ///   - searchResultView: A closure that returns a custom HTML view for displaying search results
     ///   - searchPageHeader: A closure that returns a custom HTML view to display
     ///   at the top of the search result page.
     public init(
-        _ label: any InlineElement,
-        prompt: String? = nil,
         @HTMLBuilder searchResultView: (SearchResult) -> some HTML,
         @HTMLBuilder searchPageHeader: () -> some HTML = { EmptyHTML() }
     ) {
         self.searchResultView = searchResultView(SearchResult())
         self.searchPageHeader = searchPageHeader()
-        self.prompt = prompt
-        self.label = label
         publishingContext.isSearchEnabled = true
     }
 
@@ -130,6 +121,15 @@ public struct SearchForm: HTML, NavigationItem {
         return copy
     }
 
+    /// Sets the placeholder text for the search input field.
+    /// - Parameter prompt: The text to display when the input is empty.
+    /// - Returns: A modified search form with the new placeholder text.
+    public func searchPrompt(_ prompt: String) -> Self {
+        var copy = self
+        copy.prompt = prompt
+        return copy
+    }
+
     /// Configures this dropdown to be placed inside a `NavigationBar`.
     /// - Returns: A new `Form` instance suitable for placement
     /// inside a `NavigationBar`.
@@ -150,7 +150,7 @@ public struct SearchForm: HTML, NavigationItem {
     private func renderForm() -> String {
         Form(spacing: .none) {
             Section {
-                TextField(label, prompt: prompt)
+                TextField("Search", prompt: prompt)
                     .id("search-input-\(searchID)")
                     .labelStyle(.hidden)
                     .size(controlSize)
@@ -170,20 +170,22 @@ public struct SearchForm: HTML, NavigationItem {
             .class("me-2")
             .style(.position, "relative")
 
-            Button {
-                if searchButtonStyle != .titleOnly {
-                    Span("").class("bi bi-search")
+            if !isNavigationItem {
+                Button {
+                    if searchButtonStyle != .titleOnly {
+                        Span("").class("bi bi-search")
+                    }
+                    if searchButtonStyle != .iconOnly, let searchButtonLabel {
+                        " " + searchButtonLabel
+                    }
+                } actions: {
+                    SearchAction()
                 }
-                if searchButtonStyle != .iconOnly, let searchButtonLabel {
-                    " " + searchButtonLabel
-                }
-            } actions: {
-                SearchAction()
+                .type(.submit)
+                .role(searchButtonRole)
+                .style(.color, searchButtonForegroundStyle != nil ?
+                       searchButtonForegroundStyle!.description : "")
             }
-            .type(.submit)
-            .role(searchButtonRole)
-            .style(.color, searchButtonForegroundStyle != nil ?
-                searchButtonForegroundStyle!.description : "")
         }
         .configuredAsNavigationItem(isNavigationItem)
         .controlSize(controlSize)
@@ -200,7 +202,7 @@ public struct SearchForm: HTML, NavigationItem {
         Tag("template") {
             AnyHTML(searchPageHeader)
                 .class("search-results-header")
-            SearchForm("Search") { _ in EmptyHTML() }
+            SearchForm { _ in EmptyHTML() }
                 .searchResultsTemplateHidden()
                 .class("results-search-form")
                 .margin(.bottom)

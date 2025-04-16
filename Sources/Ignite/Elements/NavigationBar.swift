@@ -203,6 +203,8 @@ public struct NavigationBar: HTML {
             ForEach(controls) { control in
                 if let form = control as? Form {
                     form.configuredAsNavigationItem()
+                } else if let form = control as? SearchForm {
+                    form.configuredAsNavigationItem()
                 } else {
                     control
                 }

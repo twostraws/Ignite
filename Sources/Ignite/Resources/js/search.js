@@ -161,7 +161,7 @@ function updateTags(wrapperLink, doc) {
 }
 
 // Form Event Handlers
-function setupSearchFormEventHandlers(input, clearButton, searchButton, onSearch) {
+function setupInputAndClearHandlers(input, clearButton) {
     input.addEventListener('input', function() {
         const hasText = this.value.trim();
         clearButton.style.visibility = hasText ? 'visible' : 'hidden';
@@ -179,8 +179,11 @@ function setupSearchFormEventHandlers(input, clearButton, searchButton, onSearch
         }
         showAllContent(mainContent);
     });
+}
 
-    searchButton.onclick = function() {
+function setupSearchHandlers(input, clearButton, searchButton, onSearch) {
+    input.closest('form').addEventListener('submit', function(e) {
+        e.preventDefault();
         const query = input.value;
         const form = input.closest('form');
 
@@ -193,7 +196,29 @@ function setupSearchFormEventHandlers(input, clearButton, searchButton, onSearch
         clearButton.style.visibility = 'hidden';
         clearButton.style.display = 'none';
         onSearch(query);
-    };
+    });
+
+    if (searchButton) {
+        searchButton.onclick = function() {
+            const query = input.value;
+            const form = input.closest('form');
+
+            // Only clear the input if it's not the results form
+            if (!form.classList.contains('results-search-form')) {
+                input.value = '';
+                input.blur();
+            }
+
+            clearButton.style.visibility = 'hidden';
+            clearButton.style.display = 'none';
+            onSearch(query);
+        };
+    }
+}
+
+function setupSearchFormEventHandlers(input, clearButton, searchButton, onSearch) {
+    setupInputAndClearHandlers(input, clearButton);
+    setupSearchHandlers(input, clearButton, searchButton, onSearch);
 }
 
 // Results Form Management
