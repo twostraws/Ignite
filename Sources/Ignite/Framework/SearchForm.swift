@@ -155,7 +155,6 @@ public struct SearchForm: HTML, NavigationItem {
                         .style(.paddingRight, "35px")
 
                     Button(Span("").class("bi bi-x-circle-fill"))
-                        .id("search-clear")
                         .style(.position, "absolute")
                         .style(.zIndex, "100")
                         .style(.right, "0px")

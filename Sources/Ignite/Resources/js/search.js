@@ -132,83 +132,41 @@ function updateDate(wrapperLink, doc) {
     }
 }
 
+function createTagSpans(tagList, parentTags) {
+    const parentStyle = parentTags.getAttribute('style');
+    const parentClasses = parentTags.getAttribute('class');
+    return tagList.map(tag =>
+        `<span class="tag ${parentClasses}" style="${parentStyle}">${tag}</span>`
+    ).join('');
+}
+
+function setupTagsContainer(tags, tagSpans) {
+    tags.removeAttribute('style');
+    tags.className = '';
+    tags.style.display = 'unset';
+    tags.innerHTML = `<div class="d-flex gap-2">${tagSpans}</div>`;
+}
+
 function updateTags(wrapperLink, doc) {
     const tags = wrapperLink.querySelector('.result-tags');
-    if (tags) {
-        if (doc.tags && doc.tags.trim()) {
-            const tagList = doc.tags.split(',');
-            const parentStyle = tags.getAttribute('style');
-            const parentClasses = tags.getAttribute('class');
-
-            const tagSpans = tagList.map(tag =>
-                `<span class="tag ${parentClasses}" style="${parentStyle}">${tag}</span>`
-            ).join('');
-
-            tags.removeAttribute('style');
-            tags.className = '';
-            tags.style.display = 'unset';
-
-            tags.innerHTML = `<div class="d-flex gap-2">${tagSpans}</div>`;
-            tags.style.display = 'unset';
-        } else {
-            tags.style.display = 'none';
-        }
+    if (!tags || !doc.tags?.trim()) {
+        tags.style.display = 'none';
+        return;
     }
+
+    const tagList = doc.tags.split(',');
+    const tagSpans = createTagSpans(tagList, tags);
+    setupTagsContainer(tags, tagSpans);
 }
 
-// Cloned Form Management
-function setupClonedForm(context) {
-    const { mainSearchForm, mainContent, mainSearchResults, query } = context;
-    const clonedForm = mainSearchForm.cloneNode(true);
-    clonedForm.classList.add('my-3');
-    mainSearchResults.appendChild(clonedForm);
-    setupClonedFormEventHandlers(clonedForm, mainContent, mainSearchResults);
-    return clonedForm;
-}
-
-function setupClonedFormEventHandlers(clonedForm, mainContent, mainSearchResults) {
-    const clonedInput = clonedForm.querySelector('[id^="search-input-"]');
-    const clonedSearchButton = clonedForm.querySelector('button[type="submit"]');
-    const clonedClearButton = clonedForm.querySelector('.bi-x-circle-fill').closest('button');
-
-    clonedInput.addEventListener('input', function() {
-        clonedClearButton.style.visibility = this.value.trim() ? 'visible' : 'hidden';
-    });
-
-    clonedClearButton.addEventListener('click', function() {
-        clonedInput.value = '';
-        clonedClearButton.style.visibility = 'hidden';
-        showAllContent(mainContent);
-        mainSearchResults.innerHTML = '';
-    });
-
-    clonedSearchButton.onclick = function() {
-        const query = clonedInput.value;
-        // Clear and blur the input after search
-        clonedInput.value = '';
-        clonedInput.blur();
-        clonedClearButton.style.visibility = 'hidden';
-        performSearch(query);
-    };
-}
-
-// Search Input Setup
-function setupSearchInput(searchInput) {
-    const clearButton = searchInput.parentElement.querySelector('.bi-x-circle-fill').closest('button');
-    const searchButton = searchInput.closest('form').querySelector('button[type="submit"]');
-
-    clearButton.style.visibility = 'hidden';
-    setupSearchInputEventHandlers(searchInput, clearButton, searchButton);
-}
-
-function setupSearchInputEventHandlers(searchInput, clearButton, searchButton) {
-    searchInput.addEventListener('input', function() {
+// Form Event Handlers
+function setupSearchFormEventHandlers(input, clearButton, searchButton, onSearch) {
+    input.addEventListener('input', function() {
         clearButton.style.visibility = this.value.trim() ? 'visible' : 'hidden';
     });
 
     clearButton.addEventListener('click', function() {
-        // Clear the input text
-        searchInput.value = '';
+        input.value = '';
         clearButton.style.visibility = 'hidden';
         const mainContent = getMainContent();
         const mainSearchResults = mainContent.querySelector('.main-search-results');
@@ -219,14 +177,38 @@ function setupSearchInputEventHandlers(searchInput, clearButton, searchButton) {
     });
 
     searchButton.onclick = function() {
-        const query = searchInput.value;
-        // Clear and blur the input after search
-        searchInput.value = '';
-        searchInput.blur();
+        const query = input.value;
+        input.value = '';
+        input.blur();
         clearButton.style.visibility = 'hidden';
-        performSearch(query);
+        onSearch(query);
     };
+}
 
+// Results Form Management
+function setupResultsForm(context) {
+    const { mainSearchResults, query } = context;
+    const resultsForm = mainSearchResults.querySelector('.results-search-form');
+
+    const resultsInput = resultsForm.querySelector('[id^="search-input-"]');
+    const resultsSearchButton = resultsForm.querySelector('button[type="submit"]');
+    const resultsClearButton = resultsForm.querySelector('.bi-x-circle-fill').closest('button');
+
+    setupSearchFormEventHandlers(resultsInput, resultsClearButton, resultsSearchButton, performSearch);
+
+    resultsInput.value = query;
+    resultsClearButton.style.visibility = query.trim() ? 'visible' : 'hidden';
+
+    return resultsForm;
+}
+
+// Search Input Setup
+function setupSearchInput(searchInput) {
+    const clearButton = searchInput.parentElement.querySelector('.bi-x-circle-fill').closest('button');
+    const searchButton = searchInput.closest('form').querySelector('button[type="submit"]');
+
+    clearButton.style.visibility = 'hidden';
+    setupSearchFormEventHandlers(searchInput, clearButton, searchButton, performSearch);
     searchInput.addEventListener('blur', handleSearchInputBlur);
 }
 
@@ -238,6 +220,43 @@ function handleSearchInputBlur() {
             mainSearchResults.innerHTML = '';
         }
         showAllContent(mainContent);
+    }
+}
+
+function setupSearchResultsHeaderAndForm(context) {
+    const { mainSearchResults, templateContent, query, mainContent } = context;
+
+    const header = templateContent.querySelector('.search-results-header');
+    if (header) {
+        const clonedHeader = header.cloneNode(true);
+        mainSearchResults.insertBefore(clonedHeader, mainSearchResults.firstChild);
+    }
+
+    const resultsForm = templateContent.querySelector('.results-search-form');
+    if (resultsForm) {
+        const clonedResultsForm = resultsForm.cloneNode(true);
+        mainSearchResults.appendChild(clonedResultsForm);
+        const resultsInput = clonedResultsForm.querySelector('[id^="search-input-"]');
+
+        if (resultsInput) {
+            resultsInput.value = query;
+
+            const resultsClearButton = resultsInput.parentElement
+                .querySelector('.bi-x-circle-fill')
+                .closest('button');
+
+            resultsClearButton.style.visibility = query.trim() ? 'visible' : 'hidden';
+
+            const resultsSearchButton = clonedResultsForm
+                .querySelector('button[type="submit"]');
+
+            setupSearchFormEventHandlers(
+                resultsInput,
+                resultsClearButton,
+                resultsSearchButton,
+                performSearch
+            );
+        }
     }
 }
 
@@ -286,34 +305,11 @@ function performSearch(query) {
     displaySearchResults(searchContext);
 }
 
-function isInNavbar(element) {
-    return element.closest('.navbar') !== null;
-}
-
 function displaySearchResults(context) {
     const { results, mainSearchForm, mainContent, mainSearchResults, templateContent, query } = context;
     mainSearchResults.innerHTML = '';
-    const header = templateContent.querySelector('.search-results-header');
 
-    if (header) {
-        const clonedHeader = header.cloneNode(true);
-        mainSearchResults.insertBefore(clonedHeader, mainSearchResults.firstChild);
-    }
-
-    const resultsForm = templateContent.querySelector('.results-search-form');
-    if (resultsForm) {
-        const clonedResultsForm = resultsForm.cloneNode(true);
-        mainSearchResults.appendChild(clonedResultsForm);
-        setupClonedFormEventHandlers(clonedResultsForm, mainContent, mainSearchResults);
-
-        const resultsInput = clonedResultsForm.querySelector('[id^="search-input-"]');
-        if (resultsInput) {
-            resultsInput.value = query;
-            const resultsClearButton = resultsInput.parentElement.querySelector('.bi-x-circle-fill').closest('button');
-            resultsClearButton.style.visibility = query.trim() ? 'visible' : 'hidden';
-        }
-    }
-
+    setupSearchResultsHeaderAndForm(context);
     hideOtherContent(mainContent, mainSearchResults);
 
     results.forEach(result => {
@@ -324,30 +320,10 @@ function displaySearchResults(context) {
 }
 
 function handleNoResults(context) {
-    const { mainSearchForm, mainContent, mainSearchResults, templateContent, query } = context;
-
+    const { mainSearchResults, mainContent } = context;
     mainSearchResults.innerHTML = '';
 
-    const header = templateContent.querySelector('.search-results-header');
-    if (header) {
-        const clonedHeader = header.cloneNode(true);
-        mainSearchResults.appendChild(clonedHeader);
-    }
-
-    const resultsForm = templateContent.querySelector('.results-search-form');
-    if (resultsForm) {
-        const clonedResultsForm = resultsForm.cloneNode(true);
-        mainSearchResults.appendChild(clonedResultsForm);
-        setupClonedFormEventHandlers(clonedResultsForm, mainContent, mainSearchResults);
-
-        const resultsInput = clonedResultsForm.querySelector('[id^="search-input-"]');
-        if (resultsInput) {
-            resultsInput.value = query;
-            const resultsClearButton = resultsInput.parentElement.querySelector('.bi-x-circle-fill').closest('button');
-            resultsClearButton.style.visibility = query.trim() ? 'visible' : 'hidden';
-        }
-    }
-
+    setupSearchResultsHeaderAndForm(context);
     mainSearchResults.insertAdjacentHTML('beforeend', '<p>No results found</p>');
     hideOtherContent(mainContent, mainSearchResults);
 }
