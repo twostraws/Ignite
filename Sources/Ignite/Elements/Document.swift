@@ -28,7 +28,11 @@ struct Document: HTML {
         attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
         var output = "<!doctype html>"
         output += "<html \(attributes)>"
-        output += contents.map { $0.render() }.joined()
+        output += contents
+            .reversed()
+            .map { $0.render() }
+            .reversed()
+            .joined()
         output += "</html>"
         return output
     }
