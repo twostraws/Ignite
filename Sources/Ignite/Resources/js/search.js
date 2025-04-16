@@ -1,6 +1,7 @@
 // Global variables for search
 let idx;
 let documents = [];
+let originalSearchFormId = null;
 
 /**
  * @typedef {Object} SearchContext
@@ -178,8 +179,14 @@ function setupSearchFormEventHandlers(input, clearButton, searchButton, onSearch
 
     searchButton.onclick = function() {
         const query = input.value;
-        input.value = '';
-        input.blur();
+        const form = input.closest('form');
+
+        // Only clear the input if it's not the results form
+        if (!form.classList.contains('results-search-form')) {
+            input.value = '';
+            input.blur();
+        }
+
         clearButton.style.visibility = 'hidden';
         onSearch(query);
     };
@@ -268,11 +275,19 @@ function performSearch(query) {
 
     const activeForm = event.target.closest('form');
 
+    // Update the original form ID if this is a new search from a different form
+    if (!activeForm.classList.contains('results-search-form')) {
+        originalSearchFormId = activeForm.id;
+    }
+
     // Find the template - it's either next to the form or we need to find the original template
     let template;
     if (activeForm.classList.contains('results-search-form')) {
-        // If this is the results form, find the original template
-        template = document.querySelector('[id^="search-results-"]');
+        // If this is the results form, use the original form's template
+        const originalForm = document.getElementById(originalSearchFormId);
+        if (originalForm) {
+            template = originalForm.nextElementSibling;
+        }
     } else {
         // If this is the original form, the template is next to it
         template = activeForm.nextElementSibling;

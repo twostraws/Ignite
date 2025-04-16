@@ -62,6 +62,9 @@ public struct SearchForm: HTML, NavigationItem {
     /// Whether the search results HTML `<template>` block should be included.
     private var isSearchResultsTemplateHidden = false
 
+    /// The identifier associated with this form.
+    private let searchID = UUID().uuidString.truncatedHash
+
     /// Creates a new search field with customizable result view.
     /// - Parameters:
     ///   - label: The label text displayed for the search field
@@ -149,7 +152,7 @@ public struct SearchForm: HTML, NavigationItem {
             Form(spacing: .none) {
                 Section {
                     TextField(label, prompt: prompt)
-                        .id("search-input-\(UUID().uuidString.truncatedHash)")
+                        .id("search-input-\(searchID)")
                         .labelStyle(.hidden)
                         .size(controlSize)
                         .style(.paddingRight, "35px")
@@ -188,6 +191,7 @@ public struct SearchForm: HTML, NavigationItem {
             .class("align-items-center")
             .customAttribute(name: "role", value: "search")
             .customAttribute(name: "onsubmit", value: "return false")
+            .id("search-form-\(searchID)")
             .attributes(attributes)
 
             if !isSearchResultsTemplateHidden {
@@ -202,7 +206,7 @@ public struct SearchForm: HTML, NavigationItem {
                         .class("search-results-item")
                         .margin(.bottom, .medium)
                 }
-                .id("search-results-\(UUID().uuidString.truncatedHash)")
+                .id("search-results-\(searchID)")
             }
         }
         .render()
