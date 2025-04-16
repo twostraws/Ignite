@@ -12,7 +12,7 @@ struct SearchAction: Action {
     }
 }
 
-/// A form that enables site-wide search.
+/// A form that performs site-wide search.
 public struct SearchForm: HTML, NavigationItem {
     /// The appearance of the search-button label.
     public enum SearchButtonStyle: Sendable, Equatable, CaseIterable {
@@ -29,10 +29,10 @@ public struct SearchForm: HTML, NavigationItem {
     public var isPrimitive: Bool { true }
 
     /// The view displayed for each search result.
-    private var searchResultView: any HTML
+    private var resultView: any HTML
 
     /// A view displayed at the top of the search results page.
-    private var searchPageHeader: any HTML
+    private var resultsPageHeader: any HTML
 
     /// This text provides a hint to users about what they can search for.
     private var prompt: String = "Search"
@@ -64,15 +64,15 @@ public struct SearchForm: HTML, NavigationItem {
 
     /// Creates a new search field with customizable result view.
     /// - Parameters:
-    ///   - searchResultView: A closure that returns a custom HTML view for displaying search results
-    ///   - searchPageHeader: A closure that returns a custom HTML view to display
-    ///   at the top of the search result page.
+    ///   - resultView: A closure that returns a custom view for displaying search result data.
+    ///   - resultsPageHeader: A closure that returns a custom view to display
+    ///   at the top of the search results page.
     public init(
-        @HTMLBuilder searchResultView: (SearchResult) -> some HTML,
-        @HTMLBuilder searchPageHeader: () -> some HTML = { EmptyHTML() }
+        @HTMLBuilder resultView: (_ result: SearchResult) -> some HTML,
+        @HTMLBuilder resultsPageHeader: () -> some HTML = { EmptyHTML() }
     ) {
-        self.searchResultView = searchResultView(SearchResult())
-        self.searchPageHeader = searchPageHeader()
+        self.resultView = resultView(SearchResult())
+        self.resultsPageHeader = resultsPageHeader()
         publishingContext.isSearchEnabled = true
     }
 
@@ -198,13 +198,13 @@ public struct SearchForm: HTML, NavigationItem {
 
     private func renderTemplate() -> String {
         Tag("template") {
-            AnyHTML(searchPageHeader)
+            AnyHTML(resultsPageHeader)
                 .class("search-results-header")
             SearchForm { _ in EmptyHTML() }
                 .searchResultsTemplateHidden()
                 .class("results-search-form")
                 .margin(.bottom)
-            Section(searchResultView)
+            Section(resultView)
                 .class("search-results-item")
                 .margin(.bottom, .medium)
         }
