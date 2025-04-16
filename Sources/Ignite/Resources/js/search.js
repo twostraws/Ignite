@@ -287,7 +287,6 @@ function performSearch(query) {
         originalSearchFormId = activeForm.id;
     }
 
-    // Find the template - it's either next to the form or we need to find the original template
     let template;
     if (activeForm.classList.contains('results-search-form')) {
         // If this is the results form, use the original form's template
