@@ -16,7 +16,7 @@ extension PublishingContext {
                 "id": metadatum.id,
                 "title": metadatum.title,
                 "description": metadatum.description,
-                "tags": metadatum.tags?.joined(separator: " ") ?? "",
+                "tags": metadatum.tags?.joined(separator: ",") ?? "",
                 "date": metadatum.date?.formatted(date: .long, time: .omitted) ?? ""
             ]
         }

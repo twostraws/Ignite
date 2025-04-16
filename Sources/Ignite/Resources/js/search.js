@@ -135,9 +135,19 @@ function updateTags(wrapperLink, doc) {
     const tags = wrapperLink.querySelector('.result-tags');
     if (tags) {
         if (doc.tags && doc.tags.trim()) {
-            tags.innerHTML = doc.tags.split(' ').map(tag =>
-                `<span class="tag">${tag}</span>`
+            const tagList = doc.tags.split(',');
+            const parentStyle = tags.getAttribute('style');
+            const parentClasses = tags.getAttribute('class');
+
+            const tagSpans = tagList.map(tag =>
+                `<span class="tag ${parentClasses}" style="${parentStyle}">${tag}</span>`
             ).join('');
+
+            tags.removeAttribute('style');
+            tags.className = '';
+            tags.style.display = 'unset';
+
+            tags.innerHTML = `<div class="d-flex gap-2">${tagSpans}</div>`;
             tags.style.display = 'unset';
         } else {
             tags.style.display = 'none';
