@@ -163,11 +163,8 @@ public struct SearchForm: HTML, NavigationItem {
                     .style(.top, "0px")
                     .style(.display, "none")
             }
-            .style(.width, "fit-content")
-            .style(.minWidth, "125px")
             .style(.flex, "1")
-            .class(isNavigationItem ? nil : "col-auto")
-            .class("me-2")
+            .class(isNavigationItem ? nil : "me-2")
             .style(.position, "relative")
 
             if !isNavigationItem {
@@ -194,6 +191,8 @@ public struct SearchForm: HTML, NavigationItem {
         .customAttribute(name: "role", value: "search")
         .customAttribute(name: "onsubmit", value: "return false")
         .id("search-form-\(searchID)")
+        .class("w-100")
+        .style(.minWidth, "125px")
         .attributes(attributes)
         .render()
     }

@@ -177,19 +177,34 @@ public struct NavigationBar: HTML {
                 Section {
                     if logo.isEmpty == false {
                         renderLogo(logo)
-                            .class("me-auto me-md-0")
+                            .class("me-0 me-sm-2 me-md-auto")
                     }
 
                     if controls.isEmpty == false {
-                        renderNavActions()
+                        Section {
+                            renderNavActions()
+                            if items.isEmpty == false {
+                                // Keep the toggle button on the same line
+                                // as the action items for a cleaner UI
+                                renderToggleButton()
+                                    .class("ms-auto ms-md-0")
+                            }
+                        }
+                        .class("d-flex", "gap-2", "align-items-center")
+                        .class("flex-grow-1", "flex-md-grow-0")
+                        .class("ms-auto", "me-2", "me-md-0")
+                        .class("order-md-last")
                     }
 
                     if items.isEmpty == false {
-                        renderToggleButton()
+                        if controls.isEmpty {
+                            renderToggleButton()
+                        }
                         renderNavItems()
                     }
                 }
                 .class(widthClasses)
+                .class("flex-wrap flex-lg-nowrap")
             }
             .attributes(attributes)
             .class("navbar", "navbar-expand-md")
@@ -199,21 +214,15 @@ public struct NavigationBar: HTML {
     }
 
     private func renderNavActions() -> some HTML {
-        Section {
-            ForEach(controls) { control in
-                if let form = control as? Form {
-                    form.configuredAsNavigationItem()
-                } else if let form = control as? SearchForm {
-                    form.configuredAsNavigationItem()
-                } else {
-                    control
-                }
+        ForEach(controls) { control in
+            if let form = control as? Form {
+                form.configuredAsNavigationItem()
+            } else if let form = control as? SearchForm {
+                form.configuredAsNavigationItem()
+            } else {
+                control
             }
         }
-        .class("gap-2")
-        .class("ms-md-2")
-        .class("d-inline-flex", "align-items-center")
-        .class("order-md-last", "ms-auto me-2")
     }
 
     private func renderToggleButton() -> some InlineElement {
