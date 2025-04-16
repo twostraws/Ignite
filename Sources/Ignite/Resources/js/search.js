@@ -256,24 +256,8 @@ function performSearch(query) {
     displaySearchResults(searchContext);
 }
 
-function handleNoResults(context) {
-    const { mainSearchForm, mainContent, mainSearchResults, templateContent, query } = context;
-
-    mainSearchResults.innerHTML = '';
-
-    const header = templateContent.querySelector('.search-results-header');
-    if (header) {
-        const clonedHeader = header.cloneNode(true);
-        mainSearchResults.appendChild(clonedHeader);
-    }
-
-    if (mainSearchForm) {
-        setupClonedForm(context);
-        mainSearchResults.insertAdjacentHTML('beforeend', '<p>No results found</p>');
-    } else {
-        mainSearchResults.innerHTML = '<p>No results found</p>';
-    }
-    hideOtherContent(mainContent, mainSearchResults);
+function isInNavbar(element) {
+    return element.closest('.navbar') !== null;
 }
 
 function displaySearchResults(context) {
@@ -286,7 +270,7 @@ function displaySearchResults(context) {
         mainSearchResults.insertBefore(clonedHeader, mainSearchResults.firstChild);
     }
 
-    if (mainSearchForm) {
+    if (mainSearchForm && !isInNavbar(mainSearchForm)) {
         setupClonedForm(context);
     }
 
@@ -299,6 +283,24 @@ function displaySearchResults(context) {
     });
 }
 
+function handleNoResults(context) {
+    const { mainSearchForm, mainContent, mainSearchResults, templateContent, query } = context;
+
+    mainSearchResults.innerHTML = '';
+
+    const header = templateContent.querySelector('.search-results-header');
+    if (header) {
+        const clonedHeader = header.cloneNode(true);
+        mainSearchResults.appendChild(clonedHeader);
+    }
+
+    if (mainSearchForm && !isInNavbar(mainSearchForm)) {
+        setupClonedForm(context);
+    }
+
+    mainSearchResults.insertAdjacentHTML('beforeend', '<p>No results found</p>');
+    hideOtherContent(mainContent, mainSearchResults);
+}
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
     loadSearchIndex();
