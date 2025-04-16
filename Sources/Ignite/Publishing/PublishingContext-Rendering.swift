@@ -63,7 +63,7 @@ extension PublishingContext {
                 addWarning("\(page.title) lacks a page description and will be omitted from search results.")
             } else {
                 let pageSearchMetadata = SearchMetadata(
-                    id: pageMetadata.url.lastPathComponent,
+                    id: path,
                     title: pageMetadata.title,
                     description: pageMetadata.description)
                 searchMetadata.append(pageSearchMetadata)
