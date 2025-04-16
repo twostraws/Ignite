@@ -163,12 +163,15 @@ function updateTags(wrapperLink, doc) {
 // Form Event Handlers
 function setupSearchFormEventHandlers(input, clearButton, searchButton, onSearch) {
     input.addEventListener('input', function() {
-        clearButton.style.visibility = this.value.trim() ? 'visible' : 'hidden';
+        const hasText = this.value.trim();
+        clearButton.style.visibility = hasText ? 'visible' : 'hidden';
+        clearButton.style.display = hasText ? 'unset' : 'none';
     });
 
     clearButton.addEventListener('click', function() {
         input.value = '';
         clearButton.style.visibility = 'hidden';
+        clearButton.style.display = 'none';
         const mainContent = getMainContent();
         const mainSearchResults = mainContent.querySelector('.main-search-results');
         if (mainSearchResults) {
@@ -188,6 +191,7 @@ function setupSearchFormEventHandlers(input, clearButton, searchButton, onSearch
         }
 
         clearButton.style.visibility = 'hidden';
+        clearButton.style.display = 'none';
         onSearch(query);
     };
 }
@@ -215,6 +219,7 @@ function setupSearchInput(searchInput) {
     const searchButton = searchInput.closest('form').querySelector('button[type="submit"]');
 
     clearButton.style.visibility = 'hidden';
+    clearButton.style.display = 'none';
     setupSearchFormEventHandlers(searchInput, clearButton, searchButton, performSearch);
     searchInput.addEventListener('blur', handleSearchInputBlur);
 }
@@ -252,7 +257,9 @@ function setupSearchResultsHeaderAndForm(context) {
                 .querySelector('.bi-x-circle-fill')
                 .closest('button');
 
-            resultsClearButton.style.visibility = query.trim() ? 'visible' : 'hidden';
+            const hasText = query.trim();
+            resultsClearButton.style.visibility = hasText ? 'visible' : 'hidden';
+            resultsClearButton.style.display = hasText ? 'unset' : 'none';
 
             const resultsSearchButton = clonedResultsForm
                 .querySelector('button[type="submit"]');

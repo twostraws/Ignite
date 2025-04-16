@@ -162,6 +162,7 @@ public struct SearchForm: HTML, NavigationItem {
                         .style(.zIndex, "100")
                         .style(.right, "0px")
                         .style(.top, "0px")
+                        .style(.display, "none")
                 }
                 .style(.width, "fit-content")
                 .style(.minWidth, "125px")
