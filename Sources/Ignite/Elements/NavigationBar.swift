@@ -187,13 +187,13 @@ public struct NavigationBar: HTML {
                                 // Keep the toggle button on the same line
                                 // as the action items for a cleaner UI
                                 renderToggleButton()
-                                    .class("ms-auto ms-md-0")
                             }
                         }
+                        .style(.flex, "1")
                         .class("d-flex", "gap-2", "align-items-center")
-                        .class("flex-grow-1", "flex-md-grow-0")
-                        .class("ms-auto", "me-2", "me-md-0")
+                        .class("ms-auto")
                         .class("order-md-last")
+                        .border(.red)
                     }
 
                     if items.isEmpty == false {

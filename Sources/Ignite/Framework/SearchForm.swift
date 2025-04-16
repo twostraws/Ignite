@@ -191,7 +191,6 @@ public struct SearchForm: HTML, NavigationItem {
         .customAttribute(name: "role", value: "search")
         .customAttribute(name: "onsubmit", value: "return false")
         .id("search-form-\(searchID)")
-        .class("w-100")
         .style(.minWidth, "125px")
         .attributes(attributes)
         .render()

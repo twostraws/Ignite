@@ -6,7 +6,7 @@
 //
 
 /// Creates vertical space of a specific value.
-public struct Spacer: HTML {
+public struct Spacer: HTML, NavigationItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
