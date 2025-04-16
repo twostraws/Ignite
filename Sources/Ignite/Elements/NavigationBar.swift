@@ -193,7 +193,6 @@ public struct NavigationBar: HTML {
                         .class("d-flex", "gap-2", "align-items-center")
                         .class("ms-auto")
                         .class("order-md-last")
-                        .border(.red)
                     }
 
                     if items.isEmpty == false {
