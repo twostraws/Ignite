@@ -147,69 +147,76 @@ public struct SearchForm: HTML, NavigationItem {
         return copy
     }
 
-    public func render() -> String {
-        Section {
-            Form(spacing: .none) {
-                Section {
-                    TextField(label, prompt: prompt)
-                        .id("search-input-\(searchID)")
-                        .labelStyle(.hidden)
-                        .size(controlSize)
-                        .style(.paddingRight, "35px")
+    private func renderForm() -> String {
+        Form(spacing: .none) {
+            Section {
+                TextField(label, prompt: prompt)
+                    .id("search-input-\(searchID)")
+                    .labelStyle(.hidden)
+                    .size(controlSize)
+                    .style(.paddingRight, "35px")
 
-                    Button(Span("").class("bi bi-x-circle-fill"))
-                        .style(.position, "absolute")
-                        .style(.zIndex, "100")
-                        .style(.right, "0px")
-                        .style(.top, "0px")
-                        .style(.display, "none")
-                }
-                .style(.width, "fit-content")
-                .style(.minWidth, "125px")
-                .style(.flex, "1")
-                .class(isNavigationItem ? nil : "col-auto")
-                .class("me-2")
-                .style(.position, "relative")
-
-                Button {
-                    if searchButtonStyle != .titleOnly {
-                        Span("").class("bi bi-search")
-                    }
-                    if searchButtonStyle != .iconOnly, let searchButtonLabel {
-                        " " + searchButtonLabel
-                    }
-                } actions: {
-                    SearchAction()
-                }
-                .type(.submit)
-                .role(searchButtonRole)
-                .style(.color, searchButtonForegroundStyle != nil ?
-                       searchButtonForegroundStyle!.description : "")
+                Button(Span("").class("bi bi-x-circle-fill"))
+                    .style(.position, "absolute")
+                    .style(.zIndex, "100")
+                    .style(.right, "0px")
+                    .style(.top, "0px")
+                    .style(.display, "none")
             }
-            .configuredAsNavigationItem(isNavigationItem)
-            .controlSize(controlSize)
-            .labelStyle(.hidden)
-            .class("align-items-center")
-            .customAttribute(name: "role", value: "search")
-            .customAttribute(name: "onsubmit", value: "return false")
-            .id("search-form-\(searchID)")
-            .attributes(attributes)
+            .style(.width, "fit-content")
+            .style(.minWidth, "125px")
+            .style(.flex, "1")
+            .class(isNavigationItem ? nil : "col-auto")
+            .class("me-2")
+            .style(.position, "relative")
 
-            if !isSearchResultsTemplateHidden {
-                Tag("template") {
-                    AnyHTML(searchPageHeader)
-                        .class("search-results-header")
-                    SearchForm("Search") { _ in EmptyHTML() }
-                        .searchResultsTemplateHidden()
-                        .class("results-search-form")
-                        .margin(.bottom)
-                    Section(searchResultView)
-                        .class("search-results-item")
-                        .margin(.bottom, .medium)
+            Button {
+                if searchButtonStyle != .titleOnly {
+                    Span("").class("bi bi-search")
                 }
-                .id("search-results-\(searchID)")
+                if searchButtonStyle != .iconOnly, let searchButtonLabel {
+                    " " + searchButtonLabel
+                }
+            } actions: {
+                SearchAction()
             }
+            .type(.submit)
+            .role(searchButtonRole)
+            .style(.color, searchButtonForegroundStyle != nil ?
+                searchButtonForegroundStyle!.description : "")
         }
+        .configuredAsNavigationItem(isNavigationItem)
+        .controlSize(controlSize)
+        .labelStyle(.hidden)
+        .class("align-items-center")
+        .customAttribute(name: "role", value: "search")
+        .customAttribute(name: "onsubmit", value: "return false")
+        .id("search-form-\(searchID)")
+        .attributes(attributes)
         .render()
+    }
+
+    private func renderTemplate() -> String {
+        Tag("template") {
+            AnyHTML(searchPageHeader)
+                .class("search-results-header")
+            SearchForm("Search") { _ in EmptyHTML() }
+                .searchResultsTemplateHidden()
+                .class("results-search-form")
+                .margin(.bottom)
+            Section(searchResultView)
+                .class("search-results-item")
+                .margin(.bottom, .medium)
+        }
+        .id("search-results-\(searchID)")
+        .render()
+    }
+
+    public func render() -> String {
+        var output = renderForm()
+        if !isSearchResultsTemplateHidden {
+            output += renderTemplate()
+        }
+        return output
     }
 }
