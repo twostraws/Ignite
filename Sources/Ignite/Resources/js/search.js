@@ -1,7 +1,7 @@
 // Global variables for search
 let idx;
 let documents = [];
-let originalSearchFormId = null;
+let originalTemplateId = null;
 
 /**
  * @typedef {Object} SearchContext
@@ -307,18 +307,15 @@ function performSearch(query) {
 
     const activeForm = event.target.closest('form');
 
-    // Update the original form ID if this is a new search from a different form
+    // Store the template ID of the form that initiated search
     if (!activeForm.classList.contains('results-search-form')) {
-        originalSearchFormId = activeForm.id;
+        originalTemplateId = activeForm.nextElementSibling.id;
     }
 
     let template;
     if (activeForm.classList.contains('results-search-form')) {
         // If this is the results form, use the original form's template
-        const originalForm = document.getElementById(originalSearchFormId);
-        if (originalForm) {
-            template = originalForm.nextElementSibling;
-        }
+        template = document.getElementById(originalTemplateId);
     } else {
         // If this is the original form, the template is next to it
         template = activeForm.nextElementSibling;
