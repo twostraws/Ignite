@@ -75,7 +75,7 @@ function createLunrIndex(data) {
 }
 
 // Result Item Creation
-function createResultItem(doc, templateContent) {
+function createResultItem(doc, templateContent, query) {
     const clone = templateContent.cloneNode(true);
     const resultItem = clone.querySelector('.search-results-item');
     const wrapperLink = createWrapperLink(doc);
@@ -86,7 +86,7 @@ function createResultItem(doc, templateContent) {
 
     resultItem.innerHTML = '';
     resultItem.appendChild(wrapperLink);
-    updateResultContent(wrapperLink, doc);
+    updateResultContent(wrapperLink, doc, query);
 
     return resultItem;
 }
@@ -98,9 +98,9 @@ function createWrapperLink(doc) {
     return wrapperLink;
 }
 
-function updateResultContent(wrapperLink, doc) {
+function updateResultContent(wrapperLink, doc, query) {
     updateTitle(wrapperLink, doc);
-    updateDescription(wrapperLink, doc);
+    updateDescription(wrapperLink, doc, query);
     updateDate(wrapperLink, doc);
     updateTags(wrapperLink, doc);
 }
@@ -112,10 +112,20 @@ function updateTitle(wrapperLink, doc) {
     }
 }
 
-function updateDescription(wrapperLink, doc) {
+function updateDescription(wrapperLink, doc, query) {
     const description = wrapperLink.querySelector('.result-description');
     if (description) {
-        description.textContent = (doc.description || '') + '...';
+        const text = (doc.description || '') + '...';
+
+        // Create a case-insensitive regular expression from the search query
+        const searchTerms = query.trim().split(/\s+/);
+        const regex = new RegExp(`(${searchTerms.join('|')})`, 'gi');
+
+        // Replace matches with marked version
+        const markedText = text.replace(regex, '<mark>$1</mark>');
+
+        // Use innerHTML instead of textContent to render the mark tags
+        description.innerHTML = markedText;
     }
 }
 
@@ -288,7 +298,7 @@ function displaySearchResults(context) {
 
     results.forEach(result => {
         const doc = window.searchDocuments.find(doc => doc.id === result.ref);
-        const resultItem = createResultItem(doc, templateContent);
+        const resultItem = createResultItem(doc, templateContent, query);
         mainSearchResults.appendChild(resultItem);
     });
 }
