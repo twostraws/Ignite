@@ -27,7 +27,9 @@ public struct Text: HTML, DropdownItem {
     var font = FontStyle.body
 
     /// The content to place inside the text.
-    var content: any InlineElement
+    var content: any HTML
+
+    private var isMultilineMarkdown = false
 
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
@@ -93,20 +95,39 @@ public struct Text: HTML, DropdownItem {
     /// Creates a new Text struct from a Markdown string.
     /// - Parameter markdown: The Markdown text to parse.
     public init(markdown: String) {
-        let parser = MarkdownToHTML(markdown: markdown, removeTitleFromBody: true)
+        // Process each paragraph individually to preserve line breaks.
+        // We could simply replace newlines with <br>, but then the paragraphs
+        // wouldn't respond to a theme's paragraphBottomMargin property.
+        let paragraphs = markdown.components(separatedBy: .newlines)
+            .filter { !$0.isEmpty }
 
-        // Remove any <p></p> tags, because these will be
-        // added automatically in render(). This allows us
-        // to retain any styling applied elsewhere, e.g.
-        // the `font()` modifier.
-        let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
-        self.content = cleanedHTML
+        let processedParagraphs = paragraphs.map {
+            let parser = MarkdownToHTML(markdown: $0, removeTitleFromBody: true)
+            return parser.body.replacing(#/<\/?p>/#, with: "")
+        }
+
+        // If single paragraph, use directly; otherwise create HTMLCollection
+        self.content = processedParagraphs.count == 1
+            ? processedParagraphs[0]
+            : HTMLCollection(processedParagraphs.map(Text.init))
+
+        self.isMultilineMarkdown = processedParagraphs.count > 1
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> String {
-        "<\(font.rawValue)\(attributes)>" + content.render() + "</\(font.rawValue)>"
+        if isMultilineMarkdown {
+            // HTMLCollection will pass its attributes to each child.
+            // This works fine for styles like color, but for styles like
+            // padding, we'd expect them to apply to the paragraphs
+            // collectively. So we'll wrap the paragraphs in a Section.
+            Section(content)
+                .attributes(attributes)
+                .render()
+        } else {
+            "<\(font.rawValue)\(attributes)>" + content.render() + "</\(font.rawValue)>"
+        }
     }
 }
 
