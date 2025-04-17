@@ -27,7 +27,7 @@ private extension HTML {
             .style(.marginBottom, "0")
             .style(alignment.itemAlignmentRules)
 
-        frameableContent = if self is Section {
+        frameableContent = if self.isSection {
             frameableContent
         } else {
             Section(frameableContent)
