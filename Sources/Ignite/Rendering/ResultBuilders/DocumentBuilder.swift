@@ -11,10 +11,18 @@
 public struct DocumentBuilder {
     public static func buildBlock(_ components: any DocumentElement...) -> some HTML {
         Document {
-            // If no HTMLHead is provided, add a default one
-            if !components.contains(where: { $0 is Head }) {
-                Head()
+            let (header, components) = components.reduce(
+                into: (header: Head, components: [any DocumentElement])(Head(), [])
+            ) { partialResult, element in
+                if let header = element as? Head {
+                    // In case multiple headers were provided only lat one will be used
+                    partialResult.header = header
+                } else {
+                    partialResult.components.append(element)
+                }
             }
+            
+            header
 
             // Add all provided components
             for component in components {

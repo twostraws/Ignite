@@ -28,7 +28,13 @@ struct Document: HTML {
         attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
         var output = "<!doctype html>"
         output += "<html \(attributes)>"
-        output += contents.map { $0.render() }.joined()
+        output += contents
+            /// Reversing render phase to defer rendering of Head element.
+            /// Allows Head to use latest `PublishingContext` values.
+            .reversed()
+            .map { $0.render() }
+            .reversed()
+            .joined()
         output += "</html>"
         return output
     }
