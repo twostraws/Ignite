@@ -150,7 +150,7 @@ import Testing
             .components(separatedBy: " ")
         )
 
-        let expected = "container-fluid col".components(separatedBy: " ")
+        let expected = "container-fluid col flex-wrap flex-lg-nowrap".components(separatedBy: " ")
         #expect(divClasses == expected)
     }
 
@@ -280,7 +280,7 @@ import Testing
         )
 
         let expectedLink = item
-            .class("nav-link")
+            .class("nav-link text-nowrap")
             .render()
         let expectedNavItem = "<li class=\"nav-item\">\(expectedLink)</li>"
 
@@ -304,12 +304,12 @@ import Testing
         )
 
         let expectedLink1 = item1
-            .class("nav-link")
+            .class("nav-link text-nowrap")
             .render()
         let expectedNavItem1 = "<li class=\"nav-item\">\(expectedLink1)</li>"
 
         let expectedLink2 = item2
-            .class("nav-link")
+            .class("nav-link text-nowrap")
             .render()
         let expectedNavItem2 = "<li class=\"nav-item\">\(expectedLink2)</li>"
 
