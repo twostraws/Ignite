@@ -7,7 +7,7 @@
 
 /// A template for displaying individual search results.
 @MainActor
-public struct SearchResult: Sendable {
+public struct SearchResult {
     /// The title of the search result.
     public var title: some Element = Text("").class("result-title")
 

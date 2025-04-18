@@ -185,8 +185,7 @@ public struct Grid: Element {
             ""
         }
 
-        var collection = HTMLCollection([])
-        passthrough.items.forEach { collection.elements.append($0 as! (any HTML)) }
+        let collection = HTMLCollection(passthrough.items.compactMap { $0 as? any HTML })
         return ForEach(collection) { item in
             handleItem(item.attributes(attributes))
                 .class(gutterClass)

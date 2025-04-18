@@ -48,4 +48,3 @@ public struct Group: HTML, Element, PassthroughElement {
         }.joined()
     }
 }
-

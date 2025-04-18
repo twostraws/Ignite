@@ -18,8 +18,8 @@ struct SearchMetadata: Sendable {
     var description: String
 
     /// Tags that categorize the document.
-    var tags: [String]? = nil
+    var tags: [String]?
 
     /// When the document was created or last modified.
-    var date: Date? = nil
+    var date: Date?
 }

@@ -23,4 +23,3 @@ public struct EmptyHTML: Element, DocumentElement {
         ""
     }
 }
-
