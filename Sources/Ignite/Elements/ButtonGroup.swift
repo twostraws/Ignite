@@ -7,7 +7,7 @@
 
 /// A container that automatically adjusts the styling for buttons it contains so
 /// that they sit more neatly together.
-public struct ButtonGroup: Element {
+public struct ButtonGroup: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

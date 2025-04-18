@@ -6,11 +6,11 @@
 //
 
 /// Describes elements that can be placed into navigation bars.
-public protocol NavigationItem: HTML {}
+public protocol NavigationItem: RenderableElement {}
 
 /// A bar that sits across the top of your page to provide top-level navigation
 /// throughout your site.
-public struct NavigationBar: Element {
+public struct NavigationBar: HTML {
     /// The color scheme for this navigation bar.
     public enum NavigationBarStyle {
         /// No specific color scheme means this bar will be rendered using
@@ -212,7 +212,7 @@ public struct NavigationBar: Element {
         .render()
     }
 
-    private func renderNavActions() -> some Element {
+    private func renderNavActions() -> some HTML {
         ForEach(controls) { control in
             if let form = control as? Form {
                 form.configuredAsNavigationItem()
@@ -237,7 +237,7 @@ public struct NavigationBar: Element {
         .aria(.label, "Toggle navigation")
     }
 
-    private func renderNavItems() -> some Element {
+    private func renderNavItems() -> some HTML {
         Section {
             List {
                 ForEach(items) { item in
@@ -265,14 +265,14 @@ public struct NavigationBar: Element {
         .id("navbarCollapse")
     }
 
-    private func renderDropdownItem(_ dropdownItem: Dropdown) -> some Element {
+    private func renderDropdownItem(_ dropdownItem: Dropdown) -> some HTML {
         ListItem {
             dropdownItem.configuration(.navigationBarItem)
         }
         .class("nav-item", "dropdown")
     }
 
-    private func renderLinkItem(_ link: Link) -> some Element {
+    private func renderLinkItem(_ link: Link) -> some HTML {
         ListItem {
             let isActive = publishingContext.currentRenderingPath == link.url
             link.trimmingMargin() // Remove the default margin applied to text
@@ -290,7 +290,7 @@ public struct NavigationBar: Element {
         return text
     }
 
-    private func renderLogo(_ logo: some InlineElement) -> any HTML {
+    private func renderLogo(_ logo: some InlineElement) -> any RenderableElement {
         let logo: Link = if let link = logo.as(Link.self) {
             link
         } else {
@@ -323,7 +323,7 @@ fileprivate extension Link {
     }
 }
 
-fileprivate extension Element {
+fileprivate extension HTML {
     /// Adds a data attribute to the element.
     /// - Parameters:
     ///   - name: The name of the data attribute

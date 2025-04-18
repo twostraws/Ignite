@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public extension Element {
+public extension HTML {
     /// Applies a background image to the element.
     /// - Parameters:
     ///   - image: The path to the image
@@ -18,7 +18,7 @@ public extension Element {
         contentMode: BackgroundImageContentMode,
         position: BackgroundPosition = .center,
         repeats: Bool = false
-    ) -> some Element {
+    ) -> some HTML {
         self.style(
             .init(.backgroundImage, value: "url('\(image)')"),
             .init(.backgroundSize, value: contentMode.css),

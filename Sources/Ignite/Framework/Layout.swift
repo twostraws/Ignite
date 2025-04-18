@@ -21,16 +21,13 @@
 /// ```
 @MainActor
 public protocol Layout {
-    /// The type of HTML content this layout will generate
-    associatedtype Document: HTML
-
     /// The main content of the layout, built using the HTML DSL
     @DocumentBuilder var body: Document { get }
 }
 
 public extension Layout {
     /// The current page being rendered.
-    var content: some Element {
+    var content: some HTML {
         Section(PublishingContext.shared.environment.pageContent)
             .class("ig-main-content") // For replacing the main content with search results
     }

@@ -7,7 +7,7 @@
 
 /// A placeholder HTML element that renders nothing
 /// Used as a default or fallback when no content is needed
-public struct EmptyHTML: Element, DocumentElement {
+public struct EmptyHTML: HTML {
     /// Creates a new empty HTML element
     public nonisolated init() {}
 

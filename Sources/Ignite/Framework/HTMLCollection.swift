@@ -10,7 +10,7 @@
 /// `HTMLCollection` is used internally to handle opaque HTML content returned from result builders,
 /// particularly in loops and other control flow situations. It converts potentially nested
 /// structures into a flat, iterable collections of `HTML` elements.
-struct HTMLCollection: Element, @preconcurrency Sequence {
+struct HTMLCollection: HTML, @preconcurrency Sequence {
     /// The content and behavior of this HTML sequence
     var body: some HTML { self }
 
@@ -21,12 +21,12 @@ struct HTMLCollection: Element, @preconcurrency Sequence {
     var isPrimitive: Bool { true }
 
     /// The array of HTML elements contained in this sequence
-    var elements: [any HTML] = []
+    var elements: [any RenderableElement] = []
 
     /// The array of HTML elements with the container's attributes applied.
-    var attributedElements: [any HTML] {
+    var attributedElements: [any RenderableElement] {
         elements.map {
-            var item: any HTML = $0
+            var item: any RenderableElement = $0
             item.attributes.merge(attributes)
             return item
         }
@@ -39,15 +39,22 @@ struct HTMLCollection: Element, @preconcurrency Sequence {
         self.elements = flatten(content)
     }
 
+    /// Creates a new HTML sequence using a result builder
+    /// - Parameter content: A closure that returns HTML content
+    init(@RenderableElementBuilder _ content: () -> some RenderableElement) {
+        let content = content()
+        self.elements = flatten(content)
+    }
+
     /// Creates a new HTML sequence from an array of elements
     /// - Parameter elements: The array of HTML elements to include
-    init(_ elements: [any HTML]) {
+    init(_ elements: [any RenderableElement]) {
         self.elements = elements.flatMap { flatten($0) }
     }
 
     /// Creates an iterator over the sequence's elements
     /// - Returns: An iterator that provides access to each HTML element
-    func makeIterator() -> IndexingIterator<[any HTML]> {
+    func makeIterator() -> IndexingIterator<[any RenderableElement]> {
         elements.makeIterator()
     }
 
@@ -55,7 +62,7 @@ struct HTMLCollection: Element, @preconcurrency Sequence {
     /// - Returns: The combined HTML string of all elements
     func render() -> String {
         elements.map {
-            var item: any HTML = $0
+            var item: any RenderableElement = $0
             item.attributes.merge(attributes)
             return item.render()
         }.joined()
@@ -64,31 +71,12 @@ struct HTMLCollection: Element, @preconcurrency Sequence {
     /// Recursively flattens nested HTML content into a single array, deconstructing wrapper types.
     /// - Parameter content: The content to flatten
     /// - Returns: An array of unwrapped HTML elements
-    private func flatten(_ content: any HTML) -> [any HTML] {
+    private func flatten(_ content: any RenderableElement) -> [any RenderableElement] {
         if let anyHTML = content as? AnyHTML {
-            flatten(anyHTML.attributedContent)
-        } else if let anyHTML = content as? AnyInlineElement {
             flatten(anyHTML.attributedContent)
         } else if let collection = content as? HTMLCollection {
             collection.attributedElements.flatMap { flatten($0) }
-        } else if let collection = content as? InlineElementCollection {
-            collection.attributedElements.flatMap { flatten($0) }
         } else if content is EmptyHTML {
-            []
-        } else {
-            [content]
-        }
-    }
-
-    /// Recursively flattens nested Element content into a single array, deconstructing wrapper types.
-    /// - Parameter content: The content to flatten
-    /// - Returns: An array of unwrapped Element elements
-    private func flatten(_ content: any InlineElement) -> [any InlineElement] {
-        if let anyHTML = content as? AnyInlineElement {
-            flatten(anyHTML.attributedContent)
-        } else if let collection = content as? InlineElementCollection {
-            collection.attributedElements.flatMap { flatten($0) }
-        } else if content is EmptyInlineElement {
             []
         } else {
             [content]

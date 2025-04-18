@@ -5,20 +5,18 @@
 // See LICENSE for license information.
 //
 
-@MainActor
-private func ariaModifier(
+@MainActor private func ariaModifier(
     _ key: AriaType,
     value: String?,
-    content: any HTML
-) -> any HTML {
+    content: any RenderableElement
+) -> any RenderableElement {
     guard let value else { return content }
-    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    var copy: any RenderableElement = content.isPrimitive ? content : Section(content)
     copy.attributes.aria.append(.init(name: key.rawValue, value: value))
     return copy
 }
 
-@MainActor
-private func ariaModifier(
+@MainActor private func ariaModifier(
     _ key: AriaType,
     value: String?,
     content: any InlineElement
@@ -29,13 +27,13 @@ private func ariaModifier(
     return copy
 }
 
-public extension Element {
+public extension HTML {
     /// Adds an ARIA attribute to the element.
     /// - Parameters:
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `Element` element
-    func aria(_ key: AriaType, _ value: String) -> some Element {
+    func aria(_ key: AriaType, _ value: String) -> some HTML {
         AnyHTML(ariaModifier(key, value: value, content: self))
     }
 
@@ -44,7 +42,7 @@ public extension Element {
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
-    func aria(_ key: AriaType, _ value: String?) -> some Element {
+    func aria(_ key: AriaType, _ value: String?) -> some HTML {
         AnyHTML(ariaModifier(key, value: value, content: self))
     }
 }
@@ -69,13 +67,13 @@ public extension InlineElement {
     }
 }
 
-extension HTML {
+extension RenderableElement {
     /// Adds an ARIA attribute to the element.
     /// - Parameters:
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
-    func aria(_ key: AriaType, _ value: String?) -> some HTML {
+    func aria(_ key: AriaType, _ value: String?) -> some RenderableElement {
         AnyHTML(ariaModifier(key, value: value, content: self))
     }
 }

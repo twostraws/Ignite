@@ -60,7 +60,7 @@ public struct HTMLBuilder {
     /// Handles the first branch of an if/else statement.
     /// - Parameter component: The HTML element to use if condition is true
     /// - Returns: The wrapped HTML element
-    public static func buildEither<Content: Element>(first component: Content) -> AnyHTML {
+    public static func buildEither<Content: HTML>(first component: Content) -> AnyHTML {
         AnyHTML(component)
     }
 
@@ -94,13 +94,6 @@ public struct HTMLBuilder {
     /// - Returns: A flattened HTML structure
     public static func buildBlock(_ components: [any HTML]...) -> some HTML {
         HTMLCollection(components.flatMap(\.self))
-    }
-
-    /// Converts text content into HTML.
-    /// - Parameter text: The text to convert
-    /// - Returns: Text wrapped as HTML
-    public static func buildExpression(_ text: Text) -> some HTML {
-        text
     }
 
     /// Handles availability conditions in switch statements.

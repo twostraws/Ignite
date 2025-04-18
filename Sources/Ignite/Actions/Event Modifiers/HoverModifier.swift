@@ -6,7 +6,7 @@
 //
 
 @MainActor
-private func hoverModifier(hover: [Action], unhover: [Action], content: any Element) -> any Element {
+private func hoverModifier(hover: [Action], unhover: [Action], content: any HTML) -> any HTML {
     content
         .onEvent(.mouseOver, hover)
         .onEvent(.mouseOut, unhover)
@@ -19,11 +19,11 @@ private func hoverModifier(hover: [Action], unhover: [Action], content: any Inli
         .onEvent(.mouseOut, unhover)
 }
 
-public extension Element {
+public extension HTML {
     /// Adds "onmouseover" and "onmouseout" JavaScript events to this element.
     /// - Parameter actions: A closure that takes a Boolean indicating hover state and returns actions to execute.
     /// - Returns: A modified HTML element with the hover event handlers attached.
-    func onHover(@ActionBuilder actions: (_ isHovering: Bool) -> [Action]) -> some Element {
+    func onHover(@ActionBuilder actions: (_ isHovering: Bool) -> [Action]) -> some HTML {
         AnyHTML(hoverModifier(hover: actions(true), unhover: actions(false), content: self))
     }
 }

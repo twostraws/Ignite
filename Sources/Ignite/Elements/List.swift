@@ -6,7 +6,7 @@
 //
 
 /// Creates a list of items, either ordered or unordered.
-public struct List: Element {
+public struct List: HTML {
     /// Controls whether this list contains items in a specific order or not.
     public enum ListMarkerStyle {
         /// This list contains items that are ordered, which normally means
@@ -54,7 +54,7 @@ public struct List: Element {
     /// Creates a new `List` object using a page element builder that returns
     /// an array of `HTML` objects to display in the list.
     /// - Parameter items: The content you want to display in your list.
-    public init(@HTMLBuilder items: () -> some HTML) {
+    public init(@RenderableElementBuilder items: () -> some RenderableElement) {
         self.items = HTMLCollection(items)
     }
 
@@ -64,7 +64,7 @@ public struct List: Element {
     ///   - items: A sequence of items you want to convert into list items.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns an item representing that value in the list.
-    public init<T>(_ items: any Sequence<T>, content: (T) -> some HTML) {
+    public init<T>(_ items: any Sequence<T>, content: (T) -> some RenderableElement) {
         self.items = HTMLCollection(items.map(content))
     }
 

@@ -7,4 +7,4 @@
 
 /// Describes elements that can exist directly inside a HTML container.
 @MainActor
-public protocol DocumentElement: Element {}
+public protocol DocumentElement: RenderableElement {}

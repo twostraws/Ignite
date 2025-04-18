@@ -41,7 +41,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     }
 
     /// The content to display inside this link.
-    var content: any HTML
+    var content: any InlineElement
 
     /// The location to which this link should direct users.
     var url: String

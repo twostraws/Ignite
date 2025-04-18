@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public extension Element {
+public extension HTML {
     /// Applies a keyframe animation to an HTML element.
     /// - Parameters:
     ///   - trigger: The event that triggers this animation
@@ -16,7 +16,7 @@ public extension Element {
         _ trigger: AnimationTrigger,
         options: [AnimationOption] = [],
         @KeyframeBuilder _ content: (KeyframeProxy) -> [Keyframe]
-    ) -> some Element {
+    ) -> some HTML {
         var animation = Animation(frames: content(KeyframeProxy()))
         animation.with(options)
         return AnimatedHTML(self, animation: animation, trigger: trigger)
@@ -32,7 +32,7 @@ public extension Element {
         _ animation: Animation,
         on trigger: AnimationTrigger,
         options: [AnimationOption] = []
-    ) -> some Element {
+    ) -> some HTML {
         var animation = animation
         animation.with(options)
         return AnimatedHTML(self, animation: animation, trigger: trigger)

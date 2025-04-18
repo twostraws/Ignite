@@ -7,12 +7,12 @@
 
 @MainActor private func fontStyleModifier(
     _ style: Font.Style,
-    content: any Element
-) -> any Element {
-    if content is Text {
-        return content.fontStyle(style)
+    content: any HTML
+) -> any HTML {
+    if content.isText {
+        content.fontStyle(style)
     } else {
-        return content.class(style.fontSizeClass)
+        content.class(style.fontSizeClass)
     }
 }
 
@@ -23,11 +23,11 @@
     content.fontStyle(style)
 }
 
-public extension Element {
+public extension HTML {
     /// Adjusts the heading level of this text.
     /// - Parameter style: The new heading level.
     /// - Returns: A new `Text` instance with the updated font style.
-    func font(_ style: Font.Style) -> some Element {
+    func font(_ style: Font.Style) -> some HTML {
         AnyHTML(fontStyleModifier(style, content: self))
     }
 }

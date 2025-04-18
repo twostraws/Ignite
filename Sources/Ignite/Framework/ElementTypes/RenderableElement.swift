@@ -8,7 +8,7 @@
 /// A protocol that defines the common behavior between Element and InlineElement types.
 /// This protocol serves as the foundation for any element that can be rendered as Element.
 @MainActor
-public protocol HTML: Stylable, CustomStringConvertible, Sendable {
+public protocol RenderableElement: CustomStringConvertible, Sendable {
     /// The standard set of control attributes for Element elements.
     var attributes: CoreAttributes { get set }
 
@@ -20,7 +20,7 @@ public protocol HTML: Stylable, CustomStringConvertible, Sendable {
     func render() -> String
 }
 
-public extension HTML {
+public extension RenderableElement {
     /// The complete string representation of the element.
     nonisolated var description: String {
         MainActor.assumeIsolated {
@@ -38,15 +38,15 @@ public extension HTML {
     var isPrimitive: Bool { false }
 }
 
-extension HTML {
+extension RenderableElement {
     /// The publishing context of this site.
     var publishingContext: PublishingContext {
         PublishingContext.shared
     }
 
-    func `is`(_ elementType: any HTML.Type) -> Bool {
+    func `is`(_ elementType: any RenderableElement.Type) -> Bool {
         switch self {
-        case let element as any Element:
+        case let element as any HTML:
             element.isType(elementType)
         case let element as any InlineElement:
             element.isType(elementType)
@@ -54,9 +54,9 @@ extension HTML {
         }
     }
 
-    func `as`<T: HTML>(_ elementType: T.Type) -> T? {
+    func `as`<T: RenderableElement>(_ elementType: T.Type) -> T? {
         switch self {
-        case let element as any Element:
+        case let element as any HTML:
             element.asType(elementType)
         case let element as any InlineElement:
             element.asType(elementType)
@@ -65,9 +65,9 @@ extension HTML {
     }
 }
 
-private extension Element {
+private extension HTML {
     /// Whether this element represents a specific type.
-    func isType(_ elementType: any HTML.Type) -> Bool {
+    func isType(_ elementType: any RenderableElement.Type) -> Bool {
         if let anyHTML = body as? AnyHTML {
             type(of: anyHTML.wrapped) == elementType
         } else {
@@ -76,7 +76,7 @@ private extension Element {
     }
 
     /// The underlying content, conditionally cast to the specified type.
-    func asType<T: HTML>(_ elementType: T.Type) -> T? {
+    func asType<T: RenderableElement>(_ elementType: T.Type) -> T? {
         if let anyHTML = body as? AnyHTML, let element = anyHTML.attributedContent as? T {
             element
         } else if let element = body as? T {
@@ -89,7 +89,7 @@ private extension Element {
 
 private extension InlineElement {
     /// The underlying content, conditionally cast to the specified type.
-    func asType<T: HTML>(_ elementType: T.Type) -> T? {
+    func asType<T: RenderableElement>(_ elementType: T.Type) -> T? {
         if let anyHTML = body as? AnyInlineElement, let element = anyHTML.attributedContent as? T {
             element
         } else if let element = body as? T {
@@ -100,7 +100,7 @@ private extension InlineElement {
     }
 
     /// Whether this element represents a specific type.
-    func isType(_ elementType: any HTML.Type) -> Bool {
+    func isType(_ elementType: any RenderableElement.Type) -> Bool {
         if let anyHTML = body as? AnyInlineElement {
             type(of: anyHTML.wrapped) == elementType
         } else {

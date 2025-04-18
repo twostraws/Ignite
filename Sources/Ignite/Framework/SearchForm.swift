@@ -13,7 +13,7 @@ struct SearchAction: Action {
 }
 
 /// A form that performs site-wide search.
-public struct SearchForm: Element, NavigationItem {
+public struct SearchForm: HTML, NavigationItem {
     /// The appearance of the search-button label.
     public enum SearchButtonStyle: Sendable, Equatable, CaseIterable {
         case iconOnly, titleAndIcon, titleOnly

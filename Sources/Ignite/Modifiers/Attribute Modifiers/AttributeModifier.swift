@@ -7,10 +7,10 @@
 
 @MainActor private func attributeModifier(
     _ attribute: Attribute?,
-    content: any HTML
-) -> any HTML {
+    content: any RenderableElement
+) -> any RenderableElement {
     guard let attribute else { return content }
-    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    var copy: any RenderableElement = content.isPrimitive ? content : Section(content)
     copy.attributes.append(customAttributes: attribute)
     return copy
 }
@@ -25,20 +25,20 @@
     return copy
 }
 
-public extension Element {
+public extension HTML {
     /// Adds a custom attribute to the element.
     /// - Parameters:
     ///   - name: The name of the attribute
     ///   - value: The value of the attribute
     /// - Returns: The modified element
-    func attribute(_ name: String, _ value: String) -> some Element {
+    func attribute(_ name: String, _ value: String) -> some HTML {
         AnyHTML(attributeModifier(.init(name: name, value: value), content: self))
     }
 
     /// Adds a custom boolean attribute to the element.
     /// - Parameter name: The name of the attribute
     /// - Returns: The modified element
-    func attribute(_ name: String) -> some Element {
+    func attribute(_ name: String) -> some HTML {
         AnyHTML(attributeModifier(.init(name), content: self))
     }
 }
@@ -61,13 +61,13 @@ public extension InlineElement {
     }
 }
 
-extension Element {
+extension HTML {
     /// Adds a custom attribute to the element.
     /// - Parameters:
     ///   - name: The name of the custom attribute
     ///   - value: The value of the custom attribute
     /// - Returns: The modified `HTML` element
-    func customAttribute(name: String, value: String) -> some Element {
+    func customAttribute(name: String, value: String) -> some HTML {
         AnyHTML(attributeModifier(.init(name: name, value: value), content: self))
     }
 
@@ -76,7 +76,7 @@ extension Element {
     ///   - name: The name of the custom attribute
     ///   - value: The value of the custom attribute
     /// - Returns: The modified `HTML` element
-    func customAttribute(_ attribute: Attribute?) -> some Element {
+    func customAttribute(_ attribute: Attribute?) -> some HTML {
         AnyHTML(attributeModifier(attribute, content: self))
     }
 }
@@ -101,14 +101,29 @@ extension InlineElement {
     }
 }
 
-extension HeadElement {
+public extension HTML where Self: HeadElement {
     /// Adds a custom attribute to the element.
     /// - Parameters:
     ///   - name: The name of the custom attribute
     ///   - value: The value of the custom attribute
     /// - Returns: The modified `HTML` element
     func customAttribute(name: String, value: String) -> some HeadElement {
-        AnyHTML(attributeModifier(.init(name: name, value: value), content: self))
+        var copy = self
+        copy.attributes.append(customAttributes: .init(name: name, value: value))
+        return copy
+    }
+}
+
+public extension HeadElement {
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(name: String, value: String) -> some HeadElement {
+        var copy = self
+        copy.attributes.append(customAttributes: .init(name: name, value: value))
+        return copy
     }
 }
 

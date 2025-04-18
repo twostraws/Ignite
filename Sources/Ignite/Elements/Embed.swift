@@ -8,7 +8,7 @@
 import Foundation
 
 /// Embeds a custom URL, such as YouTube or Vimeo.
-public struct Embed: Element, LazyLoadable {
+public struct Embed: HTML, LazyLoadable {
     /// Determines what kind of Spotify embed we have.
     public enum SpotifyContentType: String {
         /// Creates interactive item for a single Spotify track

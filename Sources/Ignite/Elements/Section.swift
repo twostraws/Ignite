@@ -12,7 +12,7 @@
 ///
 /// - Note: Unlike ``Group``, modifiers applied to a `Section` affect the
 ///         containing element rather than being propagated to child elements.
-public struct Section: Element, FormItem {
+public struct Section: HTML, FormItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -28,16 +28,18 @@ public struct Section: Element, FormItem {
     /// The heading's semantic font size.
     var headerStyle: Font.Style = .title2
 
-    var content: any HTML
+    var content: any RenderableElement
 
     // Temporarily public
-    public init(_ content: any HTML) {
+    public init(_ content: any RenderableElement) {
         self.content = content
     }
 
     /// Creates a section that renders as a `div` element.
     /// - Parameter content: The content to display within this section.
-    public init(@HTMLBuilder content: () -> some HTML) {
+    public init(
+        @RenderableElementBuilder content: () -> some RenderableElement
+    ) {
         self.content = content()
     }
 
@@ -45,7 +47,10 @@ public struct Section: Element, FormItem {
     /// - Parameters:
     ///   - header: The text to display as the section's heading
     ///   - content: The content to display within this section
-    public init(_ header: String, @HTMLBuilder content: () -> some HTML) {
+    public init(
+        _ header: String,
+        @RenderableElementBuilder content: () -> some RenderableElement
+    ) {
         self.content = content()
         self.header = header
     }

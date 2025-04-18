@@ -6,7 +6,7 @@
 //
 
 /// One item inside an accordion.
-public struct Item: Element {
+public struct Item: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -24,7 +24,7 @@ public struct Item: Element {
     var startsOpen: Bool
 
     /// The contents of this accordion item.
-    var contents: any HTML
+    var contents: any RenderableElement
 
     /// Used when rendering this accordion item so that we can send change
     /// notifications back the parent accordion object.

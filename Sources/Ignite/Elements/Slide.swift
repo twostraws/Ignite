@@ -6,7 +6,7 @@
 //
 
 /// One slide in a `Carousel`.
-public struct Slide: Element {
+public struct Slide: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -61,7 +61,7 @@ public struct Slide: Element {
 
     /// Used during rendering to assign this carousel slide to a particular parent,
     /// so our open paging behavior works correctly.
-    func assigned(at index: Int) -> some Element {
+    func assigned(at index: Int) -> some HTML {
         Section {
             if let slideBackground = background {
                 Image(slideBackground, description: "")

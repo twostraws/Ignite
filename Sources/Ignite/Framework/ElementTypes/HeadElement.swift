@@ -6,4 +6,4 @@
 //
 
 /// A metadata element that can exist in the `HTMLHead` struct.
-public protocol HeadElement: Element {}
+public protocol HeadElement: RenderableElement {}

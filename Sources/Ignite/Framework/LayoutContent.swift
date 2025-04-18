@@ -9,10 +9,10 @@
 @MainActor
 public protocol LayoutContent: Sendable {
     /// The type of HTML content this element contains.
-    associatedtype Body: HTML
+    associatedtype Body: RenderableElement
 
     /// The content and behavior of this `HTML` element.
-    @HTMLBuilder var body: Body { get }
+    @RenderableElementBuilder var body: Body { get }
 
     /// The type of layout you want this page to use.
     associatedtype LayoutType: Layout

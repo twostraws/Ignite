@@ -9,7 +9,7 @@
 @MainActor
 @resultBuilder
 public struct DocumentBuilder {
-    public static func buildBlock(_ components: any DocumentElement...) -> some HTML {
+    public static func buildBlock(_ components: any DocumentElement...) -> Document {
         Document {
             // If no HTMLHead is provided, add a default one
             if !components.contains(where: { $0 is Head }) {

@@ -6,7 +6,7 @@
 //
 
 /// A modal dialog presented on top of the screen
-public struct Modal: Element {
+public struct Modal: HTML {
     /// The size of the modal. Except from the full screen modal the height is defined by the height wheras the width
     public enum Size: CaseIterable, Sendable {
         /// A modal dialog with a small max-width of 300px
@@ -77,9 +77,9 @@ public struct Modal: Element {
 
     public init(
         id modalId: String,
-        @HTMLBuilder body: () -> some HTML,
-        @HTMLBuilder header: () -> some HTML = { EmptyHTML() },
-        @HTMLBuilder footer: () -> some HTML = { EmptyHTML() }
+        @RenderableElementBuilder body: () -> some RenderableElement,
+        @RenderableElementBuilder header: () -> some RenderableElement = { EmptyHTML() },
+        @RenderableElementBuilder footer: () -> some RenderableElement = { EmptyHTML() }
     ) {
         self.htmlID = modalId
         self.items = HTMLCollection([body()])

@@ -5,19 +5,21 @@
 // See LICENSE for license information.
 //
 
-public extension Element {
+public extension HTML {
     /// Applies a hover effect to the page element
     /// - Parameter effect: A closure that returns the effect to be applied.
     ///   The argument acts as a placeholder representing this page element.
     /// - Returns: A modified copy of the element with hover effect applied
-    func hoverEffect(_ effect: @escaping (EmptyHoverEffect) -> some Element) -> some Element {
+    func hoverEffect(_ effect: @escaping (EmptyHoverEffect) -> some HTML) -> some HTML {
         self.hoverEffectModifier(effect)
     }
 }
 
-private extension Element {
+private extension HTML {
     // An abstraction of the implementation details for consistent reuse across protocol extensions.
-    func hoverEffectModifier(_ effect: @escaping (EmptyHoverEffect) -> some Element) -> some Element {
+    func hoverEffectModifier(
+        _ effect: @escaping (EmptyHoverEffect) -> some HTML
+    ) -> some HTML {
         self.onHover { isHovering in
             if isHovering {
                 let effectElement = effect(EmptyHoverEffect())
@@ -31,9 +33,9 @@ private extension Element {
 }
 
 /// An empty hover effect type to which styles can be added
-public struct EmptyHoverEffect: Element {
+public struct EmptyHoverEffect: HTML {
     /// The content and behavior of this HTML.
-    public var body: some Element { self }
+    public var body: some HTML { self }
 
     public func render() -> String { "" }
 }

@@ -7,7 +7,7 @@
 
 /// Shows a clearly delineated box on your page, providing important information
 /// or warnings to users.
-public struct Alert: Element {
+public struct Alert: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

@@ -5,15 +5,12 @@
 // See LICENSE for license information.
 //
 
-struct Document: Element {
-    /// The content and behavior of this HTML.
-    var body: some HTML { self }
-
+public struct Document: RenderableElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
-    var isPrimitive: Bool { true }
+    public var isPrimitive: Bool { true }
 
     private let language: Language
     private let contents: [any DocumentElement]
@@ -23,7 +20,7 @@ struct Document: Element {
         self.contents = contents()
     }
 
-    func render() -> String {
+    public func render() -> String {
         var attributes = attributes
         attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
         var output = "<!doctype html>"

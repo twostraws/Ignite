@@ -6,7 +6,7 @@
 //
 
 /// A column inside a table row.
-public struct Column: Element {
+public struct Column: HTML {
     /// How to vertically align the contents of this column.
     public enum VerticalAlignment: String, Sendable, CaseIterable {
         /// Align contents to the top of the column.
@@ -41,7 +41,7 @@ public struct Column: Element {
     /// Creates a new column from a page element builder of items.
     /// - Parameter items: A page element builder that returns the items
     /// for this column.
-    public init(@HTMLBuilder items: () -> some HTML) {
+    public init(@RenderableElementBuilder items: () -> some RenderableElement) {
         self.items = HTMLCollection(items)
     }
 

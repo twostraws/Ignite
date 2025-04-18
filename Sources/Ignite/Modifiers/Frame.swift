@@ -108,7 +108,7 @@ private func frameModifier(
     return content.style(dimensions)
 }
 
-public extension Element {
+public extension HTML {
     /// Creates a specific frame for this element, either using exact values or
     /// using minimum/maximum ranges.
     /// - Parameters:
@@ -130,7 +130,7 @@ public extension Element {
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
         alignment: Alignment? = nil
-    ) -> some Element {
+    ) -> some HTML {
         AnyHTML(frameModifier(
             width: width,
             minWidth: minWidth,
@@ -163,7 +163,7 @@ public extension Element {
         minHeight: Int? = nil,
         maxHeight: Int? = nil,
         alignment: Alignment? = nil
-    ) -> some Element {
+    ) -> some HTML {
         AnyHTML(frameModifier(
             width: width.map { .px($0) },
             minWidth: minWidth.map { .px($0) },

@@ -22,11 +22,11 @@ public enum Cursor: String, CaseIterable, Sendable {
     case zoomOut = "zoom-out"
 }
 
-public extension Element {
+public extension HTML {
     /// Changes the cursor appearance of the element when hovering over the element.
     /// - Parameter cursor: The desired cursor style.
     /// - Returns: A modified copy of the element with cursor styling applied
-    func cursor(_ cursor: Cursor) -> some Element {
+    func cursor(_ cursor: Cursor) -> some HTML {
         self.style(.cursor, cursor.rawValue)
     }
 }

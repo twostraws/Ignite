@@ -6,7 +6,7 @@
 //
 
 @MainActor
-private func fontModifier(_ font: Font, content: any Element) -> any Element {
+private func fontModifier(_ font: Font, content: any HTML) -> any HTML {
     if let content = content.as(Text.self) {
         var styles = [InlineStyle]()
         styles.append(.init(.fontWeight, value: font.weight.rawValue.formatted()))
@@ -19,7 +19,7 @@ private func fontModifier(_ font: Font, content: any Element) -> any Element {
             styles.append(.init(.fontSize, value: size.stringValue))
         }
 
-        var modified: any Element = content.style(styles)
+        var modified: any HTML = content.style(styles)
 
         if let style = font.style {
             modified = modified.font(style)
@@ -84,11 +84,11 @@ private func fontModifier(_ font: Font, content: any InlineElement) -> any Inlin
     return modified
 }
 
-public extension Element {
+public extension HTML {
     /// Adjusts the font of this text.
     /// - Parameter font: The font configuration to apply.
     /// - Returns: A new instance with the updated font.
-    func font(_ font: Font) -> some Element {
+    func font(_ font: Font) -> some HTML {
         if font.name != nil {
             CSSManager.shared.registerFontFamily(font)
         }
@@ -98,7 +98,7 @@ public extension Element {
     /// Adjusts the font of this text using responsive sizing.
     /// - Parameter font: The responsive font configuration to apply.
     /// - Returns: A new instance with the updated font.
-    func font(_ font: Font.Responsive) -> some Element {
+    func font(_ font: Font.Responsive) -> some HTML {
         let baseFont = font.font
         if baseFont.name != nil {
             CSSManager.shared.registerFontFamily(baseFont)

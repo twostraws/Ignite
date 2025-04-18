@@ -6,7 +6,7 @@
 //
 
 /// A group of information placed inside a gently rounded
-public struct Card: Element {
+public struct Card: HTML {
     /// Styling for this card.
     public enum Style: CaseIterable, Sendable {
         /// Default styling.
@@ -151,9 +151,9 @@ public struct Card: Element {
 
     public init(
         imageName: String? = nil,
-        @HTMLBuilder body: () -> some HTML,
-        @HTMLBuilder header: () -> some HTML = { EmptyHTML() },
-        @HTMLBuilder footer: () -> some HTML = { EmptyHTML() }
+        @RenderableElementBuilder body: () -> some RenderableElement,
+        @RenderableElementBuilder header: () -> some RenderableElement = { EmptyHTML() },
+        @RenderableElementBuilder footer: () -> some RenderableElement = { EmptyHTML() }
     ) {
         if let imageName {
             self.image = Image(decorative: imageName)
@@ -243,16 +243,12 @@ public struct Card: Element {
         .render()
     }
 
-    private func renderHeader() -> some Element {
-        Section {
-            for item in header {
-                item
-            }
-        }
-        .class("card-header")
+    private func renderHeader() -> some HTML {
+        Section(header)
+            .class("card-header")
     }
 
-    private func renderItems() -> some Element {
+    private func renderItems() -> some HTML {
         Section {
             ForEach(items) { item in
                 switch item {
@@ -271,13 +267,9 @@ public struct Card: Element {
         }
         .class(contentPosition.bodyClasses)
     }
-
-    private func renderFooter() -> some Element {
-        Section {
-            for item in footer {
-                item
-            }
-        }
-        .class("card-footer", "text-body-secondary")
+    
+    private func renderFooter() -> some HTML {
+        Section(footer)
+            .class("card-footer", "text-body-secondary")
     }
 }

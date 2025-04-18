@@ -6,9 +6,6 @@
 //
 
 public struct Body: DocumentElement {
-    /// The content and behavior of this HTML.
-    public var body: some HTML { self }
-
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -18,7 +15,7 @@ public struct Body: DocumentElement {
     /// Whether this HTML uses Bootstrap's `container` class to determine page width.
     var isBoundByContainer: Bool = true
 
-    var content: any HTML
+    var content: any RenderableElement
 
     public init(@HTMLBuilder _ content: () -> some HTML) {
         self.content = content()

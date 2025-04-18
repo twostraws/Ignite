@@ -12,7 +12,7 @@
 ///
 /// **Note**: A 12-column grid is the default, but you can adjust that downwards
 /// by using the `columns()` modifier.
-public struct Grid: Element {
+public struct Grid: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -59,7 +59,7 @@ public struct Grid: Element {
     public init(
         alignment: Alignment = .center,
         spacing: SpacingAmount = .medium,
-        @HTMLBuilder items: () -> some HTML
+        @RenderableElementBuilder items: () -> some RenderableElement
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -158,7 +158,7 @@ public struct Grid: Element {
     }
 
     /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.
-    private func handleItem(_ item: any HTML) -> any HTML {
+    private func handleItem(_ item: any RenderableElement) -> any RenderableElement {
         var item = item
         var name: String?
         if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }) {

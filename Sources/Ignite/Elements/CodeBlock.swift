@@ -12,7 +12,7 @@
 /// the prettifier will interpret these as HTML tags and break the code's formatting.
 /// To avoid this issue, either set your site’s `shouldPrettify` property to `false`,
 /// or replace `<` and `>` with their character entity references, `&lt;` and `&gt;` respectively.
-public struct CodeBlock: Element {
+public struct CodeBlock: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

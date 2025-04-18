@@ -5,18 +5,18 @@
 // See LICENSE for license information.
 //
 
-public extension Element {
+public extension HTML {
     /// Rounds all edges of this object by some value specified as a string.
     /// - Parameter length: A string with rounding of your choosing, such as "50%".
     /// - Returns: A modified copy of the element with corner radius applied
-    func cornerRadius(_ length: LengthUnit) -> some Element {
+    func cornerRadius(_ length: LengthUnit) -> some HTML {
         cornerRadius(.all, length)
     }
 
     /// Rounds all edges of this object by some number of pixels.
     /// - Parameter length: An integer specifying a pixel amount to round corners with.
     /// - Returns: A modified copy of the element with corner radius applied
-    func cornerRadius(_ length: Int) -> some Element {
+    func cornerRadius(_ length: Int) -> some HTML {
         cornerRadius(.all, length)
     }
 
@@ -25,7 +25,7 @@ public extension Element {
     ///   - edges: Which corners should be rounded
     ///   - length: A string with rounding of your choosing, such as "50%"
     /// - Returns: A modified copy of the element with corner radius applied
-    func cornerRadius(_ edges: DiagonalEdge, _ length: LengthUnit) -> some Element {
+    func cornerRadius(_ edges: DiagonalEdge, _ length: LengthUnit) -> some HTML {
         let cornerRadiusStyles = cornerRadiusModifier(edges: edges, length: length)
         return AnyHTML(self.style(cornerRadiusStyles))
     }
@@ -35,7 +35,7 @@ public extension Element {
     ///   - edges: Which corners should be rounded
     ///   - length: An integer specifying a pixel amount to round corners with
     /// - Returns: A modified copy of the element with corner radius applied
-    func cornerRadius(_ edges: DiagonalEdge, _ length: Int) -> some Element {
+    func cornerRadius(_ edges: DiagonalEdge, _ length: Int) -> some HTML {
         let cornerRadiusStyles = cornerRadiusModifier(edges: edges, length: .px(length))
         return AnyHTML(self.style(cornerRadiusStyles))
     }

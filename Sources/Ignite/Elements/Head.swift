@@ -10,9 +10,6 @@ import Foundation
 /// A group of metadata headers for your page, such as its title,
 /// links to its CSS, and more.
 public struct Head: DocumentElement {
-    /// The content and behavior of this HTML.
-    public var body: some HTML { self }
-
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -115,5 +112,9 @@ public struct Head: DocumentElement {
             return nil
         }
         return Script(code: contents)
+    }
+
+    @discardableResult public func style(_ property: Property, _ value: String) -> some Stylable {
+        AnyHTML("")
     }
 }

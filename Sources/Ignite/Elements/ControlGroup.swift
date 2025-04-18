@@ -6,7 +6,7 @@
 //
 
 /// A container that groups related form controls into a unified visual component.
-public struct ControlGroup: Element, FormItem {
+public struct ControlGroup: HTML, FormItem {
     /// Defines the size variants available for control groups.
     public enum ControlSize: String, Sendable, CaseIterable {
         /// Creates a smaller, more compact control group.
@@ -102,7 +102,7 @@ public struct ControlGroup: Element, FormItem {
                 case let dropdown as Dropdown:
                     renderDropdown(dropdown)
                 default:
-                    item
+                    AnyHTML(item)
                 }
             }
         }
@@ -134,7 +134,7 @@ public struct ControlGroup: Element, FormItem {
         text.class("input-group-text")
     }
 
-    private func renderTextField(_ textField: TextField) -> any InlineElement {
+    private func renderTextField(_ textField: TextField) -> some InlineElement {
         var textField = textField.labelStyle(labelStyle)
         if labelStyle != .floating {
             textField.label = nil
@@ -148,7 +148,7 @@ public struct ControlGroup: Element, FormItem {
         return button
     }
 
-    private func renderDropdown(_ dropdown: Dropdown) -> any Element {
+    private func renderDropdown(_ dropdown: Dropdown) -> any HTML {
         dropdown.configuration(.controlGroupItem)
     }
 }

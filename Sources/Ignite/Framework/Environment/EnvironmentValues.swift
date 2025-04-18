@@ -53,7 +53,7 @@ public struct EnvironmentValues {
     internal(set) public var page: PageMetadata
 
     /// The content of the current page being rendered.
-    var pageContent: any HTML = EmptyHTML()
+    var pageContent: any RenderableElement = EmptyHTML()
 
     /// The current piece of Markdown content being rendered.
     var article: Article = .empty

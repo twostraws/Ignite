@@ -8,9 +8,6 @@
 /// Provides the title for a given page, which is rendered in the browser and also
 /// appears in search engine results.
 public struct Title: HeadElement {
-    /// The content and behavior of this HTML.
-    public var body: some HTML { self }
-
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 

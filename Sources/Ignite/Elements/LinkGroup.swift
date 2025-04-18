@@ -8,7 +8,7 @@
 import Foundation
 
 /// A hyperlink to another resource on this site or elsewhere.
-public struct LinkGroup: Element {
+public struct LinkGroup: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -19,7 +19,7 @@ public struct LinkGroup: Element {
     public var isPrimitive: Bool { true }
 
     /// The content to display inside this link.
-    var content: any HTML
+    var content: any RenderableElement
 
     /// The location to which this link should direct users.
     var url: String
