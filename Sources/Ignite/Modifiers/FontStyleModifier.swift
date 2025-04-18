@@ -5,8 +5,10 @@
 // See LICENSE for license information.
 //
 
-@MainActor
-private func fontStyleModifier(_ style: Font.Style, content: any Element) -> any Element {
+@MainActor private func fontStyleModifier(
+    _ style: Font.Style,
+    content: any Element
+) -> any Element {
     if content is Text {
         return content.fontStyle(style)
     } else {
@@ -14,8 +16,10 @@ private func fontStyleModifier(_ style: Font.Style, content: any Element) -> any
     }
 }
 
-@MainActor
-private func fontStyleModifier(_ style: Font.Style, content: any InlineElement) -> any InlineElement {
+@MainActor private func fontStyleModifier(
+    _ style: Font.Style,
+    content: any InlineElement
+) -> any InlineElement {
     content.fontStyle(style)
 }
 

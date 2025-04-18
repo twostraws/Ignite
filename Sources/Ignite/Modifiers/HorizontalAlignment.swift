@@ -10,8 +10,10 @@ private enum AlignmentType {
     case responsive(HorizontalAlignment.ResponsiveAlignment)
 }
 
-@MainActor
-private func horizontalAlignmentModifier(_ alignment: AlignmentType, content: any HTML) -> any HTML {
+@MainActor private func horizontalAlignmentModifier(
+    _ alignment: AlignmentType,
+    content: any HTML
+) -> any HTML {
     switch alignment {
     case .universal(let alignment):
         return content.class(alignment.rawValue)
@@ -20,8 +22,10 @@ private func horizontalAlignmentModifier(_ alignment: AlignmentType, content: an
     }
 }
 
-@MainActor
-private func horizontalAlignmentModifier(_ alignment: AlignmentType, content: any InlineElement) -> any InlineElement {
+@MainActor private func horizontalAlignmentModifier(
+    _ alignment: AlignmentType,
+    content: any InlineElement
+) -> any InlineElement {
     switch alignment {
     case .universal(let alignment):
         return content

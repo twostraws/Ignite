@@ -5,29 +5,37 @@
 // See LICENSE for license information.
 //
 
-enum MarginType {
+private enum MarginType {
     case exact(LengthUnit), semantic(SpacingAmount)
 }
 
-@MainActor
-private func marginModifier(_ margin: MarginType, edges: Edge = .all, content: any HTML) -> any HTML {
+@MainActor private func marginModifier(
+    _ margin: MarginType,
+    edges: Edge = .all,
+    content: any HTML
+) -> any HTML {
     switch margin {
     case .exact(let unit):
         let styles = content.edgeAdjustedStyles(prefix: "margin", edges, unit.stringValue)
         return content.style(styles)
     case .semantic(let amount):
-        return content.edgeAdjust(prefix: "m", edges, amount)
+        let classes = content.edgeAdjustedClasses(prefix: "m", edges, amount.rawValue)
+        return content.class(classes)
     }
 }
 
-@MainActor
-private func marginModifier(_ margin: MarginType, edges: Edge = .all, content: any InlineElement) -> any InlineElement {
+@MainActor private func marginModifier(
+    _ margin: MarginType,
+    edges: Edge = .all,
+    content: any InlineElement
+) -> any InlineElement {
     switch margin {
     case .exact(let unit):
         let styles = content.edgeAdjustedStyles(prefix: "margin", edges, unit.stringValue)
         return content.style(styles)
     case .semantic(let amount):
-        return content.edgeAdjust(prefix: "m", edges, amount)
+        let classes = content.edgeAdjustedClasses(prefix: "m", edges, amount.rawValue)
+        return content.class(classes)
     }
 }
 

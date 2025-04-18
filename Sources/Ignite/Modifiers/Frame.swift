@@ -14,7 +14,7 @@ private func frameModifier(
     minHeight: LengthUnit? = nil,
     maxHeight: LengthUnit? = nil,
     alignment: Alignment? = nil,
-    content: any HTML
+    content: some HTML
 ) -> any HTML {
     var dimensions = [InlineStyle]()
 
@@ -52,8 +52,8 @@ private func frameModifier(
         // Create a positioning context with the specified frame for the modified element
         return Section {
             content
-//                .style(alignment.itemAlignmentRules)
-//                .style(content.is(Image.self) ? dimensions : [])
+                .style(alignment.itemAlignmentRules)
+                .style(content.is(Image.self) ? dimensions : [])
         }
         .style(.display, "flex")
         .style(content.is(Image.self) ? .init(.flexDirection, value: "column") : nil)

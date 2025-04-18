@@ -44,8 +44,10 @@ private func styles(for gradient: Gradient) -> [InlineStyle] {
      .init(.color, value: "transparent")]
 }
 
-@MainActor
-private func foregroundStyleModifier(_ style: StyleType, content: any Element) -> any HTML {
+@MainActor private func foregroundStyleModifier(
+    _ style: StyleType,
+    content: any Element
+) -> any HTML {
     switch style {
     case .none:
         content
@@ -69,8 +71,10 @@ private func foregroundStyleModifier(_ style: StyleType, content: any Element) -
     }
 }
 
-@MainActor
-private func foregroundStyleModifier(_ style: StyleType, content: any InlineElement) -> any InlineElement {
+@MainActor private func foregroundStyleModifier(
+    _ style: StyleType,
+    content: any InlineElement
+) -> any InlineElement {
     switch style {
     case .none:
         content

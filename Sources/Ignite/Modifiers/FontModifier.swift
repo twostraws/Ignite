@@ -6,8 +6,8 @@
 //
 
 @MainActor
-private func fontModifier(_ font: Font, content: any HTML) -> any HTML {
-    if let content = content as? any Element, content.is(Text.self) {
+private func fontModifier(_ font: Font, content: any Element) -> any Element {
+    if let content = content.as(Text.self) {
         var styles = [InlineStyle]()
         styles.append(.init(.fontWeight, value: font.weight.rawValue.formatted()))
 
@@ -19,7 +19,7 @@ private func fontModifier(_ font: Font, content: any HTML) -> any HTML {
             styles.append(.init(.fontSize, value: size.stringValue))
         }
 
-        var modified = content.style(styles)
+        var modified: any Element = content.style(styles)
 
         if let style = font.style {
             modified = modified.font(style)

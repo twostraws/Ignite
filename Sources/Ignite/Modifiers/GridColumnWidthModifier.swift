@@ -5,8 +5,10 @@
 // See LICENSE for license information.
 //
 
-@MainActor
-private func gridColumnWidthModifier(_ width: Int, content: any HTML) -> AnyHTML {
+@MainActor private func gridColumnWidthModifier(
+    _ width: Int,
+    content: any HTML
+) -> AnyHTML {
     if content.isPrimitive {
         AnyHTML(content.class(ColumnWidth.count(width).className))
     } else {

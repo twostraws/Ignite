@@ -5,29 +5,37 @@
 // See LICENSE for license information.
 //
 
-enum PaddingType {
+private enum PaddingType {
     case exact(LengthUnit), semantic(SpacingAmount)
 }
 
-@MainActor
-private func paddingModifier(_ padding: PaddingType, edges: Edge = .all, content: any HTML) -> any HTML {
+@MainActor private func paddingModifier(
+    _ padding: PaddingType,
+    edges: Edge = .all,
+    content: any HTML
+) -> any HTML {
     switch padding {
     case .exact(let unit):
         let styles = content.edgeAdjustedStyles(prefix: "padding", edges, unit.stringValue)
         return content.style(styles)
     case .semantic(let amount):
-        return content.edgeAdjust(prefix: "p", edges, amount)
+        let classes = content.edgeAdjustedClasses(prefix: "p", edges, amount.rawValue)
+        return content.class(classes)
     }
 }
 
-@MainActor
-private func paddingModifier(_ padding: PaddingType, edges: Edge = .all, content: any InlineElement) -> any InlineElement {
+@MainActor private func paddingModifier(
+    _ padding: PaddingType,
+    edges: Edge = .all,
+    content: any InlineElement
+) -> any InlineElement {
     switch padding {
     case .exact(let unit):
         let styles = content.edgeAdjustedStyles(prefix: "padding", edges, unit.stringValue)
         return content.style(styles)
     case .semantic(let amount):
-        return content.edgeAdjust(prefix: "p", edges, amount) as! AnyInlineElement
+        let classes = content.edgeAdjustedClasses(prefix: "p", edges, amount.rawValue)
+        return content.class(classes)
     }
 }
 

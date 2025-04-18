@@ -176,7 +176,7 @@ public struct NavigationBar: Element {
             Tag("nav") {
                 Section {
                     if logo.isEmpty == false {
-                        renderLogo(logo)
+                        AnyHTML(renderLogo(logo))
                             .class("me-0 me-sm-2 me-md-auto")
                     }
 

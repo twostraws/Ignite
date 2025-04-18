@@ -45,7 +45,7 @@ public extension Element {
     }
 }
 
-public extension InlineElement {
+public extension HTML where Self: InlineElement {
     /// Adds a CSS class to the HTML element
     /// - Parameter className: The CSS class name to add
     /// - Returns: A modified copy of the element with the CSS class added
@@ -89,6 +89,9 @@ public extension FormItem where Self: InlineElement {
     }
 }
 
+// These should always remain private, because for the
+// type safety of the public facing API we always want
+// to return either Element or InlineElement.
 extension HTML {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
@@ -96,5 +99,12 @@ extension HTML {
     func `class`(_ newClasses: String?...) -> some HTML {
         let classes = newClasses.compactMap(\.self)
         return AnyHTML(classModifier(classes, content: self))
+    }
+
+    /// Adds an array of CSS classes to the element.
+    /// - Parameter newClasses: `Array` of class names to add
+    /// - Returns: The modified `Element` element
+    func `class`(_ newClasses: [String]) -> some HTML {
+        AnyHTML(classModifier(newClasses, content: self))
     }
 }

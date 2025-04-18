@@ -261,7 +261,7 @@ public struct Card: Element {
                 case let text as Text:
                     text.class("card-title")
                 case is Link, is LinkGroup:
-                    item.class("card-link")
+                    AnyHTML(item).class("card-link")
                 case let image as Image:
                     image.class("card-img")
                 default:
