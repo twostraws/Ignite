@@ -30,7 +30,7 @@ public protocol Layout {
 
 public extension Layout {
     /// The current page being rendered.
-    var content: some HTML {
+    var content: some Element {
         Section(PublishingContext.shared.environment.pageContent)
             .class("ig-main-content") // For replacing the main content with search results
     }

@@ -8,7 +8,7 @@
 /// Creates one item in a list. This isn't always needed, because you can place other
 /// elements directly into lists if you wish. Use `ListItem` when you specifically
 /// need a styled HTML <li> element.
-public struct ListItem: HTML, ListableElement {
+public struct ListItem: Element, ListableElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

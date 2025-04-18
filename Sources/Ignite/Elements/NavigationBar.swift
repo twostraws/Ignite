@@ -10,7 +10,7 @@ public protocol NavigationItem: HTML {}
 
 /// A bar that sits across the top of your page to provide top-level navigation
 /// throughout your site.
-public struct NavigationBar: HTML {
+public struct NavigationBar: Element {
     /// The color scheme for this navigation bar.
     public enum NavigationBarStyle {
         /// No specific color scheme means this bar will be rendered using
@@ -79,7 +79,7 @@ public struct NavigationBar: HTML {
     public init(
         logo: (any InlineElement)? = nil
     ) {
-        self.logo = logo ?? EmptyHTML()
+        self.logo = logo ?? EmptyInlineElement()
         self.items = []
         self.controls = []
     }
@@ -94,10 +94,10 @@ public struct NavigationBar: HTML {
     ///   call-to-action buttons and search fields, and visible across all screen sizes.
     public init(
         logo: (any InlineElement)? = nil,
-        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
+        @ContentBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ContentBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
     ) {
-        self.logo = logo ?? EmptyHTML()
+        self.logo = logo ?? EmptyInlineElement()
         self.items = items()
         self.controls = actions()
     }
@@ -111,9 +111,9 @@ public struct NavigationBar: HTML {
     ///   call-to-action buttons and search fields, and visible across all screen sizes.
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
-        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] },
-        @InlineElementBuilder logo: () -> any InlineElement = { EmptyHTML() }
+        @ContentBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ContentBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] },
+        @InlineElementBuilder logo: () -> any InlineElement = { EmptyInlineElement() }
     ) {
         self.items = items()
         self.controls = actions()
@@ -127,12 +127,12 @@ public struct NavigationBar: HTML {
     ///   - actions: Elements positioned at the end of the navigation bar, like
     ///   call-to-action buttons and search fields, and visible across all screen sizes.
     public init(
-        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
+        @ContentBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ContentBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
     ) {
         self.items = items()
         self.controls = actions()
-        self.logo = EmptyHTML()
+        self.logo = EmptyInlineElement()
     }
 
     /// Adjusts the style of this navigation bar.
@@ -212,14 +212,14 @@ public struct NavigationBar: HTML {
         .render()
     }
 
-    private func renderNavActions() -> some HTML {
+    private func renderNavActions() -> some Element {
         ForEach(controls) { control in
             if let form = control as? Form {
                 form.configuredAsNavigationItem()
             } else if let form = control as? SearchForm {
                 form.configuredAsNavigationItem()
-            } else {
-                control
+            } else if let form = control as? SubscribeForm {
+                form.configuredAsNavigationItem()
             }
         }
     }
@@ -237,7 +237,7 @@ public struct NavigationBar: HTML {
         .aria(.label, "Toggle navigation")
     }
 
-    private func renderNavItems() -> some HTML {
+    private func renderNavItems() -> some Element {
         Section {
             List {
                 ForEach(items) { item in
@@ -265,14 +265,14 @@ public struct NavigationBar: HTML {
         .id("navbarCollapse")
     }
 
-    private func renderDropdownItem(_ dropdownItem: Dropdown) -> some HTML {
+    private func renderDropdownItem(_ dropdownItem: Dropdown) -> some Element {
         ListItem {
             dropdownItem.configuration(.navigationBarItem)
         }
         .class("nav-item", "dropdown")
     }
 
-    private func renderLinkItem(_ link: Link) -> some HTML {
+    private func renderLinkItem(_ link: Link) -> some Element {
         ListItem {
             let isActive = publishingContext.currentRenderingPath == link.url
             link.trimmingMargin() // Remove the default margin applied to text
@@ -290,7 +290,7 @@ public struct NavigationBar: HTML {
         return text
     }
 
-    private func renderLogo(_ logo: any InlineElement) -> some InlineElement {
+    private func renderLogo(_ logo: some InlineElement) -> any HTML {
         let logo: Link = if let link = logo.as(Link.self) {
             link
         } else {
@@ -314,7 +314,7 @@ public struct NavigationBar: HTML {
 
 fileprivate extension Link {
     func trimmingMargin() -> Self {
-        guard content.isText else { return self }
+        guard content.is(Text.self) else { return self }
         var link = self
         var text = content
         text.attributes.append(classes: "mb-0")
@@ -323,7 +323,7 @@ fileprivate extension Link {
     }
 }
 
-fileprivate extension HTML {
+fileprivate extension Element {
     /// Adds a data attribute to the element.
     /// - Parameters:
     ///   - name: The name of the data attribute

@@ -5,28 +5,34 @@
 // See LICENSE for license information.
 //
 
+@MainActor
+private func styleModifier(_ style: any Style, content: any HTML) -> any HTML {
+    let className = StyleManager.shared.className(for: style)
+    StyleManager.shared.registerStyle(style)
+    return content.class(className)
+}
+
+@MainActor
+private func styleModifier(_ style: any Style, content: any InlineElement) -> any InlineElement {
+    let className = StyleManager.shared.className(for: style)
+    StyleManager.shared.registerStyle(style)
+    return content.class(className)
+}
+
 public extension HTML {
     /// Applies a custom style to the element.
     /// - Parameter style: The style to apply, conforming to the `Style` protocol
     /// - Returns: A modified copy of the element with the style applied
     func style(_ style: any Style) -> some HTML {
-        AnyHTML(styleModifier(style))
+        AnyHTML(styleModifier(style, content: self))
     }
 }
 
 public extension InlineElement {
-    /// Applies a custom style to the block element.
+    /// Applies a custom style to the element.
     /// - Parameter style: The style to apply, conforming to the `Style` protocol
-    /// - Returns: A modified copy of the block element with the style applied
+    /// - Returns: A modified copy of the element with the style applied
     func style(_ style: any Style) -> some InlineElement {
-        AnyHTML(styleModifier(style))
-    }
-}
-
-private extension HTML {
-    func styleModifier(_ style: any Style) -> any HTML {
-        let className = StyleManager.shared.className(for: style)
-        StyleManager.shared.registerStyle(style)
-        return self.class(className)
+        AnyInlineElement(styleModifier(style, content: self))
     }
 }

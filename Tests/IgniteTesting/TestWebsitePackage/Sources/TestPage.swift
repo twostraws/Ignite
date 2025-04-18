@@ -12,7 +12,7 @@ import Ignite
 struct TestPage: StaticPage {
     var title = "Home"
 
-    var body: some HTML {
+    var body: some Element {
         Text("Hello, World!")
     }
 }

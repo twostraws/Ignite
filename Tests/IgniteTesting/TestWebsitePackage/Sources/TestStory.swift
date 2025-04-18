@@ -9,7 +9,7 @@ import Foundation
 import Ignite
 
 struct TestStory: ArticlePage {
-    var body: some HTML {
+    var body: some Element {
         EmptyHTML()
     }
 }

@@ -6,7 +6,7 @@
 //
 
 /// A collection of slides the user can swipe through.
-public struct Carousel: HTML {
+public struct Carousel: Element {
     /// Whether moving between slides should cause movement or a crossfade.
     public enum CarouselStyle: Equatable {
         /// Slides should move.
@@ -60,7 +60,7 @@ public struct Carousel: HTML {
     /// Creates a new carousel from an element builder that generates slides.
     /// - Parameter items: An element builder that returns an array of
     ///   slides to place in this carousel.
-    public init(@ElementBuilder<Slide> _ items: () -> [Slide]) {
+    public init(@ContentBuilder<Slide> _ items: () -> [Slide]) {
         self.items = items()
     }
 

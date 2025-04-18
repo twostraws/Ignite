@@ -10,7 +10,7 @@
 /// - Note: To ensure spacing is consistent, `HStack` strips its subviews of
 /// implicit styles, such as the bottom margin automatically applied to paragraphs.
 /// All styles explicitly applied via modifiers like `.margin()` will be respected.
-public struct HStack: HTML {
+public struct HStack: Element {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

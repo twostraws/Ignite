@@ -12,7 +12,7 @@
 /// `ZStack` strips its subviews of implicit styles, such as the bottom margin
 /// automatically applied to paragraphs. All styles explicitly
 /// applied through modifiers like `.margin()` will be respected.
-public struct ZStack: HTML {
+public struct ZStack: Element {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

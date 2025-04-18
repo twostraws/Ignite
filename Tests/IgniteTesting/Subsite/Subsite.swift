@@ -84,7 +84,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
     @Test("Page Content Test")
     func content() async throws {
         let page = TestPage()
-        let element = Link(target: page) {
+        let element = LinkGroup(target: page) {
             "MORE "
             Text("CONTENT")
         }

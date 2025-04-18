@@ -6,7 +6,7 @@
 //
 
 /// Lets you include arbitrary HTML on a page.
-public struct Include: HTML {
+public struct Include: Element {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

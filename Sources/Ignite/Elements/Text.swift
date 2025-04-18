@@ -13,7 +13,7 @@
 /// - Important: For types that accept only `InlineElement` or use `@InlineElementBuilder`,
 /// use `Span` instead of `Text`.
 @MainActor
-public struct Text: HTML, DropdownItem {
+public struct Text: Element, DropdownItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -27,7 +27,7 @@ public struct Text: HTML, DropdownItem {
     var font = FontStyle.body
 
     /// The content to place inside the text.
-    var content: any InlineElement
+    var content: any HTML
 
     private var isMultilineMarkdown = false
 
@@ -131,9 +131,9 @@ public struct Text: HTML, DropdownItem {
     }
 }
 
-extension HTML {
-    func fontStyle(_ font: Font.Style) -> any HTML {
-        var copy: any HTML = self
+extension Element {
+    func fontStyle(_ font: Font.Style) -> any Element {
+        var copy: any Element = self
         if font == .lead {
             copy.attributes.append(classes: font.rawValue)
         } else if var text = copy as? Text {
@@ -144,6 +144,14 @@ extension HTML {
             anyHTML.wrapped = text
             copy = anyHTML
         }
+        return copy
+    }
+}
+
+extension InlineElement {
+    func fontStyle(_ font: Font.Style) -> any InlineElement {
+        var copy: any InlineElement = self
+        copy.attributes.append(classes: font.fontSizeClass)
         return copy
     }
 }

@@ -5,22 +5,28 @@
 // See LICENSE for license information.
 //
 
-private extension HTML {
-    func idModifier(_ id: String) -> any HTML {
-        guard !id.isEmpty else { return self }
-        // Custom elements need to be wrapped in a primitive container to store attributes
-        var copy: any HTML = self.isPrimitive ? self : Section(self)
-        copy.attributes.id = id
-        return copy
-    }
+@MainActor
+private func idModifier(_ id: String, content: any Element) -> any Element {
+    guard !id.isEmpty else { return content }
+    var copy: any Element = content.isPrimitive ? content : Section(content)
+    copy.attributes.id = id
+    return copy
 }
 
-public extension HTML {
+@MainActor
+private func idModifier(_ id: String, content: any InlineElement) -> any InlineElement {
+    guard !id.isEmpty else { return content }
+    var copy: any InlineElement = content.isPrimitive ? content : Span(content)
+    copy.attributes.id = id
+    return copy
+}
+
+public extension Element {
     /// Sets the `HTML` id attribute of the element.
     /// - Parameter id: The HTML ID value to set
     /// - Returns: A modified copy of the element with the HTML id added
-    func id(_ id: String) -> some HTML {
-        AnyHTML(idModifier(id))
+    func id(_ id: String) -> some Element {
+        AnyHTML(idModifier(id, content: self))
     }
 }
 
@@ -29,15 +35,15 @@ public extension InlineElement {
     /// - Parameter id: The HTML ID value to set
     /// - Returns: A modified copy of the element with the HTML ID added
     func id(_ id: String) -> some InlineElement {
-        AnyHTML(idModifier(id))
+        AnyInlineElement(idModifier(id, content: self))
     }
 }
 
-public extension FormItem {
+public extension Element where Self: FormItem {
     /// Sets the `HTML` id attribute of the element.
     /// - Parameter id: The HTML ID value to set
     /// - Returns: A modified copy of the element with the HTML ID added
     func id(_ id: String) -> some FormItem {
-        AnyHTML(idModifier(id))
+        AnyHTML(idModifier(id, content: self))
     }
 }

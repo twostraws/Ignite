@@ -5,11 +5,11 @@
 // See LICENSE for license information.
 //
 
-public extension HTML {
+public extension Element {
     /// Creates a flex container that allows its child to be positioned relative to its container.
     /// - Parameter alignment: How to align the content within the container. Default is `.center`.
     /// - Returns: A modified copy of the element with container-relative positioning applied.
-    func containerRelativeFrame(_ alignment: Alignment = .center) -> some HTML {
+    func containerRelativeFrame(_ alignment: Alignment = .center) -> some Element {
         AnyHTML(containerRelativeFrameModifer(alignment))
     }
 }
@@ -21,9 +21,9 @@ private let edgeAlignmentRules: [InlineStyle] = [
     .init(.left, value: "0")
 ]
 
-private extension HTML {
-    func containerRelativeFrameModifer(_ alignment: Alignment) -> any HTML {
-        var frameableContent: any HTML = self
+private extension Element {
+    func containerRelativeFrameModifer(_ alignment: Alignment) -> any Element {
+        var frameableContent: any Element = self
             .style(.marginBottom, "0")
             .style(alignment.itemAlignmentRules)
 
@@ -35,7 +35,7 @@ private extension HTML {
 
         return frameableContent
             .style(.display, "flex")
-            .style(self.isImage ? .init(.flexDirection, value: "column") : nil)
+            .style(self.is(Image.self) ? .init(.flexDirection, value: "column") : nil)
             .style(.overflow, "hidden")
             .style(edgeAlignmentRules)
             .style(alignment.flexAlignmentRules)

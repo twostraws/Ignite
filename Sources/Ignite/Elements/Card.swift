@@ -6,7 +6,7 @@
 //
 
 /// A group of information placed inside a gently rounded
-public struct Card: HTML {
+public struct Card: Element {
     /// Styling for this card.
     public enum Style: CaseIterable, Sendable {
         /// Default styling.
@@ -243,7 +243,7 @@ public struct Card: HTML {
         .render()
     }
 
-    private func renderHeader() -> some HTML {
+    private func renderHeader() -> some Element {
         Section {
             for item in header {
                 item
@@ -252,7 +252,7 @@ public struct Card: HTML {
         .class("card-header")
     }
 
-    private func renderItems() -> some HTML {
+    private func renderItems() -> some Element {
         Section {
             ForEach(items) { item in
                 switch item {
@@ -260,8 +260,8 @@ public struct Card: HTML {
                     text.class("card-text")
                 case let text as Text:
                     text.class("card-title")
-                case let link as Link:
-                    link.class("card-link")
+                case is Link, is LinkGroup:
+                    item.class("card-link")
                 case let image as Image:
                     image.class("card-img")
                 default:
@@ -272,7 +272,7 @@ public struct Card: HTML {
         .class(contentPosition.bodyClasses)
     }
 
-    private func renderFooter() -> some HTML {
+    private func renderFooter() -> some Element {
         Section {
             for item in footer {
                 item

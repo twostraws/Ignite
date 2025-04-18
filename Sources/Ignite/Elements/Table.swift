@@ -6,7 +6,7 @@
 //
 
 /// Used to create tabulated data on a page.
-public struct Table: HTML {
+public struct Table: Element {
     /// Styling options for tables.
     public enum Style {
         /// All table rows and columns look the same. The default.
@@ -58,7 +58,7 @@ public struct Table: HTML {
     ///   - rows: An array of rows to use in the table.
     public init(
         filterTitle: String? = nil,
-        @ElementBuilder<Row> rows: () -> [Row]
+        @ContentBuilder<Row> rows: () -> [Row]
     ) {
         self.filterTitle = filterTitle
         self.rows = HTMLCollection(rows())
@@ -74,7 +74,7 @@ public struct Table: HTML {
     ///   - header: An array of headers to use at the top of the table.
     public init(
         filterTitle: String? = nil,
-        @ElementBuilder<Row> rows: () -> [Row],
+        @ContentBuilder<Row> rows: () -> [Row],
         @HTMLBuilder header: () -> some HTML
     ) {
         self.filterTitle = filterTitle

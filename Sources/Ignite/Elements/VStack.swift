@@ -10,7 +10,7 @@
 /// - Note: To ensure spacing is consistent, `VStack` strips its subviews of
 /// implicit styles, such as the bottom margin automatically applied to paragraphs.
 /// To retain these implicit styles, set `spacing` to `nil`.
-public struct VStack: HTML {
+public struct VStack: Element {
     /// A type that represents spacing values in either exact pixels or semantic spacing amounts.
     private enum SpacingType: Equatable {
         case exact(Int), semantic(SpacingAmount)
@@ -86,7 +86,7 @@ public struct VStack: HTML {
     public init(
         alignment: HorizontalAlignment.ResponsiveAlignment,
         spacing pixels: Int? = 0,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder items: () -> some Element
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment

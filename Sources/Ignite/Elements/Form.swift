@@ -9,7 +9,7 @@
 public protocol FormItem: HTML {}
 
 /// A form container for collecting user input
-public struct Form: HTML, NavigationItem {
+public struct Form: Element, NavigationItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -41,7 +41,7 @@ public struct Form: HTML, NavigationItem {
     /// Sets the style for form labels
     /// - Parameter style: How labels should be displayed
     /// - Returns: A modified form with the specified label style
-    public func labelStyle(_ style: ControlLabelStyle) -> some HTML {
+    public func labelStyle(_ style: ControlLabelStyle) -> some Element {
         var copy = self
         copy.labelStyle = style
         return copy
@@ -59,7 +59,7 @@ public struct Form: HTML, NavigationItem {
     /// Adjusts the number of columns that can be fitted into this section.
     /// - Parameter columns: The number of columns to use
     /// - Returns: A new `Section` instance with the updated column count.
-    public func columns(_ columns: Int) -> some HTML {
+    public func columns(_ columns: Int) -> some Element {
         var copy = self
         copy.columnCount = columns
         return copy
@@ -80,7 +80,7 @@ public struct Form: HTML, NavigationItem {
     ///   - content: A closure that returns the form's elements.
     public init(
         spacing: SpacingAmount = .medium,
-        @ElementBuilder<FormItem> content: () -> [any FormItem]
+        @ContentBuilder<FormItem> content: () -> [any FormItem]
     ) {
         self.items = content()
         self.spacing = spacing
@@ -168,11 +168,11 @@ public struct Form: HTML, NavigationItem {
         }
     }
 
-    private func renderControlGroup(_ group: ControlGroup) -> some HTML {
+    private func renderControlGroup(_ group: ControlGroup) -> some Element {
         group.labelStyle(labelStyle)
     }
 
-    private func renderSection(_ section: Section) -> some HTML {
+    private func renderSection(_ section: Section) -> some Element {
         var items = HTMLCollection([section.content]).elements
 
         let last = items.last

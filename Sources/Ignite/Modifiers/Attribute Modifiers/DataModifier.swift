@@ -5,24 +5,30 @@
 // See LICENSE for license information.
 //
 
-private extension HTML {
-    func dataModifier(name: String, value: String) -> any HTML {
-        // Custom elements need to be wrapped in a primitive container to store attributes
-        guard value.isEmpty == false else { return self }
-        var copy: any HTML = self.isPrimitive ? self : Section(self)
-        copy.attributes.data.append(.init(name: name, value: value))
-        return copy
-    }
+@MainActor
+private func dataModifier(_ name: String, value: String, content: any HTML) -> any HTML {
+    guard !value.isEmpty else { return content }
+    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    copy.attributes.data.append(.init(name: name, value: value))
+    return copy
 }
 
-public extension HTML {
+@MainActor
+private func dataModifier(_ name: String, value: String, content: any InlineElement) -> any InlineElement {
+    guard !value.isEmpty else { return content }
+    var copy: any InlineElement = content.isPrimitive ? content : Span(content)
+    copy.attributes.data.append(.init(name: name, value: value))
+    return copy
+}
+
+public extension Element {
     /// Adds a data attribute to the element.
     /// - Parameters:
     ///   - name: The name of the data attribute
     ///   - value: The value of the data attribute
     /// - Returns: The modified `HTML` element
-    func data(_ name: String, _ value: String) -> some HTML {
-        AnyHTML(dataModifier(name: name, value: value))
+    func data(_ name: String, _ value: String) -> some Element {
+        AnyHTML(dataModifier(name, value: value, content: self))
     }
 }
 
@@ -33,6 +39,17 @@ public extension InlineElement {
     ///   - value: The value of the data attribute
     /// - Returns: The modified `HTML` element
     func data(_ name: String, _ value: String) -> some InlineElement {
-        AnyHTML(dataModifier(name: name, value: value))
+        AnyInlineElement(dataModifier(name, value: value, content: self))
+    }
+}
+
+extension HTML {
+    /// Adds a data attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the data attribute
+    ///   - value: The value of the data attribute
+    /// - Returns: The modified `Element` element
+    func data(_ name: String, _ value: String) -> some HTML {
+        AnyHTML(dataModifier(name, value: value, content: self))
     }
 }

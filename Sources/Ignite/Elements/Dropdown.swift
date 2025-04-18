@@ -12,7 +12,7 @@ public protocol DropdownItem: HTML {}
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
-public struct Dropdown: HTML, NavigationItem, FormItem {
+public struct Dropdown: Element, NavigationItem, FormItem {
     /// How the dropdown should be rendered based on its context.
     enum Configuration: Sendable {
         /// Renders as a complete standalone dropdown.
@@ -57,7 +57,7 @@ public struct Dropdown: HTML, NavigationItem, FormItem {
     ///   - items: The elements to place inside the dropdown menu.
     public init(
         _ title: any InlineElement,
-        @ElementBuilder<any DropdownItem> items: () -> [any DropdownItem]
+        @ContentBuilder<any DropdownItem> items: () -> [any DropdownItem]
     ) {
         self.title = title
         self.items = items()
@@ -69,7 +69,7 @@ public struct Dropdown: HTML, NavigationItem, FormItem {
     ///   - items: The elements to place inside the dropdown menu.
     ///   - title: The title to show on this dropdown button.
     public init(
-        @ElementBuilder<any DropdownItem> items: () -> [any DropdownItem],
+        @ContentBuilder<any DropdownItem> items: () -> [any DropdownItem],
         @InlineElementBuilder title: () -> any InlineElement
     ) {
         self.items = items()

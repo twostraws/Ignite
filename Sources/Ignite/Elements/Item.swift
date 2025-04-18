@@ -6,7 +6,7 @@
 //
 
 /// One item inside an accordion.
-public struct Item: HTML {
+public struct Item: Element {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

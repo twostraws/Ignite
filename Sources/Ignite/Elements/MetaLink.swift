@@ -86,7 +86,7 @@ public struct MetaLink: HeadElement, Sendable {
     /// - Parameters:
     ///   - href: The location of the resource in question.
     ///   - rel: How this resource relates to the current page.
-    public init(href: String, rel: Link.Relationship) {
+    public init(href: String, rel: LinkRelationship) {
         self.href = href
         self.rel = rel.rawValue
     }
@@ -95,7 +95,7 @@ public struct MetaLink: HeadElement, Sendable {
     /// - Parameters:
     ///   - href: The location of the resource in question.
     ///   - rel: How this resource relates to the current page.
-    public init(href: URL, rel: Link.Relationship) {
+    public init(href: URL, rel: LinkRelationship) {
         self.href = href.absoluteString
         self.rel = rel.rawValue
     }

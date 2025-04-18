@@ -23,7 +23,7 @@ struct TestSubsite: Site {
 struct TestSubsitePage: StaticPage {
     var title = "Subsite Home"
 
-    var body: some HTML {
+    var body: some Element {
         Text("Example subsite text")
     }
 }

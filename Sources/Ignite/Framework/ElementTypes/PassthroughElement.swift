@@ -10,6 +10,7 @@
 /// Elements that conform to `PassthroughHTML` act as transparent containers,
 /// allowing their content and styling to flow through to their child elements.
 @MainActor protocol PassthroughElement: HTML {
+    associatedtype Content: HTML & Sequence
     /// The child elements contained within this HTML element.
-    var items: HTMLCollection { get }
+    var items: Content { get }
 }

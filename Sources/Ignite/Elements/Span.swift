@@ -9,7 +9,7 @@
 /// just part of some text, for example.
 public struct Span: InlineElement, NavigationItem, FormItem {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some InlineElement { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -23,7 +23,7 @@ public struct Span: InlineElement, NavigationItem, FormItem {
     /// Creates a span with no content. Used in some situations where
     /// exact styling is performed by Bootstrap, e.g. in Carousel.
     public init() {
-        self.contents = EmptyHTML()
+        self.contents = EmptyInlineElement()
     }
 
     /// Creates a span from one `InlineElement`.

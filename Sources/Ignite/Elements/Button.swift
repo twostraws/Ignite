@@ -30,7 +30,7 @@ public struct Button: InlineElement, FormItem {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some InlineElement { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -48,7 +48,7 @@ public struct Button: InlineElement, FormItem {
     var role = Role.default
 
     /// Elements to render inside this button.
-    var label: any HTML
+    var label: any InlineElement
 
     /// Whether the button is disabled and cannot be interacted with.
     private var isDisabled = false
@@ -56,7 +56,7 @@ public struct Button: InlineElement, FormItem {
     /// Creates a button with no label. Used in some situations where
     /// exact styling is performed by Bootstrap, e.g. in Carousel.
     public init() {
-        self.label = EmptyHTML()
+        self.label = EmptyInlineElement()
     }
 
     /// Creates a button with a label.

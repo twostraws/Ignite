@@ -9,9 +9,9 @@ import Foundation
 
 /// Embeds some JavaScript inside this page, either directly or by
 /// referencing an external file.
-public struct Script: HTML, HeadElement {
+public struct Script: Element, HeadElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

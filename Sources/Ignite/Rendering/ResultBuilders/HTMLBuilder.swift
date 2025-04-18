@@ -60,7 +60,7 @@ public struct HTMLBuilder {
     /// Handles the first branch of an if/else statement.
     /// - Parameter component: The HTML element to use if condition is true
     /// - Returns: The wrapped HTML element
-    public static func buildEither<Content: HTML>(first component: Content) -> AnyHTML {
+    public static func buildEither<Content: Element>(first component: Content) -> AnyHTML {
         AnyHTML(component)
     }
 
@@ -103,13 +103,6 @@ public struct HTMLBuilder {
         text
     }
 
-    /// Handles inline elements that conform to HTML protocol.
-    /// - Parameter content: The inline HTML element
-    /// - Returns: The same element unchanged
-    public static func buildExpression<Content: InlineElement>(_ content: Content) -> some HTML {
-        content
-    }
-
     /// Handles availability conditions in switch statements.
     /// - Parameter component: The HTML element to conditionally include
     /// - Returns: The same HTML element unchanged
@@ -148,8 +141,8 @@ extension HTMLBuilder {
     /// Loads a single piece of HTML to be combined with others.
     /// - Parameter content: The HTML to load.
     /// - Returns: The original thing we read, ready to be combined.
-    public static func buildPartialBlock<Content>(first content: Content) -> Content where Content: HTML {
-        content
+    public static func buildPartialBlock<Content>(first content: Content) -> AnyHTML where Content: HTML {
+        AnyHTML(content)
     }
 
     /// Combines an exist piece of HTML with another piece.
@@ -157,7 +150,11 @@ extension HTMLBuilder {
     ///   - accumulated: The previous collection of HTML.
     ///   - next: The next piece of HTML to combine.
     /// - Returns: The combined HTML.
-    public static func buildPartialBlock<C0: HTML, C1: HTML>(accumulated: C0, next: C1) -> some HTML {
+    public static func buildPartialBlock
+    <C0: HTML, C1: HTML>(
+        accumulated: C0,
+        next: C1
+    ) -> some HTML {
         if var current = accumulated as? HTMLCollection {
             current.elements.append(next)
             return current

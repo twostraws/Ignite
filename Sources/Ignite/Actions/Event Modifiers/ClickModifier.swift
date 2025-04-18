@@ -5,11 +5,11 @@
 // See LICENSE for license information.
 //
 
-public extension HTML {
+public extension Element {
     /// Adds an "onclick" JavaScript event to this element.
     /// - Parameter actions: A closure that returns the actions to execute when clicked.
     /// - Returns: A modified HTML element with the click event handler attached.
-    func onClick(@ActionBuilder actions: () -> [Action]) -> some HTML {
+    func onClick(@ActionBuilder actions: () -> [Action]) -> some Element {
         self.onEvent(.click, actions())
     }
 }

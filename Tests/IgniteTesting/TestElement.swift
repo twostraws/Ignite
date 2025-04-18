@@ -7,14 +7,14 @@
 
 @testable import Ignite
 
-private struct TestSubElement: HTML {
-    var body: some HTML {
+private struct TestSubElement: Element {
+    var body: some Element {
         Text("Test Heading!")
     }
 }
 
 /// A custom element that modifiers can test.
-struct TestElement: HTML {
+struct TestElement: Element {
     var body: some HTML {
         TestSubElement()
         Text("Test Subheading")

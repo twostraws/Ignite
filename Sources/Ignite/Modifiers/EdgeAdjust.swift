@@ -50,6 +50,48 @@ extension HTML {
     }
 }
 
+extension InlineElement {
+    /// Adjusts the edge value (margin or padding) for a view using an adaptive amount.
+    /// - Parameters:
+    ///   - prefix: Specifies what we are changing, e.g. "padding"
+    ///   - edges: Which edges we are changing.
+    ///   - amount: The value we are changing it to.
+    /// - Returns: A copy of the current element with the updated edge adjustment.
+    func edgeAdjust(prefix: String, _ edges: Edge = .all, _ amount: SpacingAmount) -> any InlineElement {
+        if edges.contains(.all) {
+            return self.class("\(prefix)-\(amount.rawValue)")
+        }
+
+        var copy: any InlineElement = self
+
+        if edges.contains(.horizontal) {
+            copy = copy.class("\(prefix)x-\(amount.rawValue)")
+        } else {
+            if edges.contains(.leading) {
+                copy = copy.class("\(prefix)s-\(amount.rawValue)")
+            }
+
+            if edges.contains(.trailing) {
+                copy = copy.class("\(prefix)e-\(amount.rawValue)")
+            }
+        }
+
+        if edges.contains(.vertical) {
+            copy = copy.class("\(prefix)y-\(amount.rawValue)")
+        } else {
+            if edges.contains(.top) {
+                copy = copy.class("\(prefix)t-\(amount.rawValue)")
+            }
+
+            if edges.contains(.bottom) {
+                copy = copy.class("\(prefix)b-\(amount.rawValue)")
+            }
+        }
+
+        return copy
+    }
+}
+
 extension Stylable {
     /// Adjusts the edge value (margin or padding) for a view.
     /// - Parameters:

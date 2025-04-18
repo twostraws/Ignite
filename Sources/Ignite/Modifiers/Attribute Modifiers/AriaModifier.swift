@@ -5,24 +5,47 @@
 // See LICENSE for license information.
 //
 
-private extension HTML {
-    func ariaModifier(key: AriaType, value: String?) -> any HTML {
-        guard let value else { return self }
-        // Custom elements need to be wrapped in a primitive container to store attributes
-        var copy: any HTML = self.isPrimitive ? self : Section(self)
-        copy.attributes.aria.append(.init(name: key.rawValue, value: value))
-        return copy
-    }
+@MainActor
+private func ariaModifier(
+    _ key: AriaType,
+    value: String?,
+    content: any HTML
+) -> any HTML {
+    guard let value else { return content }
+    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    copy.attributes.aria.append(.init(name: key.rawValue, value: value))
+    return copy
 }
 
-public extension HTML {
+@MainActor
+private func ariaModifier(
+    _ key: AriaType,
+    value: String?,
+    content: any InlineElement
+) -> any InlineElement {
+    guard let value else { return content }
+    var copy: any InlineElement = content.isPrimitive ? content : Span(content)
+    copy.attributes.aria.append(.init(name: key.rawValue, value: value))
+    return copy
+}
+
+public extension Element {
+    /// Adds an ARIA attribute to the element.
+    /// - Parameters:
+    ///   - key: The ARIA attribute key
+    ///   - value: The ARIA attribute value
+    /// - Returns: The modified `Element` element
+    func aria(_ key: AriaType, _ value: String) -> some Element {
+        AnyHTML(ariaModifier(key, value: value, content: self))
+    }
+
     /// Adds an ARIA attribute to the element.
     /// - Parameters:
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
-    func aria(_ key: AriaType, _ value: String) -> some HTML {
-        AnyHTML(ariaModifier(key: key, value: value))
+    func aria(_ key: AriaType, _ value: String?) -> some Element {
+        AnyHTML(ariaModifier(key, value: value, content: self))
     }
 }
 
@@ -33,7 +56,16 @@ public extension InlineElement {
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
     func aria(_ key: AriaType, _ value: String) -> some InlineElement {
-        AnyHTML(ariaModifier(key: key, value: value))
+        AnyInlineElement(ariaModifier(key, value: value, content: self))
+    }
+
+    /// Adds an ARIA attribute to the element.
+    /// - Parameters:
+    ///   - key: The ARIA attribute key
+    ///   - value: The ARIA attribute value
+    /// - Returns: The modified `Element` element
+    func aria(_ key: AriaType, _ value: String?) -> some InlineElement {
+        AnyInlineElement(ariaModifier(key, value: value, content: self))
     }
 }
 
@@ -44,17 +76,6 @@ extension HTML {
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
     func aria(_ key: AriaType, _ value: String?) -> some HTML {
-        AnyHTML(ariaModifier(key: key, value: value))
-    }
-}
-
-extension InlineElement {
-    /// Adds an ARIA attribute to the element.
-    /// - Parameters:
-    ///   - key: The ARIA attribute key
-    ///   - value: The ARIA attribute value
-    /// - Returns: The modified `HTML` element
-    func aria(_ key: AriaType, _ value: String?) -> some InlineElement {
-        AnyHTML(ariaModifier(key: key, value: value))
+        AnyHTML(ariaModifier(key, value: value, content: self))
     }
 }

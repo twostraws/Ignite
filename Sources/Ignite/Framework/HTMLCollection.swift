@@ -10,7 +10,7 @@
 /// `HTMLCollection` is used internally to handle opaque HTML content returned from result builders,
 /// particularly in loops and other control flow situations. It converts potentially nested
 /// structures into a flat, iterable collections of `HTML` elements.
-struct HTMLCollection: InlineElement, FormItem, @preconcurrency Sequence {
+struct HTMLCollection: Element, @preconcurrency Sequence {
     /// The content and behavior of this HTML sequence
     var body: some HTML { self }
 
@@ -67,9 +67,28 @@ struct HTMLCollection: InlineElement, FormItem, @preconcurrency Sequence {
     private func flatten(_ content: any HTML) -> [any HTML] {
         if let anyHTML = content as? AnyHTML {
             flatten(anyHTML.attributedContent)
+        } else if let anyHTML = content as? AnyInlineElement {
+            flatten(anyHTML.attributedContent)
         } else if let collection = content as? HTMLCollection {
             collection.attributedElements.flatMap { flatten($0) }
+        } else if let collection = content as? InlineElementCollection {
+            collection.attributedElements.flatMap { flatten($0) }
         } else if content is EmptyHTML {
+            []
+        } else {
+            [content]
+        }
+    }
+
+    /// Recursively flattens nested Element content into a single array, deconstructing wrapper types.
+    /// - Parameter content: The content to flatten
+    /// - Returns: An array of unwrapped Element elements
+    private func flatten(_ content: any InlineElement) -> [any InlineElement] {
+        if let anyHTML = content as? AnyInlineElement {
+            flatten(anyHTML.attributedContent)
+        } else if let collection = content as? InlineElementCollection {
+            collection.attributedElements.flatMap { flatten($0) }
+        } else if content is EmptyInlineElement {
             []
         } else {
             [content]

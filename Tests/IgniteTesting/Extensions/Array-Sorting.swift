@@ -186,10 +186,10 @@ struct ArraySortingTests {
 
     // MARK: Tests for an HTML conforming type.
     // Given
-    struct MockHTML: HTML {
+    struct MockHTML: Element {
         var id: String
         var isPrimitive: Bool = Bool.random()
-        var body: some HTML { self }
+        var body: some Element { self }
         func render() -> String { "<div id=\"\(id)\"></div>" }
     }
 

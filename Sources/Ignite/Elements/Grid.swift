@@ -12,7 +12,7 @@
 ///
 /// **Note**: A 12-column grid is the default, but you can adjust that downwards
 /// by using the `columns()` modifier.
-public struct Grid: HTML {
+public struct Grid: Element {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -166,7 +166,7 @@ public struct Grid: HTML {
             name = scaleWidthClass(widthClass)
         }
 
-        item = item.isSection ? item : Section(item)
+        item = item.is(Section.self) ? item : Section(item)
 
         return item
             .class(name ?? "col")
@@ -185,7 +185,9 @@ public struct Grid: HTML {
             ""
         }
 
-        return ForEach(passthrough.items) { item in
+        var collection = HTMLCollection([])
+        passthrough.items.forEach { collection.elements.append($0 as! (any HTML)) }
+        return ForEach(collection) { item in
             handleItem(item.attributes(attributes))
                 .class(gutterClass)
                 .render()

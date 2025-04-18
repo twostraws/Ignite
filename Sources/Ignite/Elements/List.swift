@@ -6,7 +6,7 @@
 //
 
 /// Creates a list of items, either ordered or unordered.
-public struct List: HTML {
+public struct List: Element {
     /// Controls whether this list contains items in a specific order or not.
     public enum ListMarkerStyle {
         /// This list contains items that are ordered, which normally means

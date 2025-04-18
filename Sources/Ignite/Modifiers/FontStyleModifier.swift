@@ -5,12 +5,26 @@
 // See LICENSE for license information.
 //
 
-public extension HTML {
+@MainActor
+private func fontStyleModifier(_ style: Font.Style, content: any Element) -> any Element {
+    if content is Text {
+        return content.fontStyle(style)
+    } else {
+        return content.class(style.fontSizeClass)
+    }
+}
+
+@MainActor
+private func fontStyleModifier(_ style: Font.Style, content: any InlineElement) -> any InlineElement {
+    content.fontStyle(style)
+}
+
+public extension Element {
     /// Adjusts the heading level of this text.
     /// - Parameter style: The new heading level.
     /// - Returns: A new `Text` instance with the updated font style.
-    func font(_ style: Font.Style) -> some HTML {
-        AnyHTML(fontStyleModifier(style: style))
+    func font(_ style: Font.Style) -> some Element {
+        AnyHTML(fontStyleModifier(style, content: self))
     }
 }
 
@@ -19,16 +33,6 @@ public extension InlineElement {
     /// - Parameter style: The new heading level.
     /// - Returns: A new `Text` instance with the updated font style.
     func font(_ style: Font.Style) -> some InlineElement {
-        AnyHTML(fontStyleModifier(style: style))
-    }
-}
-
-private extension HTML {
-    func fontStyleModifier(style: Font.Style) -> any HTML {
-        if self.isText {
-            self.fontStyle(style)
-        } else {
-            self.class(style.fontSizeClass)
-        }
+        AnyInlineElement(fontStyleModifier(style, content: self))
     }
 }

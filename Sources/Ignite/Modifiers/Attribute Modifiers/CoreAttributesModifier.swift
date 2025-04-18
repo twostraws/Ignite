@@ -5,12 +5,41 @@
 // See LICENSE for license information.
 //
 
-private extension HTML {
-    func coreAttributesModifier(_ attributes: CoreAttributes) -> any HTML {
-        // Custom elements need to be wrapped in a primitive container to store attributes
-        var copy: any HTML = self.isPrimitive ? self : Section(self)
-        copy.attributes.merge(attributes)
-        return copy
+@MainActor private func coreAttributesModifier(
+    _ attributes: CoreAttributes,
+    content: any HTML
+) -> any HTML {
+    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    copy.attributes.merge(attributes)
+    return copy
+}
+
+@MainActor private func coreAttributesModifier(
+    _ attributes: CoreAttributes,
+    content: any InlineElement
+) -> any InlineElement {
+    var copy: any InlineElement = content.isPrimitive ? content : Span(content)
+    copy.attributes.merge(attributes)
+    return copy
+}
+
+public extension Element {
+    /// Merges a complete set of core attributes into this element.
+    /// - Parameter attributes: The CoreAttributes to merge with existing attributes
+    /// - Returns: The modified Element element
+    /// - Note: Uses AttributeStore for persistent storage and merging
+    func attributes(_ attributes: CoreAttributes) -> some Element {
+        AnyHTML(coreAttributesModifier(attributes, content: self))
+    }
+}
+
+public extension InlineElement {
+    /// Merges a complete set of core attributes into this element.
+    /// - Parameter attributes: The CoreAttributes to merge with existing attributes
+    /// - Returns: The modified Element element
+    /// - Note: Uses AttributeStore for persistent storage and merging
+    func attributes(_ attributes: CoreAttributes) -> some InlineElement {
+        AnyInlineElement(coreAttributesModifier(attributes, content: self))
     }
 }
 
@@ -20,16 +49,6 @@ extension HTML {
     /// - Returns: The modified HTML element
     /// - Note: Uses AttributeStore for persistent storage and merging
     func attributes(_ attributes: CoreAttributes) -> some HTML {
-        AnyHTML(coreAttributesModifier(attributes))
-    }
-}
-
-extension InlineElement {
-    /// Merges a complete set of core attributes into this element.
-    /// - Parameter attributes: The CoreAttributes to merge with existing attributes
-    /// - Returns: The modified HTML element
-    /// - Note: Uses AttributeStore for persistent storage and merging
-    func attributes(_ attributes: CoreAttributes) -> some InlineElement {
-        AnyHTML(coreAttributesModifier(attributes))
+        AnyHTML(coreAttributesModifier(attributes, content: self))
     }
 }

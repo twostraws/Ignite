@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public extension HTML {
+public extension Element {
     /// Adds a badge to the right side of this element.
     ///
     /// Use badges to add small, supplementary information to any inline element.
@@ -18,7 +18,7 @@ public extension HTML {
     ///
     /// - Parameter badge: The badge to display.
     /// - Returns: A list item containing the original content and badge.
-    func badge(_ badge: Badge) -> some HTML {
+    func badge(_ badge: Badge) -> some Element {
         ListItem {
             self
             badge
@@ -42,7 +42,7 @@ public extension ListItem {
     ///
     /// - Parameter badge: The badge to display.
     /// - Returns: A modified list item with proper badge styling.
-    func badge(_ badge: Badge) -> some HTML {
+    func badge(_ badge: Badge) -> some Element {
         self.class("d-flex", "justify-content-between", "align-items-center")
     }
 }

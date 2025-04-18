@@ -6,7 +6,7 @@
 //
 
 /// One row inside a `Table`.
-public struct Row: HTML {
+public struct Row: Element {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

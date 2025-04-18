@@ -6,7 +6,7 @@
 //
 
 /// A modal dialog presented on top of the screen
-public struct Modal: HTML {
+public struct Modal: Element {
     /// The size of the modal. Except from the full screen modal the height is defined by the height wheras the width
     public enum Size: CaseIterable, Sendable {
         /// A modal dialog with a small max-width of 300px

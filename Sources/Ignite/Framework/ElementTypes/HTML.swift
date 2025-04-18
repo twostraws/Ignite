@@ -14,53 +14,22 @@
 /// You typically don't conform to `HTML` directly. Instead, use one of the built-in elements like
 /// `Div`, `Paragraph`, or `Link`, or create custom components by conforming to `HTMLRootElement`.
 @MainActor
-public protocol HTML: Stylable, CustomStringConvertible, Sendable {
-    /// The standard set of control attributes for HTML elements.
-    var attributes: CoreAttributes { get set }
-
-    /// Whether this HTML belongs to the framework.
-    var isPrimitive: Bool { get }
-
+public protocol Element: HTML {
     /// The type of HTML content this element contains.
     associatedtype Body: HTML
 
     /// The content and behavior of this `HTML` element.
     @HTMLBuilder var body: Body { get }
-
-    /// Converts this element and its children into an HTML string with attributes.
-    /// - Returns: A string containing the rendered HTML
-    func render() -> String
 }
 
-public extension HTML {
-    /// The complete `HTML` string representation of the element.
-    nonisolated var description: String {
-        MainActor.assumeIsolated {
-            self.render()
-        }
-    }
-
-    /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
-    var attributes: CoreAttributes {
-        get { CoreAttributes() }
-        set {} // swiftlint:disable:this unused_setter_value
-    }
-
-    /// The default status as a primitive element.
-    var isPrimitive: Bool { false }
-
+public extension Element {
     /// Generates the complete `HTML` string representation of the element.
     func render() -> String {
         body.render()
     }
 }
 
-extension HTML {
-    /// The publishing context of this site.
-    var publishingContext: PublishingContext {
-        PublishingContext.shared
-    }
-
+extension Element {
     /// The Bootstrap class that sizes this element in a grid.
     var columnWidth: String {
         if let width = attributes.classes.first(where: {
@@ -80,57 +49,26 @@ extension HTML {
         }
     }
 
-    /// Whether this element represents a specific type.
-    func `is`(_ elementType: any HTML.Type) -> Bool {
-        if let anyHTML = body as? AnyHTML {
-            type(of: anyHTML.wrapped) == elementType
-        } else {
-            type(of: body) == elementType
-        }
-    }
-
-    /// The underlying content, conditionally cast to the specified type.
-    func `as`<T: HTML>(_ elementType: T.Type) -> T? {
-        if let anyHTML = body as? AnyHTML, let element = anyHTML.attributedContent as? T {
-            element
-        } else if let element = body as? T {
-            element
-        } else {
-            nil
-        }
-    }
-
     /// A Boolean value indicating whether this represents `Text`.
     var isText: Bool {
-        self.is(Text.self)
-    }
-
-    /// A Boolean value indicating whether this represents `Image`.
-    var isImage: Bool {
-        self.is(Image.self)
+        if let anyHTML = body as? AnyHTML {
+            anyHTML.wrapped is Text
+        } else {
+            body is Text
+        }
     }
 
     /// A Boolean value indicating whether this represents `Section`.
     var isSection: Bool {
-        self.is(Section.self)
-    }
-
-    /// A Boolean value indicating whether this represents a textual element.
-    var isTextualElement: Bool {
-        self.isText || self.isInlineElement
-    }
-
-    /// A Boolean value indicating whether this element's default display is inline.
-    var isInlineElement: Bool {
         if let anyHTML = body as? AnyHTML {
-            anyHTML.wrapped is any InlineElement
+            anyHTML.wrapped is Section
         } else {
-            body is any InlineElement
+            body is Section
         }
     }
 }
 
-extension HTML {
+extension Element {
     /// Adds an event handler to the element.
     /// - Parameters:
     ///   - name: The name of the event (e.g., "click", "mouseover")
@@ -146,7 +84,7 @@ extension HTML {
     /// - Parameter tabFocus: The TabFocus enum value defining keyboard navigation behavior
     /// - Returns: The modified HTML element
     /// - Note: Adds appropriate HTML attribute based on TabFocus enum
-    func tabFocus(_ tabFocus: TabFocus) -> some HTML {
+    func tabFocus(_ tabFocus: TabFocus) -> some Element {
         customAttribute(name: tabFocus.htmlName, value: tabFocus.value)
     }
 

@@ -6,7 +6,7 @@
 //
 
 /// A block quote of text.
-public struct Quote: HTML {
+public struct Quote: Element {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -24,7 +24,7 @@ public struct Quote: HTML {
     /// - Parameter contents: The elements to display inside the quote.
     public init(@HTMLBuilder contents: () -> some HTML) {
         self.contents = contents()
-        self.caption = EmptyHTML()
+        self.caption = EmptyInlineElement()
     }
 
     /// Create a new quote from a page element builder that returns an array
@@ -43,19 +43,14 @@ public struct Quote: HTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Returns: The HTML for this element.
+    /// - Returns: The Element for this element.
     public func render() -> String {
-        var attributes = attributes
-        attributes.append(classes: "blockquote")
-
-        let renderedContents = contents.render()
-        let renderedCaption = caption.render()
-
-        if renderedCaption.isEmpty {
-            return "<blockquote\(attributes)>\(renderedContents)</blockquote>"
-        } else {
-            let footer = "<footer class=\"blockquote-footer\">\(renderedCaption)</footer>"
-            return "<blockquote\(attributes)>\(renderedContents + footer)</blockquote>"
+        var result = "<blockquote\(attributes)>"
+        result += contents.render()
+        if !(caption is EmptyInlineElement) {
+            result += "<footer>\(caption.render())</footer>"
         }
+        result += "</blockquote>"
+        return result
     }
 }

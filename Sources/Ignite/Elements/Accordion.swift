@@ -7,7 +7,7 @@
 
 /// A control that displays a list of section titles that can be folded out to
 /// display more content.
-public struct Accordion: HTML {
+public struct Accordion: Element {
     /// Controls what happens when a section is opened.
     public enum OpenMode: Sendable {
         /// Opening one accordion section automatically closes all others.
@@ -37,7 +37,7 @@ public struct Accordion: HTML {
     /// Create a new Accordion from a collection of sections.
     /// - Parameter items: A result builder containing all the sections
     /// you want to display in this accordion.
-    public init(@ElementBuilder<Item> _ items: () -> [Item]) {
+    public init(@ContentBuilder<Item> _ items: () -> [Item]) {
         self.items = items()
     }
 

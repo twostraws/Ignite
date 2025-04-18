@@ -7,7 +7,7 @@
 
 /// A container that automatically adjusts the styling for buttons it contains so
 /// that they sit more neatly together.
-public struct ButtonGroup: HTML {
+public struct ButtonGroup: Element {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -31,7 +31,7 @@ public struct ButtonGroup: HTML {
     ///   - content: An element builder containing the contents for this group.
     public init(
         accessibilityLabel: String,
-        @ElementBuilder<Button> _ content: () -> [Button]
+        @ContentBuilder<Button> _ content: () -> [Button]
     ) {
         self.accessibilityLabel = accessibilityLabel
         self.content = content()
