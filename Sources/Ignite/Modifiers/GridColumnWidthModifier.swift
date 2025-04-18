@@ -16,7 +16,16 @@
     }
 }
 
-public extension HTML {
+public extension Element {
+    /// Adjusts the number of columns assigned to this element.
+    /// - Parameter width: The new number of columns to use.
+    /// - Returns: A new element with the adjusted column width.
+    func width(_ width: Int) -> some Element {
+        gridColumnWidthModifier(width, content: self)
+    }
+}
+
+public extension InlineElement {
     /// Adjusts the number of columns assigned to this element.
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A new element with the adjusted column width.
