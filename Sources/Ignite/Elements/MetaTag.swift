@@ -190,3 +190,27 @@ public struct MetaTag: HeadElement, Sendable {
         return "<meta\(attributes) />"
     }
 }
+
+public extension MetaTag {
+    /// Adds a data attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the data attribute
+    ///   - value: The value of the data attribute
+    /// - Returns: The modified `Element` element
+    func data(_ name: String, _ value: String) -> Self {
+        var copy = self
+        copy.attributes.data.append(.init(name: name, value: value))
+        return copy
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(name: String, value: String) -> Self {
+        var copy = self
+        copy.attributes.append(customAttributes: .init(name: name, value: value))
+        return copy
+    }
+}

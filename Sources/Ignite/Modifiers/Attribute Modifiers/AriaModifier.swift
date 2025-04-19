@@ -8,10 +8,10 @@
 @MainActor private func ariaModifier(
     _ key: AriaType,
     value: String?,
-    content: any RenderableElement
-) -> any RenderableElement {
+    content: any BodyElement
+) -> any BodyElement {
     guard let value else { return content }
-    var copy: any RenderableElement = content.isPrimitive ? content : Section(content)
+    var copy: any BodyElement = content.isPrimitive ? content : Section(content)
     copy.attributes.aria.append(.init(name: key.rawValue, value: value))
     return copy
 }
@@ -64,16 +64,5 @@ public extension InlineElement {
     /// - Returns: The modified `Element` element
     func aria(_ key: AriaType, _ value: String?) -> some InlineElement {
         AnyInlineElement(ariaModifier(key, value: value, content: self))
-    }
-}
-
-extension RenderableElement {
-    /// Adds an ARIA attribute to the element.
-    /// - Parameters:
-    ///   - key: The ARIA attribute key
-    ///   - value: The ARIA attribute value
-    /// - Returns: The modified `HTML` element
-    func aria(_ key: AriaType, _ value: String?) -> some RenderableElement {
-        AnyHTML(ariaModifier(key, value: value, content: self))
     }
 }

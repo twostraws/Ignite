@@ -12,8 +12,8 @@ private enum MarginType {
 @MainActor private func marginModifier(
     _ margin: MarginType,
     edges: Edge = .all,
-    content: any RenderableElement & Stylable
-) -> any RenderableElement {
+    content: any BodyElement
+) -> any BodyElement {
     switch margin {
     case .exact(let unit):
         let styles = content.edgeAdjustedStyles(prefix: "margin", edges, unit.stringValue)

@@ -7,7 +7,7 @@
 
 /// Elements that conform to `DropdownItem` can be shown inside
 /// Dropdown objects.
-public protocol DropdownItem: RenderableElement {}
+public protocol DropdownItem: BodyElement {}
 
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
@@ -121,7 +121,7 @@ public struct Dropdown: HTML, NavigationItem, FormItem {
     /// Creates the internal dropdown structure including the trigger button and menu items.
     /// - Returns: A group containing the dropdown's trigger and menu list.
     @HTMLBuilder
-    private func renderDropdownContent() -> some RenderableElement {
+    private func renderDropdownContent() -> some BodyElement {
         if configuration == .navigationBarItem {
             let titleAttributes = title.attributes
             let title = title.clearingAttributes()

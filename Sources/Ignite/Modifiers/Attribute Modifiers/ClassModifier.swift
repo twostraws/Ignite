@@ -7,10 +7,10 @@
 
 @MainActor private func classModifier(
     _ classNames: [String],
-    content: any RenderableElement
-) -> any RenderableElement {
+    content: any BodyElement
+) -> any BodyElement {
     guard !classNames.filter({ !$0.isEmpty }).isEmpty else { return content }
-    var copy: any RenderableElement = content.isPrimitive ? content : Section(content)
+    var copy: any BodyElement = content.isPrimitive ? content : Section(content)
     copy.attributes.append(classes: classNames)
     return copy
 }
@@ -94,11 +94,11 @@ public extension FormItem where Self: InlineElement {
 // These should always remain private, because for the
 // type safety of the public facing API we always want
 // to return either Element or InlineElement.
-extension RenderableElement {
+extension BodyElement {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified Element element
-    func `class`(_ newClasses: String?...) -> some RenderableElement {
+    func `class`(_ newClasses: String?...) -> some BodyElement {
         let classes = newClasses.compactMap(\.self)
         return AnyHTML(classModifier(classes, content: self))
     }
@@ -106,7 +106,7 @@ extension RenderableElement {
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
     /// - Returns: The modified `Element` element
-    func `class`(_ newClasses: [String]) -> some RenderableElement {
+    func `class`(_ newClasses: [String]) -> some BodyElement {
         AnyHTML(classModifier(newClasses, content: self))
     }
 }

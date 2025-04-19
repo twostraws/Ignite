@@ -8,7 +8,7 @@
 /// Both the margin() and padding() modifiers work identically apart from the exact
 /// name of the CSS attribute they change, so their functionality is wrapped up here
 /// to avoid code duplication. This should not be called directly.
-extension RenderableElement {
+extension BodyElement {
     /// Adjusts the edge value (margin or padding) for a view using an adaptive amount.
     /// - Parameters:
     ///   - prefix: Specifies what we are changing, e.g. "padding"

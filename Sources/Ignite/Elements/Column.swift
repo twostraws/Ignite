@@ -41,7 +41,7 @@ public struct Column: HTML {
     /// Creates a new column from a page element builder of items.
     /// - Parameter items: A page element builder that returns the items
     /// for this column.
-    public init(@HTMLBuilder items: () -> some RenderableElement) {
+    public init(@HTMLBuilder items: () -> some BodyElement) {
         self.items = HTMLCollection(items)
     }
 

@@ -7,9 +7,9 @@
 
 @MainActor private func inlineStyleModifier(
     _ styles: [InlineStyle],
-    content: any RenderableElement
-) -> any RenderableElement {
-    var copy: any RenderableElement = content.isPrimitive ? content : Section(content)
+    content: any BodyElement
+) -> any BodyElement {
+    var copy: any BodyElement = content.isPrimitive ? content : Section(content)
     copy.attributes.append(styles: styles)
     return copy
 }
@@ -91,19 +91,6 @@ public extension RenderableElement where Self: HeadElement {
     }
 }
 
-public extension RenderableElement {
-    /// Adds an inline CSS style property to the Element element
-    /// - Parameters:
-    ///   - property: The CSS property to set
-    ///   - value: The value to set for the property
-    /// - Returns: A modified copy of the element with the style property added
-    @discardableResult func style(_ property: Property, _ value: String) -> some RenderableElement {
-        var copy = self
-        copy.attributes.append(styles: .init(property, value: value))
-        return copy
-    }
-}
-
 extension HTML {
     /// Adds an inline style to the element.
     /// - Parameters:
@@ -156,22 +143,11 @@ extension InlineElement {
     }
 }
 
-//public extension RenderableElement {
-//    /// Adds an inline CSS style property to the HTML element
-//    /// - Parameters:
-//    ///   - property: The CSS property to set
-//    ///   - value: The value to set for the property
-//    /// - Returns: A modified copy of the element with the style property added
-//    func style(_ property: Property, _ value: String) -> some RenderableElement {
-//        AnyHTML(inlineStyleModifier([.init(property, value: value)], content: self))
-//    }
-//}
-
-extension RenderableElement {
+extension BodyElement {
     /// Adds inline styles to the element.
     /// - Parameter styles: An array of `InlineStyle` objects
     /// - Returns: The modified `InlineElement` element
-    func style(_ styles: [InlineStyle]) -> some RenderableElement {
+    func style(_ styles: [InlineStyle]) -> some BodyElement {
         AnyHTML(inlineStyleModifier(styles, content: self))
     }
 }

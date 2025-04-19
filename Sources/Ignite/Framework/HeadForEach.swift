@@ -1,5 +1,5 @@
 //
-// ForEach.swift
+// HeadElementForEach.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -7,7 +7,7 @@
 
 /// A structure that creates HTML content by mapping over a sequence of data.
 @MainActor
-public struct ForEach<Data: Sequence>: HTML, ListableElement, PassthroughElement {
+public struct HeadForEach<Data: Sequence>: HeadElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -18,9 +18,7 @@ public struct ForEach<Data: Sequence>: HTML, ListableElement, PassthroughElement
     private let data: Data
 
     /// The child elements contained within this HTML element.
-    var items: HTMLCollection
-
-    public var body: some HTML { self }
+    var items: [HeadElement]
 
     /// Creates a new ForEach instance that generates HTML content from a sequence.
     /// - Parameters:
@@ -28,26 +26,19 @@ public struct ForEach<Data: Sequence>: HTML, ListableElement, PassthroughElement
     ///   - content: A closure that converts each element into HTML content.
     public init(
         _ data: Data,
-        @HTMLBuilder content: @escaping (Data.Element) -> some BodyElement
+        @HeadElementBuilder content: @escaping (Data.Element) -> [any HeadElement]
     ) {
         self.data = data
-        self.items = HTMLCollection(data.map(content))
+        self.items = data.flatMap(content)
     }
 
     /// Renders the ForEach content when this isn't part of a list.
     /// - Returns: The rendered HTML string.
     public func render() -> String {
         items.map {
-            var item: any BodyElement = $0
+            var item: any HeadElement = $0
             item.attributes.merge(attributes)
             return item.render()
         }.joined()
-    }
-
-    /// Renders the ForEach content when this isn't part of a list.
-    /// - Returns: The rendered HTML string.
-    func renderInList() -> String {
-        // ListableElement conformance ensures other views never wrap ForEach in <li> tags.
-        render()
     }
 }

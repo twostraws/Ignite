@@ -15,7 +15,7 @@ public struct HTMLBuilder {
     /// Converts a single HTML element into a builder expression.
     /// - Parameter content: The HTML element to convert
     /// - Returns: The same HTML element, unchanged
-    public static func buildExpression<Content: RenderableElement>(_ content: Content) -> some HTML {
+    public static func buildExpression<Content: BodyElement>(_ content: Content) -> some HTML {
         AnyHTML(content)
     }
 
@@ -28,28 +28,28 @@ public struct HTMLBuilder {
     /// Passes through a single HTML element unchanged.
     /// - Parameter content: The HTML element to pass through
     /// - Returns: The same HTML element
-    public static func buildBlock<Content: RenderableElement>(_ content: Content) -> some HTML {
+    public static func buildBlock<Content: BodyElement>(_ content: Content) -> some HTML {
         AnyHTML(content)
     }
 
     /// Combines an array of HTML elements into a flat structure.
     /// - Parameter components: Array of HTML elements
     /// - Returns: A flattened HTML structure
-    public static func buildBlock(_ components: [any RenderableElement]) -> some HTML {
+    public static func buildBlock(_ components: [any BodyElement]) -> some HTML {
         HTMLCollection(components)
     }
 
     /// Handles array literals in the builder.
     /// - Parameter components: Array of HTML elements
     /// - Returns: A flattened HTML structure
-    public static func buildArray(_ components: [any RenderableElement]) -> some HTML {
+    public static func buildArray(_ components: [any BodyElement]) -> some HTML {
         HTMLCollection(components)
     }
 
     /// Handles optional HTML elements.
     /// - Parameter component: An optional HTML element
     /// - Returns: Either the wrapped element or an empty element
-    public static func buildOptional<Content: RenderableElement>(_ component: Content?) -> some HTML {
+    public static func buildOptional<Content: BodyElement>(_ component: Content?) -> some HTML {
         if let component {
             AnyHTML(component)
         } else {
@@ -60,21 +60,21 @@ public struct HTMLBuilder {
     /// Handles the first branch of an if/else statement.
     /// - Parameter component: The HTML element to use if condition is true
     /// - Returns: The wrapped HTML element
-    public static func buildEither<Content: RenderableElement>(first component: Content) -> AnyHTML {
+    public static func buildEither<Content: BodyElement>(first component: Content) -> AnyHTML {
         AnyHTML(component)
     }
 
     /// Handles the second branch of an if/else statement.
     /// - Parameter component: The HTML element to use if condition is false
     /// - Returns: The wrapped HTML element
-    public static func buildEither<Content: RenderableElement>(second component: Content) -> AnyHTML {
+    public static func buildEither<Content: BodyElement>(second component: Content) -> AnyHTML {
         AnyHTML(component)
     }
 
     /// Handles optional content in if statements.
     /// - Parameter component: An optional HTML element
     /// - Returns: Either the wrapped element or an empty element
-    public static func buildIf<Content: RenderableElement>(_ component: Content?) -> AnyHTML {
+    public static func buildIf<Content: BodyElement>(_ component: Content?) -> AnyHTML {
         if let component {
             AnyHTML(component)
         } else {
@@ -85,35 +85,35 @@ public struct HTMLBuilder {
     /// Handles array transformations in the builder.
     /// - Parameter components: Array of HTML elements
     /// - Returns: The same array as HTML content
-    public static func buildArray<Content: RenderableElement>(_ components: [Content]) -> some HTML {
+    public static func buildArray<Content: BodyElement>(_ components: [Content]) -> some HTML {
         HTMLCollection(components)
     }
 
     /// Handles nested arrays from loops and other control flow.
     /// - Parameter components: Variadic array of HTML element arrays
     /// - Returns: A flattened HTML structure
-    public static func buildBlock(_ components: [any RenderableElement]...) -> some HTML {
+    public static func buildBlock(_ components: [any BodyElement]...) -> some HTML {
         HTMLCollection(components.flatMap(\.self))
     }
 
     /// Handles availability conditions in switch statements.
     /// - Parameter component: The HTML element to conditionally include
     /// - Returns: The same HTML element unchanged
-    public static func buildLimitedAvailability(_ component: some RenderableElement) -> some HTML {
+    public static func buildLimitedAvailability(_ component: some BodyElement) -> some HTML {
         AnyHTML(component)
     }
 
     /// Handles nested arrays of HTML elements.
     /// - Parameter components: Two-dimensional array of HTML elements
     /// - Returns: A flattened HTML structure
-    public static func buildArray(_ components: [[any RenderableElement]]) -> some HTML {
+    public static func buildArray(_ components: [[any BodyElement]]) -> some HTML {
         HTMLCollection(components.flatMap(\.self))
     }
 
     /// Handles optional content in if let statements.
     /// - Parameter content: An optional HTML element
     /// - Returns: Either the wrapped element or an empty element
-    public static func buildBlock<Content: RenderableElement>(_ content: Content?) -> some HTML {
+    public static func buildBlock<Content: BodyElement>(_ content: Content?) -> some HTML {
         if let content {
             AnyHTML(content)
         } else {
@@ -124,7 +124,7 @@ public struct HTMLBuilder {
     /// Handles multiple optional conditions in nested if let statements.
     /// - Parameter components: Variadic array of optional HTML elements
     /// - Returns: A flattened HTML structure containing non-nil elements
-    public static func buildBlock<Content: RenderableElement>(_ components: (any HTML)?...) -> some HTML {
+    public static func buildBlock<Content: BodyElement>(_ components: (any HTML)?...) -> some HTML {
         HTMLCollection(components.compactMap(\.self))
     }
 }

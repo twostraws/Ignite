@@ -9,7 +9,7 @@ import Foundation
 
 /// An item of metadata that links to an external resource somehow, such as
 /// a stylesheet.
-public struct MetaLink: RenderableElement, HeadElement, Sendable {
+public struct MetaLink: HeadElement, Sendable {
     /// The standard CSS you should include on all Ignite pages.
     public static let standardCSS = MetaLink(href: "/css/bootstrap.min.css", rel: .stylesheet)
 
@@ -43,7 +43,7 @@ public struct MetaLink: RenderableElement, HeadElement, Sendable {
     /// - Returns: An array of MetaLink elements. If multiple themes are provided,
     /// includes data attributes for theme switching.
     static func highlighterThemeMetaLinks(for themes: some Collection<HighlighterTheme>) -> some HeadElement {
-        ForEach(themes.sorted()) { theme in
+        HeadForEach(themes.sorted()) { theme in
             MetaLink(href: "/\(theme.url)", rel: .stylesheet)
                 .data("highlight-theme", theme.description)
         }
@@ -111,5 +111,29 @@ public struct MetaLink: RenderableElement, HeadElement, Sendable {
             .init(name: "rel", value: rel))
 
         return "<link\(attributes) />"
+    }
+}
+
+public extension MetaLink {
+    /// Adds a data attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the data attribute
+    ///   - value: The value of the data attribute
+    /// - Returns: The modified `Element` element
+    func data(_ name: String, _ value: String) -> Self {
+        var copy = self
+        copy.attributes.data.append(.init(name: name, value: value))
+        return copy
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(name: String, value: String) -> Self {
+        var copy = self
+        copy.attributes.append(customAttributes: .init(name: name, value: value))
+        return copy
     }
 }

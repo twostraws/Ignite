@@ -47,7 +47,8 @@ public struct Head: DocumentElement {
             items.insert(contentsOf: Head.standardHeaders(), at: 0)
         }
 
-        return "<head\(attributes)>\(HTMLCollection(items))</head>"
+        let content = items.map { $0.render() }.joined()
+        return "<head\(attributes)>\(content))</head>"
     }
 
     /// Returns the standard set of headers used for a `Page` instance.

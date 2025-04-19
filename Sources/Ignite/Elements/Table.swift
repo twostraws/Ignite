@@ -75,7 +75,7 @@ public struct Table: HTML {
     public init(
         filterTitle: String? = nil,
         @ContentBuilder<Row> rows: () -> [Row],
-        @HTMLBuilder header: () -> some RenderableElement
+        @HTMLBuilder header: () -> some BodyElement
     ) {
         self.filterTitle = filterTitle
         self.rows = HTMLCollection(rows())

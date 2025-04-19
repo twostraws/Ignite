@@ -22,7 +22,7 @@ public struct Row: HTML {
     /// Create a new `Row` using a page element builder that returns the
     /// array of columns to use in this row.
     /// - Parameter columns: The columns to use in this row.
-    public init(@HTMLBuilder columns: () -> some RenderableElement) {
+    public init(@HTMLBuilder columns: () -> some BodyElement) {
         self.columns = HTMLCollection(columns)
     }
 

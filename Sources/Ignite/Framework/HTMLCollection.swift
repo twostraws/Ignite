@@ -21,12 +21,12 @@ struct HTMLCollection: HTML, @preconcurrency Sequence {
     var isPrimitive: Bool { true }
 
     /// The array of HTML elements contained in this sequence
-    var elements: [any RenderableElement] = []
+    var elements: [any BodyElement] = []
 
     /// The array of HTML elements with the container's attributes applied.
-    var attributedElements: [any RenderableElement] {
+    var attributedElements: [any BodyElement] {
         elements.map {
-            var item: any RenderableElement = $0
+            var item: any BodyElement = $0
             item.attributes.merge(attributes)
             return item
         }
@@ -41,20 +41,20 @@ struct HTMLCollection: HTML, @preconcurrency Sequence {
 
     /// Creates a new HTML sequence using a result builder
     /// - Parameter content: A closure that returns HTML content
-    init(@HTMLBuilder _ content: () -> some RenderableElement) {
+    init(@HTMLBuilder _ content: () -> some BodyElement) {
         let content = content()
         self.elements = flatten(content)
     }
 
     /// Creates a new HTML sequence from an array of elements
     /// - Parameter elements: The array of HTML elements to include
-    init(_ elements: [any RenderableElement]) {
+    init(_ elements: [any BodyElement]) {
         self.elements = elements.flatMap { flatten($0) }
     }
 
     /// Creates an iterator over the sequence's elements
     /// - Returns: An iterator that provides access to each HTML element
-    func makeIterator() -> IndexingIterator<[any RenderableElement]> {
+    func makeIterator() -> IndexingIterator<[any BodyElement]> {
         elements.makeIterator()
     }
 
@@ -62,7 +62,7 @@ struct HTMLCollection: HTML, @preconcurrency Sequence {
     /// - Returns: The combined HTML string of all elements
     func render() -> String {
         elements.map {
-            var item: any RenderableElement = $0
+            var item: any BodyElement = $0
             item.attributes.merge(attributes)
             return item.render()
         }.joined()
@@ -71,7 +71,7 @@ struct HTMLCollection: HTML, @preconcurrency Sequence {
     /// Recursively flattens nested HTML content into a single array, deconstructing wrapper types.
     /// - Parameter content: The content to flatten
     /// - Returns: An array of unwrapped HTML elements
-    private func flatten(_ content: any RenderableElement) -> [any RenderableElement] {
+    private func flatten(_ content: any BodyElement) -> [any BodyElement] {
         if let anyHTML = content as? AnyHTML {
             flatten(anyHTML.attributedContent)
         } else if let collection = content as? HTMLCollection {

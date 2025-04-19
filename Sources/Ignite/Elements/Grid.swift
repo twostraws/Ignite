@@ -43,7 +43,7 @@ public struct Grid: HTML {
     public init(
         alignment: Alignment = .center,
         spacing: Int,
-        @HTMLBuilder items: () -> some RenderableElement
+        @HTMLBuilder items: () -> some BodyElement
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -59,7 +59,7 @@ public struct Grid: HTML {
     public init(
         alignment: Alignment = .center,
         spacing: SpacingAmount = .medium,
-        @HTMLBuilder items: () -> some RenderableElement
+        @HTMLBuilder items: () -> some BodyElement
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -77,7 +77,7 @@ public struct Grid: HTML {
     public init<T>(
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
-        spacing: Int, content: (T) -> some RenderableElement
+        spacing: Int, content: (T) -> some BodyElement
     ) {
         self.items = HTMLCollection(items.map(content))
         self.alignment = alignment
@@ -96,7 +96,7 @@ public struct Grid: HTML {
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
         spacing: SpacingAmount = .medium,
-        content: (T) -> some RenderableElement
+        content: (T) -> some BodyElement
     ) {
         self.items = HTMLCollection(items.map(content))
         self.alignment = alignment
@@ -158,7 +158,7 @@ public struct Grid: HTML {
     }
 
     /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.
-    private func handleItem(_ item: any RenderableElement) -> any RenderableElement {
+    private func handleItem(_ item: any BodyElement) -> any BodyElement {
         var item = item
         var name: String?
         if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }) {

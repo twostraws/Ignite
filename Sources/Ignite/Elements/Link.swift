@@ -98,6 +98,19 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         self.url = target
     }
 
+    /// Creates a `Link` wrapping the provided content and pointing to the path
+    /// of the `Article` instance you provide.
+    /// - Parameters:
+    ///   - content: A piece of content from your site.
+    ///   - content: The user-facing content to show inside the `Link`.
+    public init(
+        target article: Article,
+        @InlineElementBuilder content: @escaping () -> some InlineElement
+    ) {
+        self.content = content()
+        self.url = article.path
+    }
+
     /// Creates a `Link` instance from the content you provide, linking to the path
     /// belonging to the specified `Page`.
     /// - Parameters:

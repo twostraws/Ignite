@@ -27,7 +27,7 @@ public struct Text: HTML, DropdownItem {
     var font = FontStyle.body
 
     /// The content to place inside the text.
-    var content: any RenderableElement
+    var content: any BodyElement
 
     private var isMultilineMarkdown = false
 

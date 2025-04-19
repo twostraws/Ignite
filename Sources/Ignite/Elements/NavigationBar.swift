@@ -6,7 +6,7 @@
 //
 
 /// Describes elements that can be placed into navigation bars.
-public protocol NavigationItem: RenderableElement {}
+public protocol NavigationItem: BodyElement {}
 
 /// A bar that sits across the top of your page to provide top-level navigation
 /// throughout your site.
@@ -290,7 +290,7 @@ public struct NavigationBar: HTML {
         return text
     }
 
-    private func renderLogo(_ logo: some InlineElement) -> any RenderableElement {
+    private func renderLogo(_ logo: some InlineElement) -> any BodyElement {
         let logo: Link = if let link = logo.as(Link.self) {
             link
         } else {

@@ -151,9 +151,9 @@ public struct Card: HTML {
 
     public init(
         imageName: String? = nil,
-        @HTMLBuilder body: () -> some RenderableElement,
-        @HTMLBuilder header: () -> some RenderableElement = { EmptyHTML() },
-        @HTMLBuilder footer: () -> some RenderableElement = { EmptyHTML() }
+        @HTMLBuilder body: () -> some BodyElement,
+        @HTMLBuilder header: () -> some BodyElement = { EmptyHTML() },
+        @HTMLBuilder footer: () -> some BodyElement = { EmptyHTML() }
     ) {
         if let imageName {
             self.image = Image(decorative: imageName)

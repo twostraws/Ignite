@@ -36,13 +36,13 @@ public struct Group: HTML, PassthroughElement {
 
     /// Creates a new group containing the given HTML content.
     /// - Parameter content: The HTML content to include.
-    public init(_ content: some RenderableElement) {
+    public init(_ content: some BodyElement) {
         self.items = HTMLCollection([content])
     }
 
     public func render() -> String {
         items.map {
-            var item: any RenderableElement = $0
+            var item: any BodyElement = $0
             item.attributes.merge(attributes)
             return item.render()
         }.joined()

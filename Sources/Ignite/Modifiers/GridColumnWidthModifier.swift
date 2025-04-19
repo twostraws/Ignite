@@ -7,7 +7,7 @@
 
 @MainActor private func gridColumnWidthModifier(
     _ width: Int,
-    content: any RenderableElement
+    content: any BodyElement
 ) -> AnyHTML {
     if content.isPrimitive {
         AnyHTML(content.class(ColumnWidth.count(width).className))

@@ -30,7 +30,7 @@ public struct Tag: HTML, HeadElement {
     ///   - content: The content to place inside the tag.
     public init(
         _ name: String,
-        @HTMLBuilder content: @escaping () -> any RenderableElement
+        @HTMLBuilder content: @escaping () -> any BodyElement
     ) {
         self.name = name
         self.content = content()

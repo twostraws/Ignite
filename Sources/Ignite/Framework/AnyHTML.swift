@@ -18,12 +18,12 @@ public struct AnyHTML: HTML, FormItem {
     public var isPrimitive: Bool { true }
 
     /// The underlying HTML content, unattributed.
-    var wrapped: any RenderableElement
+    var wrapped: any BodyElement
 
     /// Creates a new AnyHTML instance that wraps the given HTML content.
     /// If the content is already an AnyHTML instance, it will be unwrapped to prevent nesting.
     /// - Parameter content: The HTML content to wrap
-    public init(_ content: any RenderableElement) {
+    public init(_ content: any BodyElement) {
         var content = content
         attributes.merge(content.attributes)
         content.attributes.clear()
@@ -36,7 +36,7 @@ public struct AnyHTML: HTML, FormItem {
     }
 
     /// The underlying HTML content, with attributes.
-    var attributedContent: any RenderableElement {
+    var attributedContent: any BodyElement {
         var wrapped = wrapped
         wrapped.attributes.merge(attributes)
         return wrapped

@@ -6,7 +6,7 @@
 //
 
 /// Describes elements that can be placed into forms.
-public protocol FormItem: RenderableElement {}
+public protocol FormItem: BodyElement {}
 
 /// A form container for collecting user input
 public struct Form: HTML, NavigationItem {
@@ -224,7 +224,7 @@ public struct Form: HTML, NavigationItem {
         return renderItem(text)
     }
 
-    private func renderItem(_ item: any RenderableElement) -> some HTML {
+    private func renderItem(_ item: any BodyElement) -> some HTML {
         Section(item)
             .class("d-flex", "align-items-center")
             .class(getColumnClass(for: item, totalColumns: columnCount))
@@ -236,7 +236,7 @@ public struct Form: HTML, NavigationItem {
     ///   - totalColumns: The total number of columns in the form's grid.
     /// - Returns: A string containing the appropriate Bootstrap column class.
     private func getColumnClass(
-        for item: any RenderableElement,
+        for item: any BodyElement,
         totalColumns: Int
     ) -> String {
         if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }),

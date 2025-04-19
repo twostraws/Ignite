@@ -19,7 +19,7 @@ public struct LinkGroup: HTML {
     public var isPrimitive: Bool { true }
 
     /// The content to display inside this link.
-    var content: any RenderableElement
+    var content: any BodyElement
 
     /// The location to which this link should direct users.
     var url: String
