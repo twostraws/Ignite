@@ -15,9 +15,9 @@ public struct Body: DocumentElement {
     /// Whether this HTML uses Bootstrap's `container` class to determine page width.
     var isBoundByContainer: Bool = true
 
-    var content: any RenderableElement
+    var content: any HTML
 
-    public init(@HTMLBuilder _ content: () -> some HTML) {
+    public init(@ElementBuilder _ content: () -> some Element) {
         self.content = content()
     }
 

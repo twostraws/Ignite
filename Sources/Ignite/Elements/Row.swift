@@ -6,9 +6,9 @@
 //
 
 /// One row inside a `Table`.
-public struct Row: HTML {
+public struct Row: Element {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -22,7 +22,7 @@ public struct Row: HTML {
     /// Create a new `Row` using a page element builder that returns the
     /// array of columns to use in this row.
     /// - Parameter columns: The columns to use in this row.
-    public init(@RenderableElementBuilder columns: () -> some RenderableElement) {
+    public init(@HTMLBuilder columns: () -> some HTML) {
         self.columns = HTMLCollection(columns)
     }
 

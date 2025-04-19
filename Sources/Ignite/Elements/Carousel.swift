@@ -6,7 +6,7 @@
 //
 
 /// A collection of slides the user can swipe through.
-public struct Carousel: HTML {
+public struct Carousel: Element {
     /// Whether moving between slides should cause movement or a crossfade.
     public enum CarouselStyle: Equatable {
         /// Slides should move.
@@ -27,7 +27,7 @@ public struct Carousel: HTML {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

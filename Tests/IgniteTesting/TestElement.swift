@@ -15,7 +15,7 @@ private struct TestSubElement: Element {
 
 /// A custom element that modifiers can test.
 struct TestElement: Element {
-    var body: some HTML {
+    var body: some Element {
         TestSubElement()
         Text("Test Subheading")
         ControlLabel("Test Label")

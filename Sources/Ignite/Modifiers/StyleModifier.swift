@@ -7,8 +7,8 @@
 
 @MainActor private func styleModifier(
     _ style: any Style,
-    content: any HTML
-) -> any HTML {
+    content: any Element
+) -> any Element {
     let className = StyleManager.shared.className(for: style)
     StyleManager.shared.registerStyle(style)
     return content.class(className)
@@ -23,11 +23,11 @@
     return content.class(className)
 }
 
-public extension HTML {
+public extension Element {
     /// Applies a custom style to the element.
     /// - Parameter style: The style to apply, conforming to the `Style` protocol
     /// - Returns: A modified copy of the element with the style applied
-    func style(_ style: any Style) -> some HTML {
+    func style(_ style: any Style) -> some Element {
         AnyHTML(styleModifier(style, content: self))
     }
 }

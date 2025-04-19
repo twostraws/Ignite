@@ -5,11 +5,11 @@
 // See LICENSE for license information.
 //
 
-/// A struct able to become any HTML tag. Useful for when Ignite has not
+/// A struct able to become any Element tag. Useful for when Ignite has not
 /// implemented a specific tag you need.
-public struct Tag: HTML, HeadElement {
+public struct Tag: Element, HeadElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -21,7 +21,7 @@ public struct Tag: HTML, HeadElement {
     var name: String
 
     // The contents of this tag.
-    var content: any RenderableElement
+    var content: any HTML
 
     /// Creates a new `Tag` instance from the name provided, along with a page
     /// element builder that returns an array of the content to place inside.
@@ -30,7 +30,7 @@ public struct Tag: HTML, HeadElement {
     ///   - content: The content to place inside the tag.
     public init(
         _ name: String,
-        @RenderableElementBuilder content: @escaping () -> any RenderableElement
+        @HTMLBuilder content: @escaping () -> any HTML
     ) {
         self.name = name
         self.content = content()
@@ -41,7 +41,7 @@ public struct Tag: HTML, HeadElement {
     /// - Parameters:
     ///   - name: The name of the HTML tag you want to create.
     ///   - singleElement: The content to place inside the tag.
-    public init(_ name: String, content singleElement: any RenderableElement) {
+    public init(_ name: String, content singleElement: any HTML) {
         self.name = name
         self.content = singleElement
     }

@@ -6,7 +6,7 @@
 //
 
 /// A modal dialog presented on top of the screen
-public struct Modal: HTML {
+public struct Modal: Element {
     /// The size of the modal. Except from the full screen modal the height is defined by the height wheras the width
     public enum Size: CaseIterable, Sendable {
         /// A modal dialog with a small max-width of 300px
@@ -57,7 +57,7 @@ public struct Modal: HTML {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -77,9 +77,9 @@ public struct Modal: HTML {
 
     public init(
         id modalId: String,
-        @RenderableElementBuilder body: () -> some RenderableElement,
-        @RenderableElementBuilder header: () -> some RenderableElement = { EmptyHTML() },
-        @RenderableElementBuilder footer: () -> some RenderableElement = { EmptyHTML() }
+        @HTMLBuilder body: () -> some HTML,
+        @HTMLBuilder header: () -> some HTML = { EmptyHTML() },
+        @HTMLBuilder footer: () -> some HTML = { EmptyHTML() }
     ) {
         self.htmlID = modalId
         self.items = HTMLCollection([body()])

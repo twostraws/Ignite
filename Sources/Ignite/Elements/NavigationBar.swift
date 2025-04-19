@@ -6,11 +6,11 @@
 //
 
 /// Describes elements that can be placed into navigation bars.
-public protocol NavigationItem: RenderableElement {}
+public protocol NavigationItem: HTML {}
 
 /// A bar that sits across the top of your page to provide top-level navigation
 /// throughout your site.
-public struct NavigationBar: HTML {
+public struct NavigationBar: Element {
     /// The color scheme for this navigation bar.
     public enum NavigationBarStyle {
         /// No specific color scheme means this bar will be rendered using
@@ -45,7 +45,7 @@ public struct NavigationBar: HTML {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -212,7 +212,7 @@ public struct NavigationBar: HTML {
         .render()
     }
 
-    private func renderNavActions() -> some HTML {
+    private func renderNavActions() -> some Element {
         ForEach(controls) { control in
             if let form = control as? Form {
                 form.configuredAsNavigationItem()
@@ -237,7 +237,7 @@ public struct NavigationBar: HTML {
         .aria(.label, "Toggle navigation")
     }
 
-    private func renderNavItems() -> some HTML {
+    private func renderNavItems() -> some Element {
         Section {
             List {
                 ForEach(items) { item in
@@ -265,14 +265,14 @@ public struct NavigationBar: HTML {
         .id("navbarCollapse")
     }
 
-    private func renderDropdownItem(_ dropdownItem: Dropdown) -> some HTML {
+    private func renderDropdownItem(_ dropdownItem: Dropdown) -> some Element {
         ListItem {
             dropdownItem.configuration(.navigationBarItem)
         }
         .class("nav-item", "dropdown")
     }
 
-    private func renderLinkItem(_ link: Link) -> some HTML {
+    private func renderLinkItem(_ link: Link) -> some Element {
         ListItem {
             let isActive = publishingContext.currentRenderingPath == link.url
             link.trimmingMargin() // Remove the default margin applied to text
@@ -290,7 +290,7 @@ public struct NavigationBar: HTML {
         return text
     }
 
-    private func renderLogo(_ logo: some InlineElement) -> any RenderableElement {
+    private func renderLogo(_ logo: some InlineElement) -> any HTML {
         let logo: Link = if let link = logo.as(Link.self) {
             link
         } else {
@@ -323,7 +323,7 @@ fileprivate extension Link {
     }
 }
 
-fileprivate extension HTML {
+fileprivate extension Element {
     /// Adds a data attribute to the element.
     /// - Parameters:
     ///   - name: The name of the data attribute

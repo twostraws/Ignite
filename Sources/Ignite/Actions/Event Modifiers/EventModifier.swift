@@ -9,10 +9,10 @@
 private func eventModifier(
     _ type: EventType,
     actions: [Action],
-    content: any HTML
-) -> any HTML {
+    content: any Element
+) -> any Element {
     guard !actions.isEmpty else { return content }
-    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    var copy: any Element = content.isPrimitive ? content : Section(content)
     copy.attributes.events.append(Event(name: type.rawValue, actions: actions))
     return copy
 }
@@ -29,13 +29,13 @@ private func eventModifier(
     return copy
 }
 
-public extension HTML {
+public extension Element {
     /// Adds an event attribute to the `HTML` element.
     /// - Parameters:
     ///   - type: The name of the attribute.
     ///   - actions: Array of actions to execute when the event occurs
     /// - Returns: A modified HTML element with the specified attribute.
-    func onEvent(_ type: EventType, _ actions: [Action]) -> some HTML {
+    func onEvent(_ type: EventType, _ actions: [Action]) -> some Element {
         AnyHTML(eventModifier(type, actions: actions, content: self))
     }
 }

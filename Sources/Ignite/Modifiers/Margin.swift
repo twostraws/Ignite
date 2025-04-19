@@ -12,8 +12,8 @@ private enum MarginType {
 @MainActor private func marginModifier(
     _ margin: MarginType,
     edges: Edge = .all,
-    content: any RenderableElement & Stylable
-) -> any RenderableElement {
+    content: any HTML & Stylable
+) -> any HTML {
     switch margin {
     case .exact(let unit):
         let styles = content.edgeAdjustedStyles(prefix: "margin", edges, unit.stringValue)
@@ -39,11 +39,11 @@ private enum MarginType {
     }
 }
 
-public extension HTML {
+public extension Element {
     /// Applies margins on all sides of this element. Defaults to 20 pixels.
     /// - Parameter length: The amount of margin to apply, specified in pixels.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ length: Int = 20) -> some HTML {
+    func margin(_ length: Int = 20) -> some Element {
         AnyHTML(marginModifier(.exact(.px(length)), content: self))
     }
 
@@ -51,7 +51,7 @@ public extension HTML {
     /// - Parameter length: The amount of margin to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ length: LengthUnit) -> some HTML {
+    func margin(_ length: LengthUnit) -> some Element {
         AnyHTML(marginModifier(.exact(length), content: self))
     }
 
@@ -59,7 +59,7 @@ public extension HTML {
     /// - Parameter amount: The amount of margin to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ amount: SpacingAmount) -> some HTML {
+    func margin(_ amount: SpacingAmount) -> some Element {
         AnyHTML(marginModifier(.semantic(amount), content: self))
     }
 
@@ -68,7 +68,7 @@ public extension HTML {
     ///   - edges: The edges where this margin should be applied.
     ///   - length: The amount of margin to apply, specified in pixels.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ edges: Edge, _ length: Int = 20) -> some HTML {
+    func margin(_ edges: Edge, _ length: Int = 20) -> some Element {
         AnyHTML(marginModifier(.exact(.px(length)), edges: edges, content: self))
     }
 
@@ -78,7 +78,7 @@ public extension HTML {
     ///   - length: The amount of margin to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ edges: Edge, _ length: LengthUnit) -> some HTML {
+    func margin(_ edges: Edge, _ length: LengthUnit) -> some Element {
         AnyHTML(marginModifier(.exact(length), edges: edges, content: self))
     }
 
@@ -88,7 +88,7 @@ public extension HTML {
     ///   - amount: The amount of margin to apply, specified as a
     ///   `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ edges: Edge, _ amount: SpacingAmount) -> some HTML {
+    func margin(_ edges: Edge, _ amount: SpacingAmount) -> some Element {
         AnyHTML(marginModifier(.semantic(amount), edges: edges, content: self))
     }
 }

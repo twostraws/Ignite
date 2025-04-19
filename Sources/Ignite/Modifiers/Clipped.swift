@@ -5,10 +5,10 @@
 // See LICENSE for license information.
 //
 
-public extension HTML {
+public extension Element {
     /// Applies CSS overflow:hidden to clip the element's content to its bounds.
     /// - Returns: A modified copy of the element with clipping applied
-    func clipped() -> some HTML {
+    func clipped() -> some Element {
         self.style(.overflow, "hidden")
     }
 }

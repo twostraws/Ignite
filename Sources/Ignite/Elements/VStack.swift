@@ -10,7 +10,7 @@
 /// - Note: To ensure spacing is consistent, `VStack` strips its subviews of
 /// implicit styles, such as the bottom margin automatically applied to paragraphs.
 /// To retain these implicit styles, set `spacing` to `nil`.
-public struct VStack: HTML {
+public struct VStack: Element {
     /// A type that represents spacing values in either exact pixels or semantic spacing amounts.
     private enum SpacingType: Equatable {
         case exact(Int), semantic(SpacingAmount)
@@ -27,7 +27,7 @@ public struct VStack: HTML {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -53,7 +53,7 @@ public struct VStack: HTML {
     public init(
         alignment: HorizontalAlignment = .center,
         spacing pixels: Int? = 0,
-        @HTMLBuilder items: () -> some HTML
+        @ElementBuilder items: () -> some Element
     ) {
         self.items = HTMLCollection(items)
         self.alignment = .responsive(alignment)
@@ -70,7 +70,7 @@ public struct VStack: HTML {
     public init(
         alignment: HorizontalAlignment = .center,
         spacing: SpacingAmount,
-        @HTMLBuilder items: () -> some HTML
+        @ElementBuilder items: () -> some Element
     ) {
         self.items = HTMLCollection(items)
         self.alignment = .responsive(alignment)
@@ -86,7 +86,7 @@ public struct VStack: HTML {
     public init(
         alignment: HorizontalAlignment.ResponsiveAlignment,
         spacing pixels: Int? = 0,
-        @HTMLBuilder items: () -> some HTML
+        @ElementBuilder items: () -> some Element
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -103,7 +103,7 @@ public struct VStack: HTML {
     public init(
         alignment: HorizontalAlignment.ResponsiveAlignment,
         spacing: SpacingAmount,
-        @HTMLBuilder items: () -> some HTML
+        @ElementBuilder items: () -> some Element
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment

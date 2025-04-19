@@ -11,7 +11,7 @@
 /// Example:
 /// ```swift
 /// struct BlogLayout: Layout {
-///     var body: some HTML {
+///     var body: some Element {
 ///         Body {
 ///             content
 ///             Footer()
@@ -27,7 +27,7 @@ public protocol Layout {
 
 public extension Layout {
     /// The current page being rendered.
-    var content: some HTML {
+    var content: some Element {
         Section(PublishingContext.shared.environment.pageContent)
             .class("ig-main-content") // For replacing the main content with search results
     }

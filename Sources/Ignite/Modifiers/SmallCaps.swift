@@ -5,10 +5,10 @@
 // See LICENSE for license information.
 //
 
-public extension HTML {
+public extension Element {
     /// Converts lowercase letters to small capitals while leaving uppercase letters unchanged.
     /// - Returns: A modified copy of the element with small caps applied
-    func smallCaps() -> some HTML {
+    func smallCaps() -> some Element {
         self.style(.fontVariant, "small-caps")
     }
 }

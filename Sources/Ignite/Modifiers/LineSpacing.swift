@@ -36,8 +36,8 @@ private enum LineSpacingType {
 
 @MainActor private func lineSpacingModifier(
     _ spacing: LineSpacingType,
-    content: any HTML
-) -> any HTML {
+    content: any Element
+) -> any Element {
     if content.isText {
         switch spacing {
         case .exact(let spacing):
@@ -69,18 +69,18 @@ private enum LineSpacingType {
     }
 }
 
-public extension HTML {
+public extension Element {
     /// Sets the line height of the element using a custom value.
     /// - Parameter spacing: The line height multiplier to use.
     /// - Returns: The modified HTML element.
-    func lineSpacing(_ spacing: Double) -> some HTML {
+    func lineSpacing(_ spacing: Double) -> some Element {
         AnyHTML(lineSpacingModifier(.exact(spacing), content: self))
     }
 
     /// Sets the line height of the element using a predefined Bootstrap value.
     /// - Parameter spacing: The predefined line height to use.
     /// - Returns: The modified HTML element.
-    func lineSpacing(_ spacing: LineSpacing) -> some HTML {
+    func lineSpacing(_ spacing: LineSpacing) -> some Element {
         AnyHTML(lineSpacingModifier(.semantic(spacing), content: self))
     }
 }

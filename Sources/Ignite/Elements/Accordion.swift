@@ -7,7 +7,7 @@
 
 /// A control that displays a list of section titles that can be folded out to
 /// display more content.
-public struct Accordion: HTML {
+public struct Accordion: Element {
     /// Controls what happens when a section is opened.
     public enum OpenMode: Sendable {
         /// Opening one accordion section automatically closes all others.
@@ -18,7 +18,7 @@ public struct Accordion: HTML {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

@@ -6,9 +6,9 @@
 //
 
 @MainActor
-private func idModifier(_ id: String, content: any HTML) -> any HTML {
+private func idModifier(_ id: String, content: any Element) -> any Element {
     guard !id.isEmpty else { return content }
-    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    var copy: any Element = content.isPrimitive ? content : Section(content)
     copy.attributes.id = id
     return copy
 }
@@ -21,11 +21,11 @@ private func idModifier(_ id: String, content: any InlineElement) -> any InlineE
     return copy
 }
 
-public extension HTML {
+public extension Element {
     /// Sets the `HTML` id attribute of the element.
     /// - Parameter id: The HTML ID value to set
     /// - Returns: A modified copy of the element with the HTML id added
-    func id(_ id: String) -> some HTML {
+    func id(_ id: String) -> some Element {
         AnyHTML(idModifier(id, content: self))
     }
 }
@@ -39,7 +39,7 @@ public extension InlineElement {
     }
 }
 
-public extension HTML where Self: FormItem {
+public extension Element where Self: FormItem {
     /// Sets the `HTML` id attribute of the element.
     /// - Parameter id: The HTML ID value to set
     /// - Returns: A modified copy of the element with the HTML ID added

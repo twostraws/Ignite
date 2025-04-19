@@ -11,7 +11,7 @@
 ///
 /// ```swift
 /// struct MyTagPage: TagPage {
-///     var body: some HTML {
+///     var body: some Element {
 ///         Article {
 ///             Heading(tag ?? "All Posts")
 ///             // Show articles matching the tag

@@ -7,8 +7,8 @@
 
 @MainActor private func fontStyleModifier(
     _ style: Font.Style,
-    content: any HTML
-) -> any HTML {
+    content: any Element
+) -> any Element {
     if content.isText {
         content.fontStyle(style)
     } else {
@@ -23,11 +23,11 @@
     content.fontStyle(style)
 }
 
-public extension HTML {
+public extension Element {
     /// Adjusts the heading level of this text.
     /// - Parameter style: The new heading level.
     /// - Returns: A new `Text` instance with the updated font style.
-    func font(_ style: Font.Style) -> some HTML {
+    func font(_ style: Font.Style) -> some Element {
         AnyHTML(fontStyleModifier(style, content: self))
     }
 }

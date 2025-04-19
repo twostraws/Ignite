@@ -10,9 +10,9 @@
 /// `HTMLCollection` is used internally to handle opaque HTML content returned from result builders,
 /// particularly in loops and other control flow situations. It converts potentially nested
 /// structures into a flat, iterable collections of `HTML` elements.
-struct HTMLCollection: HTML, @preconcurrency Sequence {
+struct HTMLCollection: Element, @preconcurrency Sequence {
     /// The content and behavior of this HTML sequence
-    var body: some HTML { self }
+    var body: some Ignite.Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -21,15 +21,22 @@ struct HTMLCollection: HTML, @preconcurrency Sequence {
     var isPrimitive: Bool { true }
 
     /// The array of HTML elements contained in this sequence
-    var elements: [any RenderableElement] = []
+    var elements: [any HTML] = []
 
     /// The array of HTML elements with the container's attributes applied.
-    var attributedElements: [any RenderableElement] {
+    var attributedElements: [any HTML] {
         elements.map {
-            var item: any RenderableElement = $0
+            var item: any HTML = $0
             item.attributes.merge(attributes)
             return item
         }
+    }
+
+    /// Creates a new HTML sequence using a result builder
+    /// - Parameter content: A closure that returns HTML content
+    init(@ElementBuilder _ content: () -> some Ignite.Element) {
+        let content = content()
+        self.elements = flatten(content)
     }
 
     /// Creates a new HTML sequence using a result builder
@@ -39,22 +46,15 @@ struct HTMLCollection: HTML, @preconcurrency Sequence {
         self.elements = flatten(content)
     }
 
-    /// Creates a new HTML sequence using a result builder
-    /// - Parameter content: A closure that returns HTML content
-    init(@RenderableElementBuilder _ content: () -> some RenderableElement) {
-        let content = content()
-        self.elements = flatten(content)
-    }
-
     /// Creates a new HTML sequence from an array of elements
     /// - Parameter elements: The array of HTML elements to include
-    init(_ elements: [any RenderableElement]) {
+    init(_ elements: [any HTML]) {
         self.elements = elements.flatMap { flatten($0) }
     }
 
     /// Creates an iterator over the sequence's elements
     /// - Returns: An iterator that provides access to each HTML element
-    func makeIterator() -> IndexingIterator<[any RenderableElement]> {
+    func makeIterator() -> IndexingIterator<[any HTML]> {
         elements.makeIterator()
     }
 
@@ -62,7 +62,7 @@ struct HTMLCollection: HTML, @preconcurrency Sequence {
     /// - Returns: The combined HTML string of all elements
     func render() -> String {
         elements.map {
-            var item: any RenderableElement = $0
+            var item: any HTML = $0
             item.attributes.merge(attributes)
             return item.render()
         }.joined()
@@ -71,7 +71,7 @@ struct HTMLCollection: HTML, @preconcurrency Sequence {
     /// Recursively flattens nested HTML content into a single array, deconstructing wrapper types.
     /// - Parameter content: The content to flatten
     /// - Returns: An array of unwrapped HTML elements
-    private func flatten(_ content: any RenderableElement) -> [any RenderableElement] {
+    private func flatten(_ content: any HTML) -> [any HTML] {
         if let anyHTML = content as? AnyHTML {
             flatten(anyHTML.attributedContent)
         } else if let collection = content as? HTMLCollection {

@@ -6,15 +6,15 @@
 //
 
 /// A block quote of text.
-public struct Quote: HTML {
+public struct Quote: Element {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
     /// The content of this quote.
-    var contents: any RenderableElement
+    var contents: any HTML
 
     /// Provide details about this quote, e.g. a source name.
     var caption: any InlineElement
@@ -22,7 +22,7 @@ public struct Quote: HTML {
     /// Create a new quote from a page element builder that returns an array
     /// of elements to display in the quote.
     /// - Parameter contents: The elements to display inside the quote.
-    public init(@RenderableElementBuilder contents: () -> some RenderableElement) {
+    public init(@HTMLBuilder contents: () -> some HTML) {
         self.contents = contents()
         self.caption = EmptyInlineElement()
     }
@@ -35,7 +35,7 @@ public struct Quote: HTML {
     /// - contents: The elements to display inside the quote.
     /// - contents: Additional details about the quote, e.g. its source.
     public init(
-        @HTMLBuilder contents: () -> some HTML,
+        @ElementBuilder contents: () -> some Element,
         @InlineElementBuilder caption: () -> some InlineElement
     ) {
         self.contents = contents()

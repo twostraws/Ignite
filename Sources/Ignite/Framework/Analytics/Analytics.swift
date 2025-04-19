@@ -48,7 +48,7 @@ public struct Analytics: HeadElement {
 
     /// Creates Clicky analytics code for the current site.
     /// - Parameter siteID: This site's Clicky identifier.
-    /// - Returns: HTML for analytics tracking.
+    /// - Returns: Element for analytics tracking.
     func clickyCode(for siteID: String) -> String {
         """
         <!-- Clicky Analytics -->
@@ -59,7 +59,7 @@ public struct Analytics: HeadElement {
 
     /// Creates Fathom analytics code for the current site.
     /// - Parameter siteID: This site's Fathom identifier.
-    /// - Returns: HTML for analytics tracking.
+    /// - Returns: Element for analytics tracking.
     func fathomCode(for siteID: String) -> String {
         """
         <!-- Fathom Analytics -->
@@ -69,7 +69,7 @@ public struct Analytics: HeadElement {
 
     /// Creates Google Analytics code for the current site.
     /// - Parameter measurementID: This site's Google Analytics identifier.
-    /// - Returns: HTML for analytics tracking.
+    /// - Returns: Element for analytics tracking.
     func googleAnalyticsCode(for measurementID: String) -> String {
         """
         <!-- Google Analytics 4 -->
@@ -86,7 +86,7 @@ public struct Analytics: HeadElement {
     /// Creates Plausible analytics code for the current site.
     /// - Parameter domain: This site's domain.
     /// - Parameter measurements: The set of items the user is tracking.
-    /// - Returns: HTML for analytics tracking.
+    /// - Returns: Element for analytics tracking.
     func plausibleCode(for domain: String, using measurements: Set<PlausibleMeasurement>) -> String {
         let needs404Script = measurements.contains(.track404)
         let measurements = measurements.filter { $0 != .track404 }
@@ -115,7 +115,7 @@ public struct Analytics: HeadElement {
 
     /// Creates TelemetryDeck analytics code for the current site.
     /// - Parameter siteID: This site's TelemetryDeck identifier.
-    /// - Returns: HTML for analytics tracking.
+    /// - Returns: Element for analytics tracking.
     func telemetryDeckCode(for siteID: String) -> String {
         """
         <!-- TelemetryDeck Analytics -->

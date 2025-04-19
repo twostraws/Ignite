@@ -33,18 +33,18 @@ public enum ContentMode: CaseIterable, Sendable {
     }
 }
 
-public extension HTML {
+public extension Element {
     /// Applies a fixed aspect ratio to the current element.
     /// - Parameter ratio: The aspect ratio to apply.
     /// - Returns: A modified element with the aspect ratio applied.
-    func aspectRatio(_ ratio: AspectRatio) -> some HTML {
+    func aspectRatio(_ ratio: AspectRatio) -> some Element {
         self.class("ratio", "ratio-\(ratio.rawValue)")
     }
 
     /// Applies a custom ratio to the current element.
     /// - Parameter aspectRatio: The ratio to use, relative to 1.
     /// - Returns: A modified element with the aspect ratio applied.
-    func aspectRatio(_ aspectRatio: Double) -> some HTML {
+    func aspectRatio(_ aspectRatio: Double) -> some Element {
         let percentage = 100 / aspectRatio
         return self
             .class("ratio")
@@ -58,7 +58,7 @@ public extension Image {
     ///   - ratio: The aspect ratio to apply.
     ///   - contentMode: The content mode to apply.
     /// - Returns: A new instance of this element with the ratio and content mode applied.
-    func aspectRatio(_ ratio: AspectRatio, contentMode: ContentMode) -> some HTML {
+    func aspectRatio(_ ratio: AspectRatio, contentMode: ContentMode) -> some Element {
         Section {
             self.class(contentMode.htmlClass)
         }
@@ -70,7 +70,7 @@ public extension Image {
     ///   - ratio: The ratio to use, relative to 1.
     ///   - contentMode: The content mode to apply.
     /// - Returns: A new instance of this element with the ratio and content mode applied.
-    func aspectRatio(_ ratio: Double, contentMode: ContentMode) -> some HTML {
+    func aspectRatio(_ ratio: Double, contentMode: ContentMode) -> some Element {
         Section {
             self.class(contentMode.htmlClass)
         }

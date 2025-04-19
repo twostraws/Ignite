@@ -14,22 +14,22 @@
 /// You typically don't conform to `HTML` directly. Instead, use one of the built-in elements like
 /// `Div`, `Paragraph`, or `Link`, or create custom components by conforming to `HTMLRootElement`.
 @MainActor
-public protocol HTML: RenderableElement, Stylable {
+public protocol Element: HTML, Stylable {
     /// The type of HTML content this element contains.
-    associatedtype Body: HTML
+    associatedtype Body: Element
 
     /// The content and behavior of this `HTML` element.
-    @HTMLBuilder var body: Body { get }
+    @ElementBuilder var body: Body { get }
 }
 
-public extension HTML {
+public extension Element {
     /// Generates the complete `HTML` string representation of the element.
     func render() -> String {
         body.render()
     }
 }
 
-extension HTML {
+extension Element {
     /// The Bootstrap class that sizes this element in a grid.
     var columnWidth: String {
         if let width = attributes.classes.first(where: {
@@ -68,7 +68,7 @@ extension HTML {
     }
 }
 
-extension HTML {
+extension Element {
     /// Adds an event handler to the element.
     /// - Parameters:
     ///   - name: The name of the event (e.g., "click", "mouseover")
@@ -84,7 +84,7 @@ extension HTML {
     /// - Parameter tabFocus: The TabFocus enum value defining keyboard navigation behavior
     /// - Returns: The modified HTML element
     /// - Note: Adds appropriate HTML attribute based on TabFocus enum
-    func tabFocus(_ tabFocus: TabFocus) -> some HTML {
+    func tabFocus(_ tabFocus: TabFocus) -> some Element {
         customAttribute(name: tabFocus.htmlName, value: tabFocus.value)
     }
 

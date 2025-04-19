@@ -12,9 +12,9 @@
 ///
 /// **Note**: A 12-column grid is the default, but you can adjust that downwards
 /// by using the `columns()` modifier.
-public struct Grid: HTML {
+public struct Grid: Element {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -43,7 +43,7 @@ public struct Grid: HTML {
     public init(
         alignment: Alignment = .center,
         spacing: Int,
-        @HTMLBuilder items: () -> some HTML
+        @ElementBuilder items: () -> some Element
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -59,7 +59,7 @@ public struct Grid: HTML {
     public init(
         alignment: Alignment = .center,
         spacing: SpacingAmount = .medium,
-        @RenderableElementBuilder items: () -> some RenderableElement
+        @HTMLBuilder items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -73,11 +73,11 @@ public struct Grid: HTML {
     ///   - alignment: The alignment of items in the grid. Defaults to `.center`.
     ///   - spacing: The number of pixels between each element.
     ///   - content: A function that accepts a single value from the sequence, and
-    ///     returns a some HTML representing that value in the grid.
+    ///     returns a some Element representing that value in the grid.
     public init<T>(
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
-        spacing: Int, content: (T) -> some HTML
+        spacing: Int, content: (T) -> some Element
     ) {
         self.items = HTMLCollection(items.map(content))
         self.alignment = alignment
@@ -91,12 +91,12 @@ public struct Grid: HTML {
     ///   - alignment: The alignment of items in the grid. Defaults to `.center`.
     ///   - spacing: The predefined size between each element. Defaults to `.none`
     ///   - content: A function that accepts a single value from the sequence, and
-    ///     returns a some HTML representing that value in the grid.
+    ///     returns a some Element representing that value in the grid.
     public init<T>(
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
         spacing: SpacingAmount = .medium,
-        content: (T) -> some HTML
+        content: (T) -> some Element
     ) {
         self.items = HTMLCollection(items.map(content))
         self.alignment = alignment
@@ -158,7 +158,7 @@ public struct Grid: HTML {
     }
 
     /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.
-    private func handleItem(_ item: any RenderableElement) -> any RenderableElement {
+    private func handleItem(_ item: any HTML) -> any HTML {
         var item = item
         var name: String?
         if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }) {
@@ -176,16 +176,16 @@ public struct Grid: HTML {
     /// Renders a group of HTML elements with consistent styling and attributes.
     /// - Parameters:
     ///   - passthrough: The passthrough entity containing the HTML elements to render.
-    ///   - attributes: HTML attributes to apply to each element in the group.
+    ///   - attributes: Element attributes to apply to each element in the group.
     /// - Returns: A view containing the styled group elements.
-    func handlePassthrough(_ passthrough: any PassthroughElement, attributes: CoreAttributes) -> some HTML {
+    func handlePassthrough(_ passthrough: any PassthroughElement, attributes: CoreAttributes) -> some Element {
         let gutterClass = if case .semantic(let amount) = spacingAmount {
             "g-\(amount.rawValue)"
         } else {
             ""
         }
 
-        let collection = HTMLCollection(passthrough.items.compactMap { $0 as? any HTML })
+        let collection = HTMLCollection(passthrough.items.compactMap { $0 as? any Element })
         return ForEach(collection) { item in
             handleItem(item.attributes(attributes))
                 .class(gutterClass)

@@ -6,9 +6,9 @@
 //
 
 /// One slide in a `Carousel`.
-public struct Slide: HTML {
+public struct Slide: Element {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -44,7 +44,7 @@ public struct Slide: HTML {
     /// site, e.g. /images/dog.jpg.
     /// - Parameter items: Other items to place inside this slide, which will
     /// be placed on top of the background image.
-    public init(background: String? = nil, @HTMLBuilder items: () -> some HTML) {
+    public init(background: String? = nil, @ElementBuilder items: () -> some Element) {
         self.background = background
         self.items = HTMLCollection(items)
     }
@@ -61,7 +61,7 @@ public struct Slide: HTML {
 
     /// Used during rendering to assign this carousel slide to a particular parent,
     /// so our open paging behavior works correctly.
-    func assigned(at index: Int) -> some HTML {
+    func assigned(at index: Int) -> some Element {
         Section {
             if let slideBackground = background {
                 Image(slideBackground, description: "")

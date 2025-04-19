@@ -6,9 +6,9 @@
 //
 
 /// Lets you include arbitrary HTML on a page.
-public struct Include: HTML {
+public struct Include: Element {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

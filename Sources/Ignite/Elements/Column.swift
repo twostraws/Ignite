@@ -6,7 +6,7 @@
 //
 
 /// A column inside a table row.
-public struct Column: HTML {
+public struct Column: Element {
     /// How to vertically align the contents of this column.
     public enum VerticalAlignment: String, Sendable, CaseIterable {
         /// Align contents to the top of the column.
@@ -20,7 +20,7 @@ public struct Column: HTML {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -41,7 +41,7 @@ public struct Column: HTML {
     /// Creates a new column from a page element builder of items.
     /// - Parameter items: A page element builder that returns the items
     /// for this column.
-    public init(@RenderableElementBuilder items: () -> some RenderableElement) {
+    public init(@HTMLBuilder items: () -> some HTML) {
         self.items = HTMLCollection(items)
     }
 

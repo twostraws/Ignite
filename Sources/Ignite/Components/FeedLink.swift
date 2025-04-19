@@ -6,12 +6,12 @@
 //
 
 /// Displays a link to your RSS feed, if enabled.
-public struct FeedLink: HTML {
+public struct FeedLink: Element {
 
     @Environment(\.builtInIconsEnabled) private var builtInIconsEnabled
     @Environment(\.feedConfiguration) private var feedConfig
 
-    public var body: some HTML {
+    public var body: some Element {
         if let feedConfig {
             Text {
                 if builtInIconsEnabled != .none {

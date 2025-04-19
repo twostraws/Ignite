@@ -12,9 +12,9 @@
 /// `ZStack` strips its subviews of implicit styles, such as the bottom margin
 /// automatically applied to paragraphs. All styles explicitly
 /// applied through modifiers like `.margin()` will be respected.
-public struct ZStack: HTML {
+public struct ZStack: Element {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -34,7 +34,7 @@ public struct ZStack: HTML {
     ///   - items: A closure that returns the elements to be stacked.
     public init(
         alignment: Alignment = .center,
-        @RenderableElementBuilder _ items: () -> some RenderableElement
+        @HTMLBuilder _ items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment

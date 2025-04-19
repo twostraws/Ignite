@@ -12,8 +12,8 @@ private enum PaddingType {
 @MainActor private func paddingModifier(
     _ padding: PaddingType,
     edges: Edge = .all,
-    content: any RenderableElement & Stylable
-) -> any RenderableElement {
+    content: any HTML & Stylable
+) -> any HTML {
     switch padding {
     case .exact(let unit):
         let styles = content.edgeAdjustedStyles(prefix: "padding", edges, unit.stringValue)
@@ -39,11 +39,11 @@ private enum PaddingType {
     }
 }
 
-public extension HTML {
+public extension Element {
     /// Applies padding on all sides of this element. Defaults to 20 pixels.
     /// - Parameter length: The amount of padding to apply, specified in pixels.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ length: Int = 20) -> some HTML {
+    func padding(_ length: Int = 20) -> some Element {
         AnyHTML(paddingModifier(.exact(.px(length)), content: self))
     }
 
@@ -51,7 +51,7 @@ public extension HTML {
     /// - Parameter length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ length: LengthUnit) -> some HTML {
+    func padding(_ length: LengthUnit) -> some Element {
         AnyHTML(paddingModifier(.exact(length), content: self))
     }
 
@@ -59,7 +59,7 @@ public extension HTML {
     /// - Parameter amount: The amount of padding to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ amount: SpacingAmount) -> some HTML {
+    func padding(_ amount: SpacingAmount) -> some Element {
         AnyHTML(paddingModifier(.semantic(amount), content: self))
     }
 
@@ -68,7 +68,7 @@ public extension HTML {
     ///   - edges: The edges where this padding should be applied.
     ///   - length: The amount of padding to apply, specified in pixels.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ edges: Edge, _ length: Int = 20) -> some HTML {
+    func padding(_ edges: Edge, _ length: Int = 20) -> some Element {
         AnyHTML(paddingModifier(.exact(.px(length)), edges: edges, content: self))
     }
 
@@ -78,7 +78,7 @@ public extension HTML {
     ///   - length: The amount of padding to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ edges: Edge, _ length: LengthUnit) -> some HTML {
+    func padding(_ edges: Edge, _ length: LengthUnit) -> some Element {
         AnyHTML(paddingModifier(.exact(length), edges: edges, content: self))
     }
 
@@ -88,7 +88,7 @@ public extension HTML {
     ///   - amount: The amount of padding to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ edges: Edge, _ amount: SpacingAmount) -> some HTML {
+    func padding(_ edges: Edge, _ amount: SpacingAmount) -> some Element {
         AnyHTML(paddingModifier(.semantic(amount), edges: edges, content: self))
     }
 }

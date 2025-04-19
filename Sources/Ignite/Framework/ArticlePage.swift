@@ -12,7 +12,7 @@
 /// ```swift
 /// struct MyArticle: ArticlePage {
 ///
-///     var body: some HTML {
+///     var body: some Element {
 ///         Heading(content.title)
 ///         Text(content.description)
 ///     }

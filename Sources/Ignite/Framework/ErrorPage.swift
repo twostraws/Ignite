@@ -11,7 +11,7 @@
 ///
 /// ```swift
 /// struct MyErrorPage: ErrorPage {
-///   var body: some HTML {
+///   var body: some Element {
 ///     Section {
 ///       Text(error.title).font(.title1)
 ///       Text(error.description)

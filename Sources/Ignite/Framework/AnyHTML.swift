@@ -5,11 +5,11 @@
 // See LICENSE for license information.
 //
 
-/// A type-erasing wrapper that can hold any HTML content while maintaining protocol conformance.
+/// A type-erasing wrapper that can hold any Element content while maintaining protocol conformance.
 /// This wrapper also handles unwrapping nested AnyHTML instances to prevent unnecessary wrapping layers.
-public struct AnyHTML: HTML, FormItem {
+public struct AnyHTML: Element, FormItem {
     /// The body of this HTML element, which is itself
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -18,12 +18,12 @@ public struct AnyHTML: HTML, FormItem {
     public var isPrimitive: Bool { true }
 
     /// The underlying HTML content, unattributed.
-    var wrapped: any RenderableElement
+    var wrapped: any HTML
 
     /// Creates a new AnyHTML instance that wraps the given HTML content.
     /// If the content is already an AnyHTML instance, it will be unwrapped to prevent nesting.
     /// - Parameter content: The HTML content to wrap
-    public init(_ content: any RenderableElement) {
+    public init(_ content: any HTML) {
         var content = content
         attributes.merge(content.attributes)
         content.attributes.clear()
@@ -36,7 +36,7 @@ public struct AnyHTML: HTML, FormItem {
     }
 
     /// The underlying HTML content, with attributes.
-    var attributedContent: any RenderableElement {
+    var attributedContent: any HTML {
         var wrapped = wrapped
         wrapped.attributes.merge(attributes)
         return wrapped

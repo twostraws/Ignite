@@ -6,12 +6,12 @@
 //
 
 /// Describes elements that can be placed into forms.
-public protocol FormItem: RenderableElement {}
+public protocol FormItem: HTML {}
 
 /// A form container for collecting user input
-public struct Form: HTML, NavigationItem {
+public struct Form: Element, NavigationItem {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -41,7 +41,7 @@ public struct Form: HTML, NavigationItem {
     /// Sets the style for form labels
     /// - Parameter style: How labels should be displayed
     /// - Returns: A modified form with the specified label style
-    public func labelStyle(_ style: ControlLabelStyle) -> some HTML {
+    public func labelStyle(_ style: ControlLabelStyle) -> some Element {
         var copy = self
         copy.labelStyle = style
         return copy
@@ -59,7 +59,7 @@ public struct Form: HTML, NavigationItem {
     /// Adjusts the number of columns that can be fitted into this section.
     /// - Parameter columns: The number of columns to use
     /// - Returns: A new `Section` instance with the updated column count.
-    public func columns(_ columns: Int) -> some HTML {
+    public func columns(_ columns: Int) -> some Element {
         var copy = self
         copy.columnCount = columns
         return copy
@@ -160,8 +160,8 @@ public struct Form: HTML, NavigationItem {
         .render()
     }
 
-    @RenderableElementBuilder
-    private func renderTextField(_ textField: TextField) -> some HTML {
+    @HTMLBuilder
+    private func renderTextField(_ textField: TextField) -> some Element {
         let styledTextField = textField.size(controlSize).labelStyle(labelStyle)
         switch labelStyle {
         case .leading: styledTextField
@@ -169,11 +169,11 @@ public struct Form: HTML, NavigationItem {
         }
     }
 
-    private func renderControlGroup(_ group: ControlGroup) -> some HTML {
+    private func renderControlGroup(_ group: ControlGroup) -> some Element {
         group.labelStyle(labelStyle)
     }
 
-    private func renderSection(_ section: Section) -> some HTML {
+    private func renderSection(_ section: Section) -> some Element {
         var items = HTMLCollection([section.content]).elements
 
         let last = items.last
@@ -209,14 +209,14 @@ public struct Form: HTML, NavigationItem {
         .attributes(section.attributes)
     }
 
-    private func renderButton(_ button: Button) -> some HTML {
+    private func renderButton(_ button: Button) -> some Element {
         Section(button.class(controlSize.buttonClass))
             .class(getColumnClass(for: button, totalColumns: columnCount))
             .class("d-flex")
             .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
     }
 
-    private func renderText(_ text: Span) -> some HTML {
+    private func renderText(_ text: Span) -> some Element {
         print("""
         For proper alignment within Form, prefer a read-only, \
         plain-text TextField over a Span.
@@ -224,7 +224,7 @@ public struct Form: HTML, NavigationItem {
         return renderItem(text)
     }
 
-    private func renderItem(_ item: any RenderableElement) -> some HTML {
+    private func renderItem(_ item: any HTML) -> some Element {
         Section(item)
             .class("d-flex", "align-items-center")
             .class(getColumnClass(for: item, totalColumns: columnCount))
@@ -236,7 +236,7 @@ public struct Form: HTML, NavigationItem {
     ///   - totalColumns: The total number of columns in the form's grid.
     /// - Returns: A string containing the appropriate Bootstrap column class.
     private func getColumnClass(
-        for item: any RenderableElement,
+        for item: any HTML,
         totalColumns: Int
     ) -> String {
         if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }),

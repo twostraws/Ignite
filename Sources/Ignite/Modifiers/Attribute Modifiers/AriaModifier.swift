@@ -8,10 +8,10 @@
 @MainActor private func ariaModifier(
     _ key: AriaType,
     value: String?,
-    content: any RenderableElement
-) -> any RenderableElement {
+    content: any HTML
+) -> any HTML {
     guard let value else { return content }
-    var copy: any RenderableElement = content.isPrimitive ? content : Section(content)
+    var copy: any HTML = content.isPrimitive ? content : Section(content)
     copy.attributes.aria.append(.init(name: key.rawValue, value: value))
     return copy
 }
@@ -27,13 +27,13 @@
     return copy
 }
 
-public extension HTML {
+public extension Element {
     /// Adds an ARIA attribute to the element.
     /// - Parameters:
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `Element` element
-    func aria(_ key: AriaType, _ value: String) -> some HTML {
+    func aria(_ key: AriaType, _ value: String) -> some Element {
         AnyHTML(ariaModifier(key, value: value, content: self))
     }
 
@@ -42,7 +42,7 @@ public extension HTML {
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
-    func aria(_ key: AriaType, _ value: String?) -> some HTML {
+    func aria(_ key: AriaType, _ value: String?) -> some Element {
         AnyHTML(ariaModifier(key, value: value, content: self))
     }
 }
@@ -67,13 +67,13 @@ public extension InlineElement {
     }
 }
 
-extension RenderableElement {
+extension HTML {
     /// Adds an ARIA attribute to the element.
     /// - Parameters:
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
     /// - Returns: The modified `HTML` element
-    func aria(_ key: AriaType, _ value: String?) -> some RenderableElement {
+    func aria(_ key: AriaType, _ value: String?) -> some HTML {
         AnyHTML(ariaModifier(key, value: value, content: self))
     }
 }

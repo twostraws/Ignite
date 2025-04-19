@@ -47,7 +47,7 @@ public struct Time: InlineElement {
     /// elements to place inside the time element.
     /// - Parameter dateTime: The time and/or date of the element
     /// - Parameter contents: The elements to place inside the time element.
-    public init(dateTime: Date? = nil, @HTMLBuilder contents: () -> some InlineElement) {
+    public init(dateTime: Date? = nil, @ElementBuilder contents: () -> some InlineElement) {
         self.dateTime = dateTime
         self.contents = contents()
     }

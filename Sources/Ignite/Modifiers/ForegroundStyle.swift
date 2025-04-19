@@ -46,8 +46,8 @@ private func styles(for gradient: Gradient) -> [InlineStyle] {
 
 @MainActor private func foregroundStyleModifier(
     _ style: StyleType,
-    content: any HTML
-) -> any HTML {
+    content: any Element
+) -> any Element {
     switch style {
     case .none:
         content
@@ -89,32 +89,32 @@ private func styles(for gradient: Gradient) -> [InlineStyle] {
     }
 }
 
-public extension HTML {
+public extension Element {
     /// Applies a foreground color to the current element.
     /// - Parameter color: The style to apply, specified as a `Color` object.
     /// - Returns: The current element with the updated color applied.
-    func foregroundStyle(_ color: Color) -> some HTML {
+    func foregroundStyle(_ color: Color) -> some Element {
         AnyHTML(foregroundStyleModifier(.color(color), content: self))
     }
 
     /// Applies a foreground color to the current element.
     /// - Parameter color: The style to apply, specified as a string.
     /// - Returns: The current element with the updated color applied.
-    func foregroundStyle(_ color: String) -> some HTML {
+    func foregroundStyle(_ color: String) -> some Element {
         AnyHTML(foregroundStyleModifier(.string(color), content: self))
     }
 
     /// Applies a foreground color to the current element.
     /// - Parameter style: The style to apply, specified as a `Color` object.
     /// - Returns: The current element with the updated color applied.
-    func foregroundStyle(_ style: ForegroundStyle) -> some HTML {
+    func foregroundStyle(_ style: ForegroundStyle) -> some Element {
         AnyHTML(foregroundStyleModifier(.style(style), content: self))
     }
 
     /// Applies a foreground color to the current element.
     /// - Parameter gradient: The style to apply, specified as a `Gradient` object.
     /// - Returns: The current element with the updated color applied.
-    func foregroundStyle(_ gradient: Gradient) -> some HTML {
+    func foregroundStyle(_ gradient: Gradient) -> some Element {
         AnyHTML(foregroundStyleModifier(.gradient(gradient), content: self))
     }
 }

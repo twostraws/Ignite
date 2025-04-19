@@ -7,9 +7,9 @@
 
 /// A container that automatically adjusts the styling for buttons it contains so
 /// that they sit more neatly together.
-public struct ButtonGroup: HTML {
+public struct ButtonGroup: Element {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

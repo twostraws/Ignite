@@ -7,7 +7,7 @@
 
 /// A structure that creates HTML content by mapping over a sequence of data.
 @MainActor
-public struct ForEach<Data: Sequence>: HTML, ListableElement, PassthroughElement, HeadElement {
+public struct ForEach<Data: Sequence>: Element, ListableElement, PassthroughElement, HeadElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -20,7 +20,7 @@ public struct ForEach<Data: Sequence>: HTML, ListableElement, PassthroughElement
     /// The child elements contained within this HTML element.
     var items: HTMLCollection
 
-    public var body: some HTML { self }
+    public var body: some Element { self }
 
     /// Creates a new ForEach instance that generates HTML content from a sequence.
     /// - Parameters:
@@ -28,7 +28,7 @@ public struct ForEach<Data: Sequence>: HTML, ListableElement, PassthroughElement
     ///   - content: A closure that converts each element into HTML content.
     public init(
         _ data: Data,
-        @RenderableElementBuilder content: @escaping (Data.Element) -> some RenderableElement
+        @HTMLBuilder content: @escaping (Data.Element) -> some HTML
     ) {
         self.data = data
         self.items = HTMLCollection(data.map(content))
@@ -50,7 +50,7 @@ public struct ForEach<Data: Sequence>: HTML, ListableElement, PassthroughElement
     /// - Returns: The rendered HTML string.
     public func render() -> String {
         items.map {
-            var item: any RenderableElement = $0
+            var item: any HTML = $0
             item.attributes.merge(attributes)
             return item.render()
         }.joined()
