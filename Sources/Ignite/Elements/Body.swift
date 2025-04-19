@@ -83,3 +83,81 @@ public struct Body: DocumentElement {
         return "<body\(attributes)>\(output)</body>"
     }
 }
+
+public extension Body {
+    /// Adds a data attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the data attribute
+    ///   - value: The value of the data attribute
+    /// - Returns: The modified `Element` element
+    func data(_ name: String, _ value: String) -> Self {
+        var copy = self
+        copy.attributes.data.append(.init(name: name, value: value))
+        return copy
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(name: String, value: String) -> Self {
+        var copy = self
+        copy.attributes.append(customAttributes: .init(name: name, value: value))
+        return copy
+    }
+}
+
+public extension Body {
+    /// Applies margins on selected sides of this element. Defaults to 20 pixels.
+    /// - Parameters:
+    ///   - edges: The edges where this margin should be applied.
+    ///   - length: The amount of margin to apply, specified in
+    /// units of your choosing.
+    /// - Returns: A copy of the current element with the new margins applied.
+    func margin(_ edges: Edge, _ length: LengthUnit) -> Self {
+        let styles = content.edgeAdjustedStyles(prefix: "margin", .all, length.stringValue)
+        var copy = self
+        copy.attributes.append(styles: styles)
+        return copy
+    }
+
+    /// Applies margins on selected sides of this element, using adaptive sizing.
+    /// - Parameters:
+    ///   - edges: The edges where this margin should be applied.
+    ///   - amount: The amount of margin to apply, specified as a
+    ///   `SpacingAmount` case.
+    /// - Returns: A copy of the current element with the new margins applied.
+    func margin(_ edges: Edge, _ amount: SpacingAmount) -> Self {
+        let classes = content.edgeAdjustedClasses(prefix: "m", .all, amount.rawValue)
+        var copy = self
+        copy.attributes.append(classes: classes)
+        return copy
+    }
+
+    /// Applies padding on selected sides of this element. Defaults to 20 pixels.
+    /// - Parameters:
+    ///   - edges: The edges where this padding should be applied.
+    ///   - length: The amount of padding to apply, specified in
+    /// units of your choosing.
+    /// - Returns: A copy of the current element with the new padding applied.
+    func padding(_ edges: Edge, _ length: LengthUnit) -> Self {
+        let styles = content.edgeAdjustedStyles(prefix: "padding", .all, length.stringValue)
+        var copy = self
+        copy.attributes.append(styles: styles)
+        return copy
+    }
+
+    /// Applies padding on selected sides of this element using adaptive sizing.
+    /// - Parameters:
+    ///   - edges: The edges where this padding should be applied.
+    ///   - amount: The amount of padding to apply, specified as a
+    /// `SpacingAmount` case.
+    /// - Returns: A copy of the current element with the new padding applied.
+    func padding(_ edges: Edge, _ amount: SpacingAmount) -> Self {
+        let classes = content.edgeAdjustedClasses(prefix: "p", .all, amount.rawValue)
+        var copy = self
+        copy.attributes.append(classes: classes)
+        return copy
+    }
+}
