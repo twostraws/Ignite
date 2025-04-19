@@ -48,7 +48,7 @@ public extension InlineElement {
     }
 }
 
-public extension HeadElement {
+public extension HTML where Self: HeadElement {
     /// Adds a data attribute to the element.
     /// - Parameters:
     ///   - name: The name of the data attribute

@@ -169,6 +169,16 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         return copy
     }
 
+    /// Returns a new set of attributes with extra CSS classes appended.
+    /// - Parameter classes: The CSS classes to append.
+    /// - Returns: A copy of the previous `CoreAttributes` object with
+    /// the extra CSS classes applied.
+    func appending(classes: String...) -> CoreAttributes {
+        var copy = self
+        copy.classes.formUnion(classes)
+        return copy
+    }
+
     /// Returns a new set of attributes with an extra aria appended.
     /// - Parameter aria: The aria to append.
     /// - Returns: A copy of the previous `CoreAttributes` object with

@@ -46,6 +46,14 @@ public struct Tag: HTML, HeadElement {
         self.content = singleElement
     }
 
+    /// Creates a new `Tag` instance from the name provided, with no content
+    /// inside the tag.
+    ///   - name: The name of the HTML tag you want to create.
+    public init(_ name: String) {
+        self.name = name
+        self.content = EmptyHTML()
+    }
+
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.

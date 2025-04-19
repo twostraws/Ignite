@@ -21,5 +21,4 @@ class TextDecorationModifierTests: IgniteTestSuite {
 
         #expect(output == "<span style=\"text-decoration: \(decoration.rawValue)\">Hello, World!</span>")
     }
-
 }

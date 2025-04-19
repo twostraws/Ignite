@@ -43,7 +43,7 @@ import Testing
     func content(for page: any StaticPage, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
-        let element = Link(target: page) {
+        let element = LinkGroup(target: page) {
             "MORE "
             Text("CONTENT")
         }

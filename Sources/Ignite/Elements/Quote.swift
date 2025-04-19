@@ -43,14 +43,19 @@ public struct Quote: HTML {
     }
 
     /// Renders this element using publishing context passed in.
-    /// - Returns: The Element for this element.
+    /// - Returns: The HTML for this element.
     public func render() -> String {
-        var result = "<blockquote\(attributes)>"
-        result += contents.render()
-        if !(caption is EmptyInlineElement) {
-            result += "<footer>\(caption.render())</footer>"
+        var attributes = attributes
+        attributes.append(classes: "blockquote")
+
+        let renderedContents = contents.render()
+        let renderedCaption = caption.render()
+
+        if renderedCaption.isEmpty {
+            return "<blockquote\(attributes)>\(renderedContents)</blockquote>"
+        } else {
+            let footer = "<footer class=\"blockquote-footer\">\(renderedCaption)</footer>"
+            return "<blockquote\(attributes)>\(renderedContents + footer)</blockquote>"
         }
-        result += "</blockquote>"
-        return result
     }
 }

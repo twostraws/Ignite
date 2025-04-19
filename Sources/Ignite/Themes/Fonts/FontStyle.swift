@@ -51,7 +51,7 @@ public extension Font {
         }
 
         /// The Bootstrap font-size utility class for this style
-        var fontSizeClass: String {
+        var fontSizeClass: String? {
             switch self {
             case .title1: return "fs-1"
             case .title2: return "fs-2"
@@ -59,7 +59,7 @@ public extension Font {
             case .title4: return "fs-4"
             case .title5: return "fs-5"
             case .title6: return "fs-6"
-            case .body: return "" // Default body size doesn't need a class
+            case .body: return nil // Default body size doesn't need a class
             case .lead: return "lead" // Lead already has its own class
             }
         }
