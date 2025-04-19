@@ -12,9 +12,9 @@
 ///
 /// **Note**: A 12-column grid is the default, but you can adjust that downwards
 /// by using the `columns()` modifier.
-public struct Grid: Element {
+public struct Grid: HTML {
     /// The content and behavior of this HTML.
-    public var body: some Element { self }
+    public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -43,7 +43,7 @@ public struct Grid: Element {
     public init(
         alignment: Alignment = .center,
         spacing: Int,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder items: () -> some RenderableElement
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -59,7 +59,7 @@ public struct Grid: Element {
     public init(
         alignment: Alignment = .center,
         spacing: SpacingAmount = .medium,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder items: () -> some RenderableElement
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -77,7 +77,7 @@ public struct Grid: Element {
     public init<T>(
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
-        spacing: Int, content: (T) -> some HTML
+        spacing: Int, content: (T) -> some RenderableElement
     ) {
         self.items = HTMLCollection(items.map(content))
         self.alignment = alignment
@@ -96,7 +96,7 @@ public struct Grid: Element {
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
         spacing: SpacingAmount = .medium,
-        content: (T) -> some HTML
+        content: (T) -> some RenderableElement
     ) {
         self.items = HTMLCollection(items.map(content))
         self.alignment = alignment
@@ -158,7 +158,7 @@ public struct Grid: Element {
     }
 
     /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.
-    private func handleItem(_ item: any HTML) -> any HTML {
+    private func handleItem(_ item: any RenderableElement) -> any RenderableElement {
         var item = item
         var name: String?
         if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }) {
@@ -178,14 +178,14 @@ public struct Grid: Element {
     ///   - passthrough: The passthrough entity containing the HTML elements to render.
     ///   - attributes: Element attributes to apply to each element in the group.
     /// - Returns: A view containing the styled group elements.
-    func handlePassthrough(_ passthrough: any PassthroughElement, attributes: CoreAttributes) -> some Element {
+    func handlePassthrough(_ passthrough: any PassthroughElement, attributes: CoreAttributes) -> some HTML {
         let gutterClass = if case .semantic(let amount) = spacingAmount {
             "g-\(amount.rawValue)"
         } else {
             ""
         }
 
-        let collection = HTMLCollection(passthrough.items.compactMap { $0 as? any Element })
+        let collection = HTMLCollection(passthrough.items.compactMap { $0 as? any HTML })
         return ForEach(collection) { item in
             handleItem(item.attributes(attributes))
                 .class(gutterClass)

@@ -16,7 +16,7 @@
 ///         attributes to multiple elements without affecting the document
 ///         structure. If you need a containing `div` element, use
 ///         ``Section`` instead.
-public struct Group: Element, PassthroughElement {
+public struct Group: HTML, PassthroughElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -26,23 +26,23 @@ public struct Group: Element, PassthroughElement {
     /// The child elements contained within this group.
     var items: HTMLCollection
 
-    public var body: some Element { self }
+    public var body: some HTML { self }
 
     /// Creates a new group containing the given HTML content.
     /// - Parameter content: A closure that creates the HTML content.
-    public init(@ElementBuilder content: () -> some Element) {
+    public init(@HTMLBuilder content: () -> some HTML) {
         self.items = HTMLCollection(content)
     }
 
     /// Creates a new group containing the given HTML content.
     /// - Parameter content: The HTML content to include.
-    public init(_ content: some HTML) {
+    public init(_ content: some RenderableElement) {
         self.items = HTMLCollection([content])
     }
 
     public func render() -> String {
         items.map {
-            var item: any HTML = $0
+            var item: any RenderableElement = $0
             item.attributes.merge(attributes)
             return item.render()
         }.joined()

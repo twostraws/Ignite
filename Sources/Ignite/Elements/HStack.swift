@@ -10,9 +10,9 @@
 /// - Note: To ensure spacing is consistent, `HStack` strips its subviews of
 /// implicit styles, such as the bottom margin automatically applied to paragraphs.
 /// All styles explicitly applied via modifiers like `.margin()` will be respected.
-public struct HStack: Element {
+public struct HStack: HTML {
     /// The content and behavior of this HTML.
-    public var body: some Element { self }
+    public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -37,7 +37,7 @@ public struct HStack: Element {
     public init(
         alignment: VerticalAlignment = .center,
         spacing pixels: Int,
-        @ElementBuilder items: () -> some Element
+        @HTMLBuilder items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -52,7 +52,7 @@ public struct HStack: Element {
     public init(
         alignment: VerticalAlignment = .center,
         spacing: SpacingAmount = .medium,
-        @ElementBuilder items: () -> some Element
+        @HTMLBuilder items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment

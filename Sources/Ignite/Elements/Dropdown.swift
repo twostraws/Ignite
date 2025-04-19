@@ -7,12 +7,12 @@
 
 /// Elements that conform to `DropdownItem` can be shown inside
 /// Dropdown objects.
-public protocol DropdownItem: HTML {}
+public protocol DropdownItem: RenderableElement {}
 
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
-public struct Dropdown: Element, NavigationItem, FormItem {
+public struct Dropdown: HTML, NavigationItem, FormItem {
     /// How the dropdown should be rendered based on its context.
     enum Configuration: Sendable {
         /// Renders as a complete standalone dropdown.
@@ -26,7 +26,7 @@ public struct Dropdown: Element, NavigationItem, FormItem {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some Element { self }
+    public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -121,7 +121,7 @@ public struct Dropdown: Element, NavigationItem, FormItem {
     /// Creates the internal dropdown structure including the trigger button and menu items.
     /// - Returns: A group containing the dropdown's trigger and menu list.
     @HTMLBuilder
-    private func renderDropdownContent() -> some HTML {
+    private func renderDropdownContent() -> some RenderableElement {
         if configuration == .navigationBarItem {
             let titleAttributes = title.attributes
             let title = title.clearingAttributes()

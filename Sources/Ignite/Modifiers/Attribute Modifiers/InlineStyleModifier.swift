@@ -7,9 +7,9 @@
 
 @MainActor private func inlineStyleModifier(
     _ styles: [InlineStyle],
-    content: any HTML
-) -> any HTML {
-    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    content: any RenderableElement
+) -> any RenderableElement {
+    var copy: any RenderableElement = content.isPrimitive ? content : Section(content)
     copy.attributes.append(styles: styles)
     return copy
 }
@@ -23,13 +23,13 @@
     return copy
 }
 
-public extension Element {
+public extension HTML {
     /// Adds an inline CSS style property to the HTML element
     /// - Parameters:
     ///   - property: The CSS property to set
     ///   - value: The value to set for the property
     /// - Returns: A modified copy of the element with the style property added
-    func style(_ property: Property, _ value: String) -> some Element {
+    func style(_ property: Property, _ value: String) -> some HTML {
         AnyHTML(inlineStyleModifier([.init(property, value: value)], content: self))
     }
 }
@@ -45,7 +45,7 @@ public extension InlineElement {
     }
 }
 
-public extension FormItem where Self: Element {
+public extension FormItem where Self: HTML {
     /// Adds an inline CSS style property to the Element element
     /// - Parameters:
     ///   - property: The CSS property to set
@@ -78,7 +78,7 @@ public extension FormItem {
     }
 }
 
-public extension HTML where Self: HeadElement {
+public extension RenderableElement where Self: HeadElement {
     /// Adds an inline CSS style property to the Element element
     /// - Parameters:
     ///   - property: The CSS property to set
@@ -91,33 +91,33 @@ public extension HTML where Self: HeadElement {
     }
 }
 
-public extension HTML {
+public extension RenderableElement {
     /// Adds an inline CSS style property to the Element element
     /// - Parameters:
     ///   - property: The CSS property to set
     ///   - value: The value to set for the property
     /// - Returns: A modified copy of the element with the style property added
-    @discardableResult func style(_ property: Property, _ value: String) -> some HTML {
+    @discardableResult func style(_ property: Property, _ value: String) -> some RenderableElement {
         var copy = self
         copy.attributes.append(styles: .init(property, value: value))
         return copy
     }
 }
 
-extension Element {
+extension HTML {
     /// Adds an inline style to the element.
     /// - Parameters:
     ///   - property: The CSS property.
     ///   - value: The value.
     /// - Returns: The modified `HTML` element
-    func style(_ property: String, _ value: String) -> some Element {
+    func style(_ property: String, _ value: String) -> some HTML {
         AnyHTML(inlineStyleModifier([.init(property, value: value)], content: self))
     }
 
     /// Adds inline styles to the element.
     /// - Parameter values: Variable number of `InlineStyle` objects
     /// - Returns: The modified `HTML` element
-    func style(_ values: InlineStyle?...) -> some Element {
+    func style(_ values: InlineStyle?...) -> some HTML {
         let styles = values.compactMap(\.self)
         return AnyHTML(inlineStyleModifier(styles, content: self))
     }
@@ -125,7 +125,7 @@ extension Element {
     /// Adds inline styles to the element.
     /// - Parameter styles: An array of `InlineStyle` objects
     /// - Returns: The modified `HTML` element
-    func style(_ styles: [InlineStyle]) -> some Element {
+    func style(_ styles: [InlineStyle]) -> some HTML {
         AnyHTML(inlineStyleModifier(styles, content: self))
     }
 }
@@ -167,11 +167,11 @@ extension InlineElement {
 //    }
 //}
 
-extension HTML {
+extension RenderableElement {
     /// Adds inline styles to the element.
     /// - Parameter styles: An array of `InlineStyle` objects
     /// - Returns: The modified `InlineElement` element
-    func style(_ styles: [InlineStyle]) -> some HTML {
+    func style(_ styles: [InlineStyle]) -> some RenderableElement {
         AnyHTML(inlineStyleModifier(styles, content: self))
     }
 }

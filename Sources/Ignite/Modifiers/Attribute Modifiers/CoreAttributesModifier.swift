@@ -7,9 +7,9 @@
 
 @MainActor private func coreAttributesModifier(
     _ attributes: CoreAttributes,
-    content: any HTML
-) -> any HTML {
-    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    content: any RenderableElement
+) -> any RenderableElement {
+    var copy: any RenderableElement = content.isPrimitive ? content : Section(content)
     copy.attributes.merge(attributes)
     return copy
 }
@@ -23,17 +23,17 @@
     return copy
 }
 
-public extension HTML where Self: Element {
+public extension RenderableElement where Self: HTML {
     /// Merges a complete set of core attributes into this element.
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified Element element
     /// - Note: Uses AttributeStore for persistent storage and merging
-    func attributes(_ attributes: CoreAttributes) -> some Element {
+    func attributes(_ attributes: CoreAttributes) -> some HTML {
         AnyHTML(coreAttributesModifier(attributes, content: self))
     }
 }
 
-public extension HTML where Self: InlineElement {
+public extension RenderableElement where Self: InlineElement {
     /// Merges a complete set of core attributes into this element.
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified Element element
@@ -43,12 +43,12 @@ public extension HTML where Self: InlineElement {
     }
 }
 
-extension HTML {
+extension RenderableElement {
     /// Merges a complete set of core attributes into this element.
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified HTML element
     /// - Note: Uses AttributeStore for persistent storage and merging
-    func attributes(_ attributes: CoreAttributes) -> some HTML {
+    func attributes(_ attributes: CoreAttributes) -> some RenderableElement {
         AnyHTML(coreAttributesModifier(attributes, content: self))
     }
 }

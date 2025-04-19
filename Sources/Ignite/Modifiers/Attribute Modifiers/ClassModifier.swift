@@ -7,10 +7,10 @@
 
 @MainActor private func classModifier(
     _ classNames: [String],
-    content: any HTML
-) -> any HTML {
+    content: any RenderableElement
+) -> any RenderableElement {
     guard !classNames.filter({ !$0.isEmpty }).isEmpty else { return content }
-    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    var copy: any RenderableElement = content.isPrimitive ? content : Section(content)
     copy.attributes.append(classes: classNames)
     return copy
 }
@@ -23,18 +23,18 @@ private func classModifier(_ classNames: [String], content: any InlineElement) -
     return copy
 }
 
-public extension Element {
+public extension HTML {
     /// Adds a CSS class to the HTML element
     /// - Parameter className: The CSS class name to add
     /// - Returns: A modified copy of the element with the CSS class added
-    func `class`(_ className: String) -> some Element {
+    func `class`(_ className: String) -> some HTML {
         AnyHTML(classModifier([className], content: self))
     }
 
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified Element element
-    func `class`(_ newClasses: String?...) -> some Element {
+    func `class`(_ newClasses: String?...) -> some HTML {
         let classes = newClasses.compactMap(\.self)
         return AnyHTML(classModifier(classes, content: self))
     }
@@ -42,12 +42,12 @@ public extension Element {
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
     /// - Returns: The modified `Element` element
-    func `class`(_ newClasses: [String]) -> some Element {
+    func `class`(_ newClasses: [String]) -> some HTML {
         AnyHTML(classModifier(newClasses, content: self))
     }
 }
 
-public extension HTML where Self: InlineElement {
+public extension RenderableElement where Self: InlineElement {
     /// Adds a CSS class to the HTML element
     /// - Parameter className: The CSS class name to add
     /// - Returns: A modified copy of the element with the CSS class added
@@ -94,11 +94,11 @@ public extension FormItem where Self: InlineElement {
 // These should always remain private, because for the
 // type safety of the public facing API we always want
 // to return either Element or InlineElement.
-extension HTML {
+extension RenderableElement {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified Element element
-    func `class`(_ newClasses: String?...) -> some HTML {
+    func `class`(_ newClasses: String?...) -> some RenderableElement {
         let classes = newClasses.compactMap(\.self)
         return AnyHTML(classModifier(classes, content: self))
     }
@@ -106,7 +106,7 @@ extension HTML {
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
     /// - Returns: The modified `Element` element
-    func `class`(_ newClasses: [String]) -> some HTML {
+    func `class`(_ newClasses: [String]) -> some RenderableElement {
         AnyHTML(classModifier(newClasses, content: self))
     }
 }

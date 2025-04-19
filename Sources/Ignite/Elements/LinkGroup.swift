@@ -8,9 +8,9 @@
 import Foundation
 
 /// A hyperlink to another resource on this site or elsewhere.
-public struct LinkGroup: Element {
+public struct LinkGroup: HTML {
     /// The content and behavior of this HTML.
-    public var body: some Element { self }
+    public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -19,7 +19,7 @@ public struct LinkGroup: Element {
     public var isPrimitive: Bool { true }
 
     /// The content to display inside this link.
-    var content: any HTML
+    var content: any RenderableElement
 
     /// The location to which this link should direct users.
     var url: String
@@ -29,7 +29,7 @@ public struct LinkGroup: Element {
     /// - Parameters:
     ///   - target: The URL you want to link to.
     ///   - content: The user-facing content to show inside the `Link`.
-    public init(target: String, @ElementBuilder content: @escaping () -> some Element) {
+    public init(target: String, @HTMLBuilder content: @escaping () -> some HTML) {
         self.content = content()
         self.url = target
     }
@@ -38,7 +38,7 @@ public struct LinkGroup: Element {
     /// - Parameters:
     ///  - target: The new target to apply.
     ///  - content: The user-facing content to show inside the `Link`.
-    public init(target: any StaticPage, @ElementBuilder content: @escaping () -> some Element) {
+    public init(target: any StaticPage, @HTMLBuilder content: @escaping () -> some HTML) {
         self.content = content()
         self.url = target.path
     }
@@ -48,7 +48,7 @@ public struct LinkGroup: Element {
     /// - Parameters:
     ///   - content: A piece of content from your site.
     ///   - content: The user-facing content to show inside the `Link`.
-    public init(target article: Article, @ElementBuilder content: @escaping () -> some Element) {
+    public init(target article: Article, @HTMLBuilder content: @escaping () -> some HTML) {
         self.content = content()
         self.url = article.path
     }

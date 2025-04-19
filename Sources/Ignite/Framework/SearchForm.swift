@@ -13,14 +13,14 @@ struct SearchAction: Action {
 }
 
 /// A form that performs site-wide search.
-public struct SearchForm: Element, NavigationItem {
+public struct SearchForm: HTML, NavigationItem {
     /// The appearance of the search-button label.
     public enum SearchButtonStyle: Sendable, Equatable, CaseIterable {
         case iconOnly, titleAndIcon, titleOnly
     }
 
     /// The content and behavior of this HTML.
-    public var body: some Element { self }
+    public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -29,10 +29,10 @@ public struct SearchForm: Element, NavigationItem {
     public var isPrimitive: Bool { true }
 
     /// The view displayed for each search result.
-    private var resultView: any Element
+    private var resultView: any HTML
 
     /// A view displayed at the top of the search results page.
-    private var resultsPageHeader: any Element
+    private var resultsPageHeader: any HTML
 
     /// This text provides a hint to users about what they can search for.
     private var prompt: String = "Search"
@@ -68,8 +68,8 @@ public struct SearchForm: Element, NavigationItem {
     ///   - resultsPageHeader: A closure that returns a custom view to display
     ///   at the top of the search results page.
     public init(
-        @ElementBuilder resultView: (_ result: SearchResult) -> some Element,
-        @ElementBuilder resultsPageHeader: () -> some Element = { EmptyHTML() }
+        @HTMLBuilder resultView: (_ result: SearchResult) -> some HTML,
+        @HTMLBuilder resultsPageHeader: () -> some HTML = { EmptyHTML() }
     ) {
         self.resultView = resultView(SearchResult())
         self.resultsPageHeader = resultsPageHeader()

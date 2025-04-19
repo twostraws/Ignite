@@ -6,9 +6,9 @@
 //
 
 /// One item inside an accordion.
-public struct Item: Element {
+public struct Item: HTML {
     /// The content and behavior of this HTML.
-    public var body: some Element { self }
+    public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -24,7 +24,7 @@ public struct Item: Element {
     var startsOpen: Bool
 
     /// The contents of this accordion item.
-    var contents: any HTML
+    var contents: any RenderableElement
 
     /// Used when rendering this accordion item so that we can send change
     /// notifications back the parent accordion object.
@@ -44,7 +44,7 @@ public struct Item: Element {
     public init(
         _ title: some InlineElement,
         startsOpen: Bool = false,
-        @ElementBuilder contents: () -> some Element
+        @HTMLBuilder contents: () -> some HTML
     ) {
         self.title = title
         self.startsOpen = startsOpen

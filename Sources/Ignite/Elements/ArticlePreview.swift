@@ -7,15 +7,15 @@
 
 /// A protocol for customizing the layout of `ArticlePreview`.
 public protocol ArticlePreviewStyle {
-    func body(content: Article) -> any Element
+    func body(content: Article) -> any HTML
 }
 
 /// A wrapper around `Card`, specifically aimed at presenting details about
 /// an article on your site. This automatically links to your article page
 /// and adds in tags.
-public struct ArticlePreview: Element {
+public struct ArticlePreview: HTML {
     /// The content and behavior of this HTML.
-    public var body: some Element { self }
+    public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -59,7 +59,7 @@ public struct ArticlePreview: Element {
 
     /// Default card layout for rendering the article preview.
     /// - Returns: The article preview with the default card layout.
-    private func defaultCardLayout() -> some Element {
+    private func defaultCardLayout() -> some HTML {
         Card(imageName: article.image) {
             Text(article.description)
                 .margin(.bottom, .none)

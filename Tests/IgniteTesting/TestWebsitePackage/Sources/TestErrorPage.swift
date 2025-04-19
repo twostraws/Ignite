@@ -13,7 +13,7 @@ struct TestErrorPage: ErrorPage {
     var title: String = "Test Error Page"
     var description: String = "Test Error Page Description"
 
-    var body: some Element {
+    var body: some HTML {
         EmptyHTML()
     }
 }

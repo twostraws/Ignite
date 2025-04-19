@@ -12,8 +12,8 @@ private enum AlignmentType {
 
 @MainActor private func horizontalAlignmentModifier(
     _ alignment: AlignmentType,
-    content: any HTML
-) -> any HTML {
+    content: any RenderableElement
+) -> any RenderableElement {
     switch alignment {
     case .universal(let alignment):
         return content.class(alignment.rawValue)
@@ -38,18 +38,18 @@ private enum AlignmentType {
     }
 }
 
-public extension Element {
+public extension HTML {
     /// Aligns this element using a specific alignment.
     /// - Parameter alignment: How to align this element.
     /// - Returns: A modified copy of the element with alignment applied
-    func horizontalAlignment(_ alignment: HorizontalAlignment) -> some Element {
+    func horizontalAlignment(_ alignment: HorizontalAlignment) -> some HTML {
         AnyHTML(horizontalAlignmentModifier(.universal(alignment), content: self))
     }
 
     /// Aligns this element using multiple responsive alignments.
     /// - Parameter alignment: One or more alignments with optional breakpoints.
     /// - Returns: A modified copy of the element with alignments applied
-    func horizontalAlignment(_ alignment: HorizontalAlignment.ResponsiveAlignment) -> some Element {
+    func horizontalAlignment(_ alignment: HorizontalAlignment.ResponsiveAlignment) -> some HTML {
         AnyHTML(horizontalAlignmentModifier(.responsive(alignment), content: self))
     }
 }

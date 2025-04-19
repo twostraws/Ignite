@@ -5,11 +5,11 @@
 // See LICENSE for license information.
 //
 
-public extension Element {
+public extension HTML {
     /// Adjusts the font weight (boldness) of this font.
     /// - Parameter weight: The new font weight.
     /// - Returns: A new `Text` instance with the updated weight.
-    func fontWeight(_ weight: Font.Weight) -> some Element {
+    func fontWeight(_ weight: Font.Weight) -> some HTML {
         self.style(.fontWeight, weight.rawValue.formatted())
     }
 }

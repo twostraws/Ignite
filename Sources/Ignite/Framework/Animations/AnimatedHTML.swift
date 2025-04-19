@@ -7,9 +7,9 @@
 
 private typealias AnimationInfo = [AnimationTrigger: [any Animatable]]
 
-struct AnimatedHTML: Element {
+struct AnimatedHTML: HTML {
     /// The content and behavior of this HTML.
-    var body: some Element { self }
+    var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -18,14 +18,14 @@ struct AnimatedHTML: Element {
     var isPrimitive: Bool { true }
 
     /// The content to place inside the text.
-    var content: any HTML
+    var content: any RenderableElement
 
     /// The animations applied to this element.
     private var animations = AnimationInfo()
 
     /// Creates a section that renders as a `div` element.
     /// - Parameter content: The content to display within this section.
-    init(_ content: any Element, animation: any Animatable, trigger: AnimationTrigger) {
+    init(_ content: any HTML, animation: any Animatable, trigger: AnimationTrigger) {
         if let animatedContent = content as? AnimatedHTML {
             self.attributes.merge(animatedContent.attributes)
             self.animations = animatedContent.animations
@@ -51,7 +51,7 @@ struct AnimatedHTML: Element {
         assignHoverClass(&innerAttributes)
         assignAppearClasses(&innerAttributes)
 
-        var content: any HTML = content
+        var content: any RenderableElement = content
         content.attributes.remove(styles: .background, .backgroundColor, .color)
 
         if innerAttributes.isEmpty == false {

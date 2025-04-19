@@ -7,12 +7,12 @@
 
 /// A placeholder HTML element that renders nothing
 /// Used as a default or fallback when no content is needed
-public struct EmptyHTML: Element {
+public struct EmptyHTML: HTML {
     /// Creates a new empty HTML element
     public nonisolated init() {}
 
     /// Returns self as the body content since this is an empty element
-    public var body: some Element { self }
+    public var body: some HTML { self }
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }

@@ -6,7 +6,7 @@
 //
 
 /// A container that groups related form controls into a unified visual component.
-public struct ControlGroup: Element, FormItem {
+public struct ControlGroup: HTML, FormItem {
     /// Defines the size variants available for control groups.
     public enum ControlSize: String, Sendable, CaseIterable {
         /// Creates a smaller, more compact control group.
@@ -18,7 +18,7 @@ public struct ControlGroup: Element, FormItem {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some Element { self }
+    public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -148,7 +148,7 @@ public struct ControlGroup: Element, FormItem {
         return button
     }
 
-    private func renderDropdown(_ dropdown: Dropdown) -> any Element {
+    private func renderDropdown(_ dropdown: Dropdown) -> any HTML {
         dropdown.configuration(.controlGroupItem)
     }
 }

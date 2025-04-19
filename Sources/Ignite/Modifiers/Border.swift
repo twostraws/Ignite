@@ -28,7 +28,7 @@ private struct BorderConfig {
 }
 
 @MainActor
-private func borderModifier(config: BorderConfig, content: any Element) -> any Element {
+private func borderModifier(config: BorderConfig, content: any HTML) -> any HTML {
     let styles = createBorderStyles(config: config)
     return content.style(styles)
 }
@@ -74,7 +74,7 @@ private func createBorderStyles(config: BorderConfig) -> [InlineStyle] {
     return styles
 }
 
-public extension Element {
+public extension HTML {
     /// Adds a border to this element.
     /// - Parameters:
     ///   - color: The color of the border
@@ -89,7 +89,7 @@ public extension Element {
         style: BorderStyle = .solid,
         cornerRadii: CornerRadii = CornerRadii(),
         edges: Edge = .all
-    ) -> some Element {
+    ) -> some HTML {
         let config = BorderConfig(
             color: color,
             width: width,

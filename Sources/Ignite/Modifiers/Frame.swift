@@ -14,8 +14,8 @@ private func frameModifier(
     minHeight: LengthUnit? = nil,
     maxHeight: LengthUnit? = nil,
     alignment: Alignment? = nil,
-    content: some Element
-) -> any Element {
+    content: some HTML
+) -> any HTML {
     var dimensions = [InlineStyle]()
 
     if let minWidth {
@@ -108,7 +108,7 @@ private func frameModifier(
     return content.style(dimensions)
 }
 
-public extension Element {
+public extension HTML {
     /// Creates a specific frame for this element, either using exact values or
     /// using minimum/maximum ranges.
     /// - Parameters:
@@ -130,7 +130,7 @@ public extension Element {
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
         alignment: Alignment? = nil
-    ) -> some Element {
+    ) -> some HTML {
         AnyHTML(frameModifier(
             width: width,
             minWidth: minWidth,
@@ -163,7 +163,7 @@ public extension Element {
         minHeight: Int? = nil,
         maxHeight: Int? = nil,
         alignment: Alignment? = nil
-    ) -> some Element {
+    ) -> some HTML {
         AnyHTML(frameModifier(
             width: width.map { .px($0) },
             minWidth: minWidth.map { .px($0) },
@@ -178,7 +178,7 @@ public extension Element {
     /// A convenience method for setting only the alignment.
     /// - Parameter alignment: The desired alignment
     /// - Returns: A modified element with the specified alignment
-    func frame(alignment: Alignment) -> some Element {
+    func frame(alignment: Alignment) -> some HTML {
         AnyHTML(frameModifier(alignment: alignment, content: self))
     }
 }

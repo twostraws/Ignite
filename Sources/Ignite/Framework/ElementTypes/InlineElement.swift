@@ -8,7 +8,7 @@
 /// An element that exists inside a block element, such as an emphasized
 /// piece of text.
 @MainActor
-public protocol InlineElement: HTML, Stylable {
+public protocol InlineElement: RenderableElement, Stylable {
     /// The type of Element content this element contains.
     associatedtype Body: InlineElement
 

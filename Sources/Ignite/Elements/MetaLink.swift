@@ -9,7 +9,7 @@ import Foundation
 
 /// An item of metadata that links to an external resource somehow, such as
 /// a stylesheet.
-public struct MetaLink: HTML, HeadElement, Sendable {
+public struct MetaLink: RenderableElement, HeadElement, Sendable {
     /// The standard CSS you should include on all Ignite pages.
     public static let standardCSS = MetaLink(href: "/css/bootstrap.min.css", rel: .stylesheet)
 

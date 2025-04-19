@@ -13,8 +13,8 @@ private enum OpacityType {
 
 @MainActor private func opacityModifier(
     _ opacity: OpacityType,
-    content: any Element
-) -> any Element {
+    content: any HTML
+) -> any HTML {
     switch opacity {
     case .double(let double) where double < 1:
         content.style(.opacity, double.formatted(.nonLocalizedDecimal(places: 3)))
@@ -39,18 +39,18 @@ private enum OpacityType {
     }
 }
 
-public extension Element {
+public extension HTML {
     /// Adjusts the opacity of an element.
     /// - Parameter value: A value between 0% (fully transparent) and 100% (fully opaque).
     /// - Returns: A modified copy of the element with opacity applied
-    func opacity(_ value: Percentage) -> some Element {
+    func opacity(_ value: Percentage) -> some HTML {
         AnyHTML(opacityModifier(.percent(value), content: self))
     }
 
     /// Adjusts the opacity of an element.
     /// - Parameter value: A value between 0 (fully transparent) and 1.0 (fully opaque).
     /// - Returns: A modified copy of the element with opacity applied
-    func opacity(_ value: Double) -> some Element {
+    func opacity(_ value: Double) -> some HTML {
         AnyHTML(opacityModifier(.double(value), content: self))
     }
 }

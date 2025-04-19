@@ -7,10 +7,10 @@
 
 @MainActor private func dataModifier(
     _ name: String,
-    value: String, content: any HTML
-) -> any HTML {
+    value: String, content: any RenderableElement
+) -> any RenderableElement {
     guard !value.isEmpty else { return content }
-    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    var copy: any RenderableElement = content.isPrimitive ? content : Section(content)
     copy.attributes.data.append(.init(name: name, value: value))
     return copy
 }
@@ -26,13 +26,13 @@
     return copy
 }
 
-public extension Element {
+public extension HTML {
     /// Adds a data attribute to the element.
     /// - Parameters:
     ///   - name: The name of the data attribute
     ///   - value: The value of the data attribute
     /// - Returns: The modified `HTML` element
-    func data(_ name: String, _ value: String) -> some Element {
+    func data(_ name: String, _ value: String) -> some HTML {
         AnyHTML(dataModifier(name, value: value, content: self))
     }
 }
@@ -61,13 +61,13 @@ public extension HeadElement {
     }
 }
 
-extension HTML {
+extension RenderableElement {
     /// Adds a data attribute to the element.
     /// - Parameters:
     ///   - name: The name of the data attribute
     ///   - value: The value of the data attribute
     /// - Returns: The modified `Element` element
-    func data(_ name: String, _ value: String) -> some HTML {
+    func data(_ name: String, _ value: String) -> some RenderableElement {
         AnyHTML(dataModifier(name, value: value, content: self))
     }
 }

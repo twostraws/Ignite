@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public struct Document: HTML {
+public struct Document: RenderableElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
