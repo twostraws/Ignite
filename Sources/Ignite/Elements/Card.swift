@@ -267,7 +267,7 @@ public struct Card: HTML {
         }
         .class(contentPosition.bodyClasses)
     }
-    
+
     private func renderFooter() -> some HTML {
         Section(footer)
             .class("card-footer", "text-body-secondary")

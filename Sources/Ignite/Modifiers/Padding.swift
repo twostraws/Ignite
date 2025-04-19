@@ -147,60 +147,6 @@ public extension InlineElement {
     }
 }
 
-//public extension DocumentElement {
-//    /// Applies padding on all sides of this element. Defaults to 20 pixels.
-//    /// - Parameter length: The amount of padding to apply, specified in pixels.
-//    /// - Returns: A copy of the current element with the new padding applied.
-//    func padding(_ length: Int = 20) -> some DocumentElement {
-//        AnyHTML(paddingModifier(.exact(.px(length)), content: self))
-//    }
-//
-//    /// Applies padding on all sides of this element. Defaults to 20 pixels.
-//    /// - Parameter length: The amount of padding to apply, specified in
-//    /// units of your choosing.
-//    /// - Returns: A copy of the current element with the new padding applied.
-//    func padding(_ length: LengthUnit) -> some DocumentElement {
-//        AnyHTML(paddingModifier(.exact(length), content: self))
-//    }
-//
-//    /// Applies padding on all sides of this element using adaptive sizing.
-//    /// - Parameter amount: The amount of padding to apply, specified as a
-//    /// `SpacingAmount` case.
-//    /// - Returns: A copy of the current element with the new padding applied.
-//    func padding(_ amount: SpacingAmount) -> some DocumentElement {
-//        AnyHTML(paddingModifier(.semantic(amount), content: self))
-//    }
-//
-//    /// Applies padding on selected sides of this element. Defaults to 20 pixels.
-//    /// - Parameters:
-//    ///   - edges: The edges where this padding should be applied.
-//    ///   - length: The amount of padding to apply, specified in pixels.
-//    /// - Returns: A copy of the current element with the new padding applied.
-//    func padding(_ edges: Edge, _ length: Int = 20) -> some DocumentElement {
-//        AnyHTML(paddingModifier(.exact(.px(length)), edges: edges, content: self))
-//    }
-//
-//    /// Applies padding on selected sides of this element. Defaults to 20 pixels.
-//    /// - Parameters:
-//    ///   - edges: The edges where this padding should be applied.
-//    ///   - length: The amount of padding to apply, specified in
-//    /// units of your choosing.
-//    /// - Returns: A copy of the current element with the new padding applied.
-//    func padding(_ edges: Edge, _ length: LengthUnit) -> some DocumentElement {
-//        AnyHTML(paddingModifier(.exact(length), edges: edges, content: self))
-//    }
-//
-//    /// Applies padding on selected sides of this element using adaptive sizing.
-//    /// - Parameters:
-//    ///   - edges: The edges where this padding should be applied.
-//    ///   - amount: The amount of padding to apply, specified as a
-//    /// `SpacingAmount` case.
-//    /// - Returns: A copy of the current element with the new padding applied.
-//    func padding(_ edges: Edge, _ amount: SpacingAmount) -> some DocumentElement {
-//        AnyHTML(paddingModifier(.semantic(amount), edges: edges, content: self))
-//    }
-//}
-
 public extension StyledHTML {
     /// Applies padding on selected sides of this element. Defaults to 20 pixels.
     /// - Parameters:
