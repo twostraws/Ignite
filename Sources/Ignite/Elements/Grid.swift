@@ -43,7 +43,7 @@ public struct Grid: Element {
     public init(
         alignment: Alignment = .center,
         spacing: Int,
-        @ElementBuilder items: () -> some Element
+        @HTMLBuilder items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -77,7 +77,7 @@ public struct Grid: Element {
     public init<T>(
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
-        spacing: Int, content: (T) -> some Element
+        spacing: Int, content: (T) -> some HTML
     ) {
         self.items = HTMLCollection(items.map(content))
         self.alignment = alignment
@@ -96,7 +96,7 @@ public struct Grid: Element {
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
         spacing: SpacingAmount = .medium,
-        content: (T) -> some Element
+        content: (T) -> some HTML
     ) {
         self.items = HTMLCollection(items.map(content))
         self.alignment = alignment

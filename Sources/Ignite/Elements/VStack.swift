@@ -53,7 +53,7 @@ public struct VStack: Element {
     public init(
         alignment: HorizontalAlignment = .center,
         spacing pixels: Int? = 0,
-        @ElementBuilder items: () -> some Element
+        @HTMLBuilder items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
         self.alignment = .responsive(alignment)
@@ -70,7 +70,7 @@ public struct VStack: Element {
     public init(
         alignment: HorizontalAlignment = .center,
         spacing: SpacingAmount,
-        @ElementBuilder items: () -> some Element
+        @HTMLBuilder items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
         self.alignment = .responsive(alignment)
