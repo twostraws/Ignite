@@ -8,7 +8,7 @@
 /// A protocol that defines the common behavior between Element and InlineElement types.
 /// This protocol serves as the foundation for any element that can be rendered as Element.
 @MainActor
-public protocol RenderableElement: CustomStringConvertible, Sendable {
+public protocol RenderableElement: Sendable {
     /// The standard set of control attributes for Element elements.
     var attributes: CoreAttributes { get set }
 
@@ -21,19 +21,6 @@ public protocol RenderableElement: CustomStringConvertible, Sendable {
 }
 
 public extension RenderableElement {
-    /// The complete string representation of the element.
-    nonisolated var description: String {
-        MainActor.assumeIsolated {
-            self.render()
-        }
-    }
-
-    /// A collection of styles, classes, and attributes managed by the `AttributeStore` for this element.
-    var attributes: CoreAttributes {
-        get { CoreAttributes() }
-        set {} // swiftlint:disable:this unused_setter_value
-    }
-
     /// The default status as a primitive element.
     var isPrimitive: Bool { false }
 }

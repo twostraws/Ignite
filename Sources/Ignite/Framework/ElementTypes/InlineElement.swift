@@ -8,7 +8,7 @@
 /// An element that exists inside a block element, such as an emphasized
 /// piece of text.
 @MainActor
-public protocol InlineElement: BodyElement, Stylable {
+public protocol InlineElement: BodyElement, Stylable, CustomStringConvertible {
     /// The type of Element content this element contains.
     associatedtype Body: InlineElement
 
@@ -17,6 +17,13 @@ public protocol InlineElement: BodyElement, Stylable {
 }
 
 public extension InlineElement {
+    /// The complete string representation of the element.
+    nonisolated var description: String {
+        MainActor.assumeIsolated {
+            self.render()
+        }
+    }
+
     /// Generates the complete `Element` string representation of the element.
     func render() -> String {
         body.render()
