@@ -44,6 +44,37 @@ public struct NavigationBar: HTML {
         case trailing = "justify-content-end"
     }
 
+    /// How the navigation menu toggle button should be styled.
+    public enum NavigationMenuStyle: Sendable {
+        /// A toggle button with no border.
+        case plain
+
+        /// A toggle button with the default border styling.
+        case bordered
+
+        /// The default style for navigation menus.
+        public static var automatic: Self { .bordered }
+
+        var styles: [InlineStyle] {
+            switch self {
+            case .plain: [.init(.border, value: "none")]
+            case .bordered: []
+            }
+        }
+    }
+
+    /// Which icon should be used in the navigation menu toggle button.
+    public enum NavigationMenuIcon: String, Sendable {
+        /// A hamburger menu icon (three horizontal lines).
+        case bars = "navbar-toggler-icon"
+
+        /// A three-dots menu icon.
+        case ellipsis = "bi bi-three-dots"
+
+        /// The default icon for navigation menus.
+        public static var automatic: Self { .bars}
+    }
+
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -57,12 +88,18 @@ public struct NavigationBar: HTML {
     /// By default, uses Bootstrap's container class.
     private var widthClasses: [String] = ["container"]
 
+    /// The icon displayed in the navigation menu toggle button.
+    private var toggleIcon: NavigationMenuIcon = .automatic
+
+    /// The visual style applied to the navigation menu toggle button.
+    private var toggleMenuStyle: NavigationMenuStyle = .automatic
+
     /// The main logo for your site, such as an image or some text. This becomes
     /// clickable to let users navigate to your homepage.
-    let logo: any InlineElement
+    private let logo: any InlineElement
 
     /// An array of collapsible items to show in this navigation bar.
-    let items: [any NavigationItem]
+    private let items: [any NavigationItem]
 
     /// An array of permanent elements to show in this navigation bar.
     let controls: [any NavigationItem]
@@ -169,6 +206,24 @@ public struct NavigationBar: HTML {
         return copy
     }
 
+    /// Sets the icon to display in the navigation menu toggle button.
+    /// - Parameter icon: The icon to use for the toggle button.
+    /// - Returns: A new `NavigationBar` instance with the updated toggle icon.
+    public func navigationMenuIcon(_ icon: NavigationMenuIcon) -> Self {
+        var copy = self
+        copy.toggleIcon = icon
+        return copy
+    }
+
+    ///  Sets the visual style of the navigation menu toggle button.
+    /// - Parameter style: The style to apply to the toggle button.
+    /// - Returns: A new `NavigationBar` instance with the updated toggle button style.
+    public func navigationMenuStyle(_ style: NavigationMenuStyle) -> Self {
+        var copy = self
+        copy.toggleMenuStyle = style
+        return copy
+    }
+
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func markup() -> Markup {
@@ -227,8 +282,9 @@ public struct NavigationBar: HTML {
     private func renderToggleButton() -> some InlineElement {
         Button {
             Span()
-                .class("navbar-toggler-icon")
+                .class(toggleIcon.rawValue)
         }
+        .style(toggleMenuStyle.styles)
         .class("navbar-toggler")
         .data("bs-toggle", "collapse")
         .data("bs-target", "#navbarCollapse")
