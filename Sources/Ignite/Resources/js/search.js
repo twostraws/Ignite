@@ -363,11 +363,18 @@ function displaySearchResults(context) {
 }
 
 function handleNoResults(context) {
-    const { mainSearchResults, mainContent } = context;
+    const { mainSearchResults, mainContent, templateContent } = context;
     mainSearchResults.innerHTML = '';
-
     setupSearchResultsHeaderAndForm(context);
-    mainSearchResults.insertAdjacentHTML('beforeend', '<p>No results found</p>');
+
+    const noResultsView = templateContent.querySelector('.no-results-view');
+    if (noResultsView) {
+        const clonedNoResultsView = noResultsView.cloneNode(true);
+        mainSearchResults.appendChild(clonedNoResultsView);
+    } else {
+        mainSearchResults.insertAdjacentHTML('beforeend', '<p>No results found</p>');
+    }
+
     hideOtherContent(mainContent, mainSearchResults);
 }
 

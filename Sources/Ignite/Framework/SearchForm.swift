@@ -8,7 +8,7 @@
 /// An action that triggers the search functionality.
 struct SearchAction: Action {
     func compile() -> String {
-        "performSearch(document.querySelector('[id^=\"search-input-\"]').value)"
+        "performSearch(document.querySelector('[id^=\'search-input-\']').value)"
     }
 }
 
@@ -30,6 +30,9 @@ public struct SearchForm: HTML, NavigationItem {
 
     /// The view displayed for each search result.
     private var resultView: any HTML
+
+    /// The view displayed when there are no results.
+    private var noResultsView: any HTML
 
     /// A view displayed at the top of the search results page.
     private var resultsPageHeader: any HTML
@@ -69,9 +72,11 @@ public struct SearchForm: HTML, NavigationItem {
     ///   at the top of the search results page.
     public init(
         @HTMLBuilder resultView: (_ result: SearchResult) -> some HTML,
+        @HTMLBuilder noResultsView: () -> some HTML = { EmptyHTML() },
         @HTMLBuilder resultsPageHeader: () -> some HTML = { EmptyHTML() }
     ) {
         self.resultView = resultView(SearchResult())
+        self.noResultsView = noResultsView()
         self.resultsPageHeader = resultsPageHeader()
         publishingContext.isSearchEnabled = true
     }
@@ -207,6 +212,8 @@ public struct SearchForm: HTML, NavigationItem {
             Section(resultView)
                 .class("search-results-item")
                 .margin(.bottom, .medium)
+            AnyHTML(noResultsView)
+                .class("no-results-view")
         }
         .id("search-results-\(searchID)")
         .markup()
