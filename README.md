@@ -36,18 +36,18 @@ ignite new ExampleSite
 
 Once installed, the command-line tool is helpful for running a local web server for testing and for building your project.
 
-> [!Tip]
-> Using the Ignite tool to run a local web server is the best way to preview your site.
-
-Alternatively, you can bring Ignite into an existing project using Swift Package Manager by adding a package dependency for <https://github.com/twostraws/Ignite>.
-
-Once that completes, import Ignite into your Swift code wherever needed:
-
-```swift
-import Ignite
+To build your example site, run these commands:
+```shell
+cd ExampleSite
+ignite build
 ```
 
+That creates a new folder called Build with the site files. Now you can preview it. (For more details on how to build, see "Using the command-line tool" below.)
+
 ## Important: Previewing your site
+
+> [!Tip]
+> Using the Ignite tool to run a local web server is the best way to preview your site.
 
 Once you've built your site and are ready to see how it looks, do *not* just double-click one of the files in Finder. This will open the file directly in your browser, which means it won't know how to locate the rest of your site – the stylesheets, JavaScript code, etc – so it will not display correctly.
 
@@ -149,6 +149,14 @@ Ignite sites are just Swift package, but they use a specific folder structure to
 - **Sources:** This is where you'll place all your Swift code for your site, using any subfolder structure that suits you.
 
 This folder structure is already in place in the [Ignite Starter Template](https://github.com/twostraws/IgniteStarter) repository, and I recommend you start with that.
+
+Alternatively, you can bring Ignite into an existing project using Swift Package Manager by adding a package dependency for <https://github.com/twostraws/Ignite>.
+
+Once that completes, import Ignite into your Swift code wherever needed:
+
+```swift
+import Ignite
+```
 
 ## Create a layout to render Markdown files
 
