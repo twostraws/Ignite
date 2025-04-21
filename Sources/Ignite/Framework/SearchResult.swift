@@ -11,9 +11,6 @@ public struct SearchResult {
     /// The title of the search result.
     public var title: some HTML = Text("").class("result-title")
 
-    /// The clickable link for the search result.
-    public var link: some InlineElement = Link("", target: "").class("result-link")
-
     /// A brief description or excerpt of the search result content.
     public var description: some HTML = Text("").class("result-description")
 
