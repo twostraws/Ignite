@@ -71,23 +71,29 @@ public extension MarkupElement where Self: InlineElement {
     }
 }
 
-public extension FormItem {
-    /// Adds multiple optional CSS classes to the element.
-    /// - Parameter newClasses: Variable number of optional class names
-    /// - Returns: The modified HTML element
-    func `class`(_ newClasses: String?...) -> some FormItem {
-        let classes = newClasses.compactMap(\.self)
-        return AnyHTML(classModifier(classes, content: self))
-    }
-}
-
 public extension FormItem where Self: InlineElement {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
-    /// - Returns: The modified Element element
-    func `class`(_ newClasses: String?...) -> some FormItem {
-        let classes = newClasses.compactMap(\.self)
-        return AnyHTML(classModifier(classes, content: self))
+    /// - Returns: The modified HTML element
+    func `class`(_ newClasses: String?...) -> Self {
+        let classes = newClasses.compactMap(\.self).filter { !$0.isEmpty }
+        guard !classes.isEmpty else { return self }
+        var copy = self
+        copy.attributes.append(classes: classes)
+        return copy
+    }
+}
+
+public extension FormItem where Self: HTML {
+    /// Adds multiple optional CSS classes to the element.
+    /// - Parameter newClasses: Variable number of optional class names
+    /// - Returns: The modified HTML element
+    func `class`(_ newClasses: String?...) -> Self {
+        let classes = newClasses.compactMap(\.self).filter { !$0.isEmpty }
+        guard !classes.isEmpty else { return self }
+        var copy = self
+        copy.attributes.append(classes: classes)
+        return copy
     }
 }
 

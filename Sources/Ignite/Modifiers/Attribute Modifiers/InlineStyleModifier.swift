@@ -45,39 +45,6 @@ public extension InlineElement {
     }
 }
 
-public extension FormItem where Self: HTML {
-    /// Adds an inline CSS style property to the Element element
-    /// - Parameters:
-    ///   - property: The CSS property to set
-    ///   - value: The value to set for the property
-    /// - Returns: A modified copy of the element with the style property added
-    func style(_ property: Property, _ value: String) -> some FormItem {
-        AnyHTML(inlineStyleModifier([.init(property, value: value)], content: self))
-    }
-}
-
-public extension FormItem where Self: InlineElement {
-    /// Adds an inline CSS style property to the Element element
-    /// - Parameters:
-    ///   - property: The CSS property to set
-    ///   - value: The value to set for the property
-    /// - Returns: A modified copy of the element with the style property added
-    func style(_ property: Property, _ value: String) -> some FormItem {
-        AnyHTML(inlineStyleModifier([.init(property, value: value)], content: self))
-    }
-}
-
-public extension FormItem {
-    /// Adds an inline CSS style property to the Element element
-    /// - Parameters:
-    ///   - property: The CSS property to set
-    ///   - value: The value to set for the property
-    /// - Returns: A modified copy of the element with the style property added
-    func style(_ property: Property, _ value: String) -> some FormItem {
-        AnyHTML(inlineStyleModifier([.init(property, value: value)], content: self))
-    }
-}
-
 public extension MarkupElement where Self: HeadElement {
     /// Adds an inline CSS style property to the Element element
     /// - Parameters:

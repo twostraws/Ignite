@@ -5,9 +5,6 @@
 // See LICENSE for license information.
 //
 
-/// Describes elements that can be placed into forms.
-public protocol FormItem: BodyElement {}
-
 /// A form container for collecting user input
 public struct Form: HTML, NavigationItem {
     /// The content and behavior of this HTML.

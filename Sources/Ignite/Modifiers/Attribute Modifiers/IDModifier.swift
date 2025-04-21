@@ -38,12 +38,3 @@ public extension InlineElement {
         AnyInlineElement(idModifier(id, content: self))
     }
 }
-
-public extension HTML where Self: FormItem {
-    /// Sets the `HTML` id attribute of the element.
-    /// - Parameter id: The HTML ID value to set
-    /// - Returns: A modified copy of the element with the HTML ID added
-    func id(_ id: String) -> some FormItem {
-        AnyHTML(idModifier(id, content: self))
-    }
-}

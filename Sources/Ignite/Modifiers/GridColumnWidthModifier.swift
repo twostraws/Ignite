@@ -39,6 +39,8 @@ public extension FormItem {
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A new element with the adjusted column width.
     func width(_ width: Int) -> some FormItem {
-        gridColumnWidthModifier(width, content: self)
+        var copy = self
+        copy.attributes.append(classes: ColumnWidth.count(width).className)
+        return copy
     }
 }

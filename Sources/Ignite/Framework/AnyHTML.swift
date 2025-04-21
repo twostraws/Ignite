@@ -5,9 +5,9 @@
 // See LICENSE for license information.
 //
 
-/// A type-erasing wrapper that can hold any Element content while maintaining protocol conformance.
-/// This wrapper also handles unwrapping nested AnyHTML instances to prevent unnecessary wrapping layers.
-public struct AnyHTML: HTML, FormItem {
+/// A type-erasing wrapper that can hold any `HTML` content while maintaining protocol conformance.
+/// This wrapper also handles unwrapping nested `AnyHTML` instances to prevent unnecessary wrapping layers.
+public struct AnyHTML: HTML {
     /// The body of this HTML element, which is itself
     public var body: some HTML { self }
 

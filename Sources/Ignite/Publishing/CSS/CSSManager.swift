@@ -51,21 +51,27 @@ final class CSSManager {
 
     /// Registers a set of media queries and queues them for CSS generation
     /// - Parameters:
-    ///   - queries: Media queries that determine when styles should be applied
-    ///   - properties: CSS property names and values to apply
+    ///   - values: ResponsiveValues containing boolean values for each breakpoint
     /// - Returns: The class name that will be used for these styles
-    func registerStyles(
-        _ queries: [any Query],
-        styles: [InlineStyle]
-    ) -> String {
-        let sortedQueries = queries.sorted { String(describing: $0) < String(describing: $1) }
-        let hash = sortedQueries.map { String(describing: $0) }.joined().truncatedHash
-        let className = "style-\(hash)"
+    func registerStyles(_ values: ResponsiveValues<Bool>) -> String {
+        let values = values.values
+        let className = "style-" + values.description.truncatedHash
+        let baseValue = values[.xSmall]
+        let breakpointValues = values.filter { $0.key != .xSmall }
 
-        pendingRegistrations.append(.init(
-            queries: queries,
-            styles: styles,
-            className: className))
+        if let baseValue {
+            pendingRegistrations.append(.init(
+                queries: [],
+                styles: [.init(.display, value: baseValue ? "none" : "unset")],
+                className: className))
+        }
+
+        for (breakpoint, value) in breakpointValues {
+            pendingRegistrations.append(.init(
+                queries: [.breakpoint(.init(breakpoint)!)],
+                styles: [.init(.display, value: value ? "none" : "unset")],
+                className: className))
+        }
 
         return className
     }
