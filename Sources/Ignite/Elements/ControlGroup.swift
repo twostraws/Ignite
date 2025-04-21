@@ -47,7 +47,7 @@ public struct ControlGroup: HTML, FormItem {
     ///   - items: A closure returning an array of form items to include in the group.
     public init(
         _ label: String? = nil,
-        @ContentBuilder<FormItem> items: () -> [any FormItem]
+        @ElementBuilder<FormItem> items: () -> [any FormItem]
     ) {
         self.label = label
         self.items = items()

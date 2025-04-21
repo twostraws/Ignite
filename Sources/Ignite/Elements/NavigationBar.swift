@@ -94,8 +94,8 @@ public struct NavigationBar: HTML {
     ///   call-to-action buttons and search fields, and visible across all screen sizes.
     public init(
         logo: (any InlineElement)? = nil,
-        @ContentBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @ContentBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
+        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
     ) {
         self.logo = logo ?? EmptyInlineElement()
         self.items = items()
@@ -111,8 +111,8 @@ public struct NavigationBar: HTML {
     ///   call-to-action buttons and search fields, and visible across all screen sizes.
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
-        @ContentBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @ContentBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] },
+        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] },
         @InlineElementBuilder logo: () -> any InlineElement = { EmptyInlineElement() }
     ) {
         self.items = items()
@@ -127,8 +127,8 @@ public struct NavigationBar: HTML {
     ///   - actions: Elements positioned at the end of the navigation bar, like
     ///   call-to-action buttons and search fields, and visible across all screen sizes.
     public init(
-        @ContentBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @ContentBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
+        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
     ) {
         self.items = items()
         self.controls = actions()

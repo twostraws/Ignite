@@ -5,16 +5,16 @@
 // See LICENSE for license information.
 //
 
-typealias HeadElementBuilder = ContentBuilder<any HeadElement>
-typealias DocumentElementBuilder = ContentBuilder<any DocumentElement>
-typealias StaticPageBuilder = ContentBuilder<any StaticPage>
-typealias ErrorPageBuilder = ContentBuilder<any ErrorPage>
-typealias ArticlePageBuilder = ContentBuilder<any ArticlePage>
-typealias ActionBuilder = ContentBuilder<any Action>
+typealias HeadElementBuilder = ElementBuilder<any HeadElement>
+typealias DocumentElementBuilder = ElementBuilder<any DocumentElement>
+typealias StaticPageBuilder = ElementBuilder<any StaticPage>
+typealias ErrorPageBuilder = ElementBuilder<any ErrorPage>
+typealias ArticlePageBuilder = ElementBuilder<any ArticlePage>
+typealias ActionBuilder = ElementBuilder<any Action>
 
 /// A result builder that lets us generically build arrays of some content.
 @resultBuilder
-public struct ContentBuilder<T> {
+public struct ElementBuilder<T> {
     /// Flattens into a one-dimensional array many arrays specified as a variadic parameter.
     /// - Parameter components: A variadic array of elements.
     /// - Returns: A one-dimensional array of elements.

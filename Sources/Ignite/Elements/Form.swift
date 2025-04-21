@@ -80,7 +80,7 @@ public struct Form: HTML, NavigationItem {
     ///   - content: A closure that returns the form's elements.
     public init(
         spacing: SpacingAmount = .medium,
-        @ContentBuilder<FormItem> content: () -> [any FormItem]
+        @ElementBuilder<FormItem> content: () -> [any FormItem]
     ) {
         self.items = content()
         self.spacing = spacing

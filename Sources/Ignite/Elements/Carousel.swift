@@ -60,7 +60,7 @@ public struct Carousel: HTML {
     /// Creates a new carousel from an element builder that generates slides.
     /// - Parameter items: An element builder that returns an array of
     ///   slides to place in this carousel.
-    public init(@ContentBuilder<Slide> _ items: () -> [Slide]) {
+    public init(@ElementBuilder<Slide> _ items: () -> [Slide]) {
         self.items = items()
     }
 

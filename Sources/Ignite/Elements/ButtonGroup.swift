@@ -31,7 +31,7 @@ public struct ButtonGroup: HTML {
     ///   - content: An element builder containing the contents for this group.
     public init(
         accessibilityLabel: String,
-        @ContentBuilder<Button> _ content: () -> [Button]
+        @ElementBuilder<Button> _ content: () -> [Button]
     ) {
         self.accessibilityLabel = accessibilityLabel
         self.content = HTMLCollection(content())

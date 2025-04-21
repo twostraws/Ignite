@@ -57,7 +57,7 @@ public struct Dropdown: HTML, NavigationItem, FormItem {
     ///   - items: The elements to place inside the dropdown menu.
     public init(
         _ title: any InlineElement,
-        @ContentBuilder<any DropdownItem> items: () -> [any DropdownItem]
+        @ElementBuilder<any DropdownItem> items: () -> [any DropdownItem]
     ) {
         self.title = title
         self.items = items()
@@ -69,7 +69,7 @@ public struct Dropdown: HTML, NavigationItem, FormItem {
     ///   - items: The elements to place inside the dropdown menu.
     ///   - title: The title to show on this dropdown button.
     public init(
-        @ContentBuilder<any DropdownItem> items: () -> [any DropdownItem],
+        @ElementBuilder<any DropdownItem> items: () -> [any DropdownItem],
         @InlineElementBuilder title: () -> any InlineElement
     ) {
         self.items = items()

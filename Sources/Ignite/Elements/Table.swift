@@ -58,7 +58,7 @@ public struct Table: HTML {
     ///   - rows: An array of rows to use in the table.
     public init(
         filterTitle: String? = nil,
-        @ContentBuilder<Row> rows: () -> [Row]
+        @ElementBuilder<Row> rows: () -> [Row]
     ) {
         self.filterTitle = filterTitle
         self.rows = HTMLCollection(rows())
@@ -74,7 +74,7 @@ public struct Table: HTML {
     ///   - header: An array of headers to use at the top of the table.
     public init(
         filterTitle: String? = nil,
-        @ContentBuilder<Row> rows: () -> [Row],
+        @ElementBuilder<Row> rows: () -> [Row],
         @HTMLBuilder header: () -> some BodyElement
     ) {
         self.filterTitle = filterTitle

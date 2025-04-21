@@ -37,7 +37,7 @@ public struct Accordion: HTML {
     /// Create a new Accordion from a collection of sections.
     /// - Parameter items: A result builder containing all the sections
     /// you want to display in this accordion.
-    public init(@ContentBuilder<Item> _ items: () -> [Item]) {
+    public init(@ElementBuilder<Item> _ items: () -> [Item]) {
         self.items = items()
     }
 
