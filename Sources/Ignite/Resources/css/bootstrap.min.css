@@ -253,3 +253,19 @@ div.alert p:last-child {
         backdrop-filter: blur(70px) saturate(180%);
     }
 }
+
+.ig-text-small {
+    font-size: 0.9rem;
+}
+
+.ig-text-xSmall {
+    font-size: 0.8rem;
+}
+
+.ig-text-xxSmall {
+    font-size: 0.7rem;
+}
+
+.ig-text-xxxSmall {
+    font-size: 0.6rem;
+}

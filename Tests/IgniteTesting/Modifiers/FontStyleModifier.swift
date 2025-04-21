@@ -14,7 +14,11 @@ import Testing
 @Suite("FontStyleModifier Tests")
 @MainActor
 class FontStyleModifierTests: IgniteTestSuite {
-    @Test("Font Style", arguments: await Font.Style.tagCases)
+    private static let tagBasedStyles: [Font.Style] = [
+        .title1, .title2, .title3, .title4, .title5, .title6, .body
+    ]
+
+    @Test("Font Style", arguments: await tagBasedStyles)
     func fontStyle(style: Font.Style) async throws {
         let element = Text("Hello").font(style)
         let output = element.markupString()

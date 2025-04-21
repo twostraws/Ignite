@@ -21,8 +21,8 @@ private func fontModifier(_ font: Font, content: any HTML) -> any HTML {
 
         var modified: any HTML = content.style(styles)
 
-        if let style = font.style {
-            modified = modified.font(style)
+        if let style = font.style, let sizeVariable = style.sizeVariable {
+            styles.append(.init(.fontSize, value: sizeVariable))
         }
 
         if let responsiveSize = font.responsiveSize {
@@ -43,8 +43,8 @@ private func fontModifier(_ font: Font, content: any HTML) -> any HTML {
 
         if let size = font.size {
             styles.append(.init(.fontSize, value: size.stringValue))
-        } else if let style = font.style {
-            styles.append(.init(.fontSize, value: style.sizeVariable))
+        } else if let style = font.style, let sizeVariable = style.sizeVariable {
+            styles.append(.init(.fontSize, value: sizeVariable))
         }
 
         if let responsiveSize = font.responsiveSize {
@@ -72,8 +72,8 @@ private func fontModifier(_ font: Font, content: any InlineElement) -> any Inlin
 
     var modified = content.style(styles)
 
-    if let style = font.style {
-        modified = modified.font(style)
+    if let style = font.style, let sizeVariable = style.sizeVariable {
+        styles.append(.init(.fontSize, value: sizeVariable))
     }
 
     if let responsiveSize = font.responsiveSize {

@@ -12,7 +12,7 @@
     if content.isText {
         content.fontStyle(style)
     } else {
-        content.class(style.fontSizeClass)
+        content.class(style.sizeClass)
     }
 }
 
