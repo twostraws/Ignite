@@ -31,14 +31,17 @@ public struct NavigationBar: HTML {
 
     /// How navigation bar items should be aligned horizontally.
     public enum ItemAlignment: String {
-        /// Items are aligned to the leading edge by default.
-        case `default` = ""
+        /// Items are aligned to the leading edge
+        case leading = ""
 
         /// Items are aligned in the center
         case center = "justify-content-center"
 
         /// Items are aligned to the trailing edge
         case trailing = "justify-content-end"
+
+        /// Items are aligned to the trailing edge by default.
+        public static var automatic: Self { .trailing }
     }
 
     /// How the navigation menu toggle button should be styled.
@@ -105,7 +108,7 @@ public struct NavigationBar: HTML {
     var style = NavigationBarStyle.default
 
     /// How items in this navigation bar should be aligned
-    var itemAlignment = ItemAlignment.default
+    var itemAlignment = ItemAlignment.automatic
 
     /// Creates a new `NavigationBar` instance from the `logo`, without any items.
     /// - Parameters:
