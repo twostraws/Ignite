@@ -18,10 +18,10 @@ public struct Tag: HTML, HeadElement {
     public var isPrimitive: Bool { true }
 
     /// The name of the tag to use.
-    var name: String
+    private var name: String
 
     // The contents of this tag.
-    var content: any RenderableElement
+    private var content: any MarkupElement
 
     /// Creates a new `Tag` instance from the name provided, along with a page
     /// element builder that returns an array of the content to place inside.
@@ -41,7 +41,7 @@ public struct Tag: HTML, HeadElement {
     /// - Parameters:
     ///   - name: The name of the HTML tag you want to create.
     ///   - singleElement: The content to place inside the tag.
-    public init(_ name: String, content singleElement: any RenderableElement) {
+    public init(_ name: String, content singleElement: any MarkupElement) {
         self.name = name
         self.content = singleElement
     }
@@ -57,7 +57,8 @@ public struct Tag: HTML, HeadElement {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<\(name)\(attributes)>\(content)</\(name)>"
+    public func markup() -> Markup {
+        let contentHTML = content.markupString()
+        return Markup("<\(name)\(attributes)>\(contentHTML)</\(name)>")
     }
 }

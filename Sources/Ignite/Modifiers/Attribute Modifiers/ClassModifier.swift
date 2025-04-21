@@ -47,7 +47,7 @@ public extension HTML {
     }
 }
 
-public extension RenderableElement where Self: InlineElement {
+public extension MarkupElement where Self: InlineElement {
     /// Adds a CSS class to the HTML element
     /// - Parameter className: The CSS class name to add
     /// - Returns: A modified copy of the element with the CSS class added

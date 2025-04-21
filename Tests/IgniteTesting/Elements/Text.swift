@@ -15,14 +15,14 @@ import Testing
     @Test("Simple String")
     func simpleString() async throws {
         let element = Text("Hello")
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p>Hello</p>")
     }
 
     @Test("Builder with Simple String")
     @MainActor func test_simpleBuilderString() async throws {
         let element = Text { "Hello" }
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p>Hello</p>")
     }
 
@@ -43,7 +43,7 @@ import Testing
             }
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <p>Hello, <em>world</em><s> - <strong>this <u>is</u> a</strong> test!</s></p>
@@ -53,7 +53,7 @@ import Testing
     @Test("Custom Font", arguments: Font.Style.allCases)
     func customFont(font: Font.Style) async throws {
         let element = Text("Hello").font(font)
-        let output = element.render()
+        let output = element.markupString()
 
         if font == .lead {
             // This applies a paragraph class rather than a different tag.
@@ -66,7 +66,7 @@ import Testing
     @Test("Markdown")
     func markdown() async throws {
         let element = Text(markdown: "*i*, **b**, and ***b&i***")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <p><em>i</em>, <strong>b</strong>, and <em><strong>b&i</strong></em></p>
@@ -82,7 +82,7 @@ import Testing
             }
         }
         // When
-        let output = element.render()
+        let output = element.markupString()
         // Then
         #expect(output == """
         <p><s>There will be a few tickets available at the box office tonight.</s></p>

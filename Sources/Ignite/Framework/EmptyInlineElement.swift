@@ -19,7 +19,7 @@ public struct EmptyInlineElement: InlineElement {
 
     /// Renders this element as an empty string
     /// - Returns: An empty string
-    public func render() -> String {
-        ""
+    public func markup() -> Markup {
+        Markup()
     }
 }

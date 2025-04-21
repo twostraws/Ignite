@@ -26,7 +26,7 @@ class ZStackTests: IgniteTestSuite {
             ControlLabel("Top Label")
             ControlLabel("Bottom Label")
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div style="display: grid">\

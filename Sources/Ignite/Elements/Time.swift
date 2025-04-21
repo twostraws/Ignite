@@ -54,12 +54,12 @@ public struct Time: InlineElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var attributes = attributes
         if let dateTime {
             attributes.append(customAttributes: .init(name: "datetime", value: dateTime.asISO8601))
         }
-
-        return "<time\(attributes)>\(contents)</time>"
+        let contentHTML = contents.markupString()
+        return Markup("<time\(attributes)>\(contentHTML)</time>")
     }
 }

@@ -17,7 +17,7 @@ class AbbreviationTests: IgniteTestSuite {
     @Test("Basic Abbreviation", arguments: ["abbr"], ["abbreviation"])
     func basic(abbreviation: String, description: String) async throws {
         let element = Abbreviation(abbreviation, description: description)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<abbr title=\"\(description)\">\(abbreviation)</abbr>")
     }
@@ -25,7 +25,7 @@ class AbbreviationTests: IgniteTestSuite {
     @Test("Single Element Abbreviation", arguments: ["abbreviation"], ["abbr"])
     func singleElement(description: String, abbreviation: String) async throws {
         let element = Abbreviation(description) { Strong(abbreviation) }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <abbr title=\"\(description)\">\
@@ -42,7 +42,7 @@ class AbbreviationTests: IgniteTestSuite {
             }
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <abbr title=\"\(description)\">\

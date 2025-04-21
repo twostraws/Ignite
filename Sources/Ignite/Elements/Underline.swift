@@ -35,7 +35,8 @@ public struct Underline: InlineElement {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<u\(attributes)>\(content)</u>"
+    public func markup() -> Markup {
+        let contentHTML = content.markupString()
+        return Markup("<u\(attributes)>\(contentHTML)</u>")
     }
 }

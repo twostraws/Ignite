@@ -25,7 +25,7 @@ public struct Title: HeadElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<title>\(text)\(publishingContext.site.titleSuffix)</title>"
+    public func markup() -> Markup {
+        Markup("<title>\(text)\(publishingContext.site.titleSuffix)</title>")
     }
 }

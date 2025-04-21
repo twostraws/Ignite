@@ -17,7 +17,7 @@ class AccordionTests: IgniteTestSuite {
     @Test("Renders a div tag of class accordion")
     func outputs_div_with_class_accordion() async throws {
         let sut = Accordion {}
-        let attributes = try #require(sut.render().htmlTagWithCloseTag("div")?.attributes)
+        let attributes = try #require(sut.markupString().htmlTagWithCloseTag("div")?.attributes)
         let classAttribute = try #require(attributes.htmlAttribute(named: "class"))
         #expect(classAttribute == "accordion")
     }
@@ -26,7 +26,7 @@ class AccordionTests: IgniteTestSuite {
     func outputs_div_with_unique_id() async throws {
         let sut = Accordion {}
 
-        let idattribute = try #require(sut.render().htmlTagWithCloseTag("div")?
+        let idattribute = try #require(sut.markupString().htmlTagWithCloseTag("div")?
             .attributes
             .htmlAttribute(named: "id")
         )
@@ -44,7 +44,7 @@ class AccordionTests: IgniteTestSuite {
         ]}
 
         let sut = Accordion(items).openMode(openMode)
-        let output = sut.render()
+        let output = sut.markupString()
 
         let accordionID = try #require(output.htmlTagWithCloseTag("div")?.attributes.htmlAttribute(named: "id"))
 
@@ -58,7 +58,8 @@ class AccordionTests: IgniteTestSuite {
         for item in items() {
             let itemoutput = item
                 .assigned(to: accordionID, openMode: openMode)
-                .render()
+                .markup()
+                .string
 
             let expected = itemoutput
                 .clearingItemIDs()
@@ -77,7 +78,7 @@ class AccordionTests: IgniteTestSuite {
         ]}
 
         let sut = Accordion(items).openMode(openMode)
-        let output = sut.render()
+        let output = sut.markupString()
 
         let accordionID = try #require(output.htmlTagWithCloseTag("div")?.attributes.htmlAttribute(named: "id"))
 

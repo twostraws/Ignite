@@ -17,7 +17,7 @@ class DividerTests: IgniteTestSuite {
     @Test("A single divider")
     func singleDivider() async throws {
         let element = Divider()
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<hr />")
     }
 }

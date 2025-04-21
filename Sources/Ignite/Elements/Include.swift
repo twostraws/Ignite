@@ -18,7 +18,7 @@ public struct Include: HTML {
 
     /// The filename you want to bring in, including its extension. This file
     /// must be in your Includes directory.
-    let filename: String
+    private let filename: String
 
     /// Creates a new `Include` instance using the provided filename.
     /// - Parameter filename: The filename you want to bring in,
@@ -29,19 +29,19 @@ public struct Include: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         let fileURL = publishingContext.includesDirectory.appending(path: filename)
 
         do {
             let string = try String(contentsOf: fileURL)
-            return string
+            return Markup(string)
         } catch {
             publishingContext.addWarning("""
             Failed to find \(filename) in Includes folder; \
             it has been replaced with an empty string.
             """)
 
-            return ""
+            return Markup()
         }
     }
 }

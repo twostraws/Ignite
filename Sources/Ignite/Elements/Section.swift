@@ -64,12 +64,12 @@ public struct Section: HTML, FormItem {
         return copy
     }
 
-    public func render() -> String {
-        let renderedContent = content.render()
+    public func markup() -> Markup {
+        let contentHTML = content.markupString()
         if let header = header {
-            let renderedHeader = Text(header).fontStyle(headerStyle).render()
-            return "<section\(attributes)>\(renderedHeader + renderedContent)</section>"
+            let headerHTML = Text(header).fontStyle(headerStyle).markupString()
+            return Markup("<section\(attributes)>\(headerHTML + contentHTML)</section>")
         }
-        return "<div\(attributes)>\(renderedContent)</div>"
+        return Markup("<div\(attributes)>\(contentHTML)</div>")
     }
 }

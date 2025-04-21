@@ -15,7 +15,7 @@ import Testing
 class TableTests: IgniteTestSuite {
     @Test func simpleTable() async throws {
         let element = Table { }
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<table class=\"table\"><tbody></tbody></table>")
     }
 }

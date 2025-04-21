@@ -24,7 +24,7 @@ class ColumnTests: IgniteTestSuite {
             ControlLabel("Right Label")
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <td colspan="1"><label>Left Label</label><label>Middle Label</label><label>Right Label</label></td>
@@ -39,7 +39,7 @@ class ColumnTests: IgniteTestSuite {
             ControlLabel("Right Label")
         }.columnSpan(columnSpan)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <td colspan="\(columnSpan)"><label>Left Label</label><label>Middle Label</label><label>Right Label</label></td>
@@ -54,7 +54,7 @@ class ColumnTests: IgniteTestSuite {
             ControlLabel("Right Label")
         }.verticalAlignment(alignment)
 
-        let output = element.render()
+        let output = element.markupString()
 
         if alignment != .top {
             #expect(output == """

@@ -175,7 +175,7 @@ public struct MetaTag: HeadElement, Sendable {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var attributes = attributes
 
         if charset.isEmpty {
@@ -187,7 +187,7 @@ public struct MetaTag: HeadElement, Sendable {
                 .init(name: "charset", value: charset)
             )
         }
-        return "<meta\(attributes) />"
+        return Markup("<meta\(attributes) />")
     }
 }
 

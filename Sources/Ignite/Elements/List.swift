@@ -135,7 +135,7 @@ public struct List: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         let listAttributes = getAttributes()
 
         var output = "<\(listElementName)\(listAttributes)>"
@@ -149,16 +149,16 @@ public struct List: HTML {
                     item.attributes.append(classes: "list-group-item")
                 }
 
-                output += listableItem.renderInList()
+                output += listableItem.listMarkup().string
             } else {
                 let styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
                 item.attributes.append(classes: "m-0")
-                output += "<li\(styleClass)>\(item.render())</li>"
+                output += "<li\(styleClass)>\(item.markupString())</li>"
             }
         }
 
         output += "</\(listElementName)>"
 
-        return output
+        return Markup(output)
     }
 }

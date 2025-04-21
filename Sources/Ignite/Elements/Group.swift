@@ -40,11 +40,11 @@ public struct Group: HTML, PassthroughElement {
         self.items = HTMLCollection([content])
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         items.map {
             var item: any BodyElement = $0
             item.attributes.merge(attributes)
-            return item.render()
+            return item.markup()
         }.joined()
     }
 }

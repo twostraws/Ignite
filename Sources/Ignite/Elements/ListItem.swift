@@ -19,7 +19,7 @@ public struct ListItem: HTML, ListableElement {
     public var isPrimitive: Bool { true }
 
     /// The content of this list item.
-    var content: any BodyElement
+    private var content: any BodyElement
 
     /// Creates a new `ListItem` object using an inline element builder that
     /// returns an array of `HTML` objects to display in the list.
@@ -30,15 +30,16 @@ public struct ListItem: HTML, ListableElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<li\(attributes)>\(content)</li>"
+    public func markup() -> Markup {
+        let contentHTML = content.markupString()
+        return Markup("<li\(attributes)>\(contentHTML)</li>")
     }
 
     /// Renders this element inside a list, using the publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func renderInList() -> String {
+    public func listMarkup() -> Markup {
         // We do nothing special here, so just send back
         // the default rendering.
-        render()
+        markup()
     }
 }

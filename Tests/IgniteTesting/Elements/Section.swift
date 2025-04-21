@@ -21,7 +21,7 @@ class SectionTests: IgniteTestSuite {
             Span("Goodbye, World!")
         }
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<div><span>Hello, World!</span><span>Goodbye, World!</span></div>")
     }
 
@@ -33,7 +33,7 @@ class SectionTests: IgniteTestSuite {
         }
         .headerProminence(.title3)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <section>\

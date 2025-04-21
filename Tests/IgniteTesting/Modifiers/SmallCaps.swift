@@ -17,7 +17,7 @@ class SmallCapsTests: IgniteTestSuite {
     @Test("SmallCaps Modifier")
     func htmlSmallCaps() async throws {
         let element = Span("Hello, World!").smallCaps()
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<span style=\"font-variant: small-caps\">Hello, World!</span>")
     }

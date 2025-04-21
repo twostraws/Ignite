@@ -40,7 +40,7 @@ public struct ZStack: HTML {
         self.alignment = alignment
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         var items = items.elements
 
         items = items.enumerated().map { index, item in
@@ -59,7 +59,7 @@ public struct ZStack: HTML {
         var attributes = attributes
         attributes.append(styles: .init(.display, value: "grid"))
 
-        let content = items.map { $0.render() }.joined()
-        return "<div\(attributes)>\(content)</div>"
+        let contentHTML = items.map { $0.markupString() }.joined()
+        return Markup("<div\(attributes)>\(contentHTML)</div>")
     }
 }

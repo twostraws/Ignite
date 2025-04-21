@@ -171,7 +171,7 @@ public struct NavigationBar: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         Tag("header") {
             Tag("nav") {
                 Section {
@@ -209,7 +209,7 @@ public struct NavigationBar: HTML {
             .class("navbar", "navbar-expand-md")
             .data("bs-theme", theme(for: style))
         }
-        .render()
+        .markup()
     }
 
     private func renderNavActions() -> some HTML {

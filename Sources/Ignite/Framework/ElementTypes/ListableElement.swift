@@ -9,5 +9,5 @@
 @MainActor
 protocol ListableElement {
     /// Render this when we know for sure we're part of a `List`.
-    func renderInList() -> String
+    func listMarkup() -> Markup
 }

@@ -25,7 +25,7 @@ struct ItemTests {
         element.parentID = accordianID
         element.parentOpenMode = .individual
 
-        let output = element.render()
+        let output = element.markupString()
 
         // extract the itemID
         let startIndex = output.firstIndex(of: "#")!

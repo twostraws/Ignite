@@ -16,7 +16,7 @@ import Testing
     @Test("Single Element", arguments: ["This is a test", "Another test"])
     func singleElement(spanText: String) async throws {
         let element = Span(spanText)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<span>\(spanText)</span>")
     }
@@ -24,7 +24,7 @@ import Testing
     @Test("Builder", arguments: ["This is a test", "Another test"])
     func builder(spanText: String) async throws {
         let element = Span { spanText }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<span>\(spanText)</span>")
     }

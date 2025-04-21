@@ -17,7 +17,7 @@ public struct Emphasis: InlineElement {
     public var isPrimitive: Bool { true }
 
     /// The content you want to render with emphasis.
-    var content: any InlineElement
+    private var content: any InlineElement
 
     /// Creates a new `Emphasis` instance using an inline element builder
     /// of content to display.
@@ -36,7 +36,8 @@ public struct Emphasis: InlineElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<em\(attributes)>\(content)</em>"
+    public func markup() -> Markup {
+        let contentHTML = content.markupString()
+        return Markup("<em\(attributes)>\(contentHTML)</em>")
     }
 }

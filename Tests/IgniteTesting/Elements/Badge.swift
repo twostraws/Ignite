@@ -29,7 +29,7 @@ class BadgeTests: IgniteTestSuite {
                 .role(role)
         }
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p><span class=\"badge \(cssClass) rounded-pill\">Some text</span></p>")
     }
 
@@ -49,7 +49,7 @@ class BadgeTests: IgniteTestSuite {
                 .badgeStyle(.subtle)
         }
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p><span class=\"badge \(cssClasses)\">Some text</span></p>")
     }
 
@@ -69,7 +69,7 @@ class BadgeTests: IgniteTestSuite {
                 .role(role)
         }
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p><span class=\"badge \(cssClasses)\">Some text</span></p>")
     }
 }

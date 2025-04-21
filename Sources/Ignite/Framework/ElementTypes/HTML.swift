@@ -24,8 +24,8 @@ public protocol HTML: BodyElement, Stylable {
 
 public extension HTML {
     /// Generates the complete `HTML` string representation of the element.
-    func render() -> String {
-        body.render()
+    func markup() -> Markup {
+        body.markup()
     }
 }
 

@@ -17,7 +17,7 @@ class FontWeightModifierTests: IgniteTestSuite {
     @Test("Font Weight Modifier", arguments: Font.Weight.allCases)
     func fontWeight(weight: Font.Weight) async throws {
         let element = Text("Hello").fontWeight(weight)
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p style=\"font-weight: \(weight.rawValue)\">Hello</p>")
     }
 }

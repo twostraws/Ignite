@@ -147,7 +147,7 @@ public struct SearchForm: HTML, NavigationItem {
         return copy
     }
 
-    private func renderForm() -> String {
+    private func renderForm() -> Markup {
         Form(spacing: .none) {
             Section {
                 TextField("Search", prompt: prompt)
@@ -193,10 +193,10 @@ public struct SearchForm: HTML, NavigationItem {
         .id("search-form-\(searchID)")
         .style(.minWidth, "125px")
         .attributes(attributes)
-        .render()
+        .markup()
     }
 
-    private func renderTemplate() -> String {
+    private func renderTemplate() -> Markup {
         Tag("template") {
             AnyHTML(resultsPageHeader)
                 .class("search-results-header")
@@ -209,10 +209,10 @@ public struct SearchForm: HTML, NavigationItem {
                 .margin(.bottom, .medium)
         }
         .id("search-results-\(searchID)")
-        .render()
+        .markup()
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         var output = renderForm()
         if !isSearchResultsTemplateHidden {
             output += renderTemplate()

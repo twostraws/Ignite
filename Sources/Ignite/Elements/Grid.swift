@@ -114,7 +114,7 @@ public struct Grid: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var gridAttributes = attributes.appending(classes: ["row"])
         gridAttributes.append(classes: alignment.horizontal.containerAlignmentClass)
 
@@ -149,16 +149,15 @@ public struct Grid: HTML {
                 } else {
                     handleItem(item)
                         .class(gutterClass)
-                        .render()
                 }
             }
         }
         .attributes(gridAttributes)
-        .render()
+        .markup()
     }
 
     /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.
-    private func handleItem(_ item: any BodyElement) -> any BodyElement {
+    private func handleItem(_ item: any BodyElement) -> some BodyElement {
         var item = item
         var name: String?
         if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }) {
@@ -168,7 +167,7 @@ public struct Grid: HTML {
 
         item = item.is(Section.self) ? item : Section(item)
 
-        return item
+        return AnyHTML(item)
             .class(name ?? "col")
             .class(alignment.vertical.itemAlignmentClass)
     }
@@ -189,7 +188,6 @@ public struct Grid: HTML {
         return ForEach(collection) { item in
             handleItem(item.attributes(attributes))
                 .class(gutterClass)
-                .render()
         }
     }
 

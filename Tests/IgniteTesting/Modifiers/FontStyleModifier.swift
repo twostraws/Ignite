@@ -17,7 +17,7 @@ class FontStyleModifierTests: IgniteTestSuite {
     @Test("Font Style", arguments: await Font.Style.tagCases)
     func fontStyle(style: Font.Style) async throws {
         let element = Text("Hello").font(style)
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<\(style.description)>Hello</\(style.description)>")
     }
 }

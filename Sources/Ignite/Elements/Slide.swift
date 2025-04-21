@@ -87,7 +87,7 @@ public struct Slide: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        items.map { $0.render() }.joined()
+    public func markup() -> Markup {
+        items.map { $0.markup() }.joined()
     }
 }

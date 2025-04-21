@@ -17,7 +17,7 @@ class TextDecorationModifierTests: IgniteTestSuite {
     @Test("Text Decoration Modifier", arguments: TextDecoration.allCases)
     func textDecorationNone(_ decoration: TextDecoration) async throws {
         let element = Span("Hello, World!").textDecoration(decoration)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<span style=\"text-decoration: \(decoration.rawValue)\">Hello, World!</span>")
     }

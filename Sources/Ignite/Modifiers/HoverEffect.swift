@@ -37,7 +37,7 @@ public struct EmptyHoverEffect: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    public func render() -> String { "" }
+    public func markup() -> Markup { Markup() }
 }
 
 private struct ApplyHoverEffects: Action {

@@ -24,7 +24,7 @@ public struct Code: InlineElement {
     public var isPrimitive: Bool { true }
 
     /// The code to display.
-    var content: String
+    private var content: String
 
     /// Creates a new `Code` instance from the given content.
     /// - Parameter content: The code you want to render.
@@ -34,7 +34,7 @@ public struct Code: InlineElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-    "<code\(attributes)>\(content)</code>"
+    public func markup() -> Markup {
+        Markup("<code\(attributes)>\(content)</code>")
     }
 }

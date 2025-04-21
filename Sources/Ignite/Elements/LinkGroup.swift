@@ -81,7 +81,7 @@ public struct LinkGroup: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         isPrivacySensitive
             ? renderPrivacyProtectedLink()
             : renderStandardLink()
@@ -95,8 +95,8 @@ public struct LinkGroup: HTML {
     /// Renders a link with privacy protection enabled, encoding the URL and optionally the display content.
     /// - Parameter context: The current publishing context.
     /// - Returns: An HTML anchor tag with encoded attributes and content.
-    private func renderPrivacyProtectedLink() -> String {
-        let displayText = content.render()
+    private func renderPrivacyProtectedLink() -> Markup {
+        let displayText = content.markupString()
         let encodingType = attributes.customAttributes.first { $0.name == "privacy-sensitive" }?.value ?? "urlOnly"
 
         let encodedUrl = Data(url.utf8).base64EncodedString()
@@ -110,21 +110,22 @@ public struct LinkGroup: HTML {
         linkAttributes.append(dataAttributes: .init(name: "encoded-url", value: encodedUrl))
         linkAttributes.append(customAttributes: .init(name: "href", value: "#"))
 
-        return "a\(linkAttributes)>\(displayContent)</a>"
+        return Markup("a\(linkAttributes)>\(displayContent)</a>")
     }
 
     /// Renders a standard link with the provided URL and content.
     /// - Returns: An HTML anchor tag with the appropriate href and content.
-    private func renderStandardLink() -> String {
+    private func renderStandardLink() -> Markup {
         var linkAttributes = attributes.appending(classes: "link-plain")
 
         guard let url = URL(string: url) else {
             publishingContext.addWarning("One of your links uses an invalid URL.")
-            return ""
+            return Markup()
         }
 
         let path = publishingContext.path(for: url)
         linkAttributes.append(customAttributes: .init(name: "href", value: path))
-        return "<a\(linkAttributes)>\(content)</a>"
+        let contentHTML = content.markupString()
+        return Markup("<a\(linkAttributes)>\(contentHTML)</a>")
     }
 }

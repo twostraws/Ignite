@@ -20,7 +20,7 @@ class HStackTests: IgniteTestSuite {
             ControlLabel("Top Label")
             ControlLabel("Bottom Label")
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="hstack gap-3">\
@@ -36,7 +36,7 @@ class HStackTests: IgniteTestSuite {
             ControlLabel("Top Label")
             ControlLabel("Bottom Label")
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="hstack" style="gap: 10px">\

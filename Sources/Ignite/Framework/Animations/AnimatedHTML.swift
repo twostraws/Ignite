@@ -36,7 +36,7 @@ struct AnimatedHTML: HTML {
         self.animations[trigger, default: []].append(animation)
     }
 
-    func render() -> String {
+    func markup() -> Markup {
         // Extract color styles from the element so that we can later
         // transplant them to a place in the div hierarchy that won't conflict with animations
         let baseStyles = content.attributes.get(styles: .background, .backgroundColor, .color)
@@ -62,7 +62,7 @@ struct AnimatedHTML: HTML {
             content = Section(content).attributes(outerAttributes)
         }
 
-        return content.attributes(attributes).render()
+        return content.attributes(attributes).markup()
 
         func assignAppearClasses(_ attributes: inout CoreAttributes) {
             guard let appearAnimations = registeredAnimations[.appear] else { return }

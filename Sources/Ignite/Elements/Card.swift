@@ -203,7 +203,7 @@ public struct Card: HTML {
         return copy
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         Section {
             if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
@@ -240,7 +240,7 @@ public struct Card: HTML {
         .attributes(attributes)
         .class("card")
         .class(cardClasses)
-        .render()
+        .markup()
     }
 
     private func renderHeader() -> some HTML {

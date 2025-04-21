@@ -17,7 +17,7 @@ class StringTests: IgniteTestSuite {
     @Test("Single Element", arguments: ["This is a test", ""])
     func singleElement(element: String) async throws {
         let element = element
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == element)
     }

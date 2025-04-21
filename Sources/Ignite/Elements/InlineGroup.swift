@@ -38,11 +38,11 @@ public struct InlineGroup: InlineElement, PassthroughElement {
         self.items = InlineElementCollection([content])
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         items.map {
             var item: any InlineElement = $0
             item.attributes.merge(attributes)
-            return item.render()
+            return item.markup()
         }.joined()
     }
 }

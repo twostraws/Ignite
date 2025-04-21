@@ -34,11 +34,11 @@ public struct HeadForEach<Data: Sequence>: HeadElement {
 
     /// Renders the ForEach content when this isn't part of a list.
     /// - Returns: The rendered HTML string.
-    public func render() -> String {
+    public func markup() -> Markup {
         items.map {
             var item: any HeadElement = $0
             item.attributes.merge(attributes)
-            return item.render()
+            return item.markup()
         }.joined()
     }
 }

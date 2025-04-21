@@ -87,7 +87,7 @@ public struct Form: HTML, NavigationItem {
         attributes.id = UUID().uuidString.truncatedHash
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         if isNavigationItem {
             renderInNavigationBar()
         } else {
@@ -97,7 +97,7 @@ public struct Form: HTML, NavigationItem {
 
     /// Renders the form in a compact format suitable for navigation bars.
     /// - Returns: A string containing the rendered HTML optimized for navigation contexts.
-    private func renderInNavigationBar() -> String {
+    private func renderInNavigationBar() -> Markup {
         var items = items.map {
             if let textField = $0.as(TextField.self) {
                 textField
@@ -123,11 +123,11 @@ public struct Form: HTML, NavigationItem {
         var attributes = attributes
         attributes.append(classes: "d-flex")
 
-        let content = items.map { $0.render() }.joined()
-        return "<form\(attributes)>\(content)</form>"
+        let contentHTML = items.map { $0.markupString() }.joined()
+        return Markup("<form\(attributes)>\(contentHTML)</form>")
     }
 
-    private func renderNormally() -> String {
+    private func renderNormally() -> Markup {
         let items = items.map { item in
             if labelStyle == .leading {
                 var item = item
@@ -157,7 +157,7 @@ public struct Form: HTML, NavigationItem {
         }
         .attributes(attributes)
         .class(labelStyle == .leading ? nil : "row g-\(spacing.rawValue)")
-        .render()
+        .markup()
     }
 
     @HTMLBuilder

@@ -28,15 +28,16 @@ public struct Row: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         let output = columns.map { column in
             if column is Column {
-                column.render()
+                column.markup()
             } else {
-                "<td>\(column.render())</td>"
+                Markup("<td>\(column.markupString())</td>")
             }
         }.joined()
+        .string
 
-        return "<tr\(attributes)>\(output)</tr>"
+        return Markup("<tr\(attributes)>\(output)</tr>")
     }
 }

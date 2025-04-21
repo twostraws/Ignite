@@ -17,7 +17,7 @@ class EmphasisTests: IgniteTestSuite {
     @Test("Emphasis")
     func simpleEmphasis() async throws {
         let element = Emphasis("Although Markdown is still easier, to be honest! ")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<em>Although Markdown is still easier, to be honest! </em>")
     }

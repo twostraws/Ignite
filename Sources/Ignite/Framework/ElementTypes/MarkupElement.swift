@@ -5,33 +5,39 @@
 // See LICENSE for license information.
 //
 
-/// A protocol that defines the common behavior between Element and InlineElement types.
+/// A protocol that defines the common behavior between all HTML types.
 /// This protocol serves as the foundation for any element that can be rendered as Element.
 @MainActor
-public protocol RenderableElement: Sendable {
-    /// The standard set of control attributes for Element elements.
+public protocol MarkupElement: Sendable {
+    /// The standard set of control attributes for HTML elements.
     var attributes: CoreAttributes { get set }
 
-    /// Whether this Element belongs to the framework.
+    /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { get }
 
-    /// Converts this element and its children into an Element string with attributes.
-    /// - Returns: A string containing the rendered Element
-    func render() -> String
+    /// Converts this element and its children into HTML markup.
+    /// - Returns: A string containing the HTML markup
+    func markup() -> Markup
 }
 
-public extension RenderableElement {
+public extension MarkupElement {
     /// The default status as a primitive element.
     var isPrimitive: Bool { false }
 }
 
-extension RenderableElement {
+extension MarkupElement {
+    /// Converts this element and its children into an HTML string with attributes.
+    /// - Returns: A string containing the HTML markup
+    func markupString() -> String {
+        markup().string
+    }
+
     /// The publishing context of this site.
     var publishingContext: PublishingContext {
         PublishingContext.shared
     }
 
-    func `is`(_ elementType: any RenderableElement.Type) -> Bool {
+    func `is`(_ elementType: any MarkupElement.Type) -> Bool {
         switch self {
         case let element as any HTML:
             element.isType(elementType)
@@ -41,7 +47,7 @@ extension RenderableElement {
         }
     }
 
-    func `as`<T: RenderableElement>(_ elementType: T.Type) -> T? {
+    func `as`<T: MarkupElement>(_ elementType: T.Type) -> T? {
         switch self {
         case let element as any HTML:
             element.asType(elementType)
@@ -54,7 +60,7 @@ extension RenderableElement {
 
 private extension HTML {
     /// Whether this element represents a specific type.
-    func isType(_ elementType: any RenderableElement.Type) -> Bool {
+    func isType(_ elementType: any MarkupElement.Type) -> Bool {
         if let anyHTML = body as? AnyHTML {
             type(of: anyHTML.wrapped) == elementType
         } else {
@@ -63,7 +69,7 @@ private extension HTML {
     }
 
     /// The underlying content, conditionally cast to the specified type.
-    func asType<T: RenderableElement>(_ elementType: T.Type) -> T? {
+    func asType<T: MarkupElement>(_ elementType: T.Type) -> T? {
         if let anyHTML = body as? AnyHTML, let element = anyHTML.attributedContent as? T {
             element
         } else if let element = body as? T {
@@ -76,7 +82,7 @@ private extension HTML {
 
 private extension InlineElement {
     /// The underlying content, conditionally cast to the specified type.
-    func asType<T: RenderableElement>(_ elementType: T.Type) -> T? {
+    func asType<T: MarkupElement>(_ elementType: T.Type) -> T? {
         if let anyHTML = body as? AnyInlineElement, let element = anyHTML.attributedContent as? T {
             element
         } else if let element = body as? T {
@@ -87,7 +93,7 @@ private extension InlineElement {
     }
 
     /// Whether this element represents a specific type.
-    func isType(_ elementType: any RenderableElement.Type) -> Bool {
+    func isType(_ elementType: any MarkupElement.Type) -> Bool {
         if let anyHTML = body as? AnyInlineElement {
             type(of: anyHTML.wrapped) == elementType
         } else {

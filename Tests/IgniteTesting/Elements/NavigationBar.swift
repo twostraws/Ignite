@@ -15,15 +15,17 @@ import Testing
     @Test("Root Tag is Header")
     func headerTag() async throws {
         let element = NavigationBar()
+        let output = element.markupString()
 
-        #expect(element.render().htmlTagWithCloseTag("header") != nil)
+        #expect(output.htmlTagWithCloseTag("header") != nil)
     }
 
     @Test("Has Nav Tag Inside Header")
     func navTag() async throws {
         let element = NavigationBar()
+        let output = element.markupString()
 
-        let header = try #require(element.render()
+        let header = try #require(output
             .htmlTagWithCloseTag("header"))
 
         #expect(header.contents.htmlTagWithCloseTag("nav") != nil)
@@ -32,8 +34,9 @@ import Testing
     @Test("Nav Tag Class Is navbar and navbar-expand-md")
     func navTagClass() async throws {
         let element = NavigationBar()
+        let output = element.markupString()
 
-        let navClasses = try #require(element.render()
+        let navClasses = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.attributes
             .htmlAttribute(named: "class")?
@@ -48,8 +51,9 @@ import Testing
     func navTagDefaultTheme() async throws {
         var element = NavigationBar()
         element.style = .default
+        let output = element.markupString()
 
-        let navAttributes = try #require(element.render()
+        let navAttributes = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.attributes
         )
@@ -61,8 +65,9 @@ import Testing
     func navTagDarkTheme() async throws {
         var element = NavigationBar()
         element.style = .dark
+        let output = element.markupString()
 
-        let theme = try #require(element.render()
+        let theme = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.attributes
             .htmlAttribute(named: "data-bs-theme")
@@ -76,8 +81,9 @@ import Testing
     func navTagLightTheme() async throws {
         var element = NavigationBar()
         element.style = .light
+        let output = element.markupString()
 
-        let theme = try #require(element.render()
+        let theme = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.attributes
             .htmlAttribute(named: "data-bs-theme")
@@ -94,8 +100,9 @@ import Testing
     ])
     func divTagForColumnWidth(width: NavigationBar.Width) async throws {
         let element = NavigationBar().width(width)
+        let output = element.markupString()
 
-        let navContents = try #require(element.render()
+        let navContents = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
         )
@@ -106,8 +113,9 @@ import Testing
     @Test("Div Tag Class contains column count if given column width", arguments: [0, 3, 7])
     func divTagClassBeginsWithColumnCount(columns: Int) async throws {
         let element = NavigationBar().width(.count(columns))
+        let output = element.markupString()
 
-        let divClasses = try #require(element.render()
+        let divClasses = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
             .htmlTagWithCloseTag("div")?.attributes
@@ -125,8 +133,9 @@ import Testing
     ])
     func divTagClassEndsWithContainer(width: NavigationBar.Width) async throws {
         let element = NavigationBar().width(width)
+        let output = element.markupString()
 
-        let divClasses = try #require(element.render()
+        let divClasses = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
             .htmlTagWithCloseTag("div")?.attributes
@@ -141,8 +150,9 @@ import Testing
     @Test("Div Tag Class is as expected if given viewport width")
     func divTagClassIsFluid() async throws {
         let element = NavigationBar().width(.viewport)
+        let output = element.markupString()
 
-        let divClasses = try #require(element.render()
+        let divClasses = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
             .htmlTagWithCloseTag("div")?.attributes
@@ -158,14 +168,15 @@ import Testing
     func divTagContainsLogo() async throws {
         let logoImage = Image("")
         let element = NavigationBar(logo: logoImage)
+        let output = element.markupString()
 
-        let divContents = try #require(element.render()
+        let divContents = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
             .htmlTagWithCloseTag("div")?.contents
         )
 
-        let expected = try Regex(logoImage.render())
+        let expected = try Regex(logoImage.markupString())
         #expect(divContents.firstMatch(of: expected) != nil)
     }
 
@@ -174,8 +185,9 @@ import Testing
         let element = NavigationBar(logo: Image("somepath")) {
             Link("Link 1", target: URL(string: "1")!)
         }
+        let output = element.markupString()
 
-        let divContents = try #require(element.render()
+        let divContents = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
             .htmlTagWithCloseTag("div")?.contents
@@ -197,8 +209,9 @@ import Testing
         let element = NavigationBar(logo: Image("somepath")) {
             item
         }
+        let output = element.markupString()
 
-        let divContents = try #require(element.render()
+        let divContents = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
             .htmlTagWithCloseTag("div")?.contents
@@ -213,8 +226,9 @@ import Testing
         let element = NavigationBar(logo: Image("somepath")) {
             item
         }
+        let output = element.markupString()
 
-        let ulAttributes = try #require(element.render()
+        let ulAttributes = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
             .htmlTagWithCloseTag("div")?.contents
@@ -232,8 +246,9 @@ import Testing
             item
         }
         .navigationItemAlignment(.center)
+        let output = element.markupString()
 
-        let ulClasses = try #require(element.render()
+        let ulClasses = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
             .htmlTagWithCloseTag("div")?.contents
@@ -252,8 +267,9 @@ import Testing
             item
         }
         .navigationItemAlignment(.trailing)
+        let output = element.markupString()
 
-        let ulClasses = try #require(element.render()
+        let ulClasses = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
             .htmlTagWithCloseTag("div")?.contents
@@ -271,8 +287,9 @@ import Testing
         let element = NavigationBar(logo: Image("somepath")) {
             item
         }
+        let output = element.markupString()
 
-        let ulContents = try #require(element.render()
+        let ulContents = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
             .htmlTagWithCloseTag("div")?.contents
@@ -281,7 +298,8 @@ import Testing
 
         let expectedLink = item
             .class("nav-link text-nowrap")
-            .render()
+            .markup()
+            .string
         let expectedNavItem = "<li class=\"nav-item\">\(expectedLink)</li>"
 
         #expect(ulContents.contains(expectedNavItem))
@@ -295,8 +313,9 @@ import Testing
             item1
             item2
         }
+        let output = element.markupString()
 
-        let ulContents = try #require(element.render()
+        let ulContents = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
             .htmlTagWithCloseTag("div")?.contents
@@ -305,12 +324,14 @@ import Testing
 
         let expectedLink1 = item1
             .class("nav-link text-nowrap")
-            .render()
+            .markup()
+            .string
         let expectedNavItem1 = "<li class=\"nav-item\">\(expectedLink1)</li>"
 
         let expectedLink2 = item2
             .class("nav-link text-nowrap")
-            .render()
+            .markup()
+            .string
         let expectedNavItem2 = "<li class=\"nav-item\">\(expectedLink2)</li>"
 
         #expect(ulContents.contains(expectedNavItem1))

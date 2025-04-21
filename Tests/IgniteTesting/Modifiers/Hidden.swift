@@ -17,7 +17,7 @@ struct HiddenTests {
     @Test("Hidden Modifier for Text")
     func hiddenForText() async throws {
         let element = Text("Hello world!").hidden()
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p class=\"d-none\">Hello world!</p>")
     }
@@ -28,7 +28,7 @@ struct HiddenTests {
         let className = CSSManager.shared.registerStyles([query], styles: [.init(.display, value: "none")])
 
         let element = Text("Hello world!").hidden(query)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p class=\"\(className)\">Hello world!</p>")
     }
@@ -39,7 +39,7 @@ struct HiddenTests {
             ControlLabel("Left Label")
             ControlLabel("Right Label")
         }.hidden()
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<td colspan=\"1\" class=\"d-none\"><label>Left Label</label><label>Right Label</label></td>")
     }

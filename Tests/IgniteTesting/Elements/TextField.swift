@@ -19,7 +19,7 @@ class TextFieldTests: IgniteTestSuite {
         let element = TextField("Paul", prompt: "Enter your name here")
             .type(textType)
             .id("field")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="form-floating">\
@@ -34,7 +34,7 @@ class TextFieldTests: IgniteTestSuite {
         let element = TextField("Paul", prompt: "Enter your name here")
             .required()
             .id("field")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="form-floating">\
@@ -49,7 +49,7 @@ class TextFieldTests: IgniteTestSuite {
         let element = TextField("Paul", prompt: "Enter your name here")
             .disabled()
             .id("field")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="form-floating">\
@@ -64,7 +64,7 @@ class TextFieldTests: IgniteTestSuite {
         let element = TextField("Paul")
             .readOnly("Read only")
             .id("field")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="form-floating">\

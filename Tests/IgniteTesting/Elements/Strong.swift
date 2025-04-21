@@ -16,7 +16,7 @@ import Testing
     @Test("Single Element", arguments: ["This is a test", "Another test", ""])
     func singleElement(strongText: String) async throws {
         let element = Strong(strongText)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<strong>\(strongText)</strong>")
     }
@@ -24,7 +24,7 @@ import Testing
     @Test("Builder", arguments: ["This is a test", "Another test", ""])
     func builder(strongText: String) async throws {
         let element = Strong { strongText }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<strong>\(strongText)</strong>")
     }

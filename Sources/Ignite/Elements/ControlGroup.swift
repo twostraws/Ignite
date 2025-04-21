@@ -81,7 +81,7 @@ public struct ControlGroup: HTML, FormItem {
         return copy
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         var items = items
         let lastItem = items.last
         if var lastItem = lastItem as? Dropdown {
@@ -111,7 +111,7 @@ public struct ControlGroup: HTML, FormItem {
         .class(size?.rawValue)
 
         guard label != nil || helpText != nil else {
-            return content.render()
+            return content.markup()
         }
 
         return Section {
@@ -127,7 +127,7 @@ public struct ControlGroup: HTML, FormItem {
                     .class("form-text")
             }
         }
-        .render()
+        .markup()
     }
 
     private func renderText(_ text: Span) -> any InlineElement {

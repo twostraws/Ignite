@@ -17,7 +17,7 @@ class IgniteFooterTests: IgniteTestSuite {
     @Test("Default Ignite Footer")
     func defaultIgniteFooter() async throws {
         let element = IgniteFooter()
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <p class="text-center mt-5">\

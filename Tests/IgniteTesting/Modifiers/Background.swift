@@ -31,7 +31,7 @@ class BackgroundTests: IgniteTestSuite {
     @Test("Background modifier with Color on Text")
     func textWithColorBackground() async throws {
         let element = Text("Hello, world!").background(.teal)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p style=\"background-color: rgb(0 128 128 / 100%)\">Hello, world!</p>")
     }
@@ -39,7 +39,7 @@ class BackgroundTests: IgniteTestSuite {
     @Test("Background modifier with colorstring on Text")
     func textWithColorStringBackground() async throws {
         let element = Text("Hello, world!").background("Tomato")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p style=\"background-color: Tomato\">Hello, world!</p>")
     }
@@ -47,7 +47,7 @@ class BackgroundTests: IgniteTestSuite {
     @Test("Background modifier with Material on Text", arguments: await Self.testMaterial)
     func textWithMaterialBackground(material: Material) async throws {
         let element = Text("Hello, world!").background(material)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p class=\"\(material.className)\">Hello, world!</p>")
     }
@@ -55,7 +55,7 @@ class BackgroundTests: IgniteTestSuite {
     @Test("Gradient Background Test", arguments: await Self.testGradient)
     func textWithGradientBackground(gradient: Gradient) async throws {
         let element = Text("Hello, world!").background(gradient)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p style=\"background-image: \(gradient.description)\">Hello, world!</p>")
     }

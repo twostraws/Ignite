@@ -17,7 +17,7 @@ class EmbedTests: IgniteTestSuite {
     @Test("Basic Embed")
     func basicEmbed() async throws {
         let element = Embed(youTubeID: "dQw4w9WgXcQ", title: "There was only ever going to be one video used here.")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div><iframe src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ" \

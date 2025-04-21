@@ -65,13 +65,14 @@ public struct Column: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var columnAttributes = attributes
 
         if verticalAlignment != .top {
             columnAttributes.append(classes: ["align-\(verticalAlignment.rawValue)"])
         }
         columnAttributes.append(customAttributes: .init(name: "colspan", value: columnSpan.formatted()))
-        return "<td\(columnAttributes)>\(items)</td>"
+        let itemHTML = items.markupString()
+        return Markup("<td\(columnAttributes)>\(itemHTML)</td>")
     }
 }

@@ -17,7 +17,7 @@ class IncludeTests: IgniteTestSuite {
     @Test("Basic Include")
     func basicInclude() async throws {
         let element = Include("important.html")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "")
     }

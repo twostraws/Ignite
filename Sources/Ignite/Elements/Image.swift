@@ -85,10 +85,10 @@ public struct Image: InlineElement, LazyLoadable {
     ///   - icon: The system image to render.
     ///   - description: The accessibility label to use.
     /// - Returns: The HTML for this element.
-    private func render(icon: String, description: String) -> String {
+    private func render(icon: String, description: String) -> Markup {
         var attributes = attributes
         attributes.append(classes: "bi-\(icon)")
-        return "<i\(attributes)></i>"
+        return Markup("<i\(attributes)></i>")
     }
 
     /// Renders a user image into the current publishing context.
@@ -96,7 +96,7 @@ public struct Image: InlineElement, LazyLoadable {
     ///   - path: The user image to render.
     ///   - description: The accessibility label to use.
     /// - Returns: The HTML for this element.
-    private func render(path: String, description: String) -> String {
+    private func render(path: String, description: String) -> Markup {
         var attributes = attributes
         attributes.append(customAttributes:
             .init(name: "src", value: path),
@@ -109,7 +109,7 @@ public struct Image: InlineElement, LazyLoadable {
         }
 
         if darkVariants.isEmpty {
-            return "<img\(attributes) />"
+            return Markup("<img\(attributes) />")
         }
 
         var output = "<picture>"
@@ -121,12 +121,12 @@ public struct Image: InlineElement, LazyLoadable {
         // Add the fallback img tag
         output += "<img\(attributes) />"
         output += "</picture>"
-        return output
+        return Markup(output)
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         if description == nil {
             publishingContext.addWarning("""
             \(path?.relativePath ?? systemImage ?? "Image"): adding images without a description is not recommended. \
@@ -144,7 +144,7 @@ public struct Image: InlineElement, LazyLoadable {
             Creating an image with no name or icon should not be possible. \
             Please file a bug report on the Ignite project.
             """)
-            return ""
+            return Markup()
         }
     }
 }

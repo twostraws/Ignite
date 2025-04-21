@@ -20,7 +20,7 @@ class AnimationModifierTests: IgniteTestSuite {
             Span("This is a Span")
         }.animation(Animation.bounce, on: .hover)
 
-        let output = element.render()
+        let output = element.markupString()
 
         // Example output:
         // <div class="animation-H57c1-hover" style="transform-style: preserve-3d">

@@ -62,7 +62,7 @@ public struct Item: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         guard let parentID, let parentOpenMode else {
             fatalError("Accordion sections must not be rendered without a parentID and parentOpenMode in place.")
         }
@@ -82,16 +82,14 @@ public struct Item: HTML {
             .class("accordion-header")
 
             Section {
-                Section {
-                    contents.render()
-                }
-                .class("accordion-body")
+                Section(contents)
+                    .class("accordion-body")
             }
             .id(itemID)
             .class("accordion-collapse", "collapse", startsOpen ? "show" : nil)
             .data("bs-parent", parentOpenMode == .individual ? "#\(parentID)" : "")
         }
         .class("accordion-item")
-        .render()
+        .markup()
     }
 }

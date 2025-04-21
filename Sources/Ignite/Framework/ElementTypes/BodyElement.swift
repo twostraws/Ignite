@@ -6,7 +6,7 @@
 //
 
 /// An element that can exist in the `<body>` of an HTML page.
-public protocol BodyElement: RenderableElement, Stylable {}
+public protocol BodyElement: MarkupElement, Stylable {}
 
 public extension BodyElement {
     /// A collection of styles, classes, and attributes.

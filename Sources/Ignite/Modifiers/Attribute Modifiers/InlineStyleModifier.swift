@@ -78,7 +78,7 @@ public extension FormItem {
     }
 }
 
-public extension RenderableElement where Self: HeadElement {
+public extension MarkupElement where Self: HeadElement {
     /// Adds an inline CSS style property to the Element element
     /// - Parameters:
     ///   - property: The CSS property to set

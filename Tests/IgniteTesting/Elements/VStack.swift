@@ -20,7 +20,7 @@ class VStackTests: IgniteTestSuite {
             ControlLabel("Top Label")
             ControlLabel("Bottom Label")
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="vstack">\
@@ -36,7 +36,7 @@ class VStackTests: IgniteTestSuite {
             ControlLabel("Top Label")
             ControlLabel("Bottom Label")
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="vstack" style="gap: 10px">\

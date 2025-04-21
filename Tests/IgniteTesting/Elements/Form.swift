@@ -22,7 +22,7 @@ class FormTests: IgniteTestSuite {
             Button("Submit").type(.submit)
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <form id="\(element.attributes.id)" class="row g-3">\
@@ -49,7 +49,7 @@ class FormTests: IgniteTestSuite {
         }
         .labelStyle(style)
 
-        let output = element.render()
+        let output = element.markupString()
 
         let expected = switch style {
         case .leading:
@@ -120,7 +120,7 @@ class FormTests: IgniteTestSuite {
         }
         .controlSize(controlSize)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <form id="\(element.attributes.id)" class="row g-3">\

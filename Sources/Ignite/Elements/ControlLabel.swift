@@ -25,7 +25,8 @@ struct ControlLabel: InlineElement {
         self.text = text
     }
 
-    func render() -> String {
-        "<label\(attributes)>\(text)</label>"
+    func markup() -> Markup {
+        let textHTML = text.markupString()
+        return Markup("<label\(attributes)>\(textHTML)</label>")
     }
 }

@@ -148,7 +148,7 @@ public struct Table: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var tableAttributes = attributes.appending(classes: ["table"])
 
         if hasBorderEnabled {
@@ -183,16 +183,16 @@ public struct Table: HTML {
 
         if let header {
             let headerHTML = header.map {
-                "<th>\($0.render())</th>"
+                "<th>\($0.markupString())</th>"
             }.joined()
 
             output += "<thead><tr>\(headerHTML)</tr></thead>"
         }
 
         output += "<tbody>"
-        output += rows.render()
+        output += rows.markupString()
         output += "</tbody>"
         output += "</table>"
-        return output
+        return Markup(output)
     }
 }

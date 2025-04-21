@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public struct Document: RenderableElement {
+public struct Document: MarkupElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -20,13 +20,13 @@ public struct Document: RenderableElement {
         self.contents = contents()
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         var attributes = attributes
         attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
         var output = "<!doctype html>"
         output += "<html \(attributes)>"
-        output += contents.map { $0.render() }.joined()
+        output += contents.map { $0.markupString() }.joined()
         output += "</html>"
-        return output
+        return Markup(output)
     }
 }

@@ -40,15 +40,15 @@ public struct Head: DocumentElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var items = items
         if includeStandardHeaders {
             items.insert(contentsOf: MetaTag.socialSharingTags(), at: 0)
             items.insert(contentsOf: Head.standardHeaders(), at: 0)
         }
 
-        let content = items.map { $0.render() }.joined()
-        return "<head\(attributes)>\(content))</head>"
+        let contentHTML = items.map { $0.markupString() }.joined()
+        return Markup("<head\(attributes)>\(contentHTML)</head>")
     }
 
     /// Returns the standard set of headers used for a `Page` instance.

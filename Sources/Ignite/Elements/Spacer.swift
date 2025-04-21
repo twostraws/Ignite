@@ -36,17 +36,17 @@ public struct Spacer: HTML, NavigationItem {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         if case let .semantic(spacingAmount) = spacingAmount {
             Section {}
                 .margin(.top, spacingAmount)
                 .class("ms-auto")
-                .render()
+                .markup()
         } else if case let .exact(int) = spacingAmount {
             Section {}
                 .frame(height: .px(int))
                 .class("ms-auto")
-                .render()
+                .markup()
         } else {
             fatalError("Unknown spacing amount: \(String(describing: spacingAmount))")
         }

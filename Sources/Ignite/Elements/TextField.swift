@@ -152,7 +152,7 @@ public struct TextField: InlineElement, FormItem {
         return copy
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         switch style {
         case .top:
             renderTopLabeledTextField()
@@ -165,7 +165,7 @@ public struct TextField: InlineElement, FormItem {
         }
     }
 
-    private func renderTopLabeledTextField() -> String {
+    private func renderTopLabeledTextField() -> Markup {
         Section {
             if let label {
                 label.class("form-label")
@@ -173,10 +173,10 @@ public struct TextField: InlineElement, FormItem {
             input
                 .attributes(attributes)
         }
-        .render()
+        .markup()
     }
 
-    private func renderFrontLabeledTextField() -> String {
+    private func renderFrontLabeledTextField() -> Markup {
         Section {
             if let label {
                 label.class("col-form-label col-sm-2")
@@ -187,10 +187,10 @@ public struct TextField: InlineElement, FormItem {
             }.class("col-sm-10")
         }
         .class("row")
-        .render()
+        .markup()
     }
 
-    private func renderFloatingTextField() -> String {
+    private func renderFloatingTextField() -> Markup {
         Section {
             input
                 .attributes(attributes)
@@ -199,12 +199,12 @@ public struct TextField: InlineElement, FormItem {
             }
         }
         .class("form-floating")
-        .render()
+        .markup()
     }
 
-    private func renderPlainTextField() -> String {
+    private func renderPlainTextField() -> Markup {
         input
             .attributes(attributes)
-            .render()
+            .markup()
     }
 }

@@ -24,7 +24,7 @@ class GroupTests: IgniteTestSuite {
             }
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <label>Top Label</label>\
@@ -45,7 +45,7 @@ class GroupTests: IgniteTestSuite {
             }
         }.customAttribute(name: attributeName, value: attributeValue)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <label \(attributeName)="\(attributeValue)">Top Label</label>\

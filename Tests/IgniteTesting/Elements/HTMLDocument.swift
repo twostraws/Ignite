@@ -17,21 +17,21 @@ class HTMLDocumentTests: IgniteTestSuite {
     @Test("Starts with doctype html")
     func containsHTMLDoctype() {
         let sut = Document {}
-        let output = sut.render()
+        let output = sut.markupString()
         #expect(output.hasPrefix("<!doctype html>"))
     }
 
     @Test("Contains html tag")
     func containsHTMLTag() {
         let sut = Document {}
-        let output = sut.render()
+        let output = sut.markupString()
         #expect(nil != output.htmlTagWithCloseTag("html"))
     }
 
     @Test("lang attribute defaults to en")
     func language_attribute_defaults_to_en() throws {
         let sut = Document {}
-        let output = sut.render()
+        let output = sut.markupString()
 
         let language = try #require(output.htmlTagWithCloseTag("html")?.attributes
             .htmlAttribute(named: "lang")
@@ -60,7 +60,7 @@ class HTMLDocumentTests: IgniteTestSuite {
             Document {}
         }
 
-        let output = sut.render()
+        let output = sut.markupString()
 
         let langAttribute = try #require(output.htmlTagWithCloseTag("html")?.attributes
             .htmlAttribute(named: "lang")
@@ -72,7 +72,7 @@ class HTMLDocumentTests: IgniteTestSuite {
     @Test("If contents are empty then html tag is empty")
     func contents_are_empty_by_default() throws {
         let sut = Document {}
-        let output = sut.render()
+        let output = sut.markupString()
 
         let htmlContents = try #require(output.htmlTagWithCloseTag("html")?.contents)
 
@@ -84,9 +84,10 @@ class HTMLDocumentTests: IgniteTestSuite {
         let body = Body { "Hello World" }
         let sut = Document { body }
 
-        let expected = body.render()
+        let expected = body.markupString()
+        let output = sut.markupString()
 
-        let htmlContents = try #require(sut.render().htmlTagWithCloseTag("html")?.contents)
+        let htmlContents = try #require(output.htmlTagWithCloseTag("html")?.contents)
 
         #expect(htmlContents == expected)
     }

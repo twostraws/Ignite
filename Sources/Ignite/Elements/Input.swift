@@ -16,7 +16,7 @@ struct Input: InlineElement {
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { true }
 
-    func render() -> String {
-        "<input\(attributes) />"
+    func markup() -> Markup {
+        Markup("<input\(attributes) />")
     }
 }

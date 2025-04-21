@@ -18,7 +18,7 @@ class SubscribeFormTests: IgniteTestSuite {
             .emailFieldLabel("MyLabel")
             .labelStyle(.floating)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <form id="myID" method="post" target="_blank" action="https://sendfox.com/form/myListID/myID" \

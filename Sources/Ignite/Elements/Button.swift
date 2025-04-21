@@ -171,7 +171,7 @@ public struct Button: InlineElement, FormItem {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var buttonAttributes = attributes
             .appending(classes: Button.classes(forRole: role, size: size))
             .appending(aria: Button.aria(forRole: role))
@@ -180,8 +180,8 @@ public struct Button: InlineElement, FormItem {
             buttonAttributes.append(customAttributes: .disabled)
         }
 
-        let output = label.render()
-        return "<button type=\"\(type.htmlName)\"\(buttonAttributes)>\(output)</button>"
+        let labelHTML = label.markupString()
+        return Markup("<button type=\"\(type.htmlName)\"\(buttonAttributes)>\(labelHTML)</button>")
     }
 }
 

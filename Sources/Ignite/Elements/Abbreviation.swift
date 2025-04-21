@@ -41,7 +41,8 @@ public struct Abbreviation: InlineElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<abbr\(attributes)>\(contents.render())</abbr>"
+    public func markup() -> Markup {
+        let contentHTML = contents.markupString()
+        return Markup("<abbr\(attributes)>\(contentHTML)</abbr>")
     }
 }

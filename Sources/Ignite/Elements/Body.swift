@@ -38,17 +38,17 @@ public struct Body: DocumentElement {
         return copy
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         var attributes = attributes
-        var output = content.render()
+        var output = content.markup()
 
         // Add required scripts
         if publishingContext.site.useDefaultBootstrapURLs == .localBootstrap {
-            output += Script(file: "/js/bootstrap.bundle.min.js").render()
+            output += Script(file: "/js/bootstrap.bundle.min.js").markup()
         }
 
         if publishingContext.hasSyntaxHighlighters == true {
-            output += Script(file: "/js/syntax-highlighting.js").render()
+            output += Script(file: "/js/syntax-highlighting.js").markup()
         }
 
         if case .visible(let firstLine, let shouldWrap) =
@@ -63,24 +63,24 @@ public struct Body: DocumentElement {
             }
         }
 
-        if output.contains(#"data-bs-toggle="tooltip""#) {
+        if output.string.contains(#"data-bs-toggle="tooltip""#) {
             output += Script(code: """
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-            """).render()
+            """).markup()
         }
 
-        output += Script(file: "/js/ignite-core.js").render()
+        output += Script(file: "/js/ignite-core.js").markup()
 
         if publishingContext.isSearchEnabled {
-            output += Script(file: "/js/lunr.js").render()
-            output += Script(file: "/js/search.js").render()
+            output += Script(file: "/js/lunr.js").markup()
+            output += Script(file: "/js/search.js").markup()
         }
 
         if isBoundByContainer {
             attributes.append(classes: ["container"])
         }
-        return "<body\(attributes)>\(output)</body>"
+        return Markup("<body\(attributes)>\(output.string)</body>")
     }
 }
 
