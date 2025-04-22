@@ -89,7 +89,7 @@ public extension HTML {
     /// - Parameter font: The font configuration to apply.
     /// - Returns: A new instance with the updated font.
     func font(_ font: Font) -> some HTML {
-        if font.name != nil {
+        if let name = font.name, !name.isEmpty {
             CSSManager.shared.registerFontFamily(font)
         }
         return AnyHTML(fontModifier(font, content: self))
@@ -100,7 +100,7 @@ public extension HTML {
     /// - Returns: A new instance with the updated font.
     func font(_ font: Font.Responsive) -> some HTML {
         let baseFont = font.font
-        if baseFont.name != nil {
+        if let name = baseFont.name, !name.isEmpty {
             CSSManager.shared.registerFontFamily(baseFont)
         }
         return AnyHTML(fontModifier(baseFont, content: self))
@@ -112,7 +112,7 @@ public extension InlineElement {
     /// - Parameter font: The font configuration to apply.
     /// - Returns: A new instance with the updated font.
     func font(_ font: Font) -> some InlineElement {
-        if font.name != nil {
+        if let name = font.name, !name.isEmpty {
             CSSManager.shared.registerFontFamily(font)
         }
         return AnyInlineElement(fontModifier(font, content: self))
@@ -123,7 +123,7 @@ public extension InlineElement {
     /// - Returns: A new instance with the updated font.
     func font(_ font: Font.Responsive) -> some InlineElement {
         let baseFont = font.font
-        if baseFont.name != nil {
+        if let name = baseFont.name, !name.isEmpty {
             CSSManager.shared.registerFontFamily(baseFont)
         }
         return AnyInlineElement(fontModifier(baseFont, content: self))
@@ -135,7 +135,7 @@ public extension StyledHTML {
     /// - Parameter font: The font configuration to apply.
     /// - Returns: A new instance with the updated font.
     func font(_ font: Font) -> Self {
-        if font.name != nil {
+        if let name = font.name, !name.isEmpty {
             CSSManager.shared.registerFontFamily(font)
         }
 

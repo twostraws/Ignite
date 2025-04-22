@@ -24,7 +24,7 @@ final class CSSManager {
     private var rules: [String] = []
 
     /// Custom fonts that need to be included in the CSS output
-    var customFonts: [Font] = []
+    var customFonts: OrderedSet<Font> = []
 
     /// Registers a custom font for use in the CSS output
     func registerFontFamily(_ font: Font) {
