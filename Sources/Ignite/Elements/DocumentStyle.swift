@@ -7,14 +7,6 @@
 
 /// A type for adding internal CSS styles to an HTML document.
 public struct DocumentStyle: HeadElement {
-    /// The importance of the internal styles.
-    public enum Priority: Sendable {
-        /// The default priority.
-        case normal
-        /// A higher priority denoted by `!important`.
-        case important
-    }
-
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -24,18 +16,26 @@ public struct DocumentStyle: HeadElement {
     /// The CSS declarations to apply.
     private let style: any Style
 
-    /// The importance of the style declarations.
-    private let priority: Priority
+    /// Whether the properties of this block should be marked `!important`.
+    private var isImportant: Bool = false
+
+    /// Marks the style declarations as important, which gives them higher priority in CSS.
+    /// This is equivalent to adding `!important` to each CSS property.
+    /// - Returns: A new `DocumentStyle` instance with the important flag set to true.
+    public func important() -> Self {
+        var copy = self
+        copy.isImportant = true
+        return copy
+    }
 
     /// Creates a new `DocumentStyle` object using the styles and selector provided.
     /// - Parameters:
     ///   - selector: The selector of the style's declaration block.
     ///   - priority: The level of importance of the styles.
     ///   - style: The `Style` that holds the appropriate CSS.
-    public init(_ selector: String, priority: Priority = .normal, style: any Style) {
+    public init(_ selector: String, style: any Style) {
         self.selector = selector
         self.style = style
-        self.priority = priority
     }
 
     public func markup() -> Markup {
@@ -43,7 +43,7 @@ public struct DocumentStyle: HeadElement {
         let css = StyleManager.shared.generateCSS(
             style: style,
             selector: .type(selector),
-            isImportant: priority == .important,
+            isImportant: isImportant,
             themes: allThemes)
         return Markup("<style>\(css)</style>")
     }
