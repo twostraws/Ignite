@@ -26,8 +26,7 @@ public struct Spacer: HTML, NavigationItem {
     /// or whether it uses the structure provided by a parent `NavigationBar`.
     var isNavigationItem = false
 
-    /// Creates a new `Spacer` with a size
-    /// automatically determined by the context.
+    /// Creates a new `Spacer` that uses all available space.
     public init() {
         spacingAmount = .automatic
     }
@@ -61,9 +60,8 @@ public struct Spacer: HTML, NavigationItem {
     public func markup() -> Markup {
         if spacingAmount == .automatic {
             Section {}
-                .frame(width: axis == .horizontal && !isNavigationItem ? .px(20) : nil)
-                .frame(height: axis == .vertical ? .px(20) : nil)
-                .class(isNavigationItem ? "ms-auto" : nil)
+                .class(axis == .horizontal ? "ms-auto" : nil)
+                .class(axis == .vertical ? "mt-auto" : nil)
                 .markup()
         } else if case let .semantic(spacingAmount) = spacingAmount {
             Section {}
