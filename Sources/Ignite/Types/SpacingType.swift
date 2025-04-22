@@ -12,4 +12,7 @@ enum SpacingType: Equatable {
 
     /// A semantic spacing value that adapts based on context.
     case semantic(SpacingAmount)
+
+    /// The spacing value appropriate for the given context.
+    case automatic
 }

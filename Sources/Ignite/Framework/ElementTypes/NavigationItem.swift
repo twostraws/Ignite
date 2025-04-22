@@ -9,6 +9,23 @@
 /// - Warning: Do not conform to this type directly.
 public protocol NavigationItem: BodyElement {}
 
+@MainActor
+protocol NavigationItemConfigurable: BodyElement {
+    var isNavigationItem: Bool { get set }
+    func configuredAsNavigationItem(_ isNavItem: Bool) -> Self
+}
+
+extension NavigationItemConfigurable {
+    /// Configures this element to be placed inside a `NavigationBar`.
+    /// - Returns: A new element instance suitable for placement
+    /// inside a `NavigationBar`.
+    func configuredAsNavigationItem(_ isNavItem: Bool = true) -> Self {
+        var copy = self
+        copy.isNavigationItem = true
+        return copy
+    }
+}
+
 public extension NavigationItem where Self: HTML {
     /// Generates the complete `HTML` string representation of the element.
     func markup() -> Markup {

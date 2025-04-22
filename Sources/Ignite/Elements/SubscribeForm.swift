@@ -64,7 +64,7 @@ public struct SubscribeForm: HTML, NavigationItem {
 
     /// Controls whether this dropdown needs to be created as its own element,
     /// or whether it uses the structure provided by a parent `NavigationBar`.
-    private var isNavigationItem = false
+    var isNavigationItem = false
 
     /// Creates a new form with the specified spacing and content.
     /// - Parameters:
@@ -159,15 +159,6 @@ public struct SubscribeForm: HTML, NavigationItem {
         return copy
     }
 
-    /// Configures this dropdown to be placed inside a `NavigationBar`.
-    /// - Returns: A new `Form` instance suitable for placement
-    /// inside a `NavigationBar`.
-    func configuredAsNavigationItem() -> Self {
-        var copy = self
-        copy.isNavigationItem = true
-        return copy
-    }
-
     public func markup() -> Markup {
         var formOutput = Form {
             TextField(emailFieldLabel, prompt: emailFieldLabel)
@@ -213,3 +204,5 @@ public struct SubscribeForm: HTML, NavigationItem {
         return formOutput
     }
 }
+
+extension SubscribeForm: NavigationItemConfigurable {}

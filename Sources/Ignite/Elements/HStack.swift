@@ -60,10 +60,14 @@ public struct HStack: HTML {
     }
 
     public func markup() -> Markup {
-        let items = items.elements.map {
+        let items: [any BodyElement] = items.elements.map {
             var elementAttributes = CoreAttributes()
             elementAttributes.append(classes: "mb-0")
             elementAttributes.append(classes: alignment.itemAlignmentClass)
+            if var spacer = $0.as(Spacer.self) {
+                spacer.axis = .horizontal
+                return spacer
+            }
             return $0.attributes(elementAttributes)
         }
 

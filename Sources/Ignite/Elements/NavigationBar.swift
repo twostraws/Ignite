@@ -110,6 +110,12 @@ public struct NavigationBar: HTML {
     /// How items in this navigation bar should be aligned
     var itemAlignment = ItemAlignment.automatic
 
+    /// The number of controls that aren't `Spacer`,
+    /// used to determine the gap class that should be used.
+    private var visibleControlCount: Int {
+        controls.filter { !$0.is(Spacer.self) }.count
+    }
+
     /// Creates a new `NavigationBar` instance from the `logo`, without any items.
     /// - Parameters:
     ///   - logo: The logo to use in the top-left edge of your bar.
@@ -232,7 +238,7 @@ public struct NavigationBar: HTML {
                 Section {
                     if logo.isEmpty == false {
                         AnyHTML(renderLogo(logo))
-                            .class("me-0 me-sm-2 me-md-auto")
+                            .class("me-2 me-md-auto")
                     }
 
                     if controls.isEmpty == false {
@@ -244,8 +250,9 @@ public struct NavigationBar: HTML {
                                 renderToggleButton()
                             }
                         }
-                        .style(.flex, "1")
+                        .class("flex-fill flex-md-grow-0 flex-md-shrink-0")
                         .class("d-flex", "gap-2", "align-items-center")
+                        .class(visibleControlCount > 1 ? nil : "gap-md-0")
                         .class("ms-auto")
                         .class("order-md-last")
                     }
@@ -269,12 +276,10 @@ public struct NavigationBar: HTML {
 
     private func renderNavActions() -> some HTML {
         ForEach(controls) { control in
-            if let form = control as? Form {
-                form.configuredAsNavigationItem()
-            } else if let form = control as? SearchForm {
-                form.configuredAsNavigationItem()
-            } else if let form = control as? SubscribeForm {
-                form.configuredAsNavigationItem()
+            if let item = control as? any NavigationItemConfigurable {
+                AnyHTML(item.configuredAsNavigationItem(true))
+            } else {
+                control
             }
         }
     }
@@ -304,12 +309,8 @@ public struct NavigationBar: HTML {
                         renderLinkItem(link)
                     case let text as Span:
                         renderTextItem(text)
-                    case let form as Form:
-                        form.configuredAsNavigationItem()
-                    case let form as SubscribeForm:
-                        form.configuredAsNavigationItem()
-                    case let searchField as SearchForm:
-                        searchField.configuredAsNavigationItem()
+                    case let item as any NavigationItemConfigurable:
+                        AnyHTML(item.configuredAsNavigationItem(true))
                     default:
                         AnyHTML(item)
                     }

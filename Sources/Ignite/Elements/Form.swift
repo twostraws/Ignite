@@ -33,7 +33,7 @@ public struct Form: HTML, NavigationItem {
 
     /// Controls whether this dropdown needs to be created as its own element,
     /// or whether it uses the structure provided by a parent `NavigationBar`.
-    private var isNavigationItem = false
+    var isNavigationItem = false
 
     /// Sets the style for form labels
     /// - Parameter style: How labels should be displayed
@@ -59,15 +59,6 @@ public struct Form: HTML, NavigationItem {
     public func columns(_ columns: Int) -> some HTML {
         var copy = self
         copy.columnCount = columns
-        return copy
-    }
-
-    /// Configures this dropdown to be placed inside a `NavigationBar`.
-    /// - Returns: A new `Form` instance suitable for placement
-    /// inside a `NavigationBar`.
-    func configuredAsNavigationItem(_ isNavItem: Bool = true) -> Self {
-        var copy = self
-        copy.isNavigationItem = isNavItem
         return copy
     }
 
@@ -247,3 +238,5 @@ public struct Form: HTML, NavigationItem {
         }
     }
 }
+
+extension Form: NavigationItemConfigurable {}

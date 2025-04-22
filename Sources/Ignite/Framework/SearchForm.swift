@@ -42,7 +42,7 @@ public struct SearchForm: HTML, NavigationItem {
 
     /// Controls whether this dropdown needs to be created as its own element,
     /// or whether it uses the structure provided by a parent `NavigationBar`.
-    private var isNavigationItem = false
+    var isNavigationItem = false
 
     /// The text displayed on the search button.
     private var searchButtonLabel: String? = "Search"
@@ -135,15 +135,6 @@ public struct SearchForm: HTML, NavigationItem {
         return copy
     }
 
-    /// Configures this dropdown to be placed inside a `NavigationBar`.
-    /// - Returns: A new `Form` instance suitable for placement
-    /// inside a `NavigationBar`.
-    func configuredAsNavigationItem() -> Self {
-        var copy = self
-        copy.isNavigationItem = true
-        return copy
-    }
-
     /// Hides the search results `<template>` block from the rendered HTML.
     /// - Returns: A modified form with the specified template visibility.
     private func searchResultsTemplateHidden() -> Self {
@@ -227,3 +218,5 @@ public struct SearchForm: HTML, NavigationItem {
         return output
     }
 }
+
+extension SearchForm: NavigationItemConfigurable {}
