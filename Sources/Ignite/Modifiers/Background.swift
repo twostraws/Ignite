@@ -76,6 +76,13 @@ public extension StyledHTML {
         self.style(.backgroundColor, color.description)
     }
 
+    /// Applies a background color from a `String`.
+    /// - Parameter color: The specific color value to use, specified as a `String`.
+    /// - Returns: The current element with the updated background color.
+    func background(_ color: String) -> Self {
+        self.style(.backgroundColor, color)
+    }
+
     /// Applies a gradient background
     /// - Parameter gradient: The gradient to apply
     /// - Returns: The modified HTML element

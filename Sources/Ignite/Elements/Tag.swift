@@ -7,7 +7,7 @@
 
 /// A struct able to become any Element tag. Useful for when Ignite has not
 /// implemented a specific tag you need.
-public struct Tag: HTML, HeadElement {
+public struct Tag: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -34,16 +34,6 @@ public struct Tag: HTML, HeadElement {
     ) {
         self.name = name
         self.content = content()
-    }
-
-    /// Creates a new `Tag` instance from the name provided, along with one
-    /// page element to place inside.
-    /// - Parameters:
-    ///   - name: The name of the HTML tag you want to create.
-    ///   - singleElement: The content to place inside the tag.
-    public init(_ name: String, content singleElement: any MarkupElement) {
-        self.name = name
-        self.content = singleElement
     }
 
     /// Creates a new `Tag` instance from the name provided, with no content

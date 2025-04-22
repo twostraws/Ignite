@@ -10,6 +10,24 @@ public typealias Keyframe = Animation.Frame
 public extension Animation {
     /// A single keyframe in an animation sequence.
     struct Frame: Hashable, Sendable {
+        struct InlineStyle: CustomStringConvertible, Hashable, Equatable, Sendable {
+            /// The property, e.g. `\.color`.
+            var property: String
+
+            /// The declaration's value, e.g. "blue".
+            var value: String
+
+            init(_ property: AnimatableProperty, value: String) {
+                self.property = property.rawValue
+                self.value = value
+            }
+
+            /// The full declaration, e.g. "color: blue""
+            public var description: String {
+                property + ": " + value
+            }
+        }
+
         /// The position in the animation timeline, between `0%` and `100%`
         let position: Percentage
 
@@ -36,7 +54,7 @@ public extension Keyframe {
     /// - Returns: A new keyframe with the color animation applied
     func color(_ area: ColorArea = .foreground, to value: Color) -> Keyframe {
         var copy = self
-        copy.styles.append(.init(animatable: area.property, value: value.description))
+        copy.styles.append(.init(area.property, value: value.description))
         return copy
     }
 
@@ -45,7 +63,7 @@ public extension Keyframe {
     /// - Returns: A new keyframe with the scale transform applied
     func scale(_ value: Double) -> Keyframe {
         var copy = self
-        copy.styles.append(.init(animatable: .transform, value: "scale(\(value))"))
+        copy.styles.append(.init(.transform, value: "scale(\(value))"))
         return copy
     }
 
@@ -68,7 +86,7 @@ public extension Keyframe {
     /// - Returns: A new keyframe with the custom animation applied
     func custom(_ property: AnimatableProperty, value: String) -> Keyframe {
         var copy = self
-        copy.styles.append(.init(animatable: property, value: value))
+        copy.styles.append(.init(property, value: value))
         return copy
     }
 }

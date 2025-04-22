@@ -30,3 +30,14 @@ public protocol Style: Hashable {
     /// - Returns: A modified HTML element with the appropriate styles applied
     func style(content: StyledHTML, environment: EnvironmentConditions) -> StyledHTML
 }
+
+extension Style {
+    /// The name of the CSS class this `Style` generates,
+    /// derived from the type name minus the "Style" suffix, if present.
+    var className: String {
+        let typeName = String(describing: type(of: style))
+        let baseName = typeName.hasSuffix("Style") ? typeName : typeName + "Style"
+        let className = baseName.kebabCased()
+        return className
+    }
+}

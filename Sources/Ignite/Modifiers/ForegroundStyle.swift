@@ -156,4 +156,11 @@ public extension StyledHTML {
     func foregroundStyle(_ color: Color) -> Self {
         self.style(.color, color.description)
     }
+
+    /// Applies a foreground color to the current element.
+    /// - Parameter color: The style to apply, specified as a `String`.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ color: String) -> Self {
+        self.style(.color, color)
+    }
 }

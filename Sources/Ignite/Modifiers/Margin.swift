@@ -154,7 +154,7 @@ public extension StyledHTML {
     ///   - length: The amount of margin to apply, specified in
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ edges: Edge, _ length: LengthUnit = .px(20)) -> Self {
+    func margin(_ edges: Edge, _ length: LengthUnit) -> Self {
         let styles = self.edgeAdjustedStyles(prefix: "margin", edges, length.stringValue)
         return self.style(styles)
     }

@@ -9,18 +9,16 @@
     _ style: any Style,
     content: any HTML
 ) -> any HTML {
-    let className = StyleManager.shared.className(for: style)
     StyleManager.shared.registerStyle(style)
-    return content.class(className)
+    return content.class(style.className)
 }
 
 @MainActor private func styleModifier(
     _ style: any Style,
     content: any InlineElement
 ) -> any InlineElement {
-    let className = StyleManager.shared.className(for: style)
     StyleManager.shared.registerStyle(style)
-    return content.class(className)
+    return content.class(style.className)
 }
 
 public extension HTML {
