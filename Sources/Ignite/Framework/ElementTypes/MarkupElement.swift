@@ -12,17 +12,9 @@ public protocol MarkupElement: Sendable {
     /// The standard set of control attributes for HTML elements.
     var attributes: CoreAttributes { get set }
 
-    /// Whether this HTML belongs to the framework.
-    var isPrimitive: Bool { get }
-
     /// Converts this element and its children into HTML markup.
     /// - Returns: A string containing the HTML markup
     func markup() -> Markup
-}
-
-public extension MarkupElement {
-    /// The default status as a primitive element.
-    var isPrimitive: Bool { false }
 }
 
 extension MarkupElement {
