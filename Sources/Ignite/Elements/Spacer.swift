@@ -63,7 +63,7 @@ public struct Spacer: HTML, NavigationItem {
             Section {}
                 .frame(width: axis == .horizontal && !isNavigationItem ? .px(20) : nil)
                 .frame(height: axis == .vertical ? .px(20) : nil)
-                .class("ms-auto")
+                .class(isNavigationItem ? "ms-auto" : nil)
                 .markup()
         } else if case let .semantic(spacingAmount) = spacingAmount {
             Section {}
