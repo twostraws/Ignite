@@ -278,6 +278,8 @@ public struct NavigationBar: HTML {
         ForEach(controls) { control in
             if let item = control as? any NavigationItemConfigurable {
                 AnyHTML(item.configuredAsNavigationItem(true))
+            } else if let spacer = control.as(Spacer.self) {
+                spacer.axis(.horizontal)
             } else {
                 control
             }
@@ -311,6 +313,8 @@ public struct NavigationBar: HTML {
                         renderTextItem(text)
                     case let item as any NavigationItemConfigurable:
                         AnyHTML(item.configuredAsNavigationItem(true))
+                    case let spacer as Spacer:
+                        spacer.axis(.horizontal)
                     default:
                         AnyHTML(item)
                     }

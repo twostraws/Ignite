@@ -64,9 +64,8 @@ public struct HStack: HTML {
             var elementAttributes = CoreAttributes()
             elementAttributes.append(classes: "mb-0")
             elementAttributes.append(classes: alignment.itemAlignmentClass)
-            if var spacer = $0.as(Spacer.self) {
-                spacer.axis = .horizontal
-                return spacer
+            if let spacer = $0.as(Spacer.self) {
+                return spacer.axis(.horizontal)
             }
             return $0.attributes(elementAttributes)
         }

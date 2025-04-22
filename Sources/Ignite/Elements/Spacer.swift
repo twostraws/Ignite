@@ -19,12 +19,8 @@ public struct Spacer: HTML, NavigationItem {
     /// The amount of space to occupy.
     var spacingAmount: SpacingType
 
-    /// Whether the spacing should be applied horizontally or vertically.
-    var axis: Axis = .vertical
-
-    /// Controls whether this dropdown needs to be created as its own element,
-    /// or whether it uses the structure provided by a parent `NavigationBar`.
-    var isNavigationItem = false
+    /// Whether the spacer is used horizontally or vertically.
+    private var axis: Axis = .vertical
 
     /// Creates a new `Spacer` that uses all available space.
     public init() {
@@ -45,12 +41,11 @@ public struct Spacer: HTML, NavigationItem {
         spacingAmount = .semantic(size)
     }
 
-    /// Configures this dropdown to be placed inside a `NavigationBar`.
-    /// - Returns: A new `Spacer` instance suitable for placement
-    /// inside a `NavigationBar`.
-    func configuredAsNavigationItem(_ isNavItem: Bool) -> Self {
+    /// Configures the axis of this spacer.
+    /// - Parameter axis: The lateral direction of the spacer.
+    /// - Returns: A new `Spacer` with the specified axis.
+    func axis(_ axis: Axis) -> Self {
         var copy = self
-        copy.isNavigationItem = isNavItem
         copy.axis = .horizontal
         return copy
     }
@@ -77,5 +72,3 @@ public struct Spacer: HTML, NavigationItem {
         }
     }
 }
-
-extension Spacer: NavigationItemConfigurable {}
