@@ -13,11 +13,13 @@ public struct Document: MarkupElement {
     public var isPrimitive: Bool { true }
 
     private let language: Language
-    private let contents: [any DocumentElement]
+    private let head: Head
+    private let body: Body
 
-    init(@DocumentElementBuilder contents: () -> [any DocumentElement]) {
+    init(head: Head, body: Body) {
         self.language = PublishingContext.shared.environment.language
-        self.contents = contents()
+        self.head = head
+        self.body = body
     }
 
     public func markup() -> Markup {
@@ -25,7 +27,8 @@ public struct Document: MarkupElement {
         attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
         var output = "<!doctype html>"
         output += "<html \(attributes)>"
-        output += contents.map { $0.markupString() }.joined()
+        output += head.markupString()
+        output += body.markupString()
         output += "</html>"
         return Markup(output)
     }
