@@ -1,12 +1,12 @@
 //
-// DocumentStyle.swift
+// MetaStyle.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
 //
 
 /// A type for adding internal CSS styles to an HTML document.
-public struct DocumentStyle: HeadElement {
+public struct MetaStyle: HeadElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -28,10 +28,9 @@ public struct DocumentStyle: HeadElement {
         return copy
     }
 
-    /// Creates a new `DocumentStyle` object using the styles and selector provided.
+    /// Creates a new `MetaStyle` object using the styles and selector provided.
     /// - Parameters:
     ///   - selector: The selector of the style's declaration block.
-    ///   - priority: The level of importance of the styles.
     ///   - style: The `Style` that holds the appropriate CSS.
     public init(_ selector: String, style: any Style) {
         self.selector = selector
