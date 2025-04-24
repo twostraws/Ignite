@@ -5,8 +5,7 @@
 // See LICENSE for license information.
 //
 
-@MainActor
-private func frameModifier(
+@MainActor private func frameModifier(
     width: LengthUnit? = nil,
     minWidth: LengthUnit? = nil,
     maxWidth: LengthUnit? = nil,
@@ -66,16 +65,14 @@ private func frameModifier(
     return content.style(dimensions)
 }
 
-@MainActor
-private func frameModifier(
+@MainActor private func frameModifier(
     width: LengthUnit? = nil,
     minWidth: LengthUnit? = nil,
     maxWidth: LengthUnit? = nil,
     height: LengthUnit? = nil,
     minHeight: LengthUnit? = nil,
-    maxHeight: LengthUnit? = nil,
-    content: any InlineElement
-) -> any InlineElement {
+    maxHeight: LengthUnit? = nil
+) -> [InlineStyle] {
     var dimensions = [InlineStyle]()
 
     if let minWidth {
@@ -105,7 +102,7 @@ private func frameModifier(
         dimensions.append(.init(.maxHeight, value: maxHeight.stringValue))
     }
 
-    return content.style(dimensions)
+    return dimensions
 }
 
 public extension HTML {
@@ -202,14 +199,14 @@ public extension InlineElement {
         minHeight: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil
     ) -> some InlineElement {
-        AnyInlineElement(frameModifier(
+        let dimensionStyles = frameModifier(
             width: width,
             minWidth: minWidth,
             maxWidth: maxWidth,
             height: height,
             minHeight: minHeight,
-            maxHeight: maxHeight,
-            content: self))
+            maxHeight: maxHeight)
+        return self.style(dimensionStyles)
     }
 
     /// Creates a specific frame for this element, either using exact pixel values or
@@ -230,13 +227,71 @@ public extension InlineElement {
         minHeight: Int? = nil,
         maxHeight: Int? = nil
     ) -> some InlineElement {
-        AnyInlineElement(frameModifier(
+        let dimensionStyles = frameModifier(
             width: width.map { .px($0) },
             minWidth: minWidth.map { .px($0) },
             maxWidth: maxWidth.map { .px($0) },
             height: height.map { .px($0) },
             minHeight: minHeight.map { .px($0) },
-            maxHeight: maxHeight.map { .px($0) },
-            content: self))
+            maxHeight: maxHeight.map { .px($0) })
+        return self.style(dimensionStyles)
+    }
+}
+
+public extension NavigationItem {
+    /// Creates a specific frame for this element, either using exact values or
+    /// using minimum/maximum ranges.
+    /// - Parameters:
+    ///   - width: An exact width for this element
+    ///   - minWidth: A minimum width for this element
+    ///   - maxWidth: A maximum width for this element
+    ///   - height: An exact height for this element
+    ///   - minHeight: A minimum height for this element
+    ///   - maxHeight: A maximum height for this element
+    /// - Returns: A modified copy of the element with frame constraints applied
+    func frame(
+        width: LengthUnit? = nil,
+        minWidth: LengthUnit? = nil,
+        maxWidth: LengthUnit? = nil,
+        height: LengthUnit? = nil,
+        minHeight: LengthUnit? = nil,
+        maxHeight: LengthUnit? = nil
+    ) -> Self {
+        let dimensionStyles = frameModifier(
+            width: width,
+            minWidth: minWidth,
+            maxWidth: maxWidth,
+            height: height,
+            minHeight: minHeight,
+            maxHeight: maxHeight)
+        return self.style(dimensionStyles)
+    }
+
+    /// Creates a specific frame for this element, either using exact pixel values or
+    /// using minimum/maximum pixel ranges.
+    /// - Parameters:
+    ///   - width: An exact width for this element
+    ///   - minWidth: A minimum width for this element
+    ///   - maxWidth: A maximum width for this element
+    ///   - height: An exact height for this element
+    ///   - minHeight: A minimum height for this element
+    ///   - maxHeight: A maximum height for this element
+    /// - Returns: A modified copy of the element with frame constraints applied
+    func frame(
+        width: Int? = nil,
+        minWidth: Int? = nil,
+        maxWidth: Int? = nil,
+        height: Int? = nil,
+        minHeight: Int? = nil,
+        maxHeight: Int? = nil
+    ) -> Self {
+        let dimensionStyles = frameModifier(
+            width: width.map { .px($0) },
+            minWidth: minWidth.map { .px($0) },
+            maxWidth: maxWidth.map { .px($0) },
+            height: height.map { .px($0) },
+            minHeight: minHeight.map { .px($0) },
+            maxHeight: maxHeight.map { .px($0) })
+        return self.style(dimensionStyles)
     }
 }
