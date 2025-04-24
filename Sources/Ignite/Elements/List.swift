@@ -152,7 +152,9 @@ public struct List: HTML {
             // be allowed to handle that itself.
             if var listableItem = item as? ListableElement ??
             (item as? AnyHTML)?.body as? ListableElement {
-                listableItem.attributes.append(classes: "list-group-item")
+                if listStyle != .plain {
+                    listableItem.attributes.append(classes: "list-group-item")
+                }
                 output += listableItem.listMarkup().string
             } else {
                 let styleClass = listStyle == .plain ? "" : " class=\"list-group-item\""

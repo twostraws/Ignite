@@ -65,7 +65,6 @@ public extension FormItem where Self: HTML {
     ///   - value: The value of the custom attribute
     /// - Returns: The modified `HTML` element
     func customAttribute(name: String, value: String) -> Self {
-        guard !value.isEmpty else { return self }
         var copy = self
         copy.attributes.append(customAttributes: .init(name: name, value: value))
         return copy
@@ -79,7 +78,6 @@ public extension FormItem where Self: InlineElement {
     ///   - value: The value of the custom attribute
     /// - Returns: The modified `HTML` element
     func customAttribute(name: String, value: String) -> Self {
-        guard !value.isEmpty else { return self }
         var copy = self
         copy.attributes.append(customAttributes: .init(name: name, value: value))
         return copy

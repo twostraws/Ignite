@@ -26,7 +26,7 @@ public struct Document: MarkupElement {
         var attributes = attributes
         attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
         var output = "<!doctype html>"
-        output += "<html \(attributes)>"
+        output += "<html\(attributes)>"
         output += head.markupString()
         output += body.markupString()
         output += "</html>"
