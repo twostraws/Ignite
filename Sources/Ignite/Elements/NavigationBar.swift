@@ -250,8 +250,8 @@ public struct NavigationBar: HTML {
                                 renderToggleButton()
                             }
                         }
-                        .class("flex-fill flex-md-grow-0 flex-md-shrink-0")
-                        .class("d-flex", "gap-2", "align-items-center")
+                        .class("flex-fill", "flex-md-grow-0", "flex-md-shrink-0")
+                        .class("d-flex", "gap-2", "align-items-center", "justify-content-end")
                         .class(visibleControlCount > 1 ? nil : "gap-md-0")
                         .class("ms-auto")
                         .class("order-md-last")
