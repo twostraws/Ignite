@@ -107,7 +107,7 @@ function updateTitle(wrapperLink, doc) {
 function updateDescription(wrapperLink, doc, query) {
     const description = wrapperLink.querySelector('.result-description');
     if (description) {
-        const text = (doc.description || '') + '...';
+        const text = doc.description || '';
 
         // Create a case-insensitive regular expression from the search query
         const searchTerms = query.trim().split(/\s+/);
@@ -150,7 +150,11 @@ function setupTagsContainer(tags, tagSpans) {
 
 function updateTags(wrapperLink, doc) {
     const tags = wrapperLink.querySelector('.result-tags');
-    if (!tags || !doc.tags?.trim()) {
+    if (!tags) {
+        return;
+    }
+    
+    if (!doc.tags?.trim()) {
         tags.style.display = 'none';
         return;
     }
