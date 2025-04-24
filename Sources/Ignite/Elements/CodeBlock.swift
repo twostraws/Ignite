@@ -110,7 +110,7 @@ public struct CodeBlock: HTML {
             break
         }
 
-        return self
+        return copy
     }
 
     /// Renders this element using publishing context passed in.
