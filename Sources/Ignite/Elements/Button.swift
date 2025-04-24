@@ -50,6 +50,9 @@ public struct Button: InlineElement, FormItem {
     /// Elements to render inside this button.
     var label: any InlineElement
 
+    /// The icon element to display before the title.
+    var systemImage: String?
+
     /// Whether the button is disabled and cannot be interacted with.
     private var isDisabled = false
 
@@ -74,21 +77,27 @@ public struct Button: InlineElement, FormItem {
 
     /// Creates a button with a label.
     /// - Parameters:
-    ///   - label: The label text to display on this button.
+    ///   - title: The label text to display on this button.
+    ///   - systemImage: An image name chosen from https://icons.getbootstrap.com.
     ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
     /// - actions: An element builder that returns an array of actions to run when this button is pressed.
-    public init(_ label: String, @ActionBuilder actions: () -> [Action]) {
-        self.label = label
+    public init(
+        _ title: String,
+        systemImage: String? = nil,
+        @ActionBuilder actions: () -> [Action] = { [] }
+    ) {
+        self.label = title
+        self.systemImage = systemImage
         addEvent(name: "onclick", actions: actions())
     }
 
     /// Creates a button with a label and actions to run when it's pressed.
     /// - Parameters:
-    ///   - label: The label text to display on this button.
     ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
+    ///   - label: The label text to display on this button.
     public init(
-        @InlineElementBuilder _ label: @escaping () -> some InlineElement,
-        @ActionBuilder actions: () -> [Action]
+        @ActionBuilder actions: () -> [Action],
+        @InlineElementBuilder label: @escaping () -> some InlineElement
     ) {
         self.label = label()
         addEvent(name: "onclick", actions: actions())
@@ -180,7 +189,11 @@ public struct Button: InlineElement, FormItem {
             buttonAttributes.append(customAttributes: .disabled)
         }
 
-        let labelHTML = label.markupString()
+        var labelHTML = ""
+        if let systemImage, !systemImage.isEmpty {
+            labelHTML = "<i class=\"bi bi-\(systemImage)\"></i> "
+        }
+        labelHTML += label.markupString()
         return Markup("<button type=\"\(type.htmlName)\"\(buttonAttributes)>\(labelHTML)</button>")
     }
 }
