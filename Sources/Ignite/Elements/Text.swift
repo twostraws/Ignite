@@ -34,13 +34,27 @@ public struct Text: HTML, DropdownItem {
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
     /// - Parameter content: An array of the content to place into the text.
-    public init(@InlineElementBuilder content: @escaping () -> any InlineElement) {
+    public init(@InlineElementBuilder content: () -> any InlineElement) {
         self.content = content()
     }
 
     /// Creates a new `Text` instance from one inline element.
     public init(_ string: any InlineElement) {
         self.content = string
+    }
+
+    /// Sets the maximum number of lines for the text to display.
+    /// - Parameter number: The line limit. If `nil`, no line limit applies.
+    /// - Returns: A new `Text` instance with the line limit applied.
+    public func lineLimit(_ number: Int?) -> Self {
+        var copy = self
+        if let number {
+            copy.attributes.append(classes: "ig-line-clamp")
+            copy.attributes.append(styles: .init("--ig-max-line-length", value: number.formatted()))
+        } else {
+            copy.attributes.append(classes: "ig-line-clamp-none")
+        }
+        return copy
     }
 
     /// Creates a new `Text` instance using "lorem ipsum" placeholder text.

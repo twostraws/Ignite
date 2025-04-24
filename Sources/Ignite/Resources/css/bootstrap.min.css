@@ -269,3 +269,17 @@ div.alert p:last-child {
 .ig-text-xxxSmall {
     font-size: 0.6rem;
 }
+
+.ig-line-clamp {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--ig-max-line-length, 1);
+}
+
+.ig-line-clamp-none {
+    overflow: visible;
+    display: block;
+    -webkit-box-orient: horizontal;
+    -webkit-line-clamp: unset;
+}
