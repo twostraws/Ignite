@@ -6,29 +6,19 @@
 //
 
 /// The visual style to apply to a list.
-///
-/// Use list styles to control the appearance and layout of lists in your interface.
-/// Each style provides a distinct visual treatment that helps communicate the list's
-/// purpose and hierarchy.
-///
-/// - Note: The `groupFlush` style does not support numbered markers.
-public enum ListStyle: Sendable {
-    /// A simple list with minimal styling.
-    ///
-    /// Use this style when you want a basic list without additional visual treatments.
+public enum ListStyle: Sendable, CaseIterable {
+    /// A basic list style with minimal visual treatment, ideal for simple content presentation.
     case plain
 
-    /// A list with distinct grouping and subtle borders.
-    ///
-    /// This style adds visual separation between list items and a border around the
-    /// entire list, making it ideal for related content that benefits from clear grouping.
+    /// A list style with distinct grouping, subtle borders, and rounded corners, \
+    /// perfect for related content that needs visual separation.
     case group
 
-    /// A list with edge-to-edge items and no outer borders.
-    ///
-    /// Similar to `group` but removes outer borders and rounded corners, making it
-    /// ideal for lists that need to sit flush within a parent container like a card.
-    ///
-    /// - Important: This style does not support numbered markers.
+    /// A horizontally arranged list with grouping and borders, designed for \
+    /// content that flows left to right.
+    case horizontalGroup
+
+    /// A list style that sits flush within its container with no outer borders, \
+    /// ideal for integration within cards or other containers (note: does not support numbered markers).
     case flushGroup
 }

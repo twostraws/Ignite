@@ -36,10 +36,10 @@ public struct List: HTML {
     private var listStyle: ListStyle = .plain
 
     /// The current style for the list item markers. Defaults to `.unordered`.
-    private var markerStyle = ListMarkerStyle.unordered(.automatic)
+    private var markerStyle: ListMarkerStyle = .unordered(.automatic)
 
     /// The items to show in this list. This may contain any page elements,
-    /// but if you need specific styling you might want to use ListItem objects.
+    /// but if you need specific styling you might want to use `ListItem` objects.
     private var items: HTMLCollection
 
     /// Returns the correct HTML name for this list.
@@ -91,8 +91,14 @@ public struct List: HTML {
 
         if listStyle != .plain {
             listAttributes.append(classes: "list-group")
-        } else if listStyle == .flushGroup {
+        }
+
+        if listStyle == .flushGroup {
             listAttributes.append(classes: "list-group-flush")
+        }
+
+        if listStyle == .horizontalGroup {
+            listAttributes.append(classes: "list-group-horizontal")
         }
 
         var listMarkerType = ""
@@ -144,14 +150,12 @@ public struct List: HTML {
             var item = originalItem
             // Any element that renders its own <li> (e.g. ForEach) should
             // be allowed to handle that itself.
-            if let listableItem = item as? ListableElement {
-                if listStyle != .plain {
-                    item.attributes.append(classes: "list-group-item")
-                }
-
+            if var listableItem = item as? ListableElement ??
+            (item as? AnyHTML)?.body as? ListableElement {
+                listableItem.attributes.append(classes: "list-group-item")
                 output += listableItem.listMarkup().string
             } else {
-                let styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
+                let styleClass = listStyle == .plain ? "" : " class=\"list-group-item\""
                 item.attributes.append(classes: "m-0")
                 output += "<li\(styleClass)>\(item.markupString())</li>"
             }

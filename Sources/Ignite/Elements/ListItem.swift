@@ -21,6 +21,16 @@ public struct ListItem: HTML, ListableElement {
     /// The content of this list item.
     private var content: any BodyElement
 
+    /// Sets the role for this list item, which controls its appearance.
+    /// - Parameter role: The new role to apply.
+    /// - Returns: A new `ListItem` instance with the updated role.
+    /// - Note: The role modifier only has an effect when the parent list's style is `.group`.
+    public func role(_ role: Role) -> Self {
+        var copy = self
+        copy.attributes.append(classes: "list-group-item-\(role.rawValue)")
+        return copy
+    }
+
     /// Creates a new `ListItem` object using an inline element builder that
     /// returns an array of `HTML` objects to display in the list.
     /// - Parameter content: The content you want to display in your list.
