@@ -6,13 +6,13 @@
 //
 
 @MainActor private func gridColumnWidthModifier(
-    _ width: Int,
+    _ width: ColumnWidth,
     content: any BodyElement
 ) -> AnyHTML {
     if content.isPrimitive {
-        AnyHTML(content.class(ColumnWidth.count(width).className))
+        AnyHTML(content.class(width.className))
     } else {
-        AnyHTML(Section(content).class(ColumnWidth.count(width).className))
+        AnyHTML(Section(content).class(width.className))
     }
 }
 
@@ -21,7 +21,7 @@ public extension HTML {
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A new element with the adjusted column width.
     func width(_ width: Int) -> some HTML {
-        gridColumnWidthModifier(width, content: self)
+        gridColumnWidthModifier(.count(width), content: self)
     }
 }
 
@@ -30,7 +30,7 @@ public extension InlineElement {
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A new element with the adjusted column width.
     func width(_ width: Int) -> some HTML {
-        gridColumnWidthModifier(width, content: self)
+        gridColumnWidthModifier(.count(width), content: self)
     }
 }
 
