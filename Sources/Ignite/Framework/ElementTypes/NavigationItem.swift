@@ -21,7 +21,7 @@ extension NavigationItemConfigurable {
     /// inside a `NavigationBar`.
     func configuredAsNavigationItem(_ isNavItem: Bool = true) -> Self {
         var copy = self
-        copy.isNavigationItem = true
+        copy.isNavigationItem = isNavItem
         return copy
     }
 }
@@ -81,6 +81,16 @@ extension NavigationItem where Self: BodyElement {
         guard !className.isEmpty else { return self }
         var copy = self
         copy.attributes.append(classes: className)
+        return copy
+    }
+
+    /// Adds inline styles to the element.
+    /// - Parameter styles: An array of `InlineStyle` objects
+    /// - Returns: The modified `HTML` element
+    func style(_ styles: [InlineStyle]) -> Self {
+        guard styles.isEmpty == false else { return self }
+        var copy = self
+        copy.attributes.append(styles: styles)
         return copy
     }
 }
