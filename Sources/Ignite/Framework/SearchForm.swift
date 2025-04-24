@@ -45,7 +45,7 @@ public struct SearchForm: HTML, NavigationItem {
     var isNavigationItem = false
 
     /// The text displayed on the search button.
-    private var searchButtonLabel: String? = "Search"
+    private var searchButtonLabel = "Search"
 
     /// The appearance of the search-button label.
     private var searchButtonStyle: SearchButtonStyle = .iconOnly
@@ -164,14 +164,10 @@ public struct SearchForm: HTML, NavigationItem {
             .style(.position, "relative")
 
             if !isNavigationItem {
-                Button {
-                    if searchButtonStyle != .titleOnly {
-                        Span("").class("bi bi-search")
-                    }
-                    if searchButtonStyle != .iconOnly, let searchButtonLabel {
-                        " " + searchButtonLabel
-                    }
-                } actions: {
+                Button(
+                    searchButtonStyle != .iconOnly ? searchButtonLabel : "",
+                    systemImage: searchButtonStyle != .titleOnly ? "search" : nil
+                ) {
                     SearchAction()
                 }
                 .type(.submit)
@@ -194,17 +190,24 @@ public struct SearchForm: HTML, NavigationItem {
 
     private func renderTemplate() -> Markup {
         Tag("template") {
-            AnyHTML(resultsPageHeader)
-                .class("search-results-header")
+            if resultsPageHeader.isEmpty == false {
+                AnyHTML(resultsPageHeader)
+                    .class("search-results-header")
+            }
+
             SearchForm { _ in EmptyHTML() }
                 .searchResultsTemplateHidden()
                 .class("results-search-form")
                 .margin(.bottom)
+
             Section(resultView)
                 .class("search-results-item")
                 .margin(.bottom, .medium)
-            AnyHTML(noResultsView)
-                .class("no-results-view")
+
+            if noResultsView.isEmpty == false {
+                AnyHTML(noResultsView)
+                    .class("no-results-view")
+            }
         }
         .id("search-results-\(searchID)")
         .markup()
