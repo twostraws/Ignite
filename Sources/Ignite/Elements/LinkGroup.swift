@@ -105,7 +105,7 @@ public struct LinkGroup: HTML {
         default: displayText
         }
 
-        var linkAttributes = attributes.appending(classes: "link-plain")
+        var linkAttributes = attributes.appending(classes: "link-plain", "d-inline-block")
         linkAttributes.append(classes: "protected-link")
         linkAttributes.append(dataAttributes: .init(name: "encoded-url", value: encodedUrl))
         linkAttributes.append(customAttributes: .init(name: "href", value: "#"))
@@ -116,7 +116,7 @@ public struct LinkGroup: HTML {
     /// Renders a standard link with the provided URL and content.
     /// - Returns: An HTML anchor tag with the appropriate href and content.
     private func renderStandardLink() -> Markup {
-        var linkAttributes = attributes.appending(classes: "link-plain")
+        var linkAttributes = attributes.appending(classes: "link-plain", "d-inline-block")
 
         guard let url = URL(string: url) else {
             publishingContext.addWarning("One of your links uses an invalid URL.")
