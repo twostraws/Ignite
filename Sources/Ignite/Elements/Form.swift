@@ -153,7 +153,7 @@ public struct Form: HTML, NavigationItem {
         let styledTextField = textField.size(controlSize).labelStyle(labelStyle)
         switch labelStyle {
         case .leading: styledTextField
-        default: Section(styledTextField).class(getColumnClass(for: textField, totalColumns: columnCount))
+        default: Section(styledTextField).class(getColumnClass(for: textField))
         }
     }
 
@@ -198,10 +198,14 @@ public struct Form: HTML, NavigationItem {
     }
 
     private func renderButton(_ button: Button) -> some HTML {
-        Section(button.class(controlSize.buttonClass))
-            .class(getColumnClass(for: button, totalColumns: columnCount))
-            .class("d-flex")
-            .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
+        Section {
+            button
+                .class(controlSize.buttonClass)
+                .class(labelStyle == .leading ? nil : "w-100")
+        }
+        .class(getColumnClass(for: button))
+        .class("d-flex")
+        .class(labelStyle == .floating ? "align-items-stretch" : "align-items-end")
     }
 
     private func renderText(_ text: Span) -> some HTML {
@@ -215,7 +219,7 @@ public struct Form: HTML, NavigationItem {
     private func renderItem(_ item: any BodyElement) -> some HTML {
         Section(item)
             .class("d-flex", "align-items-center")
-            .class(getColumnClass(for: item, totalColumns: columnCount))
+            .class(getColumnClass(for: item))
     }
 
     /// Calculates the appropriate Bootstrap column class for an HTML element.
@@ -223,13 +227,10 @@ public struct Form: HTML, NavigationItem {
     ///   - item: The HTML element to calculate the column class for.
     ///   - totalColumns: The total number of columns in the form's grid.
     /// - Returns: A string containing the appropriate Bootstrap column class.
-    private func getColumnClass(
-        for item: any BodyElement,
-        totalColumns: Int
-    ) -> String {
+    private func getColumnClass(for item: any BodyElement) -> String {
         if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }),
            let width = Int(widthClass.dropFirst("col-md-".count)) {
-            let bootstrapColumns = 12 * width / totalColumns
+            let bootstrapColumns = 12 * width / columnCount
             return "col-md-\(bootstrapColumns)"
         } else if item.attributes.classes.contains("col") {
             return "col"
