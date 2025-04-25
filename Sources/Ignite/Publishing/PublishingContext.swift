@@ -20,7 +20,7 @@ final class PublishingContext {
     static var shared: PublishingContext {
         guard let sharedContext else {
             fatalError("""
-            "PublishingContext.default accessed before being initialized. \
+            PublishingContext.shared accessed before being initialized. \
             Call PublishingContext.initialize() first.
             """)
         }
@@ -103,8 +103,6 @@ final class PublishingContext {
         fontsDirectory = sourceDirectory.appending(path: "Fonts")
         contentDirectory = sourceDirectory.appending(path: "Content")
         includesDirectory = sourceDirectory.appending(path: "Includes")
-
-        try parseContent()
     }
 
     /// Creates and sets the shared instance of `PublishingContext`
@@ -176,7 +174,6 @@ final class PublishingContext {
         try ContentFinder.shared.find(root: contentDirectory) { deploy in
             let article = try Article(
                 from: deploy.url,
-                in: self,
                 resourceValues: deploy.resourceValues,
                 deployPath: deploy.path
             )

@@ -123,15 +123,12 @@ public struct Article {
     /// Creates a new `Content` instance by parsing a filesystem URL.
     /// - Parameters:
     ///   - url: The filesystem URL that contains Markdown to parse.
-    ///   - baseURL: The base URL for this domain. Used to calculate the
-    ///   relative path to this content.
     ///   - resourceValues: Resource values that provide the creation and
     ///   last modification date for this content.
     ///   - deployPath: optional String used as site url path for the content.
     ///   If nil (default), use `metadata["path"]` or path to content root.
     init(
         from url: URL,
-        in context: PublishingContext,
         resourceValues: URLResourceValues,
         deployPath: String
     ) throws {
@@ -145,9 +142,9 @@ public struct Article {
 
         let processed = processMetadata(for: markdown)
 
-        // Use whatever Markdown renderer was configured
-        // for the site we're publishing.
-        let parser = try context.site.articleRenderer.init(markdown: processed, removeTitleFromBody: true)
+        let site = PublishingContext.shared.site
+        // Use whatever Markdown renderer was configured for the site we're publishing.
+        let parser = try site.articleRenderer.init(markdown: processed, removeTitleFromBody: true)
 
         self.text = parser.body
         self.description = parser.description.strippingTags()
