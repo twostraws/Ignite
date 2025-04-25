@@ -261,7 +261,7 @@ public extension Site {
     ///   artifacts for the web page. Please modify as needed.
     ///   The default is "Build".
     mutating func publish(from file: StaticString = #filePath, buildDirectoryPath: String = "Build") async throws {
-        let context = try await PublishingContext.initialize(
+        let context = try PublishingContext.initialize(
             for: self,
             from: file,
             buildDirectoryPath: buildDirectoryPath)
