@@ -155,7 +155,7 @@ public struct Article {
         self.path = metadata["path"] as? String ?? deployPath
 
         // Save the first subfolder in the path as the article's type
-        let pathParts = path.split(separator: "/") // removes empty
+        let pathParts = path.split(separator: "/").map { String($0) } // removes empty
         if pathParts.count > 1 { // no type if not in subdirectory
             metadata["type"] = pathParts[0]
         }
