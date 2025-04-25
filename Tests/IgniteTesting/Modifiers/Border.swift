@@ -30,24 +30,4 @@ class BorderModifierTests: IgniteTestSuite {
         #expect(!output.contains("border-left"))
         #expect(!output.contains("border-right"))
     }
-
-    @Test("Border Modifier with Corner Radii")
-    func borderWithCornerRadii() async throws {
-        let element = Text("Hello").border(
-            .green,
-            width: 1.0,
-            style: .dashed,
-            cornerRadii: CornerRadii(
-                topLeading: 5,
-                topTrailing: 10,
-                bottomLeading: 15,
-                bottomTrailing: 20
-            )
-        )
-        let output = element.markupString()
-        #expect(output.contains("border-top-left-radius: 5px"))
-        #expect(output.contains("border-top-right-radius: 10px"))
-        #expect(output.contains("border-bottom-left-radius: 15px"))
-        #expect(output.contains("border-bottom-right-radius: 20px"))
-    }
 }

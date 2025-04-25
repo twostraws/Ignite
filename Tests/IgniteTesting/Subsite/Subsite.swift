@@ -90,6 +90,6 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         }
         let output = element.markupString()
 
-        #expect(output == "<a href=\"\(page.path)\" class=\"link-plain\">MORE <p>CONTENT</p></a>")
+        #expect(output == "<a href=\"\(page.path)\" class=\"link-plain d-inline-block\">MORE <p>CONTENT</p></a>")
     }
 }

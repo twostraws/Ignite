@@ -14,7 +14,7 @@ import Testing
 @Suite("Alert Tests")
 @MainActor
 class AlertTests: IgniteTestSuite {
-    @Test("All Alert roles are correctly set", arguments: zip(await Role.badgeRoles, [
+    @Test("All Alert roles are correctly set", arguments: zip(Role.standardRoles, [
         "alert-primary",
         "alert-secondary",
         "alert-success",

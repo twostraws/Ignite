@@ -51,7 +51,7 @@ import Testing
 
         let expectedPath = PublishingContext.shared.path(for: URL(string: page.path)!)
 
-        #expect(output == "<a href=\"\(expectedPath)\" class=\"link-plain\">MORE <p>CONTENT</p></a>")
+        #expect(output == "<a href=\"\(expectedPath)\" class=\"link-plain d-inline-block\">MORE <p>CONTENT</p></a>")
     }
 
     @Test("Link Warning Role", arguments: zip(await pages, await Self.sites))

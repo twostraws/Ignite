@@ -31,7 +31,7 @@ class SubscribeFormTests: IgniteTestSuite {
         </div>\
         </div>\
         <div class="col-auto d-flex align-items-stretch">\
-        <button type="submit" class="col-auto btn btn-primary">Subscribe</button>\
+        <button type="submit" class="col-auto w-100 btn btn-primary">Subscribe</button>\
         </div>\
         <fieldset style="position: absolute; left: -5000px;" aria-hidden="true">\
         <div class="form-floating">\

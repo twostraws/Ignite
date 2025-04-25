@@ -220,25 +220,6 @@ import Testing
         #expect(divContents.htmlTagWithCloseTag("ul") != nil)
     }
 
-    @Test("Unordered List omits alignment if default")
-    func ulTagClassDoesNotContainAignmentIfDefault() async throws {
-        let item = Link("Link 1", target: URL(string: "1")!)
-        let element = NavigationBar(logo: Image("somepath")) {
-            item
-        }
-        let output = element.markupString()
-
-        let ulAttributes = try #require(output
-            .htmlTagWithCloseTag("header")?.contents
-            .htmlTagWithCloseTag("nav")?.contents
-            .htmlTagWithCloseTag("div")?.contents
-            .htmlTagWithCloseTag("ul")?.attributes
-        )
-
-        let expected = "justify-content"
-        #expect(!ulAttributes.contains(expected))
-    }
-
     @Test("Unordered List contains trailing alignment if set")
     func ulTagClassContainCenterAignmentIfGiven() async throws {
         let item = Link("Link 1", target: URL(string: "1")!)

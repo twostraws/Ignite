@@ -24,10 +24,8 @@ struct HiddenTests {
 
     @Test("MediaQuery based hidden Modifier for Text")
     func hiddenMediaQueryForText() async throws {
-        let query = OrientationQuery.landscape
-        let className = CSSManager.shared.registerStyles([query], styles: [.init(.display, value: "none")])
-
-        let element = Text("Hello world!").hidden(query)
+        let className = CSSManager.shared.registerStyles(.init(small: true))
+        let element = Text("Hello world!").hidden(.responsive(small: true))
         let output = element.markupString()
 
         #expect(output == "<p class=\"\(className)\">Hello world!</p>")

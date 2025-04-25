@@ -29,7 +29,7 @@ class TagTests: IgniteTestSuite {
     func tagWithSingleElement(tagName: String) async throws {
         // Given
         let htmlElement = Span("Test Span")
-        let element = Tag(tagName, content: htmlElement)
+        let element = Tag(tagName) { htmlElement }
 
         // When
         let output = element.markupString()

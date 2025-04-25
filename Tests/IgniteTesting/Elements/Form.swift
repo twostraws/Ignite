@@ -33,7 +33,7 @@ class FormTests: IgniteTestSuite {
         </div>\
         </div>\
         <div class="col-auto d-flex align-items-stretch">\
-        <button type="submit" class="btn">Submit</button>\
+        <button type="submit" class="w-100 btn">Submit</button>\
         </div>\
         </form>
         """)
@@ -76,7 +76,7 @@ class FormTests: IgniteTestSuite {
             </div>\
             </div>\
             <div class="col-auto d-flex align-items-stretch">\
-            <button type="submit" class="btn">Submit</button>\
+            <button type="submit" class="w-100 btn">Submit</button>\
             </div>\
             </form>
             """
@@ -90,7 +90,7 @@ class FormTests: IgniteTestSuite {
             </div>\
             </div>\
             <div class="col-auto d-flex align-items-end">\
-            <button type="submit" class="btn">Submit</button>\
+            <button type="submit" class="w-100 btn">Submit</button>\
             </div>\
             </form>
             """
@@ -101,7 +101,7 @@ class FormTests: IgniteTestSuite {
             <input id="field" type="text" placeholder="MyPlaceholder" class="form-control" />\
             </div>\
             <div class="col-auto d-flex align-items-end">\
-            <button type="submit" class="btn">Submit</button>\
+            <button type="submit" class="w-100 btn">Submit</button>\
             </div>\
             </form>
             """
@@ -133,7 +133,7 @@ class FormTests: IgniteTestSuite {
         </div>\
         <div class="col-auto d-flex align-items-stretch">\
         <button type="submit" \
-        class="\(controlSize.buttonClass.map { $0 + " " } ?? "")btn">Submit</button>\
+        class="\(controlSize.buttonClass.map { $0 + " " } ?? "")w-100 btn">Submit</button>\
         </div>\
         </form>
         """)

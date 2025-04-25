@@ -31,7 +31,7 @@ struct FontModifierTests {
         let output = element.markupString()
 
         #expect(output == """
-        <p><span style="font-weight: 400; font-family: Arial; font-size: 16px">Sample text</span></p>
+        <p><span style="font-weight: 400; font-family: "Arial"; font-size: 16px">Sample text</span></p>
         """)
     }
 
@@ -45,7 +45,7 @@ struct FontModifierTests {
         let output = element.markupString()
 
         #expect(output == """
-        <p><span style="font-weight: 700; font-family: Arial; font-size: 16px">Sample text</span></p>
+        <p><span style="font-weight: 700; font-family: "Arial"; font-size: 16px">Sample text</span></p>
         """)
     }
 
@@ -59,7 +59,7 @@ struct FontModifierTests {
         let output = element.markupString()
 
         #expect(output == """
-        <p><span style="font-weight: 400; font-family: Arial; font-size: 1.5em">Sample text</span></p>
+        <p><span style="font-weight: 400; font-family: "Arial"; font-size: 1.5em">Sample text</span></p>
         """)
     }
 
@@ -73,7 +73,7 @@ struct FontModifierTests {
         let output = element.markupString()
 
         #expect(output == """
-        <p><span style="font-weight: 400; font-family: Times New Roman; font-size: 16px">Sample text</span></p>
+        <p><span style="font-weight: 400; font-family: "Times New Roman"; font-size: 16px">Sample text</span></p>
         """)
     }
 
