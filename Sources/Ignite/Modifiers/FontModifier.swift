@@ -12,7 +12,7 @@ private func fontModifier(_ font: Font, content: any HTML) -> any HTML {
         styles.append(.init(.fontWeight, value: font.weight.rawValue.formatted()))
 
         if let name = font.name, !name.isEmpty {
-            styles.append(.init(.fontFamily, value: "\"\(name)\""))
+            styles.append(.init(.fontFamily, value: name))
         }
 
         if let size = font.size {
