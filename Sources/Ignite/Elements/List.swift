@@ -86,19 +86,12 @@ public struct List: HTML {
         return copy
     }
 
+    /// Combines list and marker styles into a single `CoreAttributes` object for rendering.
     private func getAttributes() -> CoreAttributes {
         var listAttributes = attributes
 
-        if listStyle != .plain {
-            listAttributes.append(classes: "list-group")
-        }
-
-        if listStyle == .flushGroup {
-            listAttributes.append(classes: "list-group-flush")
-        }
-
-        if listStyle == .horizontalGroup {
-            listAttributes.append(classes: "list-group-horizontal")
+        if let styleClasses = listStyle.classes, !styleClasses.isEmpty {
+            listAttributes.append(classes: styleClasses)
         }
 
         var listMarkerType = ""

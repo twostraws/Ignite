@@ -21,4 +21,14 @@ public enum ListStyle: Sendable, CaseIterable {
     /// A list style that sits flush within its container with no outer borders, \
     /// ideal for integration within cards or other containers (note: does not support numbered markers).
     case flushGroup
+
+    /// The Bootstrap CSS classes needed to implement the list's visual style.
+    var classes: [String]? {
+        switch self {
+        case .plain: nil
+        case .group: ["list-group"]
+        case .horizontalGroup: ["list-group", "list-group-horizontal"]
+        case .flushGroup: ["list-group", "list-group-flush"]
+        }
+    }
 }

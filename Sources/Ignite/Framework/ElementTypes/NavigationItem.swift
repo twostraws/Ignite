@@ -60,7 +60,6 @@ extension NavigationItem where Self: InlineElement {
     }
 }
 
-
 extension NavigationItem where Self: HTML {
     /// Adds a CSS class to the HTML element
     /// - Parameter className: The CSS class name to add

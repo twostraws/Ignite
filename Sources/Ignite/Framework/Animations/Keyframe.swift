@@ -10,24 +10,6 @@ public typealias Keyframe = Animation.Frame
 public extension Animation {
     /// A single keyframe in an animation sequence.
     struct Frame: Hashable, Sendable {
-        struct InlineStyle: CustomStringConvertible, Hashable, Equatable, Sendable {
-            /// The property, e.g. `\.color`.
-            var property: String
-
-            /// The declaration's value, e.g. "blue".
-            var value: String
-
-            init(_ property: AnimatableProperty, value: String) {
-                self.property = property.rawValue
-                self.value = value
-            }
-
-            /// The full declaration, e.g. "color: blue""
-            public var description: String {
-                property + ": " + value
-            }
-        }
-
         /// The position in the animation timeline, between `0%` and `100%`
         let position: Percentage
 
@@ -42,6 +24,25 @@ public extension Animation {
             )
             self.position = position
             self.styles = data
+        }
+    }
+
+    /// A simple property-value pair to store inline styles
+    struct InlineStyle: CustomStringConvertible, Hashable, Equatable, Sendable {
+        /// The property, e.g. `\.color`.
+        var property: String
+
+        /// The declaration's value, e.g. "blue".
+        var value: String
+
+        init(_ property: AnimatableProperty, value: String) {
+            self.property = property.rawValue
+            self.value = value
+        }
+
+        /// The full declaration, e.g. "color: blue""
+        public var description: String {
+            property + ": " + value
         }
     }
 }

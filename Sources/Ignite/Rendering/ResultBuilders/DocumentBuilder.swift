@@ -12,7 +12,7 @@ public struct DocumentBuilder {
     public static func buildBlock(_ head: Head, _ body: Body) -> Document {
         Document(head: head, body: body)
     }
-    
+
     public static func buildBlock(_ body: Body) -> Document {
         Document(head: Head(), body: body)
     }
