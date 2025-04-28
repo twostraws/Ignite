@@ -541,7 +541,7 @@ public struct Color: CustomStringConvertible, Equatable, Hashable, Sendable {
         let intRed = Int(red * 255)
         let intGreen = Int(green * 255)
         let intBlue = Int(blue * 255)
-        let intOpacity = Int(opacity * 255)
+        let intOpacity = Int(opacity * 100)
 
         self.init(red: intRed, green: intGreen, blue: intBlue, opacity: intOpacity%)
     }
@@ -554,7 +554,7 @@ public struct Color: CustomStringConvertible, Equatable, Hashable, Sendable {
     ///   (transparent) through to 1 (opaque).
     public init(white: Double, opacity: Double = 1) {
         let intWhite = Int(white * 255)
-        let intOpacity = Int(opacity * 255)
+        let intOpacity = Int(opacity * 100)
 
         self.init(red: intWhite, green: intWhite, blue: intWhite, opacity: intOpacity%)
     }
