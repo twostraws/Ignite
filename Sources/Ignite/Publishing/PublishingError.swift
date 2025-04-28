@@ -74,6 +74,9 @@ enum PublishingError: LocalizedError {
     /// Publishing attempted to write out a file during a build, but failed.
     case failedToWriteFile(String)
 
+    /// Publishing attempted to parse markup, but failed.
+    case failedToParseMarkup
+
     /// A Markdown file requested a named layout that does not exist.
     case missingNamedLayout(String)
 
@@ -110,6 +113,8 @@ enum PublishingError: LocalizedError {
             "Failed to locate syntax highlighter JavaScript: \(name)."
         case .failedToEmbedThemeSwitchingJS:
             "Failed to add theme-switching JavaScript to your site's <head>."
+        case .failedToParseMarkup:
+            "Failed to parse markup while rendering an element."
         case .missingDefaultTheme:
             "Ignite requires that you provide either a light or dark theme as the default."
         case .missingDefaultSyntaxHighlighterTheme:

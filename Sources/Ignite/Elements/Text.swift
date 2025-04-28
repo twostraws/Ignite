@@ -117,6 +117,10 @@ public struct Text: HTML, DropdownItem {
 
         let processedParagraphs = paragraphs.map {
             let parser = MarkdownToHTML(markdown: $0, removeTitleFromBody: true)
+            // Remove any <p></p> tags, because these will be
+            // added automatically in markup(). This allows us
+            // to retain any styling applied elsewhere, e.g.
+            // the `font()` modifier.
             return parser.body.replacing(#/<\/?p>/#, with: "")
         }
 
@@ -126,6 +130,21 @@ public struct Text: HTML, DropdownItem {
             : HTMLCollection(processedParagraphs.map(Text.init))
 
         self.isMultilineMarkdown = processedParagraphs.count > 1
+    }
+
+    /// Creates a new `Text` struct from a markup format and its parser.
+    /// - Parameters:
+    ///   - markdown: The Markdown text to parse.
+    ///   - parser: The parser to process the text.
+    public init(markup: String, parser: any ArticleRenderer.Type) {
+        do {
+            let parser = try parser.init(markdown: markup, removeTitleFromBody: true)
+            let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
+            self.content = cleanedHTML
+        } catch {
+            self.content = markup
+            publishingContext.addError(.failedToParseMarkup)
+        }
     }
 
     /// Renders this element using publishing context passed in.
