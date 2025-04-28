@@ -27,8 +27,11 @@ public struct Document: MarkupElement {
         attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
         var output = "<!doctype html>"
         output += "<html\(attributes)>"
-        output += head.markupString()
-        output += body.markupString()
+        let bodyMarkup = body.markup()
+        // Deferred head rendering to accommodate for context updates during body rendering
+        let headMarkup = head.markup()
+        output += headMarkup.string
+        output += bodyMarkup.string
         output += "</html>"
         return Markup(output)
     }
