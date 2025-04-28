@@ -150,6 +150,7 @@ public struct SearchForm: HTML, NavigationItem {
                     .id("search-input-\(searchID)")
                     .labelStyle(.hidden)
                     .size(controlSize)
+                    .customAttribute(name: "inputmode", value: "search")
                     .style(.paddingRight, "35px")
 
                 Button(Span("").class("bi bi-x-circle-fill"))
