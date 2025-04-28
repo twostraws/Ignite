@@ -9,7 +9,7 @@ import Foundation
 
 /// Controls where this link should be opened, e.g. in the current browser
 /// window or in a new window.
-public enum LinkTarget {
+public enum LinkTarget: Equatable {
     /// No location is specified, which usually means the link opens in
     /// the current browser window.
     case `default`
@@ -30,7 +30,7 @@ public enum LinkTarget {
     /// Target a specific, named location.
     case custom(String)
 
-    /// Converts enum cases to the matching Element.
+    /// Converts enum cases to the matching HTML.
     var name: String? {
         switch self {
         case .default:

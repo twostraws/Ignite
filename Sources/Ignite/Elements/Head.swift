@@ -20,7 +20,10 @@ public struct Head: MarkupElement {
     private var includeStandardHeaders = true
 
     /// The metadata elements for this page.
-    var items: [any HeadElement]
+    private var items: [any HeadElement]
+
+    /// The default target for links in this document.
+    private var defaultLinkTarget: LinkTarget?
 
     /// Creates a new `Head` instance using an element builder that returns
     /// an array of `HeadElement` objects.
@@ -38,6 +41,15 @@ public struct Head: MarkupElement {
         return copy
     }
 
+    /// Sets the default target for all links in the document.
+    /// - Parameter target: The `LinkTarget` to use as the default for all links.
+    /// - Returns: A new `Head` instance with the specified base target.
+    public func defaultLinkTarget(_ target: LinkTarget) -> Self {
+        var copy = self
+        copy.defaultLinkTarget = target
+        return copy
+    }
+
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func markup() -> Markup {
@@ -47,8 +59,12 @@ public struct Head: MarkupElement {
             items.insert(contentsOf: Head.standardHeaders(), at: 0)
         }
 
-        let contentHTML = items.map { $0.markupString() }.joined()
-        return Markup("<head\(attributes)>\(contentHTML)</head>")
+        var contentHTML = items.map { $0.markupString() }
+        if let defaultLinkTarget, let name = defaultLinkTarget.name {
+            contentHTML.insert("<base target=\"\(name)\" />", at: 0)
+        }
+
+        return Markup("<head\(attributes)>\(contentHTML.joined())</head>")
     }
 
     /// Returns the standard set of headers used for a `Page` instance.
