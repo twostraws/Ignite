@@ -51,37 +51,53 @@ extension BodyElement {
     }
 }
 
-extension Stylable {
+private func edgeAdjustedStyles(prefix: String, _ edges: Edge = .all, _ length: String) -> [InlineStyle] {
+    var styles = [InlineStyle]()
+
+    if edges.contains(.all) {
+        styles.append(.init(prefix, value: length))
+        return styles
+    }
+
+    if edges.contains(.leading) {
+        styles.append(.init("\(prefix)-left", value: length))
+    }
+
+    if edges.contains(.trailing) {
+        styles.append(.init("\(prefix)-right", value: length))
+    }
+
+    if edges.contains(.top) {
+        styles.append(.init("\(prefix)-top", value: length))
+    }
+
+    if edges.contains(.bottom) {
+        styles.append(.init("\(prefix)-bottom", value: length))
+    }
+
+    return styles
+}
+
+extension BodyElement {
     /// Adjusts the edge value (margin or padding) for a view.
     /// - Parameters:
     ///   - prefix: Specifies what we are changing, e.g. "padding"
     ///   - edges: Which edges we are changing.
     ///   - length: The value we are changing it to.
     /// - Returns: An array of InlineStyle with the edge adjustments.
-    func edgeAdjustedStyles(prefix: String, _ edges: Edge = .all, _ length: String = "20px") -> [InlineStyle] {
-        var styles = [InlineStyle]()
+    func edgeAdjustedStyles(prefix: String, _ edges: Edge = .all, _ length: String) -> [InlineStyle] {
+        Ignite.edgeAdjustedStyles(prefix: prefix, edges, length)
+    }
+}
 
-        if edges.contains(.all) {
-            styles.append(.init(prefix, value: length))
-            return styles
-        }
-
-        if edges.contains(.leading) {
-            styles.append(.init("\(prefix)-left", value: length))
-        }
-
-        if edges.contains(.trailing) {
-            styles.append(.init("\(prefix)-right", value: length))
-        }
-
-        if edges.contains(.top) {
-            styles.append(.init("\(prefix)-top", value: length))
-        }
-
-        if edges.contains(.bottom) {
-            styles.append(.init("\(prefix)-bottom", value: length))
-        }
-
-        return styles
+extension StyledHTML {
+    /// Adjusts the edge value (margin or padding) for a view.
+    /// - Parameters:
+    ///   - prefix: Specifies what we are changing, e.g. "padding"
+    ///   - edges: Which edges we are changing.
+    ///   - length: The value we are changing it to.
+    /// - Returns: An array of InlineStyle with the edge adjustments.
+    func edgeAdjustedStyles(prefix: String, _ edges: Edge = .all, _ length: String) -> [InlineStyle] {
+        Ignite.edgeAdjustedStyles(prefix: prefix, edges, length)
     }
 }

@@ -6,7 +6,7 @@
 //
 
 /// An element that can exist in the `<body>` of an HTML page.
-public protocol BodyElement: MarkupElement, Stylable {
+public protocol BodyElement: MarkupElement {
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { get }
 }

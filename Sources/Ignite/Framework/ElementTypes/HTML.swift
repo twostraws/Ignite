@@ -14,7 +14,7 @@
 /// You typically don't conform to `HTML` directly. Instead, use one of the built-in elements like
 /// `Div`, `Paragraph`, or `Link`, or create custom components by conforming to `HTMLRootElement`.
 @MainActor
-public protocol HTML: BodyElement, Stylable {
+public protocol HTML: BodyElement {
     /// The type of HTML content this element contains.
     associatedtype Body: HTML
 

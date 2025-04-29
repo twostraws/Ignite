@@ -130,8 +130,4 @@ public struct Head: MarkupElement {
         }
         return Script(code: contents)
     }
-
-    @discardableResult public func style(_ property: Property, _ value: String) -> some Stylable {
-        AnyHTML("")
-    }
 }
