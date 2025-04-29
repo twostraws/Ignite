@@ -138,8 +138,6 @@ extension PublishingContext {
         if site.errorPage is EmptyErrorPage { return }
 
         for error in [PageNotFoundError()] {
-            environment.httpError = error
-
             let metadata = PageMetadata(
                 title: site.errorPage.title,
                 description: site.errorPage.description,
@@ -151,7 +149,9 @@ extension PublishingContext {
                 site: site,
                 allContent: allContent,
                 pageMetadata: metadata,
-                pageContent: site.errorPage)
+                pageContent: site.errorPage,
+                httpError: error
+            )
 
             let outputString = withEnvironment(values) {
                 site.errorPage.layout.body.markupString()
