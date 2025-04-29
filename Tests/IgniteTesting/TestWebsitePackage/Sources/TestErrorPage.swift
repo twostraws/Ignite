@@ -27,7 +27,6 @@ struct TestErrorPage: ErrorPage {
 
     var body: some HTML {
         ErrorChecker { errorChecker(error) }
-        EmptyHTML()
     }
 
     struct ErrorChecker: HTML {
