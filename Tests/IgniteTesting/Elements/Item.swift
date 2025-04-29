@@ -16,14 +16,11 @@ import Testing
 struct ItemTests {
     @Test("Basic accordian item test with default open mode .individual")
     func basicItemWithParentAccordianOpenModeIndividual() async throws {
-        var element = Item("First item") {
+        let accordianID = "accordion\(UUID().uuidString.truncatedHash)"
+        let element = Item("First item") {
             Text("This is an accordion item.")
         }
-
-        // set required values passed from parent accordian
-        let accordianID = "accordion\(UUID().uuidString.truncatedHash)"
-        element.parentID = accordianID
-        element.parentOpenMode = .individual
+        .assigned(to: accordianID, openMode: .individual)
 
         let output = element.markupString()
 
