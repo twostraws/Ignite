@@ -5,14 +5,8 @@
 // See LICENSE for license information.
 //
 
-/// A protocol that defines the core behavior and structure of `HTML` elements in Ignite.
-///
-/// The `HTML` protocol serves as the foundation for building web components in a type-safe,
-/// composable manner. Elements conforming to this protocol can be used anywhere in your site's
-/// hierarchy and automatically integrate with Ignite's attribute management and animation systems.
-///
-/// You typically don't conform to `HTML` directly. Instead, use one of the built-in elements like
-/// `Div`, `Paragraph`, or `Link`, or create custom components by conforming to `HTMLRootElement`.
+/// A protocol that defines the core behavior and
+/// structure of `HTML` elements in Ignite.
 @MainActor
 public protocol HTML: BodyElement {
     /// The type of HTML content this element contains.

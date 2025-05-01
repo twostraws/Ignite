@@ -6,6 +6,7 @@
 //
 
 /// Describes elements that can be placed into forms.
+/// - Warning: Do not conform to this type directly.
 public protocol FormItem: BodyElement {}
 
 public extension FormItem where Self: HTML {
@@ -32,7 +33,7 @@ public extension FormItem where Self: InlineElement {
 
 // MARK: - Style Modifiers
 public extension FormItem where Self: HTML {
-    /// Adds an inline CSS style property to the Element element
+    /// Adds an inline CSS style property to the HTML element
     /// - Parameters:
     ///   - property: The CSS property to set
     ///   - value: The value to set for the property
@@ -45,7 +46,7 @@ public extension FormItem where Self: HTML {
 }
 
 public extension FormItem where Self: InlineElement {
-    /// Adds an inline CSS style property to the Element element
+    /// Adds an inline CSS style property to the HTML element
     /// - Parameters:
     ///   - property: The CSS property to set
     ///   - value: The value to set for the property

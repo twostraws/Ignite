@@ -89,7 +89,7 @@ public extension Body {
     /// - Parameters:
     ///   - name: The name of the data attribute
     ///   - value: The value of the data attribute
-    /// - Returns: The modified `Element` element
+    /// - Returns: The modified `Body` element
     func data(_ name: String, _ value: String) -> Self {
         var copy = self
         copy.attributes.data.append(.init(name: name, value: value))

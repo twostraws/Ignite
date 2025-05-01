@@ -11,7 +11,7 @@
 /// Example:
 /// ```swift
 /// struct BlogLayout: Layout {
-///     var body: some Element {
+///     var body: Document {
 ///         Body {
 ///             content
 ///             Footer()

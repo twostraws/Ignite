@@ -46,7 +46,7 @@ public extension InlineElement {
 }
 
 public extension MarkupElement where Self: HeadElement {
-    /// Adds an inline CSS style property to the Element element
+    /// Adds an inline CSS style property to the `HeadElement`
     /// - Parameters:
     ///   - property: The CSS property to set
     ///   - value: The value to set for the property

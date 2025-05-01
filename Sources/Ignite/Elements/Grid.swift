@@ -73,7 +73,7 @@ public struct Grid: HTML {
     ///   - alignment: The alignment of items in the grid. Defaults to `.center`.
     ///   - spacing: The number of pixels between each element.
     ///   - content: A function that accepts a single value from the sequence, and
-    ///     returns a some Element representing that value in the grid.
+    ///     returns some HTML representing that value in the grid.
     public init<T>(
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
@@ -91,7 +91,7 @@ public struct Grid: HTML {
     ///   - alignment: The alignment of items in the grid. Defaults to `.center`.
     ///   - spacing: The predefined size between each element. Defaults to `.none`
     ///   - content: A function that accepts a single value from the sequence, and
-    ///     returns a some Element representing that value in the grid.
+    ///     returns some HTML representing that value in the grid.
     public init<T>(
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
@@ -175,7 +175,7 @@ public struct Grid: HTML {
     /// Renders a group of HTML elements with consistent styling and attributes.
     /// - Parameters:
     ///   - passthrough: The passthrough entity containing the HTML elements to render.
-    ///   - attributes: Element attributes to apply to each element in the group.
+    ///   - attributes: HTML attributes to apply to each element in the group.
     /// - Returns: A view containing the styled group elements.
     func handlePassthrough(_ passthrough: any PassthroughElement, attributes: CoreAttributes) -> some HTML {
         let gutterClass = if case .semantic(let amount) = spacingAmount {

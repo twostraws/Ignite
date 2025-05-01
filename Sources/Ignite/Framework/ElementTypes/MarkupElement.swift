@@ -6,7 +6,7 @@
 //
 
 /// A protocol that defines the common behavior between all HTML types.
-/// This protocol serves as the foundation for any element that can be rendered as Element.
+/// - Warning: Do not conform to this type directly.
 @MainActor
 public protocol MarkupElement: Sendable {
     /// The standard set of control attributes for HTML elements.

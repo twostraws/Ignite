@@ -26,7 +26,7 @@
 public extension BodyElement where Self: HTML {
     /// Merges a complete set of core attributes into this element.
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
-    /// - Returns: The modified Element element
+    /// - Returns: The modified `HTML` element
     /// - Note: Uses AttributeStore for persistent storage and merging
     func attributes(_ attributes: CoreAttributes) -> some HTML {
         AnyHTML(coreAttributesModifier(attributes, content: self))
@@ -36,7 +36,7 @@ public extension BodyElement where Self: HTML {
 public extension BodyElement where Self: InlineElement {
     /// Merges a complete set of core attributes into this element.
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
-    /// - Returns: The modified Element element
+    /// - Returns: The modified `HTML` element
     /// - Note: Uses AttributeStore for persistent storage and merging
     func attributes(_ attributes: CoreAttributes) -> some InlineElement {
         AnyInlineElement(coreAttributesModifier(attributes, content: self))

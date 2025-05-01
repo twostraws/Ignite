@@ -5,16 +5,16 @@
 // See LICENSE for license information.
 //
 
-/// A placeholder Element element that renders nothing
+/// A placeholder element that renders nothing
 /// Used as a default or fallback when no content is needed
 public struct EmptyInlineElement: InlineElement {
-    /// Creates a new empty Element element
+    /// Creates a new empty element
     public nonisolated init() {}
 
     /// Returns self as the body content since this is an empty element
     public var body: some InlineElement { self }
 
-    /// Whether this Element belongs to the framework.
+    /// Whether this element belongs to the framework.
     public var isPrimitive: Bool { true }
 
     /// Renders this element as an empty string

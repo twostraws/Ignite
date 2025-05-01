@@ -11,14 +11,15 @@
 ///
 /// ```swift
 /// struct MyErrorPage: ErrorPage {
-///   var body: some Element {
-///     Section {
-///       Text(error.title).font(.title1)
-///       Text(error.description)
-///       Link("Go back to the homepage", destination: "/")
-///         .buttonStyle(.primary)
+///     var body: some HTML {
+///         Section {
+///             Text(error.title)
+///                 .font(.title1)
+///             Text(error.description)
+///             Link("Go back to the homepage", target: "/")
+///                 .buttonStyle(.primary)
+///         }
 ///     }
-///   }
 /// }
 /// ```
 ///

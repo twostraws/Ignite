@@ -33,7 +33,7 @@ public extension HTML {
 
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
-    /// - Returns: The modified Element element
+    /// - Returns: The modified `HTML` element
     func `class`(_ newClasses: String?...) -> some HTML {
         let classes = newClasses.compactMap(\.self)
         return AnyHTML(classModifier(classes, content: self))
@@ -41,7 +41,7 @@ public extension HTML {
 
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
-    /// - Returns: The modified `Element` element
+    /// - Returns: The modified `HTML` element
     func `class`(_ newClasses: [String]) -> some HTML {
         AnyHTML(classModifier(newClasses, content: self))
     }
@@ -65,7 +65,7 @@ public extension MarkupElement where Self: InlineElement {
 
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
-    /// - Returns: The modified `Element` element
+    /// - Returns: The modified `HTML` element
     func `class`(_ newClasses: [String]) -> some InlineElement {
         AnyInlineElement(classModifier(newClasses, content: self))
     }
@@ -99,11 +99,11 @@ public extension FormItem where Self: HTML {
 
 // These should always remain private, because for the
 // type safety of the public facing API we always want
-// to return either Element or InlineElement.
+// to return either HTML or InlineElement.
 extension BodyElement {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
-    /// - Returns: The modified Element element
+    /// - Returns: The modified `BodyElement`
     func `class`(_ newClasses: String?...) -> some BodyElement {
         let classes = newClasses.compactMap(\.self)
         return AnyHTML(classModifier(classes, content: self))
@@ -111,7 +111,7 @@ extension BodyElement {
 
     /// Adds an array of CSS classes to the element.
     /// - Parameter newClasses: `Array` of class names to add
-    /// - Returns: The modified `Element` element
+    /// - Returns: The modified `BodyElement`
     func `class`(_ newClasses: [String]) -> some BodyElement {
         AnyHTML(classModifier(newClasses, content: self))
     }

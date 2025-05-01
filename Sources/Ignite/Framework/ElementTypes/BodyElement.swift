@@ -6,6 +6,7 @@
 //
 
 /// An element that can exist in the `<body>` of an HTML page.
+/// - Warning: Do not conform to this type directly.
 public protocol BodyElement: MarkupElement {
     /// Whether this HTML belongs to the framework.
     var isPrimitive: Bool { get }

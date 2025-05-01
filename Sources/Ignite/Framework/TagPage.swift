@@ -11,10 +11,12 @@
 ///
 /// ```swift
 /// struct MyTagPage: TagPage {
-///     var body: some Element {
-///         Article {
-///             Heading(tag ?? "All Posts")
-///             // Show articles matching the tag
+///     var body: some HTML {
+///          Text(tag.name)
+///             .font(.title1)
+///
+///          List(tag.articles) { article in
+///             Link(article)
 ///         }
 ///     }
 /// }

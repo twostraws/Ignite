@@ -32,7 +32,7 @@ public extension HTML {
     /// - Parameters:
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
-    /// - Returns: The modified `Element` element
+    /// - Returns: The modified `HTML` element
     func aria(_ key: AriaType, _ value: String) -> some HTML {
         AnyHTML(ariaModifier(key, value: value, content: self))
     }
@@ -61,7 +61,7 @@ public extension InlineElement {
     /// - Parameters:
     ///   - key: The ARIA attribute key
     ///   - value: The ARIA attribute value
-    /// - Returns: The modified `Element` element
+    /// - Returns: The modified `InlineElement`
     func aria(_ key: AriaType, _ value: String?) -> some InlineElement {
         AnyInlineElement(ariaModifier(key, value: value, content: self))
     }

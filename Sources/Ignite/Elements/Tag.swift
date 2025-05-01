@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-/// A struct able to become any Element tag. Useful for when Ignite has not
+/// A struct able to become any HTML tag. Useful for when Ignite has not
 /// implemented a specific tag you need.
 public struct Tag: HTML {
     /// The content and behavior of this HTML.

@@ -11,9 +11,9 @@
 ///
 /// ```swift
 /// struct MyArticle: ArticlePage {
-///
-///     var body: some Element {
-///         Heading(content.title)
+///     var body: HTML {
+///         Text(content.title)
+///             .font(.title1)
 ///         Text(content.description)
 ///     }
 /// }
