@@ -4,9 +4,27 @@ import os
 import sys
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, directory=None, **kwargs):
+    def __init__(self, *args, directory=None, subsite=None, **kwargs):
         self.base_directory = directory or os.getcwd()
+        self.subsite = subsite
         super().__init__(*args, directory=self.base_directory, **kwargs)
+        
+    def translate_path(self, path):
+        # Remove the subsite from the requested path
+        if self.subsite and path.startswith(self.subsite):
+            path = path[len(self.subsite):]
+            
+        return super().translate_path(path)
+    
+    def do_GET(self):
+        # Redirect root request if subsite is specified
+        if self.subsite and self.path == '/':
+            self.send_response(301)
+            self.send_header('Location', self.subsite)
+            self.end_headers()
+            return
+        
+        super().do_GET()
 
     def send_error(self, code, message=None, explain=None):
         if code == 404:
@@ -24,6 +42,7 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--directory', '-d', default=os.getcwd())
+    parser.add_argument('--subsite', '-s', default=None)
     parser.add_argument('port', nargs='?', type=int, default=8000)
     args = parser.parse_args()
 
@@ -31,7 +50,7 @@ if __name__ == '__main__':
         print(f"Error: Directory '{args.directory}' does not exist")
         sys.exit(1)
 
-    with socketserver.TCPServer(("", args.port), lambda *a, **kw: CustomHandler(*a, directory=args.directory, **kw)) as httpd:
+    with socketserver.TCPServer(("", args.port), lambda *a, **kw: CustomHandler(*a, directory=args.directory, subsite=args.subsite, **kw)) as httpd:
         print(f"Serving {args.directory} at port {args.port}")
         try:
             httpd.serve_forever()
