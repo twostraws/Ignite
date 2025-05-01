@@ -43,9 +43,15 @@ public struct List: HTML {
         case unordered(UnorderedListMarkerStyle)
 
         /// This list is unordered, with a custom symbol for bullet points.
-        /// **Note:** Although you can technically pass more than one
+        /// - Note: Although you can technically pass more than one
         /// emoji here, you might find the alignment gets strange.
         case custom(String)
+
+        /// A convenience for creating ordered lists with automatic numbering.
+        public static var ordered: Self { .ordered(.automatic) }
+
+        /// A convenience for creating unordered lists with automatic bullet points.
+        public static var unordered: Self { .unordered(.automatic) }
     }
 
     /// The content and behavior of this HTML.
@@ -121,31 +127,22 @@ public struct List: HTML {
 
         var listMarkerType = ""
 
-        if case .ordered(let orderedStyle) = markerStyle {
-            // Only add the extra styling if we aren't using
-            // the default.
-            if orderedStyle != .automatic {
-                listMarkerType = orderedStyle.rawValue
-            }
-
-            if listStyle == .group {
-                listAttributes.append(classes: "list-group-numbered")
-            }
-        } else if case .unordered(let unorderedListStyle) = markerStyle {
-            // Only add the extra styling if we aren't using
-            // the default.
-            if unorderedListStyle != .automatic {
-                listMarkerType = String(describing: unorderedListStyle)
-            }
-        } else if case .custom(let symbol) = markerStyle {
+        switch markerStyle {
+        case .ordered(let style):
+            listAttributes.append(classes: "list-group-numbered")
+            guard style != .automatic else { break }
+            // Only add the extra styling if we aren't using the default.
+            listMarkerType = style.rawValue
+        case .unordered(let style):
+            guard style != .automatic else { break }
+            // Only add the extra styling if we aren't using the default.
+            listMarkerType = style.rawValue
+        case .custom(let symbol):
             // We need to convert our symbol to something
             // Unicode friendly, in case they use emoji.
-            var cssHex = ""
-
-            for scalar in symbol.unicodeScalars {
-                let hexValue = String(format: "%X", scalar.value)
-                cssHex += "\\\(hexValue)"
-            }
+            let cssHex = symbol.unicodeScalars
+                .map { String(format: "\\%X", $0.value) }
+                .joined()
 
             listMarkerType = "'\(cssHex)'"
         }
