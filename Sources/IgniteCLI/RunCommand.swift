@@ -37,13 +37,13 @@ struct RunCommand: ParsableCommand {
             return
         }
 
-        // Check for a subsite by not finding «href="/css/» in index.html.
+        var subsite = ""
+        // Identify the subdirectory of subsite from 
+        // the path to the first css directory in index.html.
         if let indexData = FileManager.default.contents(atPath: "\(directory)/index.html") {
             let indexString = String(decoding: indexData, as: UTF8.self)
-            guard indexString.contains("<link href=\"/css") else {
-                print("❌ This site specifies a custom subfolder, so it can't be previewed locally.")
-                return
-            }
+            let regex = #/<link href="(/[^/]+)?/css/#
+            subsite = indexString.firstMatch(of: regex)?.1.map { String($0) } ?? ""
         }
 
         // Find an available port
@@ -56,14 +56,11 @@ struct RunCommand: ParsableCommand {
             }
         }
 
-        print("✅ Starting local web server on http://localhost:\(currentPort)")
-        print("Press ↵ Return to exit.")
-
         let previewCommand =
             if preview {
                 // Automatically open a web browser pointing to their
                 // local server if requested.
-                "open http://localhost:\(currentPort)"
+                "open http://localhost:\(currentPort)\(subsite)"
             } else {
                 // Important: The empty space below is enough to
                 // make the Process.execute() wait for a key press
@@ -82,9 +79,12 @@ struct RunCommand: ParsableCommand {
             return
         }
 
-        print("✅ Starting local web server on http://localhost:\(currentPort)")
+        print("✅ Starting local web server on http://localhost:\(currentPort)\(subsite)")
+        print("Press ↵ Return to exit.")
+
+        let subsiteArgument = subsite.isEmpty ? "" : "-s \(subsite)"
         try Process.execute(
-            command: "python3 \(serverScriptURL.path) -d \(directory) \(currentPort)",
+            command: "python3 \(serverScriptURL.path) -d \(directory) \(subsiteArgument) \(currentPort)",
             then: previewCommand
         )
     }
