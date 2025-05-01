@@ -27,8 +27,9 @@ public struct Text: HTML, DropdownItem {
     var font = FontStyle.body
 
     /// The content to place inside the text.
-    var content: any BodyElement
+    private var content: any BodyElement
 
+    /// Whether this text contains multiple paragraphs of Markdown content.
     private var isMultilineMarkdown = false
 
     /// Creates a new `Text` instance using an inline element builder that
@@ -109,27 +110,28 @@ public struct Text: HTML, DropdownItem {
     /// Creates a new Text struct from a Markdown string.
     /// - Parameter markdown: The Markdown text to parse.
     public init(markdown: String) {
+        let parser = MarkdownToHTML(markdown: markdown, removeTitleFromBody: true)
+
         // Process each paragraph individually to preserve line breaks.
         // We could simply replace newlines with <br>, but then the paragraphs
         // wouldn't respond to a theme's paragraphBottomMargin property.
-        let paragraphs = markdown.components(separatedBy: .newlines)
-            .filter { !$0.isEmpty }
+        if parser.body.contains("</p><p>") {
+            let paragraphs = parser.body
+                .components(separatedBy: "</p><p>")
+                .map {
+                    $0.replacingOccurrences(of: "<p>", with: "")
+                      .replacingOccurrences(of: "</p>", with: "")
+                }
+                .map(Text.init)
 
-        let processedParagraphs = paragraphs.map {
-            let parser = MarkdownToHTML(markdown: $0, removeTitleFromBody: true)
-            // Remove any <p></p> tags, because these will be
-            // added automatically in markup(). This allows us
-            // to retain any styling applied elsewhere, e.g.
-            // the `font()` modifier.
-            return parser.body.replacing(#/<\/?p>/#, with: "")
+            self.content = HTMLCollection(paragraphs)
+            self.isMultilineMarkdown = true
+        } else {
+            // Remove the wrapping <p> tags since they'll be added by markup()
+            let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
+            self.content = cleanedHTML
+            self.isMultilineMarkdown = false
         }
-
-        // If single paragraph, use directly; otherwise create HTMLCollection
-        self.content = processedParagraphs.count == 1
-            ? processedParagraphs[0]
-            : HTMLCollection(processedParagraphs.map(Text.init))
-
-        self.isMultilineMarkdown = processedParagraphs.count > 1
     }
 
     /// Creates a new `Text` struct from a markup format and its parser.
