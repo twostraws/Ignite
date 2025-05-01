@@ -67,7 +67,7 @@ public struct List: HTML {
     private var listStyle: Style = .automatic
 
     /// The current style for the list item markers. Defaults to `.unordered`.
-    private var markerStyle: ListMarkerStyle = .unordered(.automatic)
+    private var markerStyle: ListMarkerStyle = .unordered
 
     /// The items to show in this list. This may contain any page elements,
     /// but if you need specific styling you might want to use `ListItem` objects.
@@ -129,10 +129,13 @@ public struct List: HTML {
 
         switch markerStyle {
         case .ordered(let style):
-            listAttributes.append(classes: "list-group-numbered")
-            guard style != .automatic else { break }
             // Only add the extra styling if we aren't using the default.
-            listMarkerType = style.rawValue
+            if listStyle != .automatic {
+                listAttributes.append(classes: "list-group-numbered")
+            }
+            if style != .automatic {
+                listMarkerType = style.rawValue
+            }
         case .unordered(let style):
             guard style != .automatic else { break }
             // Only add the extra styling if we aren't using the default.
