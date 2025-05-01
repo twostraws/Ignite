@@ -188,13 +188,11 @@ class NavigationBarTests: IgniteTestSuite {
         }
         let output = element.markupString()
 
-        let divContents = try #require(output
+        let navContents = try #require(output
             .htmlTagWithCloseTag("header")?.contents
-            .htmlTagWithCloseTag("nav")?.contents
-            .htmlTagWithCloseTag("div")?.contents
-        )
+            .htmlTagWithCloseTag("nav")?.contents)
 
-        #expect(divContents.contains("""
+        #expect(navContents.contains("""
         <button type="button" \
         class="navbar-toggler btn" \
         data-bs-toggle="collapse" \
@@ -214,9 +212,7 @@ class NavigationBarTests: IgniteTestSuite {
 
         let divContents = try #require(output
             .htmlTagWithCloseTag("header")?.contents
-            .htmlTagWithCloseTag("nav")?.contents
-            .htmlTagWithCloseTag("div")?.contents
-        )
+            .htmlTagWithCloseTag("nav")?.contents)
 
         #expect(divContents.htmlTagWithCloseTag("ul") != nil)
     }
@@ -233,10 +229,8 @@ class NavigationBarTests: IgniteTestSuite {
         let ulClasses = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
-            .htmlTagWithCloseTag("div")?.contents
             .htmlTagWithCloseTag("ul")?.attributes
-            .htmlAttribute(named: "class")
-        )
+            .htmlAttribute(named: "class"))
 
         let expected = "justify-content-center"
         #expect(ulClasses.contains(expected))
@@ -254,10 +248,8 @@ class NavigationBarTests: IgniteTestSuite {
         let ulClasses = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
-            .htmlTagWithCloseTag("div")?.contents
             .htmlTagWithCloseTag("ul")?.attributes
-            .htmlAttribute(named: "class")
-        )
+            .htmlAttribute(named: "class"))
 
         let expected = "justify-content-end"
         #expect(ulClasses.contains(expected))
@@ -274,9 +266,7 @@ class NavigationBarTests: IgniteTestSuite {
         let ulContents = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
-            .htmlTagWithCloseTag("div")?.contents
-            .htmlTagWithCloseTag("ul")?.contents
-        )
+            .htmlTagWithCloseTag("ul")?.contents)
 
         let expectedLink = item
             .class("nav-link text-nowrap")
@@ -300,9 +290,7 @@ class NavigationBarTests: IgniteTestSuite {
         let ulContents = try #require(output
             .htmlTagWithCloseTag("header")?.contents
             .htmlTagWithCloseTag("nav")?.contents
-            .htmlTagWithCloseTag("div")?.contents
-            .htmlTagWithCloseTag("ul")?.contents
-        )
+            .htmlTagWithCloseTag("ul")?.contents)
 
         let expectedLink1 = item1
             .class("nav-link text-nowrap")

@@ -237,7 +237,7 @@ public struct NavigationBar: HTML {
             Tag("nav") {
                 Section {
                     if logo.isEmpty == false {
-                        AnyHTML(renderLogo(logo))
+                        Section(renderLogo(logo))
                             .class("me-2 me-md-auto")
                     }
 
