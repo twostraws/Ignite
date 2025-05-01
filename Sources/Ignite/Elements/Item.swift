@@ -39,37 +39,37 @@ public struct Item: HTML {
 
     /// Creates a new `Item` object from the provided title and contents.
     /// - Parameters:
-    ///   - title: The title to use as the header for this accordion item.
+    ///   - header: The title to use as the header for this accordion item.
     ///   - startsOpen: Set this to true when this item should be open when
     ///   your page is initially loaded.
-    ///   - contents: A block element builder that creates the contents
+    ///   - content: A block element builder that creates the contents
     ///   for this accordion item.
     public init(
-        _ title: some InlineElement,
+        _ header: some InlineElement,
         startsOpen: Bool = false,
-        @HTMLBuilder contents: () -> some HTML
+        @HTMLBuilder content: () -> some HTML
     ) {
-        self.title = title
+        self.title = header
         self.startsOpen = startsOpen
-        self.contents = contents()
+        self.contents = content()
     }
 
     /// Creates a new `Item` object from the provided title and contents.
     /// - Parameters:
     ///   - startsOpen: Set this to true when this item should be open when
     ///   your page is initially loaded.
-    ///   - contents: A block element builder that creates the contents
+    ///   - content: A block element builder that creates the contents
     ///   for this accordion item.
-    ///   - title: An inline element builder that creates the title to use
+    ///   - header: An inline element builder that creates the title to use
     ///   as the header for this accordion item.
     public init(
         startsOpen: Bool = false,
-        @HTMLBuilder contents: () -> some HTML,
-        @InlineElementBuilder title: () -> some InlineElement,
+        @HTMLBuilder content: () -> some HTML,
+        @InlineElementBuilder header: () -> some InlineElement,
     ) {
         self.startsOpen = startsOpen
-        self.contents = contents()
-        self.title = title()
+        self.contents = content()
+        self.title = header()
     }
 
     /// Sets the background color for the accordion item's content area.
