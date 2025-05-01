@@ -19,11 +19,14 @@ public struct Accordion: HTML {
 
     /// The visual style of the accordion.
     public enum Style: Sendable {
-        /// Uses the default Bootstrap styling.
-        case automatic
+        /// A style with outer borders and rounded corners.
+        case bordered
 
         /// Removes outer borders and rounded corners.
-        case flush
+        case plain
+
+        /// The default styling based on context.
+        public static var automatic: Self { .bordered }
     }
 
     /// The content and behavior of this HTML.
