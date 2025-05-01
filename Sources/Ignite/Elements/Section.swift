@@ -30,8 +30,7 @@ public struct Section: HTML, FormItem {
 
     var content: any BodyElement
 
-    // Temporarily public
-    public init(_ content: any BodyElement) {
+    init(_ content: any BodyElement) {
         self.content = content
     }
 
