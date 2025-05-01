@@ -10,7 +10,7 @@ public struct List: HTML {
     /// The visual style to apply to a list.
     public enum Style: Sendable, CaseIterable {
         /// A basic list appearance with no styling.
-        case plain
+        case automatic
 
         /// A list style with subtle borders and rounded corners.
         case group
@@ -19,15 +19,15 @@ public struct List: HTML {
         case horizontalGroup
 
         /// A list style with separators between items.
-        case separated
+        case plain
 
         /// The Bootstrap CSS classes needed to implement the list's visual style.
         var classes: [String]? {
             switch self {
-            case .plain: nil
+            case .automatic: nil
             case .group: ["list-group"]
             case .horizontalGroup: ["list-group", "list-group-horizontal"]
-            case .separated: ["list-group", "list-group-flush"]
+            case .plain: ["list-group", "list-group-flush"]
             }
         }
     }
@@ -63,8 +63,8 @@ public struct List: HTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// The current style for this list. Defaults to `.plain`.
-    private var listStyle: Style = .plain
+    /// The current style for this list. Defaults to `.automatic`.
+    private var listStyle: Style = .automatic
 
     /// The current style for the list item markers. Defaults to `.unordered`.
     private var markerStyle: ListMarkerStyle = .unordered(.automatic)
@@ -167,12 +167,12 @@ public struct List: HTML {
             // be allowed to handle that itself.
             if var listableItem = item as? ListableElement ??
             (item as? AnyHTML)?.body as? ListableElement {
-                if listStyle != .plain {
+                if listStyle != .automatic {
                     listableItem.attributes.append(classes: "list-group-item")
                 }
                 output += listableItem.listMarkup().string
             } else {
-                let styleClass = listStyle == .plain ? "" : " class=\"list-group-item\""
+                let styleClass = listStyle == .automatic ? "" : " class=\"list-group-item\""
                 item.attributes.append(classes: "m-0")
                 output += "<li\(styleClass)>\(item.markupString())</li>"
             }
