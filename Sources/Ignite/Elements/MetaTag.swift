@@ -65,19 +65,6 @@ public struct MetaTag: HeadElement, Sendable {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// The type of metadata being provided, which can either be "name"
-    /// or "property".
-    private var type: String
-
-    /// The value to be placed into the "name" attribute.
-    var value: String
-
-    /// The content to use for this metadata.
-    var content: String
-
-    /// A character set string that describes this page's content.
-    var charset: String
-
     /// A convenience initializer for when you want a piece of data with a
     /// URL as its content. Creates a new `MetaTag` instance from the type
     /// and URL provided.
@@ -93,11 +80,8 @@ public struct MetaTag: HeadElement, Sendable {
     ///   - type: The type of metadata.
     ///   - content: The value for the metadata.
     public init(_ type: `Type`, content: String) {
-        self.type = type.key
-
-        self.value = type.rawValue
-        self.content = content
-        self.charset = ""
+        attributes.append(customAttributes: .init(name: type.key, value: type.rawValue))
+        attributes.append(customAttributes: .init(name: "content", value: content))
     }
 
     /// Creates a new `MetaTag` instance from the custom name and content provided.
@@ -105,11 +89,8 @@ public struct MetaTag: HeadElement, Sendable {
     ///   - name: The name for the metadata.
     ///   - content: The value for the metadata.
     public init(name: String, content: String) {
-        self.type = "name"
-
-        self.value = name
-        self.content = content
-        self.charset = ""
+        attributes.append(customAttributes: .init(name: "name", value: name))
+        attributes.append(customAttributes: .init(name: "content", value: content))
     }
 
     /// Creates a new `MetaTag` instance from the custom property and content provided.
@@ -117,21 +98,24 @@ public struct MetaTag: HeadElement, Sendable {
     ///   - property: The property name for the metadata.
     ///   - content: The value for the metadata.
     public init(property: String, content: String) {
-        self.type = "property"
-
-        self.value = property
-        self.content = content
-        self.charset = ""
+        attributes.append(customAttributes: .init(name: "property", value: property))
+        attributes.append(customAttributes: .init(name: "content", value: content))
     }
 
     /// Creates a new piece of metadata that sets a specific character set for
     /// the current page.
+    /// - Parameter characterSet: The value for the character set.
     public init(characterSet: String) {
-        self.type = "characterSet"
+        attributes.append(customAttributes: .init(name: "charset", value: characterSet))
+    }
 
-        self.value = ""
-        self.content = ""
-        self.charset = characterSet
+    /// Creates a new `MetaTag` instance for HTTP equivalent headers.
+    /// - Parameters:
+    ///   - httpEquivalent: The HTTP header to simulate
+    ///   - content: The value for the header
+    public init(httpEquivalent: String, content: String) {
+        attributes.append(customAttributes: .init(name: "http-equiv", value: httpEquivalent))
+        attributes.append(customAttributes: .init(name: "content", value: content))
     }
 
     /// Returns a standard set of social sharing metadata for a given page,
@@ -173,18 +157,7 @@ public struct MetaTag: HeadElement, Sendable {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func markup() -> Markup {
-        var attributes = attributes
-
-        if charset.isEmpty {
-            attributes.append(customAttributes:
-                .init(name: type, value: value),
-                .init(name: "content", value: content))
-        } else {
-            attributes.append(customAttributes:
-                .init(name: "charset", value: charset)
-            )
-        }
-        return Markup("<meta\(attributes) />")
+        Markup("<meta\(attributes) />")
     }
 }
 

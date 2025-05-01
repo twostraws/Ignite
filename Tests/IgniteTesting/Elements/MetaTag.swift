@@ -47,7 +47,19 @@ class MetaTagTests: IgniteTestSuite {
     }
 
     func metaTagCoreFieldsMatch(_ actual: MetaTag, _ expected: MetaTag) -> Bool {
-        actual.value == expected.value && actual.content == expected.content && actual.charset == expected.charset
+        let actualCustomAttributes = actual.attributes.customAttributes
+        let expectedCustomAttributes = expected.attributes.customAttributes
+        let actualDict = Dictionary(uniqueKeysWithValues: actualCustomAttributes.map { ($0.name, $0.value) })
+        let expectedDict = Dictionary(uniqueKeysWithValues: expectedCustomAttributes.map { ($0.name, $0.value) })
+        let keysToCompare = ["name", "property", "content", "charset", "http-equiv"]
+
+        for key in keysToCompare {
+            if actualDict[key] != expectedDict[key] {
+                return false
+            }
+        }
+
+        return true
     }
 
     @Test("Social sharing tags with no image, description, or www")
