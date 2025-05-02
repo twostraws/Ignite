@@ -72,6 +72,11 @@ public struct Body: MarkupElement {
 
         output += Script(file: "/js/ignite-core.js").markup()
 
+        if publishingContext.isSearchEnabled {
+            output += Script(file: "/js/lunr.js").markup()
+            output += Script(file: "/js/search.js").markup()
+        }
+
         if isBoundByContainer {
             attributes.append(classes: ["container"])
         }
