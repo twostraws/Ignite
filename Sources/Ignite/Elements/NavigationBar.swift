@@ -207,6 +207,8 @@ public struct NavigationBar: HTML {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func markup() -> Markup {
+        // Use the child items directly so that types like Spacer() aren't concealed
+        let items = items.flatMap { ($0 as? NavigationItemGroup)?.items ?? [$0] }
         let pinnedItems = items.filter { $0.navigationBarVisibility == .always }
         let collapsibleItems = items.filter { $0.navigationBarVisibility == .automatic }
 
