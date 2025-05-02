@@ -65,7 +65,7 @@ public struct Item: HTML {
     public init(
         startsOpen: Bool = false,
         @HTMLBuilder content: () -> some HTML,
-        @InlineElementBuilder header: () -> some InlineElement,
+        @InlineElementBuilder header: () -> some InlineElement
     ) {
         self.startsOpen = startsOpen
         self.contents = content()
