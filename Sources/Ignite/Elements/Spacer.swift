@@ -16,8 +16,11 @@ public struct Spacer: HTML, NavigationItem {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
+    /// How a `NavigationBar` displays this item at different breakpoints.
+    public var navigationBarVisibility: NavigationBarVisibility = .automatic
+
     /// The amount of space to occupy.
-    var spacingAmount: SpacingType
+    private var spacingAmount: SpacingType
 
     /// Whether the spacer is used horizontally or vertically.
     private var axis: Axis = .vertical

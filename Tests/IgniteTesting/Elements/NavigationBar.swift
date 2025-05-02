@@ -51,7 +51,6 @@ class NavigationBarTests: IgniteTestSuite {
     @Test("Nav Tag Class data-bs-theme is blank if style is default")
     func navTagDefaultTheme() async throws {
         var element = NavigationBar()
-        element.style = .default
         let output = element.markupString()
 
         let navAttributes = try #require(output
@@ -64,8 +63,7 @@ class NavigationBarTests: IgniteTestSuite {
 
     @Test("Nav Tag Class data-bs-theme is dark if style is dark")
     func navTagDarkTheme() async throws {
-        var element = NavigationBar()
-        element.style = .dark
+        let element = NavigationBar().navigationBarStyle(.dark)
         let output = element.markupString()
 
         let theme = try #require(output
@@ -80,8 +78,7 @@ class NavigationBarTests: IgniteTestSuite {
 
     @Test("Nav Tag Class data-bs-theme is light if style is light")
     func navTagLightTheme() async throws {
-        var element = NavigationBar()
-        element.style = .light
+        let element = NavigationBar().navigationBarStyle(.light)
         let output = element.markupString()
 
         let theme = try #require(output

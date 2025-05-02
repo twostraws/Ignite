@@ -7,21 +7,21 @@
 
 /// Describes elements that can be placed into navigation bars.
 /// - Warning: Do not conform to this type directly.
-public protocol NavigationItem: BodyElement {}
+public protocol NavigationItem: BodyElement {
+    /// How a `NavigationBar` displays this item at different breakpoints.
+    var navigationBarVisibility: NavigationBarVisibility { get set }
 
-@MainActor
-protocol NavigationItemConfigurable: BodyElement {
-    var isNavigationItem: Bool { get set }
-    func configuredAsNavigationItem(_ isNavItem: Bool) -> Self
+    /// Returns a new instance with the specified visibility.
+    func navigationBarVisibility(_ visibility: NavigationBarVisibility) -> Self
 }
 
-extension NavigationItemConfigurable {
-    /// Configures this element to be placed inside a `NavigationBar`.
-    /// - Returns: A new element instance suitable for placement
-    /// inside a `NavigationBar`.
-    func configuredAsNavigationItem(_ isNavItem: Bool = true) -> Self {
+public extension NavigationItem {
+    /// Returns a new instance with the specified visibility.
+    /// - Parameter visibility: The visibility to apply.
+    /// - Returns: A new instance with the updated visibility.
+    func navigationBarVisibility(_ visibility: NavigationBarVisibility) -> Self {
         var copy = self
-        copy.isNavigationItem = isNavItem
+        copy.navigationBarVisibility = visibility
         return copy
     }
 }

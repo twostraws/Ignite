@@ -34,6 +34,9 @@ public struct Dropdown: HTML, NavigationItem, FormItem {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
+    /// How a `NavigationBar` displays this item at different breakpoints.
+    public var navigationBarVisibility: NavigationBarVisibility = .automatic
+
     /// The title for this `Dropdown`.
     private var title: any InlineElement
 

@@ -40,7 +40,10 @@ public struct SearchForm: HTML, NavigationItem {
     /// This text provides a hint to users about what they can search for.
     private var prompt: String = "Search"
 
-    /// Controls whether this dropdown needs to be created as its own element,
+    /// How a `NavigationBar` displays this item at different breakpoints.
+    public var navigationBarVisibility: NavigationBarVisibility = .automatic
+
+    /// Whether this dropdown needs to be created as its own element,
     /// or whether it uses the structure provided by a parent `NavigationBar`.
     var isNavigationItem = false
 

@@ -16,6 +16,9 @@ public struct Form: HTML, NavigationItem {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
+    /// How a `NavigationBar` displays this item at different breakpoints.
+    public var navigationBarVisibility: NavigationBarVisibility = .automatic
+
     /// How many columns this should be divided into
     private var columnCount: Int = 12
 

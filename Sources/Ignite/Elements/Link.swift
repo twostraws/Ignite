@@ -9,15 +9,6 @@ import Foundation
 
 /// A hyperlink to another resource on this site or elsewhere.
 public struct Link: InlineElement, NavigationItem, DropdownItem {
-    /// The content and behavior of this HTML.
-    public var body: some InlineElement { self }
-
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The visual style to apply to the link.
     public enum Style: Equatable {
         /// A link with an underline effect.
@@ -39,6 +30,18 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         /// The default link style with heavy underline prominence.
         public static var automatic: Style { .underline(.heavy, hover: .heavy) }
     }
+
+    /// The content and behavior of this HTML.
+    public var body: some InlineElement { self }
+
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
+
+    /// How a `NavigationBar` displays this item at different breakpoints.
+    public var navigationBarVisibility: NavigationBarVisibility = .automatic
 
     /// The content to display inside this link.
     var content: any InlineElement

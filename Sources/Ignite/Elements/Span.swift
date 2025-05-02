@@ -18,7 +18,10 @@ public struct Span: InlineElement, NavigationItem, FormItem {
     public var isPrimitive: Bool { true }
 
     /// The contents of this span.
-    public var contents: any InlineElement
+    private var contents: any InlineElement
+
+    /// How a `NavigationBar` displays this item at different breakpoints.
+    public var navigationBarVisibility: NavigationBarVisibility = .automatic
 
     /// Creates a span with no content. Used in some situations where
     /// exact styling is performed by Bootstrap, e.g. in Carousel.

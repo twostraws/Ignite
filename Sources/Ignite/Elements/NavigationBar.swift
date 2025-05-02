@@ -12,7 +12,7 @@ public struct NavigationBar: HTML {
     public enum NavigationBarStyle {
         /// No specific color scheme means this bar will be rendered using
         /// automatic settings.
-        case `default`
+        case automatic
 
         /// This bar must always be rendered in light mode.
         case light
@@ -98,22 +98,22 @@ public struct NavigationBar: HTML {
     /// clickable to let users navigate to your homepage.
     private let logo: any InlineElement
 
-    /// An array of collapsible items to show in this navigation bar.
+    /// An array of items to show in this navigation bar.
     private let items: [any NavigationItem]
 
-    /// An array of permanent elements to show in this navigation bar.
-    let controls: [any NavigationItem]
-
     /// The style to use when rendering this bar.
-    var style = NavigationBarStyle.default
+    private var style = NavigationBarStyle.automatic
 
     /// How items in this navigation bar should be aligned
-    var itemAlignment = ItemAlignment.automatic
+    private var itemAlignment = ItemAlignment.automatic
 
     /// The number of controls that aren't `Spacer`,
     /// used to determine the gap class that should be used.
     private var visibleControlCount: Int {
-        controls.filter { !$0.is(Spacer.self) }.count
+        items.filter {
+            $0.navigationBarVisibility == .always &&
+            $0.is(Spacer.self) == false
+        }.count
     }
 
     /// Creates a new `NavigationBar` instance from the `logo`, without any items.
@@ -124,58 +124,32 @@ public struct NavigationBar: HTML {
     ) {
         self.logo = logo ?? EmptyInlineElement()
         self.items = []
-        self.controls = []
     }
 
-    /// Creates a new `NavigationBar` instance from the `logo`,
-    /// `items`, and `actions` provided.
+    /// Creates a new `NavigationBar` instance from the `logo` and `items` provided.
     /// - Parameters:
     ///   - logo: The logo to use in the top-left edge of your bar.
     ///   - items: Basic navigation items like `Link` and `Span` that will be
     ///   collapsed into a hamburger menu at small screen sizes.
-    ///   - actions: Elements positioned at the end of the navigation bar, like
-    ///   call-to-action buttons and search fields, and visible across all screen sizes.
     public init(
         logo: (any InlineElement)? = nil,
-        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
+        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem]
     ) {
         self.logo = logo ?? EmptyInlineElement()
         self.items = items()
-        self.controls = actions()
     }
 
-    /// Creates a new `NavigationBar` instance from the `logo`,
-    /// `items`, and `actions` provided.
+    /// Creates a new `NavigationBar` instance from the `logo` and `items` provided.
     /// - Parameters:
     ///   - items: Basic navigation items like `Link` and `Span` that will be
     ///   collapsed into a hamburger menu at small screen sizes.
-    ///   - actions: Elements positioned at the end of the navigation bar, like
-    ///   call-to-action buttons and search fields, and visible across all screen sizes.
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
         @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] },
         @InlineElementBuilder logo: () -> any InlineElement = { EmptyInlineElement() }
     ) {
         self.items = items()
-        self.controls = actions()
         self.logo = logo()
-    }
-
-    /// Creates a new `NavigationBar` instance from the `items` and `actions` provided.
-    /// - Parameters:
-    ///   - items: Basic navigation items like `Link` and `Span` that will be
-    ///   collapsed into a hamburger menu at small screen sizes.
-    ///   - actions: Elements positioned at the end of the navigation bar, like
-    ///   call-to-action buttons and search fields, and visible across all screen sizes.
-    public init(
-        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
-        @ElementBuilder<NavigationItem> actions: () -> [any NavigationItem] = { [] }
-    ) {
-        self.items = items()
-        self.controls = actions()
-        self.logo = EmptyInlineElement()
     }
 
     /// Adjusts the style of this navigation bar.
@@ -233,7 +207,10 @@ public struct NavigationBar: HTML {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func markup() -> Markup {
-        Tag("header") {
+        let pinnedItems = items.filter { $0.navigationBarVisibility == .always }
+        let collapsibleItems = items.filter { $0.navigationBarVisibility == .automatic }
+
+        return Tag("header") {
             Tag("nav") {
                 Section {
                     if logo.isEmpty == false {
@@ -241,10 +218,10 @@ public struct NavigationBar: HTML {
                             .class("me-2 me-md-auto")
                     }
 
-                    if controls.isEmpty == false {
+                    if pinnedItems.isEmpty == false {
                         Section {
-                            renderNavActions()
-                            if items.isEmpty == false {
+                            renderPinnedItems(pinnedItems)
+                            if collapsibleItems.isEmpty == false {
                                 // Keep the toggle button on the same line
                                 // as the action items for a cleaner UI
                                 renderToggleButton()
@@ -257,11 +234,11 @@ public struct NavigationBar: HTML {
                         .class("order-md-last")
                     }
 
-                    if items.isEmpty == false {
-                        if controls.isEmpty {
+                    if collapsibleItems.isEmpty == false {
+                        if pinnedItems.isEmpty {
                             renderToggleButton()
                         }
-                        renderNavItems()
+                        renderCollapsibleItems(collapsibleItems)
                     }
                 }
                 .class(widthClasses)
@@ -274,14 +251,14 @@ public struct NavigationBar: HTML {
         .markup()
     }
 
-    private func renderNavActions() -> some HTML {
-        ForEach(controls) { control in
-            if let item = control as? any NavigationItemConfigurable {
+    private func renderPinnedItems(_ items: [any NavigationItem]) -> some HTML {
+        ForEach(items) { item in
+            if let item = item as? any NavigationItemConfigurable {
                 AnyHTML(item.configuredAsNavigationItem(true))
-            } else if let spacer = control.as(Spacer.self) {
+            } else if let spacer = item.as(Spacer.self) {
                 spacer.axis(.horizontal)
             } else {
-                control
+                item
             }
         }
     }
@@ -300,7 +277,7 @@ public struct NavigationBar: HTML {
         .aria(.label, "Toggle navigation")
     }
 
-    private func renderNavItems() -> some HTML {
+    private func renderCollapsibleItems(_ items: [any NavigationItem]) -> some HTML {
         Section {
             List {
                 ForEach(items) { item in
@@ -366,7 +343,7 @@ public struct NavigationBar: HTML {
 
     private func theme(for style: NavigationBarStyle) -> String? {
         switch style {
-        case .default: nil
+        case .automatic: nil
         case .light: "light"
         case .dark: "dark"
         }
