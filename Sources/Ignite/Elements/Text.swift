@@ -12,7 +12,6 @@
 ///
 /// - Important: For types that accept only `InlineElement` or use `@InlineElementBuilder`,
 /// use `Span` instead of `Text`.
-@MainActor
 public struct Text: HTML, DropdownItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }

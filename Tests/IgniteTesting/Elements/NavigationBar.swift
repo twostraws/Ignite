@@ -9,7 +9,6 @@ import Testing
 
 @testable import Ignite
 
-// swiftlint:disable type_body_length
 /// Tests for the `NavigationBar` element.
 @Suite("Navigation Bar Tests")
 class NavigationBarTests: IgniteTestSuite {
@@ -305,4 +304,3 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(ulContents.contains(expectedNavItem2))
     }
 }
-// swiftlint:enable type_body_length

@@ -50,13 +50,13 @@ struct ColorTypeTests {
 
         #expect(color.description == "rgb(\(red) \(blue) \(green) / \(opacity.roundedValue)%)")
     }
-    
+
     @Test("Double to Int Conversion in init(red:green:blue:opacity:)")
     func rbgaInitWithDouble() {
         let color = Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0)
         #expect(color.description == "rgb(255 255 255 / 100%)")
     }
-    
+
     @Test("Double to Int Conversion in init(white:opacity:)")
     func whiteAndOpacityInitWithDouble() {
         let color = Color(white: 1.0, opacity: 1.0)
