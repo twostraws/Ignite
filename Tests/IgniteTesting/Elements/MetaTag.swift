@@ -53,10 +53,8 @@ class MetaTagTests: IgniteTestSuite {
         let expectedDict = Dictionary(uniqueKeysWithValues: expectedCustomAttributes.map { ($0.name, $0.value) })
         let keysToCompare = ["name", "property", "content", "charset", "http-equiv"]
 
-        for key in keysToCompare {
-            if actualDict[key] != expectedDict[key] {
-                return false
-            }
+        for key in keysToCompare where actualDict[key] != expectedDict[key] {
+            return false
         }
 
         return true
