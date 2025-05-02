@@ -24,7 +24,7 @@ class CodeBlockTests: IgniteTestSuite {
         let test = CodeBlockTest(name: "Swift")
         """ }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <pre><code>import Foundation

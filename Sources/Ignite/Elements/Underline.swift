@@ -8,7 +8,7 @@
 /// Renders text with an underline.
 public struct Underline: InlineElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some InlineElement { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -35,7 +35,8 @@ public struct Underline: InlineElement {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<u\(attributes)>\(content)</u>"
+    public func markup() -> Markup {
+        let contentHTML = content.markupString()
+        return Markup("<u\(attributes)>\(contentHTML)</u>")
     }
 }

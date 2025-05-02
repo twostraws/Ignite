@@ -17,7 +17,7 @@ struct ImageFitModifierTests {
     func testDefaultParameters() async throws {
         let image = Image("/images/example-image.jpg")
         let modifiedImage = image.imageFit()
-        let output = modifiedImage.render()
+        let output = modifiedImage.markupString()
 
         #expect(output.contains("class=\"w-100 h-100 object-fit-cover\""))
         #expect(output.contains("object-position: 50% 50%"))
@@ -27,7 +27,7 @@ struct ImageFitModifierTests {
     func testCustomParameters() async throws {
         let image = Image("/images/example-image.jpg")
         let modifiedImage = image.imageFit(.fit, anchor: .bottomLeading)
-        let output = modifiedImage.render()
+        let output = modifiedImage.markupString()
 
         #expect(output.contains("class=\"w-100 h-100 object-fit-contain\""))
         #expect(output.contains("object-position: 0% 100%"))
@@ -37,11 +37,11 @@ struct ImageFitModifierTests {
     func testDifferentAnchorPoints() async throws {
         let image = Image("/images/example-image.jpg")
         let topLeftImage = image.imageFit(anchor: .topLeading)
-        let topLeftOutput = topLeftImage.render()
+        let topLeftOutput = topLeftImage.markupString()
         #expect(topLeftOutput.contains("object-position: 0% 0%"))
 
         let bottomRightImage = image.imageFit(anchor: .bottomTrailing)
-        let bottomRightOutput = bottomRightImage.render()
+        let bottomRightOutput = bottomRightImage.markupString()
         #expect(bottomRightOutput.contains("object-position: 100% 100%"))
     }
 }

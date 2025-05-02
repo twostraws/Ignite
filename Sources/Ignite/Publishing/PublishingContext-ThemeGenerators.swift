@@ -46,18 +46,19 @@ extension PublishingContext {
     }
 
     /// Creates @font-face and @import rules for custom fonts in a theme.
-    private func fontRules(_ theme: any Theme) -> [String] {
-        let allFonts = [theme.monospaceFont, theme.font, theme.headingFont] + CSSManager.shared.customFonts
+    private func fontRules(for fonts: some Collection<Font>) -> [String] {
         let systemFonts = Font.systemFonts + Font.monospaceFonts
-
-        let declarations = allFonts.compactMap { font -> [String]? in
-            guard let family = font.name, !systemFonts.contains(family) else { return nil }
+        let declarations = fonts.compactMap { font -> [String]? in
+            guard let family = font.name,
+                  !family.isEmpty,
+                  !systemFonts.contains(family)
+            else { return nil }
             return font.sources.compactMap { source in
                 generateFontRule(family: family, source: source)?.description
             }
         }
 
-        return Array(OrderedSet(declarations.flatMap { $0 }))
+        return declarations.flatMap { $0 }
     }
 
     private func generateFontRule(family: String, source: FontSource) -> CustomStringConvertible? {
@@ -74,16 +75,16 @@ extension PublishingContext {
     }
 
     /// Creates CSS rules for light theme
-    private func lightThemeRules(_ theme: any Theme, darkThemeID: String?) -> [CustomStringConvertible] {
+    private func lightThemeRules(_ theme: any Theme, darkThemeID: String?) -> [String] {
         var rules: [CustomStringConvertible] = []
         rules.append(rootStyles(for: theme))
         rules.append(contentsOf: baseThemeRules(theme))
         rules.append(contentsOf: themeOverrides(for: theme))
-        return rules
+        return rules.map(\.description)
     }
 
     /// Creates CSS rules for dark theme
-    private func darkThemeRules(_ theme: any Theme, lightThemeID: String?) -> [CustomStringConvertible] {
+    private func darkThemeRules(_ theme: any Theme, lightThemeID: String?) -> [String] {
         var rules: [CustomStringConvertible] = []
 
         // If this is the only theme, use it as root theme
@@ -99,19 +100,26 @@ extension PublishingContext {
             }
         )
 
-        return rules
+        return rules.map(\.description)
     }
 
     /// Collects all CSS rules for the themes
-    private func generateThemeRules(_ themes: [any Theme]) -> [CustomStringConvertible] {
+    private func generateThemeRules(_ themes: [any Theme]) -> [String] {
         guard site.supportsLightTheme || site.supportsDarkTheme else {
             fatalError(.missingDefaultTheme)
         }
 
-        var rules: [CustomStringConvertible] = []
+        var rules: OrderedSet<String> = []
 
-        let fontRules = themes.flatMap { self.fontRules($0) }
-        rules.append(contentsOf: fontRules)
+        let themeFontRules: OrderedSet = OrderedSet(themes.flatMap { theme in
+            let themeFonts = [theme.monospaceFont, theme.font, theme.headingFont]
+            return fontRules(for: themeFonts)
+        })
+
+        rules.append(contentsOf: themeFontRules)
+
+        let customFontRules = fontRules(for: CSSManager.shared.customFonts)
+        rules.append(contentsOf: customFontRules)
 
         let (lightTheme, darkTheme) = configureDefaultThemes(site.lightTheme, site.darkTheme)
 
@@ -127,11 +135,11 @@ extension PublishingContext {
             rules.append(
                 Ruleset(.attribute(name: "data-bs-theme", value: theme.cssID)) {
                     themeStyles(for: theme)
-                }
+                }.description
             )
         }
 
-        return rules
+        return Array(rules)
     }
 
     /// Configures default light and dark themes, inheriting properties when needed
@@ -153,12 +161,12 @@ extension PublishingContext {
     }
 
     /// Creates base theme rules (for root theme)
-    private func baseThemeRules(_ theme: any Theme) -> [CustomStringConvertible] {
+    private func baseThemeRules(_ theme: any Theme) -> [String] {
         var rules: [CustomStringConvertible] = []
         rules.append(contentsOf: responsiveVariables(for: theme))
         rules.append(contentsOf: containerMediaQueries(for: theme))
         rules.append(globalRulesets())
-        return rules
+        return rules.map(\.description)
     }
 
     /// Creates theme override rulesets if needed

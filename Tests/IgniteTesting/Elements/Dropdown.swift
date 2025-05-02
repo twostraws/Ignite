@@ -22,7 +22,7 @@ class DropdownTests: IgniteTestSuite {
             Text("Or you can just…")
         }.role(.primary)
 
-        let output = element.render()
+        let output = element.markupString()
 
         let expectedOutput = """
         <div class="dropdown">
@@ -52,7 +52,7 @@ class DropdownTests: IgniteTestSuite {
             Text("Content1")
         }.role(.secondary)
 
-        let output = element.render()
+        let output = element.markupString()
 
         let expectedOutput = """
         <div class="dropdown">
@@ -78,7 +78,7 @@ class DropdownTests: IgniteTestSuite {
     func emptyDropdown() async throws {
         let element = Dropdown("Click Me") {}.role(.primary)
 
-        let output = element.render()
+        let output = element.markupString()
 
         let expectedOutput = """
         <div class="dropdown">
@@ -106,7 +106,7 @@ class DropdownTests: IgniteTestSuite {
             }
         }.role(.primary)
 
-        let output = element.render()
+        let output = element.markupString()
 
         var expectedOutput = """
         <div class="dropdown">

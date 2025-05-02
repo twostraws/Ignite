@@ -17,7 +17,7 @@ struct TextSelectionTests {
     @Test("Automatic Text Selection")
     func automaticTextSelection() async throws {
         let element = Text("Hello").textSelection(.automatic)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p class=\"user-select-automatic\">Hello</p>")
     }
@@ -25,7 +25,7 @@ struct TextSelectionTests {
     @Test("All Text Selection")
     func allTextSelection() async throws {
         let element = Text("Hello").textSelection(.all)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p class=\"user-select-all\">Hello</p>")
     }
@@ -33,7 +33,7 @@ struct TextSelectionTests {
     @Test("None Text Selection")
     func noneTextSelection() async throws {
         let element = Text("Hello").textSelection(.none)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p class=\"user-select-none\">Hello</p>")
     }

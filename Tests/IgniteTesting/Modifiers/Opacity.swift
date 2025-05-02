@@ -17,7 +17,7 @@ class OpacityTests: IgniteTestSuite {
     @Test("Text Opacity", arguments: ["This is a test", "Another test"])
     func textOpacity(text: String) async throws {
         let element = Text(text).opacity(0.5)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p style=\"opacity: 0.5\">\(text)</p>")
     }
@@ -25,7 +25,7 @@ class OpacityTests: IgniteTestSuite {
     @Test("Image Opacity", arguments: [(path: "/images/example.jpg", description: "Example image")])
     func imageOpacity(image: (path: String, description: String)) async throws {
         let element = Image(image.path, description: image.description).opacity(0.2)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<img src=\"\(image.path)\" alt=\"\(image.description)\" style=\"opacity: 0.2\" />")
     }
@@ -35,7 +35,7 @@ class OpacityTests: IgniteTestSuite {
         ["0.123", "0.15", "0.1", "0.457", "0"]))
     func opacityFormatting(value: Double, css: String) async throws {
         let element = Text("Test").opacity(value)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p style=\"opacity: \(css)\">Test</p>")
     }
@@ -43,7 +43,7 @@ class OpacityTests: IgniteTestSuite {
     @Test("Checks that full opacity is not rendered")
     func fullOpacity() async throws {
         let element = Text("Test").opacity(1)
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p>Test</p>")
     }
 }

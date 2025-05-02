@@ -19,12 +19,12 @@ class ColumnTests: IgniteTestSuite {
     @Test("Column with items")
     func basicColumn() async throws {
         let element = Column {
-            FormFieldLabel(text: "Left Label")
-            FormFieldLabel(text: "Middle Label")
-            FormFieldLabel(text: "Right Label")
+            ControlLabel("Left Label")
+            ControlLabel("Middle Label")
+            ControlLabel("Right Label")
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <td colspan="1"><label>Left Label</label><label>Middle Label</label><label>Right Label</label></td>
@@ -34,12 +34,12 @@ class ColumnTests: IgniteTestSuite {
     @Test("Column with columnSpan", arguments: await Self.columnSpans)
     func columnWithColumnSpan(columnSpan: Int) async throws {
         let element = Column {
-            FormFieldLabel(text: "Left Label")
-            FormFieldLabel(text: "Middle Label")
-            FormFieldLabel(text: "Right Label")
+            ControlLabel("Left Label")
+            ControlLabel("Middle Label")
+            ControlLabel("Right Label")
         }.columnSpan(columnSpan)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <td colspan="\(columnSpan)"><label>Left Label</label><label>Middle Label</label><label>Right Label</label></td>
@@ -49,12 +49,12 @@ class ColumnTests: IgniteTestSuite {
     @Test("Column with vertical alignment", arguments: Column.VerticalAlignment.allCases)
     func columnWithVerticalAlignment(alignment: Column.VerticalAlignment) async throws {
         let element = Column {
-            FormFieldLabel(text: "Left Label")
-            FormFieldLabel(text: "Middle Label")
-            FormFieldLabel(text: "Right Label")
+            ControlLabel("Left Label")
+            ControlLabel("Middle Label")
+            ControlLabel("Right Label")
         }.verticalAlignment(alignment)
 
-        let output = element.render()
+        let output = element.markupString()
 
         if alignment != .top {
             #expect(output == """

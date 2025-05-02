@@ -32,12 +32,15 @@ public struct ZStack: HTML {
     /// - Parameters:
     ///   - alignment: The point within the stack where elements should be aligned. Defaults `.center`.
     ///   - items: A closure that returns the elements to be stacked.
-    public init(alignment: Alignment = .center, @HTMLBuilder _ items: () -> some HTML) {
+    public init(
+        alignment: Alignment = .center,
+        @HTMLBuilder _ items: () -> some BodyElement
+    ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         var items = items.elements
 
         items = items.enumerated().map { index, item in
@@ -56,7 +59,7 @@ public struct ZStack: HTML {
         var attributes = attributes
         attributes.append(styles: .init(.display, value: "grid"))
 
-        let content = items.map { $0.render() }.joined()
-        return "<div\(attributes)>\(content)</div>"
+        let contentHTML = items.map { $0.markupString() }.joined()
+        return Markup("<div\(attributes)>\(contentHTML)</div>")
     }
 }

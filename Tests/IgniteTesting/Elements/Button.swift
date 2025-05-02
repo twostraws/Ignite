@@ -24,7 +24,7 @@ class ButtonTests: IgniteTestSuite {
             .role(.primary)
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <p><button type=\"button\" \
@@ -60,10 +60,10 @@ class ButtonTests: IgniteTestSuite {
             .id("SecondText")
             .hidden()
 
-        let outputButton1 = button1.render()
-        let outputButton2 = button2.render()
-        let outputText1 = text1.render()
-        let outputText2 = text2.render()
+        let outputButton1 = button1.markupString()
+        let outputButton2 = button2.markupString()
+        let outputText1 = text1.markupString()
+        let outputText2 = text2.markupString()
 
         #expect(outputButton1 == """
         <p><button type=\"button\" class=\"btn btn-primary\" \
@@ -90,7 +90,7 @@ class ButtonTests: IgniteTestSuite {
                 .linkStyle(.button)
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <p><a href=\"https://www.hackingwithswift.com\" \
@@ -101,13 +101,13 @@ class ButtonTests: IgniteTestSuite {
     @Test("Disabled Button")
     func disabledButton() async throws {
         let button = Button().disabled()
-        let output = button.render()
+        let output = button.markupString()
         #expect(output == #"<button type="button" disabled class="btn"></button>"#)
     }
 
     // MARK: Targets
 
-    func contentExamples() -> URL {
+    private func contentExamples() -> URL {
         URL(string: "https://www.hackingwithswift.com")!
     }
 }

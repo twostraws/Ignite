@@ -20,9 +20,9 @@ class CardTests: IgniteTestSuite {
             "Some text wrapped in a card"
         }
 
-        let output = element.render()
+        let output = element.markup()
 
-        #expect(output == """
+        #expect(output.string == """
         <div class="card"><div class="card-body">Some text wrapped in a card</div></div>
         """)
     }
@@ -33,9 +33,9 @@ class CardTests: IgniteTestSuite {
             "Some text wrapped in a card"
         }
 
-        let output = element.render()
+        let output = element.markup()
 
-        #expect(output == """
+        #expect(output.string == """
         <div class="card"><img src="dog.jpg" alt="" class="card-img-top" />\
         <div class="card-body">Some text wrapped in a card</div></div>
         """)
@@ -51,9 +51,9 @@ class CardTests: IgniteTestSuite {
             "A footer"
         }
 
-        let output = element.render()
+        let output = element.markup()
 
-        #expect(output == """
+        #expect(output.string == """
         <div class="card"><div class="card-header">Header</div><div class="card-body">Some text wrapped in a card</div>\
         <div class="card-footer text-body-secondary">A footer</div></div>
         """)
@@ -69,9 +69,9 @@ class CardTests: IgniteTestSuite {
         }
         .frame(maxWidth: 500)
 
-        let output = element.render()
+        let output = element.markup()
 
-        #expect(output == """
+        #expect(output.string == """
         <div class="card" style="width: 100%; max-width: 500px">\
         <img src="/images/photos/dishwasher.jpg" alt="" class="card-img-top" /><div class="card-body">\
         <p class="card-text">Before putting your dishes into the dishwasher, give them a quick pre-clean.</p>\
@@ -88,7 +88,7 @@ class CardTests: IgniteTestSuite {
         }
         .cardStyle(style)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="\(expectedClass)"><div class="card-body">Placeholder</div></div>
@@ -102,7 +102,7 @@ class CardTests: IgniteTestSuite {
         }
         .contentPosition(.top)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="card"><div class="card-body">Placeholder</div>\
@@ -117,7 +117,7 @@ class CardTests: IgniteTestSuite {
         }
         .contentPosition(.bottom)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="card"><img src="image.jpg" alt="" class="card-img-top" />\
@@ -132,7 +132,7 @@ class CardTests: IgniteTestSuite {
         }
         .contentPosition(.overlay)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="card"><img src="image.jpg" alt="" class="card-img" />\

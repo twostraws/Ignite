@@ -15,19 +15,13 @@ final class StyleManager {
     // Private initializer to enforce singleton pattern
     private init() {}
 
-    /// Cache of generated CSS rules for styles
-    var cssRulesCache: [String: String] = [:]
-
-    /// Cache of generated CSS class names for styles
-    private var classNameCache: [String: String] = [:]
-
     /// Dictionary of registered styles keyed by their type names
-    private var registeredStyles: [String: any Style] = [:]
+    private var registeredStyles = [any Style]()
 
     /// A structure that holds the default style and all unique style variations for a given `Style`.
     struct StyleMapResult {
         /// The default style attributes that apply when no conditions are met.
-        let defaultStyle: [InlineStyle]
+        let defaultStyles: [InlineStyle]
 
         /// A mapping of environment conditions to their corresponding style attributes,
         /// containing only the minimal conditions needed for each unique style variation.
@@ -40,43 +34,23 @@ final class StyleManager {
         let styles: [InlineStyle]
         let collector: StyledHTML
         let style: any Style
-        let defaultStyle: [InlineStyle]
-    }
-
-    /// Gets or generates a CSS class name for a style
-    /// - Parameter style: The style to get a class name for
-    /// - Returns: The CSS class name for this style
-    func className(for style: any Style) -> String {
-        let typeName = String(describing: type(of: style))
-
-        if let cached = classNameCache[typeName] {
-            return cached
-        }
-
-        let baseName = typeName.hasSuffix("Style") ? typeName : typeName + "Style"
-        let className = baseName.kebabCased()
-        classNameCache[typeName] = className
-
-        return className
+        let defaultStyles: [InlineStyle]
     }
 
     /// Registers a style for CSS generation
     /// - Parameter style: The style to register
     func registerStyle(_ style: any Style) {
-        let typeName = String(describing: type(of: style))
-        registeredStyles[typeName] = style
+        registeredStyles.append(style)
     }
 
     /// Generates CSS for all registered styles using the provided themes
     /// - Parameter themes: Array of themes to generate theme-specific styles for
     /// - Returns: Complete CSS string for all styles
     func generateAllCSS(themes: [any Theme]) -> String {
-        cssRulesCache.removeAll()
-
-        for (_, style) in registeredStyles {
-            generateCSS(for: style, themes: themes)
+        let cssRules = registeredStyles.map { style in
+            generateCSS(style: style, themes: themes)
         }
 
-        return cssRulesCache.values.joined(separator: "\n\n")
+        return cssRules.joined(separator: "\n\n")
     }
 }

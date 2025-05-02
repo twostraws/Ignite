@@ -7,8 +7,7 @@
 
 /// The layout you assigned to `Site`'s `layout` property.
 public struct DefaultLayout: Layout {
-    public var body: some HTML {
-        // swiftlint:disable:next force_cast
-        PublishingContext.shared.site.layout.body as! Ignite.Document
+    public var body: Document {
+        PublishingContext.shared.site.layout.body
     }
 }

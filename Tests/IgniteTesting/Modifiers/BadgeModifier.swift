@@ -18,7 +18,7 @@ class BadgeModifierTests: IgniteTestSuite {
     func badgeModifierForInlineHTML() async throws {
         let element = Text("Notifications").badge(Badge("3"))
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <li class=\"d-flex justify-content-between align-items-center\">\
@@ -34,7 +34,7 @@ class BadgeModifierTests: IgniteTestSuite {
             Text("Messages")
         }.badge(Badge("5"))
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <li class=\"d-flex justify-content-between align-items-center\">\

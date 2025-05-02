@@ -9,10 +9,7 @@ import Foundation
 
 /// A group of metadata headers for your page, such as its title,
 /// links to its CSS, and more.
-public struct Head: DocumentElement {
-    /// The content and behavior of this HTML.
-    public var body: some HTML { self }
-
+public struct Head: MarkupElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -23,7 +20,10 @@ public struct Head: DocumentElement {
     private var includeStandardHeaders = true
 
     /// The metadata elements for this page.
-    var items: [any HeadElement]
+    private var items: [any HeadElement]
+
+    /// The default target for links in this document.
+    private var defaultLinkTarget: LinkTarget?
 
     /// Creates a new `Head` instance using an element builder that returns
     /// an array of `HeadElement` objects.
@@ -41,23 +41,34 @@ public struct Head: DocumentElement {
         return copy
     }
 
+    /// Sets the default target for all links in the document.
+    /// - Parameter target: The `LinkTarget` to use as the default for all links.
+    /// - Returns: A new `Head` instance with the specified base target.
+    public func defaultLinkTarget(_ target: LinkTarget) -> Self {
+        var copy = self
+        copy.defaultLinkTarget = target
+        return copy
+    }
+
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var items = items
         if includeStandardHeaders {
             items.insert(contentsOf: MetaTag.socialSharingTags(), at: 0)
             items.insert(contentsOf: Head.standardHeaders(), at: 0)
         }
 
-        return "<head\(attributes)>\(HTMLCollection(items))</head>"
+        var contentHTML = items.map { $0.markupString() }
+        if let defaultLinkTarget, let name = defaultLinkTarget.name {
+            contentHTML.insert("<base target=\"\(name)\" />", at: 0)
+        }
+
+        return Markup("<head\(attributes)>\(contentHTML.joined())</head>")
     }
 
-    /// A static function, returning the standard set of headers used for a `Page` instance.
-    ///
-    /// This function can be used when defining a custom header based on the standard set of headers.
-    @HeadElementBuilder
-    public static func standardHeaders() -> [any HeadElement] {
+    /// Returns the standard set of headers used for a `Page` instance.
+    @HeadElementBuilder static func standardHeaders() -> [any HeadElement] {
         MetaTag.utf8
         MetaTag.flexibleViewport
 

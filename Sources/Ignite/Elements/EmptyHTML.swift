@@ -7,7 +7,7 @@
 
 /// A placeholder HTML element that renders nothing
 /// Used as a default or fallback when no content is needed
-public struct EmptyHTML: HTML, InlineElement, DocumentElement {
+public struct EmptyHTML: HTML {
     /// Creates a new empty HTML element
     public nonisolated init() {}
 
@@ -19,7 +19,7 @@ public struct EmptyHTML: HTML, InlineElement, DocumentElement {
 
     /// Renders this element as an empty string
     /// - Returns: An empty string
-    public func render() -> String {
-        ""
+    public func markup() -> Markup {
+        Markup()
     }
 }

@@ -17,10 +17,10 @@ class HStackTests: IgniteTestSuite {
     @Test("HStack with elements")
     func basicHStack() async throws {
         let element = HStack(alignment: .top) {
-            FormFieldLabel(text: "Top Label")
-            FormFieldLabel(text: "Bottom Label")
+            ControlLabel("Top Label")
+            ControlLabel("Bottom Label")
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="hstack gap-3">\
@@ -33,10 +33,10 @@ class HStackTests: IgniteTestSuite {
     @Test("HStack with elements and spacing")
     func elementsWithSpacingWithinHStack() async throws {
         let element = HStack(spacing: 10) {
-            FormFieldLabel(text: "Top Label")
-            FormFieldLabel(text: "Bottom Label")
+            ControlLabel("Top Label")
+            ControlLabel("Bottom Label")
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="hstack" style="gap: 10px">\

@@ -151,9 +151,9 @@ public struct Card: HTML {
 
     public init(
         imageName: String? = nil,
-        @HTMLBuilder body: () -> some HTML,
-        @HTMLBuilder header: () -> some HTML = { EmptyHTML() },
-        @HTMLBuilder footer: () -> some HTML = { EmptyHTML() }
+        @HTMLBuilder body: () -> some BodyElement,
+        @HTMLBuilder header: () -> some BodyElement = { EmptyHTML() },
+        @HTMLBuilder footer: () -> some BodyElement = { EmptyHTML() }
     ) {
         if let imageName {
             self.image = Image(decorative: imageName)
@@ -203,7 +203,7 @@ public struct Card: HTML {
         return copy
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         Section {
             if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
@@ -240,16 +240,12 @@ public struct Card: HTML {
         .attributes(attributes)
         .class("card")
         .class(cardClasses)
-        .render()
+        .markup()
     }
 
     private func renderHeader() -> some HTML {
-        Section {
-            for item in header {
-                item
-            }
-        }
-        .class("card-header")
+        Section(header)
+            .class("card-header")
     }
 
     private func renderItems() -> some HTML {
@@ -260,8 +256,8 @@ public struct Card: HTML {
                     text.class("card-text")
                 case let text as Text:
                     text.class("card-title")
-                case let link as Link:
-                    link.class("card-link")
+                case is Link, is LinkGroup:
+                    AnyHTML(item).class("card-link")
                 case let image as Image:
                     image.class("card-img")
                 default:
@@ -273,11 +269,7 @@ public struct Card: HTML {
     }
 
     private func renderFooter() -> some HTML {
-        Section {
-            for item in footer {
-                item
-            }
-        }
-        .class("card-footer", "text-body-secondary")
+        Section(footer)
+            .class("card-footer", "text-body-secondary")
     }
 }

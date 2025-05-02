@@ -5,10 +5,7 @@
 // See LICENSE for license information.
 //
 
-public struct Body: DocumentElement {
-    /// The content and behavior of this HTML.
-    public var body: some HTML { self }
-
+public struct Body: MarkupElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -18,7 +15,7 @@ public struct Body: DocumentElement {
     /// Whether this HTML uses Bootstrap's `container` class to determine page width.
     var isBoundByContainer: Bool = true
 
-    var content: any HTML
+    var content: any BodyElement
 
     public init(@HTMLBuilder _ content: () -> some HTML) {
         self.content = content()
@@ -41,17 +38,17 @@ public struct Body: DocumentElement {
         return copy
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         var attributes = attributes
-        var output = content.render()
+        var output = content.markup()
 
         // Add required scripts
         if publishingContext.site.useDefaultBootstrapURLs == .localBootstrap {
-            output += Script(file: "/js/bootstrap.bundle.min.js").render()
+            output += Script(file: "/js/bootstrap.bundle.min.js").markup()
         }
 
         if publishingContext.hasSyntaxHighlighters == true {
-            output += Script(file: "/js/syntax-highlighting.js").render()
+            output += Script(file: "/js/syntax-highlighting.js").markup()
         }
 
         if case .visible(let firstLine, let shouldWrap) =
@@ -66,18 +63,96 @@ public struct Body: DocumentElement {
             }
         }
 
-        if output.contains(#"data-bs-toggle="tooltip""#) {
+        if output.string.contains(#"data-bs-toggle="tooltip""#) {
             output += Script(code: """
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-            """).render()
+            """).markup()
         }
 
-        output += Script(file: "/js/ignite-core.js").render()
+        output += Script(file: "/js/ignite-core.js").markup()
 
         if isBoundByContainer {
             attributes.append(classes: ["container"])
         }
-        return "<body\(attributes)>\(output)</body>"
+        return Markup("<body\(attributes)>\(output.string)</body>")
+    }
+}
+
+public extension Body {
+    /// Adds a data attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the data attribute
+    ///   - value: The value of the data attribute
+    /// - Returns: The modified `Body` element
+    func data(_ name: String, _ value: String) -> Self {
+        var copy = self
+        copy.attributes.data.append(.init(name: name, value: value))
+        return copy
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(name: String, value: String) -> Self {
+        var copy = self
+        copy.attributes.append(customAttributes: .init(name: name, value: value))
+        return copy
+    }
+}
+
+public extension Body {
+    /// Applies margins on selected sides of this element. Defaults to 20 pixels.
+    /// - Parameters:
+    ///   - edges: The edges where this margin should be applied.
+    ///   - length: The amount of margin to apply, specified in
+    /// units of your choosing.
+    /// - Returns: A copy of the current element with the new margins applied.
+    func margin(_ edges: Edge, _ length: LengthUnit) -> Self {
+        let styles = content.edgeAdjustedStyles(prefix: "margin", edges, length.stringValue)
+        var copy = self
+        copy.attributes.append(styles: styles)
+        return copy
+    }
+
+    /// Applies margins on selected sides of this element, using adaptive sizing.
+    /// - Parameters:
+    ///   - edges: The edges where this margin should be applied.
+    ///   - amount: The amount of margin to apply, specified as a
+    ///   `SpacingAmount` case.
+    /// - Returns: A copy of the current element with the new margins applied.
+    func margin(_ edges: Edge, _ amount: SpacingAmount) -> Self {
+        let classes = content.edgeAdjustedClasses(prefix: "m", edges, amount.rawValue)
+        var copy = self
+        copy.attributes.append(classes: classes)
+        return copy
+    }
+
+    /// Applies padding on selected sides of this element. Defaults to 20 pixels.
+    /// - Parameters:
+    ///   - edges: The edges where this padding should be applied.
+    ///   - length: The amount of padding to apply, specified in
+    /// units of your choosing.
+    /// - Returns: A copy of the current element with the new padding applied.
+    func padding(_ edges: Edge, _ length: LengthUnit) -> Self {
+        let styles = content.edgeAdjustedStyles(prefix: "padding", edges, length.stringValue)
+        var copy = self
+        copy.attributes.append(styles: styles)
+        return copy
+    }
+
+    /// Applies padding on selected sides of this element using adaptive sizing.
+    /// - Parameters:
+    ///   - edges: The edges where this padding should be applied.
+    ///   - amount: The amount of padding to apply, specified as a
+    /// `SpacingAmount` case.
+    /// - Returns: A copy of the current element with the new padding applied.
+    func padding(_ edges: Edge, _ amount: SpacingAmount) -> Self {
+        let classes = content.edgeAdjustedClasses(prefix: "p", edges, amount.rawValue)
+        var copy = self
+        copy.attributes.append(classes: classes)
+        return copy
     }
 }

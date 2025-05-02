@@ -8,7 +8,7 @@
 /// A small, capsule-shaped piece of information, such as a tag.
 public struct Badge: InlineElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some InlineElement { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -92,10 +92,10 @@ public struct Badge: InlineElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         let badgeAttributes = attributes.appending(classes: badgeClasses)
         return Span(text)
             .attributes(badgeAttributes)
-            .render()
+            .markup()
     }
 }

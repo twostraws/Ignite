@@ -7,6 +7,31 @@
 
 /// Creates a list of items, either ordered or unordered.
 public struct List: HTML {
+    /// The visual style to apply to a list.
+    public enum Style: Sendable, CaseIterable {
+        /// A basic list appearance with no styling.
+        case automatic
+
+        /// A list style with subtle borders and rounded corners.
+        case group
+
+        /// A list style with subtle borders and rounded corners, arranged horizontally.
+        case horizontalGroup
+
+        /// A list style with separators between items.
+        case plain
+
+        /// The Bootstrap CSS classes needed to implement the list's visual style.
+        var classes: [String]? {
+            switch self {
+            case .automatic: nil
+            case .group: ["list-group"]
+            case .horizontalGroup: ["list-group", "list-group-horizontal"]
+            case .plain: ["list-group", "list-group-flush"]
+            }
+        }
+    }
+
     /// Controls whether this list contains items in a specific order or not.
     public enum ListMarkerStyle {
         /// This list contains items that are ordered, which normally means
@@ -18,9 +43,15 @@ public struct List: HTML {
         case unordered(UnorderedListMarkerStyle)
 
         /// This list is unordered, with a custom symbol for bullet points.
-        /// **Note:** Although you can technically pass more than one
+        /// - Note: Although you can technically pass more than one
         /// emoji here, you might find the alignment gets strange.
         case custom(String)
+
+        /// A convenience for creating ordered lists with automatic numbering.
+        public static var ordered: Self { .ordered(.automatic) }
+
+        /// A convenience for creating unordered lists with automatic bullet points.
+        public static var unordered: Self { .unordered(.automatic) }
     }
 
     /// The content and behavior of this HTML.
@@ -32,14 +63,14 @@ public struct List: HTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// The current style for this list. Defaults to `.plain`.
-    private var listStyle: ListStyle = .plain
+    /// The current style for this list. Defaults to `.automatic`.
+    private var listStyle: Style = .automatic
 
     /// The current style for the list item markers. Defaults to `.unordered`.
-    private var markerStyle = ListMarkerStyle.unordered(.automatic)
+    private var markerStyle: ListMarkerStyle = .unordered
 
     /// The items to show in this list. This may contain any page elements,
-    /// but if you need specific styling you might want to use ListItem objects.
+    /// but if you need specific styling you might want to use `ListItem` objects.
     private var items: HTMLCollection
 
     /// Returns the correct HTML name for this list.
@@ -54,7 +85,7 @@ public struct List: HTML {
     /// Creates a new `List` object using a page element builder that returns
     /// an array of `HTML` objects to display in the list.
     /// - Parameter items: The content you want to display in your list.
-    public init(@HTMLBuilder items: () -> some HTML) {
+    public init(@HTMLBuilder items: () -> some BodyElement) {
         self.items = HTMLCollection(items)
     }
 
@@ -64,14 +95,14 @@ public struct List: HTML {
     ///   - items: A sequence of items you want to convert into list items.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns an item representing that value in the list.
-    public init<T>(_ items: any Sequence<T>, content: (T) -> some HTML) {
+    public init<T>(_ items: any Sequence<T>, content: (T) -> some BodyElement) {
         self.items = HTMLCollection(items.map(content))
     }
 
     /// Adjusts the style of this list.
     /// - Parameter style: The new style.
     /// - Returns: A new `List` instance with the updated style.
-    public func listStyle(_ style: ListStyle) -> Self {
+    public func listStyle(_ style: Style) -> Self {
         var copy = self
         copy.listStyle = style
         return copy
@@ -86,42 +117,35 @@ public struct List: HTML {
         return copy
     }
 
+    /// Combines list and marker styles into a single `CoreAttributes` object for rendering.
     private func getAttributes() -> CoreAttributes {
         var listAttributes = attributes
 
-        if listStyle != .plain {
-            listAttributes.append(classes: "list-group")
-        } else if listStyle == .flushGroup {
-            listAttributes.append(classes: "list-group-flush")
+        if let styleClasses = listStyle.classes, !styleClasses.isEmpty {
+            listAttributes.append(classes: styleClasses)
         }
 
         var listMarkerType = ""
 
-        if case .ordered(let orderedStyle) = markerStyle {
-            // Only add the extra styling if we aren't using
-            // the default.
-            if orderedStyle != .automatic {
-                listMarkerType = orderedStyle.rawValue
-            }
-
-            if listStyle == .group {
+        switch markerStyle {
+        case .ordered(let style):
+            // Only add the extra styling if we aren't using the default.
+            if listStyle != .automatic {
                 listAttributes.append(classes: "list-group-numbered")
             }
-        } else if case .unordered(let unorderedListStyle) = markerStyle {
-            // Only add the extra styling if we aren't using
-            // the default.
-            if unorderedListStyle != .automatic {
-                listMarkerType = String(describing: unorderedListStyle)
+            if style != .automatic {
+                listMarkerType = style.rawValue
             }
-        } else if case .custom(let symbol) = markerStyle {
+        case .unordered(let style):
+            guard style != .automatic else { break }
+            // Only add the extra styling if we aren't using the default.
+            listMarkerType = style.rawValue
+        case .custom(let symbol):
             // We need to convert our symbol to something
             // Unicode friendly, in case they use emoji.
-            var cssHex = ""
-
-            for scalar in symbol.unicodeScalars {
-                let hexValue = String(format: "%X", scalar.value)
-                cssHex += "\\\(hexValue)"
-            }
+            let cssHex = symbol.unicodeScalars
+                .map { String(format: "\\%X", $0.value) }
+                .joined()
 
             listMarkerType = "'\(cssHex)'"
         }
@@ -135,7 +159,7 @@ public struct List: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         let listAttributes = getAttributes()
 
         var output = "<\(listElementName)\(listAttributes)>"
@@ -144,21 +168,21 @@ public struct List: HTML {
             var item = originalItem
             // Any element that renders its own <li> (e.g. ForEach) should
             // be allowed to handle that itself.
-            if let listableItem = item as? ListableElement {
-                if listStyle != .plain {
-                    item.attributes.append(classes: "list-group-item")
+            if var listableItem = item as? ListableElement ??
+            (item as? AnyHTML)?.body as? ListableElement {
+                if listStyle != .automatic {
+                    listableItem.attributes.append(classes: "list-group-item")
                 }
-
-                output += listableItem.renderInList()
+                output += listableItem.listMarkup().string
             } else {
-                let styleClass = listStyle != .plain ? " class=\"list-group-item\"" : ""
+                let styleClass = listStyle == .automatic ? "" : " class=\"list-group-item\""
                 item.attributes.append(classes: "m-0")
-                output += "<li\(styleClass)>\(item.render())</li>"
+                output += "<li\(styleClass)>\(item.markupString())</li>"
             }
         }
 
         output += "</\(listElementName)>"
 
-        return output
+        return Markup(output)
     }
 }

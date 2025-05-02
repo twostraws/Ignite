@@ -5,19 +5,68 @@
 // See LICENSE for license information.
 //
 
+private enum AlignmentType {
+    case universal(HorizontalAlignment)
+    case responsive(HorizontalAlignment.ResponsiveAlignment)
+}
+
+@MainActor private func horizontalAlignmentModifier(
+    _ alignment: AlignmentType,
+    content: any BodyElement
+) -> any BodyElement {
+    switch alignment {
+    case .universal(let alignment):
+        return content.class(alignment.rawValue)
+    case .responsive(let alignment):
+        return content.class(alignment.containerAlignmentClasses)
+    }
+}
+
+@MainActor private func horizontalAlignmentModifier(
+    _ alignment: AlignmentType,
+    content: any InlineElement
+) -> any InlineElement {
+    switch alignment {
+    case .universal(let alignment):
+        return content
+            .class(alignment.rawValue)
+            .style(.display, "block")
+    case .responsive(let alignment):
+        return content
+            .class(alignment.containerAlignmentClasses)
+            .style(.display, "block")
+    }
+}
+
 public extension HTML {
     /// Aligns this element using a specific alignment.
     /// - Parameter alignment: How to align this element.
     /// - Returns: A modified copy of the element with alignment applied
     func horizontalAlignment(_ alignment: HorizontalAlignment) -> some HTML {
-        AnyHTML(horizontalAlignmentModifier(.universal(alignment)))
+        AnyHTML(horizontalAlignmentModifier(.universal(alignment), content: self))
     }
 
     /// Aligns this element using multiple responsive alignments.
     /// - Parameter alignment: One or more alignments with optional breakpoints.
     /// - Returns: A modified copy of the element with alignments applied
     func horizontalAlignment(_ alignment: HorizontalAlignment.ResponsiveAlignment) -> some HTML {
-        AnyHTML(horizontalAlignmentModifier(.responsive(alignment)))
+        AnyHTML(horizontalAlignmentModifier(.responsive(alignment), content: self))
+    }
+}
+
+public extension InlineElement {
+    /// Aligns this element using a specific alignment.
+    /// - Parameter alignment: How to align this element.
+    /// - Returns: A modified copy of the element with alignment applied
+    func horizontalAlignment(_ alignment: HorizontalAlignment) -> some InlineElement {
+        AnyInlineElement(horizontalAlignmentModifier(.universal(alignment), content: self))
+    }
+
+    /// Aligns this element using multiple responsive alignments.
+    /// - Parameter alignment: One or more alignments with optional breakpoints.
+    /// - Returns: A modified copy of the element with alignments applied
+    func horizontalAlignment(_ alignment: HorizontalAlignment.ResponsiveAlignment) -> some InlineElement {
+        AnyInlineElement(horizontalAlignmentModifier(.responsive(alignment), content: self))
     }
 }
 
@@ -27,30 +76,6 @@ public extension StyledHTML {
     /// - Returns: A modified copy of the element with alignment applied
     func horizontalAlignment(_ alignment: HorizontalAlignment) -> Self {
         style(alignment.itemAlignmentStyle)
-    }
-}
-
-private enum AlignmentType {
-    case universal(HorizontalAlignment)
-    case responsive(HorizontalAlignment.ResponsiveAlignment)
-}
-
-private extension HTML {
-    func horizontalAlignmentModifier(_ alignment: AlignmentType) -> any HTML {
-        switch alignment {
-        case .universal(let alignment):
-            var modified: any HTML = self.class(alignment.rawValue)
-            if self.isInlineElement {
-                modified = modified.style(.display, "block")
-            }
-            return modified
-        case .responsive(let alignment):
-            var modified: any HTML = self.class(alignment.containerAlignmentClasses)
-            if self.isInlineElement {
-                modified = modified.style(.display, "block")
-            }
-            return modified
-        }
     }
 }
 

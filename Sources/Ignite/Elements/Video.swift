@@ -8,7 +8,7 @@
 /// Shows a Video player on your page.
 public struct Video: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some InlineElement { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -18,7 +18,7 @@ public struct Video: InlineElement, LazyLoadable {
 
     /// The files of the video to display. This should be specified relative to the
     /// root of your site, e.g. /video/outforwalk.mp4.
-    var files: [String]?
+    private var files: [String]?
 
     /// Creates one or multiple `Video` instance from the names of
     /// files contained in your site's assets. This should be specified
@@ -33,7 +33,7 @@ public struct Video: InlineElement, LazyLoadable {
     /// - Parameters:
     ///   - files: The user videos to render.
     /// - Returns: The HTML for this element.
-    public func render(files: [String]) -> String {
+    private func render(files: [String]) -> Markup {
         var output = "<video controls\(attributes)>"
 
         for filename in files {
@@ -44,18 +44,18 @@ public struct Video: InlineElement, LazyLoadable {
 
         output += "Your browser does not support the video tag."
         output += "</video>"
-        return output
+        return Markup(output)
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         guard let files = self.files else {
             publishingContext.addWarning("""
             Creating video with no name should not be possible. \
             Please file a bug report on the Ignite project.
             """)
-            return ""
+            return Markup()
         }
         return render(files: files)
     }

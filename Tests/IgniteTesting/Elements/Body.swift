@@ -18,7 +18,7 @@ import Testing
     @Test("Simple Body Test", arguments: await Self.sites)
     func simpleBody(for site: any Site) async throws {
         let element = Body()
-        let output = element.render()
+        let output = element.markupString()
         let path = publishingContext.path(for: URL(string: "/js")!)
 
         #expect(output == """

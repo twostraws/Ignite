@@ -20,7 +20,7 @@ class QuoteTests: IgniteTestSuite {
             Text(quoteText)
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <blockquote class="blockquote">\
@@ -37,7 +37,7 @@ class QuoteTests: IgniteTestSuite {
             captionText
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <blockquote class="blockquote">\

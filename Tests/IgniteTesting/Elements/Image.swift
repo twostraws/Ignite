@@ -16,7 +16,7 @@ import Testing
     @Test("Local Image", arguments: ["/images/example.jpg"], ["Example image"])
     func named(file: String, description: String) async throws {
         let element = Image(file, description: description)
-        let output = element.render()
+        let output = element.markupString()
 
         let expectedPath = PublishingContext.shared.path(for: URL(string: file)!)
         #expect(output == "<img src=\"\(expectedPath)\" alt=\"\(description)\" />")
@@ -25,7 +25,7 @@ import Testing
     @Test("Remote Image", arguments: ["https://example.com"], ["Example image"])
     func named(url: String, description: String) async throws {
         let element = Image(url, description: description)
-        let output = element.render()
+        let output = element.markupString()
 
         let expectedPath = PublishingContext.shared.path(for: URL(string: url)!)
         #expect(output == "<img src=\"\(expectedPath)\" alt=\"\(description)\" />")
@@ -34,7 +34,7 @@ import Testing
     @Test("Icon Image", arguments: ["browser-safari"], ["Safari logo"])
     func icon(systemName: String, description: String) async throws {
         let element = Image(systemName: systemName, description: description)
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<i class=\"bi-browser-safari\"></i>")
     }
 }

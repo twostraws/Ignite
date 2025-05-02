@@ -29,7 +29,7 @@ public protocol ArticleRenderer {
     /// Parses Markdown provided as a direct input string.
     /// - Parameters:
     ///   - markdown: The Markdown to parse.
-    ///   - removeTitleFromBody: True if the first title should be removed
-    ///   from the final `body` property.
+    ///   - removeTitleFromBody: `true` if the first title should be removed
+    ///   from the final `text` property.
     init(markdown: String, removeTitleFromBody: Bool) throws
 }

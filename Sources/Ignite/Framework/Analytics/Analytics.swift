@@ -7,9 +7,6 @@
 
 /// Embeds analytics tracking code in the page head section for various analytics services.
 public struct Analytics: HeadElement {
-    /// The content and behavior of this HTML.
-    public var body: some HTML { self }
-
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -27,25 +24,25 @@ public struct Analytics: HeadElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         switch service {
         case .googleAnalytics(let measurementID):
-            googleAnalyticsCode(for: measurementID)
+            Markup(googleAnalyticsCode(for: measurementID))
 
         case .plausible(let domain, let measurements):
-            plausibleCode(for: domain, using: measurements)
+            Markup(plausibleCode(for: domain, using: measurements))
 
         case .fathom(let siteID):
-            fathomCode(for: siteID)
+            Markup(fathomCode(for: siteID))
 
         case .clicky(let siteID):
-            clickyCode(for: siteID)
+            Markup(clickyCode(for: siteID))
 
         case .telemetryDeck(let siteID):
-            telemetryDeckCode(for: siteID)
+            Markup(telemetryDeckCode(for: siteID))
 
         case .custom(let code):
-            code
+            Markup(code)
         }
     }
 

@@ -22,7 +22,7 @@ public struct Divider: HTML, DropdownItem {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<hr\(attributes) />"
+    public func markup() -> Markup {
+        Markup("<hr\(attributes) />")
     }
 }

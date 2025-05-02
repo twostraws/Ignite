@@ -6,7 +6,7 @@
 //
 
 /// Creates vertical space of a specific value.
-public struct Spacer: HTML {
+public struct Spacer: HTML, NavigationItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -16,14 +16,24 @@ public struct Spacer: HTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
+    /// How a `NavigationBar` displays this item at different breakpoints.
+    public var navigationBarVisibility: NavigationBarVisibility = .automatic
+
     /// The amount of space to occupy.
-    var spacingAmount: SpacingType
+    private var spacingAmount: SpacingType
+
+    /// Whether the spacer is used horizontally or vertically.
+    private var axis: Axis = .vertical
+
+    /// Creates a new `Spacer` that uses all available space.
+    public init() {
+        spacingAmount = .automatic
+    }
 
     /// Creates a new `Spacer` with a size in pixels of your choosing.
-    /// Defaults to 20.
     /// - Parameter size: The amount of vertical space this `Spacer`
-    /// should occupy. Defaults to 20.
-    public init(size: Int = 20) {
+    /// should occupy.
+    public init(size: Int) {
         spacingAmount = .exact(size)
     }
 
@@ -34,19 +44,32 @@ public struct Spacer: HTML {
         spacingAmount = .semantic(size)
     }
 
+    /// Configures the axis of this spacer.
+    /// - Parameter axis: The lateral direction of the spacer.
+    /// - Returns: A new `Spacer` with the specified axis.
+    func axis(_ axis: Axis) -> Self {
+        var copy = self
+        copy.axis = .horizontal
+        return copy
+    }
+
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        if case let .semantic(spacingAmount) = spacingAmount {
+    public func markup() -> Markup {
+        if spacingAmount == .automatic {
             Section {}
-                .margin(.top, spacingAmount)
-                .class("ms-auto")
-                .render()
+                .class(axis == .horizontal ? "ms-auto" : nil)
+                .class(axis == .vertical ? "mt-auto" : nil)
+                .markup()
+        } else if case let .semantic(spacingAmount) = spacingAmount {
+            Section {}
+                .margin(axis == .vertical ? .top : .leading, spacingAmount)
+                .markup()
         } else if case let .exact(int) = spacingAmount {
             Section {}
-                .frame(height: .px(int))
-                .class("ms-auto")
-                .render()
+                .frame(width: axis == .horizontal ? .px(int) : nil)
+                .frame(height: axis == .vertical ? .px(int) : nil)
+                .markup()
         } else {
             fatalError("Unknown spacing amount: \(String(describing: spacingAmount))")
         }

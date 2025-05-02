@@ -8,22 +8,22 @@
 import Foundation
 import OrderedCollections
 
-// A typealias that allows us to use OrderedSet without importing OrderedCollections
+// A typealias that allows us to use `OrderedSet` without importing OrderedCollections
 public typealias OrderedSet<Element: Hashable> = OrderedCollections.OrderedSet<Element>
 
-// A typealias that allows us to use OrderedDictionary without importing OrderedCollections
+// A typealias that allows us to use `OrderedDictionary` without importing OrderedCollections
 public typealias OrderedDictionary<Key: Hashable, Value> = OrderedCollections.OrderedDictionary<Key, Value>
 
-// A typealias that allows us to use UUID without importing Foundation
+// A typealias that allows us to use `UUID` without importing Foundation
 public typealias UUID = Foundation.UUID
 
-// A typealias that allows us to use URL without importing Foundation
+// A typealias that allows us to use `URL` without importing Foundation
 public typealias URL = Foundation.URL
 
-// A typealias that allows us to use Data without importing Foundation
+// A typealias that allows us to use `Data` without importing Foundation
 public typealias Data = Foundation.Data
 
-// A typealias that allows us to use Date without importing Foundation
+// A typealias that allows us to use `Date` without importing Foundation
 public typealias Date = Foundation.Date
 
 /// A handful of attributes that all HTML types must support, either for
@@ -154,7 +154,8 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
 
     /// Appends multiple CSS classes.
     /// - Parameter classes: The CSS classes to append.
-    mutating func append(classes: String...) {
+    mutating func append(classes: String?...) {
+        let classes = classes.compactMap(\.self)
         self.classes.formUnion(classes)
     }
 
@@ -163,6 +164,16 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     /// - Returns: A copy of the previous `CoreAttributes` object with
     /// the extra CSS classes applied.
     func appending(classes: some Collection<String>) -> CoreAttributes {
+        var copy = self
+        copy.classes.formUnion(classes)
+        return copy
+    }
+
+    /// Returns a new set of attributes with extra CSS classes appended.
+    /// - Parameter classes: The CSS classes to append.
+    /// - Returns: A copy of the previous `CoreAttributes` object with
+    /// the extra CSS classes applied.
+    func appending(classes: String...) -> CoreAttributes {
         var copy = self
         copy.classes.formUnion(classes)
         return copy
@@ -183,6 +194,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     /// Appends multiple extra inline CSS styles.
     /// - Parameter classes: The inline CSS styles to append.
     mutating func append(styles: InlineStyle...) {
+        let styles = styles.filter { !$0.value.isEmpty }
         self.styles.formUnion(styles)
     }
 
@@ -190,7 +202,8 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     ///  - Parameter style: The style name, e.g. background-color
     ///  - Parameter value: The style value, e.g. steelblue
     mutating func append(style: Property, value: String) {
-        styles.append(InlineStyle(style, value: value))
+        guard !value.isEmpty else { return }
+        styles.append(.init(style, value: value))
     }
 
     /// Appends a data attribute.
@@ -211,6 +224,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     ///   CSS style properties and their values to be appended.
     mutating func append(styles newStyles: some Collection<InlineStyle>) {
         var styles = self.styles
+        let newStyles = newStyles.filter { !$0.value.isEmpty }
         styles.formUnion(newStyles)
         self.styles = styles
     }
@@ -230,11 +244,21 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     /// Removes specified CSS properties from the element's inline styles.
     /// - Parameter properties: Variable number of CSS properties to remove.
     mutating func remove(styles properties: Property...) {
-        var styles = Array(self.styles)
+        var styles = self.styles
         for property in properties {
             styles.removeAll(where: { $0.property == property.rawValue })
         }
-        self.styles = OrderedSet(styles)
+        self.styles = styles
+    }
+
+    /// Removes specified custom attributes with the given names from the element.
+    /// - Parameter names: Variable number of attribute names to remove.
+    mutating func remove(attributesNamed names: String...) {
+        var customAttributes = self.customAttributes
+        for name in names {
+            customAttributes.removeAll(where: { $0.name == name })
+        }
+        self.customAttributes = customAttributes
     }
 
     /// Retrieves the inline styles for specified CSS properties.

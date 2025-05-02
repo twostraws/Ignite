@@ -17,18 +17,16 @@ struct HiddenTests {
     @Test("Hidden Modifier for Text")
     func hiddenForText() async throws {
         let element = Text("Hello world!").hidden()
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p class=\"d-none\">Hello world!</p>")
     }
 
     @Test("MediaQuery based hidden Modifier for Text")
     func hiddenMediaQueryForText() async throws {
-        let query = OrientationQuery.landscape
-        let className = CSSManager.shared.registerStyles([query], styles: [.init(.display, value: "none")])
-
-        let element = Text("Hello world!").hidden(query)
-        let output = element.render()
+        let className = CSSManager.shared.registerStyles(.init(small: true))
+        let element = Text("Hello world!").hidden(.responsive(small: true))
+        let output = element.markupString()
 
         #expect(output == "<p class=\"\(className)\">Hello world!</p>")
     }
@@ -36,10 +34,10 @@ struct HiddenTests {
     @Test("Hidden Modifier for Column")
     func hiddenForColumn() async throws {
         let element = Column {
-            FormFieldLabel(text: "Left Label")
-            FormFieldLabel(text: "Right Label")
+            ControlLabel("Left Label")
+            ControlLabel("Right Label")
         }.hidden()
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<td colspan=\"1\" class=\"d-none\"><label>Left Label</label><label>Right Label</label></td>")
     }

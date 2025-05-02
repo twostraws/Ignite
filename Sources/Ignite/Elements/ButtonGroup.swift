@@ -18,10 +18,10 @@ public struct ButtonGroup: HTML {
     public var isPrimitive: Bool { true }
 
     /// A required screen reader description for this element.
-    var accessibilityLabel: String
+    private var accessibilityLabel: String
 
     /// The buttons that should be displayed in this gorup.
-    var content: [Button]
+    private var content: HTMLCollection
 
     /// Creates a new `ButtonGroup` from the accessibility label and an
     /// element builder that must return the buttons to use.
@@ -34,18 +34,16 @@ public struct ButtonGroup: HTML {
         @ElementBuilder<Button> _ content: () -> [Button]
     ) {
         self.accessibilityLabel = accessibilityLabel
-        self.content = content()
+        self.content = HTMLCollection(content())
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        Section {
-            content.map { $0.render() }.joined()
-        }
-        .class("btn-group")
-        .aria(.label, accessibilityLabel)
-        .customAttribute(name: "role", value: "group")
-        .render()
+    public func markup() -> Markup {
+        Section(content)
+            .class("btn-group")
+            .aria(.label, accessibilityLabel)
+            .customAttribute(name: "role", value: "group")
+            .markup()
     }
 }

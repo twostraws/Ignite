@@ -44,20 +44,20 @@ public struct Script: HTML, HeadElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var attributes = attributes
         if let file {
             let path = publishingContext.path(for: file)
             attributes.append(customAttributes: .init(name: "src", value: path))
-            return "<script\(attributes)></script>"
+            return Markup("<script\(attributes)></script>")
         } else if let code {
-            return "<script\(attributes)>\(code)</script>"
+            return Markup("<script\(attributes)>\(code)</script>")
         } else {
             publishingContext.addWarning("""
             Creating a script with no source or code should not be possible. \
             Please file a bug report on the Ignite project.
             """)
-            return ""
+            return Markup()
         }
     }
 }

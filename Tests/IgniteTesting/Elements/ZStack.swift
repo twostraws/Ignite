@@ -23,10 +23,10 @@ class ZStackTests: IgniteTestSuite {
     @Test("ZStack with elements")
     func basicZStack() async throws {
         let element = ZStack {
-            FormFieldLabel(text: "Top Label")
-            FormFieldLabel(text: "Bottom Label")
+            ControlLabel("Top Label")
+            ControlLabel("Bottom Label")
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div style="display: grid">\

@@ -18,7 +18,7 @@ struct PrivacySensitiveTests {
           arguments: [PrivacyEncoding.urlOnly, PrivacyEncoding.urlAndDisplay])
     func privacySensitive(encoding: PrivacyEncoding) async throws {
         let element = Link("Go Home", target: "/").privacySensitive(encoding)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output.contains("privacy-sensitive=\"\(encoding.rawValue)\""))
         #expect(output.contains("protected-link"))

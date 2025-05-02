@@ -14,7 +14,7 @@ public struct Quote: HTML {
     public var attributes = CoreAttributes()
 
     /// The content of this quote.
-    var contents: any HTML
+    var contents: any BodyElement
 
     /// Provide details about this quote, e.g. a source name.
     var caption: any InlineElement
@@ -22,9 +22,9 @@ public struct Quote: HTML {
     /// Create a new quote from a page element builder that returns an array
     /// of elements to display in the quote.
     /// - Parameter contents: The elements to display inside the quote.
-    public init(@HTMLBuilder contents: () -> some HTML) {
+    public init(@HTMLBuilder contents: () -> some BodyElement) {
         self.contents = contents()
-        self.caption = EmptyHTML()
+        self.caption = EmptyInlineElement()
     }
 
     /// Create a new quote from a page element builder that returns an array
@@ -44,18 +44,18 @@ public struct Quote: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var attributes = attributes
         attributes.append(classes: "blockquote")
 
-        let renderedContents = contents.render()
-        let renderedCaption = caption.render()
+        let contentHTML = contents.markupString()
+        let captionHTML = caption.markupString()
 
-        if renderedCaption.isEmpty {
-            return "<blockquote\(attributes)>\(renderedContents)</blockquote>"
+        if captionHTML.isEmpty {
+            return Markup("<blockquote\(attributes)>\(contentHTML)</blockquote>")
         } else {
-            let footer = "<footer class=\"blockquote-footer\">\(renderedCaption)</footer>"
-            return "<blockquote\(attributes)>\(renderedContents + footer)</blockquote>"
+            let footer = "<footer class=\"blockquote-footer\">\(captionHTML)</footer>"
+            return Markup("<blockquote\(attributes)>\(contentHTML + footer)</blockquote>")
         }
     }
 }

@@ -17,7 +17,7 @@ class LabelTests: IgniteTestSuite {
     @Test("Basic Label")
     func basicLabel() async throws {
         let element = Label("Logo", image: "/images/logo.png")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <span style="display: inline-flex; align-items: center">\

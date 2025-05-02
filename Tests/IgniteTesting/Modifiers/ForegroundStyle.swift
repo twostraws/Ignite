@@ -29,7 +29,7 @@ class ForegroundStyleTests: IgniteTestSuite {
     func commonForegroundStyle(style: ForegroundStyle) async throws {
         let element = Text("Hello").foregroundStyle(style)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p class=\"\(style.rawValue)\">Hello</p>")
     }
@@ -38,7 +38,7 @@ class ForegroundStyleTests: IgniteTestSuite {
     func colorForegroundStyle(color: Color, value: String) async throws {
         let element = Text("Hello").foregroundStyle(color)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p style=\"color: \(value)\">Hello</p>")
     }
@@ -47,7 +47,7 @@ class ForegroundStyleTests: IgniteTestSuite {
     func stringForegroundStyle(string: String) async throws {
         let element = Text("Hello").foregroundStyle(string)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p style=\"color: \(string)\">Hello</p>")
     }

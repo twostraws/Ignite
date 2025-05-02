@@ -27,7 +27,7 @@ class GridTests: IgniteTestSuite {
                 .resizable()
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="row justify-content-center">\
@@ -60,7 +60,7 @@ class GridTests: IgniteTestSuite {
                 .width(4)
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="row justify-content-center">\
@@ -97,7 +97,7 @@ class GridTests: IgniteTestSuite {
                 .width(4)
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="row justify-content-center">\
@@ -134,7 +134,7 @@ class GridTests: IgniteTestSuite {
         }
         .columns(2)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="row justify-content-center row-cols-1 row-cols-md-2">\

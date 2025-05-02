@@ -8,7 +8,7 @@
 /// Plays Audio on your page.
 public struct Audio: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some InlineElement { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -18,7 +18,7 @@ public struct Audio: InlineElement, LazyLoadable {
 
     /// The name of the audio to display. This should be specified relative
     /// to the root of your site, e.g. /audio/bark.mp3.
-    var files: [String]?
+    private var files: [String]?
 
     /// Creates an `Audio` instance from the name of a file contained
     /// in your site's assets. This should be specified relative to the root
@@ -32,7 +32,7 @@ public struct Audio: InlineElement, LazyLoadable {
     /// - Parameters:
     ///   - files: The user audios to render.
     /// - Returns: The HTML for this element.
-    public func render(files: [String]) -> String {
+    private func render(files: [String]) -> Markup {
         var output = ""
 
         for filename in files {
@@ -42,18 +42,18 @@ public struct Audio: InlineElement, LazyLoadable {
         }
 
         output += "Your browser does not support the audio element."
-        return "<audio controls\(attributes)>\(output)</audio>"
+        return Markup("<audio controls\(attributes)>\(output)</audio>")
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         guard let files = files else {
             publishingContext.addWarning("""
             Creating audio with no name should not be possible. \
             Please file a bug report on the Ignite project.
             """)
-            return ""
+            return Markup()
         }
 
         return render(files: files)

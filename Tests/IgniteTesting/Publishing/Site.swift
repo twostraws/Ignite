@@ -47,6 +47,35 @@ struct SiteTests {
         try package.clearBuildFolderAndTestContent()
     }
 
+    @Test("Retrieving typed content")
+    func retrievingTypedContent() async throws {
+        var package = TestPackage()
+        package.contentDirectoryURL = package.contentDirectoryURL.appending(path: "Story", directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(at: package.contentDirectoryURL, withIntermediateDirectories: true)
+        let markdownFileURL = package.contentDirectoryURL.appending(path: "story-with-invalid-lastModified.md")
+
+        let markdownContent = """
+        ---
+        layout: TestStory
+        lastModified: 2020-03-30 16:37
+        ---
+
+        # Content typed Story
+        """
+
+        try markdownContent.write(to: markdownFileURL, atomically: false, encoding: .utf8)
+
+        var site = TestSitePublisher()
+        try await site.publish()
+
+        let context = PublishingContext.shared
+        let articleLoader = ArticleLoader(content: context.allContent)
+
+        #expect(articleLoader.typed("Story").isEmpty == false)
+
+        try package.clearBuildFolderAndTestContent()
+    }
+
     @Test("Site published given Markdown content with valid metadata")
     func publishingWithMarkdownContent() async throws {
         let markdownFileURL = package.contentDirectoryURL.appending(path: "story-with-valid-metadata.md")
@@ -109,9 +138,9 @@ struct SiteTests {
 }
 
 private struct TestPackage {
-    let packageBaseURL: URL
-    let buildDirectoryURL: URL
-    let contentDirectoryURL: URL
+    var packageBaseURL: URL
+    var buildDirectoryURL: URL
+    var contentDirectoryURL: URL
 
     init() {
         packageBaseURL = URL(filePath: #filePath, directoryHint: .isDirectory)
@@ -140,7 +169,6 @@ private struct TestPackage {
         try FileManager.default.removeItem(at: buildDirectoryURL)
         let enumerator = FileManager.default.enumerator(at: contentDirectoryURL, includingPropertiesForKeys: nil)
         while let fileURL = enumerator?.nextObject() as? URL {
-            guard fileURL.isFileURL, fileURL.pathExtension == "md" else { continue }
             try FileManager.default.removeItem(at: fileURL)
         }
     }

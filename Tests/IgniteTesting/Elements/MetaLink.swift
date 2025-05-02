@@ -17,7 +17,7 @@ class MetaLinkTests: IgniteTestSuite {
     @Test("href string and rel string")
     func hrefStringAndRelString() async throws {
         let element = MetaLink(href: "https://www.example.com", rel: "canonical")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<link href=\"https://www.example.com\" rel=\"canonical\" />")
     }
@@ -26,7 +26,7 @@ class MetaLinkTests: IgniteTestSuite {
     func hrefURLAndRelString() async throws {
         let url = try #require(URL(string: "https://www.example.com"))
         let element = MetaLink(href: url, rel: "canonical")
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<link href=\"https://www.example.com\" rel=\"canonical\" />")
     }
@@ -34,7 +34,7 @@ class MetaLinkTests: IgniteTestSuite {
     @Test("href string and rel Link.Relationship")
     func hrefStringAndRelRelationship() async throws {
         let element = MetaLink(href: "https://www.example.com", rel: .external)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<link href=\"https://www.example.com\" rel=\"external\" />")
     }
@@ -43,7 +43,7 @@ class MetaLinkTests: IgniteTestSuite {
     func hrefURLAndRelRelationship() async throws {
         let url = try #require(URL(string: "https://www.example.com"))
         let element = MetaLink(href: url, rel: .alternate)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<link href=\"https://www.example.com\" rel=\"alternate\" />")
     }
@@ -51,7 +51,7 @@ class MetaLinkTests: IgniteTestSuite {
     @Test("Highlighting meta tags are sorted")
     func highlighterThemesAreSorted() async throws {
         let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .twilight])
-        let output = links.render()
+        let output = links.markupString()
 
         #expect(output == """
         <link href=\"/css/prism-github-dark.css\" rel=\"stylesheet\" data-highlight-theme=\"github-dark\" />\

@@ -21,7 +21,7 @@ import Testing
         try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Link(link.description, target: link.target)
-        let output = element.render()
+        let output = element.markupString()
         let expectedPath = PublishingContext.shared.path(for: URL(string: link.target)!)
 
         #expect(output == "<a href=\"\(expectedPath)\">\(link.description)</a>")
@@ -32,7 +32,7 @@ import Testing
         try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Link("This is a test", target: page).linkStyle(.button)
-        let output = element.render()
+        let output = element.markupString()
 
         let expectedPath = PublishingContext.shared.path(for: URL(string: page.path)!)
 
@@ -43,15 +43,15 @@ import Testing
     func content(for page: any StaticPage, site: any Site) async throws {
         try PublishingContext.initialize(for: site, from: #filePath)
 
-        let element = Link(target: page) {
+        let element = LinkGroup(target: page) {
             "MORE "
             Text("CONTENT")
         }
-        let output = element.render()
+        let output = element.markupString()
 
         let expectedPath = PublishingContext.shared.path(for: URL(string: page.path)!)
 
-        #expect(output == "<a href=\"\(expectedPath)\" class=\"link-plain\">MORE <p>CONTENT</p></a>")
+        #expect(output == "<a href=\"\(expectedPath)\" class=\"link-plain d-inline-block\">MORE <p>CONTENT</p></a>")
     }
 
     @Test("Link Warning Role", arguments: zip(await pages, await Self.sites))
@@ -59,7 +59,7 @@ import Testing
         try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Link("Link with warning role.", target: page).role(.warning)
-        let output = element.render()
+        let output = element.markupString()
         let expectedPath = PublishingContext.shared.path(for: URL(string: page.path)!)
 
         #expect(output == "<a href=\"\(expectedPath)\" class=\"link-warning\">Link with warning role.</a>")

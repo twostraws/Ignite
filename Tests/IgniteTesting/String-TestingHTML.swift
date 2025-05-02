@@ -16,7 +16,7 @@ extension String {
         // if it does fail, then there is something wrong at the call site
         // (maybe tagName is malformed?)
         // swiftlint:disable:next force_try
-        let regex = try! Regex("<\(tagName)(.*?)>(.*?)</\(tagName)>")
+        let regex = try! Regex("(?s)<\(tagName)(.*?)>(.*?)</\(tagName)>")
 
         guard let unwrapped = firstMatch(of: regex) else {
             return nil

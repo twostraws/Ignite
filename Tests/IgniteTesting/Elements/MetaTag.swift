@@ -17,37 +17,49 @@ class MetaTagTests: IgniteTestSuite {
     @Test("Meta tag with type enum and content a URL")
     func withEnumAndContentURL() async throws {
         let element = MetaTag(.twitterDomain, content: URL(string: "https://example.com?s=searching#target")!)
-        let output = element.render()
+        let output = element.markup()
 
-        #expect(output == "<meta name=\"twitter:domain\" content=\"https://example.com?s=searching#target\" />")
+        #expect(output.string == "<meta name=\"twitter:domain\" content=\"https://example.com?s=searching#target\" />")
     }
 
     @Test("Meta tag with name and content both strings")
     func withNameAndContentBothStrings() async throws {
         let element = MetaTag(name: "tagname", content: "my content")
-        let output = element.render()
+        let output = element.markup()
 
-        #expect(output == "<meta name=\"tagname\" content=\"my content\" />")
+        #expect(output.string == "<meta name=\"tagname\" content=\"my content\" />")
     }
 
     @Test("Meta tag with property and content both strings")
     func withPropertyAndContentBothStrings() async throws {
         let element = MetaTag(property: "unique", content: "my value")
-        let output = element.render()
+        let output = element.markup()
 
-        #expect(output == "<meta property=\"unique\" content=\"my value\" />")
+        #expect(output.string == "<meta property=\"unique\" content=\"my value\" />")
     }
 
     @Test("Meta tag with character set only")
     func withCharacterSet() async throws {
         let element = MetaTag(characterSet: "UTF-16")
-        let output = element.render()
+        let output = element.markup()
 
-        #expect(output == "<meta charset=\"UTF-16\" />")
+        #expect(output.string == "<meta charset=\"UTF-16\" />")
     }
 
     func metaTagCoreFieldsMatch(_ actual: MetaTag, _ expected: MetaTag) -> Bool {
-        actual.value == expected.value && actual.content == expected.content && actual.charset == expected.charset
+        let actualCustomAttributes = actual.attributes.customAttributes
+        let expectedCustomAttributes = expected.attributes.customAttributes
+        let actualDict = Dictionary(uniqueKeysWithValues: actualCustomAttributes.map { ($0.name, $0.value) })
+        let expectedDict = Dictionary(uniqueKeysWithValues: expectedCustomAttributes.map { ($0.name, $0.value) })
+        let keysToCompare = ["name", "property", "content", "charset", "http-equiv"]
+
+        for key in keysToCompare {
+            if actualDict[key] != expectedDict[key] {
+                return false
+            }
+        }
+
+        return true
     }
 
     @Test("Social sharing tags with no image, description, or www")

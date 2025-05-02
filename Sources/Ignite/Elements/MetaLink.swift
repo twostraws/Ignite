@@ -43,20 +43,14 @@ public struct MetaLink: HeadElement, Sendable {
     /// - Returns: An array of MetaLink elements. If multiple themes are provided,
     /// includes data attributes for theme switching.
     static func highlighterThemeMetaLinks(for themes: some Collection<HighlighterTheme>) -> some HeadElement {
-        ForEach(themes.sorted()) { theme in
+        HeadForEach(themes.sorted()) { theme in
             MetaLink(href: "/\(theme.url)", rel: .stylesheet)
                 .data("highlight-theme", theme.description)
         }
     }
 
-    /// The content and behavior of this HTML.
-    public var body: some HTML { self }
-
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The target of this link.
     var href: String
@@ -86,7 +80,7 @@ public struct MetaLink: HeadElement, Sendable {
     /// - Parameters:
     ///   - href: The location of the resource in question.
     ///   - rel: How this resource relates to the current page.
-    public init(href: String, rel: Link.Relationship) {
+    public init(href: String, rel: LinkRelationship) {
         self.href = href
         self.rel = rel.rawValue
     }
@@ -95,7 +89,7 @@ public struct MetaLink: HeadElement, Sendable {
     /// - Parameters:
     ///   - href: The location of the resource in question.
     ///   - rel: How this resource relates to the current page.
-    public init(href: URL, rel: Link.Relationship) {
+    public init(href: URL, rel: LinkRelationship) {
         self.href = href.absoluteString
         self.rel = rel.rawValue
     }
@@ -105,7 +99,7 @@ public struct MetaLink: HeadElement, Sendable {
     ///
     /// If the link `href` starts with a `\` it is an asset and requires any `subsite` prepended;
     /// otherwise the `href` is a URL and  doesn't get `subsite` prepended
-    public func render() -> String {
+    public func markup() -> Markup {
         var attributes = attributes
         // char[0] of the link 'href' is '/' for an asset; not for a site URL
         let basePath = href.starts(with: "/") ? publishingContext.site.url.path : ""
@@ -113,6 +107,30 @@ public struct MetaLink: HeadElement, Sendable {
             .init(name: "href", value: "\(basePath)\(href)"),
             .init(name: "rel", value: rel))
 
-        return "<link\(attributes) />"
+        return Markup("<link\(attributes) />")
+    }
+}
+
+public extension MetaLink {
+    /// Adds a data attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the data attribute
+    ///   - value: The value of the data attribute
+    /// - Returns: The modified `MetaLink`
+    func data(_ name: String, _ value: String) -> Self {
+        var copy = self
+        copy.attributes.data.append(.init(name: name, value: value))
+        return copy
+    }
+
+    /// Adds a custom attribute to the element.
+    /// - Parameters:
+    ///   - name: The name of the custom attribute
+    ///   - value: The value of the custom attribute
+    /// - Returns: The modified `HTML` element
+    func customAttribute(name: String, value: String) -> Self {
+        var copy = self
+        copy.attributes.append(customAttributes: .init(name: name, value: value))
+        return copy
     }
 }
