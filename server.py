@@ -6,7 +6,7 @@ import sys
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, directory=None, subsite=None, **kwargs):
         self.base_directory = directory or os.getcwd()
-        self.subsite = subsite
+        self.subsite = None if subsite == '/' else subsite
         super().__init__(*args, directory=self.base_directory, **kwargs)
         
     def translate_path(self, path):
