@@ -93,7 +93,7 @@ public struct Head: MarkupElement {
         if site.useDefaultBootstrapURLs == .localBootstrap {
             MetaLink.standardCSS
         } else if site.useDefaultBootstrapURLs == .remoteBootstrap {
-            MetaLink.remoteIconCSS
+            MetaLink.standardRemoteCSS
         }
 
         if context.hasSyntaxHighlighters, site.allHighlighterThemes.isEmpty == false {

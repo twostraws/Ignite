@@ -42,9 +42,16 @@ public struct Body: MarkupElement {
         var attributes = attributes
         var output = content.markup()
 
-        // Add required scripts
         if publishingContext.site.useDefaultBootstrapURLs == .localBootstrap {
             output += Script(file: "/js/bootstrap.bundle.min.js").markup()
+        } else if
+            let url = URL(string: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js") {
+            output += Script(file: url)
+                .customAttribute(
+                    name: "integrity",
+                    value: "sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq")
+                .customAttribute(name: "crossorigin", value: "anonymous")
+                .markup()
         }
 
         if publishingContext.hasSyntaxHighlighters == true {
@@ -53,7 +60,6 @@ public struct Body: MarkupElement {
 
         if case .visible(let firstLine, let shouldWrap) =
             publishingContext.site.syntaxHighlighterConfiguration.lineNumberVisibility {
-
             attributes.append(classes: "line-numbers")
             if firstLine != 1 {
                 attributes.append(dataAttributes: .init(name: "start", value: firstLine.formatted()))
