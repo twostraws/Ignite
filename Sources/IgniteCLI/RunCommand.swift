@@ -138,9 +138,13 @@ struct RunCommand: ParsableCommand {
 
     /// Generates a QR code for the given URL and prints it to the terminal.
     private func generateQRCode(for url: String) {
+        #if canImport(CoreImage)
         guard let qrCode = try? QRCode(utf8String: url) else { return }
         print("\n📱 Scan this QR code to access the site on your mobile device:\n")
         print(qrCode.smallAsciiRepresentation())
+        #else
+        print("\n Visit this address to access the site on your mobile device:\n")
+        #endif
         print("URL: \(url)\n")
     }
 }

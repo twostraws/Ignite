@@ -5,6 +5,7 @@
 // See LICENSE for license information.
 //
 
+#if canImport(CoreImage)
 import CoreImage
 
 /// The engine responsible for generating QR codes using CoreImage.
@@ -69,3 +70,4 @@ struct QRCodeEngine {
         return BoolMatrix(dimension: width, flattened: rawData.map { $0 == 0 ? true : false })
     }
 }
+#endif
