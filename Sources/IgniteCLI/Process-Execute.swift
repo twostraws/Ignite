@@ -31,7 +31,7 @@ extension Process {
         then subsequentCommand: String = ""
     ) throws -> (output: String, error: String) {
         let process = Process()
-        process.launchPath = "/bin/bash"
+        process.executableURL = URL(fileURLWithPath: "/bin/bash")
         process.arguments = ["-c"] + [command]
 
         let output = Pipe()
