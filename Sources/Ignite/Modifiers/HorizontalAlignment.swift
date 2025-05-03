@@ -16,9 +16,9 @@ private enum AlignmentType {
 ) -> any BodyElement {
     switch alignment {
     case .universal(let alignment):
-        return content.class(alignment.rawValue)
+        content.class(alignment.rawValue)
     case .responsive(let alignment):
-        return content.class(alignment.containerAlignmentClasses)
+        content.class(alignment.containerAlignmentClasses)
     }
 }
 
@@ -28,11 +28,11 @@ private enum AlignmentType {
 ) -> any InlineElement {
     switch alignment {
     case .universal(let alignment):
-        return content
+        content
             .class(alignment.rawValue)
             .style(.display, "block")
     case .responsive(let alignment):
-        return content
+        content
             .class(alignment.containerAlignmentClasses)
             .style(.display, "block")
     }
