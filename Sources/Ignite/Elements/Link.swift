@@ -9,17 +9,8 @@ import Foundation
 
 /// A hyperlink to another resource on this site or elsewhere.
 public struct Link: InlineElement, NavigationItem, DropdownItem {
-    /// The content and behavior of this HTML.
-    public var body: some HTML { self }
-
-    /// The standard set of control attributes for HTML elements.
-    public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The visual style to apply to the link.
-    public enum LinkStyle: Equatable {
+    public enum Style: Equatable {
         /// A link with an underline effect.
         /// - Parameters:
         ///   - base: The underline prominence in the link's normal state.
@@ -37,17 +28,29 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         }
 
         /// The default link style with heavy underline prominence.
-        public static var automatic: LinkStyle { .underline(.heavy, hover: .heavy) }
+        public static var automatic: Style { .underline(.heavy, hover: .heavy) }
     }
 
+    /// The content and behavior of this HTML.
+    public var body: some InlineElement { self }
+
+    /// The standard set of control attributes for HTML elements.
+    public var attributes = CoreAttributes()
+
+    /// Whether this HTML belongs to the framework.
+    public var isPrimitive: Bool { true }
+
+    /// How a `NavigationBar` displays this item at different breakpoints.
+    public var navigationBarVisibility: NavigationBarVisibility = .automatic
+
     /// The content to display inside this link.
-    var content: any HTML
+    var content: any InlineElement
 
     /// The location to which this link should direct users.
     var url: String
 
     /// The style for this link. Defaults to `.automatic`.
-    var style = LinkStyle.automatic
+    var style = Style.automatic
 
     /// When rendered with the `.button` style, this controls the button's size.
     var size = Button.Size.medium
@@ -81,22 +84,21 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     /// Creates a `Link` instance from the content you provide, linking to the
     /// URL specified.
     /// - Parameters:
-    ///   - target: The URL you want to link to.
     ///   - content: The user-facing content to show inside the `Link`.
-    public init(target: String, @HTMLBuilder content: @escaping () -> some HTML) {
-        self.content = content()
+    ///   - target: The URL you want to link to.
+    public init(_ content: any InlineElement, target: String) {
+        self.content = content
         self.url = target
-        self.role = .none
     }
 
-    /// Creates a Link wrapping the provided content and pointing to the given page
+    /// Creates a `Link` instance from the content you provide, linking to the
+    /// URL specified.
     /// - Parameters:
-    ///  - target: The new target to apply.
-    ///  - content: The user-facing content to show inside the `Link`.
-    public init(target: any StaticPage, @HTMLBuilder content: @escaping () -> some HTML) {
+    ///   - content: The user-facing content to show inside the `Link`.
+    ///   - target: The URL you want to link to.
+    public init(target: String, @InlineElementBuilder content: () -> some InlineElement) {
         self.content = content()
-        self.url = target.path
-        self.role = .none
+        self.url = target
     }
 
     /// Creates a `Link` wrapping the provided content and pointing to the path
@@ -104,16 +106,56 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     /// - Parameters:
     ///   - content: A piece of content from your site.
     ///   - content: The user-facing content to show inside the `Link`.
-    public init(target article: Article, @HTMLBuilder content: @escaping () -> some HTML) {
+    public init(
+        target article: Article,
+        @InlineElementBuilder content: @escaping () -> some InlineElement
+    ) {
         self.content = content()
         self.url = article.path
-        self.role = .none
+    }
+
+    /// Creates a `Link` instance from the content you provide, linking to the path
+    /// belonging to the specified `Page`.
+    /// - Parameters:
+    ///   - content: The user-facing content to show inside the `Link`.
+    ///   - target: The `Page` you want to link to.
+    public init(_ content: some InlineElement, target: any StaticPage) {
+        self.content = content
+        self.url = target.path
+    }
+
+    /// Creates a `Link` instance from the content you provide, linking to the
+    /// URL specified.
+    /// - Parameters:
+    ///   - content: The user-facing content to show inside the `Link`.
+    ///   - target: The URL you want to link to.
+    public init(_ content: String, target: URL) {
+        self.content = content
+        self.url = target.absoluteString
+    }
+
+    /// Convenience initializer that creates a new `Link` instance using the
+    /// path of the `Article` instance you provide.
+    /// - Parameters:
+    ///    - content: The user-facing content to show inside the `Link`.
+    ///    - article: A piece of content from your site.
+    public init(_ content: String, target: Article) {
+        self.content = content
+        self.url = target.path
+    }
+
+    /// Convenience initializer that creates a new `Link` instance using the
+    /// title and path of the `Article` instance you provide.
+    /// - Parameter article: A piece of content from your site.
+    public init(_ article: Article) {
+        self.content = article.title
+        self.url = article.path
     }
 
     /// Controls in which window this page should be opened.
     /// - Parameter target: The new target to apply.
     /// - Returns: A new `Link` instance with the updated target.
-    public func target(_ target: Target) -> Self {
+    public func target(_ target: LinkTarget) -> Self {
         if let name = target.name {
             var copy = self
             let attribute = Attribute(name: "target", value: name)
@@ -145,7 +187,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     /// Adjusts the style of this link.
     /// - Parameter style: The new style.
     /// - Returns: A new `Link` instance with the updated style.
-    public func linkStyle(_ style: LinkStyle) -> Self {
+    public func linkStyle(_ style: Style) -> Self {
         var copy = self
         copy.style = style
 
@@ -163,7 +205,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     /// describing what this content means or how it should be used.
     /// - Parameter relationship: The extra relationships to add.
     /// - Returns: A new `Link` instance with the updated relationships.
-    public func relationship(_ relationship: Relationship...) -> Self {
+    public func relationship(_ relationship: LinkRelationship...) -> Self {
         var copy = self
         let attributeValue = relationship.map(\.rawValue).joined(separator: " ")
         let attribute = Attribute(name: "rel", value: attributeValue)
@@ -173,7 +215,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         isPrivacySensitive
             ? renderPrivacyProtectedLink()
             : renderStandardLink()
@@ -187,8 +229,8 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
     /// Renders a link with privacy protection enabled, encoding the URL and optionally the display content.
     /// - Parameter context: The current publishing context.
     /// - Returns: An HTML anchor tag with encoded attributes and content.
-    private func renderPrivacyProtectedLink() -> String {
-        let displayText = content.render()
+    private func renderPrivacyProtectedLink() -> Markup {
+        let displayText = content.markupString()
         let encodingType = attributes.customAttributes.first { $0.name == "privacy-sensitive" }?.value ?? "urlOnly"
 
         let encodedUrl = Data(url.utf8).base64EncodedString()
@@ -202,72 +244,22 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
         linkAttributes.append(dataAttributes: .init(name: "encoded-url", value: encodedUrl))
         linkAttributes.append(customAttributes: .init(name: "href", value: "#"))
 
-        return "a\(linkAttributes)>\(displayContent)</a>"
+        return Markup("a\(linkAttributes)>\(displayContent)</a>")
     }
 
     /// Renders a standard link with the provided URL and content.
     /// - Returns: An HTML anchor tag with the appropriate href and content.
-    private func renderStandardLink() -> String {
+    private func renderStandardLink() -> Markup {
         var linkAttributes = attributes.appending(classes: linkClasses)
 
         guard let url = URL(string: url) else {
             publishingContext.addWarning("One of your links uses an invalid URL.")
-            return ""
+            return Markup()
         }
 
         let path = publishingContext.path(for: url)
         linkAttributes.append(customAttributes: .init(name: "href", value: path))
-        return "<a\(linkAttributes)>\(content)</a>"
-    }
-}
-
-// Extension for traditional inline links
-public extension Link {
-    /// Creates a `Link` instance from the content you provide, linking to the
-    /// URL specified.
-    /// - Parameters:
-    ///   - content: The user-facing content to show inside the `Link`.
-    ///   - target: The URL you want to link to.
-    init(_ content: any InlineElement, target: String) {
-        self.content = content
-        self.url = target
-    }
-
-    /// Creates a `Link` instance from the content you provide, linking to the path
-    /// belonging to the specified `Page`.
-    /// - Parameters:
-    ///   - content: The user-facing content to show inside the `Link`.
-    ///   - target: The `Page` you want to link to.
-    init(_ content: some InlineElement, target: any StaticPage) {
-        self.content = content
-        self.url = target.path
-    }
-
-    /// Creates a `Link` instance from the content you provide, linking to the
-    /// URL specified.
-    /// - Parameters:
-    ///   - content: The user-facing content to show inside the `Link`.
-    ///   - target: The URL you want to link to.
-    init(_ content: String, target: URL) {
-        self.content = content
-        self.url = target.absoluteString
-    }
-
-    /// Convenience initializer that creates a new `Link` instance using the
-    /// path of the `Article` instance you provide.
-    /// - Parameters:
-    ///    - content: The user-facing content to show inside the `Link`.
-    ///    - article: A piece of content from your site.
-    init(_ content: String, target: Article) {
-        self.content = content
-        self.url = target.path
-    }
-
-    /// Convenience initializer that creates a new `Link` instance using the
-    /// title and path of the `Article` instance you provide.
-    /// - Parameter article: A piece of content from your site.
-    init(_ article: Article) {
-        self.content = article.title
-        self.url = article.path
+        let contentHTML = content.markupString()
+        return Markup("<a\(linkAttributes)>\(contentHTML)</a>")
     }
 }

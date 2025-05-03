@@ -18,7 +18,7 @@ struct AnimatedHTML: HTML {
     var isPrimitive: Bool { true }
 
     /// The content to place inside the text.
-    var content: any HTML
+    var content: any BodyElement
 
     /// The animations applied to this element.
     private var animations = AnimationInfo()
@@ -36,7 +36,7 @@ struct AnimatedHTML: HTML {
         self.animations[trigger, default: []].append(animation)
     }
 
-    func render() -> String {
+    func markup() -> Markup {
         // Extract color styles from the element so that we can later
         // transplant them to a place in the div hierarchy that won't conflict with animations
         let baseStyles = content.attributes.get(styles: .background, .backgroundColor, .color)
@@ -51,7 +51,7 @@ struct AnimatedHTML: HTML {
         assignHoverClass(&innerAttributes)
         assignAppearClasses(&innerAttributes)
 
-        var content: any HTML = content
+        var content: any BodyElement = content
         content.attributes.remove(styles: .background, .backgroundColor, .color)
 
         if innerAttributes.isEmpty == false {
@@ -62,7 +62,7 @@ struct AnimatedHTML: HTML {
             content = Section(content).attributes(outerAttributes)
         }
 
-        return content.attributes(attributes).render()
+        return content.attributes(attributes).markup()
 
         func assignAppearClasses(_ attributes: inout CoreAttributes) {
             guard let appearAnimations = registeredAnimations[.appear] else { return }

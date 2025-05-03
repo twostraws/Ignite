@@ -18,6 +18,6 @@ struct TestElement: HTML {
     var body: some HTML {
         TestSubElement()
         Text("Test Subheading")
-        FormFieldLabel(text: "Test Label")
+        ControlLabel("Test Label")
     }
 }

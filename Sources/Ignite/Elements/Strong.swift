@@ -8,7 +8,7 @@
 /// Renders text with a strong text effect, which usually means bold.
 public struct Strong: InlineElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some InlineElement { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -34,7 +34,8 @@ public struct Strong: InlineElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<strong\(attributes)>\(content)</strong>"
+    public func markup() -> Markup {
+        let contentHTML = content.markupString()
+        return Markup("<strong\(attributes)>\(contentHTML)</strong>")
     }
 }

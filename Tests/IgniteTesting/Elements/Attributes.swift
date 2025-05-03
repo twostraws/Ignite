@@ -17,7 +17,7 @@ class AttributesTest: IgniteTestSuite {
     @Test("Classes are ordered", arguments: tags)
     func classes_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}.class("foo", "bar", "baz", "qux")
-        let output = element.render()
+        let output = element.markupString()
         let expected = "<\(tag) class=\"foo bar baz qux\"></\(tag)>"
         #expect(output == expected)
     }
@@ -30,7 +30,7 @@ class AttributesTest: IgniteTestSuite {
             .customAttribute(name: "foo", value: "foo")
             .customAttribute(name: "bar", value: "bar")
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<\(tag) qux=\"qux\" baz=\"baz\" foo=\"foo\" bar=\"bar\"></\(tag)>")
     }
 
@@ -40,7 +40,7 @@ class AttributesTest: IgniteTestSuite {
             .onEvent(.mouseUp, [ShowAlert(message: "bar")])
             .onEvent(.mouseDown, [ShowAlert(message: "baz")])
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <\(tag) onmouseup=\"alert('bar')\" onmousedown=\"alert('baz')\"></\(tag)>
@@ -55,7 +55,7 @@ class AttributesTest: IgniteTestSuite {
                 .init(.accentColor, value: "red"),
                 .init(.cursor, value: "pointer")
             )
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<\(tag) style=\"z-index: 1; accent-color: red; cursor: pointer\"></\(tag)>")
     }
 
@@ -66,7 +66,7 @@ class AttributesTest: IgniteTestSuite {
             .aria(.checked, "qux")
             .aria(.setSize, "foo")
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<\(tag) aria-atomic=\"bar\" aria-checked=\"qux\" aria-setsize=\"foo\"></\(tag)>")
     }
 
@@ -78,7 +78,7 @@ class AttributesTest: IgniteTestSuite {
             .data("qux", "foo")
             .data("bar", "baz")
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<\(tag) data-foo=\"bar\" data-baz=\"qux\" data-qux=\"foo\" data-bar=\"baz\"></\(tag)>")
     }
 
@@ -89,7 +89,7 @@ class AttributesTest: IgniteTestSuite {
             .customAttribute(.required)
             .customAttribute(.selected)
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<\(tag) disabled required selected></\(tag)>")
     }
 }

@@ -28,10 +28,10 @@ struct FontModifierTests {
                 .font(Font(name: "Arial", size: .px(16), weight: .regular))
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
-        <p><span style="font-weight: 400; font-family: Arial; font-size: 16px">Sample text</span></p>
+        <p><span style="font-weight: 400; font-family: 'Arial'; font-size: 16px">Sample text</span></p>
         """)
     }
 
@@ -42,10 +42,10 @@ struct FontModifierTests {
                 .font(Font(name: "Arial", size: .px(16), weight: .bold))
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
-        <p><span style="font-weight: 700; font-family: Arial; font-size: 16px">Sample text</span></p>
+        <p><span style="font-weight: 700; font-family: 'Arial'; font-size: 16px">Sample text</span></p>
         """)
     }
 
@@ -56,10 +56,10 @@ struct FontModifierTests {
                 .font(Font(name: "Arial", size: .em(1.5), weight: .regular))
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
-        <p><span style="font-weight: 400; font-family: Arial; font-size: 1.5em">Sample text</span></p>
+        <p><span style="font-weight: 400; font-family: 'Arial'; font-size: 1.5em">Sample text</span></p>
         """)
     }
 
@@ -70,10 +70,10 @@ struct FontModifierTests {
                 .font(Font(name: "Times New Roman", size: .px(16), weight: .regular))
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
-        <p><span style="font-weight: 400; font-family: Times New Roman; font-size: 16px">Sample text</span></p>
+        <p><span style="font-weight: 400; font-family: 'Times New Roman'; font-size: 16px">Sample text</span></p>
         """)
     }
 
@@ -99,7 +99,7 @@ struct FontModifierTests {
         // Simulate registerClasses logic to get the expected class name
         let expectedClassName = simulateRegisterClasses(for: responsiveFontSize)
 
-        let output = element.render()
+        let output = element.markupString()
 
         // Check for the presence of the responsive font-size class
         #expect(output.contains(expectedClassName))

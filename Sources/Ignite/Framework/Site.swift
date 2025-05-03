@@ -266,6 +266,8 @@ public extension Site {
             from: file,
             buildDirectoryPath: buildDirectoryPath)
 
+        try context.parseContent()
+
         context.environment = EnvironmentValues(
             sourceDirectory: context.sourceDirectory,
             site: self,

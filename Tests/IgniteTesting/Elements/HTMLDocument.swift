@@ -16,22 +16,22 @@ import Testing
 class HTMLDocumentTests: IgniteTestSuite {
     @Test("Starts with doctype html")
     func containsHTMLDoctype() {
-        let sut = Document {}
-        let output = sut.render()
+        let sut = Document(head: Head(), body: Body())
+        let output = sut.markupString()
         #expect(output.hasPrefix("<!doctype html>"))
     }
 
     @Test("Contains html tag")
     func containsHTMLTag() {
-        let sut = Document {}
-        let output = sut.render()
+        let sut = Document(head: Head(), body: Body())
+        let output = sut.markupString()
         #expect(nil != output.htmlTagWithCloseTag("html"))
     }
 
     @Test("lang attribute defaults to en")
     func language_attribute_defaults_to_en() throws {
-        let sut = Document {}
-        let output = sut.render()
+        let sut = Document(head: Head(), body: Body())
+        let output = sut.markupString()
 
         let language = try #require(output.htmlTagWithCloseTag("html")?.attributes
             .htmlAttribute(named: "lang")
@@ -57,37 +57,15 @@ class HTMLDocumentTests: IgniteTestSuite {
 
         /// Initialize Document with the TestSite language set above.
         let sut = publishingContext.withEnvironment(values) {
-            Document {}
+           Document(head: Head(), body: Body())
         }
 
-        let output = sut.render()
+        let output = sut.markupString()
 
         let langAttribute = try #require(output.htmlTagWithCloseTag("html")?.attributes
             .htmlAttribute(named: "lang")
         )
 
         #expect(langAttribute == language.rawValue)
-    }
-
-    @Test("If contents are empty then html tag is empty")
-    func contents_are_empty_by_default() throws {
-        let sut = Document {}
-        let output = sut.render()
-
-        let htmlContents = try #require(output.htmlTagWithCloseTag("html")?.contents)
-
-        #expect(htmlContents.isEmpty)
-    }
-
-    @Test("places output of contents into contents of html tag")
-    func html_tag_contents_are_taken_from_contents_property() async throws {
-        let body = Body { "Hello World" }
-        let sut = Document { body }
-
-        let expected = body.render()
-
-        let htmlContents = try #require(sut.render().htmlTagWithCloseTag("html")?.contents)
-
-        #expect(htmlContents == expected)
     }
 }

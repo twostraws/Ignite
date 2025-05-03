@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Badge` element.
 @Suite("Badge Tests")
-@MainActor
 class BadgeTests: IgniteTestSuite {
-    @Test("All roles for default badge variant rendered correctly", arguments: zip(await Role.badgeRoles, [
+    @Test("All roles for default badge variant rendered correctly", arguments: zip(Role.standardRoles, [
         "text-bg-primary",
         "text-bg-secondary",
         "text-bg-success",
@@ -23,17 +22,17 @@ class BadgeTests: IgniteTestSuite {
         "text-bg-info",
         "text-bg-light",
         "text-bg-dark"]))
-    func allRolesForDefaultBadgeVariant(role: Role, cssClass: String) async throws {
+    func allRolesForDefaultBadgeVariant(role: Role, cssClass: String) throws {
         let element = Text {
             Badge("Some text")
                 .role(role)
         }
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p><span class=\"badge \(cssClass) rounded-pill\">Some text</span></p>")
     }
 
-    @Test("All roles for subtle badge variant rendered correctly", arguments: zip(await Role.badgeRoles, [
+    @Test("All roles for subtle badge variant rendered correctly", arguments: zip(Role.standardRoles, [
         "bg-primary-subtle text-primary-emphasis rounded-pill",
         "bg-secondary-subtle text-secondary-emphasis rounded-pill",
         "bg-success-subtle text-success-emphasis rounded-pill",
@@ -42,18 +41,18 @@ class BadgeTests: IgniteTestSuite {
         "bg-info-subtle text-info-emphasis rounded-pill",
         "bg-light-subtle text-light-emphasis rounded-pill",
         "bg-dark-subtle text-dark-emphasis rounded-pill"]))
-    func allRolesForSubtleBadgeVariant(role: Role, cssClasses: String) async throws {
+    func allRolesForSubtleBadgeVariant(role: Role, cssClasses: String) throws {
         let element = Text {
             Badge("Some text")
                 .role(role)
                 .badgeStyle(.subtle)
         }
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p><span class=\"badge \(cssClasses)\">Some text</span></p>")
     }
 
-    @Test("All roles for subtleBordered badge variant rendered correctly", arguments: zip(await Role.badgeRoles, [
+    @Test("All roles for subtleBordered badge variant rendered correctly", arguments: zip(Role.standardRoles, [
         "bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill",
         "bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill",
         "bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill",
@@ -62,14 +61,14 @@ class BadgeTests: IgniteTestSuite {
         "bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill",
         "bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill",
         "bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill"]))
-    func allRolesForSubtleBorderedBadgeVariant(role: Role, cssClasses: String) async throws {
+    func allRolesForSubtleBorderedBadgeVariant(role: Role, cssClasses: String) throws {
         let element = Text {
             Badge("Some text")
                 .badgeStyle(.subtleBordered)
                 .role(role)
         }
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p><span class=\"badge \(cssClasses)\">Some text</span></p>")
     }
 }

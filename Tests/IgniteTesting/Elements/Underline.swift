@@ -17,7 +17,7 @@ class UnderlineTests: IgniteTestSuite {
     @Test("Single Element Test", arguments: ["This is a test", "Another test", ""])
     func singleElement(underlineText: String) async throws {
         let element = Underline(underlineText)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<u>\(underlineText)</u>")
     }
@@ -25,7 +25,7 @@ class UnderlineTests: IgniteTestSuite {
     @Test("Builder", arguments: ["This is a test", "Another test", ""])
     func builder(underlineText: String) async throws {
         let element = Underline { underlineText }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<u>\(underlineText)</u>")
     }

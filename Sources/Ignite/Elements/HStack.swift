@@ -59,11 +59,14 @@ public struct HStack: HTML {
         self.spacingAmount = .semantic(spacing)
     }
 
-    public func render() -> String {
-        let items = items.elements.map {
+    public func markup() -> Markup {
+        let items: [any BodyElement] = items.elements.map {
             var elementAttributes = CoreAttributes()
             elementAttributes.append(classes: "mb-0")
             elementAttributes.append(classes: alignment.itemAlignmentClass)
+            if let spacer = $0.as(Spacer.self) {
+                return spacer.axis(.horizontal)
+            }
             return $0.attributes(elementAttributes)
         }
 
@@ -76,7 +79,7 @@ public struct HStack: HTML {
             attributes.append(classes: "gap-\(amount.rawValue)")
         }
 
-        let content = items.map { $0.render() }.joined()
-        return "<div\(attributes)>\(content)</div>"
+        let contentHTML = items.map { $0.markupString() }.joined()
+        return Markup("<div\(attributes)>\(contentHTML)</div>")
     }
 }

@@ -22,7 +22,7 @@ struct ModalTests {
                 .font(.title3)
                 .margin(.xLarge)
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div id="showModalId" tabindex="-1" class="modal fade" aria-labelledby="modalLabel" aria-hidden="true">\
@@ -48,7 +48,7 @@ struct ModalTests {
                 .font(.title3)
                 .margin(.xLarge)
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div id="dismissModalId" tabindex="-1" class="modal fade" aria-labelledby="modalLabel" aria-hidden="true">\
@@ -72,7 +72,7 @@ struct ModalTests {
                 .margin(.xLarge)
         }
         .size(sizeOption)
-        let output = element.render()
+        let output = element.markupString()
 
         if let htmlClass = sizeOption.htmlClass {
             #expect(output.contains("""
@@ -95,7 +95,7 @@ struct ModalTests {
         }
             .modalPosition(positionOption)
 
-        let output = element.render()
+        let output = element.markupString()
         if let htmlName = positionOption.htmlName {
             #expect(output.contains("""
             <div class="modal-dialog \(htmlName)">
@@ -119,7 +119,7 @@ struct ModalTests {
                 DismissModal(id: "headerModalId")
             }
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div id="headerModalId" tabindex="-1" class="modal fade" aria-labelledby="modalLabel" aria-hidden="true">\
@@ -148,9 +148,9 @@ struct ModalTests {
             }
             .role(.primary)
         }
-        let output = element.render()
+        let output = element.markup()
 
-        #expect(output == """
+        #expect(output.string == """
         <div id="footerModalId" tabindex="-1" class="modal fade" aria-labelledby="modalLabel" aria-hidden="true">\
         <div class="modal-dialog modal-dialog-centered"><div class="modal-content">\
         <div class="modal-body"><p>Body</p></div><div class="modal-footer">\
@@ -183,9 +183,9 @@ struct ModalTests {
             }
             .role(.primary)
         }
-        let output = element.render()
+        let output = element.markup()
 
-        #expect(output == """
+        #expect(output.string == """
         <div id="headerAndFooterModalId" tabindex="-1" class="modal fade" \
         aria-labelledby="modalLabel" aria-hidden="true">\
         <div class="modal-dialog modal-dialog-centered">\
@@ -214,7 +214,7 @@ struct ModalTests {
         .size(.large)
         .scrollableContent(true)
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output.contains("""
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         """))
@@ -228,7 +228,7 @@ struct ModalTests {
         let element = Button("Show Modal") {
             ShowModal(id: "showModalId", options: [option])
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output.contains("""
         <button type="button" class="btn" onclick="const options = {

@@ -21,8 +21,8 @@ public struct InlineElementBuilder {
 
     /// Creates an empty HTML element when no content is provided.
     /// - Returns: An empty HTML element
-    public static func buildBlock() -> some HTML {
-        EmptyHTML()
+    public static func buildBlock() -> some InlineElement {
+        EmptyInlineElement()
     }
 
     /// Passes through a single inline element unchanged.
@@ -35,8 +35,8 @@ public struct InlineElementBuilder {
     /// Handles array transformations in the builder.
     /// - Parameter components: Array of inline elements
     /// - Returns: A flattened HTML element
-    public static func buildArray<Content: InlineElement>(_ components: [Content]) -> some HTML {
-        HTMLCollection(components)
+    public static func buildArray<Content: InlineElement>(_ components: [Content]) -> some InlineElement {
+        InlineElementCollection(components)
     }
 
     /// Handles optional inline elements.
@@ -44,9 +44,9 @@ public struct InlineElementBuilder {
     /// - Returns: Either the wrapped element or an empty element
     public static func buildOptional<Content: InlineElement>(_ component: Content?) -> some InlineElement {
         if let component {
-            AnyHTML(component)
+            AnyInlineElement(component)
         } else {
-            AnyHTML(EmptyHTML())
+            AnyInlineElement(EmptyInlineElement())
         }
     }
 
@@ -68,7 +68,7 @@ public struct InlineElementBuilder {
     /// - Parameter components: Variable number of inline elements
     /// - Returns: A flattened HTML structure containing all elements
     public static func buildBlock(_ components: any InlineElement...) -> some InlineElement {
-        HTMLCollection(components)
+        InlineElementCollection(components)
     }
 }
 
@@ -90,11 +90,11 @@ public extension InlineElementBuilder {
         accumulated: C0,
         next: C1
     ) -> some InlineElement {
-        if var current = accumulated as? HTMLCollection {
-            current.elements.append(next)
+        if var current = accumulated as? InlineElementCollection {
+            current.elements.append(AnyInlineElement(next))
             return current
         } else {
-            return HTMLCollection([accumulated, next])
+            return InlineElementCollection([AnyInlineElement(accumulated), AnyInlineElement(next)])
         }
     }
 }

@@ -19,7 +19,7 @@ struct HorizontalAlignmentTests {
         ["text-start", "text-center", "text-end"]))
     func allAlignmentsForText(alignment: HorizontalAlignment, cssClass: String) async throws {
         let element = Text("Hello world!").horizontalAlignment(alignment)
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p class=\"\(cssClass)\">Hello world!</p>")
     }
 
@@ -28,7 +28,7 @@ struct HorizontalAlignmentTests {
         ["text-md-start", "text-md-center", "text-md-end"]))
     func allAlignmentsForTextResponsiveMedium(alignment: HorizontalAlignment, cssClass: String) async throws {
         let element = Text("Hello world!").horizontalAlignment(.responsive(medium: alignment))
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p class=\"\(cssClass)\">Hello world!</p>")
     }
 
@@ -48,7 +48,7 @@ struct HorizontalAlignmentTests {
                     xLarge: alignment,
                     xxLarge: alignment))
 
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p class=\"\(cssClass)\">Hello world!</p>")
     }
 
@@ -56,7 +56,7 @@ struct HorizontalAlignmentTests {
     func allAlignmentsForTextResponsiveMixed() async throws {
         let element = Text("Hello world!")
             .horizontalAlignment(.responsive(small: .leading, medium: .center, large: .trailing))
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p class=\"text-start text-md-center text-lg-end\">Hello world!</p>")
     }
 
@@ -65,12 +65,12 @@ struct HorizontalAlignmentTests {
         ["text-start", "text-center", "text-end"]))
     func allAlignmentsForColumn(alignment: HorizontalAlignment, cssClass: String) async throws {
         let element = Column {
-            FormFieldLabel(text: "Left Label")
-            FormFieldLabel(text: "Right Label")
+            ControlLabel("Left Label")
+            ControlLabel("Right Label")
         }
         .horizontalAlignment(alignment)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <td colspan=\"1\" class=\"\(cssClass)\">\
@@ -83,12 +83,12 @@ struct HorizontalAlignmentTests {
     @Test("Column with mixed responsive breakpoints")
     func allAlignmentsForColumnResponsiveMixed() async throws {
         let element = Column {
-            FormFieldLabel(text: "Left Label")
-            FormFieldLabel(text: "Right Label")
+            ControlLabel("Left Label")
+            ControlLabel("Right Label")
         }
         .horizontalAlignment(.responsive(small: .leading, medium: .center, large: .trailing))
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <td colspan=\"1\" class=\"text-start text-md-center text-lg-end\">\

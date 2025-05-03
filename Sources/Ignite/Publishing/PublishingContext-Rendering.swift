@@ -37,7 +37,7 @@ extension PublishingContext {
     ) {
         let path = pagePath
         currentRenderingPath = rootPath
-        let metadata = PageMetadata(
+        let pageMetadata = PageMetadata(
             title: page.title,
             description: page.description,
             url: site.url.appending(path: path),
@@ -48,11 +48,11 @@ extension PublishingContext {
             sourceDirectory: sourceDirectory,
             site: site,
             allContent: allContent,
-            pageMetadata: metadata,
+            pageMetadata: pageMetadata,
             pageContent: page)
 
         let outputString = withEnvironment(values) {
-            page.layout.body.render()
+            page.layout.body.markupString()
         }
 
         let outputDirectory = buildDirectory.appending(path: path)
@@ -65,7 +65,7 @@ extension PublishingContext {
         let layout = layout(for: article)
         currentRenderingPath = article.path
 
-        let metadata = PageMetadata(
+        let pageMetadata = PageMetadata(
             title: article.title,
             description: article.description,
             url: site.url.appending(path: article.path),
@@ -76,12 +76,12 @@ extension PublishingContext {
             sourceDirectory: sourceDirectory,
             site: site,
             allContent: allContent,
-            pageMetadata: metadata,
+            pageMetadata: pageMetadata,
             pageContent: layout,
             article: article)
 
         let outputString = withEnvironment(values) {
-            layout.layout.body.render()
+            layout.layout.body.markupString()
         }
 
         let outputDirectory = buildDirectory.appending(path: article.path)
@@ -127,7 +127,7 @@ extension PublishingContext {
                 category: category)
 
             let outputString = withEnvironment(values) {
-                tagLayout.layout.body.render()
+                tagLayout.layout.body.markupString()
             }
 
             write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
@@ -154,7 +154,7 @@ extension PublishingContext {
                 pageContent: site.errorPage)
 
             let outputString = withEnvironment(values) {
-                site.errorPage.layout.body.render()
+                site.errorPage.layout.body.markupString()
             }
 
             write(outputString, to: buildDirectory, priority: nil, filename: String(error.statusCode))

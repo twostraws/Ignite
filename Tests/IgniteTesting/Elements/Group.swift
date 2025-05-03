@@ -17,14 +17,14 @@ class GroupTests: IgniteTestSuite {
     @Test("Group does not change HTML structure")
     func groupDoesNotAddAnyAdditionalHTML() async throws {
         let element = Group {
-            FormFieldLabel(text: "Top Label")
+            ControlLabel("Top Label")
             Text("Middle Text")
             Button("Bottom Button") {
                 ShowAlert(message: "Bottom Button Tapped")
             }
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <label>Top Label</label>\
@@ -38,14 +38,14 @@ class GroupTests: IgniteTestSuite {
         let attributeName = "data-info"
         let attributeValue = "Ignite"
         let element = Group {
-            FormFieldLabel(text: "Top Label")
+            ControlLabel("Top Label")
             Text("Middle Text")
             Button("Bottom Button") {
                 ShowAlert(message: "Bottom Button Tapped")
             }
         }.customAttribute(name: attributeName, value: attributeValue)
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <label \(attributeName)="\(attributeValue)">Top Label</label>\

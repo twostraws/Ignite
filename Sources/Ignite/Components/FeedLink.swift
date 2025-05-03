@@ -21,7 +21,7 @@ public struct FeedLink: HTML {
                 }
 
                 Link("RSS Feed", target: feedConfig.path)
-                EmptyHTML()
+                EmptyInlineElement()
             }
             .horizontalAlignment(.center)
         }

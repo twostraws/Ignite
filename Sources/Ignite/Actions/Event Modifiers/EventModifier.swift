@@ -5,14 +5,28 @@
 // See LICENSE for license information.
 //
 
-private extension HTML {
-    func eventModifier(type: EventType, actions: [Action]) -> any HTML {
-        guard !actions.isEmpty else { return self }
-        // Custom elements need to be wrapped in a primitive container to store attributes
-        var copy: any HTML = self.isPrimitive ? self : Section(self)
-        copy.attributes.events.append(Event(name: type.rawValue, actions: actions))
-        return copy
-    }
+@MainActor
+private func eventModifier(
+    _ type: EventType,
+    actions: [Action],
+    content: any HTML
+) -> any HTML {
+    guard !actions.isEmpty else { return content }
+    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    copy.attributes.events.append(Event(name: type.rawValue, actions: actions))
+    return copy
+}
+
+@MainActor
+private func eventModifier(
+    _ type: EventType,
+    actions: [Action],
+    content: any InlineElement
+) -> any InlineElement {
+    guard !actions.isEmpty else { return content }
+    var copy: any InlineElement = content.isPrimitive ? content : Span(content)
+    copy.attributes.events.append(Event(name: type.rawValue, actions: actions))
+    return copy
 }
 
 public extension HTML {
@@ -22,7 +36,7 @@ public extension HTML {
     ///   - actions: Array of actions to execute when the event occurs
     /// - Returns: A modified HTML element with the specified attribute.
     func onEvent(_ type: EventType, _ actions: [Action]) -> some HTML {
-        AnyHTML(eventModifier(type: type, actions: actions))
+        AnyHTML(eventModifier(type, actions: actions, content: self))
     }
 }
 
@@ -33,6 +47,6 @@ public extension InlineElement {
     ///   - actions: Array of actions to execute when the event occurs
     /// - Returns: A modified HTML element with the specified attribute.
     func onEvent(_ type: EventType, _ actions: [Action]) -> some InlineElement {
-        AnyHTML(eventModifier(type: type, actions: actions))
+        AnyInlineElement(eventModifier(type, actions: actions, content: self))
     }
 }

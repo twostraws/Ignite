@@ -17,10 +17,10 @@ class VStackTests: IgniteTestSuite {
     @Test("VStack with elements")
     func basicVStack() async throws {
         let element = VStack {
-            FormFieldLabel(text: "Top Label")
-            FormFieldLabel(text: "Bottom Label")
+            ControlLabel("Top Label")
+            ControlLabel("Bottom Label")
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="vstack">\
@@ -33,10 +33,10 @@ class VStackTests: IgniteTestSuite {
     @Test("VStack with elements and spacing")
     func elementsWithSpacingWithinVStack() async throws {
         let element = VStack(spacing: 10) {
-            FormFieldLabel(text: "Top Label")
-            FormFieldLabel(text: "Bottom Label")
+            ControlLabel("Top Label")
+            ControlLabel("Bottom Label")
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <div class="vstack" style="gap: 10px">\

@@ -16,7 +16,7 @@ import Testing
     @Test("Without DateTime", arguments: ["This is a test", "Another test"])
     func withoutDatetime(timeText: String) async throws {
         let element = Time(timeText)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<time>\(timeText)</time>")
     }
@@ -40,7 +40,7 @@ import Testing
         }
         let dateTime = Date(timeIntervalSince1970: customTimeInterval)
         let element = Time(timeText, dateTime: dateTime)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<time datetime=\"2024-05-22T20:00:30Z\">\(timeText)</time>")
     }

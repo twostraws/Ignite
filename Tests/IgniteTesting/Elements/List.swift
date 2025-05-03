@@ -17,7 +17,7 @@ class ListTests: IgniteTestSuite {
     @Test("Basic Rendering")
     func testEmptyListRendering() async throws {
         let list = List {}
-        let output = list.render()
+        let output = list.markupString()
         #expect(output == "<ul></ul>")
     }
 
@@ -28,7 +28,7 @@ class ListTests: IgniteTestSuite {
                "Vidi"
                "Vici"
            }
-           let output = list.render()
+           let output = list.markupString()
 
            #expect(output == "<ul><li>Veni</li><li>Vidi</li><li>Vici</li></ul>")
        }

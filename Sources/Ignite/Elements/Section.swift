@@ -12,7 +12,7 @@
 ///
 /// - Note: Unlike ``Group``, modifiers applied to a `Section` affect the
 ///         containing element rather than being propagated to child elements.
-public struct Section: HTML {
+public struct Section: HTML, FormItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -28,16 +28,17 @@ public struct Section: HTML {
     /// The heading's semantic font size.
     var headerStyle: Font.Style = .title2
 
-    var content: any HTML
+    var content: any BodyElement
 
-    // Temporarily public
-    public init(_ content: any HTML) {
+    init(_ content: any BodyElement) {
         self.content = content
     }
 
     /// Creates a section that renders as a `div` element.
     /// - Parameter content: The content to display within this section.
-    public init(@HTMLBuilder content: () -> some HTML) {
+    public init(
+        @HTMLBuilder content: () -> some BodyElement
+    ) {
         self.content = content()
     }
 
@@ -45,7 +46,10 @@ public struct Section: HTML {
     /// - Parameters:
     ///   - header: The text to display as the section's heading
     ///   - content: The content to display within this section
-    public init(_ header: String, @HTMLBuilder content: () -> some HTML) {
+    public init(
+        _ header: String,
+        @HTMLBuilder content: () -> some BodyElement
+    ) {
         self.content = content()
         self.header = header
     }
@@ -59,12 +63,12 @@ public struct Section: HTML {
         return copy
     }
 
-    public func render() -> String {
-        let renderedContent = content.render()
+    public func markup() -> Markup {
+        let contentHTML = content.markupString()
         if let header = header {
-            let renderedHeader = Text(header).fontStyle(headerStyle).render()
-            return "<section\(attributes)>\(renderedHeader + renderedContent)</section>"
+            let headerHTML = Text(header).fontStyle(headerStyle).markupString()
+            return Markup("<section\(attributes)>\(headerHTML + contentHTML)</section>")
         }
-        return "<div\(attributes)>\(renderedContent)</div>"
+        return Markup("<div\(attributes)>\(contentHTML)</div>")
     }
 }

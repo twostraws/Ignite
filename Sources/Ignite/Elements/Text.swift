@@ -12,7 +12,6 @@
 ///
 /// - Important: For types that accept only `InlineElement` or use `@InlineElementBuilder`,
 /// use `Span` instead of `Text`.
-@MainActor
 public struct Text: HTML, DropdownItem {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
@@ -27,18 +26,35 @@ public struct Text: HTML, DropdownItem {
     var font = FontStyle.body
 
     /// The content to place inside the text.
-    var content: any InlineElement
+    private var content: any BodyElement
+
+    /// Whether this text contains multiple paragraphs of Markdown content.
+    private var isMultilineMarkdown = false
 
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
     /// - Parameter content: An array of the content to place into the text.
-    public init(@InlineElementBuilder content: @escaping () -> any InlineElement) {
+    public init(@InlineElementBuilder content: () -> any InlineElement) {
         self.content = content()
     }
 
     /// Creates a new `Text` instance from one inline element.
     public init(_ string: any InlineElement) {
         self.content = string
+    }
+
+    /// Sets the maximum number of lines for the text to display.
+    /// - Parameter number: The line limit. If `nil`, no line limit applies.
+    /// - Returns: A new `Text` instance with the line limit applied.
+    public func lineLimit(_ number: Int?) -> Self {
+        var copy = self
+        if let number {
+            copy.attributes.append(classes: "ig-line-clamp")
+            copy.attributes.append(styles: .init("--ig-max-line-length", value: number.formatted()))
+        } else {
+            copy.attributes.append(classes: "ig-line-clamp-none")
+        }
+        return copy
     }
 
     /// Creates a new `Text` instance using "lorem ipsum" placeholder text.
@@ -95,26 +111,69 @@ public struct Text: HTML, DropdownItem {
     public init(markdown: String) {
         let parser = MarkdownToHTML(markdown: markdown, removeTitleFromBody: true)
 
-        // Remove any <p></p> tags, because these will be
-        // added automatically in render(). This allows us
-        // to retain any styling applied elsewhere, e.g.
-        // the `font()` modifier.
-        let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
-        self.content = cleanedHTML
+        // Process each paragraph individually to preserve line breaks.
+        // We could simply replace newlines with <br>, but then the paragraphs
+        // wouldn't respond to a theme's paragraphBottomMargin property.
+        if parser.body.contains("</p><p>") {
+            let paragraphs = parser.body
+                .components(separatedBy: "</p><p>")
+                .map {
+                    $0.replacingOccurrences(of: "<p>", with: "")
+                      .replacingOccurrences(of: "</p>", with: "")
+                }
+                .map(Text.init)
+
+            self.content = HTMLCollection(paragraphs)
+            self.isMultilineMarkdown = true
+        } else {
+            // Remove the wrapping <p> tags since they'll be added by markup()
+            let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
+            self.content = cleanedHTML
+            self.isMultilineMarkdown = false
+        }
+    }
+
+    /// Creates a new `Text` struct from a markup format and its parser.
+    /// - Parameters:
+    ///   - markdown: The Markdown text to parse.
+    ///   - parser: The parser to process the text.
+    public init(markup: String, parser: any ArticleRenderer.Type) {
+        do {
+            let parser = try parser.init(markdown: markup, removeTitleFromBody: true)
+            let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
+            self.content = cleanedHTML
+        } catch {
+            self.content = markup
+            publishingContext.addError(.failedToParseMarkup)
+        }
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<\(font.rawValue)\(attributes)>" + content.render() + "</\(font.rawValue)>"
+    public func markup() -> Markup {
+        if isMultilineMarkdown {
+            // HTMLCollection will pass its attributes to each child.
+            // This works fine for styles like color, but for styles like
+            // padding, we'd expect them to apply to the paragraphs
+            // collectively. So we'll wrap the paragraphs in a Section.
+            Section(content)
+                .attributes(attributes)
+                .markup()
+        } else {
+            Markup(
+                "<\(font.rawValue)\(attributes)>" +
+                content.markupString() +
+                "</\(font.rawValue)>"
+            )
+        }
     }
 }
 
 extension HTML {
     func fontStyle(_ font: Font.Style) -> any HTML {
         var copy: any HTML = self
-        if font == .lead {
-            copy.attributes.append(classes: font.rawValue)
+        if Font.Style.classBasedStyles.contains(font), let sizeClass = font.sizeClass {
+            copy.attributes.append(classes: sizeClass)
         } else if var text = copy as? Text {
             text.font = font
             copy = text
@@ -123,6 +182,14 @@ extension HTML {
             anyHTML.wrapped = text
             copy = anyHTML
         }
+        return copy
+    }
+}
+
+extension InlineElement {
+    func fontStyle(_ font: Font.Style) -> any InlineElement {
+        var copy: any InlineElement = self
+        copy.attributes.append(classes: font.sizeClass)
         return copy
     }
 }

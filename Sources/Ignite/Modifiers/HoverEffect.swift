@@ -17,7 +17,9 @@ public extension HTML {
 
 private extension HTML {
     // An abstraction of the implementation details for consistent reuse across protocol extensions.
-    func hoverEffectModifier(_ effect: @escaping (EmptyHoverEffect) -> some HTML) -> some HTML {
+    func hoverEffectModifier(
+        _ effect: @escaping (EmptyHoverEffect) -> some HTML
+    ) -> some HTML {
         self.onHover { isHovering in
             if isHovering {
                 let effectElement = effect(EmptyHoverEffect())
@@ -35,7 +37,7 @@ public struct EmptyHoverEffect: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
-    public func render() -> String { "" }
+    public func markup() -> Markup { Markup() }
 }
 
 private struct ApplyHoverEffects: Action {

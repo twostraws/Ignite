@@ -19,26 +19,37 @@ public struct ListItem: HTML, ListableElement {
     public var isPrimitive: Bool { true }
 
     /// The content of this list item.
-    var content: any HTML
+    private var content: any BodyElement
+
+    /// Sets the role for this list item, which controls its appearance.
+    /// - Parameter role: The new role to apply.
+    /// - Returns: A new `ListItem` instance with the updated role.
+    /// - Note: The role modifier only has an effect when the parent list's style is `.group`.
+    public func role(_ role: Role) -> Self {
+        var copy = self
+        copy.attributes.append(classes: "list-group-item-\(role.rawValue)")
+        return copy
+    }
 
     /// Creates a new `ListItem` object using an inline element builder that
     /// returns an array of `HTML` objects to display in the list.
     /// - Parameter content: The content you want to display in your list.
-    public init(@HTMLBuilder content: () -> some HTML) {
+    public init(@HTMLBuilder content: () -> some BodyElement) {
         self.content = content()
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<li\(attributes)>\(content)</li>"
+    public func markup() -> Markup {
+        let contentHTML = content.markupString()
+        return Markup("<li\(attributes)>\(contentHTML)</li>")
     }
 
     /// Renders this element inside a list, using the publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func renderInList() -> String {
+    public func listMarkup() -> Markup {
         // We do nothing special here, so just send back
         // the default rendering.
-        render()
+        markup()
     }
 }

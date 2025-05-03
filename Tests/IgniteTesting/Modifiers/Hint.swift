@@ -21,7 +21,7 @@ class HintTests: IgniteTestSuite {
                 .hint(markdown: "Why, *hello* there!")
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <p><span data-bs-toggle="tooltip" \
@@ -39,7 +39,7 @@ class HintTests: IgniteTestSuite {
                 .hint(html: "www.example.com")
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <p><span data-bs-toggle="tooltip" \
@@ -57,7 +57,7 @@ class HintTests: IgniteTestSuite {
                 .hint(text: "Why, hello there!")
         }
 
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == """
         <p><span data-bs-toggle="tooltip" \

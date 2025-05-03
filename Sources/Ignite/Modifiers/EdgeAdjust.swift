@@ -8,79 +8,96 @@
 /// Both the margin() and padding() modifiers work identically apart from the exact
 /// name of the CSS attribute they change, so their functionality is wrapped up here
 /// to avoid code duplication. This should not be called directly.
-extension HTML {
+extension BodyElement {
     /// Adjusts the edge value (margin or padding) for a view using an adaptive amount.
     /// - Parameters:
     ///   - prefix: Specifies what we are changing, e.g. "padding"
     ///   - edges: Which edges we are changing.
     ///   - amount: The value we are changing it to.
-    /// - Returns: A copy of the current element with the updated edge adjustment.
-    func edgeAdjust(prefix: String, _ edges: Edge = .all, _ amount: SpacingAmount) -> any HTML {
+    /// - Returns: An array of class names for the edge adjustments.
+    func edgeAdjustedClasses(prefix: String, _ edges: Edge = .all, _ amount: Int) -> [String] {
+        var classes = [String]()
+
         if edges.contains(.all) {
-            return self.class("\(prefix)-\(amount.rawValue)")
+            classes.append("\(prefix)-\(amount)")
+            return classes
         }
 
-        var copy: any HTML = self
-
         if edges.contains(.horizontal) {
-            copy = copy.class("\(prefix)x-\(amount.rawValue)")
+            classes.append("\(prefix)x-\(amount)")
         } else {
             if edges.contains(.leading) {
-                copy = copy.class("\(prefix)s-\(amount.rawValue)")
+                classes.append("\(prefix)s-\(amount)")
             }
 
             if edges.contains(.trailing) {
-                copy = copy.class("\(prefix)e-\(amount.rawValue)")
+                classes.append("\(prefix)e-\(amount)")
             }
         }
 
         if edges.contains(.vertical) {
-            copy = copy.class("\(prefix)y-\(amount.rawValue)")
+            classes.append("\(prefix)y-\(amount)")
         } else {
             if edges.contains(.top) {
-                copy = copy.class("\(prefix)t-\(amount.rawValue)")
+                classes.append("\(prefix)t-\(amount)")
             }
 
             if edges.contains(.bottom) {
-                copy = copy.class("\(prefix)b-\(amount.rawValue)")
+                classes.append("\(prefix)b-\(amount)")
             }
         }
 
-        return copy
+        return classes
     }
 }
 
-extension Stylable {
+private func edgeAdjustedStyles(prefix: String, _ edges: Edge = .all, _ length: String) -> [InlineStyle] {
+    var styles = [InlineStyle]()
+
+    if edges.contains(.all) {
+        styles.append(.init(prefix, value: length))
+        return styles
+    }
+
+    if edges.contains(.leading) {
+        styles.append(.init("\(prefix)-left", value: length))
+    }
+
+    if edges.contains(.trailing) {
+        styles.append(.init("\(prefix)-right", value: length))
+    }
+
+    if edges.contains(.top) {
+        styles.append(.init("\(prefix)-top", value: length))
+    }
+
+    if edges.contains(.bottom) {
+        styles.append(.init("\(prefix)-bottom", value: length))
+    }
+
+    return styles
+}
+
+extension BodyElement {
     /// Adjusts the edge value (margin or padding) for a view.
     /// - Parameters:
     ///   - prefix: Specifies what we are changing, e.g. "padding"
     ///   - edges: Which edges we are changing.
     ///   - length: The value we are changing it to.
     /// - Returns: An array of InlineStyle with the edge adjustments.
-    func edgeAdjustedStyles(prefix: String, _ edges: Edge = .all, _ length: String = "20px") -> [InlineStyle] {
-        var styles = [InlineStyle]()
+    func edgeAdjustedStyles(prefix: String, _ edges: Edge = .all, _ length: String) -> [InlineStyle] {
+        Ignite.edgeAdjustedStyles(prefix: prefix, edges, length)
+    }
+}
 
-        if edges.contains(.all) {
-            styles.append(.init(prefix, value: length))
-            return styles
-        }
-
-        if edges.contains(.leading) {
-            styles.append(.init("\(prefix)-left", value: length))
-        }
-
-        if edges.contains(.trailing) {
-            styles.append(.init("\(prefix)-right", value: length))
-        }
-
-        if edges.contains(.top) {
-            styles.append(.init("\(prefix)-top", value: length))
-        }
-
-        if edges.contains(.bottom) {
-            styles.append(.init("\(prefix)-bottom", value: length))
-        }
-
-        return styles
+extension StyledHTML {
+    /// Adjusts the edge value (margin or padding) for a view.
+    /// - Parameters:
+    ///   - prefix: Specifies what we are changing, e.g. "padding"
+    ///   - edges: Which edges we are changing.
+    ///   - length: The value we are changing it to.
+    /// - Returns: An array of InlineStyle with the edge adjustments.
+    func edgeAdjustedStyles(prefix: String, _ edges: Edge = .all, _ length: String) -> [InlineStyle] {
+        Ignite.edgeAdjustedStyles(prefix: prefix, edges, length)
     }
 }

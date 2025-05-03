@@ -17,7 +17,7 @@ struct LineSpacingTests {
     @Test("Custom Line Spacing", arguments: zip([2.5, 0.0, -2.0], ["2.5", "0", "-2"]))
     func lineSpacing(value: Double, expected: String) async throws {
         let element = Text("Hello, world!").lineSpacing(value)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p style=\"line-height: \(expected)\">Hello, world!</p>")
     }
@@ -25,7 +25,7 @@ struct LineSpacingTests {
     @Test("Preset Line Spacing", arguments: LineSpacing.allCases)
     func lineSpacing(spacing: LineSpacing) async throws {
         let element = Text("Hello, world!").lineSpacing(spacing)
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<p class=\"lh-\(spacing.rawValue)\">Hello, world!</p>")
     }

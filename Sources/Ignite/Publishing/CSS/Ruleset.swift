@@ -12,6 +12,7 @@ struct Ruleset: CustomStringConvertible {
         case attribute(name: String, value: String)
         case `class`(String)
         case pseudoClass(String)
+        case type(String)
 
         var description: String {
             switch self {
@@ -21,6 +22,8 @@ struct Ruleset: CustomStringConvertible {
                 ".\(name)"
             case .pseudoClass(let name):
                 ":\(name)"
+            case .type(let name):
+                name
             }
         }
     }

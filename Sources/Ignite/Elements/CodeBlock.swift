@@ -110,31 +110,31 @@ public struct CodeBlock: HTML {
             break
         }
 
-        return self
+        return copy
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         guard publishingContext.site.allHighlighterThemes.isEmpty == false else {
             fatalError(.missingDefaultSyntaxHighlighterTheme)
         }
 
         if let language {
             publishingContext.syntaxHighlighters.append(language)
-            return """
+            return Markup("""
             <pre\(attributes)>\
             <code class=\"language-\(language)\">\
             \(content)\
             </code>\
             </pre>
-            """
+            """)
         } else {
-            return """
+            return Markup("""
             <pre\(attributes)>\
             <code>\(content)</code>\
             </pre>
-            """
+            """)
         }
     }
 }

@@ -6,7 +6,7 @@
 //
 
 /// A clickable button with a label and styling.
-public struct Button: InlineElement {
+public struct Button: InlineElement, FormItem {
     /// Controls the display size of buttons. Medium is the default.
     public enum Size: String, CaseIterable {
         case small, medium, large
@@ -30,7 +30,7 @@ public struct Button: InlineElement {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some InlineElement { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -48,7 +48,10 @@ public struct Button: InlineElement {
     var role = Role.default
 
     /// Elements to render inside this button.
-    var label: any HTML
+    var label: any InlineElement
+
+    /// The icon element to display before the title.
+    var systemImage: String?
 
     /// Whether the button is disabled and cannot be interacted with.
     private var isDisabled = false
@@ -56,7 +59,7 @@ public struct Button: InlineElement {
     /// Creates a button with no label. Used in some situations where
     /// exact styling is performed by Bootstrap, e.g. in Carousel.
     public init() {
-        self.label = EmptyHTML()
+        self.label = EmptyInlineElement()
     }
 
     /// Creates a button with a label.
@@ -74,21 +77,27 @@ public struct Button: InlineElement {
 
     /// Creates a button with a label.
     /// - Parameters:
-    ///   - label: The label text to display on this button.
+    ///   - title: The label text to display on this button.
+    ///   - systemImage: An image name chosen from https://icons.getbootstrap.com.
     ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
     /// - actions: An element builder that returns an array of actions to run when this button is pressed.
-    public init(_ label: String, @ActionBuilder actions: () -> [Action]) {
-        self.label = label
+    public init(
+        _ title: String,
+        systemImage: String? = nil,
+        @ActionBuilder actions: () -> [Action] = { [] }
+    ) {
+        self.label = title
+        self.systemImage = systemImage
         addEvent(name: "onclick", actions: actions())
     }
 
     /// Creates a button with a label and actions to run when it's pressed.
     /// - Parameters:
-    ///   - label: The label text to display on this button.
     ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
+    ///   - label: The label text to display on this button.
     public init(
-        @InlineElementBuilder _ label: @escaping () -> some InlineElement,
-        @ActionBuilder actions: () -> [Action]
+        @ActionBuilder actions: () -> [Action],
+        @InlineElementBuilder label: @escaping () -> some InlineElement
     ) {
         self.label = label()
         addEvent(name: "onclick", actions: actions())
@@ -171,7 +180,7 @@ public struct Button: InlineElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var buttonAttributes = attributes
             .appending(classes: Button.classes(forRole: role, size: size))
             .appending(aria: Button.aria(forRole: role))
@@ -180,16 +189,20 @@ public struct Button: InlineElement {
             buttonAttributes.append(customAttributes: .disabled)
         }
 
-        let output = label.render()
-        return "<button type=\"\(type.htmlName)\"\(buttonAttributes)>\(output)</button>"
+        var labelHTML = ""
+        if let systemImage, !systemImage.isEmpty {
+            labelHTML = "<i class=\"bi bi-\(systemImage)\"></i> "
+        }
+        labelHTML += label.markupString()
+        return Markup("<button type=\"\(type.htmlName)\"\(buttonAttributes)>\(labelHTML)</button>")
     }
 }
 
-extension Button {
+public extension Button {
     /// Adjusts the number of columns assigned to this element.
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A copy of the current element with the adjusted column width.
-    public func width(_ width: Int) -> some InlineElement {
+    func width(_ width: Int) -> some InlineElement {
         self.class("w-100", ColumnWidth.count(width).className)
     }
 }

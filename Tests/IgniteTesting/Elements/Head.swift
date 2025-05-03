@@ -17,7 +17,7 @@ class HTMLHeadTests: IgniteTestSuite {
     @Test("Defaults to empty head tag")
     func default_is_empty_head_tag() throws {
         let sut = Head().standardHeadersDisabled()
-        let output = sut.render()
+        let output = sut.markupString()
 
         let (attributes, contents) = try #require(output.htmlTagWithCloseTag("head"))
 
@@ -34,7 +34,8 @@ class HTMLHeadTests: IgniteTestSuite {
         }
         .standardHeadersDisabled()
 
-        let contents = try #require(sut.render().htmlTagWithCloseTag("head")?.contents)
+        let output = sut.markupString()
+        let contents = try #require(output.htmlTagWithCloseTag("head")?.contents)
 
         let exampleHeaderItems: [any HeadElement] = [
             Title("Hello, World"),
@@ -43,16 +44,16 @@ class HTMLHeadTests: IgniteTestSuite {
         ]
 
         for item in exampleHeaderItems {
-            #expect(contents.contains(item.render()))
+            #expect(contents.contains(item.markupString()))
         }
     }
 
     @Test("Output contains standard headers for page passed in on init")
     func output_contains_standard_headers_for_page() throws {
         let sut = Head()
-        let expected = HTMLCollection(Head.standardHeaders()).render()
+        let expected = Head.standardHeaders().map { $0.markupString() }.joined()
 
-        let output = sut.render()
+        let output = sut.markupString()
 
         #expect(output.contains(expected))
     }
@@ -60,9 +61,9 @@ class HTMLHeadTests: IgniteTestSuite {
     @Test("Output contains soccial sharing tags for page passed in on init")
     func output_contains_social_sharing_tags() throws {
         let sut = Head()
-        let expected = HTMLCollection(MetaTag.socialSharingTags()).render()
+        let expected = MetaTag.socialSharingTags().map { $0.markupString() }.joined()
 
-        let output = sut.render()
+        let output = sut.markupString()
 
         #expect(output.contains(expected))
     }
@@ -71,9 +72,9 @@ class HTMLHeadTests: IgniteTestSuite {
     func output_contains_additional_items() throws {
         let additionalItem = Script(file: "somefile.js")
         let sut = Head { additionalItem }
-        let expected = additionalItem.render()
+        let expected = additionalItem.markupString()
 
-        let output = sut.render()
+        let output = sut.markupString()
 
         #expect(output.contains(expected))
     }

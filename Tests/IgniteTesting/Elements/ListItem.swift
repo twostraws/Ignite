@@ -19,7 +19,7 @@ class ListItemTests: IgniteTestSuite {
         let element = ListItem {
             "Standalone List Item"
         }
-        let output = element.render()
+        let output = element.markupString()
 
         #expect(output == "<li>Standalone List Item</li>")
     }

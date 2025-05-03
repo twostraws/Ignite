@@ -27,7 +27,7 @@ private extension HTML {
             .style(.marginBottom, "0")
             .style(alignment.itemAlignmentRules)
 
-        frameableContent = if self is Section {
+        frameableContent = if self.isSection {
             frameableContent
         } else {
             Section(frameableContent)
@@ -35,7 +35,7 @@ private extension HTML {
 
         return frameableContent
             .style(.display, "flex")
-            .style(self.isImage ? .init(.flexDirection, value: "column") : nil)
+            .style(self.is(Image.self) ? .init(.flexDirection, value: "column") : nil)
             .style(.overflow, "hidden")
             .style(edgeAlignmentRules)
             .style(alignment.flexAlignmentRules)

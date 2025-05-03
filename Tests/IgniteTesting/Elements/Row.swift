@@ -20,7 +20,7 @@ struct RowTests {
             Text("Column 1")
             Text("Column 2")
         }
-        let output = row.render()
+        let output = row.markupString()
 
         #expect(output == "<tr><td><p>Column 1</p></td><td><p>Column 2</p></td></tr>")
     }
@@ -31,7 +31,7 @@ struct RowTests {
             Column { Text("Column 1") }
             Column { Text("Column 2") }
         }
-        let output = row.render()
+        let output = row.markupString()
 
         #expect(output == "<tr><td colspan=\"1\"><p>Column 1</p></td><td colspan=\"1\"><p>Column 2</p></td></tr>")
     }
@@ -42,7 +42,7 @@ struct RowTests {
             Text("Column 1")
             Column { Text("Column 2") }
         }
-        let output = row.render()
+        let output = row.markupString()
 
         #expect(output == "<tr><td><p>Column 1</p></td><td colspan=\"1\"><p>Column 2</p></td></tr>")
     }

@@ -7,12 +7,24 @@
 
 /// Elements that conform to `DropdownItem` can be shown inside
 /// Dropdown objects.
-public protocol DropdownItem: HTML {}
+public protocol DropdownItem: BodyElement {}
 
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
-public struct Dropdown: HTML, NavigationItem {
+public struct Dropdown: HTML, NavigationItem, FormItem {
+    /// How the dropdown should be rendered based on its context.
+    enum Configuration: Sendable {
+        /// Renders as a complete standalone dropdown.
+        case standalone
+        /// Renders for placement inside a navigation bar.
+        case navigationBarItem
+        /// Renders for placement inside a control group.
+        case controlGroupItem
+        /// Renders as the last item in a control group with special positioning.
+        case lastControlGroupItem
+    }
+
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -22,21 +34,24 @@ public struct Dropdown: HTML, NavigationItem {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
+    /// How a `NavigationBar` displays this item at different breakpoints.
+    public var navigationBarVisibility: NavigationBarVisibility = .automatic
+
     /// The title for this `Dropdown`.
-    var title: any InlineElement
+    private var title: any InlineElement
 
     /// The array of items to shown in this `Dropdown`.
-    var items: [any DropdownItem]
+    private var items: [any DropdownItem]
 
     /// How large this dropdown should be drawn. Defaults to `.medium`.
-    var size = Button.Size.medium
+    private var size = Button.Size.medium
 
     /// How this dropdown should be styled on the screen. Defaults to `.defaut`.
-    var role = Role.default
+    private var role = Role.default
 
     /// Controls whether this dropdown needs to be created as its own element,
-    /// or whether it uses the structure provided by a parent `NavigationBar`.
-    private var isNavigationItem = false
+    /// or whether it uses the structure provided by a parent like `NavigationBar`.
+    private var configuration: Configuration = .standalone
 
     /// Creates a new dropdown button using a title and an element that builder
     /// that returns an array of types conforming to `DropdownItem`.
@@ -82,76 +97,73 @@ public struct Dropdown: HTML, NavigationItem {
         return copy
     }
 
-    /// Configures this dropdown to be placed inside a `NavigationBar`.
-    /// This removes its <div> at render-time, which means it will use the
-    /// structure provided directly by the `NavigationBar`.
-    /// - Returns: A new `Dropdown` instance suitable for placement
-    /// inside a `NavigationBar`.
-    func configuredAsNavigationItem() -> Self {
+    /// Sets how this dropdown should be rendered based on its placement context.
+    /// - Parameter configuration: The context in which this dropdown will be used.
+    /// - Returns: A configured dropdown instance.
+    func configuration(_ configuration: Configuration) -> Self {
         var copy = self
-        copy.isNavigationItem = true
+        copy.configuration = configuration
         return copy
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        if isNavigationItem {
-            Group(renderDropdownContent())
-                .attributes(attributes)
-                .class("dropdown")
-                .render()
-        } else {
+    public func markup() -> Markup {
+        if configuration == .standalone {
             Section(renderDropdownContent())
                 .attributes(attributes)
                 .class("dropdown")
-                .render()
+                .markup()
+        } else {
+            renderDropdownContent()
+                .attributes(attributes)
+                .markup()
         }
     }
 
     /// Creates the internal dropdown structure including the trigger button and menu items.
     /// - Returns: A group containing the dropdown's trigger and menu list.
-    private func renderDropdownContent() -> some HTML {
-        Group {
-            if isNavigationItem {
-                let titleAttributes = title.attributes
-                let title = title.clearingAttributes()
-                let hasActiveItem = items.contains {
-                    publishingContext.currentRenderingPath == ($0 as? Link)?.url
-                }
-
-                Link(title, target: "#")
-                    .customAttribute(name: "role", value: "button")
-                    .class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
-                    .data("bs-toggle", "dropdown")
-                    .aria(.expanded, "false")
-                    .attributes(titleAttributes)
-            } else {
-                Button(title)
-                    .class(Button.classes(forRole: role, size: size))
-                    .class("dropdown-toggle")
-                    .data("bs-toggle", "dropdown")
-                    .aria(.expanded, "false")
+    @HTMLBuilder
+    private func renderDropdownContent() -> some BodyElement {
+        if configuration == .navigationBarItem {
+            let titleAttributes = title.attributes
+            let title = title.clearingAttributes()
+            let hasActiveItem = items.contains {
+                publishingContext.currentRenderingPath == ($0 as? Link)?.url
             }
 
-            List {
-                ForEach(items) { item in
-                    if let link = item as? Link {
-                        ListItem {
-                            link.class("dropdown-item")
-                                .class(publishingContext.currentRenderingPath == link.url ? "active" : nil)
-                                .aria(.current, publishingContext.currentRenderingPath == link.url ? "page" : nil)
-                        }
-                    } else if let text = item as? Text {
-                        ListItem {
-                            text.class("dropdown-header")
-                        }
+            Link(title, target: "#")
+                .customAttribute(name: "role", value: "button")
+                .class("dropdown-toggle", "nav-link", hasActiveItem ? "active" : nil)
+                .data("bs-toggle", "dropdown")
+                .aria(.expanded, "false")
+                .attributes(titleAttributes)
+        } else {
+            Button(title)
+                .class(Button.classes(forRole: role, size: size))
+                .class("dropdown-toggle")
+                .data("bs-toggle", "dropdown")
+                .aria(.expanded, "false")
+        }
+
+        List {
+            ForEach(items) { item in
+                if let link = item as? Link {
+                    ListItem {
+                        link.class("dropdown-item")
+                            .class(publishingContext.currentRenderingPath == link.url ? "active" : nil)
+                            .aria(.current, publishingContext.currentRenderingPath == link.url ? "page" : nil)
+                    }
+                } else if let text = item as? Text {
+                    ListItem {
+                        text.class("dropdown-header")
                     }
                 }
             }
-            .listMarkerStyle(.unordered(.automatic))
-            .class("dropdown-menu")
         }
+        .listMarkerStyle(.unordered(.automatic))
+        .class("dropdown-menu")
+        .class(configuration == .lastControlGroupItem ? "dropdown-menu-end" : nil)
     }
 }
 

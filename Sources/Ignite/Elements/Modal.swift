@@ -77,9 +77,9 @@ public struct Modal: HTML {
 
     public init(
         id modalId: String,
-        @HTMLBuilder body: () -> some HTML,
-        @HTMLBuilder header: () -> some HTML = { EmptyHTML() },
-        @HTMLBuilder footer: () -> some HTML = { EmptyHTML() }
+        @HTMLBuilder body: () -> some BodyElement,
+        @HTMLBuilder header: () -> some BodyElement = { EmptyHTML() },
+        @HTMLBuilder footer: () -> some BodyElement = { EmptyHTML() }
     ) {
         self.htmlID = modalId
         self.items = HTMLCollection([body()])
@@ -125,7 +125,7 @@ public struct Modal: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         Section {
             Section {
                 Section {
@@ -160,6 +160,6 @@ public struct Modal: HTML {
         .id(htmlID)
         .aria(.labelledBy, "modalLabel")
         .aria(.hidden, "true")
-        .render()
+        .markup()
     }
 }

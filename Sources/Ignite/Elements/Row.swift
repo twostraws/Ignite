@@ -22,21 +22,22 @@ public struct Row: HTML {
     /// Create a new `Row` using a page element builder that returns the
     /// array of columns to use in this row.
     /// - Parameter columns: The columns to use in this row.
-    public init(@HTMLBuilder columns: () -> some HTML) {
+    public init(@HTMLBuilder columns: () -> some BodyElement) {
         self.columns = HTMLCollection(columns)
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         let output = columns.map { column in
             if column is Column {
-                column.render()
+                column.markup()
             } else {
-                "<td>\(column.render())</td>"
+                Markup("<td>\(column.markupString())</td>")
             }
         }.joined()
+        .string
 
-        return "<tr\(attributes)>\(output)</tr>"
+        return Markup("<tr\(attributes)>\(output)</tr>")
     }
 }

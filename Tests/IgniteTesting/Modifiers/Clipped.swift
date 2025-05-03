@@ -17,14 +17,14 @@ class ClippedTests: IgniteTestSuite {
     @Test("Clipped Modifier")
     func clippedModifier() async throws {
         let element = Text("Hello").clipped()
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<p style=\"overflow: hidden\">Hello</p>")
     }
 
     @Test("Clipped Modifier on Custom Element")
     func clippedModifier_onCustomElement() async throws {
         let element = TestElement().clipped()
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == """
         <div style=\"overflow: hidden\">\
         <p>Test Heading!</p>\

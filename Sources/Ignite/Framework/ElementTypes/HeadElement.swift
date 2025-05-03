@@ -5,5 +5,6 @@
 // See LICENSE for license information.
 //
 
-/// A metadata element that can exist in the `HTMLHead` struct.
-public protocol HeadElement: HTML {}
+/// A metadata element that can exist in the `Head` struct.
+/// - Warning: Do not conform to this type directly.
+public protocol HeadElement: MarkupElement {}

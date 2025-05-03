@@ -80,6 +80,12 @@ struct RunCommand: ParsableCommand {
         }
 
         print("✅ Starting local web server on http://localhost:\(currentPort)\(subsite)")
+        
+        if let ipAddress = getLocalIPAddress() {
+            let localURL = "http://\(ipAddress):\(currentPort)\(subsite)"
+            generateQRCode(for: localURL)
+        }
+
         print("Press ↵ Return to exit.")
 
         let subsiteArgument = subsite.isEmpty ? "" : "-s \(subsite)"
@@ -93,5 +99,49 @@ struct RunCommand: ParsableCommand {
     private func isServerRunning(on port: Int) throws -> Bool {
         let result = try Process.execute(command: "lsof -t -i tcp:\(port)")
         return !result.output.isEmpty
+    }
+
+    /// Returns the local IP address of the machine.
+    private func getLocalIPAddress() -> String? {
+        var localIPAddress: String?
+        var interfaceAddressPointer: UnsafeMutablePointer<ifaddrs>?
+
+        if getifaddrs(&interfaceAddressPointer) == 0 {
+            var currentPointer = interfaceAddressPointer
+            while currentPointer != nil {
+                defer { currentPointer = currentPointer?.pointee.ifa_next }
+
+                guard let networkInterface = currentPointer?.pointee else { continue }
+                let addressFamily = networkInterface.ifa_addr.pointee.sa_family
+
+                if addressFamily == UInt8(AF_INET) {
+                    let interfaceName = String(cString: networkInterface.ifa_name)
+                    var hostNameBuffer = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+                    getnameinfo(networkInterface.ifa_addr, socklen_t(networkInterface.ifa_addr.pointee.sa_len),
+                                &hostNameBuffer, socklen_t(hostNameBuffer.count),
+                                nil, socklen_t(0), NI_NUMERICHOST)
+
+                    let ipAddressBytes = hostNameBuffer.prefix { $0 != 0 }.map { UInt8(bitPattern: $0) }
+                    let ipAddress = String(decoding: ipAddressBytes, as: UTF8.self)
+
+                    // Pick the first non-loopback address
+                    if interfaceName != "lo0" {
+                        localIPAddress = ipAddress
+                        break
+                    }
+                }
+            }
+            freeifaddrs(interfaceAddressPointer)
+        }
+
+        return localIPAddress
+    }
+
+    /// Generates a QR code for the given URL and prints it to the terminal.
+    private func generateQRCode(for url: String) {
+        guard let qrCode = try? QRCode(utf8String: url) else { return }
+        print("\n📱 Scan this QR code to access the site on your mobile device:\n")
+        print(qrCode.smallAsciiRepresentation())
+        print("URL: \(url)\n")
     }
 }

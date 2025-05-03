@@ -14,7 +14,7 @@ public struct EmptyErrorPage: ErrorPage {
         ""
     }
 
-    public var body: some HTML {
+    public var body: some BodyElement {
         EmptyHTML()
     }
 }

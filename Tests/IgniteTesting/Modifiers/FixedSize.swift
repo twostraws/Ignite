@@ -17,7 +17,7 @@ class FixedSizeTests: IgniteTestSuite {
     @Test("FixedSize Modifier")
     func fixedSizeModifier() async throws {
         let element = Text("Hello").fixedSize()
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<div style=\"display: inline-block\"><p>Hello</p></div>")
     }
 }

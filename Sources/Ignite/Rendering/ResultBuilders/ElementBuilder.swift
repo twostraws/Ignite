@@ -6,7 +6,6 @@
 //
 
 typealias HeadElementBuilder = ElementBuilder<any HeadElement>
-typealias DocumentElementBuilder = ElementBuilder<any DocumentElement>
 typealias StaticPageBuilder = ElementBuilder<any StaticPage>
 typealias ErrorPageBuilder = ElementBuilder<any ErrorPage>
 typealias ArticlePageBuilder = ElementBuilder<any ArticlePage>

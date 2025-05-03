@@ -19,7 +19,7 @@ class TagTests: IgniteTestSuite {
         // Given
         let element = Tag(tagName)
         // When
-        let output = element.render()
+        let output = element.markupString()
 
         // Then
         #expect(output == "<\(tagName)></\(tagName)>")
@@ -29,10 +29,10 @@ class TagTests: IgniteTestSuite {
     func tagWithSingleElement(tagName: String) async throws {
         // Given
         let htmlElement = Span("Test Span")
-        let element = Tag(tagName, content: htmlElement)
+        let element = Tag(tagName) { htmlElement }
 
         // When
-        let output = element.render()
+        let output = element.markupString()
 
         // Then
         #expect(output == "<\(tagName)><span>Test Span</span></\(tagName)>")
@@ -47,7 +47,7 @@ class TagTests: IgniteTestSuite {
         }
 
         // When
-        let output = element.render()
+        let output = element.markupString()
 
         // Then
         #expect(output == "<\(tagName)><span>Test Span 1</span><span>Test Span 2</span></\(tagName)>")

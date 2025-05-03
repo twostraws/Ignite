@@ -5,31 +5,34 @@
 // See LICENSE for license information.
 //
 
-struct Document: HTML {
-    /// The content and behavior of this HTML.
-    var body: some HTML { self }
-
+public struct Document: MarkupElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
     /// Whether this HTML belongs to the framework.
-    var isPrimitive: Bool { true }
+    public var isPrimitive: Bool { true }
 
     private let language: Language
-    private let contents: [any DocumentElement]
+    private let head: Head
+    private let body: Body
 
-    init(@DocumentElementBuilder contents: () -> [any DocumentElement]) {
+    init(head: Head, body: Body) {
         self.language = PublishingContext.shared.environment.language
-        self.contents = contents()
+        self.head = head
+        self.body = body
     }
 
-    func render() -> String {
+    public func markup() -> Markup {
         var attributes = attributes
         attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
         var output = "<!doctype html>"
-        output += "<html \(attributes)>"
-        output += contents.map { $0.render() }.joined()
+        output += "<html\(attributes)>"
+        let bodyMarkup = body.markup()
+        // Deferred head rendering to accommodate for context updates during body rendering
+        let headMarkup = head.markup()
+        output += headMarkup.string
+        output += bodyMarkup.string
         output += "</html>"
-        return output
+        return Markup(output)
     }
 }

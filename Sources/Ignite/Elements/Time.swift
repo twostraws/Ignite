@@ -12,7 +12,7 @@ import Foundation
 /// engine results or custom features such as reminders.
 public struct Time: InlineElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some InlineElement { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -30,7 +30,7 @@ public struct Time: InlineElement {
     /// - Parameter dateTime: The time and/or date of the element
     /// inside the time element.
     public init(dateTime: Date? = nil) {
-        self.contents = EmptyHTML()
+        self.contents = EmptyInlineElement()
         self.dateTime = dateTime
     }
 
@@ -54,12 +54,12 @@ public struct Time: InlineElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var attributes = attributes
         if let dateTime {
             attributes.append(customAttributes: .init(name: "datetime", value: dateTime.asISO8601))
         }
-
-        return "<time\(attributes)>\(contents)</time>"
+        let contentHTML = contents.markupString()
+        return Markup("<time\(attributes)>\(contentHTML)</time>")
     }
 }

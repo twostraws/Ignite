@@ -17,7 +17,7 @@ class CodeTests: IgniteTestSuite {
     @Test("Inline code formatting")
     func inlineCode() async throws {
         let element = Code("background-color")
-        let output = element.render()
+        let output = element.markupString()
         #expect(output == "<code>background-color</code>")
     }
 }

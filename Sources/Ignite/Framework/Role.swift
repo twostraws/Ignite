@@ -48,8 +48,7 @@ public enum Role: String, CaseIterable, Sendable {
     case none
 
     /// A list of roles that are useful for Badge elements.
-    @MainActor
-    public static let badgeRoles: [Role] = [
+    public static let standardRoles: [Role] = [
         .primary, .secondary, .success, .danger, .warning, .info, .light, .dark
     ]
 }

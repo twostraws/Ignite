@@ -17,8 +17,8 @@ class SpacerTests: IgniteTestSuite {
     @Test("SpacerTest")
     func basicSpacerTest() async throws {
         let element = Spacer()
-        let output = element.render()
+        let output = element.markupString()
 
-        #expect(output == "<div class=\"ms-auto\" style=\"height: 20px\"></div>")
+        #expect(output == "<div class=\"mt-auto\"></div>")
     }
 }

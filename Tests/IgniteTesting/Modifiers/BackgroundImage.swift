@@ -21,8 +21,9 @@ struct BackgroundImageTests {
         let element = Text {
             "Hello World!"
         }.background(image: "assets/image.png", contentMode: contentMode)
+        let output = element.markupString()
 
-        #expect(element.render() == """
+        #expect(output == """
         <p \
         style="background-image: url('assets/image.png'); \
         background-size: \(contentMode.css); \
@@ -41,8 +42,9 @@ struct BackgroundImageTests {
         let element = Text {
             "Hello World!"
         }.background(image: "assets/image.png", contentMode: .fill, position: position)
+        let output = element.markupString()
 
-        #expect(element.render() == """
+        #expect(output == """
         <p \
         style=\"background-image: url('assets/image.png'); \
         background-size: cover; \

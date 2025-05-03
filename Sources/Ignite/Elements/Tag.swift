@@ -7,7 +7,7 @@
 
 /// A struct able to become any HTML tag. Useful for when Ignite has not
 /// implemented a specific tag you need.
-public struct Tag: HTML, HeadElement {
+public struct Tag: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -18,29 +18,22 @@ public struct Tag: HTML, HeadElement {
     public var isPrimitive: Bool { true }
 
     /// The name of the tag to use.
-    var name: String
+    private var name: String
 
     // The contents of this tag.
-    var content: any HTML
+    private var content: any MarkupElement
 
     /// Creates a new `Tag` instance from the name provided, along with a page
     /// element builder that returns an array of the content to place inside.
     /// - Parameters:
     ///   - name: The name of the HTML tag you want to create.
     ///   - content: The content to place inside the tag.
-    public init(_ name: String, @HTMLBuilder content: @escaping () -> some HTML) {
+    public init(
+        _ name: String,
+        @HTMLBuilder content: @escaping () -> any BodyElement
+    ) {
         self.name = name
         self.content = content()
-    }
-
-    /// Creates a new `Tag` instance from the name provided, along with one
-    /// page element to place inside.
-    /// - Parameters:
-    ///   - name: The name of the HTML tag you want to create.
-    ///   - singleElement: The content to place inside the tag.
-    public init(_ name: String, content singleElement: some HTML) {
-        self.name = name
-        self.content = singleElement
     }
 
     /// Creates a new `Tag` instance from the name provided, with no content
@@ -54,7 +47,8 @@ public struct Tag: HTML, HeadElement {
     /// Renders this element using publishing context passed in.
     /// - Parameter context: The current publishing context.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
-        "<\(name)\(attributes)>\(content)</\(name)>"
+    public func markup() -> Markup {
+        let contentHTML = content.markupString()
+        return Markup("<\(name)\(attributes)>\(contentHTML)</\(name)>")
     }
 }

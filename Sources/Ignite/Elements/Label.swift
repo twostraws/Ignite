@@ -10,7 +10,7 @@
 /// on either `title` or `icon`.
 public struct Label: InlineElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: some InlineElement { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
@@ -54,7 +54,7 @@ public struct Label: InlineElement {
         self.icon = icon()
     }
 
-    public func render() -> String {
+    public func markup() -> Markup {
         var icon = icon
 
         if !icon.attributes.styles.contains(where: { $0.property == Property.marginRight() }) &&
@@ -65,6 +65,9 @@ public struct Label: InlineElement {
         var attributes = attributes
         attributes.append(styles: .init(.display, value: "inline-flex"))
         attributes.append(styles: .init(.alignItems, value: "center"))
-        return "<span\(attributes)>\(icon)\(title)</span>"
+
+        let iconHTML = icon.markupString()
+        let titleHTML = title.markupString()
+        return Markup("<span\(attributes)>\(iconHTML)\(titleHTML)</span>")
     }
 }

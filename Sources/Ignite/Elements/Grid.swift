@@ -43,7 +43,7 @@ public struct Grid: HTML {
     public init(
         alignment: Alignment = .center,
         spacing: Int,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder items: () -> some BodyElement
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -59,7 +59,7 @@ public struct Grid: HTML {
     public init(
         alignment: Alignment = .center,
         spacing: SpacingAmount = .medium,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder items: () -> some BodyElement
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
@@ -73,11 +73,11 @@ public struct Grid: HTML {
     ///   - alignment: The alignment of items in the grid. Defaults to `.center`.
     ///   - spacing: The number of pixels between each element.
     ///   - content: A function that accepts a single value from the sequence, and
-    ///     returns a some HTML representing that value in the grid.
+    ///     returns some HTML representing that value in the grid.
     public init<T>(
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
-        spacing: Int, content: (T) -> some HTML
+        spacing: Int, content: (T) -> some BodyElement
     ) {
         self.items = HTMLCollection(items.map(content))
         self.alignment = alignment
@@ -91,12 +91,12 @@ public struct Grid: HTML {
     ///   - alignment: The alignment of items in the grid. Defaults to `.center`.
     ///   - spacing: The predefined size between each element. Defaults to `.none`
     ///   - content: A function that accepts a single value from the sequence, and
-    ///     returns a some HTML representing that value in the grid.
+    ///     returns some HTML representing that value in the grid.
     public init<T>(
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
         spacing: SpacingAmount = .medium,
-        content: (T) -> some HTML
+        content: (T) -> some BodyElement
     ) {
         self.items = HTMLCollection(items.map(content))
         self.alignment = alignment
@@ -114,7 +114,7 @@ public struct Grid: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func render() -> String {
+    public func markup() -> Markup {
         var gridAttributes = attributes.appending(classes: ["row"])
         gridAttributes.append(classes: alignment.horizontal.containerAlignmentClass)
 
@@ -149,16 +149,15 @@ public struct Grid: HTML {
                 } else {
                     handleItem(item)
                         .class(gutterClass)
-                        .render()
                 }
             }
         }
         .attributes(gridAttributes)
-        .render()
+        .markup()
     }
 
     /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.
-    private func handleItem(_ item: any HTML) -> any HTML {
+    private func handleItem(_ item: any BodyElement) -> some BodyElement {
         var item = item
         var name: String?
         if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }) {
@@ -166,9 +165,9 @@ public struct Grid: HTML {
             name = scaleWidthClass(widthClass)
         }
 
-        item = item.isSection ? item : Section(item)
+        item = item.is(Section.self) ? item : Section(item)
 
-        return item
+        return AnyHTML(item)
             .class(name ?? "col")
             .class(alignment.vertical.itemAlignmentClass)
     }
@@ -185,10 +184,10 @@ public struct Grid: HTML {
             ""
         }
 
-        return ForEach(passthrough.items) { item in
+        let collection = HTMLCollection(passthrough.items.compactMap { $0 as? any HTML })
+        return ForEach(collection) { item in
             handleItem(item.attributes(attributes))
                 .class(gutterClass)
-                .render()
         }
     }
 

@@ -37,11 +37,11 @@ class EventModifierTests: IgniteTestSuite {
         let element = Tag(tag) {}
             .onEvent(eventActions.0, eventActions.1)
 
-        let output = element.render()
+        let output = element.markup()
 
         let eventOutput = eventActions.0.rawValue
         let actionOutput = eventActions.1.map { $0.compile() }.joined(separator: "; ")
 
-        #expect(output == "<\(tag) \(eventOutput)=\"\(actionOutput)\"></\(tag)>")
+        #expect(output.string == "<\(tag) \(eventOutput)=\"\(actionOutput)\"></\(tag)>")
     }
 }
