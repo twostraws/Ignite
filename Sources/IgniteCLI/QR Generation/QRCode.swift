@@ -6,6 +6,8 @@
 //
 
 #if canImport(CoreImage)
+import CoreImage
+
 /// A class for generating and manipulating QR codes.
 ///
 /// Use `QRCode` to create QR codes from strings with varying levels of error correction.
@@ -16,24 +18,13 @@
 /// print(qrCode.smallAsciiRepresentation())
 /// ```
 struct QRCode {
-    /// The engine used to generate the QR code.
-    private var engine = QRCodeEngine()
-
-    /// Creates an empty QR code instance.
-    init() {}
-
     /// Creates a QR code with the specified UTF-8 string.
     /// - Parameters:
     ///   - utf8String: The string to encode in the QR code.
     ///   - errorCorrection: The level of error correction to use. Defaults to `.default`.
     ///   - engine: An optional custom engine to use for generation. Defaults to nil.
     /// - Throws: `QRCodeError` if generation fails.
-    init(
-        utf8String: String,
-        errorCorrection: ErrorCorrection = .default,
-        engine: QRCodeEngine? = nil
-    ) throws {
-        if let engine = engine { self.engine = engine }
+    init(utf8String: String, errorCorrection: ErrorCorrection = .default) throws {
         try self.update(text: utf8String, errorCorrection: errorCorrection)
     }
 
@@ -57,7 +48,7 @@ struct QRCode {
         textEncoding: String.Encoding = .utf8,
         errorCorrection: ErrorCorrection = .default
     ) throws {
-        self.current = try self.engine.generate(text: text, errorCorrection: errorCorrection)
+        self.current = try self.generate(text: text, errorCorrection: errorCorrection)
         self.currentErrorCorrection = errorCorrection
     }
 
@@ -94,6 +85,61 @@ struct QRCode {
             result += "\n"
         }
         return result
+    }
+
+    /// Generates a QR code from a text string.
+    /// - Parameters:
+    ///   - text: The string to encode.
+    ///   - errorCorrection: The level of error correction to use.
+    /// - Returns: A boolean matrix representing the QR code.
+    /// - Throws: `QRCodeError` if generation fails.
+    private func generate(text: String, errorCorrection: ErrorCorrection) throws -> BoolMatrix {
+        guard let data = text.data(using: .utf8) else {
+            throw QRCodeError.unableToConvertTextToRequestedEncoding
+        }
+        return try self.generate(data: data, errorCorrection: errorCorrection)
+    }
+
+    /// Generates a QR code from raw data.
+    /// - Parameters:
+    ///   - data: The data to encode.
+    ///   - errorCorrection: The level of error correction to use.
+    /// - Returns: A boolean matrix representing the QR code.
+    /// - Throws: `QRCodeError` if generation fails.
+    private func generate(data: Data, errorCorrection: ErrorCorrection) throws -> BoolMatrix {
+        let filter = CIFilter(name: "CIQRCodeGenerator")!
+        filter.setValue(data, forKey: "inputMessage")
+        filter.setValue(errorCorrection.level, forKey: "inputCorrectionLevel")
+
+        guard
+            let outputImage = filter.outputImage,
+            let qrImage = CIContext().createCGImage(outputImage, from: outputImage.extent)
+        else {
+            throw QRCodeError.cannotGenerateImage
+        }
+
+        let width = qrImage.width
+        let height = qrImage.height
+        let colorspace = CGColorSpaceCreateDeviceGray()
+
+        var rawData = [UInt8](repeating: 0, count: width * height)
+        try rawData.withUnsafeMutableBytes { rawBufferPointer in
+            let rawPtr = rawBufferPointer.baseAddress!
+            guard let context = CGContext(
+                data: rawPtr,
+                width: width,
+                height: height,
+                bitsPerComponent: 8,
+                bytesPerRow: width,
+                space: colorspace,
+                bitmapInfo: 0)
+            else {
+                throw QRCodeError.cannotGenerateImage
+            }
+            context.draw(qrImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+        }
+
+        return BoolMatrix(dimension: width, flattened: rawData.map { $0 == 0 ? true : false })
     }
 }
 #endif
