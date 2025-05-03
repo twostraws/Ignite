@@ -74,11 +74,8 @@ struct RunCommand: ParsableCommand {
         }
 
         print("✅ Starting local web server on http://localhost:\(currentPort)\(subsite)")
-        
-        if let ipAddress = getLocalIPAddress() {
-            let localURL = "http://\(ipAddress):\(currentPort)\(subsite)"
-            generateQRCode(for: localURL)
-        }
+
+        generateQRCode(port: currentPort, subsite: subsite)
 
         print("Press ↵ Return to exit.")
 
@@ -93,6 +90,18 @@ struct RunCommand: ParsableCommand {
     private func isServerRunning(on port: Int) throws -> Bool {
         let result = try Process.execute(command: "lsof -t -i tcp:\(port)")
         return !result.output.isEmpty
+    }
+
+    /// Generates a QR code for the given URL and prints it to the terminal.
+    private func generateQRCode(port: Int, subsite: String) {
+        #if canImport(CoreImage)
+        guard let ipAddress = getLocalIPAddress() else { return }
+        let localURL = "http://\(ipAddress):\(port)\(subsite)"
+        guard let qrCode = try? QRCode(utf8String: localURL) else { return }
+        print("\n📱 Scan this QR code to access the site on your mobile device:\n")
+        print(qrCode.smallAsciiRepresentation())
+        print("URL: \(localURL)\n")
+        #endif
     }
 
     /// Returns the local IP address of the machine.
@@ -131,18 +140,6 @@ struct RunCommand: ParsableCommand {
         return localIPAddress
     }
 
-    /// Generates a QR code for the given URL and prints it to the terminal.
-    private func generateQRCode(for url: String) {
-        #if canImport(CoreImage)
-        guard let qrCode = try? QRCode(utf8String: url) else { return }
-        print("\n📱 Scan this QR code to access the site on your mobile device:\n")
-        print(qrCode.smallAsciiRepresentation())
-        #else
-        print("\n Visit this address to access the site on your mobile device:\n")
-        #endif
-        print("URL: \(url)\n")
-    }
-    
     /// Identify subsite by looking at the canonical url of 
     /// the root index.html of given directory
     private func identifySubsite(directory: String) -> String? {
