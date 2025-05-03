@@ -6,7 +6,7 @@
 //
 
 /// A type used to define a box-shadow
-struct Shadow: CustomStringConvertible {
+private struct Shadow: CustomStringConvertible {
     /// The shadow's color.
     let color: Color
 

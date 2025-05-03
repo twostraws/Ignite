@@ -7,7 +7,6 @@
 
 public extension HTML {
     /// Applies a transition animation to an HTML element.
-    ///
     /// - Parameters:
     ///   - transition: The transition animation to apply.
     ///   - trigger: The event that triggers this animation (.hover, .click, or .appear).
