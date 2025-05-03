@@ -120,7 +120,8 @@ struct RunCommand: ParsableCommand {
                 if addressFamily == UInt8(AF_INET) {
                     let interfaceName = String(cString: networkInterface.ifa_name)
                     var hostNameBuffer = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-                    getnameinfo(networkInterface.ifa_addr, socklen_t(networkInterface.ifa_addr.pointee.sa_len),
+                    // Use sizeof(sockaddr_in) for IPv4 addresses
+                    getnameinfo(networkInterface.ifa_addr, socklen_t(MemoryLayout<sockaddr_in>.size),
                                 &hostNameBuffer, socklen_t(hostNameBuffer.count),
                                 nil, socklen_t(0), NI_NUMERICHOST)
 
