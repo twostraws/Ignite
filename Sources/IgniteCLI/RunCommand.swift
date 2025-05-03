@@ -37,14 +37,8 @@ struct RunCommand: ParsableCommand {
             return
         }
 
-        var subsite = ""
-        // Identify the subdirectory of subsite from 
-        // the path to the first css directory in index.html.
-        if let indexData = FileManager.default.contents(atPath: "\(directory)/index.html") {
-            let indexString = String(decoding: indexData, as: UTF8.self)
-            let regex = #/<link href="(/[^/]+)?/css/#
-            subsite = indexString.firstMatch(of: regex)?.1.map { String($0) } ?? ""
-        }
+        // Detect if the site is an subsite
+        let subsite = identifySubsite(directory: directory) ?? ""
 
         // Find an available port
         var currentPort = port
@@ -143,5 +137,26 @@ struct RunCommand: ParsableCommand {
         print("\n📱 Scan this QR code to access the site on your mobile device:\n")
         print(qrCode.smallAsciiRepresentation())
         print("URL: \(url)\n")
+    }
+    
+    /// Identify subsite by looking at the canonical url of 
+    /// the root index.html of given directory
+    private func identifySubsite(directory: String) -> String? {
+        // Find the root index.html
+        guard let indexData = FileManager.default.contents(atPath: "\(directory)/index.html") else { return nil }
+        
+        // Locate and extract the canonical url 
+        let indexString = String(decoding: indexData, as: UTF8.self)
+        // Tag intentionally not closed to allow space and `>`, `/>`
+        let regex = #/<link href="([^"]+)" rel="canonical"/#
+        guard let urlSubString = indexString.firstMatch(of: regex)?.1 else { return nil }
+        
+        // Checks if it's an URL
+        guard let url = URL(string: String(urlSubString)) else { return nil }
+
+        // If there is no subsite, we don't want to return anything        
+        guard url.path != "/" else { return nil }
+
+        return url.path
     }
 }
