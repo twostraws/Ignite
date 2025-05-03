@@ -29,7 +29,7 @@ struct QRCode {
     }
 
     /// The current QR code as a boolean matrix.
-    private(set) var current = BoolMatrix()
+    private var current = BoolMatrix()
 
     /// The current error correction level.
     private var currentErrorCorrection: ErrorCorrection = .default
