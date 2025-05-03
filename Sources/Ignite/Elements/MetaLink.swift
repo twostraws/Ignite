@@ -16,11 +16,11 @@ public struct MetaLink: HeadElement, Sendable {
     /// The standard CSS you should include on all Ignite pages if using remote Bootstrap files
     public static var standardRemoteCSS: some HeadElement {
         MetaLink(
-            href: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+            href: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css",
             rel: .stylesheet)
         .customAttribute(
             name: "integrity",
-            value: "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH")
+            value: "sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7")
         .customAttribute(name: "crossorigin", value: "anonymous")
     }
 
