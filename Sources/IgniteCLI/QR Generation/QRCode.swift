@@ -5,6 +5,7 @@
 // See LICENSE for license information.
 //
 
+#if canImport(CoreImage)
 /// A class for generating and manipulating QR codes.
 ///
 /// Use `QRCode` to create QR codes from strings with varying levels of error correction.
@@ -95,3 +96,4 @@ struct QRCode {
         return result
     }
 }
+#endif
