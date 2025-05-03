@@ -37,14 +37,8 @@ struct RunCommand: ParsableCommand {
             return
         }
 
-        // Check for a subsite by not finding «href="/css/» in index.html.
-        if let indexData = FileManager.default.contents(atPath: "\(directory)/index.html") {
-            let indexString = String(decoding: indexData, as: UTF8.self)
-            guard indexString.contains("<link href=\"/css") else {
-                print("❌ This site specifies a custom subfolder, so it can't be previewed locally.")
-                return
-            }
-        }
+        // Detect if the site is an subsite
+        let subsite = identifySubsite(directory: directory) ?? ""
 
         // Find an available port
         var currentPort = port
@@ -56,20 +50,11 @@ struct RunCommand: ParsableCommand {
             }
         }
 
-        print("✅ Starting local web server on http://localhost:\(currentPort)")
-
-        if let ipAddress = getLocalIPAddress() {
-            let localURL = "http://\(ipAddress):\(currentPort)"
-            generateQRCode(for: localURL)
-        }
-
-        print("Press ↵ Return to exit.")
-
         let previewCommand =
             if preview {
                 // Automatically open a web browser pointing to their
                 // local server if requested.
-                "open http://localhost:\(currentPort)"
+                "open http://localhost:\(currentPort)\(subsite)"
             } else {
                 // Important: The empty space below is enough to
                 // make the Process.execute() wait for a key press
@@ -88,8 +73,18 @@ struct RunCommand: ParsableCommand {
             return
         }
 
+        print("✅ Starting local web server on http://localhost:\(currentPort)\(subsite)")
+        
+        if let ipAddress = getLocalIPAddress() {
+            let localURL = "http://\(ipAddress):\(currentPort)\(subsite)"
+            generateQRCode(for: localURL)
+        }
+
+        print("Press ↵ Return to exit.")
+
+        let subsiteArgument = subsite.isEmpty ? "" : "-s \(subsite)"
         try Process.execute(
-            command: "python3 \(serverScriptURL.path) -d \(directory) \(currentPort)",
+            command: "python3 \(serverScriptURL.path) -d \(directory) \(subsiteArgument) \(currentPort)",
             then: previewCommand
         )
     }
@@ -146,5 +141,26 @@ struct RunCommand: ParsableCommand {
         print("\n Visit this address to access the site on your mobile device:\n")
         #endif
         print("URL: \(url)\n")
+    }
+    
+    /// Identify subsite by looking at the canonical url of 
+    /// the root index.html of given directory
+    private func identifySubsite(directory: String) -> String? {
+        // Find the root index.html
+        guard let indexData = FileManager.default.contents(atPath: "\(directory)/index.html") else { return nil }
+        
+        // Locate and extract the canonical url 
+        let indexString = String(decoding: indexData, as: UTF8.self)
+        // Tag intentionally not closed to allow space and `>`, `/>`
+        let regex = #/<link href="([^"]+)" rel="canonical"/#
+        guard let urlSubString = indexString.firstMatch(of: regex)?.1 else { return nil }
+        
+        // Checks if it's an URL
+        guard let url = URL(string: String(urlSubString)) else { return nil }
+
+        // If there is no subsite, we don't want to return anything        
+        guard url.path != "/" else { return nil }
+
+        return url.path
     }
 }
