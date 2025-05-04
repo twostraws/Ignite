@@ -12,7 +12,7 @@ import Ignite
 struct TestSiteWithErrorPage: Site {
     var name = "My Error Page Test Site"
     var titleSuffix = " - My Test Site"
-    var url = URL(static: "https://www.yoursite.com")
+    var url = URL(static: "https://www.example.com")
     var timeZone: TimeZone?
     var language: Language = .english
 
