@@ -57,6 +57,18 @@ extension PublishingContext {
 
         let outputDirectory = buildDirectory.appending(path: path)
         write(outputString, to: outputDirectory, priority: priority, filename: filename)
+
+        if isSearchEnabled {
+            if page.description.isEmpty {
+                addWarning("\(page.title) lacks a page description and will be omitted from search results.")
+            } else {
+                let pageSearchMetadata = SearchMetadata(
+                    id: path,
+                    title: pageMetadata.title,
+                    description: pageMetadata.description)
+                searchMetadata.append(pageSearchMetadata)
+            }
+        }
     }
 
     /// Renders one piece of Markdown content.
@@ -86,6 +98,15 @@ extension PublishingContext {
 
         let outputDirectory = buildDirectory.appending(path: article.path)
         write(outputString, to: outputDirectory, priority: 0.8)
+
+        let pageSearchMetadata = SearchMetadata(
+            id: article.path,
+            title: article.title,
+            description: article.description,
+            tags: article.tags,
+            date: article.date)
+
+        searchMetadata.append(pageSearchMetadata)
     }
 
     /// Generates all tags pages, including the "all tags" page.
