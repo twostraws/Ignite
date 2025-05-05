@@ -7,7 +7,7 @@
 
 /// A layout that applies almost no styling.
 public struct EmptyLayout: Layout {
-    public var body: Document {
+    public var body: some Document {
         Body()
     }
 
