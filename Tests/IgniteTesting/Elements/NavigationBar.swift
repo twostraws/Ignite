@@ -49,7 +49,7 @@ class NavigationBarTests: IgniteTestSuite {
 
     @Test("Nav Tag Class data-bs-theme is blank if style is default")
     func navTagDefaultTheme() async throws {
-        var element = NavigationBar()
+        let element = NavigationBar()
         let output = element.markupString()
 
         let navAttributes = try #require(output

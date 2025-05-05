@@ -16,21 +16,21 @@ import Testing
 class HTMLDocumentTests: IgniteTestSuite {
     @Test("Starts with doctype html")
     func containsHTMLDoctype() {
-        let sut = Document(head: Head(), body: Body())
+        let sut = PlainDocument(head: Head(), body: Body())
         let output = sut.markupString()
         #expect(output.hasPrefix("<!doctype html>"))
     }
 
     @Test("Contains html tag")
     func containsHTMLTag() {
-        let sut = Document(head: Head(), body: Body())
+        let sut = PlainDocument(head: Head(), body: Body())
         let output = sut.markupString()
         #expect(nil != output.htmlTagWithCloseTag("html"))
     }
 
     @Test("lang attribute defaults to en")
     func language_attribute_defaults_to_en() throws {
-        let sut = Document(head: Head(), body: Body())
+        let sut = PlainDocument(head: Head(), body: Body())
         let output = sut.markupString()
 
         let language = try #require(output.htmlTagWithCloseTag("html")?.attributes
@@ -57,7 +57,7 @@ class HTMLDocumentTests: IgniteTestSuite {
 
         /// Initialize Document with the TestSite language set above.
         let sut = publishingContext.withEnvironment(values) {
-           Document(head: Head(), body: Body())
+            PlainDocument(head: Head(), body: Body())
         }
 
         let output = sut.markupString()
