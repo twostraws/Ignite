@@ -5,6 +5,7 @@
 // See LICENSE for license information.
 //
 
+// Specialized method for block page elements.
 @MainActor private func frameModifier(
     width: LengthUnit? = nil,
     minWidth: LengthUnit? = nil,
@@ -65,7 +66,7 @@
     return content.style(dimensions)
 }
 
-@MainActor private func frameModifier(
+@MainActor func frameModifier(
     width: LengthUnit? = nil,
     minWidth: LengthUnit? = nil,
     maxWidth: LengthUnit? = nil,
@@ -84,9 +85,6 @@
     }
 
     if let maxWidth {
-        if width == nil {
-            dimensions.append(.init(.width, value: "100%"))
-        }
         dimensions.append(.init(.maxWidth, value: maxWidth.stringValue))
     }
 
@@ -109,22 +107,22 @@ public extension HTML {
     /// Creates a specific frame for this element, either using exact values or
     /// using minimum/maximum ranges.
     /// - Parameters:
-    ///   - width: An exact width for this element
     ///   - minWidth: A minimum width for this element
+    ///   - width: An exact width for this element
     ///   - maxWidth: A maximum width for this element
-    ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
+    ///   - height: An exact height for this element
     ///   - maxHeight: A maximum height for this element
     ///   - alignment: How to align this element inside its frame. When `nil`, dimensions are applied directly
     ///     to the element. When specified, creates an invisible frame with the given dimensions
     ///     and aligns the element within it according to the alignment value.
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
-        width: LengthUnit? = nil,
         minWidth: LengthUnit? = nil,
+        width: LengthUnit? = nil,
         maxWidth: LengthUnit? = nil,
-        height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
+        height: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil,
         alignment: Alignment? = nil
     ) -> some HTML {
@@ -142,22 +140,22 @@ public extension HTML {
     /// Creates a specific frame for this element, either using exact pixel values or
     /// using minimum/maximum pixel ranges.
     /// - Parameters:
-    ///   - width: An exact width for this element
     ///   - minWidth: A minimum width for this element
+    ///   - width: An exact width for this element
     ///   - maxWidth: A maximum width for this element
-    ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
+    ///   - height: An exact height for this element
     ///   - maxHeight: A maximum height for this element
     ///   - alignment: How to align this element inside its frame. When `nil`, dimensions are applied directly
     ///     to the element. When specified, creates an invisible frame with the given dimensions
     ///     and aligns the element within it according to the alignment value.
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
-        width: Int? = nil,
         minWidth: Int? = nil,
+        width: Int? = nil,
         maxWidth: Int? = nil,
-        height: Int? = nil,
         minHeight: Int? = nil,
+        height: Int? = nil,
         maxHeight: Int? = nil,
         alignment: Alignment? = nil
     ) -> some HTML {
@@ -184,19 +182,19 @@ public extension InlineElement {
     /// Creates a specific frame for this element, either using exact values or
     /// using minimum/maximum ranges.
     /// - Parameters:
-    ///   - width: An exact width for this element
     ///   - minWidth: A minimum width for this element
+    ///   - width: An exact width for this element
     ///   - maxWidth: A maximum width for this element
-    ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
+    ///   - height: An exact height for this element
     ///   - maxHeight: A maximum height for this element
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
-        width: LengthUnit? = nil,
         minWidth: LengthUnit? = nil,
+        width: LengthUnit? = nil,
         maxWidth: LengthUnit? = nil,
-        height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
+        height: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil
     ) -> some InlineElement {
         let dimensionStyles = frameModifier(
@@ -212,19 +210,19 @@ public extension InlineElement {
     /// Creates a specific frame for this element, either using exact pixel values or
     /// using minimum/maximum pixel ranges.
     /// - Parameters:
-    ///   - width: An exact width for this element
     ///   - minWidth: A minimum width for this element
+    ///   - width: An exact width for this element
     ///   - maxWidth: A maximum width for this element
-    ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
+    ///   - height: An exact height for this element
     ///   - maxHeight: A maximum height for this element
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
-        width: Int? = nil,
         minWidth: Int? = nil,
+        width: Int? = nil,
         maxWidth: Int? = nil,
-        height: Int? = nil,
         minHeight: Int? = nil,
+        height: Int? = nil,
         maxHeight: Int? = nil
     ) -> some InlineElement {
         let dimensionStyles = frameModifier(
@@ -242,19 +240,19 @@ public extension NavigationItem {
     /// Creates a specific frame for this element, either using exact values or
     /// using minimum/maximum ranges.
     /// - Parameters:
-    ///   - width: An exact width for this element
     ///   - minWidth: A minimum width for this element
+    ///   - width: An exact width for this element
     ///   - maxWidth: A maximum width for this element
-    ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
+    ///   - height: An exact height for this element
     ///   - maxHeight: A maximum height for this element
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
-        width: LengthUnit? = nil,
         minWidth: LengthUnit? = nil,
+        width: LengthUnit? = nil,
         maxWidth: LengthUnit? = nil,
-        height: LengthUnit? = nil,
         minHeight: LengthUnit? = nil,
+        height: LengthUnit? = nil,
         maxHeight: LengthUnit? = nil
     ) -> Self {
         let dimensionStyles = frameModifier(
@@ -270,19 +268,19 @@ public extension NavigationItem {
     /// Creates a specific frame for this element, either using exact pixel values or
     /// using minimum/maximum pixel ranges.
     /// - Parameters:
-    ///   - width: An exact width for this element
     ///   - minWidth: A minimum width for this element
+    ///   - width: An exact width for this element
     ///   - maxWidth: A maximum width for this element
-    ///   - height: An exact height for this element
     ///   - minHeight: A minimum height for this element
+    ///   - height: An exact height for this element
     ///   - maxHeight: A maximum height for this element
     /// - Returns: A modified copy of the element with frame constraints applied
     func frame(
-        width: Int? = nil,
         minWidth: Int? = nil,
+        width: Int? = nil,
         maxWidth: Int? = nil,
-        height: Int? = nil,
         minHeight: Int? = nil,
+        height: Int? = nil,
         maxHeight: Int? = nil
     ) -> Self {
         let dimensionStyles = frameModifier(
@@ -292,6 +290,36 @@ public extension NavigationItem {
             height: height.map { .px($0) },
             minHeight: minHeight.map { .px($0) },
             maxHeight: maxHeight.map { .px($0) })
+        return self.style(dimensionStyles)
+    }
+}
+
+public extension StyledHTML {
+    /// Creates a specific frame for this element, either using exact values or
+    /// using minimum/maximum ranges.
+    /// - Parameters:
+    ///   - minWidth: A minimum width for this element
+    ///   - width: An exact width for this element
+    ///   - maxWidth: A maximum width for this element
+    ///   - minHeight: A minimum height for this element
+    ///   - height: An exact height for this element
+    ///   - maxHeight: A maximum height for this element
+    /// - Returns: A modified copy of the element with frame constraints applied
+    func frame(
+        minWidth: LengthUnit? = nil,
+        width: LengthUnit? = nil,
+        maxWidth: LengthUnit? = nil,
+        minHeight: LengthUnit? = nil,
+        height: LengthUnit? = nil,
+        maxHeight: LengthUnit? = nil
+    ) -> Self {
+        let dimensionStyles = frameModifier(
+            width: width,
+            minWidth: minWidth,
+            maxWidth: maxWidth,
+            height: height,
+            minHeight: minHeight,
+            maxHeight: maxHeight)
         return self.style(dimensionStyles)
     }
 }
