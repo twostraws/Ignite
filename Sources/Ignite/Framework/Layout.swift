@@ -11,7 +11,7 @@
 /// Example:
 /// ```swift
 /// struct BlogLayout: Layout {
-///     var body: Document {
+///     var body: some Document {
 ///         Body {
 ///             content
 ///             Footer()
@@ -21,14 +21,16 @@
 /// ```
 @MainActor
 public protocol Layout {
-    /// The main content of the layout, built using the HTML DSL
-    @DocumentBuilder var body: Document { get }
+    /// The type of Document content this element contains.
+    associatedtype Content: Document
+    /// The main content of the layout.
+    @DocumentBuilder var body: Content { get }
 }
 
 public extension Layout {
     /// The current page being rendered.
     var content: some HTML {
         Section(PublishingContext.shared.environment.pageContent)
-            .class("ig-main-content") // For replacing the main content with search results
+            .class("ig-main-content")
     }
 }
