@@ -122,7 +122,11 @@ struct SiteTests {
 
     @Test("Site published with a custom ErrorPage and custom content")
     func publishingWithCustomErrorPageAndContent() async throws {
-        let errorPage = TestErrorPage(title: "A different title", description: "A different description")
+        let expectedError = PageNotFoundError()
+
+        let errorPage = TestErrorPage(title: "A different title", description: "A different description") { error in
+            #expect(error.statusCode == expectedError.statusCode)
+        }
         let site = TestSiteWithErrorPage(errorPage: errorPage)
         var publisher = TestSitePublisher(site: site)
 
