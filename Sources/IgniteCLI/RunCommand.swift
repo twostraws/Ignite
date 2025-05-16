@@ -146,13 +146,13 @@ struct RunCommand: ParsableCommand {
     private func identifySubsite(directory: String) -> String? {
         // Find the root index.html
         guard let indexData = FileManager.default.contents(atPath: "\(directory)/index.html") else { return nil }
-        
+
         // Locate and extract the canonical url 
         let indexString = String(decoding: indexData, as: UTF8.self)
         // Tag intentionally not closed to allow space and `>`, `/>`
         let regex = #/<link href="([^"]+)" rel="canonical"/#
         guard let urlSubString = indexString.firstMatch(of: regex)?.1 else { return nil }
-        
+
         // Checks if it's an URL
         guard let url = URL(string: String(urlSubString)) else { return nil }
 
