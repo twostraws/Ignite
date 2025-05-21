@@ -169,7 +169,7 @@ For example, adding a new file called `apps.md` to **Content** means having this
 │   └── apps.md
 ```
 
-And it results inn this **Build** structure:
+And it results in this **Build** structure:
 
 ```bash
 ├── Build
