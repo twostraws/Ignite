@@ -42,20 +42,6 @@ public struct Modal: HTML {
         }
     }
 
-    public enum Position: CaseIterable, Sendable {
-        case top
-        case center
-
-        var htmlName: String? {
-            switch self {
-            case .top:
-                nil
-            case .center:
-                "modal-dialog-centered"
-            }
-        }
-    }
-
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -73,7 +59,7 @@ public struct Modal: HTML {
     var animated = true
     var scrollable = false
     var size: Size = .medium
-    var position: Position = .center
+    var position: ModalPosition = .center
 
     public init(
         id modalId: String,
@@ -108,7 +94,7 @@ public struct Modal: HTML {
     /// Adjusts the position of the modal view
     /// - Parameter position: The desired vertical position of the modal on the screen.
     /// - Returns: A new `Modal` instance with the updated vertical position.
-    public func modalPosition(_ position: Position) -> Self {
+    public func modalPosition(_ position: ModalPosition) -> Self {
         var copy = self
         copy.position = position
         return copy

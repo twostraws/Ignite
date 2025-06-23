@@ -85,8 +85,8 @@ struct ModalTests {
         }
     }
 
-    @Test("Modal Position", arguments: Modal.Position.allCases)
-    func checkModalPosition(positionOption: Modal.Position) async throws {
+    @Test("Modal Position", arguments: ModalPosition.allCases)
+    func checkModalPosition(positionOption: ModalPosition) async throws {
         let element = Modal(id: "topModalId") {
             Text(markdown: "Modal with `Position`")
                 .horizontalAlignment(.center)
