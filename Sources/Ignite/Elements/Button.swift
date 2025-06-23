@@ -7,23 +7,6 @@
 
 /// A clickable button with a label and styling.
 public struct Button: InlineElement, FormElement {
-    /// Whether this button is just clickable, or whether its submits a form.
-    public enum `Type` {
-        /// This button does not submit a form.
-        case plain
-
-        /// This button submits a form.
-        case submit
-
-        /// The HTML type attribute for this button.
-        var htmlName: String {
-            switch self {
-            case .plain: "button"
-            case .submit: "submit"
-            }
-        }
-    }
-
     /// The content and behavior of this HTML.
     public var body: some InlineElement { self }
 
@@ -34,7 +17,7 @@ public struct Button: InlineElement, FormElement {
     public var isPrimitive: Bool { true }
 
     /// Whether this button should submit a form or not. Defaults to `.plain`.
-    var type = Type.plain
+    var type = ButtonType.plain
 
     /// How large this button should be drawn. Defaults to `.medium`.
     var size = ButtonSize.medium
@@ -119,7 +102,7 @@ public struct Button: InlineElement, FormElement {
     /// Sets the button type, determining its behavior.
     /// - Parameter type: The type of button, such as `.plain` or `.submit`.
     /// - Returns: A new `Button` instance with the updated type.
-    public func type(_ type: Type) -> Self {
+    public func type(_ type: ButtonType) -> Self {
         var copy = self
         copy.type = type
         return copy
