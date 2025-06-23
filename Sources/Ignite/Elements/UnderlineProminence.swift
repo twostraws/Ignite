@@ -7,7 +7,7 @@
 
 /// Defines the prominence of the underline decoration for links,
 /// allowing customization of both base and hover styles.
-public enum UnderlineProminence: Int, CustomStringConvertible, Equatable {
+public enum UnderlineProminence: Int, CustomStringConvertible, Equatable, Sendable {
     /// No underline style with an opacity of 0%.
     case none = 0
     /// A faint underline style with an opacity of 10%.
