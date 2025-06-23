@@ -28,7 +28,7 @@ public struct ForEach<Data: Sequence>: HTML, ListableElement, PassthroughElement
     ///   - content: A closure that converts each element into HTML content.
     public init(
         _ data: Data,
-        @HTMLBuilder content: @escaping (Data.Element) -> some BodyElement
+        @HTMLBuilder content: @escaping (Data.Element) -> some HTML
     ) {
         self.data = data
         self.items = HTMLCollection(data.map(content))
