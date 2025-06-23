@@ -20,7 +20,7 @@ public struct Card: HTML {
         case top
 
         /// Positions content over the image.
-        case overlay(alignment: ContentAlignment)
+        case overlay(alignment: CardContentAlignment)
 
         // Static entries for backward compatibilty
         public static let `default` = Self.bottom
@@ -56,54 +56,6 @@ public struct Card: HTML {
                 false
             }
         }
-    }
-
-    enum TextAlignment: String, CaseIterable, Sendable {
-        case start = "text-start"
-        case center = "text-center"
-        case end = "text-end"
-    }
-
-    enum VerticalAlignment: String, CaseIterable, Sendable {
-        case start = "align-content-start"
-        case center = "align-content-center"
-        case end = "align-content-end"
-    }
-
-    public enum ContentAlignment: CaseIterable, Sendable {
-        case topLeading
-        case top
-        case topTrailing
-        case leading
-        case center
-        case trailing
-        case bottomLeading
-        case bottom
-        case bottomTrailing
-
-        var textAlignment: TextAlignment {
-            switch self {
-            case .topLeading, .leading, .bottomLeading:
-                .start
-            case .top, .center, .bottom:
-                .center
-            case .topTrailing, .trailing, .bottomTrailing:
-                .end
-            }
-        }
-
-        var verticalAlignment: VerticalAlignment {
-            switch self {
-            case .topLeading, .top, .topTrailing:
-                .start
-            case .leading, .center, .trailing:
-                .center
-            case .bottomLeading, .bottom, .bottomTrailing:
-                .end
-            }
-        }
-
-        public static let `default` = Self.topLeading
     }
 
     /// The content and behavior of this HTML.
