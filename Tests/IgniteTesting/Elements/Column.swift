@@ -46,8 +46,8 @@ class ColumnTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Column with vertical alignment", arguments: Column.VerticalAlignment.allCases)
-    func columnWithVerticalAlignment(alignment: Column.VerticalAlignment) async throws {
+    @Test("Column with vertical alignment", arguments: ColumnVerticalAlignment.allCases)
+    func columnWithVerticalAlignment(alignment: ColumnVerticalAlignment) async throws {
         let element = Column {
             ControlLabel("Left Label")
             ControlLabel("Middle Label")
