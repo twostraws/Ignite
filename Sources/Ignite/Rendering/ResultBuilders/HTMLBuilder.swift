@@ -38,20 +38,6 @@ public struct HTMLBuilder {
         AnyHTML(content)
     }
 
-    /// Combines an array of HTML elements into a flat structure.
-    /// - Parameter components: Array of HTML elements
-    /// - Returns: A flattened HTML structure
-    public static func buildBlock(_ components: [any BodyElement]) -> some HTML {
-        HTMLCollection(components)
-    }
-
-    /// Handles array literals in the builder.
-    /// - Parameter components: Array of HTML elements
-    /// - Returns: A flattened HTML structure
-    public static func buildArray(_ components: [any BodyElement]) -> some HTML {
-        HTMLCollection(components)
-    }
-
     /// Handles optional HTML elements.
     /// - Parameter component: An optional HTML element
     /// - Returns: Either the wrapped element or an empty element
@@ -77,43 +63,11 @@ public struct HTMLBuilder {
         AnyHTML(component)
     }
 
-    /// Handles optional content in if statements.
-    /// - Parameter component: An optional HTML element
-    /// - Returns: Either the wrapped element or an empty element
-    public static func buildIf<Content: BodyElement>(_ component: Content?) -> AnyHTML {
-        if let component {
-            AnyHTML(component)
-        } else {
-            AnyHTML(EmptyHTML())
-        }
-    }
-
-    /// Handles array transformations in the builder.
-    /// - Parameter components: Array of HTML elements
-    /// - Returns: The same array as HTML content
-    public static func buildArray<Content: BodyElement>(_ components: [Content]) -> some HTML {
-        HTMLCollection(components)
-    }
-
-    /// Handles nested arrays from loops and other control flow.
-    /// - Parameter components: Variadic array of HTML element arrays
-    /// - Returns: A flattened HTML structure
-    public static func buildBlock(_ components: [any BodyElement]...) -> some HTML {
-        HTMLCollection(components.flatMap(\.self))
-    }
-
     /// Handles availability conditions in switch statements.
     /// - Parameter component: The HTML element to conditionally include
     /// - Returns: The same HTML element unchanged
     public static func buildLimitedAvailability(_ component: some BodyElement) -> some HTML {
         AnyHTML(component)
-    }
-
-    /// Handles nested arrays of HTML elements.
-    /// - Parameter components: Two-dimensional array of HTML elements
-    /// - Returns: A flattened HTML structure
-    public static func buildArray(_ components: [[any BodyElement]]) -> some HTML {
-        HTMLCollection(components.flatMap(\.self))
     }
 
     /// Handles optional content in if let statements.
