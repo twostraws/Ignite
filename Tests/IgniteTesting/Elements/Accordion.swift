@@ -35,8 +35,8 @@ class AccordionTests: IgniteTestSuite {
         #expect(idattribute.firstMatch(of: expected) != nil)
     }
 
-    @Test("Outputs Items Provided", arguments: [Accordion.OpenMode.all, .individual])
-    func outputs_result_of_calling_render_on_each_item_provided(openMode: Accordion.OpenMode) throws {
+    @Test("Outputs Items Provided", arguments: [AccordionOpenMode.all, .individual])
+    func outputs_result_of_calling_render_on_each_item_provided(openMode: AccordionOpenMode) throws {
         func items() -> [Item] {[
             Item("title 1", content: {}),
             Item("second title", content: { Text("hello") }),
@@ -69,8 +69,8 @@ class AccordionTests: IgniteTestSuite {
         }
     }
 
-    @Test("Items Receive Accordion ID of parent Accordion", arguments: [Accordion.OpenMode.all, .individual])
-    func provides_accordion_id_to_each_item_output(openMode: Accordion.OpenMode) throws {
+    @Test("Items Receive Accordion ID of parent Accordion", arguments: [AccordionOpenMode.all, .individual])
+    func provides_accordion_id_to_each_item_output(openMode: AccordionOpenMode) throws {
         func items() -> [Item] {[
             Item("title 1", content: {}),
             Item("second title", content: { Text("hello") }),

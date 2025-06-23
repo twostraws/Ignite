@@ -8,15 +8,6 @@
 /// A control that displays a list of section titles that can be folded out to
 /// display more content.
 public struct Accordion: HTML {
-    /// Controls what happens when a section is opened.
-    public enum OpenMode: Sendable {
-        /// Opening one accordion section automatically closes all others.
-        case individual
-
-        /// Users can open multiple sections simultaneously.
-        case all
-    }
-
     /// The visual style of the accordion.
     public enum Style: Sendable {
         /// A style with outer borders and rounded corners.
@@ -44,7 +35,7 @@ public struct Accordion: HTML {
     /// Adjusts what happens when a section is opened.
     /// Defaults to `.individual`, meaning that only one
     /// accordion section may be open at a time.
-    private var openMode = OpenMode.individual
+    private var openMode = AccordionOpenMode.individual
 
     /// Create a new Accordion from a collection of sections.
     /// - Parameter items: A result builder containing all the sections
@@ -66,7 +57,7 @@ public struct Accordion: HTML {
     /// Adjusts the open mode for this Accordion.
     /// - Parameter mode: The new open mode.
     /// - Returns: A copy of this Accordion with the new open mode set.
-    public func openMode(_ mode: OpenMode) -> Self {
+    public func openMode(_ mode: AccordionOpenMode) -> Self {
         var copy = self
         copy.openMode = mode
         return copy

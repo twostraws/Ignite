@@ -35,7 +35,7 @@ public struct Item: HTML {
 
     /// Used when rendering this accordion item so that we can know whether
     /// opening this item should also close other items.
-    private var parentOpenMode: Accordion.OpenMode?
+    private var parentOpenMode: AccordionOpenMode?
 
     /// Creates a new `Item` object from the provided title and contents.
     /// - Parameters:
@@ -83,7 +83,7 @@ public struct Item: HTML {
 
     /// Used during rendering to assign this accordion item to a particular parent,
     /// so our open behavior works correctly.
-    func assigned(to parentID: String, openMode: Accordion.OpenMode) -> Self {
+    func assigned(to parentID: String, openMode: AccordionOpenMode) -> Self {
         var copy = self
         copy.parentID = parentID
         copy.parentOpenMode = openMode
