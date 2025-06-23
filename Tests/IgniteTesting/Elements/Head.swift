@@ -72,7 +72,7 @@ class HTMLHeadTests: IgniteTestSuite {
     func output_contains_additional_items() throws {
         let additionalItem = Script(file: "somefile.js")
         let sut = Head { additionalItem }
-        let expected = additionalItem.markupString()
+        let expected = additionalItem.render().string
 
         let output = sut.markupString()
 
