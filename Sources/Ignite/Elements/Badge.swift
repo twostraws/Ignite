@@ -16,13 +16,8 @@ public struct Badge: InlineElement {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    /// The different options for styling this badge.
-    public enum Style: CaseIterable {
-        case `default`, subtle, subtleBordered
-    }
-
     private var text: any InlineElement
-    private var style = Style.default
+    private var style = BadgeStyle.default
     private var role = Role.default
 
     var badgeClasses: [String] {
@@ -84,7 +79,7 @@ public struct Badge: InlineElement {
         return copy
     }
 
-    public func badgeStyle(_ style: Style) -> Badge {
+    public func badgeStyle(_ style: BadgeStyle) -> Badge {
         var copy = self
         copy.style = style
         return copy
