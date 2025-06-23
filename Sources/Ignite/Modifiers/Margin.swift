@@ -16,10 +16,10 @@ private enum MarginType {
 ) -> any BodyElement {
     switch margin {
     case .exact(let unit):
-        let styles = content.edgeAdjustedStyles(prefix: "margin", edges, unit.stringValue)
+        let styles = edges.styles(prefix: "margin", length: unit.stringValue)
         return content.style(styles)
     case .semantic(let amount):
-        let classes = content.edgeAdjustedClasses(prefix: "m", edges, amount.rawValue)
+        let classes = edges.classes(prefix: "m", amount: amount.rawValue)
         return content.class(classes)
     }
 }
@@ -31,10 +31,10 @@ private enum MarginType {
 ) -> any InlineElement {
     switch margin {
     case .exact(let unit):
-        let styles = content.edgeAdjustedStyles(prefix: "margin", edges, unit.stringValue)
+        let styles = edges.styles(prefix: "margin", length: unit.stringValue)
         return content.style(styles)
     case .semantic(let amount):
-        let classes = content.edgeAdjustedClasses(prefix: "m", edges, amount.rawValue)
+        let classes = edges.classes(prefix: "m", amount: amount.rawValue)
         return content.class(classes)
     }
 }
@@ -155,7 +155,7 @@ public extension StyledHTML {
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
     func margin(_ edges: Edge, _ length: LengthUnit) -> Self {
-        let styles = self.edgeAdjustedStyles(prefix: "margin", edges, length.stringValue)
+        let styles = edges.styles(prefix: "margin", length: length.stringValue)
         return self.style(styles)
     }
 }

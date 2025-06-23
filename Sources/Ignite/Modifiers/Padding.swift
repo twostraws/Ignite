@@ -16,10 +16,10 @@ private enum PaddingType {
 ) -> any BodyElement {
     switch padding {
     case .exact(let unit):
-        let styles = content.edgeAdjustedStyles(prefix: "padding", edges, unit.stringValue)
+        let styles = edges.styles(prefix: "padding", length: unit.stringValue)
         return content.style(styles)
     case .semantic(let amount):
-        let classes = content.edgeAdjustedClasses(prefix: "p", edges, amount.rawValue)
+        let classes = edges.classes(prefix: "p", amount: amount.rawValue)
         return content.class(classes)
     }
 }
@@ -31,10 +31,10 @@ private enum PaddingType {
 ) -> any InlineElement {
     switch padding {
     case .exact(let unit):
-        let styles = content.edgeAdjustedStyles(prefix: "padding", edges, unit.stringValue)
+        let styles = edges.styles(prefix: "padding", length: unit.stringValue)
         return content.style(styles)
     case .semantic(let amount):
-        let classes = content.edgeAdjustedClasses(prefix: "p", edges, amount.rawValue)
+        let classes = edges.classes(prefix: "p", amount: amount.rawValue)
         return content.class(classes)
     }
 }
@@ -154,7 +154,7 @@ public extension StyledHTML {
     ///   - length: The amount of padding to apply, specified in pixels.
     /// - Returns: A copy of the current element with the new padding applied.
     func padding(_ edges: Edge, _ length: Int) -> Self {
-        let styles = self.edgeAdjustedStyles(prefix: "padding", edges, "\(length)px")
+        let styles = edges.styles(prefix: "padding", length: "\(length)px")
         return self.style(styles)
     }
 
@@ -165,7 +165,7 @@ public extension StyledHTML {
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
     func padding(_ edges: Edge, _ length: LengthUnit) -> Self {
-        let styles = self.edgeAdjustedStyles(prefix: "padding", edges, length.stringValue)
+        let styles = edges.styles(prefix: "padding", length: length.stringValue)
         return self.style(styles)
     }
 }

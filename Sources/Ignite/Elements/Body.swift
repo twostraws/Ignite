@@ -117,7 +117,7 @@ public extension Body {
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
     func margin(_ edges: Edge, _ length: LengthUnit) -> Self {
-        let styles = content.edgeAdjustedStyles(prefix: "margin", edges, length.stringValue)
+        let styles = edges.styles(prefix: "margin", length: length.stringValue)
         var copy = self
         copy.attributes.append(styles: styles)
         return copy
@@ -130,7 +130,7 @@ public extension Body {
     ///   `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new margins applied.
     func margin(_ edges: Edge, _ amount: SpacingAmount) -> Self {
-        let classes = content.edgeAdjustedClasses(prefix: "m", edges, amount.rawValue)
+        let classes = edges.classes(prefix: "m", amount: amount.rawValue)
         var copy = self
         copy.attributes.append(classes: classes)
         return copy
@@ -143,7 +143,7 @@ public extension Body {
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
     func padding(_ edges: Edge, _ length: LengthUnit) -> Self {
-        let styles = content.edgeAdjustedStyles(prefix: "padding", edges, length.stringValue)
+        let styles = edges.styles(prefix: "padding", length: length.stringValue)
         var copy = self
         copy.attributes.append(styles: styles)
         return copy
@@ -156,7 +156,7 @@ public extension Body {
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
     func padding(_ edges: Edge, _ amount: SpacingAmount) -> Self {
-        let classes = content.edgeAdjustedClasses(prefix: "p", edges, amount.rawValue)
+        let classes = edges.classes(prefix: "p", amount: amount.rawValue)
         var copy = self
         copy.attributes.append(classes: classes)
         return copy
