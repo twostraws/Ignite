@@ -28,24 +28,6 @@ public struct TextField: InlineElement, FormElement {
     /// The positioning style for the field's label.
     private var style: ControlLabelStyle = .floating
 
-    /// The type of text field
-    public enum TextType: String, CaseIterable, Sendable {
-        /// Standard text input
-        case text
-        /// Email address input
-        case email
-        /// Password input
-        case password
-        /// Search input
-        case search
-        /// URL input
-        case url
-        /// Phone number input
-        case phone
-        /// Numeric input
-        case number
-    }
-
     /// Controls how read-only fields are displayed.
     public enum ReadOnlyDisplayMode: Sendable {
         /// Renders as a standard form control but non-editable.
@@ -64,7 +46,7 @@ public struct TextField: InlineElement, FormElement {
         let id = UUID().uuidString.truncatedHash
         input.attributes.id = id
         input.attributes.append(classes: "form-control")
-        input.attributes.append(customAttributes: .init(name: "type", value: TextType.text.rawValue))
+        input.attributes.append(customAttributes: .init(name: "type", value: TextFieldTextType.text.rawValue))
 
         if let prompt {
             input.attributes.append(customAttributes: .init(name: "placeholder", value: prompt))
@@ -136,7 +118,7 @@ public struct TextField: InlineElement, FormElement {
     /// Sets the input type to control validation and keyboard appearance.
     /// - Parameter type: The type of input this field will collect.
     /// - Returns: A modified text field configured for the specified input type.
-    public func type(_ type: TextType) -> Self {
+    public func type(_ type: TextFieldTextType) -> Self {
         var copy = self
         copy.input.attributes.remove(attributesNamed: "type")
         copy.input.attributes.append(customAttributes: .init(name: "type", value: type.rawValue))

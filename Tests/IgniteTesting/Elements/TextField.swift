@@ -14,8 +14,8 @@ import Testing
 @Suite("TextField Tests")
 @MainActor
 class TextFieldTests: IgniteTestSuite {
-    @Test("TextField with Text Type", arguments: TextField.TextType.allCases)
-    func textFieldWithInputTextType(textType: TextField.TextType) async throws {
+    @Test("TextField with Text Type", arguments: TextFieldTextType.allCases)
+    func textFieldWithInputTextType(textType: TextFieldTextType) async throws {
         let element = TextField("Paul", prompt: "Enter your name here")
             .type(textType)
             .id("field")
