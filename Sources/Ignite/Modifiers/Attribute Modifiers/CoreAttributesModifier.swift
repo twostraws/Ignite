@@ -7,9 +7,18 @@
 
 @MainActor private func coreAttributesModifier(
     _ attributes: CoreAttributes,
+    content: any HTML
+) -> any HTML {
+    var copy: any HTML = content.isPrimitive ? content : Section(content)
+    copy.attributes.merge(attributes)
+    return copy
+}
+
+@MainActor private func coreAttributesModifier(
+    _ attributes: CoreAttributes,
     content: any BodyElement
 ) -> any BodyElement {
-    var copy: any BodyElement = content.isPrimitive ? content : Section(content)
+    var copy: any BodyElement = content
     copy.attributes.merge(attributes)
     return copy
 }
@@ -23,7 +32,7 @@
     return copy
 }
 
-public extension BodyElement where Self: HTML {
+public extension HTML {
     /// Merges a complete set of core attributes into this element.
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified `HTML` element
@@ -33,7 +42,7 @@ public extension BodyElement where Self: HTML {
     }
 }
 
-public extension BodyElement where Self: InlineElement {
+public extension InlineElement {
     /// Merges a complete set of core attributes into this element.
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified `HTML` element
