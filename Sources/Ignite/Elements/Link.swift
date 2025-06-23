@@ -8,7 +8,7 @@
 import Foundation
 
 /// A hyperlink to another resource on this site or elsewhere.
-public struct Link: InlineElement, NavigationElement, DropdownItem {
+public struct Link: InlineElement, NavigationElement, DropdownElement {
     /// The visual style to apply to the link.
     public enum Style: Equatable {
         /// A link with an underline effect.
