@@ -40,9 +40,9 @@ public struct Card: HTML {
 
     public init(
         imageName: String? = nil,
-        @HTMLBuilder body: () -> some BodyElement,
-        @HTMLBuilder header: () -> some BodyElement = { EmptyHTML() },
-        @HTMLBuilder footer: () -> some BodyElement = { EmptyHTML() }
+        @HTMLBuilder body: () -> some HTML,
+        @HTMLBuilder header: () -> some HTML = { EmptyHTML() },
+        @HTMLBuilder footer: () -> some HTML = { EmptyHTML() }
     ) {
         if let imageName {
             self.image = Image(decorative: imageName)
