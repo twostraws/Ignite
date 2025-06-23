@@ -7,20 +7,6 @@
 
 /// Used to create tabulated data on a page.
 public struct Table: HTML {
-    /// Styling options for tables.
-    public enum Style {
-        /// All table rows and columns look the same. The default.
-        case plain
-
-        /// Applies a "zebra stripe" effect where alternate rows have a
-        /// varying color.
-        case stripedRows
-
-        /// Applies a "zebra stripe" effect where alternate columns have a
-        /// varying color.
-        case stripedColumns
-    }
-
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -40,7 +26,7 @@ public struct Table: HTML {
     var header: HTMLCollection?
 
     /// The styling to apply to this table. Defaults to `.plain`.
-    var style = Style.plain
+    var style = TableStyle.plain
 
     /// An optional caption for this table. Displayed to the user, but also useful
     /// for screen readers so users can decide if the table is worth reading further.
@@ -122,7 +108,7 @@ public struct Table: HTML {
     /// Adjusts the style of this table.
     /// - Parameter style: The new style.
     /// - Returns: A new `Table` instance with the updated style.
-    public func tableStyle(_ style: Style) -> Self {
+    public func tableStyle(_ style: TableStyle) -> Self {
         var copy = self
         copy.style = style
         return copy
