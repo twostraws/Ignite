@@ -9,28 +9,6 @@ import Foundation
 
 /// A hyperlink to another resource on this site or elsewhere.
 public struct Link: InlineElement, NavigationElement, DropdownElement {
-    /// The visual style to apply to the link.
-    public enum Style: Equatable {
-        /// A link with an underline effect.
-        /// - Parameters:
-        ///   - base: The underline prominence in the link's normal state.
-        ///   - hover: The underline prominence when hovering over the link.
-        case underline(_ base: UnderlineProminence, hover: UnderlineProminence)
-
-        /// A link that appears and behaves like a button.
-        case button
-
-        /// Creates an underline-style link with uniform prominence for both normal and hover states.
-        /// - Parameter prominence: The underline prominence to use for both states.
-        /// - Returns: A `LinkStyle` with identical base and hover prominence.
-        public static func underline(_ prominence: UnderlineProminence) -> Self {
-            .underline(prominence, hover: prominence)
-        }
-
-        /// The default link style with heavy underline prominence.
-        public static var automatic: Style { .underline(.heavy, hover: .heavy) }
-    }
-
     /// The content and behavior of this HTML.
     public var body: some InlineElement { self }
 
@@ -50,7 +28,7 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     var url: String
 
     /// The style for this link. Defaults to `.automatic`.
-    var style = Style.automatic
+    var style = LinkStyle.automatic
 
     /// When rendered with the `.button` style, this controls the button's size.
     var size = ButtonSize.medium
@@ -187,7 +165,7 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     /// Adjusts the style of this link.
     /// - Parameter style: The new style.
     /// - Returns: A new `Link` instance with the updated style.
-    public func linkStyle(_ style: Style) -> Self {
+    public func linkStyle(_ style: LinkStyle) -> Self {
         var copy = self
         copy.style = style
 
