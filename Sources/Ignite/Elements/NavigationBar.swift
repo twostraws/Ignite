@@ -206,7 +206,7 @@ public struct NavigationBar: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         // Use the child items directly so that types like Spacer() aren't concealed
         let items = items.flatMap { ($0 as? NavigationItemGroup)?.items ?? [$0] }
         let pinnedItems = items.filter { $0.navigationBarVisibility == .always }
@@ -250,7 +250,7 @@ public struct NavigationBar: HTML {
             .class("navbar", "navbar-expand-md")
             .data("bs-theme", theme(for: style))
         }
-        .markup()
+        .render()
     }
 
     private func renderPinnedItems(_ items: [any NavigationItem]) -> some HTML {

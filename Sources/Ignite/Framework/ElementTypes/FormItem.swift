@@ -11,9 +11,9 @@ public protocol FormItem: BodyElement {}
 
 public extension FormItem where Self: HTML {
     /// Generates the complete `HTML` string representation of the element.
-    func markup() -> Markup {
+    func render() -> Markup {
         if isPrimitive {
-            body.markup()
+            body.render()
         } else {
             fatalError("This protocol is not meant to be conformed to directly.")
         }
@@ -22,9 +22,9 @@ public extension FormItem where Self: HTML {
 
 public extension FormItem where Self: InlineElement {
     /// Generates the complete `HTML` string representation of the element.
-    func markup() -> Markup {
+    func render() -> Markup {
         if isPrimitive {
-            body.markup()
+            body.render()
         } else {
             fatalError("This protocol is not meant to be conformed to directly.")
         }

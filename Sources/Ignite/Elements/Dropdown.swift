@@ -108,16 +108,16 @@ public struct Dropdown: HTML, NavigationItem, FormItem {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         if configuration == .standalone {
             Section(renderDropdownContent())
                 .attributes(attributes)
                 .class("dropdown")
-                .markup()
+                .render()
         } else {
             renderDropdownContent()
                 .attributes(attributes)
-                .markup()
+                .render()
         }
     }
 

@@ -215,7 +215,7 @@ public struct Link: InlineElement, NavigationItem, DropdownItem {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         isPrivacySensitive
             ? renderPrivacyProtectedLink()
             : renderStandardLink()

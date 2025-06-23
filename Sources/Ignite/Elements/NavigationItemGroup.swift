@@ -35,7 +35,7 @@ public struct NavigationItemGroup: NavigationItem {
         self.content = items()
     }
 
-    public func markup() -> Markup {
-        items.map { $0.markup() }.joined()
+    public func render() -> Markup {
+        items.map { $0.render() }.joined()
     }
 }

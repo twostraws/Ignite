@@ -114,7 +114,7 @@ public struct Grid: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var gridAttributes = attributes.appending(classes: ["row"])
         gridAttributes.append(classes: alignment.horizontal.containerAlignmentClass)
 
@@ -153,7 +153,7 @@ public struct Grid: HTML {
             }
         }
         .attributes(gridAttributes)
-        .markup()
+        .render()
     }
 
     /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.

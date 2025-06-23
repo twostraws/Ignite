@@ -148,7 +148,7 @@ struct ModalTests {
             }
             .role(.primary)
         }
-        let output = element.markup()
+        let output = element.render()
 
         #expect(output.string == """
         <div id="footerModalId" tabindex="-1" class="modal fade" aria-labelledby="modalLabel" aria-hidden="true">\
@@ -183,7 +183,7 @@ struct ModalTests {
             }
             .role(.primary)
         }
-        let output = element.markup()
+        let output = element.render()
 
         #expect(output.string == """
         <div id="headerAndFooterModalId" tabindex="-1" class="modal fade" \

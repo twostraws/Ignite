@@ -17,7 +17,7 @@ class MetaTagTests: IgniteTestSuite {
     @Test("Meta tag with type enum and content a URL")
     func withEnumAndContentURL() async throws {
         let element = MetaTag(.twitterDomain, content: URL(string: "https://example.com?s=searching#target")!)
-        let output = element.markup()
+        let output = element.render()
 
         #expect(output.string == "<meta name=\"twitter:domain\" content=\"https://example.com?s=searching#target\" />")
     }
@@ -25,7 +25,7 @@ class MetaTagTests: IgniteTestSuite {
     @Test("Meta tag with name and content both strings")
     func withNameAndContentBothStrings() async throws {
         let element = MetaTag(name: "tagname", content: "my content")
-        let output = element.markup()
+        let output = element.render()
 
         #expect(output.string == "<meta name=\"tagname\" content=\"my content\" />")
     }
@@ -33,7 +33,7 @@ class MetaTagTests: IgniteTestSuite {
     @Test("Meta tag with property and content both strings")
     func withPropertyAndContentBothStrings() async throws {
         let element = MetaTag(property: "unique", content: "my value")
-        let output = element.markup()
+        let output = element.render()
 
         #expect(output.string == "<meta property=\"unique\" content=\"my value\" />")
     }
@@ -41,7 +41,7 @@ class MetaTagTests: IgniteTestSuite {
     @Test("Meta tag with character set only")
     func withCharacterSet() async throws {
         let element = MetaTag(characterSet: "UTF-16")
-        let output = element.markup()
+        let output = element.render()
 
         #expect(output.string == "<meta charset=\"UTF-16\" />")
     }

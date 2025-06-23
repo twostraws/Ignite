@@ -36,11 +36,11 @@ public struct ForEach<Data: Sequence>: HTML, ListableElement, PassthroughElement
 
     /// Renders the ForEach content when this isn't part of a list.
     /// - Returns: The rendered HTML string.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         items.map {
             var item: any BodyElement = $0
             item.attributes.merge(attributes)
-            return item.markup()
+            return item.render()
         }.joined()
     }
 
@@ -48,6 +48,6 @@ public struct ForEach<Data: Sequence>: HTML, ListableElement, PassthroughElement
     /// - Returns: The rendered HTML string.
     func listMarkup() -> Markup {
         // ListableElement conformance ensures other views never wrap ForEach in <li> tags.
-        markup()
+        render()
     }
 }

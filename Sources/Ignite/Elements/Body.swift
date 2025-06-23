@@ -38,12 +38,12 @@ public struct Body: MarkupElement {
         return copy
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var attributes = attributes
-        var output = content.markup()
+        var output = content.render()
 
         if publishingContext.site.useDefaultBootstrapURLs == .localBootstrap {
-            output += Script(file: "/js/bootstrap.bundle.min.js").markup()
+            output += Script(file: "/js/bootstrap.bundle.min.js").render()
         } else if
             let url = URL(string: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js") {
             output += Script(file: url)
@@ -51,11 +51,11 @@ public struct Body: MarkupElement {
                     name: "integrity",
                     value: "sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq")
                 .customAttribute(name: "crossorigin", value: "anonymous")
-                .markup()
+                .render()
         }
 
         if publishingContext.hasSyntaxHighlighters == true {
-            output += Script(file: "/js/syntax-highlighting.js").markup()
+            output += Script(file: "/js/syntax-highlighting.js").render()
         }
 
         if case .visible(let firstLine, let shouldWrap) =
@@ -73,10 +73,10 @@ public struct Body: MarkupElement {
             output += Script(code: """
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-            """).markup()
+            """).render()
         }
 
-        output += Script(file: "/js/ignite-core.js").markup()
+        output += Script(file: "/js/ignite-core.js").render()
 
         if isBoundByContainer {
             attributes.append(classes: ["container"])

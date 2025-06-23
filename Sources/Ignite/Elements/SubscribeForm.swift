@@ -162,7 +162,7 @@ public struct SubscribeForm: HTML, NavigationItem {
         return copy
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var formOutput = Form {
             TextField(emailFieldLabel, prompt: emailFieldLabel)
                 .type(.text)
@@ -196,12 +196,12 @@ public struct SubscribeForm: HTML, NavigationItem {
         .configuredAsNavigationItem(isNavigationItem)
         .labelStyle(labelStyle == .floating ? .floating : .hidden)
         .attributes(attributes)
-        .markup()
+        .render()
 
         if let script = service.script {
             formOutput += Script(file: URL(static: script))
                 .customAttribute(name: "charset", value: "utf-8")
-                .markup()
+                .render()
         }
 
         return formOutput

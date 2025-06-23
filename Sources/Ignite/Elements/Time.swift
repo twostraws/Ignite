@@ -54,7 +54,7 @@ public struct Time: InlineElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var attributes = attributes
         if let dateTime {
             attributes.append(customAttributes: .init(name: "datetime", value: dateTime.asISO8601))

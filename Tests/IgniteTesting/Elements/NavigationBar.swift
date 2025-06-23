@@ -266,7 +266,7 @@ class NavigationBarTests: IgniteTestSuite {
 
         let expectedLink = item
             .class("nav-link text-nowrap")
-            .markup()
+            .render()
             .string
         let expectedNavItem = "<li class=\"nav-item\">\(expectedLink)</li>"
 
@@ -290,13 +290,13 @@ class NavigationBarTests: IgniteTestSuite {
 
         let expectedLink1 = item1
             .class("nav-link text-nowrap")
-            .markup()
+            .render()
             .string
         let expectedNavItem1 = "<li class=\"nav-item\">\(expectedLink1)</li>"
 
         let expectedLink2 = item2
             .class("nav-link text-nowrap")
-            .markup()
+            .render()
             .string
         let expectedNavItem2 = "<li class=\"nav-item\">\(expectedLink2)</li>"
 

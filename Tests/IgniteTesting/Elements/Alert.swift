@@ -28,7 +28,7 @@ class AlertTests: IgniteTestSuite {
             Text("This is not an exercice")
         }.role(role)
 
-        let output = element.markup()
+        let output = element.render()
 
         #expect(output.string == "<div class=\"alert \(cssAppliedClass)\"><p>This is not an exercice</p></div>")
     }

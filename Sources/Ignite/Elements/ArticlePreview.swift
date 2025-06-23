@@ -43,17 +43,17 @@ public struct ArticlePreview: HTML {
 
     /// Renders the article preview with either a custom layout or the default card.
     /// - Returns: A rendered string of HTML.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         // If custom style is provided, use it; otherwise,
         // fallback to default layout.
         if let style {
             style.body(content: article)
                 .attributes(attributes)
-                .markup()
+                .render()
         } else {
             defaultCardLayout()
                 .attributes(attributes)
-                .markup()
+                .render()
         }
     }
 

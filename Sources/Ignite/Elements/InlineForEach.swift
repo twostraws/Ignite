@@ -33,11 +33,11 @@ public struct InlineForEach<Data: Sequence>: InlineElement, PassthroughElement {
 
     /// Renders the ForEach content.
     /// - Returns: The rendered HTML string.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         items.map {
             var item: any InlineElement = $0
             item.attributes.merge(attributes)
-            return item.markup()
+            return item.render()
         }.joined()
     }
 }

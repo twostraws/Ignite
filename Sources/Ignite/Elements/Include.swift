@@ -29,7 +29,7 @@ public struct Include: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         let fileURL = publishingContext.includesDirectory.appending(path: filename)
 
         do {

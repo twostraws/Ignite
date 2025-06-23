@@ -49,7 +49,7 @@ public struct Video: InlineElement, LazyLoadable {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         guard let files = self.files else {
             publishingContext.addWarning("""
             Creating video with no name should not be possible. \

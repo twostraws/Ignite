@@ -134,7 +134,7 @@ public struct Accordion: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         // Accordions with an individual open mode must have
         // each element linked back to a unique accordion ID.
         // This is generated below, then passed into individual
@@ -149,6 +149,6 @@ public struct Accordion: HTML {
         .class("accordion")
         .id(accordionID)
 
-        return content.markup()
+        return content.render()
     }
 }

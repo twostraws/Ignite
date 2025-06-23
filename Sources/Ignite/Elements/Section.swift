@@ -63,7 +63,7 @@ public struct Section: HTML, FormItem {
         return copy
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         let contentHTML = content.markupString()
         if let header = header {
             let headerHTML = Text(header).fontStyle(headerStyle).markupString()

@@ -24,7 +24,7 @@ public struct Analytics: HeadElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         switch service {
         case .googleAnalytics(let measurementID):
             Markup(googleAnalyticsCode(for: measurementID))

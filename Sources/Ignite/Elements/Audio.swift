@@ -47,7 +47,7 @@ public struct Audio: InlineElement, LazyLoadable {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         guard let files = files else {
             publishingContext.addWarning("""
             Creating audio with no name should not be possible. \

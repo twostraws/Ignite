@@ -111,7 +111,7 @@ public struct Carousel: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         Section {
             Section {
                 ForEach(0 ..< items.count) { index in
@@ -162,6 +162,6 @@ public struct Carousel: HTML {
         .class("carousel", "slide", doesCrossfade ? "carousel-fade" : nil)
         .data("bs-ride", "carousel")
         .data("bs-interval", duration != nil ? Int(duration! * 1000).formatted() : "")
-        .markup()
+        .render()
     }
 }

@@ -45,7 +45,7 @@ public struct Span: InlineElement, NavigationItem, FormItem {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         let contentHTML = contents.markupString()
         return Markup("<span\(attributes)>\(contentHTML)</span>")
     }

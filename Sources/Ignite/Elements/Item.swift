@@ -92,7 +92,7 @@ public struct Item: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         guard let parentID, let parentOpenMode else {
             fatalError("Accordion sections must not be rendered without a parentID and parentOpenMode in place.")
         }
@@ -121,6 +121,6 @@ public struct Item: HTML {
             .style(contentBackground == nil ? nil : .init(.background, value: contentBackground!.description))
         }
         .class("accordion-item")
-        .markup()
+        .render()
     }
 }

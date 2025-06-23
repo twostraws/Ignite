@@ -40,7 +40,7 @@ public struct ZStack: HTML {
         self.alignment = alignment
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var items = items.elements
 
         items = items.enumerated().map { index, item in

@@ -53,11 +53,11 @@ struct InlineElementCollection: InlineElement, @preconcurrency Sequence {
 
     /// Renders all elements in the sequence into HTML
     /// - Returns: The combined HTML string of all elements
-    func markup() -> Markup {
+    func render() -> Markup {
         elements.map {
             var item: any InlineElement = $0
             item.attributes.merge(attributes)
-            return item.markup()
+            return item.render()
         }.joined()
     }
 

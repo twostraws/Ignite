@@ -44,9 +44,9 @@ public struct AnyHTML: HTML {
 
     /// Renders the wrapped HTML content using the given publishing context
     /// - Returns: The rendered HTML string
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var wrapped = wrapped
         wrapped.attributes.merge(attributes)
-        return wrapped.markup()
+        return wrapped.render()
     }
 }

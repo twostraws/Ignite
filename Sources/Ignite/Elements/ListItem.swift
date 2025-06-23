@@ -40,7 +40,7 @@ public struct ListItem: HTML, ListableElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         let contentHTML = content.markupString()
         return Markup("<li\(attributes)>\(contentHTML)</li>")
     }
@@ -50,6 +50,6 @@ public struct ListItem: HTML, ListableElement {
     public func listMarkup() -> Markup {
         // We do nothing special here, so just send back
         // the default rendering.
-        markup()
+        render()
     }
 }

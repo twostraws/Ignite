@@ -60,11 +60,11 @@ struct HTMLCollection: HTML, @preconcurrency Sequence {
 
     /// Renders all elements in the sequence into HTML
     /// - Returns: The combined HTML string of all elements
-    func markup() -> Markup {
+    func render() -> Markup {
         elements.map {
             var item: any BodyElement = $0
             item.attributes.merge(attributes)
-            return item.markup()
+            return item.render()
         }.joined()
     }
 

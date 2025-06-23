@@ -37,7 +37,7 @@ class EventModifierTests: IgniteTestSuite {
         let element = Tag(tag) {}
             .onEvent(eventActions.0, eventActions.1)
 
-        let output = element.markup()
+        let output = element.render()
 
         let eventOutput = eventActions.0.rawValue
         let actionOutput = eventActions.1.map { $0.compile() }.joined(separator: "; ")

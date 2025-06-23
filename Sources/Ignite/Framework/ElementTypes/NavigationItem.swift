@@ -28,9 +28,9 @@ public extension NavigationItem {
 
 public extension NavigationItem where Self: HTML {
     /// Generates the complete `HTML` string representation of the element.
-    func markup() -> Markup {
+    func render() -> Markup {
         if isPrimitive {
-            body.markup()
+            body.render()
         } else {
             fatalError("This protocol should not be conformed to directly.")
         }
@@ -39,9 +39,9 @@ public extension NavigationItem where Self: HTML {
 
 public extension NavigationItem where Self: InlineElement {
     /// Generates the complete `HTML` string representation of the element.
-    func markup() -> Markup {
+    func render() -> Markup {
         if isPrimitive {
-            body.markup()
+            body.render()
         } else {
             fatalError("This protocol should not be conformed to directly.")
         }

@@ -58,7 +58,7 @@ class AccordionTests: IgniteTestSuite {
         for item in items() {
             let itemoutput = item
                 .assigned(to: accordionID, openMode: openMode)
-                .markup()
+                .render()
                 .string
 
             let expected = itemoutput

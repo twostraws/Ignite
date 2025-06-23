@@ -126,7 +126,7 @@ public struct Image: InlineElement, LazyLoadable {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         if description == nil {
             publishingContext.addWarning("""
             \(path?.relativePath ?? systemImage ?? "Image"): adding images without a description is not recommended. \

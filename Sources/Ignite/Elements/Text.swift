@@ -150,7 +150,7 @@ public struct Text: HTML, DropdownItem {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         if isMultilineMarkdown {
             // HTMLCollection will pass its attributes to each child.
             // This works fine for styles like color, but for styles like
@@ -158,7 +158,7 @@ public struct Text: HTML, DropdownItem {
             // collectively. So we'll wrap the paragraphs in a Section.
             Section(content)
                 .attributes(attributes)
-                .markup()
+                .render()
         } else {
             Markup(
                 "<\(font.rawValue)\(attributes)>" +

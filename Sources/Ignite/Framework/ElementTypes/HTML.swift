@@ -18,8 +18,8 @@ public protocol HTML: BodyElement {
 
 public extension HTML {
     /// Generates the complete `HTML` string representation of the element.
-    func markup() -> Markup {
-        body.markup()
+    func render() -> Markup {
+        body.render()
     }
 }
 

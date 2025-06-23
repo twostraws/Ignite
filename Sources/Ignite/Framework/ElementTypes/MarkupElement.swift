@@ -14,14 +14,14 @@ public protocol MarkupElement: Sendable {
 
     /// Converts this element and its children into HTML markup.
     /// - Returns: A string containing the HTML markup
-    func markup() -> Markup
+    func render() -> Markup
 }
 
 extension MarkupElement {
     /// Converts this element and its children into an HTML string with attributes.
     /// - Returns: A string containing the HTML markup
     func markupString() -> String {
-        markup().string
+        render().string
     }
 
     /// The publishing context of this site.

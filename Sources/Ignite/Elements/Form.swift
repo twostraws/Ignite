@@ -78,7 +78,7 @@ public struct Form: HTML, NavigationItem {
         attributes.id = UUID().uuidString.truncatedHash
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         if isNavigationItem {
             renderInNavigationBar()
         } else {
@@ -148,7 +148,7 @@ public struct Form: HTML, NavigationItem {
         }
         .attributes(attributes)
         .class(labelStyle == .leading ? nil : "row g-\(spacing.rawValue)")
-        .markup()
+        .render()
     }
 
     @HTMLBuilder

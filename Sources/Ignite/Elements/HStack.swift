@@ -59,7 +59,7 @@ public struct HStack: HTML {
         self.spacingAmount = .semantic(spacing)
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         let items: [any BodyElement] = items.elements.map {
             var elementAttributes = CoreAttributes()
             elementAttributes.append(classes: "mb-0")

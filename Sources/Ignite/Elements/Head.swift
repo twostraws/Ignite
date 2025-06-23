@@ -52,7 +52,7 @@ public struct Head: MarkupElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var items = items
         if includeStandardHeaders {
             items.insert(contentsOf: MetaTag.socialSharingTags(), at: 0)

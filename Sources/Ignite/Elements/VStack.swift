@@ -110,7 +110,7 @@ public struct VStack: HTML {
         self.spacingAmount = .semantic(spacing)
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         let items = items.elements.map {
             var elementAttributes = CoreAttributes()
             if spacingAmount != nil {
