@@ -21,14 +21,6 @@ public struct NavigationBar: HTML {
         case dark
     }
 
-    /// The new number of columns to use.
-    public enum Width: Sendable {
-        /// Viewport sets column width
-        case viewport
-        /// Specific count sets column width
-        case count(Int)
-    }
-
     /// How navigation bar items should be aligned horizontally.
     public enum ItemAlignment: String {
         /// Items are aligned to the leading edge
@@ -165,7 +157,7 @@ public struct NavigationBar: HTML {
     /// It does not have an effect on the navigation bar itself.
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A new `NavigationBar` instance with the adjusted column width.
-    public func width(_ width: Width) -> Self {
+    public func width(_ width: NavigationBarWidth) -> Self {
         var copy = self
         switch width {
         case .viewport:

@@ -91,11 +91,11 @@ class NavigationBarTests: IgniteTestSuite {
     }
 
     @Test("Has Div Tag Inside if given width", arguments: [
-        NavigationBar.Width.viewport,
+        NavigationBarWidth.viewport,
         .count(2),
         .count(10)
     ])
-    func divTagForColumnWidth(width: NavigationBar.Width) async throws {
+    func divTagForColumnWidth(width: NavigationBarWidth) async throws {
         let element = NavigationBar().width(width)
         let output = element.markupString()
 
@@ -125,10 +125,10 @@ class NavigationBarTests: IgniteTestSuite {
     }
 
     @Test("Div Tag Class contains `container` if given column width", arguments: [
-        NavigationBar.Width.count(2),
+        NavigationBarWidth.count(2),
         .count(10)
     ])
-    func divTagClassEndsWithContainer(width: NavigationBar.Width) async throws {
+    func divTagClassEndsWithContainer(width: NavigationBarWidth) async throws {
         let element = NavigationBar().width(width)
         let output = element.markupString()
 
