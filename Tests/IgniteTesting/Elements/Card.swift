@@ -80,9 +80,9 @@ class CardTests: IgniteTestSuite {
     }
 
     @Test("Card Styles", arguments: zip(
-        Card.Style.allCases,
+        CardStyle.allCases,
         ["card", "card text-bg-default", "card border-default"]))
-    func cardStyles(style: Card.Style, expectedClass: String) async throws {
+    func cardStyles(style: CardStyle, expectedClass: String) async throws {
         let element = Card {
             "Placeholder"
         }

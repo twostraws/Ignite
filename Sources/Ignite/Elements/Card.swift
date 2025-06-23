@@ -7,18 +7,6 @@
 
 /// A group of information placed inside a gently rounded
 public struct Card: HTML {
-    /// Styling for this card.
-    public enum Style: CaseIterable, Sendable {
-        /// Default styling.
-        case `default`
-
-        /// Solid background color.
-        case solid
-
-        /// Solid border color.
-        case bordered
-    }
-
     /// Where to position the content of the card relative to it image.
     public enum ContentPosition: CaseIterable, Sendable {
         public static let allCases: [Card.ContentPosition] = [
@@ -128,7 +116,7 @@ public struct Card: HTML {
     public var isPrimitive: Bool { true }
 
     var role = Role.default
-    var style = Style.default
+    var style = CardStyle.default
 
     var contentPosition = ContentPosition.default
     var imageOpacity = 1.0
@@ -178,7 +166,7 @@ public struct Card: HTML {
     /// Adjusts the rendering style of this card.
     /// - Parameter style: The new card style to use.
     /// - Returns: A new `Card` instance with the updated style.
-    public func cardStyle(_ style: Style) -> Card {
+    public func cardStyle(_ style: CardStyle) -> Card {
         var copy = self
         copy.style = style
         return copy
