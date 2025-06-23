@@ -7,25 +7,6 @@
 
 /// A collection of slides the user can swipe through.
 public struct Carousel: HTML {
-    /// Whether moving between slides should cause movement or a crossfade.
-    public enum CarouselStyle: Equatable {
-        /// Slides should move.
-        case move(_ duration: Double, curve: TimingCurve = .easeInOut)
-
-        /// Slides should crossfade.
-        case crossfade(_ duration: Double, curve: TimingCurve = .easeInOut)
-
-        /// The default slide movement transition with 1-second duration and ease-in-out curve.
-        public static var move: CarouselStyle {
-            .move(1, curve: .easeInOut)
-        }
-
-        /// The default crossfade transition with 1-second duration and ease-in-out curve.
-        public static var crossfade: CarouselStyle {
-            .crossfade(1, curve: .easeInOut)
-        }
-    }
-
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
