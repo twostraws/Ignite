@@ -18,12 +18,18 @@ public struct InlineElementBuilder {
     public static func buildExpression<Content: InlineElement>(_ content: Content) -> Content {
         content
     }
+    
+    /// Converts `Never` into a builder expression.
+    public static func buildExpression(_ content: Never) -> Never {}
 
     /// Creates an empty HTML element when no content is provided.
     /// - Returns: An empty HTML element
     public static func buildBlock() -> some InlineElement {
         EmptyInlineElement()
     }
+    
+    /// Passes through `Never` unchanged.
+    public static func buildBlock(_ content: Never) -> Never {}
 
     /// Passes through a single inline element unchanged.
     /// - Parameter content: The inline element to pass through
