@@ -8,18 +8,6 @@
 /// A control that displays a list of section titles that can be folded out to
 /// display more content.
 public struct Accordion: HTML {
-    /// The visual style of the accordion.
-    public enum Style: Sendable {
-        /// A style with outer borders and rounded corners.
-        case bordered
-
-        /// Removes outer borders and rounded corners.
-        case plain
-
-        /// The default styling based on context.
-        public static var automatic: Self { .bordered }
-    }
-
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -66,7 +54,7 @@ public struct Accordion: HTML {
     /// Sets the visual style of the accordion.
     /// - Parameter style: The style to apply to the accordion.
     /// - Returns: A modified copy of this accordion with the new style applied.
-    public func accordionStyle(_ style: Style) -> Self {
+    public func accordionStyle(_ style: AccordionStyle) -> Self {
         var copy = self
         copy.attributes.append(classes: "accordion-flush")
         return copy
