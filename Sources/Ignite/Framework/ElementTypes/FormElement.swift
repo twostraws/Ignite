@@ -1,5 +1,5 @@
 //
-// FormItem.swift
+// FormElement.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -7,9 +7,9 @@
 
 /// Describes elements that can be placed into forms.
 /// - Warning: Do not conform to this type directly.
-public protocol FormItem: BodyElement {}
+public protocol FormElement: BodyElement {}
 
-public extension FormItem where Self: HTML {
+public extension FormElement where Self: HTML {
     /// Generates the complete `HTML` string representation of the element.
     func render() -> Markup {
         if isPrimitive {
@@ -20,7 +20,7 @@ public extension FormItem where Self: HTML {
     }
 }
 
-public extension FormItem where Self: InlineElement {
+public extension FormElement where Self: InlineElement {
     /// Generates the complete `HTML` string representation of the element.
     func render() -> Markup {
         if isPrimitive {
@@ -32,7 +32,7 @@ public extension FormItem where Self: InlineElement {
 }
 
 // MARK: - Style Modifiers
-public extension FormItem where Self: HTML {
+public extension FormElement where Self: HTML {
     /// Adds an inline CSS style property to the HTML element
     /// - Parameters:
     ///   - property: The CSS property to set
@@ -45,7 +45,7 @@ public extension FormItem where Self: HTML {
     }
 }
 
-public extension FormItem where Self: InlineElement {
+public extension FormElement where Self: InlineElement {
     /// Adds an inline CSS style property to the HTML element
     /// - Parameters:
     ///   - property: The CSS property to set
@@ -59,7 +59,7 @@ public extension FormItem where Self: InlineElement {
 }
 
 // MARK: - Attribute Modifiers
-public extension FormItem where Self: HTML {
+public extension FormElement where Self: HTML {
     /// Adds a custom attribute to the element.
     /// - Parameters:
     ///   - name: The name of the custom attribute
@@ -72,7 +72,7 @@ public extension FormItem where Self: HTML {
     }
 }
 
-public extension FormItem where Self: InlineElement {
+public extension FormElement where Self: InlineElement {
     /// Adds a custom attribute to the element.
     /// - Parameters:
     ///   - name: The name of the custom attribute
@@ -86,7 +86,7 @@ public extension FormItem where Self: InlineElement {
 }
 
  // MARK: - Data Modifiers
-public extension FormItem where Self: HTML {
+public extension FormElement where Self: HTML {
     /// Adds a custom attribute to the element.
     /// - Parameters:
     ///   - name: The name of the custom attribute
@@ -100,7 +100,7 @@ public extension FormItem where Self: HTML {
     }
 }
 
-public extension FormItem where Self: InlineElement {
+public extension FormElement where Self: InlineElement {
     /// Adds a custom attribute to the element.
     /// - Parameters:
     ///   - name: The name of the custom attribute
@@ -115,7 +115,7 @@ public extension FormItem where Self: InlineElement {
 }
 
 // MARK: - ID Modifiers
-public extension HTML where Self: FormItem {
+public extension HTML where Self: FormElement {
     /// Sets the `HTML` id attribute of the element.
     /// - Parameter id: The HTML ID value to set
     /// - Returns: A modified copy of the element with the HTML ID added
@@ -127,7 +127,7 @@ public extension HTML where Self: FormItem {
     }
 }
 
-public extension InlineElement where Self: FormItem {
+public extension InlineElement where Self: FormElement {
     /// Sets the `HTML` id attribute of the element.
     /// - Parameter id: The HTML ID value to set
     /// - Returns: A modified copy of the element with the HTML ID added

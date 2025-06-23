@@ -6,7 +6,7 @@
 //
 
 /// A clickable button with a label and styling.
-public struct Button: InlineElement, FormItem {
+public struct Button: InlineElement, FormElement {
     /// Controls the display size of buttons. Medium is the default.
     public enum Size: String, CaseIterable {
         case small, medium, large

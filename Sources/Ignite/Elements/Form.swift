@@ -26,7 +26,7 @@ public struct Form: HTML, NavigationElement {
     private var spacing: SpacingAmount
 
     /// The form elements to be rendered.
-    private var items: [any FormItem]
+    private var items: [any FormElement]
 
     /// The style of labels in the form
     private var labelStyle: ControlLabelStyle = .floating
@@ -71,7 +71,7 @@ public struct Form: HTML, NavigationElement {
     ///   - content: A closure that returns the form's elements.
     public init(
         spacing: SpacingAmount = .medium,
-        @ElementBuilder<FormItem> content: () -> [any FormItem]
+        @ElementBuilder<FormElement> content: () -> [any FormElement]
     ) {
         self.items = content()
         self.spacing = spacing

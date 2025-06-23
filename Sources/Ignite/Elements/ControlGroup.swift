@@ -6,7 +6,7 @@
 //
 
 /// A container that groups related form controls into a unified visual component.
-public struct ControlGroup: HTML, FormItem {
+public struct ControlGroup: HTML, FormElement {
     /// Defines the size variants available for control groups.
     public enum ControlSize: String, Sendable, CaseIterable {
         /// Creates a smaller, more compact control group.
@@ -33,7 +33,7 @@ public struct ControlGroup: HTML, FormItem {
     private var helpText: (any InlineElement)?
 
     /// The collection of form items contained within this control group.
-    private let items: [any FormItem]
+    private let items: [any FormElement]
 
     /// The size configuration for the control group.
     private var size: ControlSize?
@@ -47,7 +47,7 @@ public struct ControlGroup: HTML, FormItem {
     ///   - items: A closure returning an array of form items to include in the group.
     public init(
         _ label: String? = nil,
-        @ElementBuilder<FormItem> items: () -> [any FormItem]
+        @ElementBuilder<FormElement> items: () -> [any FormElement]
     ) {
         self.label = label
         self.items = items()

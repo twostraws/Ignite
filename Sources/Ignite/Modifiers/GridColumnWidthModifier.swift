@@ -34,22 +34,22 @@ public extension InlineElement {
     }
 }
 
-public extension FormItem where Self: HTML {
+public extension FormElement where Self: HTML {
     /// Adjusts the number of columns assigned to this element.
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A new element with the adjusted column width.
-    func width(_ width: Int) -> some FormItem {
+    func width(_ width: Int) -> some FormElement {
         var copy = self
         copy.attributes.append(classes: ColumnWidth.count(width).className)
         return copy
     }
 }
 
-public extension FormItem where Self: InlineElement {
+public extension FormElement where Self: InlineElement {
     /// Adjusts the number of columns assigned to this element.
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A new element with the adjusted column width.
-    func width(_ width: Int) -> some FormItem {
+    func width(_ width: Int) -> some FormElement {
         var copy = self
         copy.attributes.append(classes: ColumnWidth.count(width).className)
         return copy

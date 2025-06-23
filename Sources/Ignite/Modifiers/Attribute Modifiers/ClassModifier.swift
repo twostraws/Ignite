@@ -71,7 +71,7 @@ public extension MarkupElement where Self: InlineElement {
     }
 }
 
-public extension FormItem where Self: InlineElement {
+public extension FormElement where Self: InlineElement {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
@@ -84,7 +84,7 @@ public extension FormItem where Self: InlineElement {
     }
 }
 
-public extension FormItem where Self: HTML {
+public extension FormElement where Self: HTML {
     /// Adds multiple optional CSS classes to the element.
     /// - Parameter newClasses: Variable number of optional class names
     /// - Returns: The modified HTML element
