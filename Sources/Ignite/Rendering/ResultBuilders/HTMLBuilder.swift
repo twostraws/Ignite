@@ -18,12 +18,18 @@ public struct HTMLBuilder {
     public static func buildExpression<Content: BodyElement>(_ content: Content) -> some HTML {
         AnyHTML(content)
     }
+    
+    /// Converts `Never` into a builder expression.
+    public static func buildExpression(_ content: Never) -> Never {}
 
     /// Creates an empty HTML element when no content is provided.
     /// - Returns: An empty HTML element
     public static func buildBlock() -> some HTML {
         AnyHTML(EmptyHTML())
     }
+    
+    /// Passes through `Never` unchanged.
+    public static func buildBlock(_ content: Never) -> Never {}
 
     /// Passes through a single HTML element unchanged.
     /// - Parameter content: The HTML element to pass through
