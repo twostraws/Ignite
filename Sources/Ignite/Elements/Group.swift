@@ -36,7 +36,7 @@ public struct Group: HTML, PassthroughElement {
 
     /// Creates a new group containing the given HTML content.
     /// - Parameter content: The HTML content to include.
-    public init(_ content: some BodyElement) {
+    public init(_ content: some HTML) {
         self.items = HTMLCollection([content])
     }
 
