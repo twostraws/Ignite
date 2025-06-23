@@ -53,7 +53,7 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     var style = Style.automatic
 
     /// When rendered with the `.button` style, this controls the button's size.
-    var size = Button.Size.medium
+    var size = ButtonSize.medium
 
     /// The role of this link, which applies various styling effects.
     var role = Role.default
@@ -169,7 +169,7 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     /// Adjusts the style of this link, when rendered in the `.button` style.
     /// - Parameter size: The new style.
     /// - Returns: A new `Link` instance with the updated size.
-    public func buttonSize(_ size: Button.Size) -> Self {
+    public func buttonSize(_ size: ButtonSize) -> Self {
         var copy = self
         copy.size = size
         return copy

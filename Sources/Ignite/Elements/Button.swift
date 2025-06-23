@@ -7,11 +7,6 @@
 
 /// A clickable button with a label and styling.
 public struct Button: InlineElement, FormElement {
-    /// Controls the display size of buttons. Medium is the default.
-    public enum Size: String, CaseIterable {
-        case small, medium, large
-    }
-
     /// Whether this button is just clickable, or whether its submits a form.
     public enum `Type` {
         /// This button does not submit a form.
@@ -42,7 +37,7 @@ public struct Button: InlineElement, FormElement {
     var type = Type.plain
 
     /// How large this button should be drawn. Defaults to `.medium`.
-    var size = Size.medium
+    var size = ButtonSize.medium
 
     /// How this button should be styled on the screen. Defaults to `.default`.
     var role = Role.default
@@ -106,7 +101,7 @@ public struct Button: InlineElement, FormElement {
     /// Adjusts the size of this button.
     /// - Parameter size: The new size.
     /// - Returns: A new `Button` instance with the updated size.
-    public func buttonSize(_ size: Size) -> Self {
+    public func buttonSize(_ size: ButtonSize) -> Self {
         var copy = self
         copy.size = size
         return copy
@@ -146,7 +141,7 @@ public struct Button: InlineElement, FormElement {
     ///   - role: The role we are styling.
     ///   - size: The size we are styling.
     /// - Returns: The CSS classes to apply for this button
-    static func classes(forRole role: Role, size: Size) -> [String] {
+    static func classes(forRole role: Role, size: ButtonSize) -> [String] {
         var outputClasses = ["btn"]
 
         switch size {
