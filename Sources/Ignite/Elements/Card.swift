@@ -7,57 +7,6 @@
 
 /// A group of information placed inside a gently rounded
 public struct Card: HTML {
-    /// Where to position the content of the card relative to it image.
-    public enum ContentPosition: CaseIterable, Sendable {
-        public static let allCases: [Card.ContentPosition] = [
-            .bottom, .top, .overlay(alignment: .topLeading)
-        ]
-
-        /// Positions content below the image.
-        case bottom
-
-        /// Positions content above the image.
-        case top
-
-        /// Positions content over the image.
-        case overlay(alignment: CardContentAlignment)
-
-        // Static entries for backward compatibilty
-        public static let `default` = Self.bottom
-        public static let overlay = Self.overlay(alignment: .topLeading)
-
-        // MARK: Helpers for `render`
-
-        var imageClass: String {
-            switch self {
-            case .bottom:
-                "card-img-top"
-            case .top:
-                "card-img-bottom"
-            case .overlay:
-                "card-img"
-            }
-        }
-
-        var bodyClasses: [String] {
-            switch self {
-            case .overlay(let alignment):
-                ["card-img-overlay", alignment.textAlignment.rawValue, alignment.verticalAlignment.rawValue]
-            default:
-                ["card-body"]
-            }
-        }
-
-        var addImageFirst: Bool {
-            switch self {
-            case .bottom, .overlay:
-                true
-            case .top:
-                false
-            }
-        }
-    }
-
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -70,7 +19,7 @@ public struct Card: HTML {
     var role = Role.default
     var style = CardStyle.default
 
-    var contentPosition = ContentPosition.default
+    var contentPosition = CardContentPosition.default
     var imageOpacity = 1.0
 
     var image: Image?
@@ -127,7 +76,7 @@ public struct Card: HTML {
     /// Adjusts the position of this card's content relative to its image.
     /// - Parameter newPosition: The new content positio for this card.
     /// - Returns: A new `Card` instance with the updated content position.
-    public func contentPosition(_ newPosition: ContentPosition) -> Self {
+    public func contentPosition(_ newPosition: CardContentPosition) -> Self {
         var copy = self
         copy.contentPosition = newPosition
         return copy
