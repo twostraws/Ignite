@@ -99,7 +99,7 @@ public struct NavigationBar: HTML {
     private let logo: any InlineElement
 
     /// An array of items to show in this navigation bar.
-    private let items: [any NavigationItem]
+    private let items: [any NavigationElement]
 
     /// The style to use when rendering this bar.
     private var style = NavigationBarStyle.automatic
@@ -133,7 +133,7 @@ public struct NavigationBar: HTML {
     ///   collapsed into a hamburger menu at small screen sizes.
     public init(
         logo: (any InlineElement)? = nil,
-        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem]
+        @ElementBuilder<NavigationElement> items: () -> [any NavigationElement]
     ) {
         self.logo = logo ?? EmptyInlineElement()
         self.items = items()
@@ -145,7 +145,7 @@ public struct NavigationBar: HTML {
     ///   collapsed into a hamburger menu at small screen sizes.
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
-        @ElementBuilder<NavigationItem> items: () -> [any NavigationItem],
+        @ElementBuilder<NavigationElement> items: () -> [any NavigationElement],
         @InlineElementBuilder logo: () -> any InlineElement = { EmptyInlineElement() }
     ) {
         self.items = items()
@@ -253,7 +253,7 @@ public struct NavigationBar: HTML {
         .render()
     }
 
-    private func renderPinnedItems(_ items: [any NavigationItem]) -> some HTML {
+    private func renderPinnedItems(_ items: [any NavigationElement]) -> some HTML {
         ForEach(items) { item in
             if let item = item as? any NavigationItemConfigurable {
                 AnyHTML(item.configuredAsNavigationItem(true))
@@ -279,7 +279,7 @@ public struct NavigationBar: HTML {
         .aria(.label, "Toggle navigation")
     }
 
-    private func renderCollapsibleItems(_ items: [any NavigationItem]) -> some HTML {
+    private func renderCollapsibleItems(_ items: [any NavigationElement]) -> some HTML {
         Section {
             List {
                 ForEach(items) { item in

@@ -6,7 +6,7 @@
 //
 
 /// A form container for collecting user input
-public struct Form: HTML, NavigationItem {
+public struct Form: HTML, NavigationElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

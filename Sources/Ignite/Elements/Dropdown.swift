@@ -12,7 +12,7 @@ public protocol DropdownItem: BodyElement {}
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
-public struct Dropdown: HTML, NavigationItem, FormItem {
+public struct Dropdown: HTML, NavigationElement, FormItem {
     /// How the dropdown should be rendered based on its context.
     enum Configuration: Sendable {
         /// Renders as a complete standalone dropdown.

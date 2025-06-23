@@ -6,7 +6,7 @@
 //
 
 /// A form for collecting email addresses for newsletter subscriptions.
-public struct SubscribeForm: HTML, NavigationItem {
+public struct SubscribeForm: HTML, NavigationElement {
     /// Defines how labels appear in the form.
     public enum LabelStyle: Sendable, CaseIterable {
         /// Labels are not visible but remain accessible to screen readers.

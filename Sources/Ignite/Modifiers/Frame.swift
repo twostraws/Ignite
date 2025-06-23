@@ -236,7 +236,7 @@ public extension InlineElement {
     }
 }
 
-public extension NavigationItem {
+public extension NavigationElement {
     /// Creates a specific frame for this element, either using exact values or
     /// using minimum/maximum ranges.
     /// - Parameters:

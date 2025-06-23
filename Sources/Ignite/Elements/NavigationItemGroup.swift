@@ -6,7 +6,7 @@
 //
 
 /// A container for organizing related navigation items .
-public struct NavigationItemGroup: NavigationItem {
+public struct NavigationItemGroup: NavigationElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -17,10 +17,10 @@ public struct NavigationItemGroup: NavigationItem {
     public var navigationBarVisibility: NavigationBarVisibility = .automatic
 
     /// The "unstyled" child elements contained within this group.
-    private var content: [any NavigationItem]
+    private var content: [any NavigationElement]
 
     /// The child elements contained within this group, with attributes.
-    var items: [any NavigationItem] {
+    var items: [any NavigationElement] {
         content.map {
             var item = $0
             item.attributes.merge(attributes)
@@ -31,7 +31,7 @@ public struct NavigationItemGroup: NavigationItem {
 
     /// Creates a navigation-item group.
     /// - Parameter items: A closure returning an array of form items to include in the group.
-    public init(@ElementBuilder<NavigationItem> items: () -> [any NavigationItem]) {
+    public init(@ElementBuilder<NavigationElement> items: () -> [any NavigationElement]) {
         self.content = items()
     }
 

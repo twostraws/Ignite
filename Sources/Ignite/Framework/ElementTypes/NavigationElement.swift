@@ -1,5 +1,5 @@
 //
-// NavigationItem.swift
+// NavigationElement.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -7,7 +7,7 @@
 
 /// Describes elements that can be placed into navigation bars.
 /// - Warning: Do not conform to this type directly.
-public protocol NavigationItem: BodyElement {
+public protocol NavigationElement: BodyElement {
     /// How a `NavigationBar` displays this item at different breakpoints.
     var navigationBarVisibility: NavigationBarVisibility { get set }
 
@@ -15,7 +15,7 @@ public protocol NavigationItem: BodyElement {
     func navigationBarVisibility(_ visibility: NavigationBarVisibility) -> Self
 }
 
-public extension NavigationItem {
+public extension NavigationElement {
     /// Returns a new instance with the specified visibility.
     /// - Parameter visibility: The visibility to apply.
     /// - Returns: A new instance with the updated visibility.
@@ -26,7 +26,7 @@ public extension NavigationItem {
     }
 }
 
-public extension NavigationItem where Self: HTML {
+public extension NavigationElement where Self: HTML {
     /// Generates the complete `HTML` string representation of the element.
     func render() -> Markup {
         if isPrimitive {
@@ -37,7 +37,7 @@ public extension NavigationItem where Self: HTML {
     }
 }
 
-public extension NavigationItem where Self: InlineElement {
+public extension NavigationElement where Self: InlineElement {
     /// Generates the complete `HTML` string representation of the element.
     func render() -> Markup {
         if isPrimitive {
@@ -48,7 +48,7 @@ public extension NavigationItem where Self: InlineElement {
     }
 }
 
-extension NavigationItem where Self: InlineElement {
+extension NavigationElement where Self: InlineElement {
     /// Adds a CSS class to the HTML element
     /// - Parameter className: The CSS class name to add
     /// - Returns: A modified copy of the element with the CSS class added
@@ -60,7 +60,7 @@ extension NavigationItem where Self: InlineElement {
     }
 }
 
-extension NavigationItem where Self: HTML {
+extension NavigationElement where Self: HTML {
     /// Adds a CSS class to the HTML element
     /// - Parameter className: The CSS class name to add
     /// - Returns: A modified copy of the element with the CSS class added
@@ -72,7 +72,7 @@ extension NavigationItem where Self: HTML {
     }
 }
 
-extension NavigationItem where Self: BodyElement {
+extension NavigationElement where Self: BodyElement {
     /// Adds a CSS class to the HTML element
     /// - Parameter className: The CSS class name to add
     /// - Returns: A modified copy of the element with the CSS class added

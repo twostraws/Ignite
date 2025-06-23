@@ -24,7 +24,7 @@ public extension HTML {
     }
 }
 
-public extension NavigationItem {
+public extension NavigationElement {
     /// Hides the element when all specified media queries match.
     /// - Parameter queries: One or more media queries that must all match for the element to be hidden.
     /// - Returns: A modified copy of the element with conditional visibility.
