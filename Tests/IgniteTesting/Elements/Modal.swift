@@ -63,8 +63,8 @@ struct ModalTests {
     }
 
     @Test("Modal Size",
-          arguments: Modal.Size.allCases)
-    func checkModalSizes(sizeOption: Modal.Size) async throws {
+          arguments: ModalSize.allCases)
+    func checkModalSizes(sizeOption: ModalSize) async throws {
         let element = Modal(id: "ModalId") {
             Text(markdown: "Modal with size")
                 .horizontalAlignment(.center)

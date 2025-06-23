@@ -7,41 +7,6 @@
 
 /// A modal dialog presented on top of the screen
 public struct Modal: HTML {
-    /// The size of the modal. Except from the full screen modal the height is defined by the height wheras the width
-    public enum Size: CaseIterable, Sendable {
-        /// A modal dialog with a small max-width of 300px
-
-        case small
-        /// A modal dialog with a medium max-width of 500px
-
-        case medium
-        /// A modal dialog with a large max-width of 800px
-
-        case large
-        /// A modal dialog with an extra large wmax-idth of 1140px
-
-        case xLarge
-
-        /// A fullscreen modal dialog covering the entre view port
-        case fullscreen
-
-        /// The HTML name for the modal size.
-        var htmlClass: String? {
-            switch self {
-            case .small:
-                "modal-sm"
-            case .medium:
-                nil
-            case .large:
-                "modal-lg"
-            case .xLarge:
-                "modal-xl"
-            case .fullscreen:
-                "modal-fullscreen"
-            }
-        }
-    }
-
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -58,7 +23,7 @@ public struct Modal: HTML {
 
     var animated = true
     var scrollable = false
-    var size: Size = .medium
+    var size: ModalSize = .medium
     var position: ModalPosition = .center
 
     public init(
@@ -76,7 +41,7 @@ public struct Modal: HTML {
     /// Adjusts the size of the modal.
     /// - Parameter size: The size of the presented modal.
     /// - Returns: A new `Modal` instance with the updated size setting.
-    public func size(_ size: Size) -> Self {
+    public func size(_ size: ModalSize) -> Self {
         var copy = self
         copy.size = size
         return copy
