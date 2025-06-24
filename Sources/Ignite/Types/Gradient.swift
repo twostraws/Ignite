@@ -50,6 +50,13 @@ public struct Gradient: CustomStringConvertible, Sendable {
             return "conic-gradient(from \(angle)deg, \(colorStops))"
         }
     }
+
+    /// The inline styles required to create this gradient.
+    var styles: [InlineStyle] {
+        [.init(.backgroundImage, value: description),
+         .init(.backgroundClip, value: "text"),
+         .init(.color, value: "transparent")]
+    }
 }
 
 public extension Gradient {
