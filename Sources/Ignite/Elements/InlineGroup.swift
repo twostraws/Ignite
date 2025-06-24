@@ -14,35 +14,28 @@
 /// - Note: `InlineGroup` is particularly useful for applying shared styling or
 ///         attributes to multiple inline elements without affecting the document
 ///         structure.
-public struct InlineGroup: InlineElement, PassthroughElement {
+public struct InlineGroup<Content: InlineElement>: InlineElement {
+    /// The content and behavior of this HTML.
+    public var body: Never { fatalError() }
+
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
+    private var content: Content
 
-    /// The child elements contained within this group.
-    var items: InlineElementCollection
-
-    public var body: some InlineElement { self }
-
-    /// Creates a new group containing the given inline content.
-    /// - Parameter content: A closure that creates the inline content.
-    public init(@InlineElementBuilder content: () -> some InlineElement) {
-        self.items = InlineElementCollection(content)
+    /// Creates a new group containing the given HTML content.
+    /// - Parameter content: A closure that creates the HTML content.
+    public init(@InlineElementBuilder content: () -> Content) {
+        self.content = content()
     }
 
-    /// Creates a new group containing the given inline content.
-    /// - Parameter content: The inline content to include.
-    public init(_ content: some InlineElement) {
-        self.items = InlineElementCollection([content])
+    /// Creates a new group containing the given HTML content.
+    /// - Parameter content: The HTML content to include.
+    public init(_ content: Content) {
+        self.content = content
     }
 
     public func render() -> Markup {
-        items.map {
-            var item: any InlineElement = $0
-            item.attributes.merge(attributes)
-            return item.render()
-        }.joined()
+        content.attributes(attributes).render()
     }
 }
