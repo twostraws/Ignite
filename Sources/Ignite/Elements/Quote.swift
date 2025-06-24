@@ -14,7 +14,7 @@ public struct Quote: HTML {
     public var attributes = CoreAttributes()
 
     /// The content of this quote.
-    var contents: any BodyElement
+    var contents: any HTML
 
     /// Provide details about this quote, e.g. a source name.
     var caption: any InlineElement
@@ -22,7 +22,7 @@ public struct Quote: HTML {
     /// Create a new quote from a page element builder that returns an array
     /// of elements to display in the quote.
     /// - Parameter contents: The elements to display inside the quote.
-    public init(@HTMLBuilder contents: () -> some BodyElement) {
+    public init(@HTMLBuilder contents: () -> some HTML) {
         self.contents = contents()
         self.caption = EmptyInlineElement()
     }
