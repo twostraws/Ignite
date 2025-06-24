@@ -6,18 +6,15 @@
 //
 
 /// A text input field for collecting user information in forms.
-public struct TextField: InlineElement, ControlGroupElement {
+public struct TextField<Label: InlineElement>: InlineElement, ControlGroupElement {
     /// The content and behavior of this HTML.
-    public var body: some InlineElement { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The label text for the field
-    var label: ControlLabel?
+    var label: ControlLabel<Label>?
 
     /// The underlying HTML input element.
     private var input = Input()
@@ -42,7 +39,7 @@ public struct TextField: InlineElement, ControlGroupElement {
     /// - Parameters:
     ///   - label: The label text to display with the field.
     ///   - placeholder: The text to display when the field is empty.
-    public init(_ label: any InlineElement, prompt: String? = nil) {
+    public init(_ label: Label, prompt: String? = nil) {
         let id = UUID().uuidString.truncatedHash
         input.attributes.id = id
         input.attributes.append(classes: "form-control")
