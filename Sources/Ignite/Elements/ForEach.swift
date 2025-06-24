@@ -69,4 +69,6 @@ extension ForEach: TableElement where Content: TableElement {
     }
 }
 
+extension ForEach: ListItemProvider where Content: ListItemProvider {}
+
 extension ForEach: ColumnProvider where Content: ColumnProvider {}
