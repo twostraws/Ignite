@@ -5,29 +5,6 @@
 // See LICENSE for license information.
 //
 
-/// A type used to define a box-shadow
-private struct Shadow: CustomStringConvertible {
-    /// The shadow's color.
-    let color: Color
-
-    /// The shadow's radius
-    let radius: Int
-
-    /// The X offset for the shadow, specified in pixels. Defaults to 0.
-    var x: Int = 0
-
-    /// The Y offset for the shadow, specified in pixels. Defaults to 0.
-    var y: Int = 0
-
-    /// Wether the shadow is inset or not
-    var inset = false
-
-    /// The CSS representation of this shadow.
-    var description: String {
-        "\(color) \(x)px \(y)px \(radius)px \(inset == true ? "inset" : "")"
-    }
-}
-
 public extension HTML {
     /// Applies an inner shadow to this element.
     /// - Parameters:
