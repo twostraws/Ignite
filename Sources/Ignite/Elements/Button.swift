@@ -6,7 +6,7 @@
 //
 
 /// A clickable button with a label and styling.
-public struct Button: InlineElement, FormElement {
+public struct Button: InlineElement, ControlGroupElement {
     /// The content and behavior of this HTML.
     public var body: some InlineElement { self }
 

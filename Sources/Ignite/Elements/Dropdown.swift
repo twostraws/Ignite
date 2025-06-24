@@ -15,7 +15,7 @@ protocol DropdownItemConfigurable {
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
-public struct Dropdown: HTML, NavigationElement, FormElement {
+public struct Dropdown: HTML, NavigationElement, ControlGroupElement {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 

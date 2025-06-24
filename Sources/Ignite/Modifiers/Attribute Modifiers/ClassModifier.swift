@@ -71,32 +71,6 @@ public extension MarkupElement where Self: InlineElement {
     }
 }
 
-public extension FormElement where Self: InlineElement {
-    /// Adds multiple optional CSS classes to the element.
-    /// - Parameter newClasses: Variable number of optional class names
-    /// - Returns: The modified HTML element
-    func `class`(_ newClasses: String?...) -> Self {
-        let classes = newClasses.compactMap(\.self).filter { !$0.isEmpty }
-        guard !classes.isEmpty else { return self }
-        var copy = self
-        copy.attributes.append(classes: classes)
-        return copy
-    }
-}
-
-public extension FormElement where Self: HTML {
-    /// Adds multiple optional CSS classes to the element.
-    /// - Parameter newClasses: Variable number of optional class names
-    /// - Returns: The modified HTML element
-    func `class`(_ newClasses: String?...) -> Self {
-        let classes = newClasses.compactMap(\.self).filter { !$0.isEmpty }
-        guard !classes.isEmpty else { return self }
-        var copy = self
-        copy.attributes.append(classes: classes)
-        return copy
-    }
-}
-
 // These should always remain private, because for the
 // type safety of the public facing API we always want
 // to return either HTML or InlineElement.
