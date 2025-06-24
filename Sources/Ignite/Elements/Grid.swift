@@ -12,27 +12,28 @@
 ///
 /// **Note**: A 12-column grid is the default, but you can adjust that downwards
 /// by using the `columns()` modifier.
-public struct Grid: HTML {
+public struct Grid<Content: HTML>: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
-    /// How many columns this should be divided into
-    var columnCount: Int?
-
     /// The amount of space between elements.
-    private var spacingAmount: SpacingAmount = .semantic(.none)
+    private var spacingAmount: SpacingAmount
 
     /// The alignment of the items within the grid.
-    private var alignment: Alignment = .center
+    private var alignment: Alignment
 
-    /// The items to display in this grid.
-    private var items: HTMLCollection
+    /// How grid items should size.
+    private var gridItemSizing: GridItemSizing = .automatic
+
+    /// The number of columns this grid should span. Use `nil` to have
+    /// the column count based on the longest row.
+    private var columnCount: Int?
+
+    /// The rows that make up the grid's content.
+    private var content: Content
 
     /// Creates a new `Grid` object using a block element builder
     /// that returns an array of items to use in this grid.
@@ -41,13 +42,15 @@ public struct Grid: HTML {
     ///   - spacing: The number of pixels between each element.
     ///   - items: The items to use in this grid.
     public init(
+        columns: Int? = nil,
         alignment: Alignment = .center,
         spacing: Int,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder content: () -> Content
     ) {
-        self.items = HTMLCollection(items)
-        self.alignment = alignment
         self.spacingAmount = .exact(spacing)
+        self.alignment = alignment
+        self.columnCount = columns
+        self.content = content()
     }
 
     /// Creates a new `Grid` object using a block element builder
@@ -57,13 +60,15 @@ public struct Grid: HTML {
     ///   - spacing: The predefined size between each element. Defaults to `.none`.
     ///   - items: The items to use in this grid.
     public init(
+        columns: Int? = nil,
         alignment: Alignment = .center,
         spacing: SemanticSpacing = .medium,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder content: () -> Content
     ) {
-        self.items = HTMLCollection(items)
-        self.alignment = alignment
         self.spacingAmount = .semantic(spacing)
+        self.alignment = alignment
+        self.columnCount = columns
+        self.content = content()
     }
 
     /// Creates a new grid from a collection of items, along with a function that converts
@@ -74,14 +79,18 @@ public struct Grid: HTML {
     ///   - spacing: The number of pixels between each element.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns some HTML representing that value in the grid.
-    public init<T>(
-        _ items: any Sequence<T>,
+    public init<T, S: Sequence, ItemContent: HTML>(
+        _ items: S,
+        columns: Int? = nil,
         alignment: Alignment = .center,
-        spacing: Int, content: (T) -> some HTML
-    ) {
-        self.items = HTMLCollection(items.map(content))
-        self.alignment = alignment
+        spacing: Int,
+        @HTMLBuilder content: @escaping (T) -> ItemContent
+    ) where S.Element == T, Content == ForEach<[T], ItemContent> {
         self.spacingAmount = .exact(spacing)
+        self.alignment = alignment
+        self.columnCount = columns
+        let content = ForEach(Array(items), content: content)
+        self.content = content
     }
 
     /// Creates a new grid from a collection of items, along with a function that converts
@@ -92,116 +101,115 @@ public struct Grid: HTML {
     ///   - spacing: The predefined size between each element. Defaults to `.none`
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns some HTML representing that value in the grid.
-    public init<T>(
-        _ items: any Sequence<T>,
+    public init<T, S: Sequence, ItemContent: HTML>(
+        _ items: S,
+        columns: Int? = nil,
         alignment: Alignment = .center,
         spacing: SemanticSpacing = .medium,
-        content: (T) -> some HTML
-    ) {
-        self.items = HTMLCollection(items.map(content))
-        self.alignment = alignment
+        @HTMLBuilder content: @escaping (T) -> ItemContent
+    ) where S.Element == T, Content == ForEach<[T], ItemContent> {
         self.spacingAmount = .semantic(spacing)
+        self.alignment = alignment
+        self.columnCount = columns
+        let content = ForEach(Array(items), content: content)
+        self.content = content
     }
 
-    /// Adjusts the number of columns that can be fitted into this grid.
-    /// - Parameter columns: The number of columns to use
-    /// - Returns: A new `Grid` instance with the updated column count.
-    public func columns(_ columns: Int) -> Self {
+    /// Controls how grid items size and expand within the grid.
+    /// - Parameter sizing: The sizing behavior to apply to grid items.
+    /// - Returns: A modified copy of this grid with the updated sizing behavior.
+    public func gridItemSizing(_ sizing: GridItemSizing) -> Self {
         var copy = self
-        copy.columnCount = columns
+        copy.gridItemSizing = sizing
         return copy
+    }
+
+    private func createGridAttributes(columnCount: Int) -> CoreAttributes {
+        var attributes = attributes
+        attributes.append(styles: gridItemSizing.inlineStyles)
+        attributes.append(styles:
+            .init("--ig-grid-columns", value: columnCount.formatted()),
+            .init("--ig-grid-gap", value: "20px")
+        )
+        return attributes
     }
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> Markup {
-        var gridAttributes = attributes.appending(classes: ["row"])
-        gridAttributes.append(classes: alignment.horizontal.containerAlignmentClass)
-
-        // If a column count is set, we want to use that for all
-        // page sizes that are medium and above. Below that we
-        // should drop down to width 1 to avoid squeezing things
-        // into oblivion.
-        if let columnCount {
-            gridAttributes.append(classes: [
-                "row-cols-1",
-                "row-cols-md-\(columnCount)"
-            ])
-        }
-
-        var gutterClass = ""
-
-//        switch spacingAmount {
-//        case .exact(let pixels) where pixels != 0:
-//            gridAttributes.append(styles: .init(.rowGap, value: "\(pixels)px"))
-//        case .semantic(let amount) where spacingAmount != .semantic(.none):
-//            gutterClass = "g-\(amount.rawValue)"
-//        default: break
-//        }
+        let subviews = content.subviews()
+        let (flattenedGridItems, columnCount) = processGridItems(subviews)
+        let attributes = createGridAttributes(columnCount: columnCount)
 
         return Section {
-            ForEach(items) { item in
-                if let passthrough = item as? any PassthroughElement {
-                    handlePassthrough(passthrough, attributes: passthrough.attributes)
-                } else if let modified = item as? AnyHTML,
-                          let passthrough = modified.wrapped as? any PassthroughElement {
-                    handlePassthrough(passthrough, attributes: modified.attributes)
-                } else {
-//                    handleItem(item)
-//                        .class(gutterClass)
-                }
+            ForEach(flattenedGridItems) { child in
+                child
+                    .class("ig-grid-item")
             }
         }
-        .attributes(gridAttributes)
+        .attributes(attributes)
+        .class("ig-adaptive-grid")
+        .style(spacingAmount.inlineStyle)
+        .style(alignment.gridAlignmentRules)
         .render()
     }
+}
 
-    /// Removes a column class, if it exists, from the item and reassigns it to a wrapper.
-    private func handleItem(_ item: any BodyElement) -> some BodyElement {
-        var item = item
-        var name: String?
-        if let widthClass = item.attributes.classes.first(where: { $0.starts(with: "col-md-") }) {
-            item.attributes.remove(classes: widthClass)
-            name = scaleWidthClass(widthClass)
+private extension Grid {
+    /// Processes child views into grid items and returns flattened items with column count.
+    /// - Parameter children: Collection of subviews to process into grid items
+    /// - Returns: A tuple containing flattened grid items and column count as a string
+    func processGridItems(_ children: SubviewsCollection) -> ([GridItem], Int) {
+        let gridItems = children.map { $0.resolvedToGridItems() }
+
+        if areAllItemsFullWidth(gridItems) {
+            return processFullWidthItems(gridItems)
         }
 
-        item = item.is(Section.self) ? item : Section(item)
+        let maxColumnCount = columnCount ?? gridItems.map(\.count).max() ?? 1
 
-        return AnyHTML(item)
-            .class(name ?? "col")
-            .class(alignment.vertical.itemAlignmentClass)
+        let flattenedItems = gridItems
+            .map { padRow($0, maxColumnCount: maxColumnCount) }
+            .flatMap(\.self)
+
+        return (flattenedItems, maxColumnCount)
     }
 
-    /// Renders a group of HTML elements with consistent styling and attributes.
+    /// Determines if all grid items are full-width items.
+    /// - Parameter gridItems: 2D array of grid items to check
+    /// - Returns: `true` if all items are full width, `false` otherwise
+    func areAllItemsFullWidth(_ gridItems: [[GridItem]]) -> Bool {
+        gridItems.allSatisfy { row in
+            row.count == 1 && row.first?.isFullWidth == true
+        }
+    }
+
+    /// Pads a row of grid items to match the maximum column count.
     /// - Parameters:
-    ///   - passthrough: The passthrough entity containing the HTML elements to render.
-    ///   - attributes: HTML attributes to apply to each element in the group.
-    /// - Returns: A view containing the styled group elements.
-    func handlePassthrough(_ passthrough: any PassthroughElement, attributes: CoreAttributes) -> some HTML {
-        let gutterClass = if case .semantic(let amount) = spacingAmount {
-            "g-\(amount.rawValue)"
-        } else {
-            ""
+    ///   - row: Array of grid items representing a row
+    ///   - maxColumnCount: Maximum number of columns in the grid
+    /// - Returns: Padded array of grid items
+    func padRow(_ row: [GridItem], maxColumnCount: Int) -> [GridItem] {
+        if row.count == 1 && row.first?.isFullWidth == true {
+            guard var item = row.first, columnCount != nil else { return row }
+            item.attributes.append(styles: .init(.gridColumn, value: "span \(maxColumnCount)"))
+            return [item]
         }
 
-        let collection = HTMLCollection(passthrough.items.compactMap { $0 as? any HTML })
-        return ForEach(collection) { item in
-//            handleItem(item)
-//                .class(gutterClass)
-        }
+        let emptyCellsNeeded = maxColumnCount - row.count
+        return emptyCellsNeeded > 0 ? row + Array(repeating: .emptyCell, count: emptyCellsNeeded) : row
     }
 
-    /// Calculates the appropriate Bootstrap column class name for a block element.
-    /// - Parameter item: The block element to calculate the class name for.
-    /// - Returns: A Bootstrap class name that represents the element's width,
-    /// scaled according to the grid's column count if needed.
-    private func scaleWidthClass(_ widthClass: String) -> String {
-        if let columnCount, let width = Int(widthClass.dropFirst("col-md-".count)) {
-            // Scale the width to be relative to the new column count
-            let scaledWidth = width * 12 / columnCount
-            return ColumnWidth.count(scaledWidth).className
-        } else {
-            return widthClass
+    /// Processes grid items that are all full-width.
+    /// - Parameter gridItems: 2D array of grid items to process
+    /// - Returns: A tuple containing flattened grid items and column count as a string
+    func processFullWidthItems(_ gridItems: [[GridItem]]) -> ([GridItem], Int) {
+        var items = gridItems.flatMap(\.self)
+        items = items.map {
+            var item = $0
+            item.attributes.append(classes: "ig-full-width-grid-item")
+            return item
         }
+        return (items, columnCount ?? 12)
     }
 }
