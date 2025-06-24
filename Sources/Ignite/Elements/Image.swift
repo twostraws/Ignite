@@ -220,3 +220,5 @@ extension Image: CardComponentConfigurable {
         CardComponent(self.class("card-img"))
     }
 }
+
+extension Image: ImageProvider {}
