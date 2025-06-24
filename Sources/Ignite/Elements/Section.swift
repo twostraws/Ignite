@@ -66,7 +66,7 @@ public struct Section: HTML {
     public func render() -> Markup {
         let contentHTML = content.markupString()
         if let header = header {
-            let headerHTML = Text(header).fontStyle(headerStyle).markupString()
+            let headerHTML = Text(header).font(headerStyle).markupString()
             return Markup("<section\(attributes)>\(headerHTML + contentHTML)</section>")
         }
         return Markup("<div\(attributes)>\(contentHTML)</div>")
