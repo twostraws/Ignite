@@ -47,3 +47,9 @@ extension InlineHTML: FormElementRenderable where Content: FormElementRenderable
         attributedContent.renderAsFormElement(configuration)
     }
 }
+
+extension InlineHTML: CardComponentConfigurable where Content: CardComponentConfigurable {
+    func configuredAsCardComponent() -> CardComponent {
+        attributedContent.configuredAsCardComponent()
+    }
+}
