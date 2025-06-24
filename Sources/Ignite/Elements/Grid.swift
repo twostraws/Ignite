@@ -131,13 +131,13 @@ public struct Grid: HTML {
 
         var gutterClass = ""
 
-        switch spacingAmount {
-        case .exact(let pixels) where pixels != 0:
-            gridAttributes.append(styles: .init(.rowGap, value: "\(pixels)px"))
-        case .semantic(let amount) where spacingAmount != .semantic(.none):
-            gutterClass = "g-\(amount.rawValue)"
-        default: break
-        }
+//        switch spacingAmount {
+//        case .exact(let pixels) where pixels != 0:
+//            gridAttributes.append(styles: .init(.rowGap, value: "\(pixels)px"))
+//        case .semantic(let amount) where spacingAmount != .semantic(.none):
+//            gutterClass = "g-\(amount.rawValue)"
+//        default: break
+//        }
 
         return Section {
             ForEach(items) { item in
