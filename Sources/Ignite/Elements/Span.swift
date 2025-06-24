@@ -50,3 +50,16 @@ public struct Span: InlineElement, NavigationElement, FormElement {
         return Markup("<span\(attributes)>\(contentHTML)</span>")
     }
 }
+
+extension Span: FormElementRenderable {
+    func renderAsFormElement(_ configuration: FormConfiguration) -> Markup {
+        print("""
+        For proper alignment within Form, prefer a read-only, \
+        plain-text TextField over a Span.
+        """)
+
+        return Section(InlineHTML(self))
+            .class("d-flex", "align-items-center")
+            .render()
+    }
+}
