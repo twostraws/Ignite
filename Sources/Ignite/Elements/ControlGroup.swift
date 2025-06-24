@@ -152,3 +152,9 @@ public struct ControlGroup: HTML, FormElement {
         dropdown.configuration(.controlGroupItem)
     }
 }
+
+extension ControlGroup: FormElementRenderable {
+    func renderAsFormElement(_ configuration: FormConfiguration) -> Markup {
+        self.labelStyle(configuration.labelStyle).render()
+    }
+}
