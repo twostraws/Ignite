@@ -219,6 +219,12 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         data.formUnion(dataAttributes)
     }
 
+    /// Appends a data attribute.
+    /// - Parameter dataAttributes: Variable number of data attributes to append.
+    mutating func append(dataAttributes: [Attribute]) {
+        data.formUnion(dataAttributes)
+    }
+
     /// Appends multiple custom attributes.
     /// - Parameter customAttributes: Variable number of custom attributes to append,
     ///   where each attribute is an `AttributeValue` containing a name-value pair.
