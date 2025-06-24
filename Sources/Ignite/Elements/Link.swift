@@ -271,3 +271,9 @@ extension Link: NavigationElementRenderable {
         return listItem.render()
     }
 }
+
+extension Link: CardComponentConfigurable {
+    func configuredAsCardComponent() -> CardComponent {
+        CardComponent(self.class("card-link"))
+    }
+}
