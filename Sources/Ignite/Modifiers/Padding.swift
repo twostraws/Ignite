@@ -12,8 +12,8 @@ private enum PaddingType {
 @MainActor private func paddingModifier(
     _ padding: PaddingType,
     edges: Edge = .all,
-    content: any BodyElement
-) -> any BodyElement {
+    content: any HTML
+) -> any HTML {
     switch padding {
     case .exact(let unit):
         let styles = edges.styles(prefix: "padding", length: unit.stringValue)
