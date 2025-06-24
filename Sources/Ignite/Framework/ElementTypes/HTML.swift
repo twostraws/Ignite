@@ -60,6 +60,12 @@ extension HTML {
             body is Section
         }
     }
+
+    /// Whether the outermost element of this type is a `<div>`
+    /// that can position its contents.
+    var requiresPositioningContext: Bool {
+        render().string.hasPrefix("<div") == false
+    }
 }
 
 extension HTML {
