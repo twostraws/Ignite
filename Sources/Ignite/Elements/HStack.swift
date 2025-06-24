@@ -18,7 +18,7 @@ public struct HStack<Content: HTML>: HTML {
     public var attributes = CoreAttributes()
 
     /// The spacing between elements.
-    private var spacingAmount: SpacingType
+    private var spacingAmount: SpacingAmount
 
     /// The alignment point for positioning elements within the stack.
     private var alignment: VerticalAlignment

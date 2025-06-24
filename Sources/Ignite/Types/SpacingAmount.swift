@@ -6,13 +6,14 @@
 //
 
 /// A type that represents spacing values in either exact pixels or semantic spacing amounts.
-enum SpacingAmount: Equatable {
-    /// An exact spacing value in pixels.
-    case exact(Int)
+typealias SpacingAmount = Amount<Int, SemanticSpacing>
 
-    /// A semantic spacing value that adapts based on context.
-    case semantic(SemanticSpacing)
-
-    /// The spacing value appropriate for the given context.
-    case automatic
+extension SpacingAmount {
+    var inlineStyle: InlineStyle? {
+        switch self {
+        case .exact(let value): .init(.gap, value: value.formatted())
+        case .semantic(let value): .init(.gap, value: "\(Double(value.rawValue) * 0.25)em")
+        default: nil
+        }
+    }
 }

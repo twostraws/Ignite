@@ -20,7 +20,7 @@ public struct Spacer: HTML, NavigationElement {
     public var navigationBarVisibility: NavigationBarVisibility = .automatic
 
     /// The amount of space to occupy.
-    private var spacingAmount: SpacingType
+    private var spacingAmount: SpacingAmount
 
     /// Whether the spacer is used horizontally or vertically.
     private var axis: Axis = .vertical

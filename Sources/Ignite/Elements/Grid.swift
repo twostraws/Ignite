@@ -26,7 +26,7 @@ public struct Grid: HTML {
     var columnCount: Int?
 
     /// The amount of space between elements.
-    private var spacingAmount: SpacingType = .semantic(.none)
+    private var spacingAmount: SpacingAmount = .semantic(.none)
 
     /// The alignment of the items within the grid.
     private var alignment: Alignment = .center
