@@ -12,8 +12,8 @@ private enum AlignmentType {
 
 @MainActor private func horizontalAlignmentModifier(
     _ alignment: AlignmentType,
-    content: any BodyElement
-) -> any BodyElement {
+    content: any HTML
+) -> any HTML {
     switch alignment {
     case .universal(let alignment):
         content.class(alignment.rawValue)
