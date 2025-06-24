@@ -41,3 +41,14 @@ extension Subview: Equatable {
         lhs.render() == rhs.render()
     }
 }
+
+extension Subview {
+    func configuredAsCardComponent() -> CardComponent {
+        /// Returns the wrapped element, configured for display
+        /// within in a `Card`, in an opaque wrapper.
+        if let wrapped = wrapped as? any CardComponentConfigurable {
+            return wrapped.configuredAsCardComponent()
+        }
+        return CardComponent(self)
+    }
+}
