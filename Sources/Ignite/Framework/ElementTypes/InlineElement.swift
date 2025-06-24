@@ -60,3 +60,9 @@ extension InlineElement {
         }
     }
 }
+
+public extension InlineElement {
+    func modifier<M: InlineElementModifier>(_ modifier: M) -> some InlineElement {
+        ModifiedInlineElement(content: self, modifier: modifier)
+    }
+}
