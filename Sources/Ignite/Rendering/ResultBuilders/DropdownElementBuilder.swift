@@ -40,7 +40,7 @@ public struct DropdownElementBuilder {
 
 /// An HTML representation of the content of a Dropdown.
 public extension DropdownElementBuilder {
-    struct Content<C>: HTML where C: DropdownElement {
+    struct Content<C>: HTML, ListItemProvider where C: DropdownElement {
         public var body: some HTML { self }
         public var attributes = CoreAttributes()
         private var content: C
