@@ -80,7 +80,7 @@ public struct Modal: HTML {
         Section {
             Section {
                 Section {
-                    if !header.isEmpty {
+                    if !header.isEmptyHTML {
                         Section {
                             header
                         }
@@ -92,7 +92,7 @@ public struct Modal: HTML {
                     }
                     .class("modal-body")
 
-                    if !footer.isEmpty {
+                    if !footer.isEmptyHTML {
                         Section {
                             footer
                         }
