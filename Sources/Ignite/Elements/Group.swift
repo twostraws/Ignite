@@ -16,35 +16,44 @@
 ///         attributes to multiple elements without affecting the document
 ///         structure. If you need a containing `div` element, use
 ///         ``Section`` instead.
-public struct Group: HTML, PassthroughElement {
+@MainActor
+public struct Group<Content> {
+    /// The content and behavior of this HTML.
+    public var body: Never { fatalError() }
+
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The child elements contained within this group.
-    var items: HTMLCollection
+    var content: Content
+}
 
-    public var body: some HTML { self }
-
+extension Group: HTML, BodyElement, MarkupElement, Sendable, VariadicHTML where Content: HTML {
     /// Creates a new group containing the given HTML content.
     /// - Parameter content: A closure that creates the HTML content.
-    public init(@HTMLBuilder content: () -> some HTML) {
-        self.items = HTMLCollection(content)
+    public init(@HTMLBuilder content: () -> Content) {
+        self.content = content()
     }
 
     /// Creates a new group containing the given HTML content.
     /// - Parameter content: The HTML content to include.
-    public init(_ content: some HTML) {
-        self.items = HTMLCollection([content])
+    public init(_ content: Content) {
+        self.content = content
     }
 
     public func render() -> Markup {
-        items.map {
-            var item: any BodyElement = $0
-            item.attributes.merge(attributes)
-            return item.render()
-        }.joined()
+        if let content = content as? any VariadicHTML {
+            content.subviews.attributes(attributes).render()
+        } else {
+            content.attributes(attributes).render()
+        }
+    }
+
+    var subviews: SubviewsCollection {
+        var content = (content as? any SubviewsProvider)?.subviews ?? SubviewsCollection(Subview(content))
+        content.attributes.merge(attributes)
+        return content
     }
 }
+
+extension Group: ColumnProvider where Content: ColumnProvider {}
