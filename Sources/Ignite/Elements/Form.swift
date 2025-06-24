@@ -5,6 +5,12 @@
 // See LICENSE for license information.
 //
 
+/// A type that is rendered differently when placed in a `Form`.
+@MainActor
+protocol FormElementRenderable {
+    func renderAsFormElement(_ configuration: FormConfiguration) -> Markup
+}
+
 /// A form container for collecting user input
 public struct Form: HTML, NavigationElement {
     /// The content and behavior of this HTML.
