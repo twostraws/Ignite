@@ -36,6 +36,12 @@ public struct InlineHTML<Content: InlineElement>: HTML {
     }
 }
 
+extension InlineHTML: NavigationElementRenderable where Content: NavigationElementRenderable {
+    func renderAsNavigationElement() -> Markup {
+        attributedContent.renderAsNavigationElement()
+    }
+}
+
 extension InlineHTML: FormElementRenderable where Content: FormElementRenderable {
     func renderAsFormElement(_ configuration: FormConfiguration) -> Markup {
         attributedContent.renderAsFormElement(configuration)
