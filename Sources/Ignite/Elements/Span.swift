@@ -71,3 +71,9 @@ extension Span: FormElementRenderable {
             .render()
     }
 }
+
+extension Span: ControlGroupItemConfigurable {
+    func configuredAsControlGroupItem(_ labelStyle: ControlLabelStyle) -> ControlGroupItem {
+        ControlGroupItem(self.class("input-group-text"))
+    }
+}
