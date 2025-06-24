@@ -21,7 +21,7 @@ public struct Tag: HTML {
     private var name: String
 
     // The contents of this tag.
-    private var content: any MarkupElement
+    private var content: any HTML
 
     /// Creates a new `Tag` instance from the name provided, along with a page
     /// element builder that returns an array of the content to place inside.
@@ -30,7 +30,7 @@ public struct Tag: HTML {
     ///   - content: The content to place inside the tag.
     public init(
         _ name: String,
-        @HTMLBuilder content: @escaping () -> any BodyElement
+        @HTMLBuilder content: () -> any HTML
     ) {
         self.name = name
         self.content = content()
