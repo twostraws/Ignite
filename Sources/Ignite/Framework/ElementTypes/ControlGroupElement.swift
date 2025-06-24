@@ -16,3 +16,11 @@ public protocol ControlGroupElement {
     /// - Returns: The rendered markup representation.
     func render() -> Markup
 }
+
+extension ControlGroupElement {
+    /// Creates a collection containing this element as a subview.
+    /// - Returns: An control-group subviews collection wrapping this element.
+    func subviews() -> ControlGroupSubviewsCollection {
+        ControlGroupSubviewsCollection(self)
+    }
+}
