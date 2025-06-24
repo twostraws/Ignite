@@ -148,7 +148,7 @@ public struct Grid: HTML {
                     handlePassthrough(passthrough, attributes: modified.attributes)
                 } else {
                     handleItem(item)
-                        .class(gutterClass)
+//                        .class(gutterClass)
                 }
             }
         }
@@ -187,7 +187,7 @@ public struct Grid: HTML {
         let collection = HTMLCollection(passthrough.items.compactMap { $0 as? any HTML })
         return ForEach(collection) { item in
             handleItem(item.attributes(attributes))
-                .class(gutterClass)
+//                .class(gutterClass)
         }
     }
 
