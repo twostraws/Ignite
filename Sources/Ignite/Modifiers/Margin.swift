@@ -6,7 +6,7 @@
 //
 
 private enum MarginType {
-    case exact(LengthUnit), semantic(SpacingAmount)
+    case exact(LengthUnit), semantic(SemanticSpacing)
 }
 
 @MainActor private func marginModifier(
@@ -59,7 +59,7 @@ public extension HTML {
     /// - Parameter amount: The amount of margin to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ amount: SpacingAmount) -> some HTML {
+    func margin(_ amount: SemanticSpacing) -> some HTML {
         AnyHTML(marginModifier(.semantic(amount), content: self))
     }
 
@@ -88,7 +88,7 @@ public extension HTML {
     ///   - amount: The amount of margin to apply, specified as a
     ///   `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ edges: Edge, _ amount: SpacingAmount) -> some HTML {
+    func margin(_ edges: Edge, _ amount: SemanticSpacing) -> some HTML {
         AnyHTML(marginModifier(.semantic(amount), edges: edges, content: self))
     }
 }
@@ -113,7 +113,7 @@ public extension InlineElement {
     /// - Parameter amount: The amount of margin to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ amount: SpacingAmount) -> some InlineElement {
+    func margin(_ amount: SemanticSpacing) -> some InlineElement {
         AnyInlineElement(marginModifier(.semantic(amount), content: self))
     }
 
@@ -142,7 +142,7 @@ public extension InlineElement {
     ///   - amount: The amount of margin to apply, specified as a
     ///   `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ edges: Edge, _ amount: SpacingAmount) -> some InlineElement {
+    func margin(_ edges: Edge, _ amount: SemanticSpacing) -> some InlineElement {
         AnyInlineElement(marginModifier(.semantic(amount), edges: edges, content: self))
     }
 }

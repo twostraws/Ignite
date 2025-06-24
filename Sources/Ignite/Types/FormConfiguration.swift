@@ -11,7 +11,7 @@ struct FormConfiguration: Sendable {
     var columnCount: Int = 12
 
     /// The amount of space between form elements.
-    var spacing: SpacingAmount = .medium
+    var spacing: SemanticSpacing = .medium
 
     /// The display style for form control labels.
     var labelStyle: ControlLabelStyle = .floating

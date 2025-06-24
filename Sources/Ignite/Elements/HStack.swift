@@ -48,7 +48,7 @@ public struct HStack<Content: HTML>: HTML {
     ///   - items: A view builder that creates the content of the stack.
     public init(
         alignment: VerticalAlignment = .center,
-        spacing: SpacingAmount = .medium,
+        spacing: SemanticSpacing = .medium,
         @HTMLBuilder content: () -> Content
     ) {
         self.children = SubviewsCollection(content())

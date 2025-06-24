@@ -40,7 +40,7 @@ public struct Spacer: HTML, NavigationElement {
     /// Creates a new `Spacer` using adaptive sizing.
     /// - Parameter size: The amount of margin to apply, specified as a
     /// `SpacingAmount` case.
-    public init(size: SpacingAmount) {
+    public init(size: SemanticSpacing) {
         spacingAmount = .semantic(size)
     }
 

@@ -58,7 +58,7 @@ public struct Grid: HTML {
     ///   - items: The items to use in this grid.
     public init(
         alignment: Alignment = .center,
-        spacing: SpacingAmount = .medium,
+        spacing: SemanticSpacing = .medium,
         @HTMLBuilder items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
@@ -95,7 +95,7 @@ public struct Grid: HTML {
     public init<T>(
         _ items: any Sequence<T>,
         alignment: Alignment = .center,
-        spacing: SpacingAmount = .medium,
+        spacing: SemanticSpacing = .medium,
         content: (T) -> some HTML
     ) {
         self.items = HTMLCollection(items.map(content))

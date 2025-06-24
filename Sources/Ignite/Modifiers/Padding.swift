@@ -6,7 +6,7 @@
 //
 
 private enum PaddingType {
-    case exact(LengthUnit), semantic(SpacingAmount)
+    case exact(LengthUnit), semantic(SemanticSpacing)
 }
 
 @MainActor private func paddingModifier(
@@ -59,7 +59,7 @@ public extension HTML {
     /// - Parameter amount: The amount of padding to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ amount: SpacingAmount) -> some HTML {
+    func padding(_ amount: SemanticSpacing) -> some HTML {
         AnyHTML(paddingModifier(.semantic(amount), content: self))
     }
 
@@ -88,7 +88,7 @@ public extension HTML {
     ///   - amount: The amount of padding to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ edges: Edge, _ amount: SpacingAmount) -> some HTML {
+    func padding(_ edges: Edge, _ amount: SemanticSpacing) -> some HTML {
         AnyHTML(paddingModifier(.semantic(amount), edges: edges, content: self))
     }
 }
@@ -113,7 +113,7 @@ public extension InlineElement {
     /// - Parameter amount: The amount of padding to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ amount: SpacingAmount) -> some InlineElement {
+    func padding(_ amount: SemanticSpacing) -> some InlineElement {
         AnyInlineElement(paddingModifier(.semantic(amount), content: self))
     }
 
@@ -142,7 +142,7 @@ public extension InlineElement {
     ///   - amount: The amount of padding to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ edges: Edge, _ amount: SpacingAmount) -> some InlineElement {
+    func padding(_ edges: Edge, _ amount: SemanticSpacing) -> some InlineElement {
         AnyInlineElement(paddingModifier(.semantic(amount), edges: edges, content: self))
     }
 }

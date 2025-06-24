@@ -36,7 +36,7 @@ public struct SubscribeForm: HTML, NavigationElement {
     private var columnCount: Int = 12
 
     /// The amount of vertical spacing between form elements.
-    private var spacing: SpacingAmount
+    private var spacing: SemanticSpacing
 
     /// The size of form controls and labels
     private var controlSize: ControlSize = .medium
@@ -74,7 +74,7 @@ public struct SubscribeForm: HTML, NavigationElement {
     ///   the action to perform when the form is submitted.
     public init(
         _ service: EmailPlatform,
-        spacing: SpacingAmount = .medium
+        spacing: SemanticSpacing = .medium
     ) {
         self.spacing = spacing
         self.service = service

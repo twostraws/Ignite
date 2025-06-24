@@ -61,7 +61,7 @@ public struct Form<Content: HTML>: HTML, NavigationElement {
     ///   - spacing: The amount of horizontal space between elements. Defaults to `.medium`.
     ///   - content: A closure that returns the form's elements.
     public init(
-        spacing: SpacingAmount = .medium,
+        spacing: SemanticSpacing = .medium,
         @HTMLBuilder content: () -> Content
     ) {
         self.content = content()

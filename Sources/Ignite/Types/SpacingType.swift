@@ -11,7 +11,7 @@ enum SpacingType: Equatable {
     case exact(Int)
 
     /// A semantic spacing value that adapts based on context.
-    case semantic(SpacingAmount)
+    case semantic(SemanticSpacing)
 
     /// The spacing value appropriate for the given context.
     case automatic
