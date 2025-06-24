@@ -103,8 +103,8 @@ public struct NavigationBar: HTML {
     /// used to determine the gap class that should be used.
     private var visibleControlCount: Int {
         items.filter {
-            $0.navigationBarVisibility == .always &&
-            $0.is(Spacer.self) == false
+            $0.navigationBarVisibility == .always
+//            && $0.is(Spacer.self) == false
         }.count
     }
 
@@ -249,10 +249,10 @@ public struct NavigationBar: HTML {
         ForEach(items) { item in
             if let item = item as? any NavigationItemConfigurable {
                 AnyHTML(item.configuredAsNavigationItem(true))
-            } else if let spacer = item.as(Spacer.self) {
-                spacer.axis(.horizontal)
+//            } else if let spacer = item.as(Spacer.self) {
+//                spacer.axis(.horizontal)
             } else {
-                item
+//                item
             }
         }
     }
@@ -287,7 +287,8 @@ public struct NavigationBar: HTML {
                     case let spacer as Spacer:
                         spacer.axis(.horizontal)
                     default:
-                        AnyHTML(item)
+                        EmptyHTML()
+//                        AnyHTML(item)
                     }
                 }
             }
