@@ -202,3 +202,12 @@ extension Text: DropdownElementRenderable {
         .render()
     }
 }
+
+extension Text: CardComponentConfigurable {
+    func configuredAsCardComponent() -> CardComponent {
+        if font == .body || FontStyle.classBasedStyles.contains(font) {
+            return CardComponent(self.class("card-text"))
+        }
+        return CardComponent(self.class("card-title"))
+    }
+}
