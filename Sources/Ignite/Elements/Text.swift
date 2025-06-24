@@ -193,3 +193,12 @@ extension InlineElement {
         return copy
     }
 }
+
+extension Text: DropdownElementRenderable {
+    func renderAsDropdownElement() -> Markup {
+        ListItem {
+            self.class("dropdown-header")
+        }
+        .render()
+    }
+}
