@@ -147,7 +147,7 @@ public struct Grid: HTML {
                           let passthrough = modified.wrapped as? any PassthroughElement {
                     handlePassthrough(passthrough, attributes: modified.attributes)
                 } else {
-                    handleItem(item)
+//                    handleItem(item)
 //                        .class(gutterClass)
                 }
             }
@@ -186,7 +186,7 @@ public struct Grid: HTML {
 
         let collection = HTMLCollection(passthrough.items.compactMap { $0 as? any HTML })
         return ForEach(collection) { item in
-            handleItem(item)
+//            handleItem(item)
 //                .class(gutterClass)
         }
     }
