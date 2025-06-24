@@ -207,6 +207,17 @@ public extension Text {
     }
 }
 
+public extension Text {
+    /// Adjusts the heading level of this text.
+    /// - Parameter style: The new heading level.
+    /// - Returns: A new `Text` instance with the updated font style.
+    func font(_ style: Font.Style) -> Self {
+        var copy = self
+        copy.font = style
+        return copy
+    }
+}
+
 extension HTML {
     func fontStyle(_ font: Font.Style) -> any HTML {
         var copy: any HTML = self
