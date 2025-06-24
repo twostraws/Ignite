@@ -7,10 +7,10 @@
 
 @MainActor private func dataModifier(
     _ name: String,
-    value: String, content: any BodyElement
-) -> any BodyElement {
+    value: String, content: any HTML
+) -> any HTML {
     guard !value.isEmpty else { return content }
-    var copy: any BodyElement = content.isPrimitive ? content : Section(content)
+    var copy: any HTML = content.isPrimitive ? content : Section(content)
     copy.attributes.data.append(.init(name: name, value: value))
     return copy
 }
