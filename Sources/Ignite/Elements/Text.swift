@@ -240,22 +240,6 @@ public extension Text {
         return copy
     }
 }
-extension HTML {
-    func fontStyle(_ font: Font.Style) -> any HTML {
-        var copy: any HTML = self
-        if Font.Style.classBasedStyles.contains(font), let sizeClass = font.sizeClass {
-            copy.attributes.append(classes: sizeClass)
-        } else if var text = copy as? Text {
-            text.font = font
-            copy = text
-        } else if var anyHTML = copy as? AnyHTML, var text = anyHTML.wrapped as? Text {
-            text.font = font
-            anyHTML.wrapped = text
-            copy = anyHTML
-        }
-        return copy
-    }
-}
 
 extension Text: DropdownElementRenderable {
     func renderAsDropdownElement() -> Markup {
