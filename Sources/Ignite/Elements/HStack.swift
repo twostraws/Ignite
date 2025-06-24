@@ -10,15 +10,12 @@
 /// - Note: To ensure spacing is consistent, `HStack` strips its subviews of
 /// implicit styles, such as the bottom margin automatically applied to paragraphs.
 /// All styles explicitly applied via modifiers like `.margin()` will be respected.
-public struct HStack: HTML {
+public struct HStack<Content: HTML>: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The spacing between elements.
     private var spacingAmount: SpacingType
@@ -27,7 +24,7 @@ public struct HStack: HTML {
     private var alignment: VerticalAlignment
 
     /// The child elements contained in the stack.
-    private var items: HTMLCollection
+    private var children: SubviewsCollection
 
     /// Creates a horizontal stack with the specified alignment, exact pixel spacing, and content.
     /// - Parameters:
@@ -37,9 +34,9 @@ public struct HStack: HTML {
     public init(
         alignment: VerticalAlignment = .center,
         spacing pixels: Int,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder content: () -> Content
     ) {
-        self.items = HTMLCollection(items)
+        self.children = SubviewsCollection(content())
         self.alignment = alignment
         self.spacingAmount = .exact(pixels)
     }
@@ -52,20 +49,20 @@ public struct HStack: HTML {
     public init(
         alignment: VerticalAlignment = .center,
         spacing: SpacingAmount = .medium,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder content: () -> Content
     ) {
-        self.items = HTMLCollection(items)
+        self.children = SubviewsCollection(content())
         self.alignment = alignment
         self.spacingAmount = .semantic(spacing)
     }
 
     public func render() -> Markup {
-        let items: [any BodyElement] = items.elements.map {
+        let items: [any HTML] = children.map {
             var elementAttributes = CoreAttributes()
             elementAttributes.append(classes: "mb-0")
             elementAttributes.append(classes: alignment.itemAlignmentClass)
-            if let spacer = $0.as(Spacer.self) {
-                return spacer.axis(.horizontal)
+            if let provider = $0.wrapped as? any SpacerProvider {
+                return Subview(provider.spacer.axis(.horizontal))
             }
             return $0.attributes(elementAttributes)
         }
