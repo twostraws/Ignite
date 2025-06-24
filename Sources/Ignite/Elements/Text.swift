@@ -257,14 +257,6 @@ extension HTML {
     }
 }
 
-extension InlineElement {
-    func fontStyle(_ font: Font.Style) -> any InlineElement {
-        var copy: any InlineElement = self
-        copy.attributes.append(classes: font.sizeClass)
-        return copy
-    }
-}
-
 extension Text: DropdownElementRenderable {
     func renderAsDropdownElement() -> Markup {
         ListItem {
