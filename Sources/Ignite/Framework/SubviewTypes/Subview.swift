@@ -52,3 +52,17 @@ extension Subview {
         return CardComponent(self)
     }
 }
+
+extension Subview {
+    /// Converts the wrapped content into an array of grid items.
+    func resolvedToGridItems() -> [GridItem] {
+        if let row = wrapped as? any GridItemProvider {
+            return row.gridItems()
+        } else {
+            // Elements not wrapped in a GridRow will take up the full width
+            var item = GridItem(self.wrapped)
+            item.isFullWidth = true
+            return [item]
+        }
+    }
+}
