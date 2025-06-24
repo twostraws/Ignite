@@ -6,7 +6,7 @@
 //
 
 /// A modal dialog presented on top of the screen
-public struct Modal: HTML {
+public struct Modal<Header: HTML, Footer: HTML, Content: HTML>: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -16,26 +16,32 @@ public struct Modal: HTML {
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }
 
-    let htmlID: String
-    private var items: HTMLCollection
-    private var header: HTMLCollection
-    private var footer: HTMLCollection
+    private let htmlID: String
+    private var content: Content
+    private var header: Header
+    private var footer: Footer
 
-    var animated = true
-    var scrollable = false
-    var size: ModalSize = .medium
-    var position: ModalPosition = .center
+    private var animated = true
+    private var scrollable = false
+    private var size: ModalSize = .medium
+    private var position: ModalPosition = .center
 
+    /// Creates a new modal dialog with the specified content.
+    /// - Parameters:
+    ///   - modalId: A unique identifier for the modal.
+    ///   - body: The main content of the modal.
+    ///   - header: Optional header content for the modal.
+    ///   - footer: Optional footer content for the modal.
     public init(
         id modalId: String,
-        @HTMLBuilder body: () -> some HTML,
-        @HTMLBuilder header: () -> some HTML = { EmptyHTML() },
-        @HTMLBuilder footer: () -> some HTML = { EmptyHTML() }
+        @HTMLBuilder content: () -> Content,
+        @HTMLBuilder header: () -> Header = { EmptyHTML() },
+        @HTMLBuilder footer: () -> Footer = { EmptyHTML() }
     ) {
         self.htmlID = modalId
-        self.items = HTMLCollection([body()])
-        self.header = HTMLCollection([header()])
-        self.footer = HTMLCollection([footer()])
+        self.content = content()
+        self.header = header()
+        self.footer = footer()
     }
 
     /// Adjusts the size of the modal.
@@ -81,22 +87,16 @@ public struct Modal: HTML {
             Section {
                 Section {
                     if !header.isEmptyHTML {
-                        Section {
-                            header
-                        }
-                        .class("modal-header")
+                        Section(header)
+                            .class("modal-header")
                     }
 
-                    Section {
-                        items
-                    }
-                    .class("modal-body")
+                    Section(content)
+                        .class("modal-body")
 
                     if !footer.isEmptyHTML {
-                        Section {
-                            footer
-                        }
-                        .class("modal-footer")
+                        Section(footer)
+                            .class("modal-footer")
                     }
                 }
                 .class("modal-content")
