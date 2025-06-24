@@ -5,10 +5,6 @@
 // See LICENSE for license information.
 //
 
-/// Elements that conform to `DropdownItem` can be shown inside
-/// Dropdown objects.
-public protocol DropdownElement: BodyElement {}
-
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
