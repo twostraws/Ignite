@@ -10,11 +10,9 @@
 /// - Note: To ensure spacing is consistent, `VStack` strips its subviews of
 /// implicit styles, such as the bottom margin automatically applied to paragraphs.
 /// To retain these implicit styles, set `spacing` to `nil`.
-public struct VStack: HTML {
+public struct VStack<Content: HTML>: HTML {
     /// A type that represents spacing values in either exact pixels or semantic spacing amounts.
-    private enum SpacingType: Equatable {
-        case exact(Int), semantic(SpacingAmount)
-    }
+    private typealias SpacingType = Amount<Int, SpacingAmount>
 
     /// Adaptive spacing amounts that are used by Bootstrap to provide consistency
     /// in site design.
@@ -32,9 +30,6 @@ public struct VStack: HTML {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The spacing between elements.
     private var spacingAmount: SpacingType?
 
@@ -42,7 +37,7 @@ public struct VStack: HTML {
     private var alignment: HorizontalAlignment.ResponsiveAlignment
 
     /// The child elements contained in the stack.
-    private var items: HTMLCollection
+    private var content: Content
 
     /// Creates a container that stacks its subviews vertically.
     /// - Parameters:
@@ -53,9 +48,9 @@ public struct VStack: HTML {
     public init(
         alignment: HorizontalAlignment = .center,
         spacing pixels: Int? = 0,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder content: () -> Content
     ) {
-        self.items = HTMLCollection(items)
+        self.content = content()
         self.alignment = .responsive(alignment)
         if let pixels {
             self.spacingAmount = .exact(pixels)
@@ -70,9 +65,9 @@ public struct VStack: HTML {
     public init(
         alignment: HorizontalAlignment = .center,
         spacing: SpacingAmount,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder content: () -> Content
     ) {
-        self.items = HTMLCollection(items)
+        self.content = content()
         self.alignment = .responsive(alignment)
         self.spacingAmount = .semantic(spacing)
     }
@@ -86,9 +81,9 @@ public struct VStack: HTML {
     public init(
         alignment: HorizontalAlignment.ResponsiveAlignment,
         spacing pixels: Int? = 0,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder content: () -> Content
     ) {
-        self.items = HTMLCollection(items)
+        self.content = content()
         self.alignment = alignment
         if let pixels {
             self.spacingAmount = .exact(pixels)
@@ -103,23 +98,14 @@ public struct VStack: HTML {
     public init(
         alignment: HorizontalAlignment.ResponsiveAlignment,
         spacing: SpacingAmount,
-        @HTMLBuilder items: () -> some HTML
+        @HTMLBuilder content: () -> Content
     ) {
-        self.items = HTMLCollection(items)
+        self.content = content()
         self.alignment = alignment
         self.spacingAmount = .semantic(spacing)
     }
 
     public func render() -> Markup {
-        let items = items.elements.map {
-            var elementAttributes = CoreAttributes()
-            if spacingAmount != nil {
-                elementAttributes.append(classes: "mb-0")
-            }
-            elementAttributes.append(classes: alignment.itemAlignmentClasses)
-            return $0.attributes(elementAttributes)
-        }
-
         var attributes = attributes
         attributes.append(classes: "vstack")
 
@@ -129,7 +115,16 @@ public struct VStack: HTML {
             attributes.append(classes: "gap-\(amount.rawValue)")
         }
 
-        let contentHTML = items.map { $0.markupString() }.joined()
+        let contentHTML = content.subviews().map { addAttributesToChild($0).markupString() }.joined()
         return Markup("<div\(attributes)>\(contentHTML)</div>")
+    }
+
+    private func addAttributesToChild(_ child: some HTML) -> some HTML {
+        var elementAttributes = CoreAttributes()
+        if spacingAmount != nil {
+            elementAttributes.append(classes: "mb-0")
+        }
+        elementAttributes.append(classes: alignment.itemAlignmentClasses)
+        return child.attributes(elementAttributes)
     }
 }
