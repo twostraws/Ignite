@@ -24,16 +24,25 @@ struct PackHTML<each Content>: Sendable { // swiftlint:disable:this redundant_se
     }
 }
 
-extension PackHTML: HTML, BodyElement, MarkupElement where repeat each Content: HTML {
+extension PackHTML: HTML, BodyElement, MarkupElement, SubviewsProvider where repeat each Content: HTML {
     /// The content and behavior of this HTML.
     var body: some HTML { self }
 
+    /// Returns the packed elements as a collection of subviews.
+    var subviews: SubviewsCollection {
+        var children = SubviewsCollection()
+        for element in repeat each content {
+            // Using the attributes() modifier will change the type to ModifiedHTML,
+            // so to keep the type info, we'll modify the attributes directly
+            var child = Subview(element)
+            child.attributes.merge(attributes)
+            children.elements.append(child)
+        }
+        return children
+    }
+
     /// Renders all packed elements as combined markup.
     func render() -> Markup {
-        var markup = Markup()
-        for element in repeat each content {
-            markup += element.attributes(attributes).render()
-        }
-        return markup
+        subviews.map { $0.render() }.joined()
     }
 }
