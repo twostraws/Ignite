@@ -5,6 +5,12 @@
 // See LICENSE for license information.
 //
 
+/// A type that has a distinct configuration when housed in a `ControlGroup`.
+@MainActor
+protocol ControlGroupItemConfigurable {
+    func configuredAsControlGroupItem(_ labelStyle: ControlLabelStyle) -> ControlGroupItem
+}
+
 /// A container that groups related form controls into a unified visual component.
 public struct ControlGroup: HTML, FormElement {
     /// Defines the size variants available for control groups.
