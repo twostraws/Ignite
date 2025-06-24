@@ -5,6 +5,13 @@
 // See LICENSE for license information.
 //
 
+/// A protocol that allows elements to be configured for placement in a navigation bar.
+@MainActor
+protocol NavigationElementRenderable {
+    /// The navigation representation of this element.
+    func renderAsNavigationElement() -> Markup
+}
+
 /// Describes elements that can be placed into navigation bars.
 /// - Warning: Do not conform to this type directly.
 @MainActor
