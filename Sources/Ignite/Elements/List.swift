@@ -7,31 +7,6 @@
 
 /// Creates a list of items, either ordered or unordered.
 public struct List: HTML {
-    /// The visual style to apply to a list.
-    public enum Style: Sendable, CaseIterable {
-        /// A basic list appearance with no styling.
-        case automatic
-
-        /// A list style with subtle borders and rounded corners.
-        case group
-
-        /// A list style with subtle borders and rounded corners, arranged horizontally.
-        case horizontalGroup
-
-        /// A list style with separators between items.
-        case plain
-
-        /// The Bootstrap CSS classes needed to implement the list's visual style.
-        var classes: [String]? {
-            switch self {
-            case .automatic: nil
-            case .group: ["list-group"]
-            case .horizontalGroup: ["list-group", "list-group-horizontal"]
-            case .plain: ["list-group", "list-group-flush"]
-            }
-        }
-    }
-
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -42,7 +17,7 @@ public struct List: HTML {
     public var isPrimitive: Bool { true }
 
     /// The current style for this list. Defaults to `.automatic`.
-    private var listStyle: Style = .automatic
+    private var listStyle: ListStyle = .automatic
 
     /// The current style for the list item markers. Defaults to `.unordered`.
     private var markerStyle: ListMarkerStyle = .unordered
@@ -80,7 +55,7 @@ public struct List: HTML {
     /// Adjusts the style of this list.
     /// - Parameter style: The new style.
     /// - Returns: A new `List` instance with the updated style.
-    public func listStyle(_ style: Style) -> Self {
+    public func listStyle(_ style: ListStyle) -> Self {
         var copy = self
         copy.listStyle = style
         return copy
