@@ -216,8 +216,30 @@ public extension Text {
         copy.font = style
         return copy
     }
-}
 
+    /// Adjusts the font of this text.
+    /// - Parameter font: The font configuration to apply.
+    /// - Returns: A new instance with the updated font.
+    func font(_ font: Font) -> Self {
+        var copy = self
+        if let style = font.style { copy.font = style }
+        let attributes = FontModifier.attributes(for: font, includeStyle: false)
+        copy.attributes.merge(attributes)
+        return copy
+    }
+
+    /// Adjusts the font of this text using responsive sizing.
+    /// - Parameter font: The responsive font configuration to apply.
+    /// - Returns: A new instance with the updated font.
+    func font(_ font: Font.Responsive) -> Self {
+        var copy = self
+        let font = font.font
+        if let style = font.style { copy.font = style }
+        let attributes = FontModifier.attributes(for: font, includeStyle: false)
+        copy.attributes.merge(attributes)
+        return copy
+    }
+}
 extension HTML {
     func fontStyle(_ font: Font.Style) -> any HTML {
         var copy: any HTML = self
