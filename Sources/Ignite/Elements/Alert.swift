@@ -7,36 +7,29 @@
 
 /// Shows a clearly delineated box on your page, providing important information
 /// or warnings to users.
-public struct Alert: HTML {
+public struct Alert<Content: HTML>: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
+    private var content: Content
+    private var role = Role.default
 
-    var content: any HTML
-
-    var role = Role.default
-
-    var alertClasses: [String] {
+    private var alertClasses: [String] {
         var outputClasses = ["alert"]
         outputClasses.append(contentsOf: attributes.classes)
 
         switch role {
-        case .default:
-            break
-
-        default:
-            outputClasses.append("alert-\(role.rawValue)")
+        case .default: break
+        default: outputClasses.append("alert-\(role.rawValue)")
         }
 
         return outputClasses
     }
 
-    public init(@HTMLBuilder content: () -> some HTML) {
+    public init(@HTMLBuilder content: () -> Content) {
         self.content = content()
     }
 
