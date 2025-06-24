@@ -28,9 +28,9 @@ public struct Modal: HTML {
 
     public init(
         id modalId: String,
-        @HTMLBuilder body: () -> some BodyElement,
-        @HTMLBuilder header: () -> some BodyElement = { EmptyHTML() },
-        @HTMLBuilder footer: () -> some BodyElement = { EmptyHTML() }
+        @HTMLBuilder body: () -> some HTML,
+        @HTMLBuilder header: () -> some HTML = { EmptyHTML() },
+        @HTMLBuilder footer: () -> some HTML = { EmptyHTML() }
     ) {
         self.htmlID = modalId
         self.items = HTMLCollection([body()])
