@@ -203,3 +203,13 @@ extension TextField: FormElementRenderable {
         }
     }
 }
+
+extension TextField: ControlGroupItemConfigurable {
+    func configuredAsControlGroupItem(_ labelStyle: ControlLabelStyle) -> ControlGroupItem {
+        var copy = self.labelStyle(labelStyle)
+        if labelStyle != .floating {
+            copy.label = nil
+        }
+        return ControlGroupItem(copy)
+    }
+}
