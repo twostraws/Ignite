@@ -208,3 +208,11 @@ public struct SubscribeForm: HTML, NavigationElement {
         return formOutput
     }
 }
+
+extension SubscribeForm: NavigationElementRenderable {
+    func renderAsNavigationElement() -> Markup {
+        var copy = self
+        copy.isNavigationItem = true
+        return copy.render()
+    }
+}
