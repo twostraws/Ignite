@@ -163,6 +163,15 @@ public struct Dropdown: HTML, NavigationElement, FormElement {
     }
 }
 
+extension Dropdown: NavigationElementRenderable {
+    func renderAsNavigationElement() -> Markup {
+        var copy = ListItem { self.configuration(.navigationBarItem) }
+        copy.attributes.append(classes: "nav-item", "dropdown")
+        copy.attributes.append(styles: .init(.listStyleType, value: "none"))
+        return copy.render()
+    }
+}
+
 private extension InlineElement {
     /// Returns a copy of the element with all attributes removed.
     func clearingAttributes() -> some InlineElement {
