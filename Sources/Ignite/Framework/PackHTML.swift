@@ -62,3 +62,24 @@ extension PackHTML: DropdownElement where repeat each Content: DropdownElement {
         return markup
     }
 }
+
+extension PackHTML: ControlGroupElement, ControlGroupSubviewsProvider
+where repeat each Content: ControlGroupElement {
+    /// Returns the packed control-group elements as a collection.
+    var subviews: ControlGroupSubviewsCollection {
+        var children = ControlGroupSubviewsCollection()
+        for element in repeat each content {
+            var child = ControlGroupSubview(element)
+            child.attributes.merge(attributes)
+            children.elements.append(child)
+        }
+        return children
+    }
+
+    /// Renders all packed control-group elements as combined markup.
+    func render() -> Markup {
+        // This method is required by CarouselElement, but we'll always
+        // deconstruct PackHTML before rendering it.
+        fatalError("Please file a bug report with the Ignite project.")
+    }
+}
