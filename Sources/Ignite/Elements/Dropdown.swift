@@ -5,6 +5,13 @@
 // See LICENSE for license information.
 //
 
+/// A type for elements that have different configurations
+/// when places in a `Dropdown`.
+@MainActor
+protocol DropdownItemConfigurable {
+    var configuration: DropdownConfiguration { get set }
+}
+
 /// Renders a button that presents a menu of information when pressed.
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
