@@ -7,7 +7,15 @@
 
 /// Describes elements that can be placed into navigation bars.
 /// - Warning: Do not conform to this type directly.
-public protocol NavigationElement: BodyElement {
+@MainActor
+public protocol NavigationElement {
+    /// Core attributes for the navigation element.
+    var attributes: CoreAttributes { get set }
+
+    /// Renders the element as markup.
+    /// - Returns: The rendered markup for the element.
+    func render() -> Markup
+
     /// How a `NavigationBar` displays this item at different breakpoints.
     var navigationBarVisibility: NavigationBarVisibility { get set }
 

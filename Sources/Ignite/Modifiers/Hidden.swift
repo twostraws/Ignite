@@ -32,7 +32,9 @@ public extension NavigationElement {
         let manager = CSSManager.shared
         let visibilityValues = visibility.values
         let className = manager.registerStyles(visibilityValues)
-        return self.class(className)
+        var copy = self
+        copy.attributes.append(classes: className)
+        return copy
     }
 }
 
