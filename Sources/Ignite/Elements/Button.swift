@@ -185,6 +185,8 @@ public extension Button {
     }
 }
 
+extension Button: ButtonElement {}
+
 extension Button: FormElementRenderable {
     func renderAsFormElement(_ configuration: FormConfiguration) -> Markup {
         Section {
