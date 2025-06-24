@@ -241,3 +241,15 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
         return Markup("<a\(linkAttributes)>\(contentHTML)</a>")
     }
 }
+
+extension Link: DropdownElementRenderable {
+    func renderAsDropdownElement() -> Markup {
+        ListItem {
+            self
+                .class("dropdown-item")
+                .class(publishingContext.currentRenderingPath == url ? "active" : nil)
+                .aria(.current, publishingContext.currentRenderingPath == url ? "page" : nil)
+        }
+        .render()
+    }
+}
