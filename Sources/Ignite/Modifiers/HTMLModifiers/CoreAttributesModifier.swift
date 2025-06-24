@@ -1,24 +1,24 @@
 //
-// CoreAttributesInlineModifier.swift
+// CoreAttributesModifier.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
 //
 
-private struct CoreAttributesInlineModifier: InlineElementModifier {
+private struct CoreAttributesModifier: HTMLModifier {
     var attributes: CoreAttributes
-    func body(content: Content) -> some InlineElement {
+    func body(content: Content) -> some HTML {
         var content = content
         content.attributes.merge(attributes)
         return content
     }
 }
 
-extension InlineElement {
+extension HTML {
     /// Merges a complete set of core attributes into this element.
     /// - Parameter attributes: The CoreAttributes to merge with existing attributes
     /// - Returns: The modified `HTML` element
-    func attributes(_ attributes: CoreAttributes) -> some InlineElement {
-        modifier(CoreAttributesInlineModifier(attributes: attributes))
+    func attributes(_ attributes: CoreAttributes) -> some HTML {
+        modifier(CoreAttributesModifier(attributes: attributes))
     }
 }
