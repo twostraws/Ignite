@@ -51,6 +51,14 @@ public struct Span: InlineElement, NavigationElement, FormElement {
     }
 }
 
+extension Span: NavigationElementRenderable {
+    func renderAsNavigationElement() -> Markup {
+        var copy = self
+        copy.attributes.append(classes: "navbar-text")
+        return copy.render()
+    }
+}
+
 extension Span: FormElementRenderable {
     func renderAsFormElement(_ configuration: FormConfiguration) -> Markup {
         print("""
