@@ -6,31 +6,26 @@
 //
 
 /// Renders text with emphasis, which usually means italics.
-public struct Emphasis: InlineElement {
+public struct Emphasis<Content: InlineElement>: InlineElement {
     /// The content and behavior of this HTML.
-    public var body: some InlineElement { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The content you want to render with emphasis.
-    private var content: any InlineElement
+    private var content: Content
 
     /// Creates a new `Emphasis` instance using an inline element builder
     /// of content to display.
     /// - Parameter content: The content to render with emphasis.
-    public init(
-        @InlineElementBuilder content: () -> some InlineElement
-    ) {
+    public init(@InlineElementBuilder content: () -> Content) {
         self.content = content()
     }
 
     /// Creates a new `Emphasis` instance using a single inline element.
     /// - Parameter singleElement: The content to render with emphasis.
-    public init(_ singleElement: any InlineElement) {
+    public init(_ singleElement: Content) {
         self.content = singleElement
     }
 
