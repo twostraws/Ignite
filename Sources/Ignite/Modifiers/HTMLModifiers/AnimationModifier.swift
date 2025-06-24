@@ -1,9 +1,21 @@
 //
-// Animation-Modifier.swift
+// AnimationModifier.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
 //
+
+/// A modifier that applies animations to HTML elements.
+private struct AnimationModifier: HTMLModifier {
+    /// The animation to apply.
+    var animation: Animation
+    /// The trigger that starts the animation.
+    var trigger: AnimationTrigger
+
+    func body(content: Content) -> some HTML {
+        AnimatedHTML(content, animation: animation, trigger: trigger)
+    }
+}
 
 public extension HTML {
     /// Applies a keyframe animation to an HTML element.
@@ -19,7 +31,7 @@ public extension HTML {
     ) -> some HTML {
         var animation = Animation(frames: content(KeyframeProxy()))
         animation.with(options)
-        return AnimatedHTML(self, animation: animation, trigger: trigger)
+        return modifier(AnimationModifier(animation: animation, trigger: trigger))
     }
 
     /// Applies a predefined animation to an HTML element.
@@ -35,6 +47,6 @@ public extension HTML {
     ) -> some HTML {
         var animation = animation
         animation.with(options)
-        return AnimatedHTML(self, animation: animation, trigger: trigger)
+        return modifier(AnimationModifier(animation: animation, trigger: trigger))
     }
 }
