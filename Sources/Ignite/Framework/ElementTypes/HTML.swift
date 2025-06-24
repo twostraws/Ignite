@@ -24,6 +24,14 @@ public extension HTML {
 }
 
 extension HTML {
+    /// Converts this element and its children into an HTML string with attributes.
+    /// - Returns: A string containing the HTML markup
+    func markupString() -> String {
+        render().string
+    }
+}
+
+extension HTML {
     /// The Bootstrap class that sizes this element in a grid.
     var columnWidth: String {
         if let width = attributes.classes.first(where: {
