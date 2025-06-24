@@ -15,28 +15,25 @@ protocol CardComponentConfigurable {
 }
 
 /// A group of information placed inside a gently rounded
-public struct Card: HTML {
+public struct Card<Header: HTML, Content: HTML, Footer: HTML>: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
+    private var role = Role.default
+    private var style = CardStyle.default
 
-    var role = Role.default
-    var style = CardStyle.default
+    private var contentPosition = CardContentPosition.default
+    private var imageOpacity = 1.0
 
-    var contentPosition = CardContentPosition.default
-    var imageOpacity = 1.0
+    private var image: Image?
+    private var header: Header
+    private var footer: Footer
+    private var content: Content
 
-    var image: Image?
-    private var header: HTMLCollection
-    private var footer: HTMLCollection
-    private var items: HTMLCollection
-
-    var cardClasses: String? {
+    private var cardClasses: String? {
         switch style {
         case .default:
             nil
@@ -49,17 +46,44 @@ public struct Card: HTML {
 
     public init(
         imageName: String? = nil,
-        @HTMLBuilder body: () -> some HTML,
-        @HTMLBuilder header: () -> some HTML = { EmptyHTML() },
-        @HTMLBuilder footer: () -> some HTML = { EmptyHTML() }
+        @HTMLBuilder content: () -> Content,
+        @HTMLBuilder header: () -> Header,
+        @HTMLBuilder footer: () -> Footer
     ) {
         if let imageName {
             self.image = Image(decorative: imageName)
         }
 
-        self.header = HTMLCollection(header)
-        self.footer = HTMLCollection(footer)
-        self.items = HTMLCollection(body)
+        self.header = header()
+        self.footer = footer()
+        self.content = content()
+    }
+
+    public init(
+        imageName: String? = nil,
+        @HTMLBuilder content: () -> Content,
+        @HTMLBuilder header: () -> Header
+    ) where Footer == EmptyHTML {
+        if let imageName {
+            self.image = Image(decorative: imageName)
+        }
+
+        self.header = header()
+        self.footer = EmptyHTML()
+        self.content = content()
+    }
+
+    public init(
+        imageName: String? = nil,
+        @HTMLBuilder content: () -> Content
+    ) where Header == EmptyHTML, Footer == EmptyHTML {
+        if let imageName {
+            self.image = Image(decorative: imageName)
+        }
+
+        self.header = EmptyHTML()
+        self.footer = EmptyHTML()
+        self.content = content()
     }
 
     public func role(_ role: Role) -> Card {
@@ -148,19 +172,8 @@ public struct Card: HTML {
 
     private func renderItems() -> some HTML {
         Section {
-            ForEach(items) { item in
-                switch item {
-                case let text as Text where text.font == .body || text.font == .lead:
-                    text.class("card-text")
-                case let text as Text:
-                    text.class("card-title")
-                case is Link, is LinkGroup:
-                    AnyHTML(item).class("card-link")
-                case let image as Image:
-                    image.class("card-img")
-                default:
-                    AnyHTML(item)
-                }
+            ForEach(content.subviews()) {
+                $0.configuredAsCardComponent()
             }
         }
         .class(contentPosition.bodyClasses)
