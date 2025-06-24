@@ -34,7 +34,7 @@ public struct ZStack: HTML {
     ///   - items: A closure that returns the elements to be stacked.
     public init(
         alignment: Alignment = .center,
-        @HTMLBuilder _ items: () -> some BodyElement
+        @HTMLBuilder _ items: () -> some HTML
     ) {
         self.items = HTMLCollection(items)
         self.alignment = alignment
