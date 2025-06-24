@@ -83,3 +83,15 @@ where repeat each Content: ControlGroupElement {
         fatalError("Please file a bug report with the Ignite project.")
     }
 }
+
+extension PackHTML: ButtonElement where repeat each Content: ButtonElement {
+    /// Renders all packed button elements as combined markup.
+    func render() -> Markup {
+        var markup = Markup()
+        for var element in repeat each content {
+            element.attributes.merge(attributes)
+            markup += element.render()
+        }
+        return markup
+    }
+}
