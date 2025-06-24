@@ -24,7 +24,7 @@ public struct Item: HTML {
     private var startsOpen: Bool
 
     /// The contents of this accordion item.
-    private var contents: any BodyElement
+    private var contents: any HTML
 
     /// Used when rendering this accordion item so that we can send change
     /// notifications back the parent accordion object.
