@@ -197,3 +197,11 @@ extension Button: FormElementRenderable {
         .render()
     }
 }
+
+extension Button: ControlGroupItemConfigurable {
+    func configuredAsControlGroupItem(_ labelStyle: ControlLabelStyle) -> ControlGroupItem {
+        var button = self
+        button.type = .plain
+        return ControlGroupItem(button)
+    }
+}
