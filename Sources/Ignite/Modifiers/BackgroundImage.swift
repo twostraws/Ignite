@@ -28,10 +28,6 @@ public extension HTML {
     }
 }
 
-protocol CSSRepresentable {
-    var css: String { get }
-}
-
 /// The possible background sizes
 public enum BackgroundImageContentMode: CSSRepresentable, Sendable {
     /// This is the default value. The background image is displayed at its original size.
