@@ -190,3 +190,16 @@ public struct TextField: InlineElement, FormElement {
             .render()
     }
 }
+
+extension TextField: FormElementRenderable {
+    func renderAsFormElement(_ configuration: FormConfiguration) -> Markup {
+        let copy = self
+            .size(configuration.controlSize)
+            .labelStyle(configuration.labelStyle)
+
+        return switch configuration.labelStyle {
+        case .leading: copy.render()
+        default: Section(copy).render()
+        }
+    }
+}
