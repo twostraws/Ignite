@@ -7,9 +7,9 @@
 
 @MainActor private func inlineStyleModifier(
     _ styles: [InlineStyle],
-    content: any BodyElement
-) -> any BodyElement {
-    var copy: any BodyElement = content.isPrimitive ? content : Section(content)
+    content: any HTML
+) -> any HTML {
+    var copy: any HTML = content.isPrimitive ? content : Section(content)
     copy.attributes.append(styles: styles)
     return copy
 }
@@ -107,14 +107,5 @@ extension InlineElement {
     /// - Returns: The modified `InlineElement` element
     func style(_ styles: [InlineStyle]) -> some InlineElement {
         AnyInlineElement(inlineStyleModifier(styles, content: self))
-    }
-}
-
-extension BodyElement {
-    /// Adds inline styles to the element.
-    /// - Parameter styles: An array of `InlineStyle` objects
-    /// - Returns: The modified `InlineElement` element
-    func style(_ styles: [InlineStyle]) -> some BodyElement {
-        AnyHTML(inlineStyleModifier(styles, content: self))
     }
 }
