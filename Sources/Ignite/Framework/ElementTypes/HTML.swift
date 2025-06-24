@@ -92,3 +92,9 @@ extension HTML {
         SubviewsCollection(self)
     }
 }
+
+public extension HTML {
+    func modifier<M: HTMLModifier>(_ modifier: M) -> some HTML {
+        ModifiedHTML(content: self, modifier: modifier)
+    }
+}
