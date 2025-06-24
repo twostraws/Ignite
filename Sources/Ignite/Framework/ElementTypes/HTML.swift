@@ -87,4 +87,8 @@ extension HTML {
     mutating func columnWidth(_ width: ColumnWidth) {
         attributes.classes.append(width.className)
     }
+
+    func subviews() -> SubviewsCollection {
+        SubviewsCollection(self)
+    }
 }
