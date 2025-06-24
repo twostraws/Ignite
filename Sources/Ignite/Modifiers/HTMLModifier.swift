@@ -5,13 +5,6 @@
 // See LICENSE for license information.
 //
 
-//
-// HTMLModifier.swift
-// Ignite
-// https://www.github.com/twostraws/Ignite
-// See LICENSE for license information.
-//
-
 /// A type that modifies HTML content.
 @MainActor
 public protocol HTMLModifier {
