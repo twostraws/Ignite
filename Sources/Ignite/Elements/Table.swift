@@ -6,35 +6,32 @@
 //
 
 /// Used to create tabulated data on a page.
-public struct Table: HTML {
+public struct Table<Header: HTML, Rows: HTML>: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// What text to use for an optional filter text field.
-    var filterTitle: String?
+    private var filterTitle: String?
 
     /// The rows that are inside this table.
-    var rows: HTMLCollection
+    private var rows: Rows
 
     /// An optional array of header to use at the top of this table.
-    var header: HTMLCollection?
+    private var header: Header
 
     /// The styling to apply to this table. Defaults to `.plain`.
-    var style = TableStyle.plain
+    private var style = TableStyle.plain
 
     /// An optional caption for this table. Displayed to the user, but also useful
     /// for screen readers so users can decide if the table is worth reading further.
-    var caption: String?
+    private var caption: String?
 
     /// Whether this table should be drawn with a border or not.
     /// Defaults to false.
-    var hasBorderEnabled = false
+    private var hasBorderEnabled = false
 
     /// Creates a new `Table` instance from an element builder that returns
     /// an array of rows to use in the table.
@@ -42,12 +39,13 @@ public struct Table: HTML {
     ///   - filterTitle: When provided, this is used to for the placeholder in a
     ///     text field that filters the table data.
     ///   - rows: An array of rows to use in the table.
-    public init(
+    public init<C>(
         filterTitle: String? = nil,
-        @ElementBuilder<Row> rows: () -> [Row]
-    ) {
+        @TableElementBuilder rows: () -> C
+    ) where Rows == TableElementBuilder.Content<C>, C: TableElement, Header == EmptyHTML {
         self.filterTitle = filterTitle
-        self.rows = HTMLCollection(rows())
+        self.header = EmptyHTML()
+        self.rows = TableElementBuilder.Content(rows())
     }
 
     /// Creates a new `Table` instance from an element builder that returns
@@ -58,14 +56,14 @@ public struct Table: HTML {
     ///     text field that filters the table data.
     ///   - rows: An array of rows to use in the table.
     ///   - header: An array of headers to use at the top of the table.
-    public init(
+    public init<C>(
         filterTitle: String? = nil,
-        @ElementBuilder<Row> rows: () -> [Row],
-        @HTMLBuilder header: () -> some HTML
-    ) {
+        @TableElementBuilder rows: () -> C,
+        @HTMLBuilder header: () -> Header
+    ) where Rows == TableElementBuilder.Content<C>, C: TableElement, Header == EmptyHTML {
         self.filterTitle = filterTitle
-        self.rows = HTMLCollection(rows())
-        self.header = HTMLCollection(header)
+        self.rows = TableElementBuilder.Content(rows())
+        self.header = header()
     }
 
     /// Creates a new `Table` instance from a collection of items, along with a function
@@ -76,13 +74,20 @@ public struct Table: HTML {
     ///     text field that filters the table data.
     ///   - content: A function that accepts a single value from the sequence, and
     /// returns a row representing that value in the table.
-    public init<T>(
-        _ items: any Sequence<T>,
+    public init<C, T, S: Sequence>(
+        _ items: S,
         filterTitle: String? = nil,
-        content: (T) -> Row
-    ) {
+        @TableElementBuilder rows: @escaping (T) -> C
+    ) where
+        S.Element == T,
+        Header == EmptyHTML,
+        Rows == TableElementBuilder.Content<ForEach<[T], C>>,
+        C: TableElement
+    { // swiftlint:disable:this opening_brace
         self.filterTitle = filterTitle
-        self.rows = HTMLCollection(items.map(content))
+        let content = ForEach(Array(items), content: rows)
+        self.rows = TableElementBuilder.Content(content)
+        self.header = EmptyHTML()
     }
 
     /// Creates a new `Table` instance from a collection of items, along with a function
@@ -94,15 +99,20 @@ public struct Table: HTML {
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a row representing that value in the table.
     ///   - header: An array of headers to use at the top of the table.
-    public init<T>(
-        _ items: any Sequence<T>,
+    public init<C, T, S: Sequence>(
+        _ items: S,
         filterTitle: String? = nil,
-        content: (T) -> Row,
-        @HTMLBuilder header: () -> some HTML
-    ) {
+        @TableElementBuilder rows: @escaping (T) -> C,
+        @HTMLBuilder header: () -> Header
+    ) where
+        S.Element == T,
+        Rows == TableElementBuilder.Content<ForEach<Array<T>, C>>,
+        C: TableElement
+    { // swiftlint:disable:this opening_brace
         self.filterTitle = filterTitle
-        self.rows = HTMLCollection(items.map(content))
-        self.header = HTMLCollection(header)
+        let content = ForEach(Array(items), content: rows)
+        self.rows = TableElementBuilder.Content(content)
+        self.header = header()
     }
 
     /// Adjusts the style of this table.
@@ -167,16 +177,15 @@ public struct Table: HTML {
             output += "<caption>\(caption)</caption>"
         }
 
-        if let header {
-            let headerHTML = header.map {
+        if header.isEmptyHTML == false {
+            let headerHTML = header.subviews().map {
                 "<th>\($0.markupString())</th>"
             }.joined()
-
             output += "<thead><tr>\(headerHTML)</tr></thead>"
         }
 
         output += "<tbody>"
-        output += rows.markupString()
+        output += rows.render().string
         output += "</tbody>"
         output += "</table>"
         return Markup(output)
