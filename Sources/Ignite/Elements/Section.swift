@@ -34,6 +34,10 @@ public struct Section: HTML {
         self.content = content
     }
 
+    init() {
+        self.content = EmptyHTML()
+    }
+
     /// Creates a section that renders as a `div` element.
     /// - Parameter content: The content to display within this section.
     public init(
