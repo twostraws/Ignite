@@ -43,7 +43,7 @@ extension InlineElement {
     }
 
     /// Checks if this element is `EmptyInlineElement`
-    var isEmpty: Bool {
+    var isEmptyInlineElement: Bool {
         if let collection = self as? InlineElementCollection {
             collection.elements.allSatisfy { $0 is EmptyInlineElement }
         } else {

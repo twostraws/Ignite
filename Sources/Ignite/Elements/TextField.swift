@@ -49,7 +49,7 @@ public struct TextField<Label: InlineElement>: InlineElement, ControlGroupElemen
             input.attributes.append(customAttributes: .init(name: "placeholder", value: prompt))
         }
 
-        if label.isEmpty == false {
+        if label.isEmptyInlineElement == false {
             var label = ControlLabel(label)
             label.attributes.append(customAttributes: .init(name: "for", value: id))
             self.label = label

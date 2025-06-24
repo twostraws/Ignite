@@ -205,7 +205,7 @@ public struct NavigationBar: HTML {
         return Tag("header") {
             Tag("nav") {
                 Section {
-                    if logo.isEmpty == false {
+                    if logo.isEmptyInlineElement == false {
                         Section(renderLogo(logo))
                             .class("me-2 me-md-auto")
                     }
