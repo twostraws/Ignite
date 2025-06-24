@@ -6,31 +6,28 @@
 //
 
 /// A column inside a table row.
-public struct Column: HTML {
+public struct Column<Content: HTML>: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// How many columns this should occupy when placed in a grid.
-    var columnSpan = 1
+    private var columnSpan = 1
 
     /// How the contents of this column should be vertically aligned.
     /// Defaults to `.top`.
-    var verticalAlignment = ColumnVerticalAlignment.top
+    private var verticalAlignment = ColumnVerticalAlignment.top
 
     /// The items to render inside this column.
-    var items: HTMLCollection
+    private var content: Content
 
     /// Creates a new column from a page element builder of items.
     /// - Parameter items: A page element builder that returns the items
     /// for this column.
-    public init(@HTMLBuilder items: () -> some HTML) {
-        self.items = HTMLCollection(items)
+    public init(@HTMLBuilder content: () -> Content) {
+        self.content = content()
     }
 
     /// Adjusts how many columns in a row this column should span.
@@ -60,7 +57,9 @@ public struct Column: HTML {
             columnAttributes.append(classes: ["align-\(verticalAlignment.rawValue)"])
         }
         columnAttributes.append(customAttributes: .init(name: "colspan", value: columnSpan.formatted()))
-        let itemHTML = items.markupString()
-        return Markup("<td\(columnAttributes)>\(itemHTML)</td>")
+        let contentHTML = content.markupString()
+        return Markup("<td\(columnAttributes)>\(contentHTML)</td>")
     }
 }
+
+extension Column: ColumnProvider {}
