@@ -36,11 +36,7 @@ extension HTML {
 
     /// Checks if this element is an empty HTML element.
     var isEmptyHTML: Bool {
-        if let collection = self as? HTMLCollection {
-            collection.elements.allSatisfy { $0 is EmptyHTML }
-        } else {
-            self is EmptyHTML
-        }
+        render().isEmpty
     }
 
     /// A Boolean value indicating whether this represents `Text`.
