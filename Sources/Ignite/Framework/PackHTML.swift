@@ -46,3 +46,19 @@ extension PackHTML: HTML, BodyElement, MarkupElement, SubviewsProvider where rep
         subviews.map { $0.render() }.joined()
     }
 }
+
+extension PackHTML: DropdownElement where repeat each Content: DropdownElement {
+    /// Renders all packed dropdown elements as combined markup.
+    func render() -> Markup {
+        var markup = Markup()
+        for var element in repeat each content {
+            element.attributes.merge(attributes)
+            if let element = element as? any DropdownElementRenderable {
+                markup += element.renderAsDropdownElement()
+            } else {
+                markup += element.render()
+            }
+        }
+        return markup
+    }
+}
