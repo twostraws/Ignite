@@ -6,7 +6,7 @@
 //
 
 /// A block quote of text.
-public struct Quote: HTML {
+public struct Quote<Caption: InlineElement, Content: HTML>: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -14,16 +14,16 @@ public struct Quote: HTML {
     public var attributes = CoreAttributes()
 
     /// The content of this quote.
-    var contents: any HTML
+    private var content: Content
 
     /// Provide details about this quote, e.g. a source name.
-    var caption: any InlineElement
+    private var caption: Caption
 
     /// Create a new quote from a page element builder that returns an array
     /// of elements to display in the quote.
     /// - Parameter contents: The elements to display inside the quote.
-    public init(@HTMLBuilder contents: () -> some HTML) {
-        self.contents = contents()
+    public init(@HTMLBuilder content: () -> Content) where Caption == EmptyInlineElement {
+        self.content = content()
         self.caption = EmptyInlineElement()
     }
 
@@ -35,10 +35,10 @@ public struct Quote: HTML {
     /// - contents: The elements to display inside the quote.
     /// - contents: Additional details about the quote, e.g. its source.
     public init(
-        @HTMLBuilder contents: () -> some HTML,
-        @InlineElementBuilder caption: () -> some InlineElement
+        @HTMLBuilder content: () -> Content,
+        @InlineElementBuilder caption: () -> Caption
     ) {
-        self.contents = contents()
+        self.content = content()
         self.caption = caption()
     }
 
@@ -48,7 +48,7 @@ public struct Quote: HTML {
         var attributes = attributes
         attributes.append(classes: "blockquote")
 
-        let contentHTML = contents.markupString()
+        let contentHTML = content.markupString()
         let captionHTML = caption.markupString()
 
         if captionHTML.isEmpty {
