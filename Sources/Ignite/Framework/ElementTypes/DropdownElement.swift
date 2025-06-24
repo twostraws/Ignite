@@ -16,3 +16,11 @@ public protocol DropdownElement {
     /// - Returns: The rendered markup for the element.
     func render() -> Markup
 }
+
+/// A protocol for types that render differently when placed inside a dropdown.
+@MainActor
+protocol DropdownElementRenderable {
+    /// Renders the element specifically for dropdown display.
+    /// - Returns: The rendered markup optimized for dropdown presentation.
+    func renderAsDropdownElement() -> Markup
+}
