@@ -95,3 +95,15 @@ extension PackHTML: ButtonElement where repeat each Content: ButtonElement {
         return markup
     }
 }
+
+extension PackHTML: TableElement where repeat each Content: TableElement {
+    /// Renders all packed table row elements as combined markup.
+    func render() -> Markup {
+        var markup = Markup()
+        for var element in repeat each content {
+            element.attributes.merge(attributes)
+            markup += element.render()
+        }
+        return markup
+    }
+}
