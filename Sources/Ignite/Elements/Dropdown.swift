@@ -9,18 +9,6 @@
 /// Can be used as a free-floating element on your page, or in
 /// a `NavigationBar`.
 public struct Dropdown: HTML, NavigationElement, FormElement {
-    /// How the dropdown should be rendered based on its context.
-    enum Configuration: Sendable {
-        /// Renders as a complete standalone dropdown.
-        case standalone
-        /// Renders for placement inside a navigation bar.
-        case navigationBarItem
-        /// Renders for placement inside a control group.
-        case controlGroupItem
-        /// Renders as the last item in a control group with special positioning.
-        case lastControlGroupItem
-    }
-
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
@@ -47,7 +35,7 @@ public struct Dropdown: HTML, NavigationElement, FormElement {
 
     /// Controls whether this dropdown needs to be created as its own element,
     /// or whether it uses the structure provided by a parent like `NavigationBar`.
-    private var configuration: Configuration = .standalone
+    private var configuration: DropdownConfiguration = .standalone
 
     /// Creates a new dropdown button using a title and an element that builder
     /// that returns an array of types conforming to `DropdownItem`.
@@ -96,7 +84,7 @@ public struct Dropdown: HTML, NavigationElement, FormElement {
     /// Sets how this dropdown should be rendered based on its placement context.
     /// - Parameter configuration: The context in which this dropdown will be used.
     /// - Returns: A configured dropdown instance.
-    func configuration(_ configuration: Configuration) -> Self {
+    func configuration(_ configuration: DropdownConfiguration) -> Self {
         var copy = self
         copy.configuration = configuration
         return copy
