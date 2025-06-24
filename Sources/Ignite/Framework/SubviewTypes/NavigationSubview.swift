@@ -50,3 +50,5 @@ struct NavigationSubview: HTML {
         }
     }
 }
+
+extension NavigationSubview: ListItemProvider {}
