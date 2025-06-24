@@ -159,6 +159,13 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         self.classes.formUnion(classes)
     }
 
+    /// Appends multiple ARIA.
+    /// - Parameter aria: The aria to append.
+    mutating func append(aria: Attribute?...) {
+        let safeAria = aria.compactMap(\.self)
+        self.aria.append(contentsOf: safeAria)
+    }
+
     /// Returns a new set of attributes with extra CSS classes appended.
     /// - Parameter classes: The CSS classes to append.
     /// - Returns: A copy of the previous `CoreAttributes` object with
