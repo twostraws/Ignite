@@ -184,3 +184,16 @@ public extension Button {
         self.class("w-100", ColumnWidth.count(width).className)
     }
 }
+
+extension Button: FormElementRenderable {
+    func renderAsFormElement(_ configuration: FormConfiguration) -> Markup {
+        Section {
+            self
+                .class(configuration.controlSize.buttonClass)
+                .class(configuration.labelStyle == .leading ? nil : "w-100")
+        }
+        .class("d-flex")
+        .class(configuration.labelStyle == .floating ? "align-items-stretch" : "align-items-end")
+        .render()
+    }
+}
