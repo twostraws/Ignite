@@ -18,7 +18,7 @@ struct AnimatedHTML: HTML {
     var isPrimitive: Bool { true }
 
     /// The content to place inside the text.
-    var content: any BodyElement
+    var content: any HTML
 
     /// The animations applied to this element.
     private var animations = AnimationInfo()
@@ -51,7 +51,7 @@ struct AnimatedHTML: HTML {
         assignHoverClass(&innerAttributes)
         assignAppearClasses(&innerAttributes)
 
-        var content: any BodyElement = content
+        var content: any HTML = content
         content.attributes.remove(styles: .background, .backgroundColor, .color)
 
         if innerAttributes.isEmpty == false {
