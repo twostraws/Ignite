@@ -253,3 +253,21 @@ extension Link: DropdownElementRenderable {
         .render()
     }
 }
+
+extension Link: NavigationElementRenderable {
+    func renderAsNavigationElement() -> Markup {
+        let isActive = PublishingContext.shared.currentRenderingPath == self.url
+        let isButton = style == .button
+        var link = self
+        link.attributes.append(classes: isButton ? nil : "nav-link")
+        link.attributes.append(classes: isActive ? "active" : nil)
+        link.attributes.append(classes: "text-nowrap")
+        if isActive {
+            link.attributes.append(aria: .aria(.current, value: "page"))
+        }
+        var listItem = ListItem { link }
+        listItem.attributes.append(classes: "nav-item")
+        listItem.attributes.append(styles: .init(.listStyleType, value: "none"))
+        return listItem.render()
+    }
+}
