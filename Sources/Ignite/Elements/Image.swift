@@ -214,3 +214,9 @@ private extension Image {
         return sources.isEmpty ? nil : .init(name: "srcset", value: sources)
     }
 }
+
+extension Image: CardComponentConfigurable {
+    func configuredAsCardComponent() -> CardComponent {
+        CardComponent(self.class("card-img"))
+    }
+}
