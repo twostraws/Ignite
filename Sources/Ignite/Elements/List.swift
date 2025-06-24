@@ -6,15 +6,12 @@
 //
 
 /// Creates a list of items, either ordered or unordered.
-public struct List: HTML {
+public struct List<Content: HTML>: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The current style for this list. Defaults to `.automatic`.
     private var listStyle: ListStyle = .automatic
@@ -24,7 +21,7 @@ public struct List: HTML {
 
     /// The items to show in this list. This may contain any page elements,
     /// but if you need specific styling you might want to use `ListItem` objects.
-    private var items: HTMLCollection
+    private var content: Content
 
     /// Returns the correct HTML name for this list.
     private var listElementName: String {
@@ -38,8 +35,8 @@ public struct List: HTML {
     /// Creates a new `List` object using a page element builder that returns
     /// an array of `HTML` objects to display in the list.
     /// - Parameter items: The content you want to display in your list.
-    public init(@HTMLBuilder items: () -> some HTML) {
-        self.items = HTMLCollection(items)
+    public init(@HTMLBuilder content: () -> Content) {
+        self.content = content()
     }
 
     /// Creates a new list from a collection of items, along with a function that converts
@@ -48,8 +45,12 @@ public struct List: HTML {
     ///   - items: A sequence of items you want to convert into list items.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns an item representing that value in the list.
-    public init<T>(_ items: any Sequence<T>, content: (T) -> some HTML) {
-        self.items = HTMLCollection(items.map(content))
+    public init<T, S: Sequence, RowContent: HTML>(
+        _ items: S,
+        @HTMLBuilder content: @escaping (T) -> RowContent
+    ) where S.Element == T, Content == ForEach<[T], RowContent> {
+        let content = ForEach(Array(items), content: content)
+        self.content = content
     }
 
     /// Adjusts the style of this list.
@@ -71,7 +72,7 @@ public struct List: HTML {
     }
 
     /// Combines list and marker styles into a single `CoreAttributes` object for rendering.
-    private func getAttributes() -> CoreAttributes {
+    private var listAttributes: CoreAttributes {
         var listAttributes = attributes
 
         if let styleClasses = listStyle.classes, !styleClasses.isEmpty {
@@ -110,32 +111,26 @@ public struct List: HTML {
         return listAttributes
     }
 
+    /// Renders an individual list row, wrapping it in a `ListItem` when necessary.
+    private func renderListRow(_ content: Subview) -> Markup {
+        if content.wrapped is any ListItemProvider {
+            var content = content
+            content.attributes.append(classes: listStyle != .automatic ? "list-group-item" : nil)
+            return content.render()
+        } else {
+            let styleClass = listStyle == .automatic ? nil : "list-group-item"
+            return ListItem { content }
+                .class(styleClass)
+                .render()
+        }
+    }
+
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> Markup {
-        let listAttributes = getAttributes()
-
         var output = "<\(listElementName)\(listAttributes)>"
-
-        for originalItem in items {
-            var item = originalItem
-            // Any element that renders its own <li> (e.g. ForEach) should
-            // be allowed to handle that itself.
-            if var listableItem = item as? ListableElement ??
-            (item as? AnyHTML)?.body as? ListableElement {
-                if listStyle != .automatic {
-                    listableItem.attributes.append(classes: "list-group-item")
-                }
-                output += listableItem.listMarkup().string
-            } else {
-                let styleClass = listStyle == .automatic ? "" : " class=\"list-group-item\""
-                item.attributes.append(classes: "m-0")
-                output += "<li\(styleClass)>\(item.markupString())</li>"
-            }
-        }
-
+        output += content.subviews().map { renderListRow($0).string }.joined()
         output += "</\(listElementName)>"
-
         return Markup(output)
     }
 }
