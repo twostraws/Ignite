@@ -23,7 +23,7 @@ public struct Text: HTML, DropdownElement {
     public var isPrimitive: Bool { true }
 
     /// The font to use for this text.
-    var font = FontStyle.body
+    private var fontStyle = FontStyle.body
 
     /// The content to place inside the text.
     private var content: any BodyElement
@@ -161,9 +161,9 @@ public struct Text: HTML, DropdownElement {
                 .render()
         } else {
             Markup(
-                "<\(font.rawValue)\(attributes)>" +
+                "<\(fontStyle.rawValue)\(attributes)>" +
                 content.markupString() +
-                "</\(font.rawValue)>"
+                "</\(fontStyle.rawValue)>"
             )
         }
     }
@@ -213,7 +213,7 @@ public extension Text {
     /// - Returns: A new `Text` instance with the updated font style.
     func font(_ style: Font.Style) -> Self {
         var copy = self
-        copy.font = style
+        copy.fontStyle = style
         return copy
     }
 
@@ -222,7 +222,7 @@ public extension Text {
     /// - Returns: A new instance with the updated font.
     func font(_ font: Font) -> Self {
         var copy = self
-        if let style = font.style { copy.font = style }
+        if let style = font.style { copy.fontStyle = style }
         let attributes = FontModifier.attributes(for: font, includeStyle: false)
         copy.attributes.merge(attributes)
         return copy
@@ -234,7 +234,7 @@ public extension Text {
     func font(_ font: Font.Responsive) -> Self {
         var copy = self
         let font = font.font
-        if let style = font.style { copy.font = style }
+        if let style = font.style { copy.fontStyle = style }
         let attributes = FontModifier.attributes(for: font, includeStyle: false)
         copy.attributes.merge(attributes)
         return copy
@@ -252,7 +252,7 @@ extension Text: DropdownElementRenderable {
 
 extension Text: CardComponentConfigurable {
     func configuredAsCardComponent() -> CardComponent {
-        if font == .body || FontStyle.classBasedStyles.contains(font) {
+        if fontStyle == .body || FontStyle.classBasedStyles.contains(fontStyle) {
             return CardComponent(self.class("card-text"))
         }
         return CardComponent(self.class("card-title"))
