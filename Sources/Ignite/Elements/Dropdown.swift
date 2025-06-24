@@ -107,7 +107,7 @@ public struct Dropdown: HTML, NavigationElement, ControlGroupElement {
                 .render()
         } else {
             renderDropdownContent()
-                .attributes(attributes)
+//                .attributes(attributes)
                 .render()
         }
     }
