@@ -53,3 +53,5 @@ extension InlineHTML: CardComponentConfigurable where Content: CardComponentConf
         attributedContent.configuredAsCardComponent()
     }
 }
+
+extension InlineHTML: NavigationElement where Content: NavigationElement {}
