@@ -23,7 +23,6 @@ public extension InlineElement {
     }
 }
 
-
 public extension HTML {
     /// Adjusts the number of columns assigned to this element.
     /// - Parameter width: The new number of columns to use.

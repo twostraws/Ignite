@@ -49,7 +49,6 @@ struct AccordionSubviewsCollection: AccordionElement, RandomAccessCollection {
         return child
     }
 
-    // swiftlint:disable identifier_name
     nonisolated func index(after i: Index) -> Index {
         elements.index(after: i)
     }
@@ -61,7 +60,6 @@ struct AccordionSubviewsCollection: AccordionElement, RandomAccessCollection {
     nonisolated func index(_ i: Index, offsetBy distance: Int) -> Index {
         elements.index(i, offsetBy: distance)
     }
-    // swiftlint:enable identifier_name
 
     nonisolated func distance(from start: Index, to end: Index) -> Int {
         elements.distance(from: start, to: end)

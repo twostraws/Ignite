@@ -51,7 +51,6 @@ struct CarouselSubviewsCollection: CarouselElement, RandomAccessCollection {
         return child
     }
 
-    // swiftlint:disable identifier_name
     /// Returns the position immediately after the given index.
     /// - Parameter i: The index to advance.
     /// - Returns: The index after the specified position.
@@ -74,7 +73,6 @@ struct CarouselSubviewsCollection: CarouselElement, RandomAccessCollection {
     nonisolated func index(_ i: Index, offsetBy distance: Int) -> Index {
         elements.index(i, offsetBy: distance)
     }
-    // swiftlint:enable identifier_name
 
     /// Returns the distance between two indices.
     /// - Parameters:
