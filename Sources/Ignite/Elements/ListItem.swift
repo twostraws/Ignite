@@ -78,3 +78,5 @@ public struct ListItem<Content: HTML, BadgeContent: InlineElement>: HTML {
 }
 
 extension ListItem: ListItemProvider {}
+
+extension ListItem: NavigationElement where Content: NavigationElement {}
