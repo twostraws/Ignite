@@ -22,3 +22,5 @@ public struct EmptyHTML: HTML {
 }
 
 extension EmptyHTML: NavigationElement {}
+
+extension EmptyHTML: ListItemProvider {}
