@@ -157,7 +157,7 @@ class NavigationBarTests: IgniteTestSuite {
             .components(separatedBy: " ")
         )
 
-        let expected = "container-fluid col flex-wrap flex-lg-nowrap".components(separatedBy: " ")
+        let expected = "container-fluid col-auto flex-wrap flex-lg-nowrap".components(separatedBy: " ")
         #expect(divClasses == expected)
     }
 
@@ -268,7 +268,7 @@ class NavigationBarTests: IgniteTestSuite {
             .class("nav-link text-nowrap")
             .render()
             .string
-        let expectedNavItem = "<li class=\"nav-item\">\(expectedLink)</li>"
+        let expectedNavItem = "<li class=\"nav-item\" style=\"list-style-type: none\">\(expectedLink)</li>"
 
         #expect(ulContents.contains(expectedNavItem))
     }
@@ -292,13 +292,13 @@ class NavigationBarTests: IgniteTestSuite {
             .class("nav-link text-nowrap")
             .render()
             .string
-        let expectedNavItem1 = "<li class=\"nav-item\">\(expectedLink1)</li>"
+        let expectedNavItem1 = "<li class=\"nav-item\" style=\"list-style-type: none\">\(expectedLink1)</li>"
 
         let expectedLink2 = item2
             .class("nav-link text-nowrap")
             .render()
             .string
-        let expectedNavItem2 = "<li class=\"nav-item\">\(expectedLink2)</li>"
+        let expectedNavItem2 = "<li class=\"nav-item\" style=\"list-style-type: none\">\(expectedLink2)</li>"
 
         #expect(ulContents.contains(expectedNavItem1))
         #expect(ulContents.contains(expectedNavItem2))
