@@ -10,7 +10,7 @@
 /// `CardComponent` provides a flexible way to apply attributes to any HTML content,
 /// making it useful for creating styled containers and layout components.
 struct CardComponent: HTML {
-    var body: some HTML { self }
+    var body: Never { fatalError() }
     var attributes = CoreAttributes()
     var content: any HTML
 

@@ -7,7 +7,7 @@
 
 /// A collection of HTML subviews that can be rendered and accessed randomly.
 struct SubviewsCollection: HTML, RandomAccessCollection {
-    var body: some HTML { self }
+    var body: Never { fatalError() }
 
     /// Core HTML attributes applied to all elements in the collection.
     var attributes = CoreAttributes()

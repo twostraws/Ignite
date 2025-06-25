@@ -7,7 +7,7 @@
 
 /// An opaque wrapper for an element of a `ControlGroup.`
 struct ControlGroupItem: HTML {
-    var body: some HTML { self }
+    var body: Never { fatalError() }
 
     /// Core HTML attributes applied to the item.
     var attributes = CoreAttributes()

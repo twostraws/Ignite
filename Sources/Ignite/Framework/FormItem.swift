@@ -7,7 +7,7 @@
 
 /// A wrapper that applies form-specific configuration to HTML content.
 struct FormItem: HTML {
-    var body: some HTML { self }
+    var body: Never { fatalError() }
 
     var attributes = CoreAttributes()
 

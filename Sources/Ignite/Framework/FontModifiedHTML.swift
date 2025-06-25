@@ -7,7 +7,7 @@
 
 /// A wrapper that applies font styling to HTML content.
 struct FontModifiedHTML<Content: HTML>: HTML {
-    var body: some HTML { self }
+    var body: Never { fatalError() }
     var attributes = CoreAttributes()
 
     private var content: Content

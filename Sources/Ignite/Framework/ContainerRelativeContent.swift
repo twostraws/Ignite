@@ -8,7 +8,7 @@
 /// A flex container that positions content relative to its container bounds.
 struct ContainerRelativeContent<Content: HTML>: HTML {
     /// The content and behavior of this HTML.
-    var body: some HTML { self }
+    var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     var attributes = CoreAttributes()

@@ -7,7 +7,7 @@
 
 /// A collection of navigation subviews that flattens hierarchical navigation elements.
 struct NavigationSubviewsCollection: HTML, RandomAccessCollection {
-    var body: some HTML { self }
+    var body: Never { fatalError() }
 
     var attributes = CoreAttributes()
 

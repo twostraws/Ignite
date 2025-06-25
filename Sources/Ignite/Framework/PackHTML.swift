@@ -26,7 +26,7 @@ struct PackHTML<each Content>: Sendable { // swiftlint:disable:this redundant_se
 
 extension PackHTML: HTML, SubviewsProvider, VariadicHTML where repeat each Content: HTML {
     /// The content and behavior of this HTML.
-    var body: some HTML { self }
+    var body: Never { fatalError() }
 
     /// Returns the packed elements as a collection of subviews.
     var subviews: SubviewsCollection {

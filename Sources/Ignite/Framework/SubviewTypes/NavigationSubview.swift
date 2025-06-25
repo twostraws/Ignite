@@ -8,7 +8,7 @@
 /// A container that wraps navigation elements and manages their rendering behavior.
 struct NavigationSubview: HTML {
     /// The content and behavior of this HTML.
-    var body: some HTML { self }
+    var body: Never { fatalError() }
 
     var attributes = CoreAttributes()
 

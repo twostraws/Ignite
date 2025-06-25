@@ -8,7 +8,7 @@
 /// An opaque HTML element representing a subview of an `ControlGroup`.
 struct ControlGroupSubview: HTML {
     /// The content and behavior of this HTML.
-    var body: some HTML { self }
+    var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     var attributes = CoreAttributes()
