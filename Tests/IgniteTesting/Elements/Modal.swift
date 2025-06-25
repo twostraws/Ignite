@@ -18,8 +18,8 @@ struct ModalTests {
     func showModal() async throws {
         let element = Modal(id: "showModalId") {
             Text("Dismiss me by clicking on the backdrop.")
-                .horizontalAlignment(.center)
                 .font(.title3)
+                .horizontalAlignment(.center)
                 .margin(.xLarge)
         }
         let output = element.markupString()
@@ -44,8 +44,8 @@ struct ModalTests {
             .horizontalAlignment(.trailing)
 
             Text("Dismiss me by clicking on the close button.")
-                .horizontalAlignment(.center)
                 .font(.title3)
+                .horizontalAlignment(.center)
                 .margin(.xLarge)
         }
         let output = element.markupString()
@@ -89,8 +89,8 @@ struct ModalTests {
     func checkModalPosition(positionOption: ModalPosition) async throws {
         let element = Modal(id: "topModalId") {
             Text(markdown: "Modal with `Position`")
-                .horizontalAlignment(.center)
                 .font(.title3)
+                .horizontalAlignment(.center)
                 .margin(.xLarge)
         }
             .modalPosition(positionOption)
