@@ -53,7 +53,7 @@ extension StyleManager {
             let testCondition = createTestCondition(from: query)
             let testResult = style.style(content: collector, environment: testCondition)
 
-            if Array(testResult.attributes.styles) == styles {
+            if Array(testResult.styles) == styles {
                 return testCondition
             }
         }
@@ -76,7 +76,7 @@ extension StyleManager {
         existingConditions uniqueConditions: [EnvironmentConditions: [InlineStyle]]
     ) -> (EnvironmentConditions, [InlineStyle])? {
         let testResult = style.style(content: collector, environment: environment)
-        guard Array(testResult.attributes.styles) == styles else { return nil }
+        guard Array(testResult.styles) == styles else { return nil }
 
         if let existingCondition = uniqueConditions.first(where: { $0.value == styles })?.key {
             return environment.conditionCount < existingCondition.conditionCount
@@ -144,7 +144,7 @@ extension StyleManager {
 
         for environment in allConditions {
             let styledHTML = style.style(content: collector, environment: environment)
-            tempMap[environment] = Array(styledHTML.attributes.styles)
+            tempMap[environment] = Array(styledHTML.styles)
         }
 
         return tempMap
@@ -166,7 +166,7 @@ extension StyleManager {
         // Find the default style
         let defaultEnvironment = EnvironmentConditions()
         let defaultHTML = style.style(content: collector, environment: defaultEnvironment)
-        let defaultStyle = Array(defaultHTML.attributes.styles)
+        let defaultStyle = Array(defaultHTML.styles)
 
         // Analyze conditions that produce different styles from default
         for (environment, styles) in tempMap {
