@@ -8,7 +8,7 @@
 /// A clickable button with a label and styling.
 public struct Button: InlineElement, ControlGroupElement {
     /// The content and behavior of this HTML.
-    public var body: some InlineElement { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

@@ -8,7 +8,7 @@
 /// Shows a Video player on your page.
 public struct Video: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
-    public var body: some InlineElement { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

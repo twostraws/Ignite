@@ -10,7 +10,7 @@ import Foundation
 /// A hyperlink to another resource on this site or elsewhere.
 public struct Link: InlineElement, NavigationElement, DropdownElement {
     /// The content and behavior of this HTML.
-    public var body: some InlineElement { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
