@@ -1,5 +1,5 @@
 //
-//  HTMLHead.swift
+//  Head.swift
 //  Ignite
 //  https://www.github.com/twostraws/Ignite
 //  See LICENSE for license information.
@@ -13,11 +13,11 @@ import Testing
 /// Tests for the `HTMLHead` element.
 @Suite("HTMLHead Tests")
 @MainActor
-class HTMLHeadTests: IgniteTestSuite {
+class HeadTests: IgniteTestSuite {
     @Test("Defaults to empty head tag")
     func default_is_empty_head_tag() throws {
         let sut = Head().standardHeadersDisabled()
-        let output = sut.markupString()
+        let output = sut.render().string
 
         let (attributes, contents) = try #require(output.htmlTagWithCloseTag("head"))
 
@@ -34,7 +34,7 @@ class HTMLHeadTests: IgniteTestSuite {
         }
         .standardHeadersDisabled()
 
-        let output = sut.markupString()
+        let output = sut.render().string
         let contents = try #require(output.htmlTagWithCloseTag("head")?.contents)
 
         let exampleHeaderItems: [any HeadElement] = [
@@ -53,7 +53,7 @@ class HTMLHeadTests: IgniteTestSuite {
         let sut = Head()
         let expected = Head.standardHeaders().map { $0.markupString() }.joined()
 
-        let output = sut.markupString()
+        let output = sut.render().string
 
         #expect(output.contains(expected))
     }
@@ -63,7 +63,7 @@ class HTMLHeadTests: IgniteTestSuite {
         let sut = Head()
         let expected = MetaTag.socialSharingTags().map { $0.markupString() }.joined()
 
-        let output = sut.markupString()
+        let output = sut.render().string
 
         #expect(output.contains(expected))
     }
@@ -74,7 +74,7 @@ class HTMLHeadTests: IgniteTestSuite {
         let sut = Head { additionalItem }
         let expected = additionalItem.render().string
 
-        let output = sut.markupString()
+        let output = sut.render().string
 
         #expect(output.contains(expected))
     }
