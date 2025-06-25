@@ -23,3 +23,5 @@ public struct EmptyHTML: HTML {
         Markup()
     }
 }
+
+extension EmptyHTML: NavigationElement {}
