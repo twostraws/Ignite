@@ -68,11 +68,13 @@ public struct Article {
     }
 
     /// An array of the tags used to describe this content.
-    public var tags: [String]? {
-        if let tags = metadata["tags"] as? String {
-            return tags.splitAndTrim()
+    public var tags: [TagMetadata]? {
+        guard let tags = metadata["tags"] as? String else { return nil }
+
+        return tags.splitAndTrim().map { tag in
+            let tagPath = tag.convertedToSlug()
+            return .init(name: tag, path: "/tags/\(tagPath)")
         }
-        return nil
     }
 
     /// The author for this content, if set.
