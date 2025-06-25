@@ -107,3 +107,24 @@ extension PackHTML: TableElement where repeat each Content: TableElement {
         return markup
     }
 }
+
+extension PackHTML: CarouselElement, CarouselSubviewsProvider
+where repeat each Content: CarouselElement {
+    /// Returns the packed carousel elements as a collection.
+    var subviews: CarouselSubviewsCollection {
+        var children = CarouselSubviewsCollection()
+        for element in repeat each content {
+            var child = CarouselSubview(element)
+            child.attributes.merge(attributes)
+            children.elements.append(child)
+        }
+        return children
+    }
+
+    /// Renders all packed carousel elements as combined markup.
+    func render() -> Markup {
+        // This method is required by CarouselElement, but we'll always
+        // deconstruct PackHTML before rendering it.
+        fatalError("Please file a bug report with the Ignite project.")
+    }
+}
