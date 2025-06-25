@@ -24,6 +24,20 @@ public protocol NavigationElement {
     func render() -> Markup
 }
 
+public extension NavigationElement where Self: HTML {
+    /// Returns a new instance with the specified visibility.
+    func navigationBarVisibility(_ visibility: NavigationBarVisibility) -> some NavigationElement {
+        NavigationItem(visibility: visibility, content: self)
+    }
+}
+
+public extension NavigationElement where Self: InlineElement {
+    /// Returns a new instance with the specified visibility.
+    func navigationBarVisibility(_ visibility: NavigationBarVisibility) -> some NavigationElement {
+        NavigationItem(visibility: visibility, content: self)
+    }
+}
+
 public extension NavigationElement {
     func render() -> Markup {
         fatalError("This protocol should not be conformed to directly.")
