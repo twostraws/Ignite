@@ -149,3 +149,23 @@ where repeat each Content: NavigationElement {
         fatalError("Please file a bug report with the Ignite project.")
     }
 }
+
+extension PackHTML: AccordionElement, AccordionSubviewsProvider
+where repeat each Content: AccordionElement {
+    /// Returns the packed accordion elements as a collection.
+    var subviews: AccordionSubviewsCollection {
+        var children = AccordionSubviewsCollection()
+        for element in repeat each content {
+            var child = AccordionSubview(element)
+            child.attributes.merge(attributes)
+            children.elements.append(child)
+        }
+        return children
+    }
+
+    func render() -> Markup {
+        // This method is required by AccordionElement, but we'll always
+        // deconstruct PackHTML before rendering it.
+        fatalError("Please file a bug report with the Ignite project.")
+    }
+}
