@@ -6,50 +6,47 @@
 //
 
 /// A clickable button with a label and styling.
-public struct Button: InlineElement, ControlGroupElement {
+public struct Button<Label: InlineElement>: InlineElement, ControlGroupElement {
     /// The content and behavior of this HTML.
     public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// Whether this button should submit a form or not. Defaults to `.plain`.
-    var type = ButtonType.plain
+    private var type = ButtonType.plain
 
     /// How large this button should be drawn. Defaults to `.medium`.
-    var size = ButtonSize.medium
+    private var size = ButtonSize.medium
 
     /// How this button should be styled on the screen. Defaults to `.default`.
-    var role = Role.default
+    private var role = Role.default
 
     /// Elements to render inside this button.
-    var label: any InlineElement
+    private var label: Label
 
     /// The icon element to display before the title.
-    var systemImage: String?
+    private var systemImage: String?
 
     /// Whether the button is disabled and cannot be interacted with.
     private var isDisabled = false
 
     /// Creates a button with no label. Used in some situations where
     /// exact styling is performed by Bootstrap, e.g. in Carousel.
-    public init() {
+    public init() where Label == EmptyInlineElement {
         self.label = EmptyInlineElement()
     }
 
     /// Creates a button with a label.
     /// - Parameter label: The label text to display on this button.
-    public init(_ label: some InlineElement) {
+    public init(_ label: Label) {
         self.label = label
     }
 
     /// Creates a button from a more complex piece of HTML.
     /// - Parameter label: An inline element builder of all the content
     /// for this button.
-    public init(@InlineElementBuilder label: @escaping () -> some InlineElement) {
+    public init(@InlineElementBuilder label: () -> Label) {
         self.label = label()
     }
 
@@ -58,12 +55,11 @@ public struct Button: InlineElement, ControlGroupElement {
     ///   - title: The label text to display on this button.
     ///   - systemImage: An image name chosen from https://icons.getbootstrap.com.
     ///   - actions: An element builder that returns an array of actions to run when this button is pressed.
-    /// - actions: An element builder that returns an array of actions to run when this button is pressed.
     public init(
         _ title: String,
         systemImage: String? = nil,
         @ActionBuilder actions: () -> [Action] = { [] }
-    ) {
+    ) where Label == String {
         self.label = title
         self.systemImage = systemImage
         addEvent(name: "onclick", actions: actions())
@@ -75,7 +71,7 @@ public struct Button: InlineElement, ControlGroupElement {
     ///   - label: The label text to display on this button.
     public init(
         @ActionBuilder actions: () -> [Action],
-        @InlineElementBuilder label: @escaping () -> some InlineElement
+        @InlineElementBuilder label: () -> Label
     ) {
         self.label = label()
         addEvent(name: "onclick", actions: actions())
@@ -117,51 +113,12 @@ public struct Button: InlineElement, ControlGroupElement {
         return copy
     }
 
-    /// Returns an array containing the correct CSS classes to style this button
-    /// based on the role and size passed in. This is used for buttons, links, and
-    /// dropdowns, which is why it's shared.
-    /// - Parameters:
-    ///   - role: The role we are styling.
-    ///   - size: The size we are styling.
-    /// - Returns: The CSS classes to apply for this button
-    static func classes(forRole role: Role, size: ButtonSize) -> [String] {
-        var outputClasses = ["btn"]
-
-        switch size {
-        case .small:
-            outputClasses.append("btn-sm")
-        case .large:
-            outputClasses.append("btn-lg")
-        default:
-            break
-        }
-
-        switch role {
-        case .default:
-            break
-        default:
-            outputClasses.append("btn-\(role.rawValue)")
-        }
-
-        return outputClasses
-    }
-
-    /// Adds the correct ARIA attribute for Close buttons, if needed.
-    static func aria(forRole role: Role) -> Attribute? {
-        switch role {
-        case .close:
-            Attribute(name: "label", value: "Close")
-        default:
-            nil
-        }
-    }
-
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> Markup {
         var buttonAttributes = attributes
-            .appending(classes: Button.classes(forRole: role, size: size))
-            .appending(aria: Button.aria(forRole: role))
+            .appending(classes: size.classes(forRole: role))
+            .appending(aria: role.aria())
 
         if isDisabled {
             buttonAttributes.append(customAttributes: .disabled)
@@ -173,15 +130,6 @@ public struct Button: InlineElement, ControlGroupElement {
         }
         labelHTML += label.markupString()
         return Markup("<button type=\"\(type.htmlName)\"\(buttonAttributes)>\(labelHTML)</button>")
-    }
-}
-
-public extension Button {
-    /// Adjusts the number of columns assigned to this element.
-    /// - Parameter width: The new number of columns to use.
-    /// - Returns: A copy of the current element with the adjusted column width.
-    func width(_ width: Int) -> some InlineElement {
-        self.class("w-100", ColumnWidth.count(width).className)
     }
 }
 
