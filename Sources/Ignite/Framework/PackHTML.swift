@@ -47,6 +47,28 @@ extension PackHTML: HTML, SubviewsProvider, VariadicHTML where repeat each Conte
     }
 }
 
+extension PackHTML: InlineElement, InlineSubviewsProvider, CustomStringConvertible
+where repeat each Content: InlineElement {
+    /// The content and behavior of this HTML.
+    var body: Never { fatalError() }
+
+    /// Returns the packed inline elements as a collection.
+    var subviews: InlineSubviewsCollection {
+        var children = InlineSubviewsCollection()
+        for element in repeat each content {
+            var child = InlineSubview(element)
+            child.attributes.merge(attributes)
+            children.elements.append(child)
+        }
+        return children
+    }
+
+    /// Renders all packed inline elements as combined markup.
+    func render() -> Markup {
+        subviews.map { $0.render() }.joined()
+    }
+}
+
 extension PackHTML: DropdownElement where repeat each Content: DropdownElement {
     /// Renders all packed dropdown elements as combined markup.
     func render() -> Markup {
