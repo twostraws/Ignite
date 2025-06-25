@@ -27,7 +27,7 @@ public struct ConditionalHTML<TrueContent, FalseContent>: Sendable { // swiftlin
     }
 }
 
-extension ConditionalHTML: HTML, BodyElement, MarkupElement where TrueContent: HTML, FalseContent: HTML {
+extension ConditionalHTML: HTML, BodyElement where TrueContent: HTML, FalseContent: HTML {
     public var body: some HTML { self }
 
     /// Renders the conditional content as HTML markup.

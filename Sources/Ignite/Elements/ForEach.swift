@@ -18,7 +18,7 @@ public struct ForEach<Data: Sequence, Content> {
     var items: [Content]
 }
 
-extension ForEach: HTML, BodyElement, MarkupElement, VariadicHTML, Sendable where Content: HTML {
+extension ForEach: HTML, BodyElement, VariadicHTML, Sendable where Content: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
 
