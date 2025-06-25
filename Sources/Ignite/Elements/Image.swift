@@ -15,9 +15,6 @@ public struct Image: InlineElement, LazyLoadable {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The path of the image, either relative to the
     /// root of your site, e.g. /images/dog.jpg., or as a web address.
     var path: URL?

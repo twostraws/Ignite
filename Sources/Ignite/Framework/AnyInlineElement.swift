@@ -16,9 +16,6 @@ public struct AnyInlineElement: InlineElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this element belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The underlying HTML content, unattributed.
     var wrapped: any InlineElement
 

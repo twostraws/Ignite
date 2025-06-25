@@ -17,9 +17,6 @@ struct InlineElementCollection: InlineElement, @preconcurrency Sequence {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    var isPrimitive: Bool { true }
-
     /// The array of HTML elements contained in this sequence
     var elements: [any InlineElement] = []
 

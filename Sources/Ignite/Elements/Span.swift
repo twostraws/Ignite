@@ -14,9 +14,6 @@ public struct Span: InlineElement, NavigationElement, ControlGroupElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The contents of this span.
     private var contents: any InlineElement
 

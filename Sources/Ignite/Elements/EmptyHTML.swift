@@ -14,9 +14,6 @@ public struct EmptyHTML: HTML {
     /// Returns self as the body content since this is an empty element
     public var body: Never { fatalError() }
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// Renders this element as an empty string
     /// - Returns: An empty string
     public func render() -> Markup {

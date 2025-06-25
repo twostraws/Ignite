@@ -14,9 +14,6 @@ public struct Divider: HTML, DropdownElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// Creates a new divider.
     public init() {}
 

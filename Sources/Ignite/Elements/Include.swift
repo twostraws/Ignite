@@ -13,9 +13,6 @@ public struct Include: HTML {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The filename you want to bring in, including its extension. This file
     /// must be in your Includes directory.
     private let filename: String

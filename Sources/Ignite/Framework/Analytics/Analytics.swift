@@ -10,9 +10,6 @@ public struct Analytics: HeadElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The analytics service to use
     private let service: Service
 

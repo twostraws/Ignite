@@ -13,9 +13,6 @@ public struct Video: InlineElement, LazyLoadable {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The files of the video to display. This should be specified relative to the
     /// root of your site, e.g. /video/outforwalk.mp4.
     private var files: [String]?

@@ -11,9 +11,6 @@ public struct HeadForEach<Data: Sequence>: HeadElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The sequence of data to iterate over.
     private let data: Data
 

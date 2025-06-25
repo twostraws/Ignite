@@ -20,9 +20,6 @@ public struct Code: InlineElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The code to display.
     private var content: String
 

@@ -13,9 +13,6 @@ public struct Audio: InlineElement, LazyLoadable {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The name of the audio to display. This should be specified relative
     /// to the root of your site, e.g. /audio/bark.mp3.
     private var files: [String]?

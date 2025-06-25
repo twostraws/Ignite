@@ -31,9 +31,6 @@ public struct Embed: HTML, LazyLoadable {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The URL we're embedding inside our page.
     let url: String
 

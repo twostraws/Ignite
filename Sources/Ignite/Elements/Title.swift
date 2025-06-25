@@ -11,9 +11,6 @@ public struct Title: HeadElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// A plain-text string for the page title.
     var text: String
 
