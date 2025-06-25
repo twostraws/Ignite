@@ -41,3 +41,20 @@ extension ConditionalHTML: HTML where TrueContent: HTML, FalseContent: HTML {
         }
     }
 }
+
+
+extension ConditionalHTML: InlineElement, CustomStringConvertible
+where TrueContent: InlineElement, FalseContent: InlineElement {
+    public var body: Never { fatalError() }
+
+    /// Renders the conditional content as inline HTML markup.
+    /// - Returns: The rendered inline markup from either the true or false content.
+    public func render() -> Markup {
+        switch storage {
+        case .trueContent(let content):
+            content.attributes(attributes).render()
+        case .falseContent(let content):
+            content.attributes(attributes).render()
+        }
+    }
+}
