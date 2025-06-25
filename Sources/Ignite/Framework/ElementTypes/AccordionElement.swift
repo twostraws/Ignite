@@ -16,3 +16,11 @@ public protocol AccordionElement {
     /// - Returns: The rendered markup representation.
     func render() -> Markup
 }
+
+extension AccordionElement {
+    /// Creates a collection containing this element as a subview.
+    /// - Returns: An accordion subviews collection wrapping this element.
+    func subviews() -> AccordionSubviewsCollection {
+        AccordionSubviewsCollection(self)
+    }
+}
