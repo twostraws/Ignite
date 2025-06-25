@@ -7,18 +7,15 @@
 
 /// A control that displays a list of section titles that can be folded out to
 /// display more content.
-public struct Accordion: HTML {
+public struct Accordion<Content: AccordionElement>: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// A collection of sections you want to show inside this accordion.
-    private var items: [Item]
+    private var content: Content
 
     /// Adjusts what happens when a section is opened.
     /// Defaults to `.individual`, meaning that only one
@@ -28,8 +25,8 @@ public struct Accordion: HTML {
     /// Create a new Accordion from a collection of sections.
     /// - Parameter items: A result builder containing all the sections
     /// you want to display in this accordion.
-    public init(@ElementBuilder<Item> _ items: () -> [Item]) {
-        self.items = items()
+    public init(@AccordionElementBuilder _ content: () -> Content) {
+        self.content = content()
     }
 
     /// Creates a new `Accordion` instance from a collection of items, along with a function
@@ -38,8 +35,12 @@ public struct Accordion: HTML {
     ///   - items: A sequence of items you want to convert into items.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a row representing that value in the accordion.
-    public init<T>(_ items: any Sequence<T>, content: (T) -> Item) {
-        self.items = items.map(content)
+    public init<T, S: Sequence, ItemContent: AccordionElement>(
+        _ items: S,
+        content: @escaping (T) -> ItemContent
+    ) where S.Element == T, Content == ForEach<[T], ItemContent> {
+        let content = ForEach(Array(items), content: content)
+        self.content = content
     }
 
     /// Adjusts the open mode for this Accordion.
@@ -120,7 +121,7 @@ public struct Accordion: HTML {
         // items so they can adapt accordinly.
         let accordionID = "accordion\(UUID().uuidString.truncatedHash)"
         let content = Section {
-            ForEach(items) { item in
+            ForEach(self.content.subviews()) { item in
                 item.assigned(to: accordionID, openMode: openMode)
             }
         }
