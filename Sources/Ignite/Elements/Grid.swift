@@ -124,6 +124,18 @@ public struct Grid<Content: HTML>: HTML {
         return copy
     }
 
+    @available(*, deprecated, message: """
+    Please use the `columns` initialization parameter. This method will be removed in a future release.
+    """)
+    /// Adjusts the number of columns that can be fitted into this grid.
+    /// - Parameter columns: The number of columns to use
+    /// - Returns: A new `Grid` instance with the updated column count.
+    public func columns(_ columns: Int) -> Self {
+        var copy = self
+        copy.columnCount = columns
+        return copy
+    }
+
     private func createGridAttributes(columnCount: Int) -> CoreAttributes {
         var attributes = attributes
         attributes.append(styles: gridItemSizing.inlineStyles)
