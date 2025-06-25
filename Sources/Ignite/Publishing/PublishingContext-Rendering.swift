@@ -94,7 +94,7 @@ extension PublishingContext {
 
         /// Creates a unique list of sorted tags from across the site, starting
         /// with `nil` for the "all tags" page.
-        let tags: [String?] = [nil] + Set(allContent.compactMap(\.tags).flatMap(\.self)).sorted()
+        let tags: [String?] = [nil] + Set(allContent.compactMap(\.tags).flatMap(\.self).map(\.name)).sorted()
 
         for tag in tags {
             let path: String = if let tag {
