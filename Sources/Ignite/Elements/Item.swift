@@ -5,6 +5,12 @@
 // See LICENSE for license information.
 //
 
+/// A type that inherits data from a containing `Accordion`.
+@MainActor
+protocol AccordionItemAssignable: AccordionElement {
+    func assigned(to parentID: String, openMode: AccordionOpenMode) -> Self
+}
+
 /// One item inside an accordion.
 public struct Item: HTML {
     /// The content and behavior of this HTML.
