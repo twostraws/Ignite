@@ -5,21 +5,23 @@
 // See LICENSE for license information.
 //
 
-/// A result builder that enables declarative syntax for constructing inline HTML elements.
+/// A result builder that enables declarative syntax for constructing HTML elements.
 ///
-/// This builder provides support for creating inline element hierarchies using
-/// a SwiftUI-like syntax, handling common control flow patterns like conditionals and loops.
+/// This builder provides support for creating HTML hierarchies using SwiftUI-like syntax,
+/// handling common control flow patterns like conditionals, loops, and switch statements.
 @MainActor
 @resultBuilder
 public struct InlineElementBuilder {
-    /// Converts a single inline element into a builder expression.
-    /// - Parameter content: The inline element to convert
-    /// - Returns: The same inline element, unchanged
-    public static func buildExpression<Content: InlineElement>(_ content: Content) -> Content {
+    /// Converts a single HTML element into a builder expression.
+    /// - Parameter content: The HTML element to convert
+    /// - Returns: The same HTML element, unchanged
+    public static func buildExpression<Content: InlineElement>(_ content: Content) -> some InlineElement {
         content
     }
-    
+
     /// Converts `Never` into a builder expression.
+    /// - Parameter content: The HTML element to convert
+    /// - Returns: The same HTML element, unchanged
     public static func buildExpression(_ content: Never) -> Never {}
 
     /// Creates an empty HTML element when no content is provided.
@@ -27,80 +29,64 @@ public struct InlineElementBuilder {
     public static func buildBlock() -> some InlineElement {
         EmptyInlineElement()
     }
-    
-    /// Passes through `Never` unchanged.
+
+    /// Passes through a single HTML element unchanged.
+    /// - Parameter content: The HTML element to pass through
+    /// - Returns: The same HTML element
     public static func buildBlock(_ content: Never) -> Never {}
 
-    /// Passes through a single inline element unchanged.
-    /// - Parameter content: The inline element to pass through
-    /// - Returns: The same inline element
-    public static func buildBlock<Content: InlineElement>(_ content: Content) -> Content {
+    /// Passes through a single HTML element unchanged.
+    /// - Parameter content: The HTML element to pass through
+    /// - Returns: The same HTML element
+    public static func buildBlock<Content: InlineElement>(_ content: Content) -> some InlineElement {
         content
-    }
-
-    /// Handles array transformations in the builder.
-    /// - Parameter components: Array of inline elements
-    /// - Returns: A flattened HTML element
-    public static func buildArray<Content: InlineElement>(_ components: [Content]) -> some InlineElement {
-        InlineElementCollection(components)
-    }
-
-    /// Handles optional inline elements.
-    /// - Parameter component: An optional inline element
-    /// - Returns: Either the wrapped element or an empty element
-    public static func buildOptional<Content: InlineElement>(_ component: Content?) -> some InlineElement {
-        if let component {
-            AnyInlineElement(component)
-        } else {
-            AnyInlineElement(EmptyInlineElement())
-        }
     }
 
     /// Handles the first branch of an if/else statement.
-    /// - Parameter component: The inline element to use if condition is true
-    /// - Returns: The provided inline element
-    public static func buildEither<Content: InlineElement>(first component: Content) -> Content {
-        component
+    /// - Parameter component: The HTML element to use if condition is true
+    /// - Returns: The wrapped HTML element
+    public static func buildEither<T, F>(
+        first content: T
+    ) -> ConditionalHTML<T, F> where T: InlineElement, F: InlineElement {
+        .init(storage: .trueContent(content))
     }
 
     /// Handles the second branch of an if/else statement.
-    /// - Parameter component: The inline element to use if condition is false
-    /// - Returns: The provided inline element
-    public static func buildEither<Content: InlineElement>(second component: Content) -> Content {
-        component
+    /// - Parameter component: The HTML element to use if condition is false
+    /// - Returns: The wrapped HTML element
+    public static func buildEither<T, F>(
+        second content: F
+    ) -> ConditionalHTML<T, F> where T: InlineElement, F: InlineElement {
+        .init(storage: .falseContent(content))
     }
 
-    /// Handles variadic inline elements by combining them into a flat structure.
-    /// - Parameter components: Variable number of inline elements
-    /// - Returns: A flattened HTML structure containing all elements
-    public static func buildBlock(_ components: any InlineElement...) -> some InlineElement {
-        InlineElementCollection(components)
-    }
-}
-
-/// Extension providing result builder functionality for combining multiple HTML elements
-public extension InlineElementBuilder {
-    /// Loads a single piece of HTML to be combined with others.
-    /// - Parameter content: The HTML to load.
-    /// - Returns: The original thing we read, ready to be combined.
-    static func buildPartialBlock<Content>(first content: Content) -> Content where Content: InlineElement {
-        content
+    /// Handles optional content in if statements.
+    /// - Parameter component: An optional HTML element
+    /// - Returns: Either the wrapped element or an empty element
+    public static func buildOptional<Content: InlineElement>(
+        _ content: Content?
+    ) -> ConditionalHTML<Content, EmptyInlineElement> {
+        guard let content else {
+            return buildEither(second: EmptyInlineElement())
+        }
+        return buildEither(first: content)
     }
 
-    /// Combines an exist piece of HTML with another piece.
+    /// Handles availability conditions in switch statements.
+    /// - Parameter component: The HTML element to conditionally include
+    /// - Returns: The same HTML element unchanged
+    public static func buildLimitedAvailability(_ component: some InlineElement) -> some InlineElement {
+        AnyInlineElement(component)
+    }
+
+    /// Combines multiple pieces of HTML together.
     /// - Parameters:
     ///   - accumulated: The previous collection of HTML.
     ///   - next: The next piece of HTML to combine.
     /// - Returns: The combined HTML.
-    static func buildPartialBlock<C0: InlineElement, C1: InlineElement>(
-        accumulated: C0,
-        next: C1
-    ) -> some InlineElement {
-        if var current = accumulated as? InlineElementCollection {
-            current.elements.append(AnyInlineElement(next))
-            return current
-        } else {
-            return InlineElementCollection([AnyInlineElement(accumulated), AnyInlineElement(next)])
-        }
+    public static func buildBlock<each Content>(
+        _ content: repeat each Content
+    ) -> some InlineElement where repeat each Content: InlineElement {
+        PackHTML(repeat each content)
     }
 }
