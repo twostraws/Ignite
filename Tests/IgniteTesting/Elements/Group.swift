@@ -16,7 +16,7 @@ import Testing
 class GroupTests: IgniteTestSuite {
     @Test("Group does not change HTML structure")
     func groupDoesNotAddAnyAdditionalHTML() async throws {
-        let element = Group {
+        let element: any HTML = Group {
             ControlLabel("Top Label")
             Text("Middle Text")
             Button("Bottom Button") {
