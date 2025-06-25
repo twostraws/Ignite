@@ -69,6 +69,30 @@ extension ForEach: TableElement where Content: TableElement {
     }
 }
 
+extension ForEach: CarouselElement where Content: CarouselElement {
+    /// Creates a new ForEach instance that generates HTML content from a sequence.
+    /// - Parameters:
+    ///   - data: The sequence to iterate over.
+    ///   - content: A closure that converts each element into HTML content.
+    init(
+        _ data: Data,
+        @CarouselElementBuilder content: @escaping (Data.Element) -> Content
+    ) {
+        self.data = data
+        self.items = data.map(content)
+    }
+
+    /// Renders the ForEach content when this isn't part of a list.
+    /// - Returns: The rendered HTML string.
+    public func render() -> Markup {
+        items.map {
+            var item = $0
+            item.attributes.merge(attributes)
+            return item.render()
+        }.joined()
+    }
+}
+
 extension ForEach: ListItemProvider where Content: ListItemProvider {}
 
 extension ForEach: ColumnProvider where Content: ColumnProvider {}
