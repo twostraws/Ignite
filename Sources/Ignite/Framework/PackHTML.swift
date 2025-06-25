@@ -128,3 +128,24 @@ where repeat each Content: CarouselElement {
         fatalError("Please file a bug report with the Ignite project.")
     }
 }
+
+extension PackHTML: NavigationElement, NavigationSubviewsProvider
+where repeat each Content: NavigationElement {
+
+    /// Returns the packed navigation elements as a collection.
+    var children: NavigationSubviewsCollection {
+        var children = NavigationSubviewsCollection()
+        for element in repeat each content {
+            var child = NavigationSubview(element)
+            child.attributes.merge(attributes)
+            children.elements.append(child)
+        }
+        return children
+    }
+
+    func render() -> Markup {
+        // This method is required by NavigationElement, but we'll always
+        // deconstruct PackHTML before rendering it.
+        fatalError("Please file a bug report with the Ignite project.")
+    }
+}
