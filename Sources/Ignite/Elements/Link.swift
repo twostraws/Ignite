@@ -8,41 +8,38 @@
 import Foundation
 
 /// A hyperlink to another resource on this site or elsewhere.
-public struct Link: InlineElement, NavigationElement, DropdownElement {
+public struct Link<Content: InlineElement>: InlineElement, NavigationElement, DropdownElement {
     /// The content and behavior of this HTML.
     public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// How a `NavigationBar` displays this item at different breakpoints.
     public var navigationBarVisibility: NavigationBarVisibility = .automatic
 
     /// The content to display inside this link.
-    var content: any InlineElement
+    private var content: Content
 
     /// The location to which this link should direct users.
     var url: String
 
     /// The style for this link. Defaults to `.automatic`.
-    var style = LinkStyle.automatic
+    private var style = LinkStyle.automatic
 
     /// When rendered with the `.button` style, this controls the button's size.
-    var size = ButtonSize.medium
+    private var size = ButtonSize.medium
 
     /// The role of this link, which applies various styling effects.
-    var role = Role.default
+    private var role = Role.default
 
     /// Returns an array containing the correct CSS classes to style this link.
-    var linkClasses: [String] {
+    private var linkClasses: [String] {
         var outputClasses = [String]()
 
         switch style {
         case .button:
-            outputClasses.append(contentsOf: Button.classes(forRole: role, size: size))
+            outputClasses.append(contentsOf: size.classes(forRole: role))
         case .underline(let baseDecoration, hover: let hoverDecoration) where style != .automatic:
             outputClasses.append("link-underline")
             outputClasses.append("link-underline-opacity-\(baseDecoration)")
@@ -64,7 +61,7 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     /// - Parameters:
     ///   - content: The user-facing content to show inside the `Link`.
     ///   - target: The URL you want to link to.
-    public init(_ content: any InlineElement, target: String) {
+    public init(_ content: Content, target: String) {
         self.content = content
         self.url = target
     }
@@ -74,7 +71,7 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     /// - Parameters:
     ///   - content: The user-facing content to show inside the `Link`.
     ///   - target: The URL you want to link to.
-    public init(target: String, @InlineElementBuilder content: () -> some InlineElement) {
+    public init(target: String, @InlineElementBuilder content: () -> Content) {
         self.content = content()
         self.url = target
     }
@@ -86,7 +83,7 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     ///   - content: The user-facing content to show inside the `Link`.
     public init(
         target article: Article,
-        @InlineElementBuilder content: @escaping () -> some InlineElement
+        @InlineElementBuilder content: @escaping () -> Content
     ) {
         self.content = content()
         self.url = article.path
@@ -97,7 +94,7 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     /// - Parameters:
     ///   - content: The user-facing content to show inside the `Link`.
     ///   - target: The `Page` you want to link to.
-    public init(_ content: some InlineElement, target: any StaticPage) {
+    public init(_ content: Content, target: any StaticPage) {
         self.content = content
         self.url = target.path
     }
@@ -107,7 +104,7 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     /// - Parameters:
     ///   - content: The user-facing content to show inside the `Link`.
     ///   - target: The URL you want to link to.
-    public init(_ content: String, target: URL) {
+    public init(_ content: String, target: URL) where Content == String {
         self.content = content
         self.url = target.absoluteString
     }
@@ -117,7 +114,7 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     /// - Parameters:
     ///    - content: The user-facing content to show inside the `Link`.
     ///    - article: A piece of content from your site.
-    public init(_ content: String, target: Article) {
+    public init(_ content: String, target: Article) where Content == String {
         self.content = content
         self.url = target.path
     }
@@ -125,7 +122,7 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     /// Convenience initializer that creates a new `Link` instance using the
     /// title and path of the `Article` instance you provide.
     /// - Parameter article: A piece of content from your site.
-    public init(_ article: Article) {
+    public init(_ article: Article) where Content == String {
         self.content = article.title
         self.url = article.path
     }
@@ -242,6 +239,8 @@ public struct Link: InlineElement, NavigationElement, DropdownElement {
     }
 }
 
+extension Link: LinkProvider {}
+
 extension Link: DropdownElementRenderable {
     func renderAsDropdownElement() -> Markup {
         ListItem {
@@ -265,7 +264,7 @@ extension Link: NavigationElementRenderable {
         if isActive {
             link.attributes.append(aria: .aria(.current, value: "page"))
         }
-        var listItem = ListItem { link }
+        var listItem = ListItem(link)
         listItem.attributes.append(classes: "nav-item")
         listItem.attributes.append(styles: .init(.listStyleType, value: "none"))
         return listItem.render()
