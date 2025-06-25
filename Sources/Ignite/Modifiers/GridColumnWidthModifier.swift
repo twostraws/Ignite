@@ -28,7 +28,7 @@ public extension HTML {
     /// - Parameter width: The new number of columns to use.
     /// - Returns: A new element with the adjusted column width.
     @available(*, deprecated, message: """
-    Please use the gridCellColumns() modifier. This method will be removed in a future release.
+    Please use gridCellColumns() or formControlWidth(). This method will be removed in a future release.
     """)
     func width(_ width: Int) -> some HTML {
         gridCellColumns(width)
