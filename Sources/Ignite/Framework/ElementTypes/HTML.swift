@@ -47,15 +47,6 @@ extension HTML {
         render().isEmpty
     }
 
-    /// A Boolean value indicating whether this represents `Text`.
-    var isText: Bool {
-        if let anyHTML = body as? AnyHTML {
-            anyHTML.wrapped is Text
-        } else {
-            body is Text
-        }
-    }
-
     /// A Boolean value indicating whether this represents `Section`.
     var isSection: Bool {
         if let anyHTML = body as? AnyHTML {
