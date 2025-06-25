@@ -37,11 +37,11 @@ class AccordionTests: IgniteTestSuite {
 
     @Test("Outputs Items Provided", arguments: [AccordionOpenMode.all, .individual])
     func outputs_result_of_calling_render_on_each_item_provided(openMode: AccordionOpenMode) throws {
-        func items() -> [Item] {[
-            Item("title 1", content: {}),
-            Item("second title", content: { Text("hello") }),
+        @AccordionElementBuilder func items() -> some AccordionElement {
+            Item("title 1", content: {})
+            Item("second title", content: { Text("hello") })
             Item("titulo 3", content: { Image("imagename") })
-        ]}
+        }
 
         let sut = Accordion(items).openMode(openMode)
         let output = sut.markupString()
@@ -55,11 +55,10 @@ class AccordionTests: IgniteTestSuite {
             .clearingItemIDs()
             .clearingAccordionIDs()
 
-        for item in items() {
+        for item in items().subviews() {
             let itemoutput = item
                 .assigned(to: accordionID, openMode: openMode)
-                .render()
-                .string
+                .markupString()
 
             let expected = itemoutput
                 .clearingItemIDs()
@@ -71,11 +70,11 @@ class AccordionTests: IgniteTestSuite {
 
     @Test("Items Receive Accordion ID of parent Accordion", arguments: [AccordionOpenMode.all, .individual])
     func provides_accordion_id_to_each_item_output(openMode: AccordionOpenMode) throws {
-        func items() -> [Item] {[
-            Item("title 1", content: {}),
-            Item("second title", content: { Text("hello") }),
+        @AccordionElementBuilder func items() -> some AccordionElement {
+            Item("title 1", content: {})
+            Item("second title", content: { Text("hello") })
             Item("titulo 3", content: { Image("imagename") })
-        ]}
+        }
 
         let sut = Accordion(items).openMode(openMode)
         let output = sut.markupString()
