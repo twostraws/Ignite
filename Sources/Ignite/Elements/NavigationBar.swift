@@ -102,10 +102,11 @@ public struct NavigationBar: HTML {
     /// The number of controls that aren't `Spacer`,
     /// used to determine the gap class that should be used.
     private var visibleControlCount: Int {
-        items.filter {
-            $0.navigationBarVisibility == .always
+        0
+//        items.filter {
+//            $0.navigationBarVisibility == .always
 //            && $0.is(Spacer.self) == false
-        }.count
+//        }.count
     }
 
     /// Creates a new `NavigationBar` instance from the `logo`, without any items.
@@ -199,8 +200,8 @@ public struct NavigationBar: HTML {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func render() -> Markup {
-        let pinnedItems = items.filter { $0.navigationBarVisibility == .always }
-        let collapsibleItems = items.filter { $0.navigationBarVisibility == .automatic }
+        let pinnedItems = items
+        let collapsibleItems = items
 
         return Tag("header") {
             Tag("nav") {
