@@ -12,21 +12,18 @@
 ///
 /// - Important: For types that accept only `InlineElement` or use `@InlineElementBuilder`,
 /// use `Span` instead of `Text`.
-public struct Text: HTML, DropdownElement {
+public struct Text<Content: InlineElement>: HTML, DropdownElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The font to use for this text.
-    private var fontStyle = FontStyle.body
+    var fontStyle = FontStyle.body
 
     /// The content to place inside the text.
-    private var content: any BodyElement
+    private var content: Content
 
     /// Whether this text contains multiple paragraphs of Markdown content.
     private var isMultilineMarkdown = false
@@ -34,12 +31,12 @@ public struct Text: HTML, DropdownElement {
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
     /// - Parameter content: An array of the content to place into the text.
-    public init(@InlineElementBuilder content: () -> any InlineElement) {
+    public init(@InlineElementBuilder content: () -> Content) {
         self.content = content()
     }
 
     /// Creates a new `Text` instance from one inline element.
-    public init(_ string: any InlineElement) {
+    public init(_ string: Content) {
         self.content = string
     }
 
@@ -57,6 +54,35 @@ public struct Text: HTML, DropdownElement {
         return copy
     }
 
+    /// Renders this element using publishing context passed in.
+    /// - Returns: The HTML for this element.
+    public func render() -> Markup {
+        if isMultilineMarkdown {
+            // HTMLCollection will pass its attributes to each child.
+            // This works fine for styles like color, but for styles like
+            // padding, we'd expect them to apply to the paragraphs
+            // collectively. So we'll wrap the paragraphs in a Section.
+            return Section(content)
+                .attributes(attributes)
+                .render()
+        } else if FontStyle.classBasedStyles.contains(fontStyle), let sizeClass = fontStyle.sizeClass {
+            let attributes = attributes.appending(classes: sizeClass)
+            return Markup(
+                "<p\(attributes)>" +
+                content.markupString() +
+                "</p>"
+            )
+        } else {
+            return Markup(
+                "<\(fontStyle.rawValue)\(attributes)>" +
+                content.markupString() +
+                "</\(fontStyle.rawValue)>"
+            )
+        }
+    }
+}
+
+extension Text where Content == String {
     /// Creates a new `Text` instance using "lorem ipsum" placeholder text.
     /// - Parameter placeholderLength: How many placeholder words to generate.
     public init(placeholderLength: Int) {
@@ -123,7 +149,7 @@ public struct Text: HTML, DropdownElement {
                 }
                 .map(Text.init)
 
-            self.content = HTMLCollection(paragraphs)
+            self.content = paragraphs.map { $0.markupString() }.joined()
             self.isMultilineMarkdown = true
         } else {
             // Remove the wrapping <p> tags since they'll be added by markup()
@@ -146,64 +172,6 @@ public struct Text: HTML, DropdownElement {
             self.content = markup
             publishingContext.addError(.failedToParseMarkup)
         }
-    }
-
-    /// Renders this element using publishing context passed in.
-    /// - Returns: The HTML for this element.
-    public func render() -> Markup {
-        if isMultilineMarkdown {
-            // HTMLCollection will pass its attributes to each child.
-            // This works fine for styles like color, but for styles like
-            // padding, we'd expect them to apply to the paragraphs
-            // collectively. So we'll wrap the paragraphs in a Section.
-            Section(content)
-                .attributes(attributes)
-                .render()
-        } else {
-            Markup(
-                "<\(fontStyle.rawValue)\(attributes)>" +
-                content.markupString() +
-                "</\(fontStyle.rawValue)>"
-            )
-        }
-    }
-}
-
-public extension Text {
-    /// Applies a foreground color to the current element.
-    /// - Parameter color: The style to apply, specified as a `Color` object.
-    /// - Returns: The current element with the updated color applied.
-    func foregroundStyle(_ color: Color) -> Self {
-        var copy = self
-        copy.attributes.append(styles: .init(.color, value: color.description))
-        return copy
-    }
-
-    /// Applies a foreground color to the current element.
-    /// - Parameter color: The style to apply, specified as a string.
-    /// - Returns: The current element with the updated color applied.
-    func foregroundStyle(_ color: String) -> Self {
-        var copy = self
-        copy.attributes.append(styles: .init(.color, value: color))
-        return copy
-    }
-
-    /// Applies a foreground color to the current element.
-    /// - Parameter style: The style to apply, specified as a `Color` object.
-    /// - Returns: The current element with the updated color applied.
-    func foregroundStyle(_ style: ForegroundStyle) -> Self {
-        var copy = self
-        copy.attributes.append(classes: style.rawValue)
-        return copy
-    }
-
-    /// Applies a foreground color to the current element.
-    /// - Parameter gradient: The style to apply, specified as a `Gradient` object.
-    /// - Returns: The current element with the updated color applied.
-    func foregroundStyle(_ gradient: Gradient) -> Self {
-        var copy = self
-        copy.attributes.append(styles: gradient.styles)
-        return copy
     }
 }
 
