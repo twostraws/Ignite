@@ -42,7 +42,6 @@ extension ConditionalHTML: HTML where TrueContent: HTML, FalseContent: HTML {
     }
 }
 
-
 extension ConditionalHTML: InlineElement, CustomStringConvertible
 where TrueContent: InlineElement, FalseContent: InlineElement {
     public var body: Never { fatalError() }
