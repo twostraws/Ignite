@@ -6,28 +6,25 @@
 //
 
 /// A collection of slides the user can swipe through.
-public struct Carousel: HTML {
+public struct Carousel<Slides: CarouselElement>: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// An automatically-generated unique identifier for this carousel.
     /// Used to tell its buttons which carousel they are controlling.
     private let carouselID = "carousel\(UUID().uuidString.truncatedHash)"
 
     /// The collection of slides to show inside this carousel.
-    var items: [Slide]
+    private var slides: CarouselSubviewsCollection
 
     /// The animation style used to move between slides.
-    var style: CarouselStyle = .move
+    private var style: CarouselStyle = .move
 
     /// The amount of time, in seconds, a slide is shown before the next appears.
-    var duration: Double?
+    private var duration: Double?
 
     /// A computed property that determines if the carousel uses crossfade transitions.
     private var doesCrossfade: Bool {
@@ -41,8 +38,8 @@ public struct Carousel: HTML {
     /// Creates a new carousel from an element builder that generates slides.
     /// - Parameter items: An element builder that returns an array of
     ///   slides to place in this carousel.
-    public init(@ElementBuilder<Slide> _ items: () -> [Slide]) {
-        self.items = items()
+    public init(@CarouselElementBuilder slides: () -> Slides) {
+        self.slides = slides().subviews()
     }
 
     /// Creates a new carousel from a collection of items, along with a function that converts
@@ -51,8 +48,12 @@ public struct Carousel: HTML {
     ///   - items: A sequence of items you want to convert into slides.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a slide representing that value in the carousel.
-    public init<T>(_ items: any Sequence<T>, content: (T) -> Slide) {
-        self.items = items.map(content)
+    public init<T, S: Sequence, SlideContent: CarouselElement>(
+        _ items: S,
+        @CarouselElementBuilder slides: @escaping (T) -> SlideContent
+    ) where S.Element == T, Slides == ForEach<[T], SlideContent> {
+        let items = items.map(slides)
+        self.slides = CarouselSubviewsCollection(items.map(CarouselSubview.init))
     }
 
     /// Adjusts the style of this carousel.
@@ -95,7 +96,7 @@ public struct Carousel: HTML {
     public func render() -> Markup {
         Section {
             Section {
-                ForEach(0 ..< items.count) { index in
+                ForEach(0 ..< slides.elements.count) { index in
                     Button()
                         .data("bs-target", "#\(carouselID)")
                         .data("bs-slide-to", String(index))
@@ -107,8 +108,9 @@ public struct Carousel: HTML {
             .class("carousel-indicators")
 
             Section {
-                ForEach(items.enumerated()) { index, item in
-                    item.assigned(at: index)
+                ForEach(slides.enumerated()) { index, item in
+                    item
+                        .class(index == 0 ? "active" : nil)
                         .style(slideTransition(for: style))
                 }
             }
@@ -142,7 +144,13 @@ public struct Carousel: HTML {
         .id(carouselID)
         .class("carousel", "slide", doesCrossfade ? "carousel-fade" : nil)
         .data("bs-ride", "carousel")
-        .data("bs-interval", duration != nil ? Int(duration! * 1000).formatted() : "")
+        .data("bs-interval", duration != nil ? Int(duration! * 1000).formatted() : nil)
         .render()
+    }
+}
+
+private extension HTML {
+    func data(_ name: String, _ value: String?) -> some HTML {
+        modifier(DataModifier(name: name, value: value))
     }
 }
