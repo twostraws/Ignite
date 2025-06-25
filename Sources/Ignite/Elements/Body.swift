@@ -5,17 +5,15 @@
 // See LICENSE for license information.
 //
 
-public struct Body: MarkupElement {
+@MainActor
+public struct Body {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// Whether this HTML uses Bootstrap's `container` class to determine page width.
-    var isBoundByContainer: Bool = true
+    private var isBoundByContainer: Bool = true
 
-    var content: any HTML
+    private var content: any HTML
 
     public init(@HTMLBuilder _ content: () -> some HTML) {
         self.content = content()
@@ -42,6 +40,7 @@ public struct Body: MarkupElement {
         var attributes = attributes
         var output = content.render()
 
+        let publishingContext = PublishingContext.shared
         if publishingContext.site.useDefaultBootstrapURLs == .localBootstrap {
             output += Script(file: "/js/bootstrap.bundle.min.js").render()
         } else if
@@ -102,7 +101,7 @@ public extension Body {
     ///   - name: The name of the custom attribute
     ///   - value: The value of the custom attribute
     /// - Returns: The modified `HTML` element
-    func customAttribute(name: String, value: String) -> Self {
+    func attribute(_ name: String, _ value: String) -> Self {
         var copy = self
         copy.attributes.append(customAttributes: .init(name: name, value: value))
         return copy
