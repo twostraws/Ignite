@@ -196,6 +196,44 @@ public extension Text {
 }
 
 public extension Text {
+    /// Applies a foreground color to the current element.
+    /// - Parameter color: The style to apply, specified as a `Color` object.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ color: Color) -> Self {
+        var copy = self
+        copy.attributes.append(styles: .init(.color, value: color.description))
+        return copy
+    }
+
+    /// Applies a foreground color to the current element.
+    /// - Parameter color: The style to apply, specified as a string.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ color: String) -> Self {
+        var copy = self
+        copy.attributes.append(styles: .init(.color, value: color))
+        return copy
+    }
+
+    /// Applies a foreground color to the current element.
+    /// - Parameter style: The style to apply, specified as a `Color` object.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ style: ForegroundStyle) -> Self {
+        var copy = self
+        copy.attributes.append(classes: style.rawValue)
+        return copy
+    }
+
+    /// Applies a foreground color to the current element.
+    /// - Parameter gradient: The style to apply, specified as a `Gradient` object.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ gradient: Gradient) -> Self {
+        var copy = self
+        copy.attributes.append(styles: gradient.styles)
+        return copy
+    }
+}
+
+public extension Text {
     /// Adjusts the heading level of this text.
     /// - Parameter style: The new heading level.
     /// - Returns: A new `Text` instance with the updated font style.
