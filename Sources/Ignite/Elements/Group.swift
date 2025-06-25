@@ -57,3 +57,7 @@ extension Group: HTML, Sendable, VariadicHTML where Content: HTML {
 }
 
 extension Group: ColumnProvider where Content: ColumnProvider {}
+
+extension Group: LinkProvider where Content: LinkProvider {
+    var url: String { content.url }
+}
