@@ -176,6 +176,26 @@ extension Text where Content == String {
 }
 
 public extension Text {
+    /// Sets the line height of the element using a custom value.
+    /// - Parameter spacing: The line height multiplier to use.
+    /// - Returns: The modified HTML element.
+    func lineSpacing(_ spacing: Double) -> Self {
+        var copy = self
+        copy.attributes.append(styles: .init(.lineHeight, value: spacing.formatted(.nonLocalizedDecimal)))
+        return copy
+    }
+
+    /// Sets the line height of the element using a predefined Bootstrap value.
+    /// - Parameter spacing: The predefined line height to use.
+    /// - Returns: The modified HTML element.
+    func lineSpacing(_ spacing: LineSpacing) -> Self {
+        var copy = self
+        copy.attributes.append(classes: "lh-\(spacing.rawValue)")
+        return copy
+    }
+}
+
+public extension Text {
     /// Adjusts the heading level of this text.
     /// - Parameter style: The new heading level.
     /// - Returns: A new `Text` instance with the updated font style.
