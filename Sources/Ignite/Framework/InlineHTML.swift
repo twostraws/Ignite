@@ -55,3 +55,5 @@ extension InlineHTML: CardComponentConfigurable where Content: CardComponentConf
 }
 
 extension InlineHTML: NavigationElement where Content: NavigationElement {}
+
+extension InlineHTML: ImageProvider where Content: ImageProvider {}
