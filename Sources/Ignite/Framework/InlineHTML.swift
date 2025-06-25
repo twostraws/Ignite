@@ -54,6 +54,10 @@ extension InlineHTML: CardComponentConfigurable where Content: CardComponentConf
     }
 }
 
+extension InlineHTML: LinkProvider where Content: LinkProvider {
+    var url: String { content.url }
+}
+
 extension InlineHTML: NavigationElement where Content: NavigationElement {}
 
 extension InlineHTML: ImageProvider where Content: ImageProvider {}
