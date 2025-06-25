@@ -47,15 +47,6 @@ extension HTML {
         render().isEmpty
     }
 
-    /// A Boolean value indicating whether this represents `Section`.
-    var isSection: Bool {
-        if let anyHTML = body as? AnyHTML {
-            anyHTML.wrapped is Section
-        } else {
-            body is Section
-        }
-    }
-
     /// Whether the outermost element of this type is a `<div>`
     /// that can position its contents.
     var requiresPositioningContext: Bool {
