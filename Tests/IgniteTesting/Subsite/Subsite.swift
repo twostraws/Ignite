@@ -31,7 +31,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         publishingContext.environment.pageContent = Text("TEXT")
 
         let element = Body()
-        let output = element.markupString()
+        let output = element.render().string
         let path = publishingContext.path(for: URL(string: "/js")!)
 
         #expect(output == """
