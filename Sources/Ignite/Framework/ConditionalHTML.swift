@@ -58,3 +58,21 @@ where TrueContent: InlineElement, FalseContent: InlineElement {
         }
     }
 }
+
+extension ConditionalHTML: ControlGroupElement
+where TrueContent: ControlGroupElement, FalseContent: ControlGroupElement {
+    /// Renders the conditional content as a control group element.
+    /// - Returns: The rendered control group markup from either the true or false content.
+    public func render() -> Markup {
+        switch storage {
+        case .trueContent(let content):
+            var content = content
+            content.attributes.merge(attributes)
+            return content.render()
+        case .falseContent(let content):
+            var content = content
+            content.attributes.merge(attributes)
+            return content.render()
+        }
+    }
+}
