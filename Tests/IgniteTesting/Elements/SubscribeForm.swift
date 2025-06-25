@@ -26,19 +26,17 @@ class SubscribeFormTests: IgniteTestSuite {
         <div class="col">\
         <div class="form-floating">\
         <input id="sendfox_form_email" placeholder="MyLabel" \
-        type="text" name="email" class="form-control col" />\
+        type="text" name="email" class="form-control" />\
         <label for="sendfox_form_email">MyLabel</label>\
         </div>\
         </div>\
-        <div class="col-auto d-flex align-items-stretch">\
-        <button type="submit" class="col-auto w-100 btn btn-primary">Subscribe</button>\
+        <div class="col-auto">\
+        <button type="submit" class="h-100 btn btn-primary">Subscribe</button>\
         </div>\
-        <fieldset style="position: absolute; left: -5000px;" aria-hidden="true">\
-        <div class="form-floating">\
+        <div style="position: absolute; left: -5000px;" aria-hidden="true">\
         <input type="text" name="a_password" tabindex="-1" value="" autocomplete="off" \
         class="form-control" />\
         </div>\
-        </fieldset>\
         </form>\
         <script charset="utf-8" src="https://cdn.sendfox.com/js/form.js"></script>
         """)
