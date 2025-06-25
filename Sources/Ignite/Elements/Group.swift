@@ -28,7 +28,7 @@ public struct Group<Content> {
     var content: Content
 }
 
-extension Group: HTML, BodyElement, Sendable, VariadicHTML where Content: HTML {
+extension Group: HTML, Sendable, VariadicHTML where Content: HTML {
     /// Creates a new group containing the given HTML content.
     /// - Parameter content: A closure that creates the HTML content.
     public init(@HTMLBuilder content: () -> Content) {

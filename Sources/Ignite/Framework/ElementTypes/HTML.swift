@@ -8,15 +8,28 @@
 /// A protocol that defines the core behavior and
 /// structure of `HTML` elements in Ignite.
 @MainActor
-public protocol HTML: BodyElement {
+public protocol HTML: Sendable {
     /// The type of HTML content this element contains.
     associatedtype Body: HTML
 
     /// The content and behavior of this `HTML` element.
     @HTMLBuilder var body: Body { get }
+
+    /// The standard set of control attributes for HTML elements.
+    var attributes: CoreAttributes { get set }
+
+    /// Converts this element and its children into HTML markup.
+    /// - Returns: A string containing the HTML markup
+    func render() -> Markup
 }
 
 public extension HTML {
+    /// A collection of styles, classes, and attributes.
+    var attributes: CoreAttributes {
+        get { CoreAttributes() }
+        set {} // swiftlint:disable:this unused_setter_value
+    }
+
     /// Generates the complete `HTML` string representation of the element.
     func render() -> Markup {
         body.render()
@@ -24,22 +37,20 @@ public extension HTML {
 }
 
 extension HTML {
+    /// The publishing context of this site.
+    var publishingContext: PublishingContext {
+        PublishingContext.shared
+    }
+
     /// Converts this element and its children into an HTML string with attributes.
     /// - Returns: A string containing the HTML markup
     func markupString() -> String {
         render().string
     }
-}
 
-extension HTML {
-    /// The Bootstrap class that sizes this element in a grid.
-    var columnWidth: String {
-        if let width = attributes.classes.first(where: {
-            $0.starts(with: "col-md-")
-        }) {
-            return width
-        }
-        return "col"
+    /// The default status as a primitive element.
+    var isPrimitive: Bool {
+        Self.Body.self == Never.self
     }
 
     /// Checks if this element is an empty HTML element.
@@ -72,12 +83,6 @@ extension HTML {
     /// - Note: Adds appropriate HTML attribute based on TabFocus enum
     func tabFocus(_ tabFocus: TabFocus) -> some HTML {
         customAttribute(name: tabFocus.htmlName, value: tabFocus.value)
-    }
-
-    /// Adjusts the number of columns assigned to this element.
-    /// - Parameter width: The new number of columns to use.
-    mutating func columnWidth(_ width: ColumnWidth) {
-        attributes.classes.append(width.className)
     }
 
     func subviews() -> SubviewsCollection {

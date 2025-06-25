@@ -33,7 +33,7 @@ struct ModifiedHTML<Content, Modifier>: Sendable { // swiftlint:disable:this red
     }
 }
 
-extension ModifiedHTML: HTML, BodyElement, VariadicHTML where Content: HTML, Modifier: HTMLModifier {
+extension ModifiedHTML: HTML, VariadicHTML where Content: HTML, Modifier: HTMLModifier {
     /// Applies the modifier to each child in a collection of HTML subviews.
     ///
     /// This method iterates through each child in the provided collection, applies the stored

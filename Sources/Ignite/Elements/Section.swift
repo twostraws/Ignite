@@ -30,7 +30,7 @@ public struct Section<Content> {
     private var content: Content
 }
 
-extension Section: HTML, BodyElement, Sendable, FormElementRenderable where Content: HTML {
+extension Section: HTML, Sendable, FormElementRenderable where Content: HTML {
     /// Creates a section that renders as a `div` element.
     /// - Parameter content: The content to display within this section.
     public init(@HTMLBuilder content: () -> Content) {
