@@ -10,4 +10,4 @@ import Foundation
 public var bundle: Bundle { Bundle.module }
 
 /// The current version. Used to write generator information.
-public let version = "Ignite v0.6.0"
+public let version = "Ignite v0.6.5"
