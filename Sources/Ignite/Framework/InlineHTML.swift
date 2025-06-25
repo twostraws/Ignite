@@ -8,7 +8,7 @@
 /// A type that represents the HTML representation of `InlineElement`.
 public struct InlineHTML<Content: InlineElement>: HTML {
     /// The body of this HTML element.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

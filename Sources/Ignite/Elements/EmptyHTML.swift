@@ -12,7 +12,7 @@ public struct EmptyHTML: HTML {
     public nonisolated init() {}
 
     /// Returns self as the body content since this is an empty element
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// Whether this HTML belongs to the framework.
     public var isPrimitive: Bool { true }

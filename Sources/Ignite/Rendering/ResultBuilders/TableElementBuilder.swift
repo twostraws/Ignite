@@ -39,7 +39,7 @@ public struct TableElementBuilder {
 public extension TableElementBuilder {
     /// An HTML representation of the content of a builder-based table.
     struct Content<C>: HTML where C: TableElement {
-        public var body: some HTML { self }
+        public var body: Never { fatalError() }
         public var attributes = CoreAttributes()
         private var content: C
 

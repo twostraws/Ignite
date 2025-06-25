@@ -8,7 +8,7 @@
 /// Creates vertical space of a specific value.
 public struct Spacer: HTML, NavigationElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

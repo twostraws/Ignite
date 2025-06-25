@@ -20,7 +20,7 @@ public struct ForEach<Data: Sequence, Content> {
 
 extension ForEach: HTML, VariadicHTML, Sendable where Content: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// Creates a new ForEach instance that generates HTML content from a sequence.
     /// - Parameters:

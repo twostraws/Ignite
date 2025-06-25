@@ -28,7 +28,7 @@ public struct ConditionalHTML<TrueContent, FalseContent>: Sendable { // swiftlin
 }
 
 extension ConditionalHTML: HTML where TrueContent: HTML, FalseContent: HTML {
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// Renders the conditional content as HTML markup.
     /// - Returns: The rendered markup from either the true or false content.

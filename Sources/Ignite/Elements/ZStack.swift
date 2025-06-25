@@ -14,7 +14,7 @@
 /// applied through modifiers like `.margin()` will be respected.
 public struct ZStack<Content: HTML>: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

@@ -39,7 +39,7 @@ public extension HTML {
 /// An empty hover effect type to which styles can be added
 public struct EmptyHoverEffect: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     public func render() -> Markup { Markup() }
 }

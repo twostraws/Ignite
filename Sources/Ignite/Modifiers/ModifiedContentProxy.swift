@@ -8,7 +8,7 @@
 /// A proxy that applies HTML modifiers to content while optimizing the output structure.
 public struct ModifiedContentProxy<Modifier: HTMLModifier>: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// Core HTML attributes applied to the content.
     public var attributes = CoreAttributes()
