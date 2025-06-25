@@ -1,5 +1,5 @@
 //
-// GroupBox.swift
+// Section.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -12,37 +12,28 @@
 ///
 /// - Note: Unlike ``Group``, modifiers applied to a `Section` affect the
 ///         containing element rather than being propagated to child elements.
-public struct Section: HTML {
+@MainActor
+public struct Section<Content> {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The heading text of the section.
-    var header: String?
+    private var header: String?
 
     /// The heading's semantic font size.
-    var headerStyle: Font.Style = .title2
+    private var headerStyle: Font.Style = .title2
 
-    var content: any BodyElement
+    /// The content of the section.
+    private var content: Content
+}
 
-    init(_ content: any BodyElement) {
-        self.content = content
-    }
-
-    init() {
-        self.content = EmptyHTML()
-    }
-
+extension Section: HTML, BodyElement, Sendable, FormElementRenderable where Content: HTML {
     /// Creates a section that renders as a `div` element.
     /// - Parameter content: The content to display within this section.
-    public init(
-        @HTMLBuilder content: () -> some BodyElement
-    ) {
+    public init(@HTMLBuilder content: () -> Content) {
         self.content = content()
     }
 
@@ -50,12 +41,21 @@ public struct Section: HTML {
     /// - Parameters:
     ///   - header: The text to display as the section's heading
     ///   - content: The content to display within this section
-    public init(
-        _ header: String,
-        @HTMLBuilder content: () -> some BodyElement
-    ) {
+    public init(_ header: String, @HTMLBuilder content: () -> Content) {
         self.content = content()
         self.header = header
+    }
+
+    init(_ content: Content) {
+        self.content = content
+    }
+
+    init() where Content == EmptyHTML {
+        self.content = EmptyHTML()
+    }
+
+    init<T: InlineElement>(_ content: T) where Content == InlineHTML<T> {
+        self.content = InlineHTML(content)
     }
 
     /// Adjusts the semantic importance of the section's header by changing its font style.
@@ -74,5 +74,33 @@ public struct Section: HTML {
             return Markup("<section\(attributes)>\(headerHTML + contentHTML)</section>")
         }
         return Markup("<div\(attributes)>\(contentHTML)</div>")
+    }
+
+    func renderAsFormElement(_ configuration: FormConfiguration) -> Markup {
+        var subviews = content.subviews().elements
+        let last = subviews.last
+
+        subviews = subviews.dropLast().map {
+            var subview = $0
+            subview.attributes.append(classes: "mb-\(configuration.spacing.rawValue)")
+            return subview
+        }
+
+        if let last {
+            subviews.append(last)
+        }
+
+        return Tag("fieldset") {
+            if let header {
+                Tag("legend") { header }
+                    .class(configuration.labelStyle == .leading ? "col-form-label col-sm-2" : nil)
+            }
+
+            ForEach(subviews) { item in
+                FormItem(item)
+                    .formConfiguration(configuration)
+            }
+        }
+        .render()
     }
 }
