@@ -16,7 +16,7 @@ import Testing
 struct RowTests {
     @Test("Row with Multiple Columns")
     func rowWithMultipleColumns() async throws {
-        let row = Row {
+        let row = TableRow {
             Text("Column 1")
             Text("Column 2")
         }
@@ -27,7 +27,7 @@ struct RowTests {
 
     @Test("Row with Column Elements")
     func rowWithColumnElements() async throws {
-        let row = Row {
+        let row = TableRow {
             Column { Text("Column 1") }
             Column { Text("Column 2") }
         }
@@ -38,7 +38,7 @@ struct RowTests {
 
     @Test("Row with Mixed Content")
     func rowWithMixedContent() async throws {
-        let row = Row {
+        let row = TableRow {
             Text("Column 1")
             Column { Text("Column 2") }
         }

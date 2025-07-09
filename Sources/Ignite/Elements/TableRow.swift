@@ -5,8 +5,11 @@
 // See LICENSE for license information.
 //
 
+@available(*, deprecated, message: "Row has been renamed to TableRow")
+public typealias Row = TableRow
+
 /// One row inside a `Table`.
-public struct Row<Content: HTML>: HTML {
+public struct TableRow<Content: HTML>: HTML {
     /// The content and behavior of this HTML.
     public var body: Never { fatalError() }
 
@@ -38,4 +41,4 @@ public struct Row<Content: HTML>: HTML {
     }
 }
 
-extension Row: TableElement {}
+extension TableRow: TableElement {}
