@@ -64,7 +64,7 @@ struct HorizontalAlignmentTests {
         [HorizontalAlignment.leading, .center, .trailing],
         ["text-start", "text-center", "text-end"]))
     func allAlignmentsForColumn(alignment: HorizontalAlignment, cssClass: String) async throws {
-        let element = Column {
+        let element = TableColumn {
             ControlLabel("Left Label")
             ControlLabel("Right Label")
         }
@@ -82,7 +82,7 @@ struct HorizontalAlignmentTests {
 
     @Test("Column with mixed responsive breakpoints")
     func allAlignmentsForColumnResponsiveMixed() async throws {
-        let element = Column {
+        let element = TableColumn {
             ControlLabel("Left Label")
             ControlLabel("Right Label")
         }

@@ -33,7 +33,7 @@ struct HiddenTests {
 
     @Test("Hidden Modifier for Column")
     func hiddenForColumn() async throws {
-        let element = Column {
+        let element = TableColumn {
             ControlLabel("Left Label")
             ControlLabel("Right Label")
         }.hidden()

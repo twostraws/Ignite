@@ -28,8 +28,8 @@ struct RowTests {
     @Test("Row with Column Elements")
     func rowWithColumnElements() async throws {
         let row = TableRow {
-            Column { Text("Column 1") }
-            Column { Text("Column 2") }
+            TableColumn { Text("Column 1") }
+            TableColumn { Text("Column 2") }
         }
         let output = row.markupString()
 
@@ -40,7 +40,7 @@ struct RowTests {
     func rowWithMixedContent() async throws {
         let row = TableRow {
             Text("Column 1")
-            Column { Text("Column 2") }
+            TableColumn { Text("Column 2") }
         }
         let output = row.markupString()
 

@@ -5,8 +5,11 @@
 // See LICENSE for license information.
 //
 
+@available(*, deprecated, message: "Column has been renamed to TableColumn")
+public typealias Column = TableColumn
+
 /// A column inside a table row.
-public struct Column<Content: HTML>: HTML {
+public struct TableColumn<Content: HTML>: HTML {
     /// The content and behavior of this HTML.
     public var body: Never { fatalError() }
 
@@ -62,4 +65,4 @@ public struct Column<Content: HTML>: HTML {
     }
 }
 
-extension Column: ColumnProvider {}
+extension TableColumn: ColumnProvider {}

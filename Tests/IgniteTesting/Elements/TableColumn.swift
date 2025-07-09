@@ -18,7 +18,7 @@ class ColumnTests: IgniteTestSuite {
 
     @Test("Column with items")
     func basicColumn() async throws {
-        let element = Column {
+        let element = TableColumn {
             ControlLabel("Left Label")
             ControlLabel("Middle Label")
             ControlLabel("Right Label")
@@ -33,7 +33,7 @@ class ColumnTests: IgniteTestSuite {
 
     @Test("Column with columnSpan", arguments: await Self.columnSpans)
     func columnWithColumnSpan(columnSpan: Int) async throws {
-        let element = Column {
+        let element = TableColumn {
             ControlLabel("Left Label")
             ControlLabel("Middle Label")
             ControlLabel("Right Label")
@@ -48,7 +48,7 @@ class ColumnTests: IgniteTestSuite {
 
     @Test("Column with vertical alignment", arguments: ColumnVerticalAlignment.allCases)
     func columnWithVerticalAlignment(alignment: ColumnVerticalAlignment) async throws {
-        let element = Column {
+        let element = TableColumn {
             ControlLabel("Left Label")
             ControlLabel("Middle Label")
             ControlLabel("Right Label")
