@@ -7,7 +7,8 @@
 
 /// A protocol for customizing the layout of `ArticlePreview`.
 public protocol ArticlePreviewStyle {
-    func body(content: Article) -> any HTML
+    associatedtype Content: HTML
+    func body(content: Article) -> Content
 }
 
 /// A wrapper around `Card`, specifically aimed at presenting details about
@@ -23,7 +24,7 @@ public struct ArticlePreview: HTML {
     private var article: Article
 
     /// Custom style for the article preview.
-    private var style: ArticlePreviewStyle?
+    private var style: (any ArticlePreviewStyle)?
 
     /// Initializes the article preview
     /// - Parameters:
