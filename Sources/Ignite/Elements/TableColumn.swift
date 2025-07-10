@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@available(*, deprecated, message: "Column has been renamed to TableColumn")
+@available(*, deprecated, message: "Column has been renamed to TableColumn and will be removed in a future release.")
 public typealias Column = TableColumn
 
 /// A column inside a table row.

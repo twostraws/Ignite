@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@available(*, deprecated, message: "Row has been renamed to TableRow")
+@available(*, deprecated, message: "Row has been renamed to TableRow and will be removed in a future release.")
 public typealias Row = TableRow
 
 /// One row inside a `Table`.
