@@ -45,6 +45,7 @@ public struct Body: MarkupElement {
         if publishingContext.site.useDefaultBootstrapURLs == .localBootstrap {
             output += Script(file: "/js/bootstrap.bundle.min.js").markup()
         } else if
+            publishingContext.site.useDefaultBootstrapURLs == .remoteBootstrap,
             let url = URL(string: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js") {
             output += Script(file: url)
                 .customAttribute(
