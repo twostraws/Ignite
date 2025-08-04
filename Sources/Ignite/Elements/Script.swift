@@ -11,13 +11,10 @@ import Foundation
 /// referencing an external file.
 public struct Script: HTML, HeadElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The external file to load.
     private var file: URL?
@@ -44,8 +41,9 @@ public struct Script: HTML, HeadElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var attributes = attributes
+        let publishingContext = PublishingContext.shared
         if let file {
             let path = publishingContext.path(for: file)
             attributes.append(customAttributes: .init(name: "src", value: path))

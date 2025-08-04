@@ -24,7 +24,7 @@ struct IgniteCLI: ParsableCommand {
         commandName: "ignite",
         abstract: "A command-line tool for manipulating Ignite sites.",
         discussion: discussion,
-        version: "0.6.0",
+        version: "0.6.5",
         subcommands: [NewCommand.self, BuildCommand.self, RunCommand.self]
     )
 }

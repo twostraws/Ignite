@@ -30,8 +30,8 @@ struct MarginTests {
         #expect(output == "<p style=\"margin: \(value)px\">Hello, world!</p>")
     }
 
-    @Test("Margin modifier with amount value", arguments: SpacingAmount.allCases)
-    func amountUnitMargin(amount: SpacingAmount) async throws {
+    @Test("Margin modifier with amount value", arguments: SemanticSpacing.allCases)
+    func amountUnitMargin(amount: SemanticSpacing) async throws {
         let element = Text("Hello, world!").margin(amount)
         let output = element.markupString()
 

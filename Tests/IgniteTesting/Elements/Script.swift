@@ -19,7 +19,7 @@ import Testing
         try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Script(code: "javascript code")
-        let output = element.markupString()
+        let output = element.render().string
 
         #expect(output == "<script>javascript code</script>")
     }
@@ -29,7 +29,7 @@ import Testing
         try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Script(file: scriptFile)
-        let output = element.markupString()
+        let output = element.render().string
 
         let expectedPath = PublishingContext.shared.path(for: URL(string: scriptFile)!)
         #expect(output == "<script src=\"\(expectedPath)\"></script>")
@@ -40,7 +40,7 @@ import Testing
         try PublishingContext.initialize(for: site, from: #filePath)
 
         let element = Script(file: remoteScript)
-        let output = element.markupString()
+        let output = element.render().string
 
         let expectedPath = PublishingContext.shared.path(for: URL(string: remoteScript)!)
         #expect(output == "<script src=\"\(expectedPath)\"></script>")

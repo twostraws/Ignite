@@ -27,6 +27,9 @@ struct SiteTests {
 
     @Test("Site published when Markdown content contains invalid lastModified date")
     func publishingWithInvalidLastModifiedDate() async throws {
+        // Create the Content directory if it doesn't exist
+        try FileManager.default.createDirectory(at: package.contentDirectoryURL, withIntermediateDirectories: true)
+
         let markdownFileURL = package.contentDirectoryURL.appending(path: "story-with-invalid-lastModified.md")
         let markdownContent = """
         ---

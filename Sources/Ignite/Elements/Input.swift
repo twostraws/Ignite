@@ -8,15 +8,12 @@
 /// An input element for use in form controls.
 struct Input: InlineElement {
     /// The content and behavior of this HTML.
-    var body: some InlineElement { self }
+    var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    var isPrimitive: Bool { true }
-
-    func markup() -> Markup {
+    func render() -> Markup {
         Markup("<input\(attributes) />")
     }
 }

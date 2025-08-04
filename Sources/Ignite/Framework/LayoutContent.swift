@@ -9,7 +9,7 @@
 @MainActor
 public protocol LayoutContent: Sendable {
     /// The type of HTML content this element contains.
-    associatedtype Body: BodyElement
+    associatedtype Body: HTML
 
     /// The content and behavior of this `HTML` element.
     @HTMLBuilder var body: Body { get }

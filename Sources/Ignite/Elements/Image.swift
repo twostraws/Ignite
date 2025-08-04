@@ -10,13 +10,10 @@ import Foundation
 /// An image on your page. Can be vector (SVG) or raster (JPG, PNG, GIF).
 public struct Image: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
-    public var body: some InlineElement { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The path of the image, either relative to the
     /// root of your site, e.g. /images/dog.jpg., or as a web address.
@@ -126,7 +123,7 @@ public struct Image: InlineElement, LazyLoadable {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         if description == nil {
             publishingContext.addWarning("""
             \(path?.relativePath ?? systemImage ?? "Image"): adding images without a description is not recommended. \
@@ -214,3 +211,11 @@ private extension Image {
         return sources.isEmpty ? nil : .init(name: "srcset", value: sources)
     }
 }
+
+extension Image: CardComponentConfigurable {
+    func configuredAsCardComponent() -> CardComponent {
+        CardComponent(self.class("card-img"))
+    }
+}
+
+extension Image: ImageProvider {}

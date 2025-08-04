@@ -1,5 +1,5 @@
 //
-// Content.swift
+// ArticleLoader.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -18,6 +18,6 @@ public struct ArticleLoader {
     }
 
     public func tagged(_ tag: String) -> [Article] {
-        all.filter { $0.tags?.contains(tag) == true }
+        all.filter { $0.tags?.contains(where: { $0.name == tag }) == true }
     }
 }

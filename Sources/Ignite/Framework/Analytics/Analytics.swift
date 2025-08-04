@@ -10,9 +10,6 @@ public struct Analytics: HeadElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The analytics service to use
     private let service: Service
 
@@ -24,7 +21,7 @@ public struct Analytics: HeadElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         switch service {
         case .googleAnalytics(let measurementID):
             Markup(googleAnalyticsCode(for: measurementID))

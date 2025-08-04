@@ -156,7 +156,7 @@ public struct MetaTag: HeadElement, Sendable {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         Markup("<meta\(attributes) />")
     }
 }

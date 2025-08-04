@@ -5,17 +5,15 @@
 // See LICENSE for license information.
 //
 
-public struct Body: MarkupElement {
+@MainActor
+public struct Body {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// Whether this HTML uses Bootstrap's `container` class to determine page width.
-    var isBoundByContainer: Bool = true
+    private var isBoundByContainer: Bool = true
 
-    var content: any BodyElement
+    private var content: any HTML
 
     public init(@HTMLBuilder _ content: () -> some HTML) {
         self.content = content()
@@ -38,12 +36,13 @@ public struct Body: MarkupElement {
         return copy
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var attributes = attributes
-        var output = content.markup()
+        var output = content.render()
 
+        let publishingContext = PublishingContext.shared
         if publishingContext.site.useDefaultBootstrapURLs == .localBootstrap {
-            output += Script(file: "/js/bootstrap.bundle.min.js").markup()
+            output += Script(file: "/js/bootstrap.bundle.min.js").render()
         } else if
             publishingContext.site.useDefaultBootstrapURLs == .remoteBootstrap,
             let url = URL(string: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js") {
@@ -52,11 +51,11 @@ public struct Body: MarkupElement {
                     name: "integrity",
                     value: "sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq")
                 .customAttribute(name: "crossorigin", value: "anonymous")
-                .markup()
+                .render()
         }
 
         if publishingContext.hasSyntaxHighlighters == true {
-            output += Script(file: "/js/syntax-highlighting.js").markup()
+            output += Script(file: "/js/syntax-highlighting.js").render()
         }
 
         if case .visible(let firstLine, let shouldWrap) =
@@ -74,10 +73,10 @@ public struct Body: MarkupElement {
             output += Script(code: """
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-            """).markup()
+            """).render()
         }
 
-        output += Script(file: "/js/ignite-core.js").markup()
+        output += Script(file: "/js/ignite-core.js").render()
 
         if isBoundByContainer {
             attributes.append(classes: ["container"])
@@ -103,7 +102,7 @@ public extension Body {
     ///   - name: The name of the custom attribute
     ///   - value: The value of the custom attribute
     /// - Returns: The modified `HTML` element
-    func customAttribute(name: String, value: String) -> Self {
+    func attribute(_ name: String, _ value: String) -> Self {
         var copy = self
         copy.attributes.append(customAttributes: .init(name: name, value: value))
         return copy
@@ -118,7 +117,7 @@ public extension Body {
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new margins applied.
     func margin(_ edges: Edge, _ length: LengthUnit) -> Self {
-        let styles = content.edgeAdjustedStyles(prefix: "margin", edges, length.stringValue)
+        let styles = edges.styles(prefix: "margin", length: length.stringValue)
         var copy = self
         copy.attributes.append(styles: styles)
         return copy
@@ -130,8 +129,8 @@ public extension Body {
     ///   - amount: The amount of margin to apply, specified as a
     ///   `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new margins applied.
-    func margin(_ edges: Edge, _ amount: SpacingAmount) -> Self {
-        let classes = content.edgeAdjustedClasses(prefix: "m", edges, amount.rawValue)
+    func margin(_ edges: Edge, _ amount: SemanticSpacing) -> Self {
+        let classes = edges.classes(prefix: "m", amount: amount.rawValue)
         var copy = self
         copy.attributes.append(classes: classes)
         return copy
@@ -144,7 +143,7 @@ public extension Body {
     /// units of your choosing.
     /// - Returns: A copy of the current element with the new padding applied.
     func padding(_ edges: Edge, _ length: LengthUnit) -> Self {
-        let styles = content.edgeAdjustedStyles(prefix: "padding", edges, length.stringValue)
+        let styles = edges.styles(prefix: "padding", length: length.stringValue)
         var copy = self
         copy.attributes.append(styles: styles)
         return copy
@@ -156,8 +155,8 @@ public extension Body {
     ///   - amount: The amount of padding to apply, specified as a
     /// `SpacingAmount` case.
     /// - Returns: A copy of the current element with the new padding applied.
-    func padding(_ edges: Edge, _ amount: SpacingAmount) -> Self {
-        let classes = content.edgeAdjustedClasses(prefix: "p", edges, amount.rawValue)
+    func padding(_ edges: Edge, _ amount: SemanticSpacing) -> Self {
+        let classes = edges.classes(prefix: "p", amount: amount.rawValue)
         var copy = self
         copy.attributes.append(classes: classes)
         return copy

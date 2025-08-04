@@ -7,7 +7,8 @@
 
 /// A protocol for customizing the layout of `ArticlePreview`.
 public protocol ArticlePreviewStyle {
-    func body(content: Article) -> any HTML
+    associatedtype Content: HTML
+    func body(content: Article) -> Content
 }
 
 /// A wrapper around `Card`, specifically aimed at presenting details about
@@ -15,18 +16,15 @@ public protocol ArticlePreviewStyle {
 /// and adds in tags.
 public struct ArticlePreview: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
-    var article: Article
+    private var article: Article
 
     /// Custom style for the article preview.
-    private var style: ArticlePreviewStyle?
+    private var style: (any ArticlePreviewStyle)?
 
     /// Initializes the article preview
     /// - Parameters:
@@ -43,17 +41,17 @@ public struct ArticlePreview: HTML {
 
     /// Renders the article preview with either a custom layout or the default card.
     /// - Returns: A rendered string of HTML.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         // If custom style is provided, use it; otherwise,
         // fallback to default layout.
         if let style {
             style.body(content: article)
                 .attributes(attributes)
-                .markup()
+                .render()
         } else {
             defaultCardLayout()
                 .attributes(attributes)
-                .markup()
+                .render()
         }
     }
 
@@ -69,15 +67,8 @@ public struct ArticlePreview: HTML {
             }
             .font(.title2)
         } footer: {
-            let tagLinks = article.tagLinks()
-
-            if let tagLinks {
-                Section {
-                    ForEach(tagLinks) { link in
-                        link
-                    }
-                }
-                .style(.marginTop, "-5px")
+            Section {
+                article.tagLinks()
             }
         }
     }

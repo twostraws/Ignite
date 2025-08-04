@@ -1,5 +1,5 @@
 //
-// HTMLBody.swift
+// Body.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -18,7 +18,7 @@ import Testing
     @Test("Simple Body Test", arguments: await Self.sites)
     func simpleBody(for site: any Site) async throws {
         let element = Body()
-        let output = element.markupString()
+        let output = element.render().string
         let path = publishingContext.path(for: URL(string: "/js")!)
 
         #expect(output == """

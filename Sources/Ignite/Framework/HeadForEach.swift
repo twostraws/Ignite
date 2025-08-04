@@ -11,9 +11,6 @@ public struct HeadForEach<Data: Sequence>: HeadElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The sequence of data to iterate over.
     private let data: Data
 
@@ -34,11 +31,11 @@ public struct HeadForEach<Data: Sequence>: HeadElement {
 
     /// Renders the ForEach content when this isn't part of a list.
     /// - Returns: The rendered HTML string.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         items.map {
             var item: any HeadElement = $0
             item.attributes.merge(attributes)
-            return item.markup()
+            return item.render()
         }.joined()
     }
 }

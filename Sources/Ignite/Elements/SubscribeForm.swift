@@ -6,7 +6,7 @@
 //
 
 /// A form for collecting email addresses for newsletter subscriptions.
-public struct SubscribeForm: HTML, NavigationItem {
+public struct SubscribeForm: HTML, NavigationElement {
     /// Defines how labels appear in the form.
     public enum LabelStyle: Sendable, CaseIterable {
         /// Labels are not visible but remain accessible to screen readers.
@@ -24,13 +24,10 @@ public struct SubscribeForm: HTML, NavigationItem {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// How a `NavigationBar` displays this item at different breakpoints.
     public var navigationBarVisibility: NavigationBarVisibility = .automatic
@@ -39,7 +36,7 @@ public struct SubscribeForm: HTML, NavigationItem {
     private var columnCount: Int = 12
 
     /// The amount of vertical spacing between form elements.
-    private var spacing: SpacingAmount
+    private var spacing: SemanticSpacing
 
     /// The size of form controls and labels
     private var controlSize: ControlSize = .medium
@@ -77,7 +74,7 @@ public struct SubscribeForm: HTML, NavigationItem {
     ///   the action to perform when the form is submitted.
     public init(
         _ service: EmailPlatform,
-        spacing: SpacingAmount = .medium
+        spacing: SemanticSpacing = .medium
     ) {
         self.spacing = spacing
         self.service = service
@@ -162,28 +159,34 @@ public struct SubscribeForm: HTML, NavigationItem {
         return copy
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var formOutput = Form {
-            TextField(emailFieldLabel, prompt: emailFieldLabel)
-                .type(.text)
-                .id(service.emailFieldID)
-                .class(controlSize.controlClass)
-                .customAttribute(name: "name", value: service.emailFieldName!)
-                .class(formStyle == .inline ? "col" : "col-md-12")
+            Section {
+                TextField(emailFieldLabel, prompt: emailFieldLabel)
+                    .labelStyle(labelStyle == .floating ? .floating : .hidden)
+                    .type(.text)
+                    .id(service.emailFieldID)
+                    .class(controlSize.controlClass)
+                    .customAttribute(name: "name", value: service.emailFieldName!)
+            }
+            .class(formStyle == .inline ? "col" : "col-md-12")
 
-            Button(subscribeButtonLabel)
-                .type(.submit)
-                .role(subscribeButtonRole)
-                .style(.color, subscribeButtonForegroundStyle != nil ? subscribeButtonForegroundStyle!.description : "")
-                .class(controlSize.buttonClass)
-                .class(formStyle == .inline ? nil : "w-100")
-                .class(formStyle == .inline ? "col-auto" : "col")
+            Section {
+                Button(subscribeButtonLabel)
+                    .type(.submit)
+                    .role(subscribeButtonRole)
+                    .style(.color, subscribeButtonForegroundStyle != nil ?
+                           subscribeButtonForegroundStyle!.description : "")
+                    .class(controlSize.buttonClass)
+                    .class(formStyle == .inline ? "h-100" : "w-100")
+            }
+            .class(formStyle == .inline ? "col-auto" : "col")
 
             if let honeypotName = service.honeypotFieldName {
                 Section {
                     TextField(EmptyInlineElement(), prompt: nil)
-                        .id("")
                         .labelStyle(.hidden)
+                        .id("")
                         .customAttribute(name: "name", value: honeypotName)
                         .customAttribute(name: "tabindex", value: "-1")
                         .customAttribute(name: "value", value: "")
@@ -193,19 +196,23 @@ public struct SubscribeForm: HTML, NavigationItem {
                 .customAttribute(name: "aria-hidden", value: "true")
             }
         }
-        .configuredAsNavigationItem(isNavigationItem)
-        .labelStyle(labelStyle == .floating ? .floating : .hidden)
         .attributes(attributes)
-        .markup()
+        .render()
 
         if let script = service.script {
             formOutput += Script(file: URL(static: script))
                 .customAttribute(name: "charset", value: "utf-8")
-                .markup()
+                .render()
         }
 
         return formOutput
     }
 }
 
-extension SubscribeForm: NavigationItemConfigurable {}
+extension SubscribeForm: NavigationElementRenderable {
+    func renderAsNavigationElement() -> Markup {
+        var copy = self
+        copy.isNavigationItem = true
+        return copy.render()
+    }
+}

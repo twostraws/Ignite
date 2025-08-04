@@ -6,21 +6,18 @@
 //
 
 /// Creates vertical space of a specific value.
-public struct Spacer: HTML, NavigationItem {
+public struct Spacer: HTML, NavigationElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// How a `NavigationBar` displays this item at different breakpoints.
     public var navigationBarVisibility: NavigationBarVisibility = .automatic
 
     /// The amount of space to occupy.
-    private var spacingAmount: SpacingType
+    private var spacingAmount: SpacingAmount
 
     /// Whether the spacer is used horizontally or vertically.
     private var axis: Axis = .vertical
@@ -40,7 +37,7 @@ public struct Spacer: HTML, NavigationItem {
     /// Creates a new `Spacer` using adaptive sizing.
     /// - Parameter size: The amount of margin to apply, specified as a
     /// `SpacingAmount` case.
-    public init(size: SpacingAmount) {
+    public init(size: SemanticSpacing) {
         spacingAmount = .semantic(size)
     }
 
@@ -55,23 +52,33 @@ public struct Spacer: HTML, NavigationItem {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
-        if spacingAmount == .automatic {
+    public func render() -> Markup {
+        if case .automatic = spacingAmount {
             Section {}
                 .class(axis == .horizontal ? "ms-auto" : nil)
                 .class(axis == .vertical ? "mt-auto" : nil)
-                .markup()
+                .render()
         } else if case let .semantic(spacingAmount) = spacingAmount {
             Section {}
                 .margin(axis == .vertical ? .top : .leading, spacingAmount)
-                .markup()
+                .render()
         } else if case let .exact(int) = spacingAmount {
             Section {}
                 .frame(width: axis == .horizontal ? .px(int) : nil)
                 .frame(height: axis == .vertical ? .px(int) : nil)
-                .markup()
+                .render()
         } else {
             fatalError("Unknown spacing amount: \(String(describing: spacingAmount))")
         }
+    }
+}
+
+extension Spacer: SpacerProvider {
+    var spacer: Spacer { self }
+}
+
+extension Spacer: NavigationElementRenderable {
+    func renderAsNavigationElement() -> Markup {
+        self.axis(.horizontal).render()
     }
 }

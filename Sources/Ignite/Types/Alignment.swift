@@ -83,4 +83,19 @@ extension Alignment {
         case (.trailing, .bottom):  [.init(.alignSelf, value: "flex-end"), .init(.justifySelf, value: "flex-end")]
         }
     }
+
+    /// Grid alignment rules for container-level alignment
+    var gridAlignmentRules: [InlineStyle] {
+        switch (horizontal, vertical) {
+        case (.leading, .top):      [.init(.justifyItems, value: "start"), .init(.alignItems, value: "start")]
+        case (.center, .top):       [.init(.justifyItems, value: "center"), .init(.alignItems, value: "start")]
+        case (.trailing, .top):     [.init(.justifyItems, value: "end"), .init(.alignItems, value: "start")]
+        case (.leading, .center):   [.init(.justifyItems, value: "start"), .init(.alignItems, value: "center")]
+        case (.center, .center):    [.init(.justifyItems, value: "center"), .init(.alignItems, value: "center")]
+        case (.trailing, .center):  [.init(.justifyItems, value: "end"), .init(.alignItems, value: "center")]
+        case (.leading, .bottom):   [.init(.justifyItems, value: "start"), .init(.alignItems, value: "end")]
+        case (.center, .bottom):    [.init(.justifyItems, value: "center"), .init(.alignItems, value: "end")]
+        case (.trailing, .bottom):  [.init(.justifyItems, value: "end"), .init(.alignItems, value: "end")]
+        }
+    }
 }

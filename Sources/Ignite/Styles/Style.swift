@@ -12,7 +12,7 @@
 /// Example:
 /// ```swift
 /// struct MyCustomStyle: Style {
-///     func style(content: StyledHTML, environment: EnvironmentConditions) -> StyledHTML {
+///     func style(content: Content, environment: EnvironmentConditions) -> Content {
 ///         if environment.colorScheme == .dark {
 ///             content.foregroundStyle(.red)
 ///         } else {
@@ -23,12 +23,13 @@
 /// ```
 @MainActor
 public protocol Style: Hashable {
+    typealias Content = StyledHTML
     /// Resolves the style for the given HTML content and environment conditions
     /// - Parameters:
     ///   - content: An HTML element to apply styles to
-    ///   - environmentConditions: The current media query condition to resolve against
+    ///   - environment: The current media query condition to resolve against
     /// - Returns: A modified HTML element with the appropriate styles applied
-    func style(content: StyledHTML, environment: EnvironmentConditions) -> StyledHTML
+    func style(content: Content, environment: EnvironmentConditions) -> Content
 }
 
 extension Style {

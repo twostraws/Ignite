@@ -26,13 +26,10 @@ public struct Embed: HTML, LazyLoadable {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The URL we're embedding inside our page.
     let url: String
@@ -104,7 +101,7 @@ public struct Embed: HTML, LazyLoadable {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         // Enough permissions for users to accomplish common
         // tasks safely.
         let allowPermissions = """
@@ -122,6 +119,6 @@ public struct Embed: HTML, LazyLoadable {
              #"<iframe src="\#(url)" title="\#(title)" allow="\#(allowPermissions)"></iframe>"#
         }
         .attributes(attributes)
-        .markup()
+        .render()
     }
 }

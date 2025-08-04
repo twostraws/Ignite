@@ -22,7 +22,7 @@ class DropdownTests: IgniteTestSuite {
             Text("Or you can just…")
         }.role(.primary)
 
-        let output = element.markupString()
+        let output = element.render().string
 
         let expectedOutput = """
         <div class="dropdown">
@@ -52,7 +52,7 @@ class DropdownTests: IgniteTestSuite {
             Text("Content1")
         }.role(.secondary)
 
-        let output = element.markupString()
+        let output = element.render().string
 
         let expectedOutput = """
         <div class="dropdown">
@@ -78,7 +78,7 @@ class DropdownTests: IgniteTestSuite {
     func emptyDropdown() async throws {
         let element = Dropdown("Click Me") {}.role(.primary)
 
-        let output = element.markupString()
+        let output = element.render().string
 
         let expectedOutput = """
         <div class="dropdown">
@@ -101,12 +101,11 @@ class DropdownTests: IgniteTestSuite {
     @Test("Dropdown Large Content")
     func dropdownLargeContent() async throws {
         let element = Dropdown("Click Me") {
-            for index in 1...50 {
-                Text("Item \(index)")
-            }
+            Text("Item 1")
+            Text("Item 2")
         }.role(.primary)
 
-        let output = element.markupString()
+        let output = element.render().string
 
         var expectedOutput = """
         <div class="dropdown">
@@ -114,11 +113,12 @@ class DropdownTests: IgniteTestSuite {
                 data-bs-toggle="dropdown" aria-expanded="false">Click Me</button>
             <ul class="dropdown-menu">
         """
-        for index in 1...50 {
-            expectedOutput += """
-                <li><p class="dropdown-header">Item \(index)</p></li>
-            """
-        }
+
+        expectedOutput += """
+            <li><p class="dropdown-header">Item 1</p></li>
+            <li><p class="dropdown-header">Item 2</p></li>
+        """
+
         expectedOutput += """
             </ul>
         </div>

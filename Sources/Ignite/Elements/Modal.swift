@@ -6,91 +6,45 @@
 //
 
 /// A modal dialog presented on top of the screen
-public struct Modal: HTML {
-    /// The size of the modal. Except from the full screen modal the height is defined by the height wheras the width
-    public enum Size: CaseIterable, Sendable {
-        /// A modal dialog with a small max-width of 300px
-
-        case small
-        /// A modal dialog with a medium max-width of 500px
-
-        case medium
-        /// A modal dialog with a large max-width of 800px
-
-        case large
-        /// A modal dialog with an extra large wmax-idth of 1140px
-
-        case xLarge
-
-        /// A fullscreen modal dialog covering the entre view port
-        case fullscreen
-
-        /// The HTML name for the modal size.
-        var htmlClass: String? {
-            switch self {
-            case .small:
-                "modal-sm"
-            case .medium:
-                nil
-            case .large:
-                "modal-lg"
-            case .xLarge:
-                "modal-xl"
-            case .fullscreen:
-                "modal-fullscreen"
-            }
-        }
-    }
-
-    public enum Position: CaseIterable, Sendable {
-        case top
-        case center
-
-        var htmlName: String? {
-            switch self {
-            case .top:
-                nil
-            case .center:
-                "modal-dialog-centered"
-            }
-        }
-    }
-
+public struct Modal<Header: HTML, Footer: HTML, Content: HTML>: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
+    private let htmlID: String
+    private var content: Content
+    private var header: Header
+    private var footer: Footer
 
-    let htmlID: String
-    private var items: HTMLCollection
-    private var header: HTMLCollection
-    private var footer: HTMLCollection
+    private var animated = true
+    private var scrollable = false
+    private var size: ModalSize = .medium
+    private var position: ModalPosition = .center
 
-    var animated = true
-    var scrollable = false
-    var size: Size = .medium
-    var position: Position = .center
-
+    /// Creates a new modal dialog with the specified content.
+    /// - Parameters:
+    ///   - modalId: A unique identifier for the modal.
+    ///   - body: The main content of the modal.
+    ///   - header: Optional header content for the modal.
+    ///   - footer: Optional footer content for the modal.
     public init(
         id modalId: String,
-        @HTMLBuilder body: () -> some BodyElement,
-        @HTMLBuilder header: () -> some BodyElement = { EmptyHTML() },
-        @HTMLBuilder footer: () -> some BodyElement = { EmptyHTML() }
+        @HTMLBuilder content: () -> Content,
+        @HTMLBuilder header: () -> Header = { EmptyHTML() },
+        @HTMLBuilder footer: () -> Footer = { EmptyHTML() }
     ) {
         self.htmlID = modalId
-        self.items = HTMLCollection([body()])
-        self.header = HTMLCollection([header()])
-        self.footer = HTMLCollection([footer()])
+        self.content = content()
+        self.header = header()
+        self.footer = footer()
     }
 
     /// Adjusts the size of the modal.
     /// - Parameter size: The size of the presented modal.
     /// - Returns: A new `Modal` instance with the updated size setting.
-    public func size(_ size: Size) -> Self {
+    public func size(_ size: ModalSize) -> Self {
         var copy = self
         copy.size = size
         return copy
@@ -108,7 +62,7 @@ public struct Modal: HTML {
     /// Adjusts the position of the modal view
     /// - Parameter position: The desired vertical position of the modal on the screen.
     /// - Returns: A new `Modal` instance with the updated vertical position.
-    public func modalPosition(_ position: Position) -> Self {
+    public func modalPosition(_ position: ModalPosition) -> Self {
         var copy = self
         copy.position = position
         return copy
@@ -125,27 +79,21 @@ public struct Modal: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         Section {
             Section {
                 Section {
-                    if !header.isEmpty {
-                        Section {
-                            header
-                        }
-                        .class("modal-header")
+                    if !header.isEmptyHTML {
+                        Section(header)
+                            .class("modal-header")
                     }
 
-                    Section {
-                        items
-                    }
-                    .class("modal-body")
+                    Section(content)
+                        .class("modal-body")
 
-                    if !footer.isEmpty {
-                        Section {
-                            footer
-                        }
-                        .class("modal-footer")
+                    if !footer.isEmptyHTML {
+                        Section(footer)
+                            .class("modal-footer")
                     }
                 }
                 .class("modal-content")
@@ -160,6 +108,6 @@ public struct Modal: HTML {
         .id(htmlID)
         .aria(.labelledBy, "modalLabel")
         .aria(.hidden, "true")
-        .markup()
+        .render()
     }
 }

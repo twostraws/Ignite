@@ -26,13 +26,13 @@ class FormTests: IgniteTestSuite {
 
         #expect(output == """
         <form id="\(element.attributes.id)" class="row g-3">\
-        <div class="col-auto">\
+        <div>\
         <div class="form-floating">\
         <input id="field" type="text" placeholder="MyPlaceholder" class="form-control" />\
         <label for="field">MyLabel</label>\
         </div>\
         </div>\
-        <div class="col-auto d-flex align-items-stretch">\
+        <div class="d-flex align-items-stretch">\
         <button type="submit" class="w-100 btn">Submit</button>\
         </div>\
         </form>
@@ -61,7 +61,7 @@ class FormTests: IgniteTestSuite {
             <input id="field" type="text" placeholder="MyPlaceholder" class="form-control mb-3" />\
             </div>\
             </div>\
-            <div class="col-auto d-flex align-items-end">\
+            <div class="d-flex align-items-end">\
             <button type="submit" class="mb-3 btn">Submit</button>\
             </div>\
             </form>
@@ -69,13 +69,13 @@ class FormTests: IgniteTestSuite {
         case .floating:
             """
             <form id="\(element.attributes.id)" class="row g-3">\
-            <div class="col-auto">\
+            <div>\
             <div class="form-floating">\
             <input id="field" type="text" placeholder="MyPlaceholder" class="form-control" />\
             <label for="field">MyLabel</label>\
             </div>\
             </div>\
-            <div class="col-auto d-flex align-items-stretch">\
+            <div class="d-flex align-items-stretch">\
             <button type="submit" class="w-100 btn">Submit</button>\
             </div>\
             </form>
@@ -83,13 +83,13 @@ class FormTests: IgniteTestSuite {
         case .top:
             """
             <form id="\(element.attributes.id)" class="row g-3">\
-            <div class="col-auto">\
+            <div>\
             <div>\
             <label for="field" class="form-label">MyLabel</label>\
             <input id="field" type="text" placeholder="MyPlaceholder" class="form-control" />\
             </div>\
             </div>\
-            <div class="col-auto d-flex align-items-end">\
+            <div class="d-flex align-items-end">\
             <button type="submit" class="w-100 btn">Submit</button>\
             </div>\
             </form>
@@ -97,10 +97,10 @@ class FormTests: IgniteTestSuite {
         case .hidden:
             """
             <form id="\(element.attributes.id)" class="row g-3">\
-            <div class="col-auto">\
+            <div>\
             <input id="field" type="text" placeholder="MyPlaceholder" class="form-control" />\
             </div>\
-            <div class="col-auto d-flex align-items-end">\
+            <div class="d-flex align-items-end">\
             <button type="submit" class="w-100 btn">Submit</button>\
             </div>\
             </form>
@@ -124,14 +124,14 @@ class FormTests: IgniteTestSuite {
 
         #expect(output == """
         <form id="\(element.attributes.id)" class="row g-3">\
-        <div class="col-auto">\
+        <div>\
         <div class="form-floating">\
         <input id="field" type="text" placeholder="MyPlaceholder" \
         class="form-control\(controlSize.controlClass.map { " " + $0 } ?? "")" />\
         <label for="field"\(controlSize.labelClass.map { " class=\"" + $0 + "\"" } ?? "")>MyLabel</label>\
         </div>\
         </div>\
-        <div class="col-auto d-flex align-items-stretch">\
+        <div class="d-flex align-items-stretch">\
         <button type="submit" \
         class="\(controlSize.buttonClass.map { $0 + " " } ?? "")w-100 btn">Submit</button>\
         </div>\

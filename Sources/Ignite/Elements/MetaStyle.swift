@@ -37,7 +37,7 @@ public struct MetaStyle: HeadElement {
         self.style = style
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         let allThemes = publishingContext.site.allThemes
         let css = StyleManager.shared.generateCSS(
             style: style,

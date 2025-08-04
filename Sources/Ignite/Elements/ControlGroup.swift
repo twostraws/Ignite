@@ -5,8 +5,14 @@
 // See LICENSE for license information.
 //
 
+/// A type that has a distinct configuration when housed in a `ControlGroup`.
+@MainActor
+protocol ControlGroupItemConfigurable {
+    func configuredAsControlGroupItem(_ labelStyle: ControlLabelStyle) -> ControlGroupItem
+}
+
 /// A container that groups related form controls into a unified visual component.
-public struct ControlGroup: HTML, FormItem {
+public struct ControlGroup<Content: ControlGroupElement>: HTML {
     /// Defines the size variants available for control groups.
     public enum ControlSize: String, Sendable, CaseIterable {
         /// Creates a smaller, more compact control group.
@@ -18,22 +24,19 @@ public struct ControlGroup: HTML, FormItem {
     }
 
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The label text for the control group.
     private let label: String?
 
     /// The help text displayed below the control group.
-    private var helpText: (any InlineElement)?
+    private var helpText: String?
 
     /// The collection of form items contained within this control group.
-    private let items: [any FormItem]
+    private let content: Content
 
     /// The size configuration for the control group.
     private var size: ControlSize?
@@ -47,10 +50,10 @@ public struct ControlGroup: HTML, FormItem {
     ///   - items: A closure returning an array of form items to include in the group.
     public init(
         _ label: String? = nil,
-        @ElementBuilder<FormItem> items: () -> [any FormItem]
+        @ControlGroupElementBuilder content: () -> Content
     ) {
         self.label = label
-        self.items = items()
+        self.content = content()
         self.helpText = nil
     }
 
@@ -81,29 +84,17 @@ public struct ControlGroup: HTML, FormItem {
         return copy
     }
 
-    public func markup() -> Markup {
-        var items = items
-        let lastItem = items.last
-        if var lastItem = lastItem as? Dropdown {
-            lastItem = lastItem.configuration(.lastControlGroupItem)
+    public func render() -> Markup {
+        var items = content.subviews().elements
+        if let lastItem = items.last {
             items = items.dropLast()
-            items.append(lastItem)
+            items.append(lastItem.configuredAsLastItem())
         }
 
         let content = Section {
             ForEach(items) { item in
-                switch item {
-                case let item as TextField:
-                    renderTextField(item)
-                case let button as Button:
-                    renderButton(button)
-                case let item as Span:
-                    renderText(item)
-                case let dropdown as Dropdown:
-                    renderDropdown(dropdown)
-                default:
-                    AnyHTML(item)
-                }
+                item
+                    .configuredAsControlGroupItem(labelStyle)
             }
         }
         .attributes(attributes)
@@ -111,7 +102,7 @@ public struct ControlGroup: HTML, FormItem {
         .class(size?.rawValue)
 
         guard label != nil || helpText != nil else {
-            return content.markup()
+            return content.render()
         }
 
         return Section {
@@ -127,28 +118,12 @@ public struct ControlGroup: HTML, FormItem {
                     .class("form-text")
             }
         }
-        .markup()
+        .render()
     }
+}
 
-    private func renderText(_ text: Span) -> any InlineElement {
-        text.class("input-group-text")
-    }
-
-    private func renderTextField(_ textField: TextField) -> some InlineElement {
-        var textField = textField.labelStyle(labelStyle)
-        if labelStyle != .floating {
-            textField.label = nil
-        }
-        return textField
-    }
-
-    private func renderButton(_ button: Button) -> any InlineElement {
-        var button = button
-        button.type = .plain
-        return button
-    }
-
-    private func renderDropdown(_ dropdown: Dropdown) -> any HTML {
-        dropdown.configuration(.controlGroupItem)
+extension ControlGroup: FormElementRenderable {
+    func renderAsFormElement(_ configuration: FormConfiguration) -> Markup {
+        self.labelStyle(configuration.labelStyle).render()
     }
 }

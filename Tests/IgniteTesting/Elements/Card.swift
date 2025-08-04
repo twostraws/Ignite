@@ -20,7 +20,7 @@ class CardTests: IgniteTestSuite {
             "Some text wrapped in a card"
         }
 
-        let output = element.markup()
+        let output = element.render()
 
         #expect(output.string == """
         <div class="card"><div class="card-body">Some text wrapped in a card</div></div>
@@ -33,7 +33,7 @@ class CardTests: IgniteTestSuite {
             "Some text wrapped in a card"
         }
 
-        let output = element.markup()
+        let output = element.render()
 
         #expect(output.string == """
         <div class="card"><img src="dog.jpg" alt="" class="card-img-top" />\
@@ -51,7 +51,7 @@ class CardTests: IgniteTestSuite {
             "A footer"
         }
 
-        let output = element.markup()
+        let output = element.render()
 
         #expect(output.string == """
         <div class="card"><div class="card-header">Header</div><div class="card-body">Some text wrapped in a card</div>\
@@ -69,7 +69,7 @@ class CardTests: IgniteTestSuite {
         }
         .frame(maxWidth: 500)
 
-        let output = element.markup()
+        let output = element.render()
 
         #expect(output.string == """
         <div class="card" style="width: 100%; max-width: 500px">\
@@ -80,9 +80,9 @@ class CardTests: IgniteTestSuite {
     }
 
     @Test("Card Styles", arguments: zip(
-        Card.Style.allCases,
+        CardStyle.allCases,
         ["card", "card text-bg-default", "card border-default"]))
-    func cardStyles(style: Card.Style, expectedClass: String) async throws {
+    func cardStyles(style: CardStyle, expectedClass: String) async throws {
         let element = Card {
             "Placeholder"
         }

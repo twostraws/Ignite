@@ -6,18 +6,15 @@
 //
 
 /// A text input field for collecting user information in forms.
-public struct TextField: InlineElement, FormItem {
+public struct TextField<Label: InlineElement>: InlineElement, ControlGroupElement {
     /// The content and behavior of this HTML.
-    public var body: some InlineElement { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The label text for the field
-    var label: ControlLabel?
+    var label: ControlLabel<Label>?
 
     /// The underlying HTML input element.
     private var input = Input()
@@ -27,24 +24,6 @@ public struct TextField: InlineElement, FormItem {
 
     /// The positioning style for the field's label.
     private var style: ControlLabelStyle = .floating
-
-    /// The type of text field
-    public enum TextType: String, CaseIterable, Sendable {
-        /// Standard text input
-        case text
-        /// Email address input
-        case email
-        /// Password input
-        case password
-        /// Search input
-        case search
-        /// URL input
-        case url
-        /// Phone number input
-        case phone
-        /// Numeric input
-        case number
-    }
 
     /// Controls how read-only fields are displayed.
     public enum ReadOnlyDisplayMode: Sendable {
@@ -60,17 +39,17 @@ public struct TextField: InlineElement, FormItem {
     /// - Parameters:
     ///   - label: The label text to display with the field.
     ///   - placeholder: The text to display when the field is empty.
-    public init(_ label: any InlineElement, prompt: String? = nil) {
+    public init(_ label: Label, prompt: String? = nil) {
         let id = UUID().uuidString.truncatedHash
         input.attributes.id = id
         input.attributes.append(classes: "form-control")
-        input.attributes.append(customAttributes: .init(name: "type", value: TextType.text.rawValue))
+        input.attributes.append(customAttributes: .init(name: "type", value: TextFieldTextType.text.rawValue))
 
         if let prompt {
             input.attributes.append(customAttributes: .init(name: "placeholder", value: prompt))
         }
 
-        if label.isEmpty == false {
+        if label.isEmptyInlineElement == false {
             var label = ControlLabel(label)
             label.attributes.append(customAttributes: .init(name: "for", value: id))
             self.label = label
@@ -136,7 +115,7 @@ public struct TextField: InlineElement, FormItem {
     /// Sets the input type to control validation and keyboard appearance.
     /// - Parameter type: The type of input this field will collect.
     /// - Returns: A modified text field configured for the specified input type.
-    public func type(_ type: TextType) -> Self {
+    public func type(_ type: TextFieldTextType) -> Self {
         var copy = self
         copy.input.attributes.remove(attributesNamed: "type")
         copy.input.attributes.append(customAttributes: .init(name: "type", value: type.rawValue))
@@ -152,7 +131,7 @@ public struct TextField: InlineElement, FormItem {
         return copy
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         switch style {
         case .top:
             renderTopLabeledTextField()
@@ -173,7 +152,7 @@ public struct TextField: InlineElement, FormItem {
             input
                 .attributes(attributes)
         }
-        .markup()
+        .render()
     }
 
     private func renderFrontLabeledTextField() -> Markup {
@@ -187,7 +166,7 @@ public struct TextField: InlineElement, FormItem {
             }.class("col-sm-10")
         }
         .class("row")
-        .markup()
+        .render()
     }
 
     private func renderFloatingTextField() -> Markup {
@@ -199,12 +178,35 @@ public struct TextField: InlineElement, FormItem {
             }
         }
         .class("form-floating")
-        .markup()
+        .render()
     }
 
     private func renderPlainTextField() -> Markup {
         input
             .attributes(attributes)
-            .markup()
+            .render()
+    }
+}
+
+extension TextField: FormElementRenderable {
+    func renderAsFormElement(_ configuration: FormConfiguration) -> Markup {
+        let copy = self
+            .size(configuration.controlSize)
+            .labelStyle(configuration.labelStyle)
+
+        return switch configuration.labelStyle {
+        case .leading: copy.render()
+        default: Section(copy).render()
+        }
+    }
+}
+
+extension TextField: ControlGroupItemConfigurable {
+    func configuredAsControlGroupItem(_ labelStyle: ControlLabelStyle) -> ControlGroupItem {
+        var copy = self.labelStyle(labelStyle)
+        if labelStyle != .floating {
+            copy.label = nil
+        }
+        return ControlGroupItem(copy)
     }
 }

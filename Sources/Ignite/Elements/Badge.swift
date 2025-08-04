@@ -6,26 +6,18 @@
 //
 
 /// A small, capsule-shaped piece of information, such as a tag.
-public struct Badge: InlineElement {
+public struct Badge<Content: InlineElement>: InlineElement {
     /// The content and behavior of this HTML.
-    public var body: some InlineElement { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
-    /// The different options for styling this badge.
-    public enum Style: CaseIterable {
-        case `default`, subtle, subtleBordered
-    }
-
-    private var text: any InlineElement
-    private var style = Style.default
+    private var content: Content
+    private var style = BadgeStyle.default
     private var role = Role.default
 
-    var badgeClasses: [String] {
+    private var badgeClasses: [String] {
         var outputClasses = ["badge"]
         outputClasses.append(contentsOf: attributes.classes)
 
@@ -70,21 +62,21 @@ public struct Badge: InlineElement {
         return outputClasses
     }
 
-    public init(_ text: any InlineElement) {
-        self.text = text
+    public init(_ content: Content) {
+        self.content = content
     }
 
-    public init(_ text: String) {
-        self.text = text
+    public init(_ content: String) where Content == String {
+        self.content = content
     }
 
-    public func role(_ role: Role) -> Badge {
+    public func role(_ role: Role) -> Self {
         var copy = self
         copy.role = role
         return copy
     }
 
-    public func badgeStyle(_ style: Style) -> Badge {
+    public func badgeStyle(_ style: BadgeStyle) -> Self {
         var copy = self
         copy.style = style
         return copy
@@ -92,10 +84,10 @@ public struct Badge: InlineElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         let badgeAttributes = attributes.appending(classes: badgeClasses)
-        return Span(text)
+        return Span(content)
             .attributes(badgeAttributes)
-            .markup()
+            .render()
     }
 }

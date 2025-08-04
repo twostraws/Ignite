@@ -276,3 +276,44 @@ div.alert p:last-child {
     -webkit-box-orient: horizontal;
     -webkit-line-clamp: unset;
 }
+
+.ig-adaptive-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--ig-grid-columns, 12), minmax(0, 1fr));
+    gap: var(--ig-grid-gap, 20px);
+}
+
+@media (max-width: 768px) {
+    .ig-adaptive-grid {
+        grid-template-columns: repeat(auto-fit, minmax(var(--ig-grid-item-min-width, 50%), 1fr));
+    }
+
+    .ig-adaptive-grid .ig-grid-item {
+        grid-column: 1 / -1 !important;
+    }
+
+    .ig-adaptive-grid[style*="--ig-grid-item-min-width"] .ig-grid-item {
+        grid-column: auto !important;
+    }
+}
+
+.ig-grid-item {
+    min-width: 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.ig-full-width-grid-item {
+    grid-column: 1 / -1;
+}
+
+.ig-grid-spacer {
+    min-height: 0;
+    background: transparent;
+}
+
+@media (max-width: 768px) {
+    .ig-grid-spacer {
+        display: none;
+    }
+}

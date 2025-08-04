@@ -7,50 +7,26 @@
 
 /// A control that displays a list of section titles that can be folded out to
 /// display more content.
-public struct Accordion: HTML {
-    /// Controls what happens when a section is opened.
-    public enum OpenMode: Sendable {
-        /// Opening one accordion section automatically closes all others.
-        case individual
-
-        /// Users can open multiple sections simultaneously.
-        case all
-    }
-
-    /// The visual style of the accordion.
-    public enum Style: Sendable {
-        /// A style with outer borders and rounded corners.
-        case bordered
-
-        /// Removes outer borders and rounded corners.
-        case plain
-
-        /// The default styling based on context.
-        public static var automatic: Self { .bordered }
-    }
-
+public struct Accordion<Content: AccordionElement>: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// A collection of sections you want to show inside this accordion.
-    private var items: [Item]
+    private var content: Content
 
     /// Adjusts what happens when a section is opened.
     /// Defaults to `.individual`, meaning that only one
     /// accordion section may be open at a time.
-    private var openMode = OpenMode.individual
+    private var openMode = AccordionOpenMode.individual
 
     /// Create a new Accordion from a collection of sections.
     /// - Parameter items: A result builder containing all the sections
     /// you want to display in this accordion.
-    public init(@ElementBuilder<Item> _ items: () -> [Item]) {
-        self.items = items()
+    public init(@AccordionElementBuilder _ content: () -> Content) {
+        self.content = content()
     }
 
     /// Creates a new `Accordion` instance from a collection of items, along with a function
@@ -59,14 +35,18 @@ public struct Accordion: HTML {
     ///   - items: A sequence of items you want to convert into items.
     ///   - content: A function that accepts a single value from the sequence, and
     ///     returns a row representing that value in the accordion.
-    public init<T>(_ items: any Sequence<T>, content: (T) -> Item) {
-        self.items = items.map(content)
+    public init<T, S: Sequence, ItemContent: AccordionElement>(
+        _ items: S,
+        content: @escaping (T) -> ItemContent
+    ) where S.Element == T, Content == ForEach<[T], ItemContent> {
+        let content = ForEach(Array(items), content: content)
+        self.content = content
     }
 
     /// Adjusts the open mode for this Accordion.
     /// - Parameter mode: The new open mode.
     /// - Returns: A copy of this Accordion with the new open mode set.
-    public func openMode(_ mode: OpenMode) -> Self {
+    public func openMode(_ mode: AccordionOpenMode) -> Self {
         var copy = self
         copy.openMode = mode
         return copy
@@ -75,7 +55,7 @@ public struct Accordion: HTML {
     /// Sets the visual style of the accordion.
     /// - Parameter style: The style to apply to the accordion.
     /// - Returns: A modified copy of this accordion with the new style applied.
-    public func accordionStyle(_ style: Style) -> Self {
+    public func accordionStyle(_ style: AccordionStyle) -> Self {
         var copy = self
         copy.attributes.append(classes: "accordion-flush")
         return copy
@@ -134,14 +114,14 @@ public struct Accordion: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         // Accordions with an individual open mode must have
         // each element linked back to a unique accordion ID.
         // This is generated below, then passed into individual
         // items so they can adapt accordinly.
         let accordionID = "accordion\(UUID().uuidString.truncatedHash)"
         let content = Section {
-            ForEach(items) { item in
+            ForEach(self.content.subviews()) { item in
                 item.assigned(to: accordionID, openMode: openMode)
             }
         }
@@ -149,6 +129,6 @@ public struct Accordion: HTML {
         .class("accordion")
         .id(accordionID)
 
-        return content.markup()
+        return content.render()
     }
 }

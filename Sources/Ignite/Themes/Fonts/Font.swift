@@ -25,7 +25,7 @@ public struct Font: Hashable, Equatable, Sendable {
     let responsiveSize: ResponsiveValues<LengthUnit>?
 
     /// The weight (boldness) of the font.
-    let weight: Font.Weight
+    let weight: Font.Weight?
 
     /// Constants that define the style of the font.
     public enum Variant: String, Sendable {
@@ -112,7 +112,7 @@ public struct Font: Hashable, Equatable, Sendable {
         name: String?,
         style: Font.Style = .body,
         size: Responsive.Size,
-        weight: Weight = .regular
+        weight: Weight? = nil
     ) {
         self.name = name
         self.style = style
@@ -126,7 +126,7 @@ public struct Font: Hashable, Equatable, Sendable {
         name: String?,
         style: Font.Style = .body,
         size: LengthUnit? = nil,
-        weight: Font.Weight = .regular
+        weight: Font.Weight? = nil
     ) {
         self.name = name
         self.style = style
@@ -142,7 +142,7 @@ public struct Font: Hashable, Equatable, Sendable {
     /// - Returns: A Font instance configured with the system font.
     public static func system(
         _ style: Font.Style,
-        weight: Font.Weight = .regular
+        weight: Font.Weight? = nil
     ) -> Font {
         Font(name: nil, style: style, weight: weight)
     }
@@ -155,7 +155,7 @@ public struct Font: Hashable, Equatable, Sendable {
     public static func system(
         _ style: Font.Style = .body,
         size: LengthUnit,
-        weight: Font.Weight = .regular
+        weight: Font.Weight? = nil
     ) -> Font {
         Font(name: nil, style: style, size: size, weight: weight)
     }
@@ -168,7 +168,7 @@ public struct Font: Hashable, Equatable, Sendable {
     public static func system(
         _ style: Font.Style = .body,
         size: Int,
-        weight: Font.Weight = .regular
+        weight: Font.Weight? = nil
     ) -> Font {
         Font(name: nil, style: style, size: .px(size), weight: weight)
     }
@@ -184,7 +184,7 @@ public struct Font: Hashable, Equatable, Sendable {
         _ name: String,
         style: Font.Style = .body,
         size: LengthUnit,
-        weight: Font.Weight = .regular
+        weight: Font.Weight? = nil
     ) -> Font {
         Font(name: name, style: style, size: size, weight: weight)
     }
@@ -200,7 +200,7 @@ public struct Font: Hashable, Equatable, Sendable {
         _ name: String,
         style: Font.Style = .body,
         size: Int,
-        weight: Font.Weight = .regular
+        weight: Font.Weight? = nil
     ) -> Font {
         Font(name: name, style: style, size: .px(size), weight: weight)
     }
@@ -214,7 +214,7 @@ public struct Font: Hashable, Equatable, Sendable {
     public static func custom(
         _ name: String,
         style: Font.Style = .body,
-        weight: Font.Weight = .regular
+        weight: Font.Weight? = nil
     ) -> Font {
         Font(name: name, style: style, size: nil, weight: weight)
     }

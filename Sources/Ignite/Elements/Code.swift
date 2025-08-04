@@ -15,13 +15,10 @@
 /// or replace `<` and `>` with their character entity references, `&lt;` and `&gt;` respectively.
 public struct Code: InlineElement {
     /// The content and behavior of this HTML.
-    public var body: some InlineElement { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The code to display.
     private var content: String
@@ -34,7 +31,7 @@ public struct Code: InlineElement {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         Markup("<code\(attributes)>\(content)</code>")
     }
 }

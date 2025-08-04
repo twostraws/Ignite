@@ -212,7 +212,9 @@ private extension Site {
     var supportsDarkTheme: Bool {
         darkTheme != nil
     }
+}
 
+extension Site {
     var hasMultipleThemes: Bool {
         (supportsLightTheme && supportsDarkTheme) ||
         !alternateThemes.isEmpty

@@ -5,140 +5,35 @@
 // See LICENSE for license information.
 //
 
+/// A type that provides a specialized configuration
+/// when displayed within a card container.
+@MainActor
+protocol CardComponentConfigurable {
+    /// Returns the original element, configured for display
+    /// within in a `Card`, in an opaque wrapper.
+    func configuredAsCardComponent() -> CardComponent
+}
+
 /// A group of information placed inside a gently rounded
-public struct Card: HTML {
-    /// Styling for this card.
-    public enum Style: CaseIterable, Sendable {
-        /// Default styling.
-        case `default`
-
-        /// Solid background color.
-        case solid
-
-        /// Solid border color.
-        case bordered
-    }
-
-    /// Where to position the content of the card relative to it image.
-    public enum ContentPosition: CaseIterable, Sendable {
-        public static let allCases: [Card.ContentPosition] = [
-            .bottom, .top, .overlay(alignment: .topLeading)
-        ]
-
-        /// Positions content below the image.
-        case bottom
-
-        /// Positions content above the image.
-        case top
-
-        /// Positions content over the image.
-        case overlay(alignment: ContentAlignment)
-
-        // Static entries for backward compatibilty
-        public static let `default` = Self.bottom
-        public static let overlay = Self.overlay(alignment: .topLeading)
-
-        // MARK: Helpers for `render`
-
-        var imageClass: String {
-            switch self {
-            case .bottom:
-                "card-img-top"
-            case .top:
-                "card-img-bottom"
-            case .overlay:
-                "card-img"
-            }
-        }
-
-        var bodyClasses: [String] {
-            switch self {
-            case .overlay(let alignment):
-                ["card-img-overlay", alignment.textAlignment.rawValue, alignment.verticalAlignment.rawValue]
-            default:
-                ["card-body"]
-            }
-        }
-
-        var addImageFirst: Bool {
-            switch self {
-            case .bottom, .overlay:
-                true
-            case .top:
-                false
-            }
-        }
-    }
-
-    enum TextAlignment: String, CaseIterable, Sendable {
-        case start = "text-start"
-        case center = "text-center"
-        case end = "text-end"
-    }
-
-    enum VerticalAlignment: String, CaseIterable, Sendable {
-        case start = "align-content-start"
-        case center = "align-content-center"
-        case end = "align-content-end"
-    }
-
-    public enum ContentAlignment: CaseIterable, Sendable {
-        case topLeading
-        case top
-        case topTrailing
-        case leading
-        case center
-        case trailing
-        case bottomLeading
-        case bottom
-        case bottomTrailing
-
-        var textAlignment: TextAlignment {
-            switch self {
-            case .topLeading, .leading, .bottomLeading:
-                .start
-            case .top, .center, .bottom:
-                .center
-            case .topTrailing, .trailing, .bottomTrailing:
-                .end
-            }
-        }
-
-        var verticalAlignment: VerticalAlignment {
-            switch self {
-            case .topLeading, .top, .topTrailing:
-                .start
-            case .leading, .center, .trailing:
-                .center
-            case .bottomLeading, .bottom, .bottomTrailing:
-                .end
-            }
-        }
-
-        public static let `default` = Self.topLeading
-    }
-
+public struct Card<Header: HTML, Content: HTML, Footer: HTML>: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
+    private var role = Role.default
+    private var style = CardStyle.default
 
-    var role = Role.default
-    var style = Style.default
+    private var contentPosition = CardContentPosition.default
+    private var imageOpacity = 1.0
 
-    var contentPosition = ContentPosition.default
-    var imageOpacity = 1.0
+    private var image: Image?
+    private var header: Header
+    private var footer: Footer
+    private var content: Content
 
-    var image: Image?
-    private var header: HTMLCollection
-    private var footer: HTMLCollection
-    private var items: HTMLCollection
-
-    var cardClasses: String? {
+    private var cardClasses: String? {
         switch style {
         case .default:
             nil
@@ -151,17 +46,44 @@ public struct Card: HTML {
 
     public init(
         imageName: String? = nil,
-        @HTMLBuilder body: () -> some BodyElement,
-        @HTMLBuilder header: () -> some BodyElement = { EmptyHTML() },
-        @HTMLBuilder footer: () -> some BodyElement = { EmptyHTML() }
+        @HTMLBuilder content: () -> Content,
+        @HTMLBuilder header: () -> Header,
+        @HTMLBuilder footer: () -> Footer
     ) {
         if let imageName {
             self.image = Image(decorative: imageName)
         }
 
-        self.header = HTMLCollection(header)
-        self.footer = HTMLCollection(footer)
-        self.items = HTMLCollection(body)
+        self.header = header()
+        self.footer = footer()
+        self.content = content()
+    }
+
+    public init(
+        imageName: String? = nil,
+        @HTMLBuilder content: () -> Content,
+        @HTMLBuilder header: () -> Header
+    ) where Footer == EmptyHTML {
+        if let imageName {
+            self.image = Image(decorative: imageName)
+        }
+
+        self.header = header()
+        self.footer = EmptyHTML()
+        self.content = content()
+    }
+
+    public init(
+        imageName: String? = nil,
+        @HTMLBuilder content: () -> Content
+    ) where Header == EmptyHTML, Footer == EmptyHTML {
+        if let imageName {
+            self.image = Image(decorative: imageName)
+        }
+
+        self.header = EmptyHTML()
+        self.footer = EmptyHTML()
+        self.content = content()
     }
 
     public func role(_ role: Role) -> Card {
@@ -178,7 +100,7 @@ public struct Card: HTML {
     /// Adjusts the rendering style of this card.
     /// - Parameter style: The new card style to use.
     /// - Returns: A new `Card` instance with the updated style.
-    public func cardStyle(_ style: Style) -> Card {
+    public func cardStyle(_ style: CardStyle) -> Card {
         var copy = self
         copy.style = style
         return copy
@@ -187,7 +109,7 @@ public struct Card: HTML {
     /// Adjusts the position of this card's content relative to its image.
     /// - Parameter newPosition: The new content positio for this card.
     /// - Returns: A new `Card` instance with the updated content position.
-    public func contentPosition(_ newPosition: ContentPosition) -> Self {
+    public func contentPosition(_ newPosition: CardContentPosition) -> Self {
         var copy = self
         copy.contentPosition = newPosition
         return copy
@@ -203,7 +125,7 @@ public struct Card: HTML {
         return copy
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         Section {
             if let image, contentPosition.addImageFirst {
                 if imageOpacity != 1 {
@@ -216,7 +138,7 @@ public struct Card: HTML {
                 }
             }
 
-            if header.isEmpty == false {
+            if header.isEmptyHTML == false {
                 renderHeader()
             }
 
@@ -233,14 +155,14 @@ public struct Card: HTML {
                 }
             }
 
-            if footer.isEmpty == false {
+            if footer.isEmptyHTML == false {
                 renderFooter()
             }
         }
         .attributes(attributes)
         .class("card")
         .class(cardClasses)
-        .markup()
+        .render()
     }
 
     private func renderHeader() -> some HTML {
@@ -250,19 +172,8 @@ public struct Card: HTML {
 
     private func renderItems() -> some HTML {
         Section {
-            ForEach(items) { item in
-                switch item {
-                case let text as Text where text.font == .body || text.font == .lead:
-                    text.class("card-text")
-                case let text as Text:
-                    text.class("card-title")
-                case is Link, is LinkGroup:
-                    AnyHTML(item).class("card-link")
-                case let image as Image:
-                    image.class("card-img")
-                default:
-                    AnyHTML(item)
-                }
+            ForEach(content.subviews()) {
+                $0.configuredAsCardComponent()
             }
         }
         .class(contentPosition.bodyClasses)

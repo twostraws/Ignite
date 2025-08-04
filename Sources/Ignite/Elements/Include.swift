@@ -8,13 +8,10 @@
 /// Lets you include arbitrary HTML on a page.
 public struct Include: HTML {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The filename you want to bring in, including its extension. This file
     /// must be in your Includes directory.
@@ -29,7 +26,7 @@ public struct Include: HTML {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         let fileURL = publishingContext.includesDirectory.appending(path: filename)
 
         do {

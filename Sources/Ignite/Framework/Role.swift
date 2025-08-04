@@ -51,4 +51,12 @@ public enum Role: String, CaseIterable, Sendable {
     public static let standardRoles: [Role] = [
         .primary, .secondary, .success, .danger, .warning, .info, .light, .dark
     ]
+
+    /// Adds the correct ARIA attribute, if it exists, for the role.
+    func aria() -> Attribute? {
+        switch self {
+        case .close: Attribute(name: "label", value: "Close")
+        default: nil
+        }
+    }
 }

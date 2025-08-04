@@ -24,6 +24,11 @@ extension Attribute {
 
     /// A boolean attribute indicating whether audio/video controls should be displayed.
     static let controls: Attribute = .init("controls")
+
+    /// An aria attribute.
+    static func aria(_ key: AriaType, value: String) -> Attribute {
+       Attribute(name: key.rawValue, value: value)
+    }
 }
 
 // Convenience static methods for common HTML enumerated attributes.

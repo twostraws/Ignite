@@ -12,21 +12,18 @@
 ///
 /// - Important: For types that accept only `InlineElement` or use `@InlineElementBuilder`,
 /// use `Span` instead of `Text`.
-public struct Text: HTML, DropdownItem {
+public struct Text<Content: InlineElement>: HTML, DropdownElement {
     /// The content and behavior of this HTML.
-    public var body: some HTML { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
-
     /// The font to use for this text.
-    var font = FontStyle.body
+    var fontStyle = FontStyle.body
 
     /// The content to place inside the text.
-    private var content: any BodyElement
+    private var content: Content
 
     /// Whether this text contains multiple paragraphs of Markdown content.
     private var isMultilineMarkdown = false
@@ -34,12 +31,12 @@ public struct Text: HTML, DropdownItem {
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
     /// - Parameter content: An array of the content to place into the text.
-    public init(@InlineElementBuilder content: () -> any InlineElement) {
+    public init(@InlineElementBuilder content: () -> Content) {
         self.content = content()
     }
 
     /// Creates a new `Text` instance from one inline element.
-    public init(_ string: any InlineElement) {
+    public init(_ string: Content) {
         self.content = string
     }
 
@@ -57,6 +54,35 @@ public struct Text: HTML, DropdownItem {
         return copy
     }
 
+    /// Renders this element using publishing context passed in.
+    /// - Returns: The HTML for this element.
+    public func render() -> Markup {
+        if isMultilineMarkdown {
+            // HTMLCollection will pass its attributes to each child.
+            // This works fine for styles like color, but for styles like
+            // padding, we'd expect them to apply to the paragraphs
+            // collectively. So we'll wrap the paragraphs in a Section.
+            return Section(content)
+                .attributes(attributes)
+                .render()
+        } else if FontStyle.classBasedStyles.contains(fontStyle), let sizeClass = fontStyle.sizeClass {
+            let attributes = attributes.appending(classes: sizeClass)
+            return Markup(
+                "<p\(attributes)>" +
+                content.markupString() +
+                "</p>"
+            )
+        } else {
+            return Markup(
+                "<\(fontStyle.rawValue)\(attributes)>" +
+                content.markupString() +
+                "</\(fontStyle.rawValue)>"
+            )
+        }
+    }
+}
+
+extension Text where Content == String {
     /// Creates a new `Text` instance using "lorem ipsum" placeholder text.
     /// - Parameter placeholderLength: How many placeholder words to generate.
     public init(placeholderLength: Int) {
@@ -123,7 +149,7 @@ public struct Text: HTML, DropdownItem {
                 }
                 .map(Text.init)
 
-            self.content = HTMLCollection(paragraphs)
+            self.content = paragraphs.map { $0.markupString() }.joined()
             self.isMultilineMarkdown = true
         } else {
             // Remove the wrapping <p> tags since they'll be added by markup()
@@ -147,49 +173,114 @@ public struct Text: HTML, DropdownItem {
             publishingContext.addError(.failedToParseMarkup)
         }
     }
-
-    /// Renders this element using publishing context passed in.
-    /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
-        if isMultilineMarkdown {
-            // HTMLCollection will pass its attributes to each child.
-            // This works fine for styles like color, but for styles like
-            // padding, we'd expect them to apply to the paragraphs
-            // collectively. So we'll wrap the paragraphs in a Section.
-            Section(content)
-                .attributes(attributes)
-                .markup()
-        } else {
-            Markup(
-                "<\(font.rawValue)\(attributes)>" +
-                content.markupString() +
-                "</\(font.rawValue)>"
-            )
-        }
-    }
 }
 
-extension HTML {
-    func fontStyle(_ font: Font.Style) -> any HTML {
-        var copy: any HTML = self
-        if Font.Style.classBasedStyles.contains(font), let sizeClass = font.sizeClass {
-            copy.attributes.append(classes: sizeClass)
-        } else if var text = copy as? Text {
-            text.font = font
-            copy = text
-        } else if var anyHTML = copy as? AnyHTML, var text = anyHTML.wrapped as? Text {
-            text.font = font
-            anyHTML.wrapped = text
-            copy = anyHTML
-        }
+public extension Text {
+    /// Sets the line height of the element using a custom value.
+    /// - Parameter spacing: The line height multiplier to use.
+    /// - Returns: The modified HTML element.
+    func lineSpacing(_ spacing: Double) -> Self {
+        var copy = self
+        copy.attributes.append(styles: .init(.lineHeight, value: spacing.formatted(.nonLocalizedDecimal)))
+        return copy
+    }
+
+    /// Sets the line height of the element using a predefined Bootstrap value.
+    /// - Parameter spacing: The predefined line height to use.
+    /// - Returns: The modified HTML element.
+    func lineSpacing(_ spacing: LineSpacing) -> Self {
+        var copy = self
+        copy.attributes.append(classes: "lh-\(spacing.rawValue)")
         return copy
     }
 }
 
-extension InlineElement {
-    func fontStyle(_ font: Font.Style) -> any InlineElement {
-        var copy: any InlineElement = self
-        copy.attributes.append(classes: font.sizeClass)
+public extension Text {
+    /// Applies a foreground color to the current element.
+    /// - Parameter color: The style to apply, specified as a `Color` object.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ color: Color) -> Self {
+        var copy = self
+        copy.attributes.append(styles: .init(.color, value: color.description))
         return copy
+    }
+
+    /// Applies a foreground color to the current element.
+    /// - Parameter color: The style to apply, specified as a string.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ color: String) -> Self {
+        var copy = self
+        copy.attributes.append(styles: .init(.color, value: color))
+        return copy
+    }
+
+    /// Applies a foreground color to the current element.
+    /// - Parameter style: The style to apply, specified as a `Color` object.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ style: ForegroundStyle) -> Self {
+        var copy = self
+        copy.attributes.append(classes: style.rawValue)
+        return copy
+    }
+
+    /// Applies a foreground color to the current element.
+    /// - Parameter gradient: The style to apply, specified as a `Gradient` object.
+    /// - Returns: The current element with the updated color applied.
+    func foregroundStyle(_ gradient: Gradient) -> Self {
+        var copy = self
+        copy.attributes.append(styles: gradient.styles)
+        return copy
+    }
+}
+
+public extension Text {
+    /// Adjusts the heading level of this text.
+    /// - Parameter style: The new heading level.
+    /// - Returns: A new `Text` instance with the updated font style.
+    func font(_ style: Font.Style) -> Self {
+        var copy = self
+        copy.fontStyle = style
+        return copy
+    }
+
+    /// Adjusts the font of this text.
+    /// - Parameter font: The font configuration to apply.
+    /// - Returns: A new instance with the updated font.
+    func font(_ font: Font) -> Self {
+        var copy = self
+        if let style = font.style { copy.fontStyle = style }
+        let attributes = FontModifier.attributes(for: font, includeStyle: false)
+        copy.attributes.merge(attributes)
+        return copy
+    }
+
+    /// Adjusts the font of this text using responsive sizing.
+    /// - Parameter font: The responsive font configuration to apply.
+    /// - Returns: A new instance with the updated font.
+    func font(_ font: Font.Responsive) -> Self {
+        var copy = self
+        let font = font.font
+        if let style = font.style { copy.fontStyle = style }
+        let attributes = FontModifier.attributes(for: font, includeStyle: false)
+        copy.attributes.merge(attributes)
+        return copy
+    }
+}
+
+extension Text: DropdownElementRenderable {
+    func renderAsDropdownElement() -> Markup {
+        ListItem {
+            self.class("dropdown-header")
+        }
+        .render()
+    }
+}
+
+extension Text: CardComponentConfigurable {
+    func configuredAsCardComponent() -> CardComponent {
+        if fontStyle == .body || FontStyle.classBasedStyles.contains(fontStyle) {
+            return CardComponent(self.class("card-text"))
+        }
+        return CardComponent(self.class("card-title"))
     }
 }

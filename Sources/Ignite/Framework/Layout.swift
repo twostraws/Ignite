@@ -30,7 +30,7 @@ public protocol Layout {
 public extension Layout {
     /// The current page being rendered.
     var content: some HTML {
-        Section(PublishingContext.shared.environment.pageContent)
-            .class("ig-main-content")
+        let environment = PublishingContext.shared.environment
+        return PageContent(environment.pageContent)
     }
 }

@@ -8,13 +8,10 @@
 /// Plays Audio on your page.
 public struct Audio: InlineElement, LazyLoadable {
     /// The content and behavior of this HTML.
-    public var body: some InlineElement { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this HTML belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The name of the audio to display. This should be specified relative
     /// to the root of your site, e.g. /audio/bark.mp3.
@@ -47,7 +44,7 @@ public struct Audio: InlineElement, LazyLoadable {
 
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
-    public func markup() -> Markup {
+    public func render() -> Markup {
         guard let files = files else {
             publishingContext.addWarning("""
             Creating audio with no name should not be possible. \

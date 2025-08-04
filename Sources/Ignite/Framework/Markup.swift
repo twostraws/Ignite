@@ -6,7 +6,7 @@
 //
 
 /// A structure that represents HTML markup content.
-public struct Markup: Sendable {
+public struct Markup: Sendable, Equatable {
     /// The raw HTML string content.
     var string: String
 

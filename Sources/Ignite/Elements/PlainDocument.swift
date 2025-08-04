@@ -26,13 +26,13 @@ public struct PlainDocument: Document {
         self.body = content().body
     }
 
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var attributes = attributes
         attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
 
-        let bodyMarkup = body.markup()
+        let bodyMarkup = body.render()
         // Deferred head rendering to accommodate for context updates during body rendering
-        let headMarkup = head.markup()
+        let headMarkup = head.render()
 
         var output = "<!doctype html>"
         output += "<html\(attributes)>"

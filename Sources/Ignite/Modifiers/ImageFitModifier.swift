@@ -1,5 +1,5 @@
 //
-// ImageFit-Modifier.swift
+// ImageFitModifier.swift
 // Ignite
 // https://www.github.com/twostraws/Ignite
 // See LICENSE for license information.
@@ -17,9 +17,9 @@ public extension Image {
     ) -> some InlineElement {
         let xPercent = Int(anchor.x * 100)
         let yPercent = Int(anchor.y * 100)
-
-        return self
-            .class("w-100 h-100 object-fit-\(fit.rawValue)")
-            .style(.objectPosition, "\(xPercent)% \(yPercent)%")
+        var attributes = attributes
+        attributes.append(classes: "w-100 h-100 object-fit-\(fit.rawValue)")
+        attributes.append(styles: .init(.objectPosition, value: "\(xPercent)% \(yPercent)%"))
+        return self.attributes(attributes)
     }
 }

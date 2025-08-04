@@ -11,13 +11,10 @@
 /// instances to prevent unnecessary wrapping layers.
 public struct AnyInlineElement: InlineElement {
     /// The body of this HTML element, which is itself.
-    public var body: some InlineElement { self }
+    public var body: Never { fatalError() }
 
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
-
-    /// Whether this element belongs to the framework.
-    public var isPrimitive: Bool { true }
 
     /// The underlying HTML content, unattributed.
     var wrapped: any InlineElement
@@ -47,9 +44,9 @@ public struct AnyInlineElement: InlineElement {
 
     /// Renders the wrapped HTML content using the given publishing context
     /// - Returns: The rendered HTML string
-    public func markup() -> Markup {
+    public func render() -> Markup {
         var wrapped = wrapped
         wrapped.attributes.merge(attributes)
-        return wrapped.markup()
+        return wrapped.render()
     }
 }

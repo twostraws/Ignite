@@ -31,7 +31,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         publishingContext.environment.pageContent = Text("TEXT")
 
         let element = Body()
-        let output = element.markupString()
+        let output = element.render().string
         let path = publishingContext.path(for: URL(string: "/js")!)
 
         #expect(output == """
@@ -47,7 +47,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
     @Test("Script File Test", arguments: ["/code.js"])
     func file(scriptFile: String) async throws {
         let element = Script(file: scriptFile)
-        let output = element.markupString()
+        let output = element.render().string
         let expectedPath = publishingContext.path(for: URL(string: scriptFile)!)
         #expect(output == "<script src=\"\(expectedPath)\"></script>")
     }

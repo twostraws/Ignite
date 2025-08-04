@@ -91,11 +91,11 @@ class NavigationBarTests: IgniteTestSuite {
     }
 
     @Test("Has Div Tag Inside if given width", arguments: [
-        NavigationBar.Width.viewport,
+        NavigationBarWidth.viewport,
         .count(2),
         .count(10)
     ])
-    func divTagForColumnWidth(width: NavigationBar.Width) async throws {
+    func divTagForColumnWidth(width: NavigationBarWidth) async throws {
         let element = NavigationBar().width(width)
         let output = element.markupString()
 
@@ -125,10 +125,10 @@ class NavigationBarTests: IgniteTestSuite {
     }
 
     @Test("Div Tag Class contains `container` if given column width", arguments: [
-        NavigationBar.Width.count(2),
+        NavigationBarWidth.count(2),
         .count(10)
     ])
-    func divTagClassEndsWithContainer(width: NavigationBar.Width) async throws {
+    func divTagClassEndsWithContainer(width: NavigationBarWidth) async throws {
         let element = NavigationBar().width(width)
         let output = element.markupString()
 
@@ -157,7 +157,7 @@ class NavigationBarTests: IgniteTestSuite {
             .components(separatedBy: " ")
         )
 
-        let expected = "container-fluid col flex-wrap flex-lg-nowrap".components(separatedBy: " ")
+        let expected = "container-fluid col-auto flex-wrap flex-lg-nowrap".components(separatedBy: " ")
         #expect(divClasses == expected)
     }
 
@@ -266,9 +266,9 @@ class NavigationBarTests: IgniteTestSuite {
 
         let expectedLink = item
             .class("nav-link text-nowrap")
-            .markup()
+            .render()
             .string
-        let expectedNavItem = "<li class=\"nav-item\">\(expectedLink)</li>"
+        let expectedNavItem = "<li class=\"nav-item\" style=\"list-style-type: none\">\(expectedLink)</li>"
 
         #expect(ulContents.contains(expectedNavItem))
     }
@@ -290,15 +290,15 @@ class NavigationBarTests: IgniteTestSuite {
 
         let expectedLink1 = item1
             .class("nav-link text-nowrap")
-            .markup()
+            .render()
             .string
-        let expectedNavItem1 = "<li class=\"nav-item\">\(expectedLink1)</li>"
+        let expectedNavItem1 = "<li class=\"nav-item\" style=\"list-style-type: none\">\(expectedLink1)</li>"
 
         let expectedLink2 = item2
             .class("nav-link text-nowrap")
-            .markup()
+            .render()
             .string
-        let expectedNavItem2 = "<li class=\"nav-item\">\(expectedLink2)</li>"
+        let expectedNavItem2 = "<li class=\"nav-item\" style=\"list-style-type: none\">\(expectedLink2)</li>"
 
         #expect(ulContents.contains(expectedNavItem1))
         #expect(ulContents.contains(expectedNavItem2))
