@@ -32,8 +32,10 @@ public struct Image: InlineElement, LazyLoadable {
     /// Creates a new `Image` instance from the specified path. For an image contained
     /// in your site's assets, this should be specified relative to the root of your
     /// site, e.g. /images/dog.jpg.
+    /// Append `~dark` to the end of filenames for a dark mode version of the image. (`cool-image.svg` and `cool-image~dark.svg`)
+    /// Append `@2x` to the end of filenames to supply a higher resoloution version fo the image (`cool-image.png` and `cool-image@2x.png`)
     /// - Parameters:
-    ///   - name: The filename of your image relative to the root of your site.
+    ///   - path: The filename of your image relative to the root of your site.
     ///   e.g. /images/welcome.jpg.
     ///   - description: An description of your image suitable for screen readers.
     public init(_ path: String, description: String? = nil) {
