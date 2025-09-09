@@ -61,3 +61,15 @@ public struct Script: HTML, HeadElement {
         }
     }
 }
+
+public extension Script {
+    /// Adds a type attribute to the element.
+    /// - Parameters:
+    ///   - value: The value of the type attribute
+    /// - Returns: The modified `HTML` element
+    func type(value: String) -> Self {
+        var copy = self
+        copy.attributes.append(customAttributes: .init(name: "type", value: value))
+        return copy
+    }
+}
