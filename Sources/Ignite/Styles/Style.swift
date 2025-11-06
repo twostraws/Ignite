@@ -35,7 +35,7 @@ extension Style {
     /// The name of the CSS class this `Style` generates,
     /// derived from the type name minus the "Style" suffix, if present.
     var className: String {
-        let typeName = String(describing: type(of: style))
+        let typeName = String(describing: type(of: self))
         let baseName = typeName.hasSuffix("Style") ? typeName : typeName + "Style"
         let className = baseName.kebabCased()
         return className
