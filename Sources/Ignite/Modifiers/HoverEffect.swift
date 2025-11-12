@@ -10,7 +10,7 @@ public extension HTML {
     /// - Parameter effect: A closure that returns the effect to be applied.
     ///   The argument acts as a placeholder representing this page element.
     /// - Returns: A modified copy of the element with hover effect applied
-    func hoverEffect(_ effect: @escaping (EmptyHoverEffect) -> some HTML) -> some HTML {
+    func hoverEffect(_ effect: @escaping (EmptHTMLyHoverEffect) -> some HTML) -> some HTML {
         self.hoverEffectModifier(effect)
     }
 }
@@ -18,11 +18,11 @@ public extension HTML {
 private extension HTML {
     // An abstraction of the implementation details for consistent reuse across protocol extensions.
     func hoverEffectModifier(
-        _ effect: @escaping (EmptyHoverEffect) -> some HTML
+        _ effect: @escaping (EmptHTMLyHoverEffect) -> some HTML
     ) -> some HTML {
         self.onHover { isHovering in
             if isHovering {
-                let effectElement = effect(EmptyHoverEffect())
+                let effectElement = effect(EmptHTMLyHoverEffect())
                 let effectAttributes = effectElement.attributes
                 ApplyHoverEffects(styles: effectAttributes.styles)
             } else {
@@ -33,9 +33,44 @@ private extension HTML {
 }
 
 /// An empty hover effect type to which styles can be added
-public struct EmptyHoverEffect: HTML {
+public struct EmptHTMLyHoverEffect: HTML {
     /// The content and behavior of this HTML.
     public var body: some HTML { self }
+
+    public func markup() -> Markup { Markup() }
+}
+
+public extension InlineElement {
+    /// Applies a hover effect to the inline element
+    /// - Parameter effect: A closure that returns the effect to be applied.
+    ///   The argument acts as a placeholder representing this inline element.
+    /// - Returns: A modified copy of the element with hover effect applied
+    func hoverEffect(_ effect: @escaping (EmptyInlineElementHoverEffect) -> some InlineElement) -> some InlineElement {
+        self.hoverEffectModifier(effect)
+    }
+}
+
+private extension InlineElement {
+    // An abstraction of the implementation details for consistent reuse across protocol extensions.
+    func hoverEffectModifier(
+        _ effect: @escaping (EmptyInlineElementHoverEffect) -> some InlineElement
+    ) -> some InlineElement {
+        self.onHover { isHovering in
+            if isHovering {
+                let effectElement = effect(EmptyInlineElementHoverEffect())
+                let effectAttributes = effectElement.attributes
+                ApplyHoverEffects(styles: effectAttributes.styles)
+            } else {
+                RemoveHoverEffects()
+            }
+        }
+    }
+}
+
+/// An empty hover effect type to which styles can be added
+public struct EmptyInlineElementHoverEffect: InlineElement {
+    /// The content and behavior of this element.
+    public var body: some InlineElement { self }
 
     public func markup() -> Markup { Markup() }
 }
