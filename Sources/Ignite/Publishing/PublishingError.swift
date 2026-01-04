@@ -21,6 +21,9 @@ enum PublishingError: LocalizedError {
     /// Could not find the site's package directory.
     case missingPackageDirectory
 
+    /// The specified source directory does not exist or is not a directory.
+    case missingSourceDirectory(URL)
+
     /// Could not find the app sandbox's home directory
     case missingSandboxHomeDirectory
 
@@ -91,6 +94,8 @@ enum PublishingError: LocalizedError {
         switch self {
         case .missingPackageDirectory:
             "Unable to locate Package.swift."
+        case .missingSourceDirectory(let url):
+            "The specified source directory does not exist or is not a directory: \(url.path)."
         case .missingSandboxHomeDirectory:
             "Unable to locate App sandbox's home directory"
         case .badMarkdown(let url):

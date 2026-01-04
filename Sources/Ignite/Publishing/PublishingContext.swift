@@ -99,6 +99,25 @@ final class PublishingContext {
         includesDirectory = sourceDirectory.appending(path: "Includes")
     }
 
+    /// Creates a new publishing context with explicit source and build directories.
+    /// Use this when embedding Ignite in an app target where Package.swift doesn't exist.
+    /// - Parameters:
+    ///   - site: The site we're currently publishing.
+    ///   - sourceDirectory: The root directory containing Assets, Content, and Includes folders.
+    ///   - buildDirectory: The directory where the generated site will be written.
+    private init(for site: any Site, sourceDirectory: URL, buildDirectory: URL) throws {
+        self.site = site
+
+        let sourceBuildDirectories = try URL.makeDirectories(source: sourceDirectory, build: buildDirectory)
+        self.sourceDirectory = sourceBuildDirectories.source
+        self.buildDirectory = sourceBuildDirectories.build
+
+        assetsDirectory = self.sourceDirectory.appending(path: "Assets")
+        fontsDirectory = self.sourceDirectory.appending(path: "Fonts")
+        contentDirectory = self.sourceDirectory.appending(path: "Content")
+        includesDirectory = self.sourceDirectory.appending(path: "Includes")
+    }
+
     /// Creates and sets the shared instance of `PublishingContext`
     /// - Parameters:
     ///   - site: The site we're currently publishing.
@@ -113,6 +132,24 @@ final class PublishingContext {
         buildDirectoryPath: String = "Build"
     ) throws -> PublishingContext {
         let context = try PublishingContext(for: site, from: file, buildDirectoryPath: buildDirectoryPath)
+        sharedContext = context
+        return context
+    }
+
+    /// Creates and sets the shared instance of `PublishingContext` with explicit directories.
+    /// Use this when embedding Ignite in an app target where Package.swift doesn't exist.
+    /// - Parameters:
+    ///   - site: The site we're currently publishing.
+    ///   - sourceDirectory: The root directory containing Assets, Content, and Includes folders.
+    ///   - buildDirectory: The directory where the generated site will be written.
+    /// - Returns: The shared `PublishingContext` instance.
+    @discardableResult
+    static func initialize(
+        for site: any Site,
+        sourceDirectory: URL,
+        buildDirectory: URL
+    ) throws -> PublishingContext {
+        let context = try PublishingContext(for: site, sourceDirectory: sourceDirectory, buildDirectory: buildDirectory)
         sharedContext = context
         return context
     }

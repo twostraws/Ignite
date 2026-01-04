@@ -151,6 +151,10 @@ public protocol Site: Sendable {
     /// Publishes this entire site from user space.
     mutating func publish(from file: StaticString, buildDirectoryPath: String) async throws
 
+    /// Publishes this site using explicit directory paths.
+    /// Use this when embedding Ignite in an app target where Package.swift doesn't exist.
+    mutating func publish(sourceDirectory: URL, buildDirectory: URL) async throws
+
     /// Override this if you need to do custom work to your site before the build begins,
     /// such as downloading data, creating your staticPages array dynamically, etc.
     mutating func prepare() async throws
@@ -265,7 +269,25 @@ public extension Site {
             for: self,
             from: file,
             buildDirectoryPath: buildDirectoryPath)
+        try await performPublish(with: context)
+    }
 
+    /// Publishes the site using explicit directory paths.
+    /// Use this when embedding Ignite in an app target where Package.swift doesn't exist.
+    /// - Parameters:
+    ///   - sourceDirectory: The root directory containing Assets, Content, and Includes folders.
+    ///   - buildDirectory: The directory where the generated site will be written.
+    mutating func publish(sourceDirectory: URL, buildDirectory: URL) async throws {
+        let context = try PublishingContext.initialize(
+            for: self,
+            sourceDirectory: sourceDirectory,
+            buildDirectory: buildDirectory)
+        try await performPublish(with: context)
+    }
+
+    /// Shared implementation for all publish methods.
+    /// - Parameter context: The initialized publishing context.
+    private mutating func performPublish(with context: PublishingContext) async throws {
         try context.parseContent()
 
         context.environment = EnvironmentValues(
