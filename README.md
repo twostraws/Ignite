@@ -282,6 +282,7 @@ That will launch a local web server you should use to preview your site, and als
 | [try! Swift Tokyo](https://tryswift.jp/en/) | [GitHub](https://github.com/tryswift/try-swift-tokyo) |
 | [Tomo Codes](https://tomo.codes) | [GitHub](https://github.com/TomaszLizer/TomoCodes) |
 | [Ryan Token](https://www.ryantoken.com) | [GitHub](https://github.com/r-token/ryantoken.com-v4-ignite) |
+| [Codaglot](https://codaglot.skjorn.name) | [GitHub](https://github.com/skjorn/codaglot-showcase) |
 
 
 ## Contributing
