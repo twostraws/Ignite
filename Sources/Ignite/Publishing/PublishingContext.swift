@@ -169,14 +169,37 @@ final class PublishingContext {
     /// Converts a URL to a site-relative path string.
     /// - Parameter url: The URL to convert.
     /// - Returns: A string path, either preserving remote URLs or
-    /// making local URLs relative to the site root.
+    /// making local URLs relative to the site root. When `site.useRelativePaths`
+    /// is true, local paths will have their leading slash removed.
     func path(for url: URL) -> String {
         let path = url.relativeString
-        return if url.isFileURL {
+        var result = if url.isFileURL {
             site.url.appending(path: path).decodedPath
         } else {
             path
         }
+
+        if site.useRelativePaths, result.hasPrefix("/") {
+            result = String(result.dropFirst())
+        }
+
+        return result
+    }
+
+    /// Converts a path string to a site-relative path, prepending the site's
+    /// subpath if needed and respecting the `useRelativePaths` setting.
+    /// - Parameter path: A path string, typically starting with "/" for local assets.
+    /// - Returns: The resolved path. For subsites, includes the subsite path prefix.
+    /// When `useRelativePaths` is true, the leading slash is removed.
+    func assetPath(_ path: String) -> String {
+        let basePath = path.hasPrefix("/") ? site.url.path : ""
+        var fullPath = "\(basePath)\(path)"
+
+        if site.useRelativePaths, fullPath.hasPrefix("/") {
+            fullPath = String(fullPath.dropFirst())
+        }
+
+        return fullPath
     }
 
     /// Adds a warning during a site build.

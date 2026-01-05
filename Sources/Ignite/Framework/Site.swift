@@ -142,6 +142,13 @@ public protocol Site: Sendable {
     /// The path to the favicon
     var favicon: URL? { get }
 
+    /// When `true`, generates asset paths without leading slashes
+    /// (e.g., `css/bootstrap.min.css` instead of `/css/bootstrap.min.css`).
+    ///
+    /// Use this for single-page sites that need to work when opened directly
+    /// from the filesystem without a web server. Defaults to `false`.
+    var useRelativePaths: Bool { get }
+
     /// An array of all the static pages you want to include in your site.
     @StaticPageBuilder var staticPages: [any StaticPage] { get }
 
@@ -221,8 +228,11 @@ public extension Site {
     /// An empty error page by default, which triggers no error pages being generated.
     var errorPage: EmptyErrorPage { EmptyErrorPage() }
 
-    /// The default favicon being nil
+    /// The default favicon being nil.
     var favicon: URL? { nil }
+
+    /// Default to absolute paths for all local URLs.
+    var useRelativePaths: Bool { false }
 
     /// The syntax highlighting themes from every site theme.
     internal var allHighlighterThemes: OrderedSet<HighlighterTheme> {

@@ -97,14 +97,14 @@ public struct MetaLink: HeadElement, Sendable {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     ///
-    /// If the link `href` starts with a `\` it is an asset and requires any `subsite` prepended;
-    /// otherwise the `href` is a URL and  doesn't get `subsite` prepended
+    /// If the link `href` starts with a `/` it is a local asset and requires any subsite
+    /// path prepended; otherwise the `href` is treated as-is (e.g., external URLs).
+    /// The path respects the site's `useRelativePaths` setting.
     public func markup() -> Markup {
         var attributes = attributes
-        // char[0] of the link 'href' is '/' for an asset; not for a site URL
-        let basePath = href.starts(with: "/") ? publishingContext.site.url.path : ""
+        let resolvedPath = publishingContext.assetPath(href)
         attributes.append(customAttributes:
-            .init(name: "href", value: "\(basePath)\(href)"),
+            .init(name: "href", value: resolvedPath),
             .init(name: "rel", value: rel))
 
         return Markup("<link\(attributes) />")

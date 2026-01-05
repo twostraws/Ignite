@@ -199,7 +199,7 @@ private extension Image {
     }
 
     /// Creates a `srcset` string from image variants with their corresponding pixel density descriptors,
-    /// e.g., `"/images/hero@2x.jpg 2x"`
+    /// e.g., `"/images/hero@2x.jpg 2x"` or `"images/hero@2x.jpg 2x"` when `useRelativePaths` is enabled.
     /// - Parameter variants: An array of image variant URLs
     /// - Returns: An HTML attribute containing the srcset value, or nil if no valid variants exist
     func generateSourceSet(_ variants: [URL]) -> Attribute? {
@@ -210,7 +210,8 @@ private extension Image {
             let densityDescriptor = getDensityDescriptor(filename).map { " \($0)" } ?? ""
             let relativePath = variant.path.replacingOccurrences(of: assetsDirectory.path, with: "")
             let webPath = relativePath.split(separator: "/").joined(separator: "/")
-            return "/\(webPath)\(densityDescriptor)"
+            let resolvedPath = publishingContext.assetPath("/\(webPath)")
+            return "\(resolvedPath)\(densityDescriptor)"
         }.joined(separator: ", ")
 
         return sources.isEmpty ? nil : .init(name: "srcset", value: sources)
