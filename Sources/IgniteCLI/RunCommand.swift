@@ -62,14 +62,17 @@ struct RunCommand: ParsableCommand {
                 " "
             }
 
-        // Get the installed location of the server script
-        let serverScriptURL = URL(filePath: "/usr/local/bin/ignite-server.py")
+        // Find the server script installed next to the tool itself
+        let tool = ProcessInfo.processInfo.arguments.first ?? "NEVER"
+        let dirLoc = tool.lastIndex(of: "/") ?? tool.endIndex
+        let toolDir = String(tool[..<dirLoc])
+        let serverScriptURL = URL(filePath: "\(toolDir)/ignite-server.py")
 
         // Verify server script exists
         guard FileManager.default.fileExists(atPath: serverScriptURL.path) else {
-            print("❌ Critical server component missing")
+            print("❌ Critical server script missing: \(serverScriptURL.path)")
             print("   This suggests a corrupted installation. Please reinstall with:")
-            print("   make install && make clean")
+            print("   make clean && make install")
             return
         }
 
