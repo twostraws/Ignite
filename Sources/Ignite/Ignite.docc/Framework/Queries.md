@@ -1,11 +1,5 @@
 # Queries
 
-CSS Media Queries
-
-## Overview
-
-Overview here
-
 ## Topics
 
 - ``BreakpointQuery``
