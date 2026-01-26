@@ -1,10 +1,12 @@
 # ``Ignite``
 
-Create static sites with Swift.
+A static site generator for Swift developers.
 
 ## Overview
 
-Ignite defines types
+Ignite is a static site builder for Swift developers, offering an expressive, powerful API to build beautiful websites that work great on all devices.
+
+Ignite doesn't try to convert SwiftUI code to HTML, or simply map HTML tags to Swift code. Instead, it aims to use SwiftUI-like syntax to help you build great websites even if you have no knowledge of HTML or CSS.
 
 ## Topics
 
