@@ -99,10 +99,10 @@ Ignite doesn't try to convert SwiftUI code to HTML, or simply map HTML tags to S
 
 ### Framework
 
-- <doc:Analytics>
+- <doc:Analytics-collection>
 - <doc:Animations>
 - <doc:ElementTypes>
-- <doc:Environment>
+- <doc:Environment-collection>
 - <doc:Queries>
 - <doc:Robots>
 - ``AnyHTML``
@@ -172,7 +172,7 @@ Ignite doesn't try to convert SwiftUI code to HTML, or simply map HTML tags to S
 
 ### Rendering
 
-- <doc:Category>
+- <doc:Category-collection>
 - <doc:Markdown>
 - <doc:ResponseErrors>
 - <doc:ResultBuilders>
