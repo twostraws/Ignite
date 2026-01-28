@@ -46,7 +46,7 @@ public struct LinkGroup: HTML {
     /// Creates a `Link` wrapping the provided content and pointing to the path
     /// of the `Article` instance you provide.
     /// - Parameters:
-    ///   - content: A piece of content from your site.
+    ///   - article: An article in your site.
     ///   - content: The user-facing content to show inside the `Link`.
     public init(target article: Article, @HTMLBuilder content: @escaping () -> some HTML) {
         self.content = content()

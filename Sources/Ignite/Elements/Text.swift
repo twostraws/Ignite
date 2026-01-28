@@ -135,7 +135,7 @@ public struct Text: HTML, DropdownItem {
 
     /// Creates a new `Text` struct from a markup format and its parser.
     /// - Parameters:
-    ///   - markdown: The Markdown text to parse.
+    ///   - markup: The Markdown text to parse.
     ///   - parser: The parser to process the text.
     public init(markup: String, parser: any ArticleRenderer.Type) {
         do {

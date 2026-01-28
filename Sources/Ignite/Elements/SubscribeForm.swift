@@ -69,12 +69,10 @@ public struct SubscribeForm: HTML, NavigationItem {
     /// or whether it uses the structure provided by a parent `NavigationBar`.
     var isNavigationItem = false
 
-    /// Creates a new form with the specified spacing and content.
+    /// Creates a new form with the specified email service and spacing.
     /// - Parameters:
+    ///   - service: The email platform the form submits to.
     ///   - spacing: The amount of horizontal space between elements. Defaults to `.medium`.
-    ///   - content: A closure that returns the form's elements.
-    ///   - onSubmit: A closure that takes the form's ID as a parameter and returns
-    ///   the action to perform when the form is submitted.
     public init(
         _ service: EmailPlatform,
         spacing: SpacingAmount = .medium
