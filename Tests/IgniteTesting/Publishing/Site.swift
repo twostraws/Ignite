@@ -36,15 +36,16 @@ struct SiteTests {
 
         # Story with invalid lastModified
         """
+        defer {
+            try? package.clearBuildFolderAndTestContent()
+        }
 
-        try markdownContent.write(to: markdownFileURL, atomically: false, encoding: .utf8)
+        try markdownContent.write(to: markdownFileURL, atomically: true, encoding: .utf8)
 
         var site = TestSitePublisher()
         try await site.publish()
 
         #expect(package.checkIndexFileExists())
-
-        try package.clearBuildFolderAndTestContent()
     }
 
     @Test("Retrieving typed content")
