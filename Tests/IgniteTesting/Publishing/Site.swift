@@ -153,6 +153,9 @@ private struct TestPackage {
             .appending(path: "TestWebsitePackage")
         buildDirectoryURL = packageBaseURL.appending(path: "Build")
         contentDirectoryURL = packageBaseURL.appending(path: "Content")
+        try? FileManager.default.createDirectory(
+            at: contentDirectoryURL,
+            withIntermediateDirectories: false)
     }
 
     func checkIndexFileExists() -> Bool {
