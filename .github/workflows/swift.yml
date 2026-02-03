@@ -18,5 +18,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build
       run: swift build
-    - name: Run tests
-      run: swift test -q
+    - name: Run tests (except SiteTests)
+      run: swift test -q --skip SiteTests
+    - name: Run tests (SiteTests only)
+      run: swift test -q --filter SiteTests
