@@ -26,7 +26,7 @@ public extension HTML {
 
 public extension NavigationItem {
     /// Hides the element when all specified media queries match.
-    /// - Parameter queries: One or more media queries that must all match for the element to be hidden.
+    /// - Parameter visibility: A responsive boolean indicating which size classes hide the element.
     /// - Returns: A modified copy of the element with conditional visibility.
     func hidden(_ visibility: ResponsiveBoolean) -> Self {
         let manager = CSSManager.shared

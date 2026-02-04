@@ -44,8 +44,7 @@ public struct Tag: HTML {
         self.content = EmptyHTML()
     }
 
-    /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
+    /// Renders this element.
     /// - Returns: The HTML for this element.
     public func markup() -> Markup {
         let contentHTML = content.markupString()

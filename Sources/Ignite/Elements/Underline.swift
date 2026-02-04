@@ -32,8 +32,7 @@ public struct Underline: InlineElement {
         self.content = singleElement
     }
 
-    /// Renders this element using publishing context passed in.
-    /// - Parameter context: The current publishing context.
+    /// Renders this element.
     /// - Returns: The HTML for this element.
     public func markup() -> Markup {
         let contentHTML = content.markupString()

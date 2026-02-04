@@ -59,7 +59,7 @@ public struct TextField: InlineElement, FormItem {
     /// Creates a new text field with the specified label and placeholder text.
     /// - Parameters:
     ///   - label: The label text to display with the field.
-    ///   - placeholder: The text to display when the field is empty.
+    ///   - prompt: The text to display when the field is empty.
     public init(_ label: any InlineElement, prompt: String? = nil) {
         let id = UUID().uuidString.truncatedHash
         input.attributes.id = id

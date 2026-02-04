@@ -11,7 +11,8 @@
     var attributes = CoreAttributes()
 
     /// Adds inline styles to the element.
-    /// - Parameter values: Variable number of `InlineStyle` objects
+    /// - Parameter property: The CSS property to apply.
+    /// - Parameter value: Variable number of `InlineStyle` objects.
     /// - Returns: The modified `HTML` element
     public func style(_ property: Property, _ value: String) -> Self {
         var copy = self

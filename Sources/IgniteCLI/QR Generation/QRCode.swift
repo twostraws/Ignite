@@ -22,7 +22,6 @@ struct QRCode {
     /// - Parameters:
     ///   - utf8String: The string to encode in the QR code.
     ///   - errorCorrection: The level of error correction to use. Defaults to `.default`.
-    ///   - engine: An optional custom engine to use for generation. Defaults to nil.
     /// - Throws: `QRCodeError` if generation fails.
     init(utf8String: String, errorCorrection: ErrorCorrection = .default) throws {
         try self.update(text: utf8String, errorCorrection: errorCorrection)
