@@ -95,4 +95,22 @@ struct HorizontalAlignmentTests {
         <label>Left Label</label><label>Right Label</label></td>
         """)
     }
+
+    @Test("Container alignment classes", arguments: zip(
+        [HorizontalAlignment.leading, .center, .trailing],
+        ["justify-content-start", "justify-content-center", "justify-content-end"]))
+    func containerAlignmentClasses(
+        alignment: HorizontalAlignment,
+        expectedClass: String
+    ) async throws {
+        #expect(alignment.containerAlignmentClass == expectedClass)
+    }
+
+    @Test("All cases are equatable")
+    func allCasesAreEquatable() async throws {
+        #expect(HorizontalAlignment.leading == HorizontalAlignment.leading)
+        #expect(HorizontalAlignment.center == HorizontalAlignment.center)
+        #expect(HorizontalAlignment.trailing == HorizontalAlignment.trailing)
+        #expect(HorizontalAlignment.leading != HorizontalAlignment.trailing)
+    }
 }
