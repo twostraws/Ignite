@@ -64,4 +64,37 @@ import Testing
 
         #expect(output == "<a href=\"\(expectedPath)\" class=\"link-warning\">Link with warning role.</a>")
     }
+
+    @Test("LinkGroup with string target")
+    func linkGroupWithStringTarget() async throws {
+        let element = LinkGroup(target: "/about") {
+            Text("About Us")
+        }
+        let output = element.markupString()
+        #expect(output.contains("href=\"/about\""))
+        #expect(output.contains("About Us"))
+        #expect(output.contains("link-plain"))
+    }
+
+    @Test("LinkGroup with target modifier", arguments: zip(await pages, await Self.sites))
+    func linkGroupWithTargetModifier(page: any StaticPage, site: any Site) async throws {
+        try PublishingContext.initialize(for: site, from: #filePath)
+
+        let element = LinkGroup(target: page) {
+            Text("Click here")
+        }.target(.blank)
+        let output = element.markupString()
+        #expect(output.contains("target=\"_blank\""))
+    }
+
+    @Test("LinkGroup with relationship", arguments: zip(await pages, await Self.sites))
+    func linkGroupWithRelationship(page: any StaticPage, site: any Site) async throws {
+        try PublishingContext.initialize(for: site, from: #filePath)
+
+        let element = LinkGroup(target: page) {
+            Text("External")
+        }.relationship(.noFollow)
+        let output = element.markupString()
+        #expect(output.contains("rel=\"nofollow\""))
+    }
 }
