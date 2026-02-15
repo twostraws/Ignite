@@ -84,4 +84,46 @@ class MediaQueryTests: IgniteTestSuite {
         let output = query.condition
         #expect(output == css)
     }
+
+    // MARK: - Custom breakpoints
+
+    @Test("Custom breakpoint produces correct condition")
+    func customBreakpointCondition() async throws {
+        let query = BreakpointQuery.custom(.px(800))
+        #expect(query.condition == "min-width: 800px")
+    }
+
+    @Test("Custom breakpoint with rem unit")
+    func customBreakpointRem() async throws {
+        let query = BreakpointQuery.custom(.rem(50))
+        #expect(query.condition == "min-width: 50.0rem")
+    }
+
+    // MARK: - Equality
+
+    @Test("Equal breakpoint queries are equal")
+    func breakpointQueryEquality() async throws {
+        #expect(BreakpointQuery.small == BreakpointQuery.small)
+        #expect(BreakpointQuery.custom(.px(800)) == BreakpointQuery.custom(.px(800)))
+    }
+
+    @Test("Different breakpoint queries are not equal")
+    func breakpointQueryInequality() async throws {
+        #expect(BreakpointQuery.small != BreakpointQuery.medium)
+        #expect(BreakpointQuery.custom(.px(800)) != BreakpointQuery.custom(.px(900)))
+    }
+
+    @Test("Equal theme queries are equal")
+    func themeQueryEquality() async throws {
+        let a = ThemeQuery(DefaultDarkTheme.self)
+        let b = ThemeQuery(DefaultDarkTheme.self)
+        #expect(a == b)
+    }
+
+    @Test("Different theme queries are not equal")
+    func themeQueryInequality() async throws {
+        let dark = ThemeQuery(DefaultDarkTheme.self)
+        let light = ThemeQuery(DefaultLightTheme.self)
+        #expect(dark != light)
+    }
 }
