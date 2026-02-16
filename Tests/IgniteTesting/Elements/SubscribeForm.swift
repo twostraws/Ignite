@@ -76,4 +76,64 @@ class SubscribeFormTests: IgniteTestSuite {
         let output = element.markupString()
         #expect(output.contains(">Join Now</button>"))
     }
+
+    // MARK: - Form style
+
+    @Test("Stacked form style changes layout to vertical")
+    func stackedFormStyle() async throws {
+        let element = SubscribeForm(.sendFox(listID: "x", formID: "y"))
+            .formStyle(.stacked)
+        let output = element.markupString()
+        #expect(output.contains("col-md-12"))
+        #expect(output.contains("w-100"))
+    }
+
+    // MARK: - Control size
+
+    @Test("Small control size adds small classes")
+    func smallControlSize() async throws {
+        let element = SubscribeForm(.sendFox(listID: "x", formID: "y"))
+            .controlSize(.small)
+        let output = element.markupString()
+        #expect(output.contains("form-control-sm"))
+        #expect(output.contains("btn-sm"))
+    }
+
+    @Test("Large control size adds large classes")
+    func largeControlSize() async throws {
+        let element = SubscribeForm(.sendFox(listID: "x", formID: "y"))
+            .controlSize(.large)
+        let output = element.markupString()
+        #expect(output.contains("form-control-lg"))
+        #expect(output.contains("btn-lg"))
+    }
+
+    // MARK: - Button customization
+
+    @Test("Custom button role changes button class")
+    func customButtonRole() async throws {
+        let element = SubscribeForm(.sendFox(listID: "x", formID: "y"))
+            .subscribeButtonRole(.danger)
+        let output = element.markupString()
+        #expect(output.contains("btn-danger"))
+        #expect(!output.contains("btn-primary"))
+    }
+
+    // MARK: - Provider-specific behavior
+
+    @Test("Mailchimp form includes honeypot field with correct name")
+    func mailchimpHoneypot() async throws {
+        let element = SubscribeForm(.mailchimp(username: "user", uValue: "abc", listID: "123"))
+        let output = element.markupString()
+        #expect(output.contains("name=\"b_abc_123\""))
+        #expect(output.contains("aria-hidden=\"true\""))
+    }
+
+    @Test("Kit form has no honeypot field and no external script")
+    func kitNoHoneypotNoScript() async throws {
+        let element = SubscribeForm(.kit("myToken"))
+        let output = element.markupString()
+        #expect(!output.contains("aria-hidden"))
+        #expect(!output.contains("<script"))
+    }
 }

@@ -81,4 +81,58 @@ class TableTests: IgniteTestSuite {
         let output = element.markupString()
         #expect(output.contains("<caption>Test caption</caption>"))
     }
+
+    // MARK: - Filter title
+
+    @Test("Table with filter title renders input with igniteFilterTable")
+    func filterTitle() async throws {
+        let element = Table(filterTitle: "Search...") {
+            Row { Column { "Cell" } }
+        }
+        let output = element.markupString()
+        #expect(output.contains("placeholder=\"Search...\""))
+        #expect(output.contains("igniteFilterTable"))
+        #expect(output.contains("form-control mb-2"))
+    }
+
+    // MARK: - Sequence initializers
+
+    @Test("Table from sequence renders rows")
+    func sequenceInitializer() async throws {
+        let items = ["Alice", "Bob"]
+        let element = Table(items) { name in
+            Row { Column { name } }
+        }
+        let output = element.markupString()
+        #expect(output.contains("Alice"))
+        #expect(output.contains("Bob"))
+        #expect(output.contains("<tbody>"))
+    }
+
+    @Test("Table from sequence with header renders thead and rows")
+    func sequenceInitializerWithHeader() async throws {
+        let items = ["Alice", "Bob"]
+        let element = Table(items) { name in
+            Row { Column { name } }
+        } header: {
+            "Name"
+        }
+        let output = element.markupString()
+        #expect(output.contains("<thead><tr><th>Name</th></tr></thead>"))
+        #expect(output.contains("Alice"))
+    }
+
+    // MARK: - Combined options
+
+    @Test("Table with border, striped rows, and caption combines all attributes")
+    func combinedOptions() async throws {
+        let element = Table { }
+            .tableBorder(true)
+            .tableStyle(.stripedRows)
+            .accessibilityLabel("My Table")
+        let output = element.markupString()
+        #expect(output.contains("table-bordered"))
+        #expect(output.contains("table-striped"))
+        #expect(output.contains("<caption>My Table</caption>"))
+    }
 }

@@ -144,4 +144,61 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(query != nil)
         #expect(query?.condition == "min-width: 768px")
     }
+
+    // MARK: - CSS MediaQuery render output
+
+    @Test("CSS MediaQuery single feature renders with @media wrapper")
+    func cssMediaQuerySingleFeature() async throws {
+        let query = MediaQuery(ColorSchemeQuery.dark) {
+            Ruleset(.class("test"), styles: [InlineStyle(.opacity, value: "0.5")])
+        }
+
+        let output = query.render()
+        #expect(output.contains("@media (prefers-color-scheme: dark)"))
+        #expect(output.contains("opacity: 0.5"))
+    }
+
+    @Test("CSS MediaQuery and combinator joins features")
+    func cssMediaQueryAndCombinator() async throws {
+        let query = MediaQuery(ColorSchemeQuery.dark, BreakpointQuery.medium, combinator: .and) {
+            Ruleset(.class("test"), styles: [InlineStyle(.opacity, value: "1")])
+        }
+
+        let output = query.render()
+        #expect(output.contains("@media (prefers-color-scheme: dark) and (min-width: 768px)"))
+    }
+
+    @Test("CSS MediaQuery or combinator joins features")
+    func cssMediaQueryOrCombinator() async throws {
+        let query = MediaQuery(ColorSchemeQuery.dark, BreakpointQuery.medium, combinator: .or) {
+            Ruleset(.class("test"), styles: [InlineStyle(.opacity, value: "1")])
+        }
+
+        let output = query.render()
+        #expect(output.contains("@media (prefers-color-scheme: dark) or (min-width: 768px)"))
+    }
+
+    @Test("CSS MediaQuery array initializer matches variadic initializer")
+    func cssMediaQueryArrayInitializerParity() async throws {
+        let features: [MediaFeature] = [ColorSchemeQuery.dark, BreakpointQuery.medium]
+
+        let variadicQuery = MediaQuery(ColorSchemeQuery.dark, BreakpointQuery.medium) {
+            Ruleset(.class("a"), styles: [])
+        }
+
+        let arrayQuery = MediaQuery(features) {
+            Ruleset(.class("a"), styles: [])
+        }
+
+        #expect(variadicQuery.render() == arrayQuery.render())
+    }
+
+    @Test("CSS MediaQuery description matches render output")
+    func cssMediaQueryDescriptionMatchesRender() async throws {
+        let query = MediaQuery(ColorSchemeQuery.dark) {
+            Ruleset(.class("x"), styles: [InlineStyle(.color, value: "red")])
+        }
+
+        #expect(query.description == query.render())
+    }
 }
