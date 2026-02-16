@@ -62,4 +62,87 @@ struct ColorTypeTests {
         let color = Color(white: 1.0, opacity: 1.0)
         #expect(color.description == "rgb(255 255 255 / 100%)")
     }
+
+    // MARK: - Hex initializer
+
+    @Test("Hex init with 6-char string parses RGB correctly")
+    func hexInitSixChar() async throws {
+        let color = Color(hex: "#FF8000")
+        #expect(color.red == 255)
+        #expect(color.green == 128)
+        #expect(color.blue == 0)
+        #expect(color.opacity == 100)
+    }
+
+    @Test("Hex init with 8-char string parses RGBA correctly")
+    func hexInitEightChar() async throws {
+        let color = Color(hex: "#FF800032")
+        #expect(color.red == 255)
+        #expect(color.green == 128)
+        #expect(color.blue == 0)
+        #expect(color.opacity == 50)
+    }
+
+    @Test("Hex init with invalid string falls back to opaque black")
+    func hexInitInvalidFallsBackToBlack() async throws {
+        let color = Color(hex: "not-a-color")
+        #expect(color.red == 0)
+        #expect(color.green == 0)
+        #expect(color.blue == 0)
+        #expect(color.opacity == 100)
+    }
+
+    @Test("Hex init without hash prefix falls back to opaque black")
+    func hexInitNoHashFallsBackToBlack() async throws {
+        let color = Color(hex: "FF0000")
+        #expect(color.red == 0)
+        #expect(color.green == 0)
+        #expect(color.blue == 0)
+        #expect(color.opacity == 100)
+    }
+
+    // MARK: - Opacity method
+
+    @Test("Opacity method multiplies existing opacity")
+    func opacityMethodMultiplies() async throws {
+        let color = Color(red: 255, green: 0, blue: 0)
+        let faded = color.opacity(0.5)
+        #expect(faded.opacity == 50)
+        #expect(faded.red == 255)
+    }
+
+    // MARK: - Weighted
+
+    @Test("Weighted lightest mixes with 80% white")
+    func weightedLightest() async throws {
+        let color = Color.red
+        let light = color.weighted(.lightest)
+        #expect(light.red == 255)
+        #expect(light.green == 204)
+        #expect(light.blue == 204)
+    }
+
+    @Test("Weighted darkest mixes with 80% black")
+    func weightedDarkest() async throws {
+        let color = Color.red
+        let dark = color.weighted(.darkest)
+        #expect(dark.red == 50)
+        #expect(dark.green == 0)
+        #expect(dark.blue == 0)
+    }
+
+    // MARK: - Static constants
+
+    @Test("Clear is fully transparent")
+    func clearIsFullyTransparent() async throws {
+        #expect(Color.clear.red == 0)
+        #expect(Color.clear.green == 0)
+        #expect(Color.clear.blue == 0)
+        #expect(Color.clear.opacity == 0)
+    }
+
+    @Test("Aqua and cyan are equal")
+    func aquaEqualsCyan() async throws {
+        #expect(Color.aqua == Color.cyan)
+    }
 }

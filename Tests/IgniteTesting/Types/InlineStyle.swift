@@ -45,4 +45,31 @@ struct InlineStyleTests {
         #expect((pair.lhs < pair.rhs) == lessThan)
         #expect((pair.lhs > pair.rhs) == !lessThan)
     }
+
+    // MARK: - important()
+
+    @Test("Important appends !important to value")
+    func importantAppendsFlag() async throws {
+        let style = InlineStyle(.color, value: "red")
+        let important = style.important()
+        #expect(important.value == "red !important")
+        #expect(important.description == "color: red !important")
+    }
+
+    @Test("Important false returns unchanged style")
+    func importantFalseReturnsUnchanged() async throws {
+        let style = InlineStyle(.color, value: "red")
+        let unchanged = style.important(false)
+        #expect(unchanged.value == "red")
+    }
+
+    // MARK: - Equatable
+
+    @Test("Equal property and value produce equal styles")
+    func equalStylesAreEqual() async throws {
+        let a = InlineStyle(.color, value: "red")
+        let b = InlineStyle(.color, value: "red")
+        #expect(a == b)
+        #expect(a.hashValue == b.hashValue)
+    }
 }

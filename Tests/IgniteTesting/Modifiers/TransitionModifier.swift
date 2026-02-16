@@ -5,7 +5,6 @@
 //  See LICENSE for license information.
 //
 
-import Foundation
 import Testing
 
 @testable import Ignite
@@ -20,10 +19,7 @@ class TransitionModifierTests: IgniteTestSuite {
         let element = Text("Hello").transition(transition, on: .hover)
         let output = element.markupString()
 
-        let hoverID = firstCapturedGroup(
-            in: output,
-            pattern: #"class="[^"]*animation-([A-Za-z0-9]{5})-hover[^"]*""#
-        )
+        let hoverID = firstHoverAnimationID(in: output)
 
         #expect(hoverID != nil)
         #expect(output.contains(#"style="transform-style: preserve-3d""#))
@@ -38,14 +34,8 @@ class TransitionModifierTests: IgniteTestSuite {
         let element = Text("Hello").transition(transition, on: .click)
         let output = element.markupString()
 
-        let animationID = firstCapturedGroup(
-            in: output,
-            pattern: #"class="[^"]*animation-([A-Za-z0-9]{5})[^"]*""#
-        )
-        let clickID = firstCapturedGroup(
-            in: output,
-            pattern: #"class="[^"]*click-([A-Za-z0-9]{5})[^"]*""#
-        )
+        let animationID = firstAnimationID(in: output)
+        let clickID = firstClickID(in: output)
 
         #expect(animationID != nil)
         #expect(clickID != nil)
@@ -63,10 +53,7 @@ class TransitionModifierTests: IgniteTestSuite {
         let element = Text("Hello").transition(transition, on: .appear)
         let output = element.markupString()
 
-        let appearID = firstCapturedGroup(
-            in: output,
-            pattern: #"class="[^"]*animation-([A-Za-z0-9]{5})[^"]*""#
-        )
+        let appearID = firstAnimationID(in: output)
 
         #expect(appearID != nil)
         #expect(output.contains("Hello"))
@@ -75,18 +62,15 @@ class TransitionModifierTests: IgniteTestSuite {
         #expect(!output.contains(#"class="click-"#))
     }
 
-    private func firstCapturedGroup(in source: String, pattern: String, group: Int = 1) -> String? {
-        guard let regex = try? NSRegularExpression(pattern: pattern) else {
-            return nil
-        }
+    private func firstHoverAnimationID(in source: String) -> String? {
+        source.firstMatch(of: /class="[^"]*animation-([A-Za-z0-9]{5})-hover[^"]*"/).map { String($0.1) }
+    }
 
-        let sourceRange = NSRange(source.startIndex..<source.endIndex, in: source)
+    private func firstAnimationID(in source: String) -> String? {
+        source.firstMatch(of: /class="[^"]*animation-([A-Za-z0-9]{5})[^"]*"/).map { String($0.1) }
+    }
 
-        guard let match = regex.firstMatch(in: source, options: [], range: sourceRange),
-              let captureRange = Range(match.range(at: group), in: source) else {
-            return nil
-        }
-
-        return String(source[captureRange])
+    private func firstClickID(in source: String) -> String? {
+        source.firstMatch(of: /class="[^"]*click-([A-Za-z0-9]{5})[^"]*"/).map { String($0.1) }
     }
 }
