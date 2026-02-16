@@ -5,7 +5,6 @@
 //  See LICENSE for license information.
 //
 
-import Foundation
 import Testing
 
 @testable import Ignite
@@ -13,9 +12,23 @@ import Testing
 /// Tests for the `LazyLoadable` modifier.
 @Suite("LazyLoadable Tests")
 @MainActor
-struct LazyLoadableTests {
-    @Test("ExampleTest")
-    func example() async throws {
+class LazyLoadableTests: IgniteTestSuite {
+    @Test("Embed with lazy() adds loading=lazy attribute")
+    func lazyEmbedAddsAttribute() async throws {
+        let element = Embed(youTubeID: "abc123", title: "Test Video")
+            .lazy()
 
+        let output = element.markupString()
+
+        #expect(output.contains(#"loading="lazy""#))
+    }
+
+    @Test("Embed without lazy() does not have loading attribute")
+    func noLazyNoAttribute() async throws {
+        let element = Embed(youTubeID: "abc123", title: "Test Video")
+
+        let output = element.markupString()
+
+        #expect(!output.contains("loading="))
     }
 }

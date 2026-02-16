@@ -5,7 +5,6 @@
 //  See LICENSE for license information.
 //
 
-import Foundation
 import Testing
 
 @testable import Ignite
@@ -14,8 +13,23 @@ import Testing
 @Suite("ClickModifier Tests")
 @MainActor
 class ClickModifierTests: IgniteTestSuite {
-    @Test("ExampleTest")
-    func example() async throws {
+    @Test("onClick adds onclick attribute to HTML element")
+    func onClickAddsAttribute() async throws {
+        let element = Text("Tap me")
+            .onClick { ShowAlert(message: "Hi") }
 
+        let output = element.markupString()
+
+        #expect(output.contains(#"onclick="alert('Hi')"#))
+    }
+
+    @Test("onClick adds onclick attribute to inline element")
+    func onClickInlineElement() async throws {
+        let element = Emphasis("Click me")
+            .onClick { ShowAlert(message: "Clicked") }
+
+        let output = element.markupString()
+
+        #expect(output.contains(#"onclick="alert('Clicked')"#))
     }
 }
