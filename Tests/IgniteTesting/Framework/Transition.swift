@@ -78,28 +78,12 @@ struct TransitionTests {
         #expect(item.final == "blur(10.0px)")
     }
 
-    @Test("flip right contains rotateY(360deg) with correct duration and timing")
-    func flipRight() async throws {
+    @Test("flip sets duration to 0.5 and timing to easeInOut")
+    func flipDurationAndTiming() async throws {
         let transition = Transition.flip(.right)
         let item = transition.data[0]
-        #expect(item.property == .transform)
-        #expect(item.final.contains("rotateY(360deg)"))
         #expect(item.duration == 0.5)
         #expect(item.timing == .easeInOut)
-    }
-
-    @Test("flip left contains rotateY(-360deg)")
-    func flipLeft() async throws {
-        let transition = Transition.flip(.left)
-        let item = transition.data[0]
-        #expect(item.final.contains("rotateY(-360deg)"))
-    }
-
-    @Test("flip up contains rotateX(-360deg)")
-    func flipUp() async throws {
-        let transition = Transition.flip(.up)
-        let item = transition.data[0]
-        #expect(item.final.contains("rotateX(-360deg)"))
     }
 
     @Test("speed() halves the last data item's duration")

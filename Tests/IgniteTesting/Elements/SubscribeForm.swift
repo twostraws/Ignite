@@ -43,4 +43,37 @@ class SubscribeFormTests: IgniteTestSuite {
         <script charset="utf-8" src="https://cdn.sendfox.com/js/form.js"></script>
         """)
     }
+
+    @Test("Mailchimp form uses correct endpoint and form ID")
+    func mailchimpForm() async throws {
+        let element = SubscribeForm(.mailchimp(username: "user", uValue: "abc", listID: "123"))
+        let output = element.markupString()
+        #expect(output.contains("action=\"https://user.us1.list-manage.com/subscribe/post?u=abc&id=123\""))
+        #expect(output.contains("id=\"mc-embedded-subscribe-form\""))
+        #expect(output.contains("name=\"mc-embedded-subscribe-form\""))
+    }
+
+    @Test("Kit form uses correct endpoint and email field name")
+    func kitForm() async throws {
+        let element = SubscribeForm(.kit("myToken"))
+        let output = element.markupString()
+        #expect(output.contains("action=\"https://app.convertkit.com/forms/myToken/subscriptions\""))
+        #expect(output.contains("name=\"email_address\""))
+    }
+
+    @Test("Buttondown form uses correct endpoint and form class")
+    func buttondownForm() async throws {
+        let element = SubscribeForm(.buttondown("myuser"))
+        let output = element.markupString()
+        #expect(output.contains("action=\"https://buttondown.com/api/emails/embed-subscribe/myuser\""))
+        #expect(output.contains("embeddable-buttondown-form"))
+    }
+
+    @Test("Custom subscribe button label renders correctly")
+    func customButtonLabel() async throws {
+        let element = SubscribeForm(.sendFox(listID: "x", formID: "y"))
+            .subscribeButtonLabel("Join Now")
+        let output = element.markupString()
+        #expect(output.contains(">Join Now</button>"))
+    }
 }

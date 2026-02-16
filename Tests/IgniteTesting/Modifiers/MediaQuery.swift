@@ -126,4 +126,22 @@ class MediaQueryTests: IgniteTestSuite {
         let light = ThemeQuery(DefaultLightTheme.self)
         #expect(dark != light)
     }
+
+    // MARK: - Hashable
+
+    @Test("Equal theme queries hash equally")
+    func themeQueryHashable() async throws {
+        let a = ThemeQuery(DefaultDarkTheme.self)
+        let b = ThemeQuery(DefaultDarkTheme.self)
+        #expect(a.hashValue == b.hashValue)
+    }
+
+    // MARK: - BreakpointQuery init from Breakpoint
+
+    @Test("init from Breakpoint maps correctly")
+    func breakpointQueryInitFromBreakpoint() async throws {
+        let query = BreakpointQuery(.medium)
+        #expect(query != nil)
+        #expect(query?.condition == "min-width: 768px")
+    }
 }
