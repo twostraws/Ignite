@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-public enum EventType: String, Sendable {
+public enum EventType: String, Sendable, CaseIterable {
     // Window Events
     case afterPrint = "onafterprint"
     case beforePrint = "onbeforeprint"

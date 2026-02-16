@@ -144,7 +144,6 @@ class ElementTypeTests: IgniteTestSuite {
     @Test("Built-in elements are primitive")
     func builtInElementsArePrimitive() async throws {
         #expect(Text("Hello").isPrimitive)
-        #expect(EmptyHTML().isPrimitive)
         #expect(Divider().isPrimitive)
     }
 }

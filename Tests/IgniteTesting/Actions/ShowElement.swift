@@ -13,9 +13,18 @@ import Testing
 /// Tests for the `ShowElement` action.
 @Suite("ShowElement Tests")
 @MainActor
-class ShowElementTests: IgniteTestSuite {
-    @Test("ExampleTest")
-    func example() async throws {
+struct ShowElementTests {
+    @Test("Compiles to classList.remove with d-none")
+    func compilesToRemove() async throws {
+        let action = ShowElement("myElement")
+        let output = action.compile()
+        #expect(output == "document.getElementById('myElement').classList.remove('d-none')")
+    }
 
+    @Test("Embeds element ID in output")
+    func embedsElementID() async throws {
+        let action = ShowElement("sidebar")
+        let output = action.compile()
+        #expect(output.contains("'sidebar'"))
     }
 }

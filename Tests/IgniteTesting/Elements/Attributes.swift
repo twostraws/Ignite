@@ -92,4 +92,96 @@ class AttributesTest: IgniteTestSuite {
         let output = element.markupString()
         #expect(output == "<\(tag) disabled required selected></\(tag)>")
     }
+
+    // MARK: - ID modifier
+
+    @Test("ID modifier produces id attribute on HTML element", arguments: tags)
+    func idModifierOnHTML(tag: String) async throws {
+        let element = Tag(tag) {}.id("my-element")
+        let output = element.markupString()
+        #expect(output == "<\(tag) id=\"my-element\"></\(tag)>")
+    }
+
+    @Test("ID modifier produces id attribute on inline element")
+    func idModifierOnInlineElement() async throws {
+        let element = Emphasis("Hello").id("em-1")
+        let output = element.markupString()
+        #expect(output.contains("id=\"em-1\""))
+        #expect(output.contains("<em"))
+    }
+
+    @Test("Empty ID is a no-op", arguments: tags)
+    func emptyIDIsNoOp(tag: String) async throws {
+        let element = Tag(tag) {}.id("")
+        let output = element.markupString()
+        #expect(output == "<\(tag)></\(tag)>")
+    }
+
+    // MARK: - Inline style modifier (public Property API)
+
+    @Test("Public style modifier with Property adds inline style", arguments: tags)
+    func publicStyleModifierAddsInlineStyle(tag: String) async throws {
+        let element = Tag(tag) {}.style(.color, "red")
+        let output = element.markupString()
+        #expect(output == "<\(tag) style=\"color: red\"></\(tag)>")
+    }
+
+    @Test("Style modifier on inline element")
+    func styleModifierOnInlineElement() async throws {
+        let element = Emphasis("Bold").style(.color, "blue")
+        let output = element.markupString()
+        #expect(output.contains("style=\"color: blue\""))
+    }
+
+    // MARK: - CoreAttributes modifier
+
+    @Test("CoreAttributes modifier merges classes and styles")
+    func coreAttributesModifierMergesAttributes() async throws {
+        var attrs = CoreAttributes()
+        attrs.append(classes: "custom-class")
+        attrs.append(styles: InlineStyle(.color, value: "green"))
+
+        let element = Text("Hello").attributes(attrs)
+        let output = element.markupString()
+        #expect(output.contains("custom-class"))
+        #expect(output.contains("color: green"))
+    }
+
+    // MARK: - InlineElement paths
+
+    @Test("Aria modifier on inline element")
+    func ariaOnInlineElement() async throws {
+        let element = Emphasis("Hello").aria(.label, "greeting")
+        let output = element.markupString()
+        #expect(output.contains("aria-label=\"greeting\""))
+    }
+
+    @Test("Class modifier on inline element")
+    func classOnInlineElement() async throws {
+        let element = Emphasis("Hello").class("highlight")
+        let output = element.markupString()
+        #expect(output.contains("class=\"highlight\""))
+    }
+
+    @Test("Data modifier on inline element")
+    func dataOnInlineElement() async throws {
+        let element = Emphasis("Hello").data("info", "test")
+        let output = element.markupString()
+        #expect(output.contains("data-info=\"test\""))
+    }
+
+    @Test("Empty data value is a no-op")
+    func emptyDataValueIsNoOp() async throws {
+        let element = Tag("div") {}.data("key", "")
+        let output = element.markupString()
+        #expect(!output.contains("data-key"))
+    }
+
+    @Test("Optional nil aria value is a no-op")
+    func optionalNilAriaIsNoOp() async throws {
+        let value: String? = nil
+        let element = Tag("div") {}.aria(.label, value)
+        let output = element.markupString()
+        #expect(!output.contains("aria-label"))
+    }
 }

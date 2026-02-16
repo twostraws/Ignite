@@ -42,12 +42,13 @@ class DocumentBuilderTests: IgniteTestSuite {
         #expect(output.contains("<html"))
     }
 
-    @Test("Existing document passes through")
+    @Test("Existing document passes through unchanged")
     func existingDocumentPassthrough() async throws {
         let original = PlainDocument(head: Head(), body: Body())
         let doc = buildDocument { original }
-        let output = doc.markupString()
-        #expect(output.hasPrefix("<!doctype html>"))
+        let originalOutput = original.markupString()
+        let builderOutput = doc.markupString()
+        #expect(originalOutput == builderOutput)
     }
 
     // MARK: - DocumentElementBuilder
