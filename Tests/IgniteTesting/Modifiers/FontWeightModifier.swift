@@ -20,4 +20,11 @@ class FontWeightModifierTests: IgniteTestSuite {
         let output = element.markupString()
         #expect(output == "<p style=\"font-weight: \(weight.rawValue)\">Hello</p>")
     }
+
+    @Test("Font weight on inline element applies style")
+    func fontWeightOnInlineElement() async throws {
+        let element = Span("Bold text").fontWeight(.bold)
+        let output = element.markupString()
+        #expect(output.contains("font-weight: 700"))
+    }
 }
