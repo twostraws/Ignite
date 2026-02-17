@@ -45,4 +45,33 @@ class HStackTests: IgniteTestSuite {
         </div>
         """)
     }
+
+    @Test("HStack with bottom alignment uses align-self-end")
+    func bottomAlignment() async throws {
+        let element = HStack(alignment: .bottom) {
+            ControlLabel("Item")
+        }
+        let output = element.markupString()
+        #expect(output.contains("align-self-end"))
+    }
+
+    @Test("HStack with semantic spacing uses gap class")
+    func semanticSpacing() async throws {
+        let element = HStack(spacing: .large) {
+            ControlLabel("Item")
+        }
+        let output = element.markupString()
+        #expect(output.contains("gap-4"))
+    }
+
+    @Test("HStack with spacing none omits gap class")
+    func spacingNone() async throws {
+        let element = HStack(spacing: .none) {
+            ControlLabel("Item")
+        }
+        let output = element.markupString()
+        #expect(output.contains("hstack"))
+        #expect(!output.contains("gap-"))
+        #expect(!output.contains("gap:"))
+    }
 }

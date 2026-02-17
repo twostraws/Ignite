@@ -45,4 +45,40 @@ class VStackTests: IgniteTestSuite {
         </div>
         """)
     }
+
+    @Test("VStack with leading alignment uses align-self-start")
+    func leadingAlignment() async throws {
+        let element = VStack(alignment: .leading) {
+            ControlLabel("Item")
+        }
+        let output = element.markupString()
+        #expect(output.contains("align-self-start"))
+    }
+
+    @Test("VStack with trailing alignment uses align-self-end")
+    func trailingAlignment() async throws {
+        let element = VStack(alignment: .trailing) {
+            ControlLabel("Item")
+        }
+        let output = element.markupString()
+        #expect(output.contains("align-self-end"))
+    }
+
+    @Test("VStack with semantic spacing uses gap class")
+    func semanticSpacing() async throws {
+        let element = VStack(spacing: .large) {
+            ControlLabel("Item")
+        }
+        let output = element.markupString()
+        #expect(output.contains("gap-4"))
+    }
+
+    @Test("VStack with nil spacing preserves implicit margins by omitting mb-0")
+    func nilSpacingPreservesMargins() async throws {
+        let element = VStack(spacing: nil) {
+            ControlLabel("Item")
+        }
+        let output = element.markupString()
+        #expect(!output.contains("mb-0"))
+    }
 }
