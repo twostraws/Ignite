@@ -54,4 +54,24 @@ class GroupTests: IgniteTestSuite {
         onclick="alert('Bottom Button Tapped')">Bottom Button</button>
         """)
     }
+
+    @Test("Class modifier propagates to all children")
+    func classPropagatesToChildren() async throws {
+        let element = Group {
+            Text("First")
+            Text("Second")
+        }.class("highlight")
+        let output = element.markupString()
+
+        #expect(output.contains("<p class=\"highlight\">First</p>"))
+        #expect(output.contains("<p class=\"highlight\">Second</p>"))
+    }
+
+    @Test("Empty Group produces empty output")
+    func emptyGroup() async throws {
+        let element = Group {}
+        let output = element.markupString()
+
+        #expect(output == "")
+    }
 }

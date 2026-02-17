@@ -42,4 +42,5 @@ class BadgeModifierTests: IgniteTestSuite {
         </li>
         """)
     }
+
 }

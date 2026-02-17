@@ -53,4 +53,29 @@ struct BackgroundImageTests {
         </p>
         """)
     }
+
+    @Test("Background image with repeats true produces background-repeat repeat")
+    func repeatsTrue() async throws {
+        let element = Text {
+            "Hello World!"
+        }.background(image: "assets/pattern.png", contentMode: .original, repeats: true)
+        let output = element.markupString()
+
+        #expect(output.contains("background-repeat: repeat"))
+        #expect(!output.contains("no-repeat"))
+    }
+
+    @Test("Background position with percent values and non-center alignment")
+    func percentRelativePosition() async throws {
+        let position = BackgroundPosition.position(
+            vertical: .percent(10), relativeTo: .top,
+            horizontal: .percent(20), relativeTo: .leading
+        )
+        let element = Text {
+            "Hello World!"
+        }.background(image: "assets/image.png", contentMode: .fill, position: position)
+        let output = element.markupString()
+
+        #expect(output.contains("background-position: calc(0% + 20%) calc(0% + 10%)"))
+    }
 }

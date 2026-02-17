@@ -49,4 +49,23 @@ class AnimationModifierTests: IgniteTestSuite {
             Issue.record("Failed to create regular expression: \(error)")
         }
     }
+
+    @Test("Click trigger produces onclick handler")
+    func clickTrigger() async throws {
+        let element = Text("Click me").animation(Animation.bounce, on: .click)
+        let output = element.markupString()
+
+        #expect(output.contains("igniteToggleClickAnimation(this)"))
+        #expect(output.contains("onclick"))
+    }
+
+    @Test("Appear trigger produces animation class without hover suffix")
+    func appearTrigger() async throws {
+        let element = Text("Appear").animation(Animation.bounce, on: .appear)
+        let output = element.markupString()
+
+        #expect(output.contains("animation-"))
+        #expect(!output.contains("-hover"))
+        #expect(!output.contains("onclick"))
+    }
 }
