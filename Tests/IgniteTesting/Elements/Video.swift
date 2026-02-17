@@ -39,4 +39,26 @@ import Testing
         </video>
         """)
     }
+
+    @Test("Unrecognized file extension produces no source tag")
+    func unrecognizedExtension() async throws {
+        let element = Video("/videos/mystery.xyz")
+        let output = element.markupString()
+
+        #expect(output == """
+        <video controls>\
+        Your browser does not support the video tag.\
+        </video>
+        """)
+    }
+
+    @Test("Mixed recognized and unrecognized files only renders recognized sources")
+    func mixedExtensions() async throws {
+        let element = Video("/videos/clip.mp4", "/videos/clip.xyz", "/videos/clip.webm")
+        let output = element.markupString()
+
+        #expect(output.contains(#"<source src="/videos/clip.mp4" type="video/mp4" />"#))
+        #expect(output.contains(#"<source src="/videos/clip.webm" type="video/webm" />"#))
+        #expect(!output.contains("clip.xyz"))
+    }
 }

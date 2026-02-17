@@ -38,4 +38,26 @@ class AudioTests: IgniteTestSuite {
         </audio>
         """)
     }
+
+    @Test("Unrecognized file extension produces no source tag")
+    func unrecognizedExtension() async throws {
+        let element = Audio("/audio/mystery.xyz")
+        let output = element.markupString()
+
+        #expect(output == """
+        <audio controls>\
+        Your browser does not support the audio element.\
+        </audio>
+        """)
+    }
+
+    @Test("Mixed recognized and unrecognized files only renders recognized sources")
+    func mixedExtensions() async throws {
+        let element = Audio("/audio/song.mp3", "/audio/song.xyz", "/audio/song.ogg")
+        let output = element.markupString()
+
+        #expect(output.contains(#"<source src="/audio/song.mp3" type="audio/mpeg">"#))
+        #expect(output.contains(#"<source src="/audio/song.ogg" type="audio/ogg">"#))
+        #expect(!output.contains("song.xyz"))
+    }
 }

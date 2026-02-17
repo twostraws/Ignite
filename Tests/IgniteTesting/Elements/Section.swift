@@ -43,4 +43,32 @@ class SectionTests: IgniteTestSuite {
         </section>
         """)
     }
+
+    @Test("Default header prominence renders as h2")
+    func defaultHeaderProminence() async throws {
+        let element = Section("Default Heading") {
+            Span("Content")
+        }
+
+        let output = element.markupString()
+
+        #expect(output == """
+        <section>\
+        <h2>Default Heading</h2>\
+        <span>Content</span>\
+        </section>
+        """)
+    }
+
+    @Test("Section with ID includes id on containing element")
+    func sectionWithID() async throws {
+        let element = Section {
+            Span("Content")
+        }
+        .id("my-section")
+
+        let output = element.markupString()
+
+        #expect(output == "<div id=\"my-section\"><span>Content</span></div>")
+    }
 }

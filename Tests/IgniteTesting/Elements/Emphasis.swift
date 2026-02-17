@@ -21,4 +21,28 @@ class EmphasisTests: IgniteTestSuite {
 
         #expect(output == "<em>Although Markdown is still easier, to be honest! </em>")
     }
+
+    @Test("Emphasis with builder initializer wrapping inline element")
+    func builderWithInlineElement() async throws {
+        let element = Emphasis {
+            Strong("very important")
+        }
+        let output = element.markupString()
+
+        #expect(output == "<em><strong>very important</strong></em>")
+    }
+
+    @Test("Emphasis with multiple children via builder")
+    func builderWithMultipleChildren() async throws {
+        let element = Emphasis {
+            "Hello "
+            Strong("world")
+        }
+        let output = element.markupString()
+
+        #expect(output.contains("Hello "))
+        #expect(output.contains("<strong>world</strong>"))
+        #expect(output.hasPrefix("<em>"))
+        #expect(output.hasSuffix("</em>"))
+    }
 }
