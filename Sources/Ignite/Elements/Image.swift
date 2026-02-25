@@ -97,12 +97,18 @@ public struct Image: InlineElement, LazyLoadable {
     /// - Parameters:
     ///   - path: The user image to render.
     ///   - description: The accessibility label to use.
+    ///   - isRemote: Whether this is a remote URL (skips local variant detection).
     /// - Returns: The HTML for this element.
-    private func render(path: String, description: String) -> Markup {
+    private func render(path: String, description: String, isRemote: Bool = false) -> Markup {
         var attributes = attributes
         attributes.append(customAttributes:
             .init(name: "src", value: path),
             .init(name: "alt", value: description))
+
+        // Remote images don't have local variants (@2x, ~dark), so skip detection.
+        guard !isRemote else {
+            return Markup("<img\(attributes) />")
+        }
 
         let (lightVariants, darkVariants) = findVariants(for: path)
 
@@ -139,8 +145,9 @@ public struct Image: InlineElement, LazyLoadable {
         if let systemImage {
             return render(icon: systemImage, description: description ?? "")
         } else if let path {
+            let isRemote = path.scheme == "http" || path.scheme == "https"
             let resolvedPath = publishingContext.path(for: path)
-            return render(path: resolvedPath, description: description ?? "")
+            return render(path: resolvedPath, description: description ?? "", isRemote: isRemote)
         } else {
             publishingContext.addWarning("""
             Creating an image with no name or icon should not be possible. \
