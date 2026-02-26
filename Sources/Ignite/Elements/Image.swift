@@ -104,6 +104,11 @@ public struct Image: InlineElement, LazyLoadable {
             .init(name: "src", value: path),
             .init(name: "alt", value: description))
 
+        // If this is a remote image, we can't look for variants.
+        if path.starts(with: "http://") || path.starts(with: "https://") {
+            return Markup("<img\(attributes) />")
+        }
+
         let (lightVariants, darkVariants) = findVariants(for: path)
 
         if let sourceSet = generateSourceSet(lightVariants) {
@@ -139,8 +144,14 @@ public struct Image: InlineElement, LazyLoadable {
         if let systemImage {
             return render(icon: systemImage, description: description ?? "")
         } else if let path {
-            let resolvedPath = publishingContext.path(for: path)
-            return render(path: resolvedPath, description: description ?? "")
+            // Check if the path is a remote URL
+            let pathString = path.absoluteString
+            if pathString.hasPrefix("http://") || pathString.hasPrefix("https://") {
+                return render(path: pathString, description: description ?? "")
+            } else {
+                let resolvedPath = publishingContext.path(for: path)
+                return render(path: resolvedPath, description: description ?? "")
+            }
         } else {
             publishingContext.addWarning("""
             Creating an image with no name or icon should not be possible. \
