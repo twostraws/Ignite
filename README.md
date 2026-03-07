@@ -277,7 +277,7 @@ That will launch a local web server you should use to preview your site, and als
 |------------------------|-------------------------------------------|
 | [Lighting Ignite on Fire](https://jptoro.dev/lighting-ignite-on-fire/) | [GitHub](https://github.com/JPToroDev/Lighting-Ignite-on-Fire) |
 | [jcalderita Portfolio](https://jcalderita.com) | [GitHub](https://github.com/jcalderita/portfolio-web-ignite) |
-| [Fotogroep de Gender](http://www.vdhamer.com/fgDeGender) | [GitHub](https://github.com/vdhamer/Photo-Club-Hub-HTML) |
+| [Photo Club Hub](https://www.fcDeGender.nl/clubs) | [GitHub](https://github.com/vdhamer/Photo-Club-Hub-HTML) |
 | [sookim-1's T.W.L](https://sookim-1.github.io) | [GitHub](https://github.com/sookim-1/blog-website) |
 | [try! Swift Tokyo](https://tryswift.jp/en/) | [GitHub](https://github.com/tryswift/try-swift-tokyo) |
 | [Tomo Codes](https://tomo.codes) | [GitHub](https://github.com/TomaszLizer/TomoCodes) |
