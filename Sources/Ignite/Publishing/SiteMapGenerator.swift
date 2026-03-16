@@ -11,7 +11,8 @@ struct SiteMapGenerator {
 
     func generateSiteMap() -> String {
         let locations = context.siteMap.map {
-            "<url><loc>\(context.site.url.absoluteString)\($0.path)</loc><priority>\($0.priority)</priority></url>"
+            let path = $0.path.hasSuffix("/") ? $0.path : $0.path + "/"
+            return "<url><loc>\(context.site.url.absoluteString)\(path)</loc><priority>\($0.priority)</priority></url>"
         }.joined()
 
         return """
