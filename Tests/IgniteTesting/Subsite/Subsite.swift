@@ -78,7 +78,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         let page = TestSubsitePage()
         let element = Link("This is a test", target: page).linkStyle(.button)
         let output = element.markupString()
-        #expect(output == "<a href=\"\(page.path)\" class=\"btn btn-primary\">This is a test</a>")
+        #expect(output == "<a href=\"\(page.path)/\" class=\"btn btn-primary\">This is a test</a>")
     }
 
     @Test("Page Content Test")
@@ -90,6 +90,6 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         }
         let output = element.markupString()
 
-        #expect(output == "<a href=\"\(page.path)\" class=\"link-plain d-inline-block\">MORE <p>CONTENT</p></a>")
+        #expect(output == "<a href=\"\(page.path)/\" class=\"link-plain d-inline-block\">MORE <p>CONTENT</p></a>")
     }
 }

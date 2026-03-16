@@ -22,7 +22,7 @@ import Testing
 
         let element = Link(link.description, target: link.target)
         let output = element.markupString()
-        let expectedPath = PublishingContext.shared.path(for: URL(string: link.target)!)
+        let expectedPath = PublishingContext.shared.linkPath(for: URL(string: link.target)!)
 
         #expect(output == "<a href=\"\(expectedPath)\">\(link.description)</a>")
     }
@@ -34,7 +34,7 @@ import Testing
         let element = Link("This is a test", target: page).linkStyle(.button)
         let output = element.markupString()
 
-        let expectedPath = PublishingContext.shared.path(for: URL(string: page.path)!)
+        let expectedPath = PublishingContext.shared.linkPath(for: URL(string: page.path)!)
 
         #expect(output == "<a href=\"\(expectedPath)\" class=\"btn btn-primary\">This is a test</a>")
     }
@@ -49,7 +49,7 @@ import Testing
         }
         let output = element.markupString()
 
-        let expectedPath = PublishingContext.shared.path(for: URL(string: page.path)!)
+        let expectedPath = PublishingContext.shared.linkPath(for: URL(string: page.path)!)
 
         #expect(output == "<a href=\"\(expectedPath)\" class=\"link-plain d-inline-block\">MORE <p>CONTENT</p></a>")
     }
@@ -60,7 +60,7 @@ import Testing
 
         let element = Link("Link with warning role.", target: page).role(.warning)
         let output = element.markupString()
-        let expectedPath = PublishingContext.shared.path(for: URL(string: page.path)!)
+        let expectedPath = PublishingContext.shared.linkPath(for: URL(string: page.path)!)
 
         #expect(output == "<a href=\"\(expectedPath)\" class=\"link-warning\">Link with warning role.</a>")
     }
@@ -71,7 +71,7 @@ import Testing
             Text("About Us")
         }
         let output = element.markupString()
-        #expect(output.contains("href=\"/about\""))
+        #expect(output.contains("href=\"/about/\""))
         #expect(output.contains("About Us"))
         #expect(output.contains("link-plain"))
     }
