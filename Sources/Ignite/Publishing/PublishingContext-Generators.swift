@@ -44,7 +44,12 @@ extension PublishingContext {
     public func generateFeed() {
         guard let feedConfig = site.feedConfiguration else { return }
 
-        let content = allContent.sorted(
+        var filtered = allContent
+        if let types = feedConfig.contentTypes {
+            filtered = filtered.filter { types.contains($0.type) }
+        }
+
+        let content = filtered.sorted(
             by: \.date,
             order: .reverse
         )
