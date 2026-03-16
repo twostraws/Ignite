@@ -17,6 +17,15 @@ struct FeedGenerator {
         self.content = content
     }
 
+    private func xmlEscape(_ string: String) -> String {
+        string
+            .replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
+            .replacingOccurrences(of: "\"", with: "&quot;")
+            .replacingOccurrences(of: "'", with: "&apos;")
+    }
+
     func generateFeed() -> String {
         let contentXML = generateContentXML()
         var result = generateRSSHeader()
@@ -25,7 +34,7 @@ struct FeedGenerator {
             result += """
             <image>\
             <url>\(image.url)</url>\
-            <title>\(site.name)</title>\
+            <title>\(xmlEscape(site.name))</title>\
             <link>\(site.url.absoluteString)</link>\
             <width>\(image.width)</width>\
             <height>\(image.height)</height>\
@@ -49,7 +58,7 @@ struct FeedGenerator {
                 var itemXML = """
                 <item>\
                 <guid isPermaLink="true">\(item.path(in: site))</guid>\
-                <title>\(item.title)</title>\
+                <title>\(xmlEscape(item.title))</title>\
                 <link>\(item.path(in: site))</link>\
                 <description><![CDATA[\(item.description)]]></description>\
                 <pubDate>\(item.date.asRFC822(timeZone: site.timeZone))</pubDate>
@@ -86,8 +95,8 @@ struct FeedGenerator {
         xmlns:atom="http://www.w3.org/2005/Atom" \
         xmlns:content="http://purl.org/rss/1.0/modules/content/">\
         <channel>\
-        <title>\(site.name)</title>\
-        <description>\(site.description ?? "")</description>\
+        <title>\(xmlEscape(site.name))</title>\
+        <description>\(xmlEscape(site.description ?? ""))</description>\
         <link>\(site.url.absoluteString)</link>\
         <atom:link
             href="\(site.url.appending(path: feedConfig.path).absoluteString)"

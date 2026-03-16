@@ -20,6 +20,21 @@ struct FeedGeneratorTests {
         TestSite(timeZone: .init(abbreviation: "EST")!)
     ]
 
+    @Test("XML-escapes special characters in titles")
+    func xmlEscapesSpecialCharacters() async throws {
+        let site = TestSite()
+        let config = site.feedConfiguration!
+        var article = Article()
+        article.title = "Donations & Sponsorships"
+        article.description = "Example Description"
+
+        let generator = FeedGenerator(config: config, site: site, content: [article])
+        let feed = generator.generateFeed()
+
+        #expect(feed.contains("<title>Donations &amp; Sponsorships</title>"))
+        #expect(!feed.contains("<title>Donations & Sponsorships</title>"))
+    }
+
     @Test("generateFeed()", arguments: await sites)
     func generateFeed(for site: any Site) async throws {
         let config = site.feedConfiguration!
