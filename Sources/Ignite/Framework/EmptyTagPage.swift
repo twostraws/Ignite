@@ -7,6 +7,8 @@
 
 /// A default tag page that does nothing; used to disable tag pages entirely.
 public struct EmptyTagPage: TagPage {
+    public init() {}
+
     public var body: some BodyElement {
         EmptyHTML()
     }
