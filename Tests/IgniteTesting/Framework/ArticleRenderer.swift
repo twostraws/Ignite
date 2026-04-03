@@ -73,6 +73,21 @@ struct ArticleRendererTests {
         #expect(element.body == "<p>Here is some <code>var code = \"great\"</code></p>")
     }
 
+    @Test("Markdown escapes plain text")
+    func escapesMarkdownPlainText() async throws {
+        let element = MarkdownToHTML(markdown: "AT&T", removeTitleFromBody: false)
+
+        #expect(element.body == "<p>AT&amp;T</p>")
+    }
+
+    @Test("Markdown escapes inline code")
+    func escapesMarkdownInlineCode() async throws {
+        let markdown = "Here is some `a < b && c > d`"
+        let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
+
+        #expect(element.body == "<p>Here is some <code>a &lt; b &amp;&amp; c &gt; d</code></p>")
+    }
+
     @Test("Markdown emphasis from string", arguments: ["Here is some *emphasized* text"])
     func convertMarkdownEmphasisToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)

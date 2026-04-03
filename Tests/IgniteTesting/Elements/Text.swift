@@ -69,8 +69,65 @@ import Testing
         let output = element.markupString()
 
         #expect(output == """
-        <p><em>i</em>, <strong>b</strong>, and <em><strong>b&i</strong></em></p>
+        <p><em>i</em>, <strong>b</strong>, and <em><strong>b&amp;i</strong></em></p>
         """)
+    }
+    
+    @Test("Markdown rendering disappearing headings")
+    func markdownRenderingDisappearingHeadings() async throws {
+        let element = Text(markdown: """
+        ## Heading 1
+        Body text 1
+        ## Heading 2
+        Body text 2
+        """)
+        let output = element.markupString()
+        #expect(output.contains("<h2>Heading 1</h2>"))
+        #expect(output.contains("<h2>Heading 2</h2>"))
+    }
+    
+    @Test("Markdown rendering invalid paragraphs")
+    func markdownRenderingInvalidParagraphs() async throws {
+        let element = Text(markdown: """
+        ## Heading 1
+        Text 1
+        
+        Text 2
+        
+        ## Heading 2
+        Text 3
+        """)
+        let output = element.markupString()
+        #expect(output.contains("<p>Text 1</p>"))
+        #expect(output.contains("<p>Text 2</p>"))
+        #expect(output.contains("<p>Text 3</p>"))
+        #expect(output.contains("<p></p>") == false)
+    }
+
+    @Test("Markdown rendering preserves block structure")
+    func markdownRenderingPreservesBlockStructure() async throws {
+        let element = Text(markdown: """
+        ## Heading
+        - Item 1
+        - Item 2
+        """)
+        let output = element.markupString()
+        #expect(output == "<div><h2>Heading</h2><ul><li>Item 1</li><li>Item 2</li></ul></div>")
+    }
+
+    @Test("Markup parser preserves block Markdown")
+    func markupParserPreservesBlockMarkdown() async throws {
+        let element = Text(
+            markup: """
+            ## Heading 1
+            Body text 1
+            ## Heading 2
+            Body text 2
+            """,
+            parser: MarkdownToHTML.self
+        )
+        let output = element.markupString()
+        #expect(output == "<div><h2>Heading 1</h2><p>Body text 1</p><h2>Heading 2</h2><p>Body text 2</p></div>")
     }
 
     @Test("Strikethrough")
