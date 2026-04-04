@@ -17,6 +17,15 @@ struct FeedGenerator {
         self.content = content
     }
 
+    private func xmlEscape(_ string: String) -> String {
+        string
+            .replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
+            .replacingOccurrences(of: "\"", with: "&quot;")
+            .replacingOccurrences(of: "'", with: "&apos;")
+    }
+
     func generateFeed() -> String {
         let contentXML = generateContentXML()
         var result = generateRSSHeader()
@@ -25,7 +34,7 @@ struct FeedGenerator {
             result += """
             <image>\
             <url>\(image.url)</url>\
-            <title>\(site.name)</title>\
+            <title>\(xmlEscape(site.name))</title>\
             <link>\(site.url.absoluteString)</link>\
             <width>\(image.width)</width>\
             <height>\(image.height)</height>\
