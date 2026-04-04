@@ -123,7 +123,7 @@ public struct LinkGroup: HTML {
             return Markup()
         }
 
-        let path = publishingContext.path(for: url)
+        let path = publishingContext.linkPath(for: url)
         linkAttributes.append(customAttributes: .init(name: "href", value: path))
         let contentHTML = content.markupString()
         return Markup("<a\(linkAttributes)>\(contentHTML)</a>")

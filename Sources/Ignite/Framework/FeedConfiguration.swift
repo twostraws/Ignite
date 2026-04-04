@@ -57,6 +57,10 @@ public struct FeedConfiguration: Sendable {
     /// feed readers.
     var image: FeedImage?
 
+    /// An optional list of content types to include in the feed.
+    /// When nil, all content types are included.
+    var contentTypes: [String]?
+
     /// A safe default feed configuration: 20 items, description only, path at /feed.rss.
     static let `default` = FeedConfiguration(mode: .descriptionOnly, contentCount: 20, path: "/feed.rss")
 
@@ -68,11 +72,14 @@ public struct FeedConfiguration: Sendable {
     ///   - path: The path where the RSS feed should be accessible, default to /feed.rss
     ///   - image: An optional image used to customize your feed's
     ///   appearance in feed readers.
-    public init?(mode: ContentMode, contentCount: Int, path: String = "/feed.rss", image: FeedImage? = nil) {
+    ///   - contentTypes: An optional list of content types to include
+    ///   (e.g. ["letters"]). When nil, all types are included.
+    public init?(mode: ContentMode, contentCount: Int, path: String = "/feed.rss", image: FeedImage? = nil, contentTypes: [String]? = nil) {
         guard contentCount > 0 else { return nil }
         self.mode = mode
         self.contentCount = contentCount
         self.path = path
         self.image = image
+        self.contentTypes = contentTypes
     }
 }

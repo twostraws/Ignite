@@ -30,6 +30,14 @@ public struct PlainDocument: Document {
         var attributes = attributes
         attributes.append(customAttributes: .init(name: "lang", value: language.rawValue))
 
+        let site = PublishingContext.shared.site
+        if let lightTheme = site.lightTheme {
+            attributes.append(customAttributes: .init(name: "data-light-theme", value: lightTheme.cssID))
+        }
+        if let darkTheme = site.darkTheme {
+            attributes.append(customAttributes: .init(name: "data-dark-theme", value: darkTheme.cssID))
+        }
+
         let bodyMarkup = body.markup()
         // Deferred head rendering to accommodate for context updates during body rendering
         let headMarkup = head.markup()

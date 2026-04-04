@@ -186,6 +186,25 @@ final class PublishingContext {
         return result
     }
 
+    /// Returns a path with a trailing slash appended for local page URLs.
+    /// Static hosts serve directory-style pages (path/index.html) at path/,
+    /// so links should use the canonical form to avoid 301 redirects.
+    func linkPath(for url: URL) -> String {
+        var result = path(for: url)
+
+        let isExternal = url.scheme == "http" || url.scheme == "https" || url.scheme == "mailto"
+        if !isExternal,
+           !result.hasSuffix("/"),
+           !result.hasPrefix("#") {
+            let lastComponent = result.split(separator: "/").last.map(String.init) ?? ""
+            if !lastComponent.contains(".") {
+                result += "/"
+            }
+        }
+
+        return result
+    }
+
     /// Converts a path string to a site-relative path, prepending the site's
     /// subpath if needed and respecting the `useRelativePaths` setting.
     /// - Parameter path: A path string, typically starting with "/" for local assets.

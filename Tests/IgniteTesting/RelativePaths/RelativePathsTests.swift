@@ -59,7 +59,7 @@ struct RelativePathsTests {
         let link = Link("Test", target: "/about")
         let output = link.markupString()
 
-        #expect(output.contains("href=\"/about\""))
+        #expect(output.contains("href=\"/about/\""))
     }
 
     // MARK: - Relative Paths Behavior (useRelativePaths = true)
@@ -114,8 +114,8 @@ struct RelativePathsTests {
         let link = Link("About", target: "/about")
         let output = link.markupString()
 
-        #expect(output.contains("href=\"about\""))
-        #expect(!output.contains("href=\"/about\""))
+        #expect(output.contains("href=\"about/\""))
+        #expect(!output.contains("href=\"/about/\""))
     }
 
     // MARK: - Subsite Support
