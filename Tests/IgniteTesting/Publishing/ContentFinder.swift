@@ -11,7 +11,7 @@ import Testing
 
 /// Tests for the `ContentFinder` type.
 @Suite("ContentFinder")
-actor ContentFinderTests {
+struct ContentFinderTests {
     /// Run each ``TestCase`` defined in the ``ContentFinderTestCases`` using ``run(_:)``.
     ///
     /// Verify any error thrown is expected.
@@ -114,7 +114,7 @@ actor ContentFinderTests {
     }
 
     /// Specify directory root, files/dirs, and links for ``Tst`` filesystem setup.
-    indirect enum FileItem {
+    indirect enum FileItem: Sendable {
         case root(_ name: String)
         case file(_ name: String, _ parent: FileItem)
         case directory(_ name: String, _ parent: FileItem)
@@ -126,7 +126,7 @@ actor ContentFinderTests {
     /// and expected results from running
     /// ``ContentFinder.find(root:, suffixes:, contentMaker:)``
     /// (either a set of paths or some error text).
-    struct TestCase: CustomStringConvertible {
+    struct TestCase: CustomStringConvertible, Sendable {
         /// User-defined but unique value to keep parallel test temp directories distinct.
         let id: String = UUID().uuidString
 
