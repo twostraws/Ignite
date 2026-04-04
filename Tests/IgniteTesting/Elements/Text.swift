@@ -72,36 +72,22 @@ import Testing
         <p><em>i</em>, <strong>b</strong>, and <em><strong>b&amp;i</strong></em></p>
         """)
     }
-    
-    @Test("Markdown rendering disappearing headings")
-    func markdownRenderingDisappearingHeadings() async throws {
-        let element = Text(markdown: """
-        ## Heading 1
-        Body text 1
-        ## Heading 2
-        Body text 2
-        """)
-        let output = element.markupString()
-        #expect(output.contains("<h2>Heading 1</h2>"))
-        #expect(output.contains("<h2>Heading 2</h2>"))
-    }
-    
-    @Test("Markdown rendering invalid paragraphs")
-    func markdownRenderingInvalidParagraphs() async throws {
+        
+    @Test("Markdown rendering forms correct paragraphs and respects blank lines")
+    func markdownRenderingFormsParagraphsRespectingBlankLines() async throws {
         let element = Text(markdown: """
         ## Heading 1
         Text 1
         
         Text 2
-        
         ## Heading 2
         Text 3
+        Text 4
+        ## Heading 3
+        Text 5
         """)
         let output = element.markupString()
-        #expect(output.contains("<p>Text 1</p>"))
-        #expect(output.contains("<p>Text 2</p>"))
-        #expect(output.contains("<p>Text 3</p>"))
-        #expect(output.contains("<p></p>") == false)
+        #expect(output == "<div><h2>Heading 1</h2><p>Text 1</p><p>Text 2</p><h2>Heading 2</h2><p>Text 3 Text 4</p><h2>Heading 3</h2><p>Text 5</p></div>")
     }
 
     @Test("Markdown rendering preserves block structure")
