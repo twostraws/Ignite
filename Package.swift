@@ -12,7 +12,7 @@ let package = Package(
         .executable(name: "IgniteCLI", targets: ["IgniteCLI"])
     ],
     dependencies: [
-        .package(url: "https://github.com/swiftlang/swift-markdown.git", from: "0.6.0"),
+        .package(url: "https://github.com/swiftlang/swift-markdown.git", exact: "0.7.1"),
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.5.0"),
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.4"),
         .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.7.5")
