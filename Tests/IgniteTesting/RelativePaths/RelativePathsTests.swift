@@ -253,6 +253,49 @@ struct RelativePathsTests {
         #expect(!output.contains("href=\"/css/ignite-core.min.css\""))
     }
 
+    @Test("Relative path images find local variants")
+    func relativePathImagesFindLocalVariants() throws {
+        let directories = try makeTemporarySiteDirectories()
+        defer {
+            try? FileManager.default.removeItem(at: directories.rootDirectory)
+        }
+
+        try createImageVariants(in: directories.sourceDirectory)
+        try PublishingContext.initialize(
+            for: TestRelativePathsSite(),
+            sourceDirectory: directories.sourceDirectory,
+            buildDirectory: directories.buildDirectory
+        )
+
+        let output = Image("/images/example.jpg", description: "Example image").markupString()
+
+        #expect(output.contains("src=\"images/example.jpg\""))
+        #expect(output.contains("srcset=\"images/example@2x.jpg 2x\""))
+        #expect(!output.contains("src=\"/images/example.jpg\""))
+        #expect(!PublishingContext.shared.warnings.contains("Could not read the assets directory. Please file a bug report."))
+    }
+
+    @Test("Relative path image variants keep the subsite prefix")
+    func relativePathImageVariantsKeepSubsitePrefix() throws {
+        let directories = try makeTemporarySiteDirectories()
+        defer {
+            try? FileManager.default.removeItem(at: directories.rootDirectory)
+        }
+
+        try createImageVariants(in: directories.sourceDirectory)
+        try PublishingContext.initialize(
+            for: TestRelativePathsSubsite(),
+            sourceDirectory: directories.sourceDirectory,
+            buildDirectory: directories.buildDirectory
+        )
+
+        let output = Image("/images/example.jpg", description: "Example image").markupString()
+
+        #expect(output.contains("src=\"subsite/images/example.jpg\""))
+        #expect(output.contains("srcset=\"subsite/images/example@2x.jpg 2x\""))
+        #expect(!PublishingContext.shared.warnings.contains("Could not read the assets directory. Please file a bug report."))
+    }
+
     // MARK: - useRelativePaths Defaults to False
 
     @Test("useRelativePaths defaults to false")
@@ -265,5 +308,30 @@ struct RelativePathsTests {
     func testRelativePathsSiteHasRelativePaths() throws {
         let site = TestRelativePathsSite()
         #expect(site.useRelativePaths == true)
+    }
+
+    private func makeTemporarySiteDirectories() throws -> (rootDirectory: URL, sourceDirectory: URL, buildDirectory: URL) {
+        let rootDirectory = FileManager.default.temporaryDirectory
+            .appending(path: UUID().uuidString)
+        let sourceDirectory = rootDirectory.appending(path: "Source")
+        let buildDirectory = rootDirectory.appending(path: "Build")
+
+        try FileManager.default.createDirectory(
+            at: sourceDirectory,
+            withIntermediateDirectories: true
+        )
+
+        return (rootDirectory, sourceDirectory, buildDirectory)
+    }
+
+    private func createImageVariants(in sourceDirectory: URL) throws {
+        let imagesDirectory = sourceDirectory.appending(path: "Assets/images")
+        try FileManager.default.createDirectory(
+            at: imagesDirectory,
+            withIntermediateDirectories: true
+        )
+
+        try Data("base".utf8).write(to: imagesDirectory.appending(path: "example.jpg"))
+        try Data("2x".utf8).write(to: imagesDirectory.appending(path: "example@2x.jpg"))
     }
 }

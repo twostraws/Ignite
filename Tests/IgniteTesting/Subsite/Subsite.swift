@@ -20,7 +20,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
     func named(path: String, description: String) async throws {
         let element = Image(path, description: description)
         let output = element.markupString()
-        let path = publishingContext.path(for: URL(string: path)!)
+        let path = publishingContext.assetPath(path)
         #expect(output == "<img src=\"\(path)\" alt=\"Example image\" />")
     }
 
