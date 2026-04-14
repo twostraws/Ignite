@@ -33,6 +33,7 @@ private struct JSONFeedItem: Encodable {
     var title: String
     var summary: String
     var content_html: String?
+    var content_text: String?
     var date_published: String
     var authors: [JSONFeedAuthor]?
     var tags: [String]?
@@ -66,6 +67,10 @@ struct JSONFeedGenerator {
 
             if feedConfig.mode == .full {
                 feedItem.content_html = item.text.makingAbsoluteLinks(relativeTo: site.url)
+            } else {
+                // JSON Feed v1.1 requires content_html or content_text per item.
+                // In descriptionOnly mode, use the description as content_text fallback.
+                feedItem.content_text = item.description
             }
 
             if let authorName, !authorName.isEmpty {

@@ -88,6 +88,8 @@ struct JSONFeedGeneratorTests {
         let item = items[0]
         #expect(item["summary"] as? String == "Example Description")
         #expect(item["content_html"] == nil)
+        // JSON Feed v1.1 requires content_html or content_text — descriptionOnly uses content_text
+        #expect(item["content_text"] as? String == "Example Description")
     }
 
     @Test("Full-content mode: items include content_html")
