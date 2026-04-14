@@ -75,6 +75,7 @@ struct AtomFeedGenerator {
 
         if let image = feedConfig.image {
             header += "<icon>\(image.url)</icon>"
+            header += "<logo>\(image.url)</logo>"
         }
 
         return header

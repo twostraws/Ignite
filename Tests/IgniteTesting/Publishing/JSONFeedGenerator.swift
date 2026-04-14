@@ -192,7 +192,7 @@ struct JSONFeedGeneratorTests {
         #expect(tags.contains("ignite"))
     }
 
-    @Test("Feed image: icon key present when image configured")
+    @Test("Feed image: icon and favicon present when image configured")
     func feedImageIcon() throws {
         let site = TestSite() // has feedConfiguration with image
         let config = site.feedConfiguration!
@@ -203,6 +203,7 @@ struct JSONFeedGeneratorTests {
         let json = try parseJSON(output)
 
         #expect(json["icon"] as? String == "path/to/image.png")
+        #expect(json["favicon"] as? String == "path/to/image.png")
     }
 
     @Test("Language: matches site language")

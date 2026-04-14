@@ -16,6 +16,7 @@ private struct JSONFeed: Encodable {
     var description: String?
     var language: String
     var icon: String?
+    var favicon: String?
     var authors: [JSONFeedAuthor]?
     var items: [JSONFeedItem]
 }
@@ -88,6 +89,7 @@ struct JSONFeedGenerator {
             description: site.description,
             language: site.language.rawValue,
             icon: feedConfig.image?.url,
+            favicon: feedConfig.image?.url,
             authors: siteAuthor.map { [JSONFeedAuthor(name: $0)] },
             items: Array(feedItems)
         )

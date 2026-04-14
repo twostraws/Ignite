@@ -45,6 +45,7 @@ struct AtomFeedGeneratorTests {
         <generator uri="https://github.com/twostraws/Ignite" \
         version="\(Ignite.version)">Ignite</generator>\
         <icon>\(config.image?.url ?? "")</icon>\
+        <logo>\(config.image?.url ?? "")</logo>\
         <entry>\
         <title>\(article.title.xmlEscaped)</title>\
         <link href="\(article.path(in: site))" rel="alternate"/>\
@@ -186,9 +187,10 @@ struct AtomFeedGeneratorTests {
         let feed = generator.generateFeed()
 
         #expect(feed.contains("<icon>https://example.com/icon.png</icon>"))
+        #expect(feed.contains("<logo>https://example.com/icon.png</logo>"))
     }
 
-    @Test("Icon element absent when no image configured")
+    @Test("Icon and logo elements absent when no image configured")
     func feedImageAbsent() async throws {
         let config = FeedConfiguration(mode: .descriptionOnly, contentCount: 20)!
         let site = TestSite()
@@ -197,6 +199,7 @@ struct AtomFeedGeneratorTests {
         let feed = generator.generateFeed()
 
         #expect(!feed.contains("<icon>"))
+        #expect(!feed.contains("<logo>"))
     }
 
     // MARK: - Timezone handling

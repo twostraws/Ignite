@@ -25,7 +25,7 @@ struct FeedGenerator {
             result += """
             <image>\
             <url>\(image.url)</url>\
-            <title>\(xmlEscape(site.name))</title>\
+            <title>\(site.name.xmlEscaped)</title>\
             <link>\(site.url.absoluteString)</link>\
             <width>\(image.width)</width>\
             <height>\(image.height)</height>\
