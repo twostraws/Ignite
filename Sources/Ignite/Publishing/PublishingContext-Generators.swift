@@ -40,7 +40,7 @@ extension PublishingContext {
         }
     }
 
-    /// Generates an RSS feed for this site, if enabled.
+    /// Generates syndication feeds for this site in all enabled formats.
     public func generateFeed() {
         guard let feedConfig = site.feedConfiguration else { return }
 
@@ -54,14 +54,30 @@ extension PublishingContext {
             order: .reverse
         )
 
-        let generator = FeedGenerator(config: feedConfig, site: site, content: content)
-        let result = generator.generateFeed()
+        for format in feedConfig.formats {
+            let output: String
+            switch format {
+            case .rss:
+                output = FeedGenerator(config: feedConfig, site: site, content: content)
+                    .generateFeed()
+            case .atom:
+                output = AtomFeedGenerator(config: feedConfig, site: site, content: content)
+                    .generateFeed()
+            case .json:
+                output = JSONFeedGenerator(config: feedConfig, site: site, content: content)
+                    .generateFeed()
+            }
 
-        do {
-            let destinationURL = buildDirectory.appending(path: feedConfig.path)
-            try result.write(to: destinationURL, atomically: true, encoding: .utf8)
-        } catch {
-            addError(.failedToWriteFeed)
+            let path = feedConfig.paths[format]
+                ?? FeedConfiguration.defaultPaths[format]
+                ?? "/feed.\(format.rawValue)"
+
+            do {
+                let destinationURL = buildDirectory.appending(path: path)
+                try output.write(to: destinationURL, atomically: true, encoding: .utf8)
+            } catch {
+                addError(.failedToWriteFeed)
+            }
         }
     }
 
