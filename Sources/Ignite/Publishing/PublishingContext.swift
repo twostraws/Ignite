@@ -49,6 +49,9 @@ final class PublishingContext {
     /// The directory containing their final, built website.
     var buildDirectory: URL
 
+    /// Which publishing diagnostics should be emitted to the console.
+    let logOptions: PublishingLogOptions
+
     /// Path at which content renders. Defaults to nil.
     public var currentRenderingPath: String?
 
@@ -86,8 +89,14 @@ final class PublishingContext {
     ///   - file: One file from the user's package.
     ///   - buildDirectoryPath: The path where the artifacts are generated.
     ///   The default is "Build".
-    private init(for site: any Site, from file: StaticString, buildDirectoryPath: String = "Build") throws {
+    private init(
+        for site: any Site,
+        from file: StaticString,
+        buildDirectoryPath: String = "Build",
+        logOptions: PublishingLogOptions = .standard
+    ) throws {
         self.site = site
+        self.logOptions = logOptions
 
         let sourceBuildDirectories = try URL.selectDirectories(from: file)
         sourceDirectory = sourceBuildDirectories.source
@@ -105,8 +114,14 @@ final class PublishingContext {
     ///   - site: The site we're currently publishing.
     ///   - sourceDirectory: The root directory containing Assets, Content, and Includes folders.
     ///   - buildDirectory: The directory where the generated site will be written.
-    private init(for site: any Site, sourceDirectory: URL, buildDirectory: URL) throws {
+    private init(
+        for site: any Site,
+        sourceDirectory: URL,
+        buildDirectory: URL,
+        logOptions: PublishingLogOptions = .standard
+    ) throws {
         self.site = site
+        self.logOptions = logOptions
 
         let sourceBuildDirectories = try URL.makeDirectories(source: sourceDirectory, build: buildDirectory)
         self.sourceDirectory = sourceBuildDirectories.source
@@ -129,9 +144,15 @@ final class PublishingContext {
     static func initialize(
         for site: any Site,
         from file: StaticString,
-        buildDirectoryPath: String = "Build"
+        buildDirectoryPath: String = "Build",
+        logOptions: PublishingLogOptions = .standard
     ) throws -> PublishingContext {
-        let context = try PublishingContext(for: site, from: file, buildDirectoryPath: buildDirectoryPath)
+        let context = try PublishingContext(
+            for: site,
+            from: file,
+            buildDirectoryPath: buildDirectoryPath,
+            logOptions: logOptions
+        )
         sharedContext = context
         return context
     }
@@ -147,9 +168,15 @@ final class PublishingContext {
     static func initialize(
         for site: any Site,
         sourceDirectory: URL,
-        buildDirectory: URL
+        buildDirectory: URL,
+        logOptions: PublishingLogOptions = .standard
     ) throws -> PublishingContext {
-        let context = try PublishingContext(for: site, sourceDirectory: sourceDirectory, buildDirectory: buildDirectory)
+        let context = try PublishingContext(
+            for: site,
+            sourceDirectory: sourceDirectory,
+            buildDirectory: buildDirectory,
+            logOptions: logOptions
+        )
         sharedContext = context
         return context
     }
@@ -231,6 +258,11 @@ final class PublishingContext {
     /// - Parameter error: The error to add.
     func addError(_ error: PublishingError) {
         errors.append(error)
+    }
+
+    /// Returns whether a specific class of publishing diagnostics should be logged.
+    func shouldLog(_ option: PublishingLogOptions) -> Bool {
+        logOptions.contains(option)
     }
 
     /// Adds one path to the sitemap.

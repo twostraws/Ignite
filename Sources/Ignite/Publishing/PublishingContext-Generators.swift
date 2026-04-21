@@ -80,7 +80,10 @@ extension PublishingContext {
 
     /// Generates the CSS file containing all media query rules, including styles.
     func generateMediaQueryCSS() {
-        print("Generating CSS for custom styles. This may take a moment...")
+        if shouldLog(.notices) {
+            print("Generating CSS for custom styles. This may take a moment...")
+        }
+
         let mediaQueryCSS = CSSManager.shared.generateAllRules(themes: site.allThemes)
         let stylesCSS = StyleManager.shared.generateAllCSS(themes: site.allThemes)
         let combinedCSS = [mediaQueryCSS, stylesCSS]

@@ -15,7 +15,7 @@ import Ignite
 struct TestSitePublisher {
     var site: any Site = TestSite()
 
-    mutating func publish() async throws {
-        try await site.publish()
+    mutating func publish(logOptions: PublishingLogOptions = [.warnings, .errors]) async throws {
+        try await site.publish(logOptions: logOptions)
     }
 }
