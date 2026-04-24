@@ -54,14 +54,14 @@ public extension Theme {
 
     var secondary: Color {
         colorScheme == .dark ?
-        Color(red: 222, green: 226, blue: 230, opacity: 0.75) :
-        Color(red: 33, green: 37, blue: 41, opacity: 0.75)
+        Color(red: 222, green: 226, blue: 230, opacity: 75%) :
+        Color(red: 33, green: 37, blue: 41, opacity: 75%)
     }
 
     var tertiary: Color {
         colorScheme == .dark ?
-        Color(red: 222, green: 226, blue: 230, opacity: 0.5) :
-        Color(red: 33, green: 37, blue: 41, opacity: 0.5)
+        Color(red: 222, green: 226, blue: 230, opacity: 50%) :
+        Color(red: 33, green: 37, blue: 41, opacity: 50%)
     }
 
     var background: Color {
