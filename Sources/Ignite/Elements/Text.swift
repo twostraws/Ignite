@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import SwiftSoup
+
 /// A structured piece of text, such as a paragraph of heading. If you are just
 /// placing content inside a list, table, table header, and so on, you can usually
 /// just use a simple string. Using `Text` is required if you want a specific paragraph
@@ -28,8 +30,8 @@ public struct Text: HTML, DropdownItem {
     /// The content to place inside the text.
     private var content: any BodyElement
 
-    /// Whether this text contains multiple paragraphs of Markdown content.
-    private var isMultilineMarkdown = false
+    /// Whether this text should wrap rendered markup in a container rather than a paragraph tag.
+    private var wrapsBlockMarkup = false
 
     /// Creates a new `Text` instance using an inline element builder that
     /// returns an array of the content to place into the text.
@@ -109,28 +111,10 @@ public struct Text: HTML, DropdownItem {
     /// Creates a new Text struct from a Markdown string.
     /// - Parameter markdown: The Markdown text to parse.
     public init(markdown: String) {
-        let parser = MarkdownToHTML(markdown: markdown, removeTitleFromBody: true)
-
-        // Process each paragraph individually to preserve line breaks.
-        // We could simply replace newlines with <br>, but then the paragraphs
-        // wouldn't respond to a theme's paragraphBottomMargin property.
-        if parser.body.contains("</p><p>") {
-            let paragraphs = parser.body
-                .components(separatedBy: "</p><p>")
-                .map {
-                    $0.replacingOccurrences(of: "<p>", with: "")
-                      .replacingOccurrences(of: "</p>", with: "")
-                }
-                .map(Text.init)
-
-            self.content = HTMLCollection(paragraphs)
-            self.isMultilineMarkdown = true
-        } else {
-            // Remove the wrapping <p> tags since they'll be added by markup()
-            let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
-            self.content = cleanedHTML
-            self.isMultilineMarkdown = false
-        }
+        let parser = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
+        let renderedMarkup = Self.renderedMarkupContent(from: parser.body)
+        self.content = renderedMarkup.content
+        self.wrapsBlockMarkup = renderedMarkup.wrapsBlockMarkup
     }
 
     /// Creates a new `Text` struct from a markup format and its parser.
@@ -139,9 +123,10 @@ public struct Text: HTML, DropdownItem {
     ///   - parser: The parser to process the text.
     public init(markup: String, parser: any ArticleRenderer.Type) {
         do {
-            let parser = try parser.init(markdown: markup, removeTitleFromBody: true)
-            let cleanedHTML = parser.body.replacing(#/<\/?p>/#, with: "")
-            self.content = cleanedHTML
+            let parser = try parser.init(markdown: markup, removeTitleFromBody: false)
+            let renderedMarkup = Self.renderedMarkupContent(from: parser.body)
+            self.content = renderedMarkup.content
+            self.wrapsBlockMarkup = renderedMarkup.wrapsBlockMarkup
         } catch {
             self.content = markup
             publishingContext.addError(.failedToParseMarkup)
@@ -151,11 +136,9 @@ public struct Text: HTML, DropdownItem {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func markup() -> Markup {
-        if isMultilineMarkdown {
-            // HTMLCollection will pass its attributes to each child.
-            // This works fine for styles like color, but for styles like
-            // padding, we'd expect them to apply to the paragraphs
-            // collectively. So we'll wrap the paragraphs in a Section.
+        if wrapsBlockMarkup {
+            // Block-level markup needs a container so the HTML stays valid and
+            // modifiers continue to apply collectively rather than per child.
             Section(content)
                 .attributes(attributes)
                 .markup()
@@ -166,6 +149,44 @@ public struct Text: HTML, DropdownItem {
                 "</\(font.rawValue)>"
             )
         }
+    }
+}
+
+private extension Text {
+    /// Decides whether parsed markup can be rendered inline or needs a block wrapper.
+    static func renderedMarkupContent(from html: String) -> (content: any BodyElement, wrapsBlockMarkup: Bool) {
+        guard let inlineMarkup = inlineMarkupContent(from: html) else {
+            return (html, true)
+        }
+
+        return (inlineMarkup, false)
+    }
+
+    /// Extracts the contents of a single paragraph when the rendered markup contains nothing else.
+    static func inlineMarkupContent(from html: String) -> String? {
+        guard html.isEmpty == false else {
+            return ""
+        }
+
+        guard
+            let document = try? SwiftSoup.parseBodyFragment(html),
+            let body = document.body()
+        else {
+            return nil
+        }
+
+        let children = body.children()
+
+        guard
+            body.childNodeSize() == 1,
+            children.size() == 1,
+            let paragraph = children.first(),
+            paragraph.tagName() == "p"
+        else {
+            return nil
+        }
+
+        return try? paragraph.html()
     }
 }
 
