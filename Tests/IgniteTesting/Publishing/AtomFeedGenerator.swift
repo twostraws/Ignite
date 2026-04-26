@@ -37,21 +37,21 @@ struct AtomFeedGeneratorTests {
         #expect(generator.generateFeed() == """
         <?xml version="1.0" encoding="UTF-8"?>\
         <feed xmlns="http://www.w3.org/2005/Atom">\
-        <title>\(site.name.xmlEscaped)</title>\
+        <title>\(site.name.escapedForXML())</title>\
         <link href="\(site.url.absoluteString)" rel="alternate"/>\
         <link href="\(selfHref)" rel="self" type="application/atom+xml"/>\
         <id>\(site.url.absoluteString)/</id>\
-        <updated>\(article.date.asRFC3339(timeZone: site.timeZone))</updated>\
+        <updated>\(article.date.asISO8601(timeZone: site.timeZone))</updated>\
         <generator uri="https://github.com/twostraws/Ignite" \
         version="\(Ignite.version)">Ignite</generator>\
         <icon>\(config.image?.url ?? "")</icon>\
         <logo>\(config.image?.url ?? "")</logo>\
         <entry>\
-        <title>\(article.title.xmlEscaped)</title>\
+        <title>\(article.title.escapedForXML())</title>\
         <link href="\(article.path(in: site))" rel="alternate"/>\
         <id>\(article.path(in: site))</id>\
-        <updated>\(article.date.asRFC3339(timeZone: site.timeZone))</updated>\
-        <published>\(article.date.asRFC3339(timeZone: site.timeZone))</published>\
+        <updated>\(article.date.asISO8601(timeZone: site.timeZone))</updated>\
+        <published>\(article.date.asISO8601(timeZone: site.timeZone))</published>\
         <summary type="html"><![CDATA[\(article.description)]]></summary>\
         </entry>\
         </feed>
@@ -215,7 +215,7 @@ struct AtomFeedGeneratorTests {
         let generator = AtomFeedGenerator(config: config, site: site, content: [article])
         let feed = generator.generateFeed()
 
-        let expectedDate = article.date.asRFC3339(timeZone: site.timeZone)
+        let expectedDate = article.date.asISO8601(timeZone: site.timeZone)
         #expect(feed.contains("<updated>\(expectedDate)</updated>"))
         #expect(feed.contains("<published>\(expectedDate)</published>"))
     }

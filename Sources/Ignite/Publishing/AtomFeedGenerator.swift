@@ -48,11 +48,11 @@ struct AtomFeedGenerator {
         var header = """
         <?xml version="1.0" encoding="UTF-8"?>\
         <feed xmlns="http://www.w3.org/2005/Atom">\
-        <title>\(site.name.xmlEscaped)</title>
+        <title>\(site.name.escapedForXML())</title>
         """
 
         if let description = site.description, description.isEmpty == false {
-            header += "<subtitle>\(description.xmlEscaped)</subtitle>"
+            header += "<subtitle>\(description.escapedForXML())</subtitle>"
         }
 
         header += """
@@ -62,10 +62,10 @@ struct AtomFeedGenerator {
         """
 
         let mostRecentDate = content.first?.date ?? Date.now
-        header += "<updated>\(mostRecentDate.asRFC3339(timeZone: site.timeZone))</updated>"
+        header += "<updated>\(mostRecentDate.asISO8601(timeZone: site.timeZone))</updated>"
 
         if site.author.isEmpty == false {
-            header += "<author><name>\(site.author.xmlEscaped)</name></author>"
+            header += "<author><name>\(site.author.escapedForXML())</name></author>"
         }
 
         header += """
@@ -88,16 +88,16 @@ struct AtomFeedGenerator {
             .map { item in
                 var entryXML = """
                 <entry>\
-                <title>\(item.title.xmlEscaped)</title>\
+                <title>\(item.title.escapedForXML())</title>\
                 <link href="\(item.path(in: site))" rel="alternate"/>\
                 <id>\(item.path(in: site))</id>\
-                <updated>\(item.date.asRFC3339(timeZone: site.timeZone))</updated>\
-                <published>\(item.date.asRFC3339(timeZone: site.timeZone))</published>
+                <updated>\(item.date.asISO8601(timeZone: site.timeZone))</updated>\
+                <published>\(item.date.asISO8601(timeZone: site.timeZone))</published>
                 """
 
                 let authorName = item.author ?? site.author
                 if authorName.isEmpty == false {
-                    entryXML += "<author><name>\(authorName.xmlEscaped)</name></author>"
+                    entryXML += "<author><name>\(authorName.escapedForXML())</name></author>"
                 }
 
                 entryXML += "<summary type=\"html\"><![CDATA[\(item.description)]]></summary>"
@@ -111,7 +111,7 @@ struct AtomFeedGenerator {
                 }
 
                 item.tags?.forEach { tag in
-                    entryXML += "<category term=\"\(tag.xmlEscaped)\"/>"
+                    entryXML += "<category term=\"\(tag.escapedForXML())\"/>"
                 }
 
                 entryXML += "</entry>"

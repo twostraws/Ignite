@@ -62,7 +62,7 @@ struct JSONFeedGenerator {
                 url: absoluteURL,
                 title: item.title,
                 summary: item.description,
-                date_published: item.date.asRFC3339(timeZone: site.timeZone)
+                date_published: item.date.asISO8601(timeZone: site.timeZone)
             )
 
             if feedConfig.mode == .full {
