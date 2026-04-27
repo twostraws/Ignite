@@ -115,6 +115,10 @@ public struct Head: MarkupElement {
             MetaLink(href: favicon, rel: .icon)
         }
 
+        if let feedConfig = site.feedConfiguration {
+            MetaLink.feedDiscoveryLinks(for: feedConfig)
+        }
+
         if site.allThemes.count > 1, let themeSwitchingScript {
             themeSwitchingScript
         }
