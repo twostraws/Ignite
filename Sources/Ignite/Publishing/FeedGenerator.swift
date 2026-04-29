@@ -25,7 +25,7 @@ struct FeedGenerator {
             result += """
             <image>\
             <url>\(image.url)</url>\
-            <title>\(xmlEscape(site.name))</title>\
+            <title>\(site.name.escapedForXML())</title>\
             <link>\(site.url.absoluteString)</link>\
             <width>\(image.width)</width>\
             <height>\(image.height)</height>\
@@ -42,15 +42,6 @@ struct FeedGenerator {
         return result
     }
 
-    private func xmlEscape(_ string: String) -> String {
-        string
-            .replacingOccurrences(of: "&", with: "&amp;")
-            .replacingOccurrences(of: "<", with: "&lt;")
-            .replacingOccurrences(of: ">", with: "&gt;")
-            .replacingOccurrences(of: "\"", with: "&quot;")
-            .replacingOccurrences(of: "'", with: "&apos;")
-    }
-
     private func generateContentXML() -> String {
         content
             .prefix(feedConfig.contentCount)
@@ -58,7 +49,7 @@ struct FeedGenerator {
                 var itemXML = """
                 <item>\
                 <guid isPermaLink="true">\(item.path(in: site))</guid>\
-                <title>\(xmlEscape(item.title))</title>\
+                <title>\(item.title.escapedForXML())</title>\
                 <link>\(item.path(in: site))</link>\
                 <description><![CDATA[\(item.description)]]></description>\
                 <pubDate>\(item.date.asRFC822(timeZone: site.timeZone))</pubDate>
@@ -95,8 +86,8 @@ struct FeedGenerator {
         xmlns:atom="http://www.w3.org/2005/Atom" \
         xmlns:content="http://purl.org/rss/1.0/modules/content/">\
         <channel>\
-        <title>\(xmlEscape(site.name))</title>\
-        <description>\(xmlEscape(site.description ?? ""))</description>\
+        <title>\(site.name.escapedForXML())</title>\
+        <description>\((site.description ?? "").escapedForXML())</description>\
         <link>\(site.url.absoluteString)</link>\
         <atom:link
             href="\(site.url.appending(path: feedConfig.path).absoluteString)"

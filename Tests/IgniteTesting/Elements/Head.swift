@@ -78,4 +78,15 @@ class HTMLHeadTests: IgniteTestSuite {
 
         #expect(output.contains(expected))
     }
+
+    @Test("Standard headers include feed auto-discovery link")
+    func standardHeadersIncludeFeedDiscovery() throws {
+        // TestSite has feedConfiguration with RSS format
+        let sut = Head()
+        let output = sut.markupString()
+
+        #expect(output.contains("rel=\"alternate\""))
+        #expect(output.contains("application/rss+xml"))
+        #expect(output.contains("/feed.rss"))
+    }
 }
