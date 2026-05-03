@@ -7,6 +7,7 @@
 
 import Foundation
 import Markdown
+import SwiftSoup
 
 /// A simple Markdown to HTML parser powered by Apple's swift-markdown.
 public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
@@ -32,6 +33,11 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
         self.removeTitleFromBody = removeTitleFromBody
         let document = Markdown.Document(parsing: markdown)
         body = visit(document)
+    }
+
+    /// Escapes plain text so rendered Markdown always produces valid HTML.
+    private func escapedHTML(_ text: String) -> String {
+        return Entities.escape(text)
     }
 
     /// Visit some markup when no other handler is suitable.
@@ -66,10 +72,12 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     /// - Returns: A HTML <pre> element with <code> inside, marked with
     /// CSS to remember which language was used.
     public func visitCodeBlock(_ codeBlock: Markdown.CodeBlock) -> String {
+        let code = escapedHTML(codeBlock.code)
+
         if let language = codeBlock.language {
-            #"<pre><code class="language-\#(language.lowercased())">\#(codeBlock.code)</code></pre>"#
+            return #"<pre><code class="language-\#(language.lowercased())">\#(code)</code></pre>"#
         } else {
-            #"<pre><code>\#(codeBlock.code)</code></pre>"#
+            return #"<pre><code>\#(code)</code></pre>"#
         }
     }
 
@@ -149,7 +157,7 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     /// - Parameter inlineCode: The inline code markup to process.
     /// - Returns: A HTML <code> tag containing the code.
     mutating public func visitInlineCode(_ inlineCode: Markdown.InlineCode) -> String {
-        "<code>\(inlineCode.code)</code>"
+        "<code>\(escapedHTML(inlineCode.code))</code>"
     }
 
     /// Processes a chunk of inline HTML markup.
@@ -322,7 +330,7 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     /// - Parameter text: The plain text markup to process.
     /// - Returns: The same text that was read as input.
     mutating public func visitText(_ text: Markdown.Text) -> String {
-        text.plainText
+        escapedHTML(text.plainText)
     }
 
     /// Process thematic break markup. This is written as --- in Markdown.
