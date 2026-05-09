@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `IgniteFooter` element.
 @Suite("IgniteFooter Tests")
-@MainActor
 class IgniteFooterTests: IgniteTestSuite {
-    @Test("Default Ignite Footer")
+    @Test("Default Ignite Footer", .publishingContext())
     func defaultIgniteFooter() async throws {
         let element = IgniteFooter()
         let output = element.markupString()

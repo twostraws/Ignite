@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `ClickModifier` modifier.
 @Suite("ClickModifier Tests")
-@MainActor
 class ClickModifierTests: IgniteTestSuite {
-    @Test("onClick adds onclick attribute to HTML element")
+    @Test("onClick adds onclick attribute to HTML element", .publishingContext())
     func onClickAddsAttribute() async throws {
         let element = Text("Tap me")
             .onClick { ShowAlert(message: "Hi") }
@@ -23,7 +22,7 @@ class ClickModifierTests: IgniteTestSuite {
         #expect(output.contains(#"onclick="alert('Hi')"#))
     }
 
-    @Test("onClick adds onclick attribute to inline element")
+    @Test("onClick adds onclick attribute to inline element", .publishingContext())
     func onClickInlineElement() async throws {
         let element = Emphasis("Click me")
             .onClick { ShowAlert(message: "Clicked") }

@@ -12,15 +12,13 @@ import Testing
 
 /// Tests for the `SiteMapGenerator` output formatting.
 @Suite("SiteMapGenerator Tests")
-@MainActor
 struct SiteMapGeneratorTests {
     /// Creates a fresh PublishingContext to avoid shared singleton state leaking between tests.
     private func freshContext() throws -> PublishingContext {
         try PublishingContext.initialize(for: TestSite(), from: #filePath)
-        return PublishingContext.shared
     }
 
-    @Test("Empty sitemap produces valid XML wrapper")
+    @Test("Empty sitemap produces valid XML wrapper", .publishingContext())
     func emptySitemap() throws {
         let context = try freshContext()
         let generator = SiteMapGenerator(context: context)
@@ -33,7 +31,7 @@ struct SiteMapGeneratorTests {
         """)
     }
 
-    @Test("Single location produces correct XML entry")
+    @Test("Single location produces correct XML entry", .publishingContext())
     func singleLocation() throws {
         let context = try freshContext()
         context.addToSiteMap("/about", priority: 0.8)
@@ -43,7 +41,7 @@ struct SiteMapGeneratorTests {
         #expect(output.contains("<url><loc>https://www.example.com/about/</loc><priority>0.8</priority></url>"))
     }
 
-    @Test("Multiple locations produce correct XML entries")
+    @Test("Multiple locations produce correct XML entries", .publishingContext())
     func multipleLocations() throws {
         let context = try freshContext()
         context.addToSiteMap("/", priority: 1.0)
@@ -60,7 +58,7 @@ struct SiteMapGeneratorTests {
         #expect(output.contains("<loc>https://www.example.com/blog/</loc>"))
     }
 
-    @Test("Sitemap uses site URL for location prefix")
+    @Test("Sitemap uses site URL for location prefix", .publishingContext())
     func siteURLPrefix() throws {
         let context = try freshContext()
         context.addToSiteMap("/page", priority: 0.5)
@@ -70,7 +68,7 @@ struct SiteMapGeneratorTests {
         #expect(output.contains("<loc>https://www.example.com/page/</loc>"))
     }
 
-    @Test("Sitemap preserves insertion order")
+    @Test("Sitemap preserves insertion order", .publishingContext())
     func preservesOrder() throws {
         let context = try freshContext()
         context.addToSiteMap("/second", priority: 0.5)

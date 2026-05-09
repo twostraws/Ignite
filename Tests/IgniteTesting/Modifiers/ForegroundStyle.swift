@@ -12,7 +12,6 @@ import Testing
 
 /// Tests for the `ForegroundStyle` modifier.
 @Suite("ForegroundStyle Tests")
-@MainActor
 class ForegroundStyleTests: IgniteTestSuite {
     static let testColorNames = ["white", "black", "red", "green", "blue"]
     static let testColors: [Color] = [.white, .black, .red, .green, .blue]
@@ -25,7 +24,7 @@ class ForegroundStyleTests: IgniteTestSuite {
         "rgb(0 0 255 / 100%)"
     ]
 
-    @Test("Common Foreground Styles", arguments: ForegroundStyle.allCases)
+    @Test("Common Foreground Styles", .publishingContext(), arguments: ForegroundStyle.allCases)
     func commonForegroundStyle(style: ForegroundStyle) async throws {
         let element = Text("Hello").foregroundStyle(style)
 
@@ -34,7 +33,7 @@ class ForegroundStyleTests: IgniteTestSuite {
         #expect(output == "<p class=\"\(style.rawValue)\">Hello</p>")
     }
 
-    @Test("Color Foreground Styles", arguments: await zip(Self.testColors, Self.testRGBs))
+    @Test("Color Foreground Styles", .publishingContext(), arguments: await zip(Self.testColors, Self.testRGBs))
     func colorForegroundStyle(color: Color, value: String) async throws {
         let element = Text("Hello").foregroundStyle(color)
 
@@ -43,7 +42,7 @@ class ForegroundStyleTests: IgniteTestSuite {
         #expect(output == "<p style=\"color: \(value)\">Hello</p>")
     }
 
-    @Test("String Foreground Styles", arguments: await Self.testColorNames)
+    @Test("String Foreground Styles", .publishingContext(), arguments: await Self.testColorNames)
     func stringForegroundStyle(string: String) async throws {
         let element = Text("Hello").foregroundStyle(string)
 

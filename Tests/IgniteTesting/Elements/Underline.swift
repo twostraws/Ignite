@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Underline` element.
 @Suite("Underline Tests")
-@MainActor
 class UnderlineTests: IgniteTestSuite {
-    @Test("Single Element Test", arguments: ["This is a test", "Another test", ""])
+    @Test("Single Element Test", .publishingContext(), arguments: ["This is a test", "Another test", ""])
     func singleElement(underlineText: String) async throws {
         let element = Underline(underlineText)
         let output = element.markupString()
@@ -22,7 +21,7 @@ class UnderlineTests: IgniteTestSuite {
         #expect(output == "<u>\(underlineText)</u>")
     }
 
-    @Test("Builder", arguments: ["This is a test", "Another test", ""])
+    @Test("Builder", .publishingContext(), arguments: ["This is a test", "Another test", ""])
     func builder(underlineText: String) async throws {
         let element = Underline { underlineText }
         let output = element.markupString()

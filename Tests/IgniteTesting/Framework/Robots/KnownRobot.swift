@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for `KnownRobot`.
 @Suite("KnownRobot Tests")
-@MainActor
 struct KnownRobotTests {
-    @Test("All KnownRobot cases", arguments: zip(
+    @Test("All KnownRobot cases", .publishingContext(), arguments: zip(
         KnownRobot.allCases, [
             "Applebot",
             "baiduspider",

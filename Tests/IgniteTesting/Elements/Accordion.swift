@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Accordion` element.
 @Suite("Accordion Tests")
-@MainActor
 class AccordionTests: IgniteTestSuite {
-    @Test("Renders a div tag of class accordion")
+    @Test("Renders a div tag of class accordion", .publishingContext())
     func outputs_div_with_class_accordion() async throws {
         let sut = Accordion {}
         let attributes = try #require(sut.markupString().htmlTagWithCloseTag("div")?.attributes)
@@ -22,7 +21,7 @@ class AccordionTests: IgniteTestSuite {
         #expect(classAttribute == "accordion")
     }
 
-    @Test("Provides a Unique id")
+    @Test("Provides a Unique id", .publishingContext())
     func outputs_div_with_unique_id() async throws {
         let sut = Accordion {}
 
@@ -35,7 +34,7 @@ class AccordionTests: IgniteTestSuite {
         #expect(idattribute.firstMatch(of: expected) != nil)
     }
 
-    @Test("Outputs Items Provided", arguments: [Accordion.OpenMode.all, .individual])
+    @Test("Outputs Items Provided", .publishingContext(), arguments: [Accordion.OpenMode.all, .individual])
     func outputs_result_of_calling_render_on_each_item_provided(openMode: Accordion.OpenMode) throws {
         func items() -> [Item] {[
             Item("title 1", content: {}),
@@ -69,7 +68,7 @@ class AccordionTests: IgniteTestSuite {
         }
     }
 
-    @Test("Items Receive Accordion ID of parent Accordion", arguments: [Accordion.OpenMode.all, .individual])
+    @Test("Items Receive Accordion ID of parent Accordion", .publishingContext(), arguments: [Accordion.OpenMode.all, .individual])
     func provides_accordion_id_to_each_item_output(openMode: Accordion.OpenMode) throws {
         func items() -> [Item] {[
             Item("title 1", content: {}),

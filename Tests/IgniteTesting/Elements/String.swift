@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for Strings (aka Plain Text)
 @Suite("String Tests")
-@MainActor
 class StringTests: IgniteTestSuite {
-    @Test("Single Element", arguments: ["This is a test", ""])
+    @Test("Single Element", .publishingContext(), arguments: ["This is a test", ""])
     func singleElement(element: String) async throws {
         let element = element
         let output = element.markupString()

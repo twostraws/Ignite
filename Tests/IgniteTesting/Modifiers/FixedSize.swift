@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `FixedSize` modifier.
 @Suite("FixedSize Tests")
-@MainActor
 class FixedSizeTests: IgniteTestSuite {
-    @Test("FixedSize Modifier")
+    @Test("FixedSize Modifier", .publishingContext())
     func fixedSizeModifier() async throws {
         let element = Text("Hello").fixedSize()
         let output = element.markupString()

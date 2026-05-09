@@ -100,8 +100,8 @@ extension PublishingContext {
             print("Generating CSS for custom styles. This may take a moment...")
         }
 
-        let mediaQueryCSS = CSSManager.shared.generateAllRules(themes: site.allThemes)
-        let stylesCSS = StyleManager.shared.generateAllCSS(themes: site.allThemes)
+        let mediaQueryCSS = cssManager.generateAllRules(themes: site.allThemes)
+        let stylesCSS = styleManager.generateAllCSS(themes: site.allThemes)
         let combinedCSS = [mediaQueryCSS, stylesCSS]
             .filter { !$0.isEmpty }
             .joined(separator: "\n\n")
@@ -119,6 +119,6 @@ extension PublishingContext {
     /// Generates animations for the site.
     func generateAnimations() {
         let animationsPath = buildDirectory.appending(path: "css/ignite-core.min.css")
-        AnimationManager.shared.write(to: animationsPath)
+        animationManager.write(to: animationsPath)
     }
 }

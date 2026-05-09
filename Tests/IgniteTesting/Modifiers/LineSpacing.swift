@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `LineSpacing` modifier.
 @Suite("LineSpacing Tests")
-@MainActor
 struct LineSpacingTests {
-    @Test("Custom Line Spacing", arguments: zip([2.5, 0.0, -2.0], ["2.5", "0", "-2"]))
+    @Test("Custom Line Spacing", .publishingContext(), arguments: zip([2.5, 0.0, -2.0], ["2.5", "0", "-2"]))
     func lineSpacing(value: Double, expected: String) async throws {
         let element = Text("Hello, world!").lineSpacing(value)
         let output = element.markupString()
@@ -22,7 +21,7 @@ struct LineSpacingTests {
         #expect(output == "<p style=\"line-height: \(expected)\">Hello, world!</p>")
     }
 
-    @Test("Preset Line Spacing", arguments: LineSpacing.allCases)
+    @Test("Preset Line Spacing", .publishingContext(), arguments: LineSpacing.allCases)
     func lineSpacing(spacing: LineSpacing) async throws {
         let element = Text("Hello, world!").lineSpacing(spacing)
         let output = element.markupString()

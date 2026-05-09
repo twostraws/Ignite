@@ -12,7 +12,6 @@ import Testing
 
 /// Tests for the `AnchorPoint` type.
 @Suite("AnchorPoint Tests")
-@MainActor
 struct AnchorPointTests {
     static let anchorPoints: [AnchorPoint] = [
         .center, .topLeft, .topRight,
@@ -26,7 +25,7 @@ struct AnchorPointTests {
         "bottom", "left", "right"
     ]
 
-    @Test("Anchor point", arguments: await zip(anchorPoints, anchorPointCSSValues))
+    @Test("Anchor point", .publishingContext(), arguments: await zip(anchorPoints, anchorPointCSSValues))
     func anchorPoint(_ anchorPoint: AnchorPoint, css: String) async throws {
         #expect(anchorPoint.value == css)
     }
@@ -34,7 +33,7 @@ struct AnchorPointTests {
     static let xCoordinates = ["1", "2", "3", "4", "5"]
     static let yCoordinates = ["6", "7", "8", "9", "10"]
 
-    @Test("Custom anchor point", arguments: zip(await Self.xCoordinates, await Self.yCoordinates))
+    @Test("Custom anchor point", .publishingContext(), arguments: zip(await Self.xCoordinates, await Self.yCoordinates))
     func customAnchorPoint(xCoord: String, yCoord: String) async throws {
         let element = AnchorPoint.custom(x: xCoord, y: yCoord)
         #expect(element.value == "\(xCoord) \(yCoord)")

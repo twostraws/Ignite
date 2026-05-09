@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `ListItem` element.
 @Suite("ListItem Tests")
-@MainActor
 class ListItemTests: IgniteTestSuite {
-    @Test("Standalone ListItem")
+    @Test("Standalone ListItem", .publishingContext())
     func standAlone() async throws {
         let element = ListItem {
             "Standalone List Item"
@@ -24,7 +23,7 @@ class ListItemTests: IgniteTestSuite {
         #expect(output == "<li>Standalone List Item</li>")
     }
 
-    @Test("ListItem with role adds role class")
+    @Test("ListItem with role adds role class", .publishingContext())
     func roleModifier() async throws {
         let element = ListItem {
             "Important item"
@@ -33,7 +32,7 @@ class ListItemTests: IgniteTestSuite {
         #expect(output.contains("list-group-item-danger"))
     }
 
-    @Test("ListItem with HTML content renders nested elements")
+    @Test("ListItem with HTML content renders nested elements", .publishingContext())
     func htmlContent() async throws {
         let element = ListItem {
             Text("Bold item")

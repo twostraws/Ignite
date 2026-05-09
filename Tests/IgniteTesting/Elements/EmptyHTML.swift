@@ -12,23 +12,22 @@ import Testing
 
 /// Tests for the `EmptyHTML` element.
 @Suite("EmptyHTML Tests")
-@MainActor
 class EmptyHTMLTests: IgniteTestSuite {
-    @Test("Renders empty string")
+    @Test("Renders empty string", .publishingContext())
     func rendersEmptyString() async throws {
         let element = EmptyHTML()
         let output = element.markupString()
         #expect(output == "")
     }
 
-    @Test("Markup is empty")
+    @Test("Markup is empty", .publishingContext())
     func markupIsEmpty() async throws {
         let element = EmptyHTML()
         let markup = element.markup()
         #expect(markup.isEmpty)
     }
 
-    @Test("Is primitive")
+    @Test("Is primitive", .publishingContext())
     func isPrimitive() async throws {
         let element = EmptyHTML()
         #expect(element.isPrimitive == true)

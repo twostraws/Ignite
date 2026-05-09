@@ -10,7 +10,7 @@
 /// `HTMLCollection` is used internally to handle opaque HTML content returned from result builders,
 /// particularly in loops and other control flow situations. It converts potentially nested
 /// structures into a flat, iterable collections of `HTML` elements.
-struct HTMLCollection: HTML, @preconcurrency Sequence {
+struct HTMLCollection: HTML, Sequence {
     /// The content and behavior of this HTML sequence
     var body: some Ignite.HTML { self }
 

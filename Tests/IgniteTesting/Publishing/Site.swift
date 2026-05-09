@@ -12,12 +12,7 @@ import Testing
 
 /// Tests for the `Site` type.
 ///
-/// > Warning: Calling `PublishingContext.initialize` as a part of the suite set-up
-/// can lead to false positive results because these tests are calling `TestSite/publish`
-/// that includes the `PublishingContext.initialize` call.
-/// **Workaround:** Run this suite in isolation.
 @Suite("Site Tests", .serialized)
-@MainActor
 struct SiteTests {
     private let package = TestPackage()
 
@@ -25,7 +20,7 @@ struct SiteTests {
         try? package.clearBuildFolderAndTestContent()
     }
 
-    @Test("Site published when Markdown content contains invalid lastModified date")
+    @Test("Site published when Markdown content contains invalid lastModified date", .publishingContext())
     func publishingWithInvalidLastModifiedDate() async throws {
         let markdownFileURL = package.contentDirectoryURL.appending(path: "story-with-invalid-lastModified.md")
         let markdownContent = """
@@ -47,7 +42,7 @@ struct SiteTests {
         try package.clearBuildFolderAndTestContent()
     }
 
-    @Test("Retrieving typed content")
+    @Test("Retrieving typed content", .publishingContext())
     func retrievingTypedContent() async throws {
         var package = TestPackage()
         package.contentDirectoryURL = package.contentDirectoryURL.appending(path: "Story", directoryHint: .isDirectory)
@@ -65,10 +60,15 @@ struct SiteTests {
 
         try markdownContent.write(to: markdownFileURL, atomically: false, encoding: .utf8)
 
-        var site = TestSitePublisher()
-        try await site.publish()
-
-        let context = PublishingContext.shared
+        let site = TestSitePublisher().site
+        let context = try PublishingContext.withInitialized(
+            for: site,
+            sourceDirectory: package.packageBaseURL,
+            buildDirectory: package.buildDirectoryURL
+        ) { context in
+            try context.parseContent()
+            return context
+        }
         let articleLoader = ArticleLoader(content: context.allContent)
 
         #expect(articleLoader.typed("Story").isEmpty == false)
@@ -76,7 +76,7 @@ struct SiteTests {
         try package.clearBuildFolderAndTestContent()
     }
 
-    @Test("Site published given Markdown content with valid metadata")
+    @Test("Site published given Markdown content with valid metadata", .publishingContext())
     func publishingWithMarkdownContent() async throws {
         let markdownFileURL = package.contentDirectoryURL.appending(path: "story-with-valid-metadata.md")
         let markdownContent = """
@@ -98,7 +98,7 @@ struct SiteTests {
         try package.clearBuildFolderAndTestContent()
     }
 
-    @Test("Sites published without an ErrorPage")
+    @Test("Sites published without an ErrorPage", .publishingContext())
     func publishingWithoutErrorPage() async throws {
         var site = TestSitePublisher()
 
@@ -109,7 +109,7 @@ struct SiteTests {
         try package.clearBuildFolderAndTestContent()
     }
 
-    @Test("Site published with a custom ErrorPage")
+    @Test("Site published with a custom ErrorPage", .publishingContext())
     func publishingWithCustomErrorPage() async throws {
         var site = TestSitePublisher(site: TestSiteWithErrorPage())
 
@@ -120,7 +120,7 @@ struct SiteTests {
         try package.clearBuildFolderAndTestContent()
     }
 
-    @Test("Site published with a custom ErrorPage and custom content")
+    @Test("Site published with a custom ErrorPage and custom content", .publishingContext())
     func publishingWithCustomErrorPageAndContent() async throws {
         let expectedError = PageNotFoundError()
 
@@ -173,7 +173,7 @@ private struct TestPackage {
     }
 
     func clearBuildFolderAndTestContent() throws {
-        try FileManager.default.removeItem(at: buildDirectoryURL)
+        try? FileManager.default.removeItem(at: buildDirectoryURL)
         let enumerator = FileManager.default.enumerator(at: contentDirectoryURL, includingPropertiesForKeys: nil)
         while let fileURL = enumerator?.nextObject() as? URL {
             try FileManager.default.removeItem(at: fileURL)

@@ -22,14 +22,14 @@ private func hintData(markdown: String) -> [Attribute] {
     return hintData(html: cleanedHTML)
 }
 
-@MainActor private func hintModifier(
+private func hintModifier(
     data: [Attribute],
     content: any HTML
 ) -> any HTML {
     data.reduce(content) { $0.data($1.name, $1.value!) }
 }
 
-@MainActor private func hintModifier(
+private func hintModifier(
     data: [Attribute],
     content: any InlineElement
 ) -> any InlineElement {

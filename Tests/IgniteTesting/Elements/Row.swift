@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Row` element.
 @Suite("Row Tests")
-@MainActor
 struct RowTests {
-    @Test("Row with Multiple Columns")
+    @Test("Row with Multiple Columns", .publishingContext())
     func rowWithMultipleColumns() async throws {
         let row = Row {
             Text("Column 1")
@@ -25,7 +24,7 @@ struct RowTests {
         #expect(output == "<tr><td><p>Column 1</p></td><td><p>Column 2</p></td></tr>")
     }
 
-    @Test("Row with Column Elements")
+    @Test("Row with Column Elements", .publishingContext())
     func rowWithColumnElements() async throws {
         let row = Row {
             Column { Text("Column 1") }
@@ -36,7 +35,7 @@ struct RowTests {
         #expect(output == "<tr><td colspan=\"1\"><p>Column 1</p></td><td colspan=\"1\"><p>Column 2</p></td></tr>")
     }
 
-    @Test("Row with Mixed Content")
+    @Test("Row with Mixed Content", .publishingContext())
     func rowWithMixedContent() async throws {
         let row = Row {
             Text("Column 1")

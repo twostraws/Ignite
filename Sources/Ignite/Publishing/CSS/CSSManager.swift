@@ -6,10 +6,11 @@
 //
 
 /// A manager that generates and maintains CSS classes for media query-based styling rules.
-@MainActor
 final class CSSManager {
-    /// The shared instance used for managing CSS rules across the application.
-    static let shared = CSSManager()
+    /// The manager for the current publish operation.
+    static var shared: CSSManager {
+        PublishingContext.shared.cssManager
+    }
 
     /// Queue of registrations waiting to be processed
     private struct PendingRegistration {
@@ -54,52 +55,83 @@ final class CSSManager {
     ///   - values: ResponsiveValues containing boolean values for each breakpoint
     /// - Returns: The class name that will be used for these styles
     func registerStyles(_ values: ResponsiveValues<Bool>) -> String {
+        let className = Self.className(forStyles: values)
+        registerStyles(values, className: className)
+        return className
+    }
+
+    /// Returns the class name used for a set of media-query styles.
+    static func className(forStyles values: ResponsiveValues<Bool>) -> String {
+        "style-" + values.values.description.truncatedHash
+    }
+
+    /// Registers a set of media queries and queues them for CSS generation.
+    private func registerStyles(_ values: ResponsiveValues<Bool>, className: String) {
         let values = values.values
-        let className = "style-" + values.description.truncatedHash
         let baseValue = values[.xSmall]
         let breakpointValues = values.filter { $0.key != .xSmall }
 
         if let baseValue {
-            pendingRegistrations.append(.init(
+            appendPendingRegistration(.init(
                 queries: [],
                 styles: [.init(.display, value: baseValue ? "none" : "unset")],
                 className: className))
         }
 
         for (breakpoint, value) in breakpointValues {
-            pendingRegistrations.append(.init(
+            appendPendingRegistration(.init(
                 queries: [.breakpoint(.init(breakpoint)!)],
                 styles: [.init(.display, value: value ? "none" : "unset")],
                 className: className))
         }
-
-        return className
     }
 
     /// Registers CSS classes for responsive font sizes and returns the generated class name.
     /// - Parameter responsiveSize: The responsive font size.
     /// - Returns: A unique class name that applies the font's responsive size rules.
     func registerFont(_ responsiveSize: ResponsiveValues<LengthUnit>) -> String {
+        let className = Self.className(forFont: responsiveSize)
+        registerFont(responsiveSize, className: className)
+        return className
+    }
+
+    /// Returns the class name used for a responsive font size.
+    static func className(forFont responsiveSize: ResponsiveValues<LengthUnit>) -> String {
+        "font-" + responsiveSize.values.description.truncatedHash
+    }
+
+    /// Registers CSS classes for responsive font sizes.
+    private func registerFont(_ responsiveSize: ResponsiveValues<LengthUnit>, className: String) {
         let values = responsiveSize.values
-        let className = "font-" + values.description.truncatedHash
         let baseSize = values[.xSmall]
         let breakpointSizes = values.filter { $0.key != .xSmall }
 
         if let baseSize {
-            pendingRegistrations.append(.init(
+            appendPendingRegistration(.init(
                 queries: [],
                 styles: [.init(.fontSize, value: baseSize.stringValue)],
                 className: className))
         }
 
         for (breakpoint, size) in breakpointSizes {
-            pendingRegistrations.append(.init(
+            appendPendingRegistration(.init(
                 queries: [.breakpoint(.init(breakpoint)!)],
                 styles: [.init(.fontSize, value: size.stringValue)],
                 className: className))
         }
+    }
 
-        return className
+    /// Queues a pending registration if it has not already been queued.
+    private func appendPendingRegistration(_ registration: PendingRegistration) {
+        let isDuplicate = pendingRegistrations.contains { existing in
+            existing.className == registration.className &&
+            existing.styles == registration.styles &&
+            existing.queries.map(\.condition) == registration.queries.map(\.condition)
+        }
+
+        if isDuplicate == false {
+            pendingRegistrations.append(registration)
+        }
     }
 
     /// Generates a CSS rule for a set of media queries and properties.

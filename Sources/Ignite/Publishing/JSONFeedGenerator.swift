@@ -40,7 +40,6 @@ private struct JSONFeedItem: Encodable {
 }
 
 /// Generates a JSON Feed v1.1 document from site content.
-@MainActor
 struct JSONFeedGenerator {
     var feedConfig: FeedConfiguration
     var site: any Site

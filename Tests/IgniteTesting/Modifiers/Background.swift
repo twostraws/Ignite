@@ -12,7 +12,6 @@ import Testing
 
 /// Tests for the `Background` modifier.
 @Suite("Background Tests")
-@MainActor
 class BackgroundTests: IgniteTestSuite {
     static let testMaterial: [Material] = [
         .ultraThinMaterial,
@@ -28,7 +27,7 @@ class BackgroundTests: IgniteTestSuite {
         Gradient(colors: [.white, .black], type: .conic(angle: 10))
     ]
 
-    @Test("Background modifier with Color on Text")
+    @Test("Background modifier with Color on Text", .publishingContext())
     func textWithColorBackground() async throws {
         let element = Text("Hello, world!").background(.teal)
         let output = element.markupString()
@@ -36,7 +35,7 @@ class BackgroundTests: IgniteTestSuite {
         #expect(output == "<p style=\"background-color: rgb(0 128 128 / 100%)\">Hello, world!</p>")
     }
 
-    @Test("Background modifier with colorstring on Text")
+    @Test("Background modifier with colorstring on Text", .publishingContext())
     func textWithColorStringBackground() async throws {
         let element = Text("Hello, world!").background("Tomato")
         let output = element.markupString()
@@ -44,7 +43,7 @@ class BackgroundTests: IgniteTestSuite {
         #expect(output == "<p style=\"background-color: Tomato\">Hello, world!</p>")
     }
 
-    @Test("Background modifier with Material on Text", arguments: await Self.testMaterial)
+    @Test("Background modifier with Material on Text", .publishingContext(), arguments: await Self.testMaterial)
     func textWithMaterialBackground(material: Material) async throws {
         let element = Text("Hello, world!").background(material)
         let output = element.markupString()
@@ -52,7 +51,7 @@ class BackgroundTests: IgniteTestSuite {
         #expect(output == "<p class=\"\(material.className)\">Hello, world!</p>")
     }
 
-    @Test("Gradient Background Test", arguments: await Self.testGradient)
+    @Test("Gradient Background Test", .publishingContext(), arguments: await Self.testGradient)
     func textWithGradientBackground(gradient: Gradient) async throws {
         let element = Text("Hello, world!").background(gradient)
         let output = element.markupString()

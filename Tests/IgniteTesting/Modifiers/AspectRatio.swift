@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `AspectRatio` modifier.
 @Suite("AspectRatio Tests")
-@MainActor
 class AspectRatioTests: IgniteTestSuite {
-    @Test("Verify AspectRatio Modifiers", arguments: AspectRatio.allCases)
+    @Test("Verify AspectRatio Modifiers", .publishingContext(), arguments: AspectRatio.allCases)
     func verifyAspectRatioModifiers(ratio: AspectRatio) async throws {
         let element = Text("Hello").aspectRatio(ratio)
         let output = element.markupString()
@@ -22,7 +21,7 @@ class AspectRatioTests: IgniteTestSuite {
         #expect(output == "<p class=\"ratio ratio-\(ratio.rawValue)\">Hello</p>")
     }
 
-    @Test("Verify Content Modes", arguments: AspectRatio.allCases, ContentMode.allCases)
+    @Test("Verify Content Modes", .publishingContext(), arguments: AspectRatio.allCases, ContentMode.allCases)
     func verifyContentModes(ratio: AspectRatio, mode: ContentMode) async throws {
         let element = Image("/images/example.jpg").aspectRatio(ratio, contentMode: mode)
         let output = element.markupString()

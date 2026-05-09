@@ -11,17 +11,16 @@ import Testing
 
 /// Tests for the `Attribute` type and its convenience extensions.
 @Suite("Attribute Tests")
-@MainActor
 struct AttributeTests {
     // MARK: - Description
 
-    @Test("Name-value attribute description includes quotes")
+    @Test("Name-value attribute description includes quotes", .publishingContext())
     func nameValueDescription() async throws {
         let attr = Attribute(name: "target", value: "_blank")
         #expect(attr.description == "target=\"_blank\"")
     }
 
-    @Test("Boolean attribute description is just the name")
+    @Test("Boolean attribute description is just the name", .publishingContext())
     func booleanDescription() async throws {
         let attr = Attribute("disabled")
         #expect(attr.description == "disabled")
@@ -30,7 +29,7 @@ struct AttributeTests {
 
     // MARK: - Comparable
 
-    @Test("Attributes are ordered by description")
+    @Test("Attributes are ordered by description", .publishingContext())
     func comparableByDescription() async throws {
         let a = Attribute(name: "alpha", value: "1")
         let b = Attribute(name: "beta", value: "2")
@@ -39,14 +38,14 @@ struct AttributeTests {
 
     // MARK: - Equatable
 
-    @Test("Same name and value are equal")
+    @Test("Same name and value are equal", .publishingContext())
     func sameNameValueAreEqual() async throws {
         let a = Attribute(name: "rel", value: "stylesheet")
         let b = Attribute(name: "rel", value: "stylesheet")
         #expect(a == b)
     }
 
-    @Test("Different values are not equal")
+    @Test("Different values are not equal", .publishingContext())
     func differentValuesAreNotEqual() async throws {
         let a = Attribute(name: "rel", value: "stylesheet")
         let b = Attribute(name: "rel", value: "nofollow")
@@ -55,7 +54,7 @@ struct AttributeTests {
 
     // MARK: - Convenience boolean attributes
 
-    @Test("Convenience boolean attributes have correct names", arguments: [
+    @Test("Convenience boolean attributes have correct names", .publishingContext(), arguments: [
         (Attribute.disabled, "disabled"),
         (.required, "required"),
         (.readOnly, "readonly"),
@@ -70,12 +69,12 @@ struct AttributeTests {
 
     // MARK: - HiddenState
 
-    @Test("HiddenState untilFound raw value uses kebab-case")
+    @Test("HiddenState untilFound raw value uses kebab-case", .publishingContext())
     func hiddenStateUntilFoundRawValue() async throws {
         #expect(Attribute.HiddenState.untilFound.rawValue == "until-found")
     }
 
-    @Test("Hidden factory method produces correct attribute")
+    @Test("Hidden factory method produces correct attribute", .publishingContext())
     func hiddenFactoryMethod() async throws {
         let attr = Attribute.hidden(.true)
         #expect(attr.name == "hidden")

@@ -26,6 +26,24 @@ public typealias Data = Foundation.Data
 // A typealias that allows us to use `Date` without importing Foundation
 public typealias Date = Foundation.Date
 
+/// A publishing-time registration required by rendered attributes.
+enum PublishingRegistration: Hashable, Equatable, Sendable {
+    case fontFamily(Font)
+    case responsiveFont(ResponsiveValues<LengthUnit>)
+    case responsiveVisibility(ResponsiveValues<Bool>)
+
+    func apply(to context: PublishingContext) {
+        switch self {
+        case .fontFamily(let font):
+            context.cssManager.registerFontFamily(font)
+        case .responsiveFont(let values):
+            _ = context.cssManager.registerFont(values)
+        case .responsiveVisibility(let values):
+            _ = context.cssManager.registerStyles(values)
+        }
+    }
+}
+
 /// A handful of attributes that all HTML types must support, either for
 /// rendering or for publishing purposes.
 public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
@@ -51,12 +69,16 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     /// Custom attributes not covered by the above, e.g. loading="lazy"
     var customAttributes = OrderedSet<Attribute>()
 
+    /// Publishing registrations required by these attributes.
+    var publishingRegistrations = OrderedSet<PublishingRegistration>()
+
     /// Whether this set of attributes is empty.
     var isEmpty: Bool { self == CoreAttributes() }
 
     /// All core attributes collapsed down to a single string for easy application.
     public var description: String {
-        "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
+        registerPublishingRequirements()
+        return "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
     }
 
     /// The ID of this element, if set.
@@ -219,6 +241,11 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         self.customAttributes.formUnion(customAttributes)
     }
 
+    /// Appends a publishing-time registration.
+    mutating func append(publishingRegistration: PublishingRegistration) {
+        publishingRegistrations.append(publishingRegistration)
+    }
+
     /// Appends a collection of inline CSS styles.
     /// - Parameter newStyles: A collection of `AttributeValue` objects representing
     ///   CSS style properties and their values to be appended.
@@ -289,6 +316,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         result.data.formUnion(other.data)
         result.events.formUnion(other.events)
         result.customAttributes.formUnion(other.customAttributes)
+        result.publishingRegistrations.formUnion(other.publishingRegistrations)
 
         return result
     }
@@ -306,5 +334,15 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         data.formUnion(other.data)
         events.formUnion(other.events)
         customAttributes.formUnion(other.customAttributes)
+        publishingRegistrations.formUnion(other.publishingRegistrations)
+    }
+
+    /// Applies publishing-time registrations when a publishing context is active.
+    private func registerPublishingRequirements() {
+        guard let context = PublishingContext.current else { return }
+
+        for registration in publishingRegistrations {
+            registration.apply(to: context)
+        }
     }
 }

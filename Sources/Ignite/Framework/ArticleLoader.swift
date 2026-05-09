@@ -5,7 +5,6 @@
 // See LICENSE for license information.
 //
 
-@MainActor
 public struct ArticleLoader {
     public var all: [Article]
 

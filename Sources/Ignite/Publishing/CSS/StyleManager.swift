@@ -7,13 +7,13 @@
 
 /// A manager responsible for generating and maintaining CSS classes from Style implementations.
 /// This class handles style caching, CSS generation, and integration with the publishing process.
-@MainActor
 final class StyleManager {
-    /// The shared instance used for managing styles across the application
-    static let shared = StyleManager()
+    /// The manager for the current publish operation.
+    static var shared: StyleManager {
+        PublishingContext.shared.styleManager
+    }
 
-    // Private initializer to enforce singleton pattern
-    private init() {}
+    init() {}
 
     /// Dictionary of registered styles keyed by their type names
     private var registeredStyles = [any Style]()
@@ -41,6 +41,11 @@ final class StyleManager {
     /// - Parameter style: The style to register
     func registerStyle(_ style: any Style) {
         registeredStyles.append(style)
+    }
+
+    /// Whether a style class has been registered with this manager.
+    func containsRegisteredStyle(named className: String) -> Bool {
+        registeredStyles.contains { $0.className == className }
     }
 
     /// Generates CSS for all registered styles using the provided themes

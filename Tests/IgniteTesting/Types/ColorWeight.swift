@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `ColorWeight` type.
 @Suite("ColorWeight Tests")
-@MainActor
 struct ColorWeightTests {
-    @Test("Raw values are in hundreds from 100 to 900")
+    @Test("Raw values are in hundreds from 100 to 900", .publishingContext())
     func rawValues() async throws {
         #expect(ColorWeight.lightest.rawValue == 100)
         #expect(ColorWeight.lighter.rawValue == 200)
@@ -27,7 +26,7 @@ struct ColorWeightTests {
         #expect(ColorWeight.darkest.rawValue == 900)
     }
 
-    @Test("Mix percentages are symmetric around regular")
+    @Test("Mix percentages are symmetric around regular", .publishingContext())
     func mixPercentages() async throws {
         #expect(ColorWeight.lightest.mixPercentage == 80)
         #expect(ColorWeight.lighter.mixPercentage == 60)
@@ -40,7 +39,7 @@ struct ColorWeightTests {
         #expect(ColorWeight.darkest.mixPercentage == 80)
     }
 
-    @Test("Lighter weights mix with white")
+    @Test("Lighter weights mix with white", .publishingContext())
     func lighterWeightsMixWithWhite() async throws {
         #expect(ColorWeight.lightest.mixWithWhite == true)
         #expect(ColorWeight.lighter.mixWithWhite == true)
@@ -48,7 +47,7 @@ struct ColorWeightTests {
         #expect(ColorWeight.semiLight.mixWithWhite == true)
     }
 
-    @Test("Regular and darker weights do not mix with white")
+    @Test("Regular and darker weights do not mix with white", .publishingContext())
     func darkerWeightsDoNotMixWithWhite() async throws {
         #expect(ColorWeight.regular.mixWithWhite == false)
         #expect(ColorWeight.semiDark.mixWithWhite == false)

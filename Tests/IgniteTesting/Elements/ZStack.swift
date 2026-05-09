@@ -12,7 +12,6 @@ import Testing
 
 /// Tests for the `ZStack` element.
 @Suite("ZStack Tests")
-@MainActor
 class ZStackTests: IgniteTestSuite {
     static let alignments: [Alignment] = [
         .top, .topLeading, .topTrailing,
@@ -20,7 +19,7 @@ class ZStackTests: IgniteTestSuite {
         .bottom, .bottomLeading, .bottomTrailing
     ]
 
-    @Test("ZStack with elements")
+    @Test("ZStack with elements", .publishingContext())
     func basicZStack() async throws {
         let element = ZStack {
             ControlLabel("Top Label")
@@ -38,7 +37,7 @@ class ZStackTests: IgniteTestSuite {
         """)
     }
 
-    @Test("ZStack assigns incrementing z-index to children")
+    @Test("ZStack assigns incrementing z-index to children", .publishingContext())
     func zIndexIncrement() async throws {
         let element = ZStack {
             ControlLabel("A")
@@ -51,7 +50,7 @@ class ZStackTests: IgniteTestSuite {
         #expect(output.contains("z-index: 2"))
     }
 
-    @Test("ZStack topLeading alignment uses flex-start for both axes")
+    @Test("ZStack topLeading alignment uses flex-start for both axes", .publishingContext())
     func topLeadingAlignment() async throws {
         let element = ZStack(alignment: .topLeading) {
             ControlLabel("Item")
@@ -61,7 +60,7 @@ class ZStackTests: IgniteTestSuite {
         #expect(output.contains("justify-self: flex-start"))
     }
 
-    @Test("ZStack bottomTrailing alignment uses flex-end for both axes")
+    @Test("ZStack bottomTrailing alignment uses flex-end for both axes", .publishingContext())
     func bottomTrailingAlignment() async throws {
         let element = ZStack(alignment: .bottomTrailing) {
             ControlLabel("Item")
@@ -71,7 +70,7 @@ class ZStackTests: IgniteTestSuite {
         #expect(output.contains("justify-self: flex-end"))
     }
 
-    @Test("ZStack top alignment uses flex-start for vertical and center for horizontal")
+    @Test("ZStack top alignment uses flex-start for vertical and center for horizontal", .publishingContext())
     func topAlignment() async throws {
         let element = ZStack(alignment: .top) {
             ControlLabel("Item")
@@ -81,7 +80,7 @@ class ZStackTests: IgniteTestSuite {
         #expect(output.contains("justify-self: center"))
     }
 
-    @Test("ZStack bottom alignment uses flex-end for vertical and center for horizontal")
+    @Test("ZStack bottom alignment uses flex-end for vertical and center for horizontal", .publishingContext())
     func bottomAlignment() async throws {
         let element = ZStack(alignment: .bottom) {
             ControlLabel("Item")
@@ -91,7 +90,7 @@ class ZStackTests: IgniteTestSuite {
         #expect(output.contains("justify-self: center"))
     }
 
-    @Test("ZStack leading alignment uses center for vertical and flex-start for horizontal")
+    @Test("ZStack leading alignment uses center for vertical and flex-start for horizontal", .publishingContext())
     func leadingAlignment() async throws {
         let element = ZStack(alignment: .leading) {
             ControlLabel("Item")
@@ -101,7 +100,7 @@ class ZStackTests: IgniteTestSuite {
         #expect(output.contains("justify-self: flex-start"))
     }
 
-    @Test("ZStack trailing alignment uses center for vertical and flex-end for horizontal")
+    @Test("ZStack trailing alignment uses center for vertical and flex-end for horizontal", .publishingContext())
     func trailingAlignment() async throws {
         let element = ZStack(alignment: .trailing) {
             ControlLabel("Item")

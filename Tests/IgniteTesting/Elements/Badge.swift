@@ -13,7 +13,7 @@ import Testing
 /// Tests for the `Badge` element.
 @Suite("Badge Tests")
 class BadgeTests: IgniteTestSuite {
-    @Test("All roles for default badge variant rendered correctly", arguments: zip(Role.standardRoles, [
+    @Test("All roles for default badge variant rendered correctly", .publishingContext(), arguments: zip(Role.standardRoles, [
         "text-bg-primary",
         "text-bg-secondary",
         "text-bg-success",
@@ -32,7 +32,7 @@ class BadgeTests: IgniteTestSuite {
         #expect(output == "<p><span class=\"badge \(cssClass) rounded-pill\">Some text</span></p>")
     }
 
-    @Test("All roles for subtle badge variant rendered correctly", arguments: zip(Role.standardRoles, [
+    @Test("All roles for subtle badge variant rendered correctly", .publishingContext(), arguments: zip(Role.standardRoles, [
         "bg-primary-subtle text-primary-emphasis rounded-pill",
         "bg-secondary-subtle text-secondary-emphasis rounded-pill",
         "bg-success-subtle text-success-emphasis rounded-pill",
@@ -52,7 +52,7 @@ class BadgeTests: IgniteTestSuite {
         #expect(output == "<p><span class=\"badge \(cssClasses)\">Some text</span></p>")
     }
 
-    @Test("All roles for subtleBordered badge variant rendered correctly", arguments: zip(Role.standardRoles, [
+    @Test("All roles for subtleBordered badge variant rendered correctly", .publishingContext(), arguments: zip(Role.standardRoles, [
         "bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill",
         "bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill",
         "bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill",

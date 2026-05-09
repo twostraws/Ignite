@@ -12,7 +12,6 @@ import Testing
 
 /// Tests for the `JSONFeedGenerator` type.
 @Suite("JSONFeedGenerator Tests")
-@MainActor
 struct JSONFeedGeneratorTests {
 
     // MARK: - Helpers
@@ -47,7 +46,7 @@ struct JSONFeedGeneratorTests {
 
     // MARK: - Tests
 
-    @Test("Golden path: single article produces correct JSON Feed structure")
+    @Test("Golden path: single article produces correct JSON Feed structure", .publishingContext())
     func goldenPath() throws {
         let site = TestSite()
         let config = site.feedConfiguration!
@@ -74,7 +73,7 @@ struct JSONFeedGeneratorTests {
         #expect(item["id"] as? String == item["url"] as? String)
     }
 
-    @Test("Description-only mode: items have summary but no content_html")
+    @Test("Description-only mode: items have summary but no content_html", .publishingContext())
     func descriptionOnlyMode() throws {
         let site = TestSite()
         let config = FeedConfiguration(mode: .descriptionOnly, contentCount: 20)!
@@ -92,7 +91,7 @@ struct JSONFeedGeneratorTests {
         #expect(item["content_text"] as? String == "Example Description")
     }
 
-    @Test("Full-content mode: items include content_html")
+    @Test("Full-content mode: items include content_html", .publishingContext())
     func fullContentMode() throws {
         let site = TestSite()
         let config = FeedConfiguration(mode: .full, contentCount: 20)!
@@ -108,7 +107,7 @@ struct JSONFeedGeneratorTests {
         #expect(item["summary"] as? String == "Example Description")
     }
 
-    @Test("Output is valid JSON")
+    @Test("Output is valid JSON", .publishingContext())
     func jsonValidity() throws {
         let site = TestSite()
         let config = site.feedConfiguration!
@@ -122,7 +121,7 @@ struct JSONFeedGeneratorTests {
         #expect(parsed is [String: Any])
     }
 
-    @Test("Multiple articles: contentCount limits items")
+    @Test("Multiple articles: contentCount limits items", .publishingContext())
     func multipleArticlesContentCount() throws {
         let site = TestSite()
         let config = FeedConfiguration(mode: .descriptionOnly, contentCount: 2)!
@@ -141,7 +140,7 @@ struct JSONFeedGeneratorTests {
         #expect(items[1]["title"] as? String == "Article 2")
     }
 
-    @Test("Author handling: article author overrides site author")
+    @Test("Author handling: article author overrides site author", .publishingContext())
     func authorOverride() throws {
         let site = TestSite()
         let config = site.feedConfiguration!
@@ -157,7 +156,7 @@ struct JSONFeedGeneratorTests {
         #expect(itemAuthors[0]["name"] as? String == "Article Author")
     }
 
-    @Test("Author handling: omit authors when both site and article author are empty")
+    @Test("Author handling: omit authors when both site and article author are empty", .publishingContext())
     func authorOmittedWhenEmpty() throws {
         let site = TestSite() // site.author is ""
         let config = site.feedConfiguration!
@@ -176,7 +175,7 @@ struct JSONFeedGeneratorTests {
         #expect(item["authors"] == nil)
     }
 
-    @Test("Tags: present as array of strings in items")
+    @Test("Tags: present as array of strings in items", .publishingContext())
     func tagsPresent() throws {
         let site = TestSite()
         let config = site.feedConfiguration!
@@ -194,7 +193,7 @@ struct JSONFeedGeneratorTests {
         #expect(tags.contains("ignite"))
     }
 
-    @Test("Feed image: icon and favicon present when image configured")
+    @Test("Feed image: icon and favicon present when image configured", .publishingContext())
     func feedImageIcon() throws {
         let site = TestSite() // has feedConfiguration with image
         let config = site.feedConfiguration!
@@ -208,7 +207,7 @@ struct JSONFeedGeneratorTests {
         #expect(json["favicon"] as? String == "path/to/image.png")
     }
 
-    @Test("Language: matches site language")
+    @Test("Language: matches site language", .publishingContext())
     func languagePresent() throws {
         let site = TestSite()
         let config = site.feedConfiguration!

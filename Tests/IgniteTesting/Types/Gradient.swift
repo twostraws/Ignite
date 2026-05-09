@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Gradient` type.
 @Suite("Gradient Tests")
-@MainActor
 struct GradientTests {
-    @Test("linearGradient", arguments: zip(
+    @Test("linearGradient", .publishingContext(), arguments: zip(
         [UnitPoint.top, .bottomLeading, .leading],
         [UnitPoint.bottom, .topTrailing, .trailing]))
     func linearGradient(start: UnitPoint, end: UnitPoint) async throws {
@@ -27,7 +26,7 @@ struct GradientTests {
         """)
     }
 
-    @Test("radialGradient")
+    @Test("radialGradient", .publishingContext())
     func radialGradient() async throws {
         let element = Gradient.radialGradient(colors: .red, .blue)
         let output = element.description
@@ -37,7 +36,7 @@ struct GradientTests {
         """)
     }
 
-    @Test("conicGradient should default to 0deg")
+    @Test("conicGradient should default to 0deg", .publishingContext())
     func conicGradient() async throws {
         let element = Gradient.conicGradient(colors: .red, .blue)
         let output = element.description
@@ -47,7 +46,7 @@ struct GradientTests {
         """)
     }
 
-    @Test("conicGradient should use correct angles", arguments: [45, 90, 180])
+    @Test("conicGradient should use correct angles", .publishingContext(), arguments: [45, 90, 180])
     func conicGradient(angle: Int) async throws {
         let element = Gradient.conicGradient(colors: .red, .blue, angle: angle)
         let output = element.description

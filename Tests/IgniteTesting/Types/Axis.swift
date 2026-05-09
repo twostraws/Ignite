@@ -12,34 +12,33 @@ import Testing
 
 /// Tests for the `Axis` type.
 @Suite("Axis Tests")
-@MainActor
 struct AxisTests {
-    @Test("Individual axes have distinct raw values")
+    @Test("Individual axes have distinct raw values", .publishingContext())
     func individualAxesHaveDistinctRawValues() async throws {
         #expect(Axis.horizontal.rawValue == 1)
         #expect(Axis.vertical.rawValue == 2)
         #expect(Axis.horizontal.rawValue != Axis.vertical.rawValue)
     }
 
-    @Test("All contains both axes")
+    @Test("All contains both axes", .publishingContext())
     func allContainsBothAxes() async throws {
         #expect(Axis.all.contains(.horizontal))
         #expect(Axis.all.contains(.vertical))
     }
 
-    @Test("All equals union of horizontal and vertical")
+    @Test("All equals union of horizontal and vertical", .publishingContext())
     func allEqualsUnion() async throws {
         let combined: Axis = [.horizontal, .vertical]
         #expect(combined == Axis.all)
     }
 
-    @Test("Individual axes do not contain each other")
+    @Test("Individual axes do not contain each other", .publishingContext())
     func individualAxesDoNotContainEachOther() async throws {
         #expect(!Axis.horizontal.contains(.vertical))
         #expect(!Axis.vertical.contains(.horizontal))
     }
 
-    @Test("Empty axis set contains nothing")
+    @Test("Empty axis set contains nothing", .publishingContext())
     func emptyAxisSetContainsNothing() async throws {
         let empty = Axis()
         #expect(!empty.contains(.horizontal))

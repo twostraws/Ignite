@@ -12,10 +12,9 @@ import Testing
 
 /// Tests for publishing with explicit directories (app target usage).
 @Suite("App Target Publishing Tests")
-@MainActor
 struct AppTargetPublishingTests {
     /// Verifies that URL.makeDirectories creates directories from explicit URLs.
-    @Test("makeDirectories succeeds with valid source directory")
+    @Test("makeDirectories succeeds with valid source directory", .publishingContext())
     func makeDirectoriesWithValidSource() throws {
         let tempDir = FileManager.default.temporaryDirectory
             .appending(path: UUID().uuidString)
@@ -38,7 +37,7 @@ struct AppTargetPublishingTests {
     }
 
     /// Verifies that URL.makeDirectories throws missingSourceDirectory for non-existent path.
-    @Test("makeDirectories throws missingSourceDirectory for missing source directory")
+    @Test("makeDirectories throws missingSourceDirectory for missing source directory", .publishingContext())
     func makeDirectoriesThrowsForMissingSource() throws {
         let nonExistent = URL(filePath: "/nonexistent/path/\(UUID().uuidString)")
         let buildDir = FileManager.default.temporaryDirectory
@@ -54,7 +53,7 @@ struct AppTargetPublishingTests {
     }
 
     /// Verifies that URL.makeDirectories throws missingSourceDirectory when source is a file.
-    @Test("makeDirectories throws missingSourceDirectory when source is a file")
+    @Test("makeDirectories throws missingSourceDirectory when source is a file", .publishingContext())
     func makeDirectoriesThrowsForFileSource() throws {
         let tempDir = FileManager.default.temporaryDirectory
             .appending(path: UUID().uuidString)
@@ -83,7 +82,7 @@ struct AppTargetPublishingTests {
     }
 
     /// Verifies that PublishingContext can be initialized with explicit directories.
-    @Test("PublishingContext initializes with explicit directories")
+    @Test("PublishingContext initializes with explicit directories", .publishingContext())
     func contextInitializesWithExplicitDirectories() throws {
         let tempDir = FileManager.default.temporaryDirectory
             .appending(path: UUID().uuidString)
@@ -114,7 +113,7 @@ struct AppTargetPublishingTests {
     }
 
     /// Verifies that PublishingContext throws missingSourceDirectory for non-existent path.
-    @Test("PublishingContext throws missingSourceDirectory for missing source directory")
+    @Test("PublishingContext throws missingSourceDirectory for missing source directory", .publishingContext())
     func contextThrowsForMissingSource() throws {
         let nonExistent = URL(filePath: "/nonexistent/path/\(UUID().uuidString)")
         let buildDir = FileManager.default.temporaryDirectory
@@ -136,7 +135,7 @@ struct AppTargetPublishingTests {
     }
 
     /// Verifies the error message for missing source directory is descriptive.
-    @Test("Missing source directory error has descriptive message")
+    @Test("Missing source directory error has descriptive message", .publishingContext())
     func missingSourceDirectoryErrorMessage() {
         let testPath = URL(filePath: "/test/missing/directory")
         let error = PublishingError.missingSourceDirectory(testPath)

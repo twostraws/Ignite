@@ -5,7 +5,6 @@
 // See LICENSE for license information.
 //
 
-@MainActor
 struct FeedGenerator {
     var feedConfig: FeedConfiguration
     var site: any Site

@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Grid` element.
 @Suite("Grid Tests")
-@MainActor
 class GridTests: IgniteTestSuite {
-    @Test("List with three images")
+    @Test("List with three images", .publishingContext())
     func gridWithThreeImages() async throws {
         let element = Grid {
             Image("/images/photos/shades.jpg", description: "A pair of sunglasses.")
@@ -44,7 +43,7 @@ class GridTests: IgniteTestSuite {
         """)
     }
 
-    @Test("List with three images and width")
+    @Test("List with three images and width", .publishingContext())
     func gridWithThreeImagesAndWidth() async throws {
         let element = Grid {
             Image("/images/photos/shades.jpg", description: "A pair of sunglasses.")
@@ -77,7 +76,7 @@ class GridTests: IgniteTestSuite {
         """)
     }
 
-    @Test("List with four elements of width 4, should wrap")
+    @Test("List with four elements of width 4, should wrap", .publishingContext())
     func gridWithWrapping() async throws {
         let element = Grid {
             Image("/images/photos/shades.jpg", description: "A pair of sunglasses.")
@@ -117,7 +116,7 @@ class GridTests: IgniteTestSuite {
         """)
     }
 
-    @Test("List with four elements of width 4, should wrap")
+    @Test("List with four elements of width 4, should wrap", .publishingContext())
     func gridWithWrappingTwoColors() async throws {
         let element = Grid {
             Image("/images/photos/shades.jpg", description: "A pair of sunglasses.")

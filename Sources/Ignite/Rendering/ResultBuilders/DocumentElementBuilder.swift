@@ -6,7 +6,6 @@
 //
 
 /// A result builder for populating the children of a `Document`.
-@MainActor
 @resultBuilder
 public struct DocumentElementBuilder {
     /// Creates a tuple containing the provided head and body elements.

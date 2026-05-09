@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `SpacingAmount` type.
 @Suite("SpacingAmount Tests")
-@MainActor
 struct SpacingAmountTests {
-    @Test("Raw values are sequential from zero", arguments: zip(
+    @Test("Raw values are sequential from zero", .publishingContext(), arguments: zip(
         SpacingAmount.allCases,
         [0, 1, 2, 3, 4, 5]))
     func rawValuesAreSequentialFromZero(
@@ -24,12 +23,12 @@ struct SpacingAmountTests {
         #expect(amount.rawValue == expectedRawValue)
     }
 
-    @Test("All cases count is six")
+    @Test("All cases count is six", .publishingContext())
     func allCasesCountIsSix() async throws {
         #expect(SpacingAmount.allCases.count == 6)
     }
 
-    @Test("Cases are in expected order")
+    @Test("Cases are in expected order", .publishingContext())
     func casesAreInExpectedOrder() async throws {
         let cases = SpacingAmount.allCases
         #expect(cases[0] == .none)
@@ -40,7 +39,7 @@ struct SpacingAmountTests {
         #expect(cases[5] == .xLarge)
     }
 
-    @Test("None has raw value zero")
+    @Test("None has raw value zero", .publishingContext())
     func noneHasRawValueZero() async throws {
         #expect(SpacingAmount.none.rawValue == 0)
     }

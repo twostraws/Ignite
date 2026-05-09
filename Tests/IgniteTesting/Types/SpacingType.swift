@@ -12,27 +12,26 @@ import Testing
 
 /// Tests for the `SpacingType` type.
 @Suite("SpacingType Tests")
-@MainActor
 struct SpacingTypeTests {
-    @Test("Exact values are equatable")
+    @Test("Exact values are equatable", .publishingContext())
     func exactValuesAreEquatable() async throws {
         #expect(SpacingType.exact(10) == SpacingType.exact(10))
         #expect(SpacingType.exact(0) == SpacingType.exact(0))
         #expect(SpacingType.exact(10) != SpacingType.exact(20))
     }
 
-    @Test("Semantic values are equatable")
+    @Test("Semantic values are equatable", .publishingContext())
     func semanticValuesAreEquatable() async throws {
         #expect(SpacingType.semantic(.medium) == SpacingType.semantic(.medium))
         #expect(SpacingType.semantic(.small) != SpacingType.semantic(.large))
     }
 
-    @Test("Automatic equals automatic")
+    @Test("Automatic equals automatic", .publishingContext())
     func automaticEqualsAutomatic() async throws {
         #expect(SpacingType.automatic == SpacingType.automatic)
     }
 
-    @Test("Different variants are not equal")
+    @Test("Different variants are not equal", .publishingContext())
     func differentVariantsAreNotEqual() async throws {
         #expect(SpacingType.exact(0) != SpacingType.automatic)
         #expect(SpacingType.exact(0) != SpacingType.semantic(.none))

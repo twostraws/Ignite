@@ -106,7 +106,7 @@ struct AnimatedHTML: HTML {
             if transitions.isEmpty == false {
                 var aggreateTransition = Transition()
                 aggreateTransition.data = transitions.flatMap(\.data)
-                AnimationManager.shared.register(aggreateTransition, for: trigger)
+                PublishingContext.current?.animationManager.register(aggreateTransition, for: trigger)
                 finalAnimations[trigger, default: []].append(aggreateTransition)
             }
 
@@ -114,7 +114,7 @@ struct AnimatedHTML: HTML {
                 var aggreateAnimation = Animation()
                 aggreateAnimation.direction = animations.last?.direction ?? .automatic
                 aggreateAnimation.frames = animations.flatMap(\.frames)
-                AnimationManager.shared.register(aggreateAnimation, for: trigger)
+                PublishingContext.current?.animationManager.register(aggreateAnimation, for: trigger)
                 finalAnimations[trigger, default: []].append(aggreateAnimation)
             }
         }

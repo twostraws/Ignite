@@ -9,8 +9,7 @@
 public struct DefaultLayout: Layout {
     public var body: some Document {
         let layout = PublishingContext.shared.site.layout
-        let head = layout.body.head
-        let body = layout.body.body
-        return PlainDocument(head: head, body: body)
+        let content = layout.documentContent()
+        return PlainDocument(head: content.head, body: content.body)
     }
 }

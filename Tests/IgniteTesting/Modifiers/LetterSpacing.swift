@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `LetterSpacing` modifier.
 @Suite("LetterSpacing Tests")
-@MainActor
 class LetterSpacingTests: IgniteTestSuite {
-    @Test("letterSpacing with pixel value adds px unit")
+    @Test("letterSpacing with pixel value adds px unit", .publishingContext())
     func pixelValue() async throws {
         let element = Text("Spaced")
             .letterSpacing(5)
@@ -23,7 +22,7 @@ class LetterSpacingTests: IgniteTestSuite {
         #expect(output.contains("letter-spacing: 5px"))
     }
 
-    @Test("letterSpacing with rem LengthUnit adds rem unit")
+    @Test("letterSpacing with rem LengthUnit adds rem unit", .publishingContext())
     func remValue() async throws {
         let element = Text("Spaced")
             .letterSpacing(.rem(1.5))
@@ -33,7 +32,7 @@ class LetterSpacingTests: IgniteTestSuite {
         #expect(output.contains("letter-spacing: 1.5rem"))
     }
 
-    @Test("letterSpacing works on inline elements with pixel value")
+    @Test("letterSpacing works on inline elements with pixel value", .publishingContext())
     func inlinePixelValue() async throws {
         let element = Emphasis("Spaced")
             .letterSpacing(3)
@@ -43,7 +42,7 @@ class LetterSpacingTests: IgniteTestSuite {
         #expect(output.contains("letter-spacing: 3px"))
     }
 
-    @Test("letterSpacing works on inline elements with LengthUnit")
+    @Test("letterSpacing works on inline elements with LengthUnit", .publishingContext())
     func inlineLengthUnit() async throws {
         let element = Emphasis("Spaced")
             .letterSpacing(.rem(2))

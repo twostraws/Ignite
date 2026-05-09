@@ -11,21 +11,65 @@ import SwiftSoup
 /// Publishing contexts manage the entire flow of publishing, through all
 /// elements. This allows any part of the site to reference content, add
 /// build warnings, and more.
-@MainActor
-final class PublishingContext {
-    /// The shared instance of `PublishingContext`.
-    private static var sharedContext: PublishingContext!
+final class PublishingContext: @unchecked Sendable {
+    /// The current publishing context for this task.
+    @TaskLocal private static var currentContext: PublishingContext?
 
-    /// The shared instance of `PublishingContext`.
+    /// The current rendering environment for this task.
+    @TaskLocal private static var currentEnvironment: EnvironmentValues?
+
+    /// The publishing context currently bound to this task, if any.
+    static var current: PublishingContext? {
+        currentContext
+    }
+
+    /// The publishing context currently bound to this task.
     static var shared: PublishingContext {
-        guard let sharedContext else {
+        guard let currentContext else {
             fatalError("""
-            PublishingContext.shared accessed before being initialized. \
-            Call PublishingContext.initialize() first.
+            PublishingContext.shared accessed outside a publishing context. \
+            Wrap rendering in PublishingContext.withCurrent(_:operation:) or \
+            PublishingContext.withInitialized(...).
             """)
         }
 
-        return sharedContext
+        return currentContext
+    }
+
+    /// Runs a synchronous operation with the given context available through task-local lookup.
+    static func withCurrent<T>(
+        _ context: PublishingContext,
+        operation: () throws -> T
+    ) rethrows -> T {
+        let previousContext = currentContext
+
+        return try $currentContext.withValue(context) {
+            if previousContext === context {
+                try operation()
+            } else {
+                try $currentEnvironment.withValue(nil) {
+                    try operation()
+                }
+            }
+        }
+    }
+
+    /// Runs an asynchronous operation with the given context available through task-local lookup.
+    static func withCurrent<T>(
+        _ context: PublishingContext,
+        operation: () async throws -> T
+    ) async rethrows -> T {
+        let previousContext = currentContext
+
+        return try await $currentContext.withValue(context) {
+            if previousContext === context {
+                try await operation()
+            } else {
+                try await $currentEnvironment.withValue(nil) {
+                    try await operation()
+                }
+            }
+        }
     }
 
     /// The site that is currently being built.
@@ -61,8 +105,19 @@ final class PublishingContext {
     /// Any errors that have been issued during a build.
     private(set) var errors = [PublishingError]()
 
-    /// The current environment values for the application.
-    var environment = EnvironmentValues()
+    /// The default environment values for the application.
+    private var defaultEnvironment = EnvironmentValues()
+
+    /// The current environment values for this task.
+    var environment: EnvironmentValues {
+        get {
+            Self.currentEnvironment ?? defaultEnvironment
+        }
+
+        set {
+            defaultEnvironment = newValue
+        }
+    }
 
     /// All the Markdown content this user has inside their Content folder.
     private(set) var allContent = [Article]()
@@ -81,6 +136,15 @@ final class PublishingContext {
     /// randomly every time a build took place it would be annoying for source
     /// control!)
     private(set) var siteMap = [Location]()
+
+    /// The CSS registry for this publish operation.
+    let cssManager = CSSManager()
+
+    /// The style registry for this publish operation.
+    let styleManager = StyleManager()
+
+    /// The animation registry for this publish operation.
+    let animationManager = AnimationManager()
 
     /// Creates a new publishing context for a specific site, providing the path to
     /// one of the user's file. This then navigates upwards to find the root directory.
@@ -133,13 +197,14 @@ final class PublishingContext {
         includesDirectory = self.sourceDirectory.appending(path: "Includes")
     }
 
-    /// Creates and sets the shared instance of `PublishingContext`
+    /// Creates a publishing context.
     /// - Parameters:
     ///   - site: The site we're currently publishing.
     ///   - file: One file from the user's package.
     ///   - buildDirectoryPath: The path where the artifacts are generated.
     ///   The default is "Build".
-    /// - Returns: The shared `PublishingContext` instance.
+    /// - Returns: A `PublishingContext` instance that can be used directly or
+    /// made current using `withCurrent(_:operation:)`.
     @discardableResult
     static func initialize(
         for site: any Site,
@@ -147,23 +212,22 @@ final class PublishingContext {
         buildDirectoryPath: String = "Build",
         logOptions: PublishingLogOptions = .standard
     ) throws -> PublishingContext {
-        let context = try PublishingContext(
+        try PublishingContext(
             for: site,
             from: file,
             buildDirectoryPath: buildDirectoryPath,
             logOptions: logOptions
         )
-        sharedContext = context
-        return context
     }
 
-    /// Creates and sets the shared instance of `PublishingContext` with explicit directories.
+    /// Creates a publishing context with explicit directories.
     /// Use this when embedding Ignite in an app target where Package.swift doesn't exist.
     /// - Parameters:
     ///   - site: The site we're currently publishing.
     ///   - sourceDirectory: The root directory containing Assets, Content, and Includes folders.
     ///   - buildDirectory: The directory where the generated site will be written.
-    /// - Returns: The shared `PublishingContext` instance.
+    /// - Returns: A `PublishingContext` instance that can be used directly or
+    /// made current using `withCurrent(_:operation:)`.
     @discardableResult
     static func initialize(
         for site: any Site,
@@ -171,14 +235,92 @@ final class PublishingContext {
         buildDirectory: URL,
         logOptions: PublishingLogOptions = .standard
     ) throws -> PublishingContext {
-        let context = try PublishingContext(
+        try PublishingContext(
             for: site,
             sourceDirectory: sourceDirectory,
             buildDirectory: buildDirectory,
             logOptions: logOptions
         )
-        sharedContext = context
-        return context
+    }
+
+    /// Creates a publishing context and makes it current for a synchronous operation.
+    static func withInitialized<T>(
+        for site: any Site,
+        from file: StaticString,
+        buildDirectoryPath: String = "Build",
+        logOptions: PublishingLogOptions = .standard,
+        operation: (PublishingContext) throws -> T
+    ) throws -> T {
+        let context = try initialize(
+            for: site,
+            from: file,
+            buildDirectoryPath: buildDirectoryPath,
+            logOptions: logOptions
+        )
+
+        return try withCurrent(context) {
+            try operation(context)
+        }
+    }
+
+    /// Creates a publishing context and makes it current for an asynchronous operation.
+    static func withInitialized<T>(
+        for site: any Site,
+        from file: StaticString,
+        buildDirectoryPath: String = "Build",
+        logOptions: PublishingLogOptions = .standard,
+        operation: (PublishingContext) async throws -> T
+    ) async throws -> T {
+        let context = try initialize(
+            for: site,
+            from: file,
+            buildDirectoryPath: buildDirectoryPath,
+            logOptions: logOptions
+        )
+
+        return try await withCurrent(context) {
+            try await operation(context)
+        }
+    }
+
+    /// Creates a publishing context with explicit directories and makes it current for a synchronous operation.
+    static func withInitialized<T>(
+        for site: any Site,
+        sourceDirectory: URL,
+        buildDirectory: URL,
+        logOptions: PublishingLogOptions = .standard,
+        operation: (PublishingContext) throws -> T
+    ) throws -> T {
+        let context = try initialize(
+            for: site,
+            sourceDirectory: sourceDirectory,
+            buildDirectory: buildDirectory,
+            logOptions: logOptions
+        )
+
+        return try withCurrent(context) {
+            try operation(context)
+        }
+    }
+
+    /// Creates a publishing context with explicit directories and makes it current for an asynchronous operation.
+    static func withInitialized<T>(
+        for site: any Site,
+        sourceDirectory: URL,
+        buildDirectory: URL,
+        logOptions: PublishingLogOptions = .standard,
+        operation: (PublishingContext) async throws -> T
+    ) async throws -> T {
+        let context = try initialize(
+            for: site,
+            sourceDirectory: sourceDirectory,
+            buildDirectory: buildDirectory,
+            logOptions: logOptions
+        )
+
+        return try await withCurrent(context) {
+            try await operation(context)
+        }
     }
 
     /// Returns all content tagged with the specified tag, or all content if the tag is nil.
@@ -413,9 +555,10 @@ final class PublishingContext {
     ///   - operation: A closure that executes with the temporary environment
     /// - Returns: The value returned by the operation
     func withEnvironment<T>(_ environment: EnvironmentValues, operation: () -> T) -> T {
-        let previous = self.environment
-        self.environment = environment
-        defer { self.environment = previous }
-        return operation()
+        PublishingContext.withCurrent(self) {
+            Self.$currentEnvironment.withValue(environment) {
+                operation()
+            }
+        }
     }
 }

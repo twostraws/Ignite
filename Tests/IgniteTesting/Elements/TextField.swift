@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `TextField` element.
 @Suite("TextField Tests")
-@MainActor
 class TextFieldTests: IgniteTestSuite {
-    @Test("TextField with Text Type", arguments: TextField.TextType.allCases)
+    @Test("TextField with Text Type", .publishingContext(), arguments: TextField.TextType.allCases)
     func textFieldWithInputTextType(textType: TextField.TextType) async throws {
         let element = TextField("Paul", prompt: "Enter your name here")
             .type(textType)
@@ -29,7 +28,7 @@ class TextFieldTests: IgniteTestSuite {
         """)
     }
 
-    @Test("TextField is required")
+    @Test("TextField is required", .publishingContext())
     func textFieldIsRequired() async throws {
         let element = TextField("Paul", prompt: "Enter your name here")
             .required()
@@ -44,7 +43,7 @@ class TextFieldTests: IgniteTestSuite {
         """)
     }
 
-    @Test("TextField is disabled")
+    @Test("TextField is disabled", .publishingContext())
     func textFieldIsDisabled() async throws {
         let element = TextField("Paul", prompt: "Enter your name here")
             .disabled()
@@ -59,7 +58,7 @@ class TextFieldTests: IgniteTestSuite {
         """)
     }
 
-    @Test("TextField is read only")
+    @Test("TextField is read only", .publishingContext())
     func textFieldIsReadOnly() async throws {
         let element = TextField("Paul")
             .readOnly("Read only")

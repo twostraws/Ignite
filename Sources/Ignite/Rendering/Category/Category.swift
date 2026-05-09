@@ -6,7 +6,7 @@
 //
 
 /// The category by which articles on your site can be grouped.
-public protocol Category: CustomStringConvertible, Sendable {
+public protocol Category: CustomStringConvertible {
     /// The name of the category.
     var name: String { get }
     /// An array of articles that belongs to this category.

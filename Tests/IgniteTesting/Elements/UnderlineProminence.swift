@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `UnderlineProminence` type.
 @Suite("UnderlineProminence Tests")
-@MainActor
 struct UnderlineProminenceTests {
-    @Test("Raw values match opacity percentages")
+    @Test("Raw values match opacity percentages", .publishingContext())
     func rawValues() async throws {
         #expect(UnderlineProminence.none.rawValue == 0)
         #expect(UnderlineProminence.faint.rawValue == 10)
@@ -24,7 +23,7 @@ struct UnderlineProminenceTests {
         #expect(UnderlineProminence.heavy.rawValue == 100)
     }
 
-    @Test("Description formats raw value as string")
+    @Test("Description formats raw value as string", .publishingContext())
     func descriptionFormatsRawValue() async throws {
         #expect(UnderlineProminence.none.description == "0")
         #expect(UnderlineProminence.faint.description == "10")
@@ -34,7 +33,7 @@ struct UnderlineProminenceTests {
         #expect(UnderlineProminence.heavy.description == "100")
     }
 
-    @Test("Equatable conformance")
+    @Test("Equatable conformance", .publishingContext())
     func equatableConformance() async throws {
         #expect(UnderlineProminence.none == UnderlineProminence.none)
         #expect(UnderlineProminence.heavy == UnderlineProminence.heavy)

@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Slide` element.
 @Suite("Slide Tests")
-@MainActor
 class SlideTests: IgniteTestSuite {
-    @Test("Slide with Background Image")
+    @Test("Slide with Background Image", .publishingContext())
     func slideWithBackgroundImage() async throws {
         let slide = Slide(background: "/images/dog.jpg")
         let output = slide.assigned(at: 0).markupString()
@@ -31,7 +30,7 @@ class SlideTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Slide with Items")
+    @Test("Slide with Items", .publishingContext())
     func slideWithItems() async throws {
         let slide = Slide {
             Text("Item 1")
@@ -51,7 +50,7 @@ class SlideTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Slide with Background Opacity")
+    @Test("Slide with Background Opacity", .publishingContext())
     func slideWithBackgroundOpacity() async throws {
         let slide = Slide(background: "/images/dog.jpg").backgroundOpacity(0.5)
         let output = slide.assigned(at: 0).markupString()

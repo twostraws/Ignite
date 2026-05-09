@@ -12,30 +12,29 @@ import Testing
 
 /// Tests for the `Code` element.
 @Suite("Code Tests")
-@MainActor
 class CodeTests: IgniteTestSuite {
-    @Test("Inline code formatting")
+    @Test("Inline code formatting", .publishingContext())
     func inlineCode() async throws {
         let element = Code("background-color")
         let output = element.markupString()
         #expect(output == "<code>background-color</code>")
     }
 
-    @Test("Code preserves angle brackets in content")
+    @Test("Code preserves angle brackets in content", .publishingContext())
     func angleBrackets() async throws {
         let element = Code("Array&lt;Int&gt;")
         let output = element.markupString()
         #expect(output == "<code>Array&lt;Int&gt;</code>")
     }
 
-    @Test("Code with empty string renders empty code element")
+    @Test("Code with empty string renders empty code element", .publishingContext())
     func emptyContent() async throws {
         let element = Code("")
         let output = element.markupString()
         #expect(output == "<code></code>")
     }
 
-    @Test("Code with custom class includes class attribute")
+    @Test("Code with custom class includes class attribute", .publishingContext())
     func customClass() async throws {
         let element = Code("let x = 1").class("highlight")
         let output = element.markupString()
@@ -43,7 +42,7 @@ class CodeTests: IgniteTestSuite {
         #expect(output.contains("let x = 1"))
     }
 
-    @Test("Code with ID includes id attribute")
+    @Test("Code with ID includes id attribute", .publishingContext())
     func idAttribute() async throws {
         let element = Code("print()").id("code-sample")
         let output = element.markupString()

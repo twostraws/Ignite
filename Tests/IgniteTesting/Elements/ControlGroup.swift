@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `ControlGroup` element.
 @Suite("ControlGroup Tests")
-@MainActor
 class ControlGroupTests: IgniteTestSuite {
-    @Test("Basic control group has input-group class")
+    @Test("Basic control group has input-group class", .publishingContext())
     func basicControlGroupHasInputGroupClass() async throws {
         let element = ControlGroup {
             TextField("Name", prompt: "Enter name")
@@ -25,7 +24,7 @@ class ControlGroupTests: IgniteTestSuite {
         #expect(output.contains("input-group"))
     }
 
-    @Test("Control group with label renders label element")
+    @Test("Control group with label renders label element", .publishingContext())
     func controlGroupWithLabelRendersLabelElement() async throws {
         let element = ControlGroup("Full Name") {
             TextField("Name", prompt: "Enter name")
@@ -37,7 +36,7 @@ class ControlGroupTests: IgniteTestSuite {
         #expect(output.contains("form-label"))
     }
 
-    @Test("Control size small", arguments: zip(
+    @Test("Control size small", .publishingContext(), arguments: zip(
         ControlGroup.ControlSize.allCases,
         ["input-group-sm", "", "input-group-lg"]))
     func controlSizeClasses(
@@ -47,7 +46,7 @@ class ControlGroupTests: IgniteTestSuite {
         #expect(size.rawValue == expectedClass)
     }
 
-    @Test("Control group with help text renders form-text")
+    @Test("Control group with help text renders form-text", .publishingContext())
     func controlGroupWithHelpTextRendersFormText() async throws {
         let element = ControlGroup("Email") {
             TextField("Email", prompt: "Enter email")
@@ -61,7 +60,7 @@ class ControlGroupTests: IgniteTestSuite {
                 output.contains("We'll never share your email."))
     }
 
-    @Test("Control group with span renders input-group-text")
+    @Test("Control group with span renders input-group-text", .publishingContext())
     func controlGroupWithSpanRendersInputGroupText() async throws {
         let element = ControlGroup {
             Span("@")

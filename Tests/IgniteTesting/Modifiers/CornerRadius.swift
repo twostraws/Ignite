@@ -12,23 +12,22 @@ import Testing
 
 /// Tests for the `CornerRadius` modifier.
 @Suite("CornerRadius Tests")
-@MainActor
 class CornerRadiusTests: IgniteTestSuite {
-    @Test("CornerRadius Modifier with All Edges (String)")
+    @Test("CornerRadius Modifier with All Edges (String)", .publishingContext())
     func cornerRadiusWithAllEdgesString() async throws {
         let element = Text("Hello").cornerRadius(.percent(50%))
         let output = element.markupString()
         #expect(output == "<p style=\"border-radius: 50.0%\">Hello</p>")
     }
 
-    @Test("CornerRadius Modifier with All Edges (Pixels)")
+    @Test("CornerRadius Modifier with All Edges (Pixels)", .publishingContext())
     func cornerRadiusWithAllEdgesPixels() async throws {
         let element = Text("Hello").cornerRadius(10)
         let output = element.markupString()
         #expect(output == "<p style=\"border-radius: 10px\">Hello</p>")
     }
 
-    @Test("CornerRadius Modifier with Specific Edges (String)")
+    @Test("CornerRadius Modifier with Specific Edges (String)", .publishingContext())
     func cornerRadiusWithSpecificEdgesString() async throws {
         let element = Text("Hello").cornerRadius([.topLeading, .bottomTrailing], .px(10))
         let output = element.markupString()
@@ -38,7 +37,7 @@ class CornerRadiusTests: IgniteTestSuite {
         #expect(!output.contains("border-bottom-left-radius"))
     }
 
-    @Test("CornerRadius Modifier with Specific Edges (Pixels)")
+    @Test("CornerRadius Modifier with Specific Edges (Pixels)", .publishingContext())
     func cornerRadiusWithSpecificEdgesPixels() async throws {
         let element = Text("Hello").cornerRadius([.topLeading, .bottomTrailing], 10)
         let output = element.markupString()

@@ -30,8 +30,7 @@ import Foundation
 /// - Important: When implementing optional properties like `lightTheme` and `darkTheme`,
 ///   ensure the return type exactly matches the protocol requirement, e.g., `(any Theme)?`.
 ///   Swift's type system requires this exact match.
-@MainActor
-public protocol Site: Sendable {
+public protocol Site {
     /// The type of your homepage. Required.
     associatedtype HomePageType: StaticPage
 
@@ -285,13 +284,14 @@ public extension Site {
         buildDirectoryPath: String = "Build",
         logOptions: PublishingLogOptions = .standard
     ) async throws {
-        let context = try PublishingContext.initialize(
+        try await PublishingContext.withInitialized(
             for: self,
             from: file,
             buildDirectoryPath: buildDirectoryPath,
             logOptions: logOptions
-        )
-        try await performPublish(with: context)
+        ) { context in
+            try await performPublish(with: context)
+        }
     }
 
     /// Publishes the site using explicit directory paths while controlling which diagnostics are logged.
@@ -304,13 +304,14 @@ public extension Site {
         buildDirectory: URL,
         logOptions: PublishingLogOptions = .standard
     ) async throws {
-        let context = try PublishingContext.initialize(
+        try await PublishingContext.withInitialized(
             for: self,
             sourceDirectory: sourceDirectory,
             buildDirectory: buildDirectory,
             logOptions: logOptions
-        )
-        try await performPublish(with: context)
+        ) { context in
+            try await performPublish(with: context)
+        }
     }
 
     /// Shared implementation for all publish methods.

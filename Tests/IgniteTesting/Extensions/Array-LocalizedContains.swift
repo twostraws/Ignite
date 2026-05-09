@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Array-LocalizedContains` extension.
 @Suite("Array-LocalizedContains Tests")
-@MainActor
 struct ArrayLocalizedContainsTests {
-    @Test("Array contains a matching string")
+    @Test("Array contains a matching string", .publishingContext())
     func arrayContainsMatchingString() async throws {
         // Given
         let testArray = ["Tom", "Jerry", "Nibbles", "Butch"]
@@ -34,7 +33,7 @@ struct ArrayLocalizedContainsTests {
         #expect(result4 == true)
     }
 
-    @Test("Array does NOT contain a matching string")
+    @Test("Array does NOT contain a matching string", .publishingContext())
     func arrayDoesNotContainMatchingString() async throws {
         // Given
         let testArray = ["Tom", "Jerry", "Nibbles", "Butch"]
@@ -54,7 +53,7 @@ struct ArrayLocalizedContainsTests {
         #expect(result4 == false)
     }
 
-    @Test("Strings with diacritics")
+    @Test("Strings with diacritics", .publishingContext())
     func arrayContainsStringsWithDiacritics() async throws {
         // Given
         let testArray = ["über", "jalapeño", "façade", "naïve"]
@@ -69,7 +68,7 @@ struct ArrayLocalizedContainsTests {
         #expect(actualCount == expectedCount)
     }
 
-    @Test("Strings with currently unsupported diacritics")
+    @Test("Strings with currently unsupported diacritics", .publishingContext())
     func arrayContainsUnsupportedDiacritics() async throws {
         // Given
         let testArray = ["łódź", "følg", "zażółć"]
@@ -83,7 +82,7 @@ struct ArrayLocalizedContainsTests {
         #expect(actualCount == 0)
     }
 
-    @Test("Strings with special characters")
+    @Test("Strings with special characters", .publishingContext())
     func arrayContainsSpecialCharacters() async throws {
         // Given
         let testArray = ["!@#$%^", "&*()_+", "-=~`|", "{[}]\\", ":;\"'<", ">?/.,"]
@@ -98,7 +97,7 @@ struct ArrayLocalizedContainsTests {
         #expect(actualCount == expectedCount)
     }
 
-    @Test("Empty string")
+    @Test("Empty string", .publishingContext())
     func usingLocalizedContains_forAnEmptyString() async throws {
         // Given
         let testArray = [" ", "", "", "empty"]
@@ -109,7 +108,7 @@ struct ArrayLocalizedContainsTests {
         #expect(result == false)
     }
 
-    @Test("Array is empty")
+    @Test("Array is empty", .publishingContext())
     func callingLocalizedContains_onAnEmptyArray() async throws {
         // Given
         let testArray = [String]()

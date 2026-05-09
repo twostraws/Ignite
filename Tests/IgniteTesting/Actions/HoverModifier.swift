@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `HoverModifier` modifier.
 @Suite("HoverModifier Tests")
-@MainActor
 class HoverModifierTests: IgniteTestSuite {
-    @Test("onHover adds both onmouseover and onmouseout attributes")
+    @Test("onHover adds both onmouseover and onmouseout attributes", .publishingContext())
     func hoverAddsMouseEvents() async throws {
         let element = Text("Hover me")
             .onHover { isHovering in
@@ -30,7 +29,7 @@ class HoverModifierTests: IgniteTestSuite {
         #expect(output.contains("onmouseout="))
     }
 
-    @Test("Hover true actions go to onmouseover")
+    @Test("Hover true actions go to onmouseover", .publishingContext())
     func hoverTrueGoesToMouseOver() async throws {
         let element = Text("Hover me")
             .onHover { isHovering in
@@ -47,7 +46,7 @@ class HoverModifierTests: IgniteTestSuite {
         #expect(output.contains(#"onmouseout="alert('out')"#))
     }
 
-    @Test("onHover works on inline elements")
+    @Test("onHover works on inline elements", .publishingContext())
     func hoverOnInlineElement() async throws {
         let element = Emphasis("Hover me")
             .onHover { isHovering in

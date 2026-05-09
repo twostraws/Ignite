@@ -14,7 +14,6 @@
 ///     @Environment(\.themes) var themes
 /// }
 /// ```
-@MainActor
 @propertyWrapper public struct Environment<Value> {
     /// The key path to the desired environment value.
     private let keyPath: KeyPath<EnvironmentValues, Value>

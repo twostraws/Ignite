@@ -6,7 +6,7 @@
 //
 
 /// A rule that disallows one specific robot from one or more paths on your site.
-public struct DisallowRule {
+public struct DisallowRule: Sendable {
     var name: String
     var paths: [String]
 

@@ -11,7 +11,6 @@ import Ignite
 /// A test publisher for ``TestSite``.
 ///
 /// It helps to run `TestSite/publish` with a correct path of the file that triggered the build.
-@MainActor
 struct TestSitePublisher {
     var site: any Site = TestSite()
 

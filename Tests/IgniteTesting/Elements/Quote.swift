@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Quote` element.
 @Suite("Quote Tests")
-@MainActor
 class QuoteTests: IgniteTestSuite {
-    @Test("Plain Quote", arguments: ["It is a truth universally acknowledged..."])
+    @Test("Plain Quote", .publishingContext(), arguments: ["It is a truth universally acknowledged..."])
     func plainQuoteTest(quoteText: String) async throws {
         let element = Quote {
             Text(quoteText)
@@ -29,7 +28,7 @@ class QuoteTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Quote With Caption", arguments: ["Programming is an art."], ["Paul Hudson"])
+    @Test("Quote With Caption", .publishingContext(), arguments: ["Programming is an art."], ["Paul Hudson"])
     func quoteWithCaptionTest(quoteText: String, captionText: String) async throws {
         let element = Quote {
             Text(quoteText)
@@ -47,7 +46,7 @@ class QuoteTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Quote with multiple children renders all content")
+    @Test("Quote with multiple children renders all content", .publishingContext())
     func multipleChildren() async throws {
         let element = Quote {
             Text("First line")
@@ -62,7 +61,7 @@ class QuoteTests: IgniteTestSuite {
         #expect(output.hasSuffix("</blockquote>"))
     }
 
-    @Test("Quote caption with inline element renders styled caption")
+    @Test("Quote caption with inline element renders styled caption", .publishingContext())
     func captionWithInlineElement() async throws {
         let element = Quote {
             Text("To be or not to be")

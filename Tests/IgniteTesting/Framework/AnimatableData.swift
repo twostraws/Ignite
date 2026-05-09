@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for `AnimatableData`.
 @Suite("AnimatableData Tests")
-@MainActor
 struct AnimatableDataTests {
-    @Test("Explicit from/to init stores both values and property")
+    @Test("Explicit from/to init stores both values and property", .publishingContext())
     func explicitFromTo() async throws {
         let data = AnimatableData(.opacity, from: "0", to: "1")
         #expect(data.initial == "0")
@@ -21,60 +20,60 @@ struct AnimatableDataTests {
         #expect(data.property == .opacity)
     }
 
-    @Test("Single value init sets opacity default initial to 1")
+    @Test("Single value init sets opacity default initial to 1", .publishingContext())
     func opacityDefault() async throws {
         let data = AnimatableData(.opacity, value: "0.5")
         #expect(data.initial == "1")
         #expect(data.final == "0.5")
     }
 
-    @Test("Single value init sets backgroundColor default initial to transparent")
+    @Test("Single value init sets backgroundColor default initial to transparent", .publishingContext())
     func backgroundColorDefault() async throws {
         let data = AnimatableData(.backgroundColor, value: "red")
         #expect(data.initial == "transparent")
         #expect(data.final == "red")
     }
 
-    @Test("Single value init sets color default initial to inherit")
+    @Test("Single value init sets color default initial to inherit", .publishingContext())
     func colorDefault() async throws {
         let data = AnimatableData(.color, value: "blue")
         #expect(data.initial == "inherit")
         #expect(data.final == "blue")
     }
 
-    @Test("Single value init sets transform default initial to none")
+    @Test("Single value init sets transform default initial to none", .publishingContext())
     func transformDefault() async throws {
         let data = AnimatableData(.transform, value: "scale(2)")
         #expect(data.initial == "none")
         #expect(data.final == "scale(2)")
     }
 
-    @Test("Single value init sets other properties default initial to initial")
+    @Test("Single value init sets other properties default initial to initial", .publishingContext())
     func otherPropertyDefault() async throws {
         let data = AnimatableData(.width, value: "100px")
         #expect(data.initial == "initial")
         #expect(data.final == "100px")
     }
 
-    @Test("Default duration is 0.35")
+    @Test("Default duration is 0.35", .publishingContext())
     func defaultDuration() async throws {
         let data = AnimatableData(.opacity, value: "0")
         #expect(data.duration == 0.35)
     }
 
-    @Test("Default delay is 0")
+    @Test("Default delay is 0", .publishingContext())
     func defaultDelay() async throws {
         let data = AnimatableData(.opacity, value: "0")
         #expect(data.delay == 0)
     }
 
-    @Test("Default timing is automatic")
+    @Test("Default timing is automatic", .publishingContext())
     func defaultTiming() async throws {
         let data = AnimatableData(.opacity, value: "0")
         #expect(data.timing == .automatic)
     }
 
-    @Test("Hashable conformance: same values are equal")
+    @Test("Hashable conformance: same values are equal", .publishingContext())
     func hashableEquality() async throws {
         let a = AnimatableData(.opacity, from: "0", to: "1")
         let b = AnimatableData(.opacity, from: "0", to: "1")
@@ -82,7 +81,7 @@ struct AnimatableDataTests {
         #expect(a.hashValue == b.hashValue)
     }
 
-    @Test("Hashable conformance: different values are not equal")
+    @Test("Hashable conformance: different values are not equal", .publishingContext())
     func hashableInequality() async throws {
         let a = AnimatableData(.opacity, from: "0", to: "1")
         let b = AnimatableData(.opacity, from: "0.5", to: "1")

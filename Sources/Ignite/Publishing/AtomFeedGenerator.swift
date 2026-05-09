@@ -8,7 +8,6 @@
 import Foundation
 
 /// Generates an Atom XML feed (RFC 4287) from site content.
-@MainActor
 struct AtomFeedGenerator {
     /// The feed configuration controlling output mode, content count, and image.
     var feedConfig: FeedConfiguration

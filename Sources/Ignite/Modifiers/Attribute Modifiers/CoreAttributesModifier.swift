@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@MainActor private func coreAttributesModifier(
+private func coreAttributesModifier(
     _ attributes: CoreAttributes,
     content: any BodyElement
 ) -> any BodyElement {
@@ -14,7 +14,7 @@
     return copy
 }
 
-@MainActor private func coreAttributesModifier(
+private func coreAttributesModifier(
     _ attributes: CoreAttributes,
     content: any InlineElement
 ) -> any InlineElement {

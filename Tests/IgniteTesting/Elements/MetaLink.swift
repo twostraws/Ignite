@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `MetaLink` element.
 @Suite("MetaLink Tests")
-@MainActor
 class MetaLinkTests: IgniteTestSuite {
-    @Test("href string and rel string")
+    @Test("href string and rel string", .publishingContext())
     func hrefStringAndRelString() async throws {
         let element = MetaLink(href: "https://www.example.com", rel: "canonical")
         let output = element.markupString()
@@ -22,7 +21,7 @@ class MetaLinkTests: IgniteTestSuite {
         #expect(output == "<link href=\"https://www.example.com\" rel=\"canonical\" />")
     }
 
-    @Test("href URL and rel string")
+    @Test("href URL and rel string", .publishingContext())
     func hrefURLAndRelString() async throws {
         let url = try #require(URL(string: "https://www.example.com"))
         let element = MetaLink(href: url, rel: "canonical")
@@ -31,7 +30,7 @@ class MetaLinkTests: IgniteTestSuite {
         #expect(output == "<link href=\"https://www.example.com\" rel=\"canonical\" />")
     }
 
-    @Test("href string and rel Link.Relationship")
+    @Test("href string and rel Link.Relationship", .publishingContext())
     func hrefStringAndRelRelationship() async throws {
         let element = MetaLink(href: "https://www.example.com", rel: .external)
         let output = element.markupString()
@@ -39,7 +38,7 @@ class MetaLinkTests: IgniteTestSuite {
         #expect(output == "<link href=\"https://www.example.com\" rel=\"external\" />")
     }
 
-    @Test("href URL and rel Link.Relationship")
+    @Test("href URL and rel Link.Relationship", .publishingContext())
     func hrefURLAndRelRelationship() async throws {
         let url = try #require(URL(string: "https://www.example.com"))
         let element = MetaLink(href: url, rel: .alternate)
@@ -48,7 +47,7 @@ class MetaLinkTests: IgniteTestSuite {
         #expect(output == "<link href=\"https://www.example.com\" rel=\"alternate\" />")
     }
 
-    @Test("Highlighting meta tags are sorted")
+    @Test("Highlighting meta tags are sorted", .publishingContext())
     func highlighterThemesAreSorted() async throws {
         let links = MetaLink.highlighterThemeMetaLinks(for: [.xcodeDark, .githubDark, .twilight])
         let output = links.markupString()

@@ -12,19 +12,18 @@ import Testing
 
 /// Tests for the `HTMLBuilder` result builder.
 @Suite("HTMLBuilder Tests")
-@MainActor
 class HTMLBuilderTests: IgniteTestSuite {
     private func build(@HTMLBuilder content: () -> some HTML) -> some HTML {
         content()
     }
 
-    @Test("Single element passes through")
+    @Test("Single element passes through", .publishingContext())
     func singleElement() async throws {
         let result = build { Text("Hello") }
         #expect(result.markupString() == "<p>Hello</p>")
     }
 
-    @Test("Multiple elements combine into collection")
+    @Test("Multiple elements combine into collection", .publishingContext())
     func multipleElements() async throws {
         let result = build {
             Text("A")
@@ -33,13 +32,13 @@ class HTMLBuilderTests: IgniteTestSuite {
         #expect(result.markupString() == "<p>A</p><p>B</p>")
     }
 
-    @Test("Empty block produces empty output")
+    @Test("Empty block produces empty output", .publishingContext())
     func emptyBlock() async throws {
         let result = build {}
         #expect(result.markupString() == "")
     }
 
-    @Test("Optional nil produces empty output")
+    @Test("Optional nil produces empty output", .publishingContext())
     func optionalNil() async throws {
         let show = false
         let result = build {
@@ -50,7 +49,7 @@ class HTMLBuilderTests: IgniteTestSuite {
         #expect(result.markupString() == "")
     }
 
-    @Test("Optional non-nil produces content")
+    @Test("Optional non-nil produces content", .publishingContext())
     func optionalNonNil() async throws {
         let show = true
         let result = build {
@@ -61,7 +60,7 @@ class HTMLBuilderTests: IgniteTestSuite {
         #expect(result.markupString() == "<p>Visible</p>")
     }
 
-    @Test("If-else true branch")
+    @Test("If-else true branch", .publishingContext())
     func ifElseTrueBranch() async throws {
         let condition = true
         let result = build {
@@ -74,7 +73,7 @@ class HTMLBuilderTests: IgniteTestSuite {
         #expect(result.markupString() == "<p>Yes</p>")
     }
 
-    @Test("If-else false branch")
+    @Test("If-else false branch", .publishingContext())
     func ifElseFalseBranch() async throws {
         let condition = false
         let result = build {
@@ -87,7 +86,7 @@ class HTMLBuilderTests: IgniteTestSuite {
         #expect(result.markupString() == "<p>No</p>")
     }
 
-    @Test("For loop produces all elements")
+    @Test("For loop produces all elements", .publishingContext())
     func forLoop() async throws {
         let items = ["A", "B", "C"]
         let result = build {
@@ -98,7 +97,7 @@ class HTMLBuilderTests: IgniteTestSuite {
         #expect(result.markupString() == "<p>A</p><p>B</p><p>C</p>")
     }
 
-    @Test("Mixed content combines correctly")
+    @Test("Mixed content combines correctly", .publishingContext())
     func mixedContent() async throws {
         let result = build {
             Text("First")

@@ -14,7 +14,7 @@ import Testing
 actor ContentErrorToleranceTests {
 
   /// Evaluate each `CETCase` defined in `CETCases`.
-  @Test("tolerateErrors", arguments: CETCases.cases)
+  @Test("tolerateErrors", .publishingContext(), arguments: CETCases.cases)
   func tolerateErrors(test: CETCase) async throws {
     #expect(test.isOk, "\(test)")
   }

@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Cursor` modifier.
 @Suite("Cursor Tests")
-@MainActor
 class CursorTests: IgniteTestSuite {
-    @Test("Cursor Modifier", arguments: Cursor.allCases)
+    @Test("Cursor Modifier", .publishingContext(), arguments: Cursor.allCases)
     func cursorModifier(_ cursor: Cursor) async throws {
         let element = Span("Hello, World!").cursor(cursor)
         let output = element.markupString()
@@ -22,7 +21,7 @@ class CursorTests: IgniteTestSuite {
         #expect(output == "<span style=\"cursor: \(cursor.rawValue)\">Hello, World!</span>")
     }
 
-    @Test("Cursor Modifier on Custom Element", arguments: Cursor.allCases)
+    @Test("Cursor Modifier on Custom Element", .publishingContext(), arguments: Cursor.allCases)
     func cursorModifier_onCustomElement(_ cursor: Cursor) async throws {
         let element = TestElement().cursor(cursor)
         let output = element.markupString()

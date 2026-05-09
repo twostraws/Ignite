@@ -11,15 +11,14 @@ import Testing
 
 /// Tests for the `SwitchTheme` action.
 @Suite("SwitchTheme Tests")
-@MainActor
 class SwitchThemeTests: IgniteTestSuite {
-    @Test("Light theme compiles to igniteSwitchTheme with light ID")
+    @Test("Light theme compiles to igniteSwitchTheme with light ID", .publishingContext())
     func lightTheme() async throws {
         let action = SwitchTheme(.light)
         #expect(action.compile() == "igniteSwitchTheme('light');")
     }
 
-    @Test("Dark theme compiles to igniteSwitchTheme with dark ID")
+    @Test("Dark theme compiles to igniteSwitchTheme with dark ID", .publishingContext())
     func darkTheme() async throws {
         let action = SwitchTheme(.dark)
         #expect(action.compile() == "igniteSwitchTheme('dark');")

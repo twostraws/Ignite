@@ -12,15 +12,14 @@ import Testing
 
 /// Tests for the `Percentage` type.
 @Suite("Percentage Tests")
-@MainActor
 struct PercentageTests {
-    @Test("Value property", arguments: [25, 74.3, -126.225])
+    @Test("Value property", .publishingContext(), arguments: [25, 74.3, -126.225])
     func value(value: Double) async throws {
         let element = Percentage(value)
         #expect(element.value == value)
     }
 
-    @Test("Value function", arguments: [
+    @Test("Value function", .publishingContext(), arguments: [
         (2, Percentage(25.12345678390987), 25.12),
         (5, Percentage(25.12345678390987), 25.12346),
         (10, Percentage(25.12345678390987), 25.1234567839)])
@@ -28,7 +27,7 @@ struct PercentageTests {
         #expect(percent.value(decimals: decimals) == expected)
     }
 
-    @Test("Rounded value", arguments: [
+    @Test("Rounded value", .publishingContext(), arguments: [
         (Percentage(25.4), 25),
         (Percentage(25.499999), 25),
         (Percentage(25.5), 26)])
@@ -36,7 +35,7 @@ struct PercentageTests {
         #expect(percent.roundedValue == expected)
     }
 
-    @Test("Subtracting percentages", arguments: [
+    @Test("Subtracting percentages", .publishingContext(), arguments: [
         (Percentage(25.4), Percentage(22.4), 3.0),
         (Percentage(16.335), Percentage(49), -32.665),
         (Percentage(77), Percentage(-23), 100.0)])
@@ -44,7 +43,7 @@ struct PercentageTests {
         #expect(minuend - subtrahend == expected)
     }
 
-    @Test("Adding percentages", arguments: [
+    @Test("Adding percentages", .publishingContext(), arguments: [
         (Percentage(25.4), Percentage(22.4), 47.8),
         (Percentage(16.335), Percentage(49), 65.335),
         (Percentage(77), Percentage(-23), 54.0)])
@@ -52,7 +51,7 @@ struct PercentageTests {
         #expect(abs(firstAddend + secondAddend - expected) < 0.000001)
     }
 
-    @Test("Multiplying percentages", arguments: [
+    @Test("Multiplying percentages", .publishingContext(), arguments: [
         (2.0, Percentage(25.4), 0.508),
         (-3.0, Percentage(16.335), -0.49005),
         (10.0, Percentage(77), 7.70)])
@@ -61,17 +60,17 @@ struct PercentageTests {
         #expect(abs(percent * factor - expected) < 0.000001)
     }
 
-    @Test("% postfix operator on doubles", arguments: [25.4, 83.49999, 69.5])
+    @Test("% postfix operator on doubles", .publishingContext(), arguments: [25.4, 83.49999, 69.5])
     func percentagePostfixDouble(value: Double) async throws {
         #expect(value% == Percentage(value))
     }
 
-    @Test("% postfix operator on integers", arguments: [25, 83, 69])
+    @Test("% postfix operator on integers", .publishingContext(), arguments: [25, 83, 69])
     func percentagePostfixInt(value: Int) async throws {
         #expect(value% == Percentage(value))
     }
 
-    @Test("Comparable operator", arguments: [
+    @Test("Comparable operator", .publishingContext(), arguments: [
         (Percentage(20), Percentage(21), true),
         (Percentage(20), Percentage(19), false),
         (Percentage(20), Percentage(-19), false)])
@@ -80,7 +79,7 @@ struct PercentageTests {
         #expect((lhs > rhs) == !expected)
     }
 
-    @Test("Equality operator", arguments: [
+    @Test("Equality operator", .publishingContext(), arguments: [
         (Percentage(20), Percentage(21), false),
         (Percentage(20), Percentage(19), false),
         (Percentage(20), Percentage(-19), false),
@@ -89,13 +88,13 @@ struct PercentageTests {
         #expect((lhs == rhs) == expected)
     }
 
-    @Test("BinaryFloatingPoint extension", arguments: [20.88, -33.12, 125.54321])
+    @Test("BinaryFloatingPoint extension", .publishingContext(), arguments: [20.88, -33.12, 125.54321])
     func asString(value: Double) async throws {
         let element = Percentage(value)
         #expect(element.value.asString() == "\(value)%")
     }
 
-    @Test("BinaryInteger extension", arguments: [20, -33, 125])
+    @Test("BinaryInteger extension", .publishingContext(), arguments: [20, -33, 125])
     func asString(value: Int) async throws {
         let element = Percentage(value)
         #expect(element.roundedValue.asString() == "\(value)%")

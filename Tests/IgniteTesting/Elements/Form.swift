@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Form` element.
 @Suite("Form Tests")
-@MainActor
 class FormTests: IgniteTestSuite {
-    @Test("Basic Form")
+    @Test("Basic Form", .publishingContext())
     func form() async throws {
         let element = Form {
             TextField("MyLabel", prompt: "MyPlaceholder")
@@ -40,7 +39,7 @@ class FormTests: IgniteTestSuite {
     }
 
     // swiftlint:disable function_body_length
-    @Test("Form with Label Style", arguments: ControlLabelStyle.allCases)
+    @Test("Form with Label Style", .publishingContext(), arguments: ControlLabelStyle.allCases)
     func form_withLabelStyle(style: ControlLabelStyle) async throws {
         let element = Form {
             TextField("MyLabel", prompt: "MyPlaceholder")
@@ -111,7 +110,7 @@ class FormTests: IgniteTestSuite {
     }
     // swiftlint:enable function_body_length
 
-    @Test("Form with Control Size", arguments: ControlSize.allCases)
+    @Test("Form with Control Size", .publishingContext(), arguments: ControlSize.allCases)
     func form_withControlSize(controlSize: ControlSize) async throws {
         let element = Form {
             TextField("MyLabel", prompt: "MyPlaceholder")

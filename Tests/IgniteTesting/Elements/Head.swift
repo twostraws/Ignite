@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `HTMLHead` element.
 @Suite("HTMLHead Tests")
-@MainActor
 class HTMLHeadTests: IgniteTestSuite {
-    @Test("Defaults to empty head tag")
+    @Test("Defaults to empty head tag", .publishingContext())
     func default_is_empty_head_tag() throws {
         let sut = Head().standardHeadersDisabled()
         let output = sut.markupString()
@@ -25,7 +24,7 @@ class HTMLHeadTests: IgniteTestSuite {
         #expect(attributes.isEmpty)
     }
 
-    @Test("Output contains items passed in on init")
+    @Test("Output contains items passed in on init", .publishingContext())
     func outputs_items_passed_on_init() throws {
         let sut = Head {
             Title("Hello, World")
@@ -48,7 +47,7 @@ class HTMLHeadTests: IgniteTestSuite {
         }
     }
 
-    @Test("Output contains standard headers for page passed in on init")
+    @Test("Output contains standard headers for page passed in on init", .publishingContext())
     func output_contains_standard_headers_for_page() throws {
         let sut = Head()
         let expected = Head.standardHeaders().map { $0.markupString() }.joined()
@@ -58,7 +57,7 @@ class HTMLHeadTests: IgniteTestSuite {
         #expect(output.contains(expected))
     }
 
-    @Test("Output contains soccial sharing tags for page passed in on init")
+    @Test("Output contains soccial sharing tags for page passed in on init", .publishingContext())
     func output_contains_social_sharing_tags() throws {
         let sut = Head()
         let expected = MetaTag.socialSharingTags().map { $0.markupString() }.joined()
@@ -68,7 +67,7 @@ class HTMLHeadTests: IgniteTestSuite {
         #expect(output.contains(expected))
     }
 
-    @Test("Output contains any additional items passed in on init")
+    @Test("Output contains any additional items passed in on init", .publishingContext())
     func output_contains_additional_items() throws {
         let additionalItem = Script(file: "somefile.js")
         let sut = Head { additionalItem }
@@ -79,7 +78,7 @@ class HTMLHeadTests: IgniteTestSuite {
         #expect(output.contains(expected))
     }
 
-    @Test("Standard headers include feed auto-discovery link")
+    @Test("Standard headers include feed auto-discovery link", .publishingContext())
     func standardHeadersIncludeFeedDiscovery() throws {
         // TestSite has feedConfiguration with RSS format
         let sut = Head()

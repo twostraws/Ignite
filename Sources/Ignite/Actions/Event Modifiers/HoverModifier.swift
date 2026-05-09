@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@MainActor private func hoverModifier(
+private func hoverModifier(
     hover: [Action],
     unhover: [Action],
     content: any HTML
@@ -15,7 +15,7 @@
         .onEvent(.mouseOut, unhover)
 }
 
-@MainActor private func hoverModifier(
+private func hoverModifier(
     hover: [Action],
     unhover: [Action],
     content: any InlineElement

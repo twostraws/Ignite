@@ -17,11 +17,16 @@ private func simulateRegisterClasses(for size: Font.Responsive.Size) -> String {
     return className
 }
 
+private struct FontModifierStyle: Style {
+    func style(content: StyledHTML, environment: EnvironmentConditions) -> StyledHTML {
+        content.foregroundStyle(.red)
+    }
+}
+
 /// Tests for the `FontModifier` modifier.
 @Suite("FontModifier Tests")
-@MainActor
 struct FontModifierTests {
-    @Test("Basic Font Application")
+    @Test("Basic Font Application", .publishingContext())
     func basicFontApplication() async throws {
         let element = Text {
             Span("Sample text")
@@ -35,7 +40,7 @@ struct FontModifierTests {
         """)
     }
 
-    @Test("Font Weight Application")
+    @Test("Font Weight Application", .publishingContext())
     func fontWeightApplication() async throws {
         let element = Text {
             Span("Sample text")
@@ -49,7 +54,7 @@ struct FontModifierTests {
         """)
     }
 
-    @Test("Font Size Application")
+    @Test("Font Size Application", .publishingContext())
     func fontSizeApplication() async throws {
         let element = Text {
             Span("Sample text")
@@ -63,7 +68,7 @@ struct FontModifierTests {
         """)
     }
 
-    @Test("Font Family Application")
+    @Test("Font Family Application", .publishingContext())
     func fontFamilyApplication() async throws {
         let element = Text {
             Span("Sample text")
@@ -77,7 +82,20 @@ struct FontModifierTests {
         """)
     }
 
-    @Test("Responsive Font Size Application")
+    @Test("Font modifier still recognizes Text after style modifier", .publishingContext())
+    func fontModifierRecognizesTextAfterStyleModifier() async throws {
+        let element = Text("Sample text")
+            .style(FontModifierStyle())
+            .font(Font(name: "Arial", size: .px(16), weight: .bold))
+
+        let output = element.markupString()
+
+        #expect(output == """
+        <p class="font-modifier-style" style="font-weight: 700; font-family: 'Arial'; font-size: 16px">Sample text</p>
+        """)
+    }
+
+    @Test("Responsive Font Size Application", .publishingContext())
     func responsiveFontSizeApplication() async throws {
         // Create a responsive font size using the ResponsiveValue.responsive method
         let responsiveFontSize = Font.Responsive.Size.responsive(

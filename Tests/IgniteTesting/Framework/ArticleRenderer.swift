@@ -12,10 +12,9 @@ import Testing
 
 /// Tests for `ArticleRenderer`.
 @Suite("ArticleRenderer Tests")
-@MainActor
 struct ArticleRendererTests {
     @Test(
-        "Markdown headings from string",
+        "Markdown headings from string", .publishingContext(),
         arguments: ["# Heading 1", "## Heading 2", "### Heading 3", "# Heading with a #hashtag"]
     )
     func convertMarkdownHeadingsToHTML(markdown: String) async throws {
@@ -27,7 +26,7 @@ struct ArticleRendererTests {
         #expect(element.body == "<\(expectedTag)>\(expectedContent)</\(expectedTag)>")
     }
 
-    @Test("Markdown heading remove title from body")
+    @Test("Markdown heading remove title from body", .publishingContext())
     func removeMarkdownTitleFromBody() async throws {
         let element = MarkdownToHTML(
             markdown: "# Test Heading\n\nTest content",
@@ -37,7 +36,7 @@ struct ArticleRendererTests {
         #expect(element.body == "<p>Test content</p>")
     }
 
-    @Test("Markdown paragraphs from string", arguments: ["Paragraph one\n\nParagraph two"])
+    @Test("Markdown paragraphs from string", .publishingContext(), arguments: ["Paragraph one\n\nParagraph two"])
     func convertMarkdownParagraphsToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
@@ -50,7 +49,7 @@ struct ArticleRendererTests {
         #expect(element.body == "\(expectedHTML)")
     }
 
-    @Test("Markdown block quotes from string", arguments: ["> Here is an example quote"])
+    @Test("Markdown block quotes from string", .publishingContext(), arguments: ["> Here is an example quote"])
     func convertMarkdownBlockQuotesToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
@@ -58,7 +57,7 @@ struct ArticleRendererTests {
         #expect(element.body == "<blockquote><p>\(content)</p></blockquote>")
     }
 
-    @Test("Markdown image from string", arguments: ["Here is an ![Image description](path/to/example/image.jpg)"])
+    @Test("Markdown image from string", .publishingContext(), arguments: ["Here is an ![Image description](path/to/example/image.jpg)"])
     func convertMarkdownImageToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
@@ -66,28 +65,28 @@ struct ArticleRendererTests {
         #expect(element.body == "<p>Here is an \(expectedImageHTML)</p>")
     }
 
-    @Test("Markdown code block from string", arguments: ["Here is some `var code = \"great\"`"])
+    @Test("Markdown code block from string", .publishingContext(), arguments: ["Here is some `var code = \"great\"`"])
     func convertMarkdownCodeBlockToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(element.body == "<p>Here is some <code>var code = \"great\"</code></p>")
     }
 
-    @Test("Markdown emphasis from string", arguments: ["Here is some *emphasized* text"])
+    @Test("Markdown emphasis from string", .publishingContext(), arguments: ["Here is some *emphasized* text"])
     func convertMarkdownEmphasisToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(element.body == "<p>Here is some <em>emphasized</em> text</p>")
     }
 
-    @Test("Markdown link from string", arguments: ["Here is a [link](https://example.com)"])
+    @Test("Markdown link from string", .publishingContext(), arguments: ["Here is a [link](https://example.com)"])
     func convertMarkdownLinkToHTML(markdown: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(element.body == "<p>Here is a <a href=\"https://example.com\">link</a></p>")
     }
 
-    @Test("Markdown list from string")
+    @Test("Markdown list from string", .publishingContext())
     func convertMarkdownListToHTML() async throws {
         let markdown = """
         - Item 1
@@ -98,7 +97,7 @@ struct ArticleRendererTests {
         #expect(element.body == "<ul><li>Item 1</li><li>Item 2</li></ul>")
     }
 
-    @Test("Markdown ordered list from string")
+    @Test("Markdown ordered list from string", .publishingContext())
     func convertMarkdownOrderedListToHTML() async throws {
         let markdown = """
         1. Item 1
@@ -109,7 +108,7 @@ struct ArticleRendererTests {
         #expect(element.body == "<ol><li>Item 1</li><li>Item 2</li></ol>")
     }
 
-    @Test("Markdown strikethrough from string")
+    @Test("Markdown strikethrough from string", .publishingContext())
     func convertMarkdownStrikethroughToHTML() async throws {
         let markdown = "Example text with some of it ~crossed out~"
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
@@ -117,7 +116,7 @@ struct ArticleRendererTests {
         #expect(element.body == "<p>Example text with some of it <s>crossed out</s></p>")
     }
 
-    @Test("Markdown strong from string")
+    @Test("Markdown strong from string", .publishingContext())
     func convertMarkdownStrongToHTML() async throws {
         let markdown = "Example of **strong** text"
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
@@ -125,7 +124,7 @@ struct ArticleRendererTests {
         #expect(element.body == "<p>Example of <strong>strong</strong> text</p>")
     }
 
-    @Test("Markdown table from string")
+    @Test("Markdown table from string", .publishingContext())
     func convertMarkdownTableToHTML() async throws {
         let markdown = """
         | Title 1 | Title 2 |
@@ -150,7 +149,7 @@ struct ArticleRendererTests {
         """)
     }
 
-    @Test("Markdown thematic break from string")
+    @Test("Markdown thematic break from string", .publishingContext())
     func convertMarkdownThematicBreakToHTML() async throws {
         let markdown = """
         Text above

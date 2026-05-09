@@ -12,8 +12,8 @@ import Testing
 
 /// Tests for the `Span` element.
 @Suite("Span Tests")
-@MainActor class SpanTests: IgniteTestSuite {
-    @Test("Single Element", arguments: ["This is a test", "Another test"])
+class SpanTests: IgniteTestSuite {
+    @Test("Single Element", .publishingContext(), arguments: ["This is a test", "Another test"])
     func singleElement(spanText: String) async throws {
         let element = Span(spanText)
         let output = element.markupString()
@@ -21,7 +21,7 @@ import Testing
         #expect(output == "<span>\(spanText)</span>")
     }
 
-    @Test("Builder", arguments: ["This is a test", "Another test"])
+    @Test("Builder", .publishingContext(), arguments: ["This is a test", "Another test"])
     func builder(spanText: String) async throws {
         let element = Span { spanText }
         let output = element.markupString()

@@ -22,7 +22,7 @@ public struct SiteMetadata: Sendable {
 
 extension SiteMetadata {
     /// Creates an empty page for use as a default value
-    @MainActor static let empty = SiteMetadata(
+    static let empty = SiteMetadata(
         name: "",
         titleSuffix: "",
         description: "",

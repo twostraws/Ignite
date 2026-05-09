@@ -11,16 +11,15 @@ import Testing
 
 /// Tests for `AnimationDirection`.
 @Suite("AnimationDirection Tests")
-@MainActor
 struct AnimationDirectionTests {
-    @Test("Raw values match CSS animation-direction values", arguments: zip(
+    @Test("Raw values match CSS animation-direction values", .publishingContext(), arguments: zip(
         [AnimationDirection.automatic, .reverse, .alternate, .alternateReverse],
         ["normal", "reverse", "alternate", "alternate-reverse"]))
     func rawValues(direction: AnimationDirection, expected: String) async throws {
         #expect(direction.rawValue == expected)
     }
 
-    @Test("Hashable conformance: equal values hash the same")
+    @Test("Hashable conformance: equal values hash the same", .publishingContext())
     func hashableConformance() async throws {
         let a = AnimationDirection.alternate
         let b = AnimationDirection.alternate

@@ -12,21 +12,20 @@ import Testing
 
 /// Tests for the `ColorScheme` type.
 @Suite("ColorScheme Tests")
-@MainActor
 struct ColorSchemeTests {
-    @Test("Raw values", arguments: zip(
+    @Test("Raw values", .publishingContext(), arguments: zip(
         [ColorScheme.light, .dark],
         ["light", "dark"]))
     func rawValues(scheme: ColorScheme, expected: String) async throws {
         #expect(scheme.rawValue == expected)
     }
 
-    @Test("All cases count is two")
+    @Test("All cases count is two", .publishingContext())
     func allCasesCountIsTwo() async throws {
         #expect(ColorScheme.allCases.count == 2)
     }
 
-    @Test("Equatable and Hashable conformance")
+    @Test("Equatable and Hashable conformance", .publishingContext())
     func equatableAndHashableConformance() async throws {
         #expect(ColorScheme.light == ColorScheme.light)
         #expect(ColorScheme.dark == ColorScheme.dark)

@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@MainActor private func inlineStyleModifier(
+private func inlineStyleModifier(
     _ styles: [InlineStyle],
     content: any BodyElement
 ) -> any BodyElement {
@@ -14,7 +14,7 @@
     return copy
 }
 
-@MainActor private func inlineStyleModifier(
+private func inlineStyleModifier(
     _ styles: [InlineStyle],
     content: any InlineElement
 ) -> any InlineElement {

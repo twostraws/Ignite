@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@MainActor private func eventModifier(
+private func eventModifier(
     _ type: EventType,
     actions: [Action],
     content: any HTML
@@ -16,7 +16,7 @@
     return copy
 }
 
-@MainActor private func eventModifier(
+private func eventModifier(
     _ type: EventType,
     actions: [Action],
     content: any InlineElement

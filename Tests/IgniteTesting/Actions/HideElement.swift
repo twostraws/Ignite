@@ -12,16 +12,15 @@ import Testing
 
 /// Tests for the `HideElement` action.
 @Suite("HideElement Tests")
-@MainActor
 struct HideElementTests {
-    @Test("Compiles to classList.add with d-none")
+    @Test("Compiles to classList.add with d-none", .publishingContext())
     func compilesToAdd() async throws {
         let action = HideElement("myElement")
         let output = action.compile()
         #expect(output == "document.getElementById('myElement').classList.add('d-none')")
     }
 
-    @Test("Embeds element ID in output")
+    @Test("Embeds element ID in output", .publishingContext())
     func embedsElementID() async throws {
         let action = HideElement("content-panel")
         let output = action.compile()

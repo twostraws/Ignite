@@ -6,8 +6,7 @@
 //
 
 /// A protocol that allows pages of any type to use a layout.
-@MainActor
-public protocol LayoutContent: Sendable {
+public protocol LayoutContent {
     /// The type of HTML content this element contains.
     associatedtype Body: BodyElement
 

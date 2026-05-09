@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `ResponsiveValues` type.
 @Suite("ResponsiveValues Tests")
-@MainActor
 struct ResponsiveValuesTests {
-    @Test("Single xSmall value cascades to all breakpoints")
+    @Test("Single xSmall value cascades to all breakpoints", .publishingContext())
     func singleValueCascadesToAllBreakpoints() async throws {
         let responsive = ResponsiveValues<Int>(10)
         let values = responsive.values
@@ -23,7 +22,7 @@ struct ResponsiveValuesTests {
         #expect(values[Breakpoint.xxLarge] == 10)
     }
 
-    @Test("Non-cascaded values only include specified breakpoints")
+    @Test("Non-cascaded values only include specified breakpoints", .publishingContext())
     func nonCascadedValuesOnlyIncludeSpecified() async throws {
         let responsive = ResponsiveValues<Int>(10, medium: 20)
         let values = responsive.values(cascaded: false)
@@ -32,7 +31,7 @@ struct ResponsiveValuesTests {
         #expect(values[Breakpoint.medium] == 20)
     }
 
-    @Test("Cascading fills gaps from smaller breakpoints")
+    @Test("Cascading fills gaps from smaller breakpoints", .publishingContext())
     func cascadingFillsGaps() async throws {
         let responsive = ResponsiveValues<Int>(10, large: 30)
         let values = responsive.values
@@ -44,14 +43,14 @@ struct ResponsiveValuesTests {
         #expect(values[Breakpoint.xxLarge] == 30)
     }
 
-    @Test("No values produces empty dictionary")
+    @Test("No values produces empty dictionary", .publishingContext())
     func noValuesProducesEmptyDictionary() async throws {
         let responsive = ResponsiveValues<Int>()
         let values = responsive.values
         #expect(values.isEmpty)
     }
 
-    @Test("Middle-only value does not cascade backwards")
+    @Test("Middle-only value does not cascade backwards", .publishingContext())
     func middleOnlyValueDoesNotCascadeBackwards() async throws {
         let responsive = ResponsiveValues<Int>(medium: 20)
         let values = responsive.values
@@ -61,7 +60,7 @@ struct ResponsiveValuesTests {
         #expect(values[Breakpoint.large] == 20)
     }
 
-    @Test("All breakpoints specified individually")
+    @Test("All breakpoints specified individually", .publishingContext())
     func allBreakpointsSpecified() async throws {
         let responsive = ResponsiveValues<Int>(1, small: 2, medium: 3, large: 4, xLarge: 5, xxLarge: 6)
         let values = responsive.values
@@ -74,7 +73,7 @@ struct ResponsiveValuesTests {
         #expect(values[Breakpoint.xxLarge] == 6)
     }
 
-    @Test("Equatable conformance")
+    @Test("Equatable conformance", .publishingContext())
     func equatableConformance() async throws {
         let a = ResponsiveValues<Int>(10, medium: 20)
         let b = ResponsiveValues<Int>(10, medium: 20)
@@ -83,7 +82,7 @@ struct ResponsiveValuesTests {
         #expect(a != c)
     }
 
-    @Test("Hashable conformance")
+    @Test("Hashable conformance", .publishingContext())
     func hashableConformance() async throws {
         let a = ResponsiveValues<Int>(10, medium: 20)
         let b = ResponsiveValues<Int>(10, medium: 20)

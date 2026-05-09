@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `VerticalAlignment` type.
 @Suite("VerticalAlignment Tests")
-@MainActor
 struct VerticalAlignmentTests {
-    @Test("Container alignment classes", arguments: zip(
+    @Test("Container alignment classes", .publishingContext(), arguments: zip(
         [VerticalAlignment.top, .center, .bottom],
         ["align-items-start", "align-items-center", "align-items-end"]))
     func containerAlignmentClasses(
@@ -24,7 +23,7 @@ struct VerticalAlignmentTests {
         #expect(alignment.containerAlignmentClass == expectedClass)
     }
 
-    @Test("Item alignment classes", arguments: zip(
+    @Test("Item alignment classes", .publishingContext(), arguments: zip(
         [VerticalAlignment.top, .center, .bottom],
         ["align-self-start", "align-self-center", "align-self-end"]))
     func itemAlignmentClasses(
@@ -34,7 +33,7 @@ struct VerticalAlignmentTests {
         #expect(alignment.itemAlignmentClass == expectedClass)
     }
 
-    @Test("All cases are equatable")
+    @Test("All cases are equatable", .publishingContext())
     func allCasesAreEquatable() async throws {
         #expect(VerticalAlignment.top == VerticalAlignment.top)
         #expect(VerticalAlignment.center == VerticalAlignment.center)

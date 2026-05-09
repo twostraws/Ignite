@@ -37,8 +37,8 @@ private struct LineNumbersSite: Site {
 
 /// Tests for the `Body` element.
 @Suite("Body Tests")
-@MainActor class BodyTests: IgniteTestSuite {
-    @Test("Simple Body Test")
+class BodyTests: IgniteTestSuite {
+    @Test("Simple Body Test", .publishingContext())
     func simpleBody() async throws {
         let element = Body()
         let output = element.markupString()
@@ -52,7 +52,7 @@ private struct LineNumbersSite: Site {
         """)
     }
 
-    @Test("Body with content renders content inside body tags")
+    @Test("Body with content renders content inside body tags", .publishingContext())
     func bodyWithContent() async throws {
         let element = Body { Text("Hello") }
         let output = element.markupString()
@@ -61,14 +61,14 @@ private struct LineNumbersSite: Site {
         #expect(output.contains("</body>"))
     }
 
-    @Test("Body without container omits container class")
+    @Test("Body without container omits container class", .publishingContext())
     func bodyIgnorePageGutters() async throws {
         let element = Body().ignorePageGutters()
         let output = element.markupString()
         #expect(!output.contains("container"))
     }
 
-    @Test("Body with data attribute renders data attribute")
+    @Test("Body with data attribute renders data attribute", .publishingContext())
     func bodyDataAttribute() async throws {
         let element = Body().data("theme", "dark")
         let output = element.markupString()
@@ -77,11 +77,13 @@ private struct LineNumbersSite: Site {
 
     // MARK: - Bootstrap branches
 
-    @Test("Remote bootstrap includes CDN script with integrity and crossorigin")
+    @Test("Remote bootstrap includes CDN script with integrity and crossorigin", .publishingContext())
     func remoteBootstrap() async throws {
-        try PublishingContext.initialize(for: RemoteBootstrapSite(), from: #filePath)
-        let element = Body()
-        let output = element.markupString()
+        let output = try withPublishingContext(for: RemoteBootstrapSite()) { _ in
+            let element = Body()
+            return element.markupString()
+        }
+
         #expect(output.contains("cdn.jsdelivr.net"))
         #expect(output.contains("integrity="))
         #expect(output.contains("crossorigin=\"anonymous\""))
@@ -89,7 +91,7 @@ private struct LineNumbersSite: Site {
 
     // MARK: - Syntax highlighting
 
-    @Test("Body includes syntax highlighting script when highlighters are present")
+    @Test("Body includes syntax highlighting script when highlighters are present", .publishingContext())
     func syntaxHighlightingScript() async throws {
         publishingContext.syntaxHighlighters.append(.swift)
         let element = Body()
@@ -99,7 +101,7 @@ private struct LineNumbersSite: Site {
 
     // MARK: - Tooltip initialization
 
-    @Test("Body includes tooltip initialization when content has tooltip triggers")
+    @Test("Body includes tooltip initialization when content has tooltip triggers", .publishingContext())
     func tooltipInitScript() async throws {
         let element = Body {
             Text("Hover me")
@@ -111,33 +113,37 @@ private struct LineNumbersSite: Site {
 
     // MARK: - Line number visibility
 
-    @Test("Body with visible line numbers adds line-numbers class")
+    @Test("Body with visible line numbers adds line-numbers class", .publishingContext())
     func visibleLineNumbers() async throws {
-        try PublishingContext.initialize(for: LineNumbersSite(), from: #filePath)
-        let element = Body()
-        let output = element.markupString()
+        let output = try withPublishingContext(for: LineNumbersSite()) { _ in
+            let element = Body()
+            return element.markupString()
+        }
+
         #expect(output.contains("line-numbers"))
     }
 
-    @Test("Body with visible line numbers and custom start adds data-start attribute")
+    @Test("Body with visible line numbers and custom start adds data-start attribute", .publishingContext())
     func lineNumbersCustomStart() async throws {
-        try PublishingContext.initialize(
-            for: LineNumbersSite(lineNumberVisibility: .visible(firstLine: 5, linesWrap: false)),
-            from: #filePath
-        )
-        let element = Body()
-        let output = element.markupString()
+        let output = try withPublishingContext(
+            for: LineNumbersSite(lineNumberVisibility: .visible(firstLine: 5, linesWrap: false))
+        ) { _ in
+            let element = Body()
+            return element.markupString()
+        }
+
         #expect(output.contains("data-start=\"5\""))
     }
 
-    @Test("Body with visible line numbers and wrapping adds pre-wrap style")
+    @Test("Body with visible line numbers and wrapping adds pre-wrap style", .publishingContext())
     func lineNumbersWrapping() async throws {
-        try PublishingContext.initialize(
-            for: LineNumbersSite(lineNumberVisibility: .visible(firstLine: 1, linesWrap: true)),
-            from: #filePath
-        )
-        let element = Body()
-        let output = element.markupString()
+        let output = try withPublishingContext(
+            for: LineNumbersSite(lineNumberVisibility: .visible(firstLine: 1, linesWrap: true))
+        ) { _ in
+            let element = Body()
+            return element.markupString()
+        }
+
         #expect(output.contains("white-space: pre-wrap"))
     }
 }

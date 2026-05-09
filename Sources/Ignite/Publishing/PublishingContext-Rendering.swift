@@ -52,7 +52,7 @@ extension PublishingContext {
             pageContent: page)
 
         let outputString = withEnvironment(values) {
-            page.layout.body.markupString()
+            page.layout.documentMarkupString()
         }
 
         let outputDirectory = buildDirectory.appending(path: path)
@@ -81,7 +81,7 @@ extension PublishingContext {
             article: article)
 
         let outputString = withEnvironment(values) {
-            layout.layout.body.markupString()
+            layout.layout.documentMarkupString()
         }
 
         let outputDirectory = buildDirectory.appending(path: article.path)
@@ -127,7 +127,7 @@ extension PublishingContext {
                 category: category)
 
             let outputString = withEnvironment(values) {
-                tagLayout.layout.body.markupString()
+                tagLayout.layout.documentMarkupString()
             }
 
             write(outputString, to: outputDirectory, priority: tag == nil ? 0.7 : 0.6)
@@ -154,7 +154,7 @@ extension PublishingContext {
             )
 
             let outputString = withEnvironment(values) {
-                site.errorPage.layout.body.markupString()
+                site.errorPage.layout.documentMarkupString()
             }
 
             write(outputString, to: buildDirectory, priority: nil, filename: String(error.statusCode))

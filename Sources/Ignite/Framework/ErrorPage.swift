@@ -24,7 +24,6 @@
 /// ```
 ///
 /// - Note: Ignite currently supports only 404 HTTP errors.
-@MainActor
 public protocol ErrorPage: LayoutContent {
     /// The current HTTP error being rendered.
     var error: HTTPError { get }

@@ -29,9 +29,8 @@ private struct TestRobotsConfig: RobotsConfiguration {
 
 /// Tests for the `RobotsGenerator` output formatting.
 @Suite("RobotsGenerator Tests")
-@MainActor
 struct RobotsGeneratorTests {
-    @Test("Default configuration produces standard robots.txt")
+    @Test("Default configuration produces standard robots.txt", .publishingContext())
     func defaultConfiguration() {
         let site = RobotsTestSite()
         let generator = RobotsGenerator(site: site)
@@ -45,7 +44,7 @@ struct RobotsGeneratorTests {
         """)
     }
 
-    @Test("Single disallow rule with default wildcard path")
+    @Test("Single disallow rule with default wildcard path", .publishingContext())
     func singleDisallowRule() {
         let site = RobotsTestSite(rules: [
             DisallowRule(name: "BadBot")
@@ -58,7 +57,7 @@ struct RobotsGeneratorTests {
         #expect(output.contains("User-agent: *\nAllow: /"))
     }
 
-    @Test("Disallow rule with specific paths")
+    @Test("Disallow rule with specific paths", .publishingContext())
     func disallowRuleWithPaths() {
         let site = RobotsTestSite(rules: [
             DisallowRule(name: "Googlebot", paths: ["/private", "/admin"])
@@ -71,7 +70,7 @@ struct RobotsGeneratorTests {
         #expect(output.contains("Disallow: /admin"))
     }
 
-    @Test("Multiple disallow rules are all included")
+    @Test("Multiple disallow rules are all included", .publishingContext())
     func multipleDisallowRules() {
         let site = RobotsTestSite(rules: [
             DisallowRule(name: "BadBot"),
@@ -85,7 +84,7 @@ struct RobotsGeneratorTests {
         #expect(output.contains("Disallow: /secret"))
     }
 
-    @Test("Known robot disallow rule uses correct name")
+    @Test("Known robot disallow rule uses correct name", .publishingContext())
     func knownRobotDisallowRule() {
         let site = RobotsTestSite(rules: [
             DisallowRule(robot: .chatGPT)

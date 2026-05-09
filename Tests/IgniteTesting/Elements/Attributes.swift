@@ -10,11 +10,10 @@ import Testing
 
 /// Tests for the element's `Attributes`.
 @Suite("Attributes Tests")
-@MainActor
 class AttributesTest: IgniteTestSuite {
     private nonisolated static let tags: [String] = ["body", "btn", "img", "div", "nav", "section"]
 
-    @Test("Classes are ordered", arguments: tags)
+    @Test("Classes are ordered", .publishingContext(), arguments: tags)
     func classes_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}.class("foo", "bar", "baz", "qux")
         let output = element.markupString()
@@ -22,7 +21,7 @@ class AttributesTest: IgniteTestSuite {
         #expect(output == expected)
     }
 
-    @Test("Custom attributes are ordered", arguments: tags)
+    @Test("Custom attributes are ordered", .publishingContext(), arguments: tags)
     func customAttributes_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .customAttribute(name: "qux", value: "qux")
@@ -34,7 +33,7 @@ class AttributesTest: IgniteTestSuite {
         #expect(output == "<\(tag) qux=\"qux\" baz=\"baz\" foo=\"foo\" bar=\"bar\"></\(tag)>")
     }
 
-    @Test("Events are ordered", arguments: tags)
+    @Test("Events are ordered", .publishingContext(), arguments: tags)
     func events_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .onEvent(.mouseUp, [ShowAlert(message: "bar")])
@@ -47,7 +46,7 @@ class AttributesTest: IgniteTestSuite {
         """)
     }
 
-    @Test("Styles are ordered", arguments: tags)
+    @Test("Styles are ordered", .publishingContext(), arguments: tags)
     func styles_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .style(
@@ -59,7 +58,7 @@ class AttributesTest: IgniteTestSuite {
         #expect(output == "<\(tag) style=\"z-index: 1; accent-color: red; cursor: pointer\"></\(tag)>")
     }
 
-    @Test("Aria attributes are ordered", arguments: tags)
+    @Test("Aria attributes are ordered", .publishingContext(), arguments: tags)
     func ariaAttributes_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .aria(.atomic, "bar")
@@ -70,7 +69,7 @@ class AttributesTest: IgniteTestSuite {
         #expect(output == "<\(tag) aria-atomic=\"bar\" aria-checked=\"qux\" aria-setsize=\"foo\"></\(tag)>")
     }
 
-    @Test("Data attributes are ordered", arguments: tags)
+    @Test("Data attributes are ordered", .publishingContext(), arguments: tags)
     func dataAttributes_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .data("foo", "bar")
@@ -82,7 +81,7 @@ class AttributesTest: IgniteTestSuite {
         #expect(output == "<\(tag) data-foo=\"bar\" data-baz=\"qux\" data-qux=\"foo\" data-bar=\"baz\"></\(tag)>")
     }
 
-    @Test("Boolean attributes are ordered", arguments: tags)
+    @Test("Boolean attributes are ordered", .publishingContext(), arguments: tags)
     func booleanAttributes_areOrdered(tag: String) async throws {
         let element = Tag(tag) {}
             .customAttribute(.disabled)
@@ -95,14 +94,14 @@ class AttributesTest: IgniteTestSuite {
 
     // MARK: - ID modifier
 
-    @Test("ID modifier produces id attribute on HTML element", arguments: tags)
+    @Test("ID modifier produces id attribute on HTML element", .publishingContext(), arguments: tags)
     func idModifierOnHTML(tag: String) async throws {
         let element = Tag(tag) {}.id("my-element")
         let output = element.markupString()
         #expect(output == "<\(tag) id=\"my-element\"></\(tag)>")
     }
 
-    @Test("ID modifier produces id attribute on inline element")
+    @Test("ID modifier produces id attribute on inline element", .publishingContext())
     func idModifierOnInlineElement() async throws {
         let element = Emphasis("Hello").id("em-1")
         let output = element.markupString()
@@ -110,7 +109,7 @@ class AttributesTest: IgniteTestSuite {
         #expect(output.contains("<em"))
     }
 
-    @Test("Empty ID is a no-op", arguments: tags)
+    @Test("Empty ID is a no-op", .publishingContext(), arguments: tags)
     func emptyIDIsNoOp(tag: String) async throws {
         let element = Tag(tag) {}.id("")
         let output = element.markupString()
@@ -119,14 +118,14 @@ class AttributesTest: IgniteTestSuite {
 
     // MARK: - Inline style modifier (public Property API)
 
-    @Test("Public style modifier with Property adds inline style", arguments: tags)
+    @Test("Public style modifier with Property adds inline style", .publishingContext(), arguments: tags)
     func publicStyleModifierAddsInlineStyle(tag: String) async throws {
         let element = Tag(tag) {}.style(.color, "red")
         let output = element.markupString()
         #expect(output == "<\(tag) style=\"color: red\"></\(tag)>")
     }
 
-    @Test("Style modifier on inline element")
+    @Test("Style modifier on inline element", .publishingContext())
     func styleModifierOnInlineElement() async throws {
         let element = Emphasis("Bold").style(.color, "blue")
         let output = element.markupString()
@@ -135,7 +134,7 @@ class AttributesTest: IgniteTestSuite {
 
     // MARK: - CoreAttributes modifier
 
-    @Test("CoreAttributes modifier merges classes and styles")
+    @Test("CoreAttributes modifier merges classes and styles", .publishingContext())
     func coreAttributesModifierMergesAttributes() async throws {
         var attrs = CoreAttributes()
         attrs.append(classes: "custom-class")
@@ -149,35 +148,35 @@ class AttributesTest: IgniteTestSuite {
 
     // MARK: - InlineElement paths
 
-    @Test("Aria modifier on inline element")
+    @Test("Aria modifier on inline element", .publishingContext())
     func ariaOnInlineElement() async throws {
         let element = Emphasis("Hello").aria(.label, "greeting")
         let output = element.markupString()
         #expect(output.contains("aria-label=\"greeting\""))
     }
 
-    @Test("Class modifier on inline element")
+    @Test("Class modifier on inline element", .publishingContext())
     func classOnInlineElement() async throws {
         let element = Emphasis("Hello").class("highlight")
         let output = element.markupString()
         #expect(output.contains("class=\"highlight\""))
     }
 
-    @Test("Data modifier on inline element")
+    @Test("Data modifier on inline element", .publishingContext())
     func dataOnInlineElement() async throws {
         let element = Emphasis("Hello").data("info", "test")
         let output = element.markupString()
         #expect(output.contains("data-info=\"test\""))
     }
 
-    @Test("Empty data value is a no-op")
+    @Test("Empty data value is a no-op", .publishingContext())
     func emptyDataValueIsNoOp() async throws {
         let element = Tag("div") {}.data("key", "")
         let output = element.markupString()
         #expect(!output.contains("data-key"))
     }
 
-    @Test("Optional nil aria value is a no-op")
+    @Test("Optional nil aria value is a no-op", .publishingContext())
     func optionalNilAriaIsNoOp() async throws {
         let value: String? = nil
         let element = Tag("div") {}.aria(.label, value)

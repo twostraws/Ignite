@@ -21,7 +21,6 @@
 ///     }
 /// }
 /// ```
-@MainActor
 public protocol Style: Hashable {
     /// Resolves the style for the given HTML content and environment conditions
     /// - Parameters:

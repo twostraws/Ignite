@@ -7,7 +7,6 @@
 
 import Foundation
 
-@MainActor
 struct SyntaxHighlightGenerator {
     var site: any Site
 

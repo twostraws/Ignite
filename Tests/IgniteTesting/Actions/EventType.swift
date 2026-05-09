@@ -12,15 +12,14 @@ import Testing
 
 /// Tests for the `EventType` enum.
 @Suite("EventType Tests")
-@MainActor
 struct EventTypeTests {
-    @Test("All raw values start with on prefix", arguments: EventType.allCases)
+    @Test("All raw values start with on prefix", .publishingContext(), arguments: EventType.allCases)
     func allRawValuesStartWithOn(eventType: EventType) async throws {
         #expect(eventType.rawValue.hasPrefix("on"),
                 "Expected \(eventType) raw value '\(eventType.rawValue)' to start with 'on'")
     }
 
-    @Test("Representative raw values match HTML event attributes", arguments: [
+    @Test("Representative raw values match HTML event attributes", .publishingContext(), arguments: [
         (EventType.click, "onclick"),
         (.doubleClick, "ondblclick"),
         (.mouseDown, "onmousedown"),
@@ -43,7 +42,7 @@ struct EventTypeTests {
         #expect(eventType.rawValue == expected)
     }
 
-    @Test("withoutPrefix strips on prefix", arguments: [
+    @Test("withoutPrefix strips on prefix", .publishingContext(), arguments: [
         (EventType.click, "click"),
         (.doubleClick, "dblclick"),
         (.mouseOver, "mouseover"),

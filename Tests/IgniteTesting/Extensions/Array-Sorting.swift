@@ -12,10 +12,7 @@ import Testing
 
 /// Tests for the `Array-Sorting` extension.
 @Suite("Array-Sorting Tests")
-@MainActor
 struct ArraySortingTests {
-    @MainActor
-
     // MARK: Tests for a simple custom type.
     // Given
     struct Apple {
@@ -30,7 +27,7 @@ struct ArraySortingTests {
         Apple(weight: 180, color: "Green")
     ]
 
-    @Test("Find the lightest apple by weight")
+    @Test("Find the lightest apple by weight", .publishingContext())
     func minBy_findLightestApple() async throws {
         // When
         let result = apples.min(by: \.weight)
@@ -38,7 +35,7 @@ struct ArraySortingTests {
         #expect(result?.weight == 120)
     }
 
-    @Test("Find the heaviest apple by weight")
+    @Test("Find the heaviest apple by weight", .publishingContext())
     func maxBy_findHeaviestApple() async throws {
         // When
         let result = apples.max(by: \.weight)
@@ -46,7 +43,7 @@ struct ArraySortingTests {
         #expect(result?.weight == 180)
     }
 
-    @Test("Find 'min' apple colour")
+    @Test("Find 'min' apple colour", .publishingContext())
     func minBy_findMinColor() async throws {
         // When
         let result = apples.min(by: \.color)
@@ -54,7 +51,7 @@ struct ArraySortingTests {
         #expect(result?.color == "Green")
     }
 
-    @Test("Find 'max' apple color")
+    @Test("Find 'max' apple color", .publishingContext())
     func maxBy_findMaxColor() async throws {
         // When
         let result = apples.max(by: \.color)
@@ -62,7 +59,7 @@ struct ArraySortingTests {
         #expect(result?.color == "Yellow")
     }
 
-    @Test("Sort apples by weight in ascending order")
+    @Test("Sort apples by weight in ascending order", .publishingContext())
     func sortApplesByWeightInAscendingOrder() async throws {
         // When
         let result = apples.sorted(by: \.weight, order: .forward)
@@ -70,7 +67,7 @@ struct ArraySortingTests {
         #expect(result.map { $0.weight } == [120, 150, 160, 180])
     }
 
-    @Test("Sort apples by weight in descending order")
+    @Test("Sort apples by weight in descending order", .publishingContext())
     func sortApplesByWeightInDescendingOrder() async throws {
         // When
         let result = apples.sorted(by: \ .weight, order: .reverse)
@@ -78,7 +75,7 @@ struct ArraySortingTests {
         #expect(result.map { $0.weight } == [180, 160, 150, 120])
     }
 
-    @Test("Sort apples by colour in ascending order")
+    @Test("Sort apples by colour in ascending order", .publishingContext())
     func sortApplesByColorInAscendingOrder() async throws {
         // When
         let result = apples.sorted(by: \ .color, order: .forward)
@@ -86,7 +83,7 @@ struct ArraySortingTests {
         #expect(result.map { $0.color } == ["Green", "Red", "Red", "Yellow"])
     }
 
-    @Test("Sort apples by colour in descending order")
+    @Test("Sort apples by colour in descending order", .publishingContext())
     func sortApplesByColorInDescendingOrder() async throws {
         // When
         let result = apples.sorted(by: \ .color, order: .reverse)
@@ -109,7 +106,7 @@ struct ArraySortingTests {
         Car(model: "SUV", horsepower: 200, price: 35000)
     ]
 
-    @Test("Find the highest horsepower")
+    @Test("Find the highest horsepower", .publishingContext())
     func maxBy_findHighestHorsepower() async throws {
         // When
         let result = cars.max(by: \.horsepower)
@@ -117,7 +114,7 @@ struct ArraySortingTests {
         #expect(result?.horsepower == 200)
     }
 
-    @Test("Find the lowest horsepower")
+    @Test("Find the lowest horsepower", .publishingContext())
     func minBy_findLowestHorsepower() async throws {
         // When
         let result = cars.min(by: \.horsepower)
@@ -125,7 +122,7 @@ struct ArraySortingTests {
         #expect(result?.horsepower == 130)
     }
 
-    @Test("Find the cheapest price")
+    @Test("Find the cheapest price", .publishingContext())
     func minBy_findCheapestPrice() async throws {
         // When
         let result = cars.min(by: \.price)
@@ -133,7 +130,7 @@ struct ArraySortingTests {
         #expect(result?.price == 18000)
     }
 
-    @Test("Find the most expensive price")
+    @Test("Find the most expensive price", .publishingContext())
     func maxBy_findMostExpensivePrice() async throws {
         // When
         let result = cars.max(by: \.price)
@@ -141,7 +138,7 @@ struct ArraySortingTests {
         #expect(result?.price == 35000)
     }
 
-    @Test("Sort cars by price in descending order")
+    @Test("Sort cars by price in descending order", .publishingContext())
     func sortCarsByPriceInDescendingOrder() async throws {
         // When
         let result = cars.sorted(by: \.price, order: .reverse)
@@ -149,7 +146,7 @@ struct ArraySortingTests {
         #expect(result.map { $0.model } == ["SUV", "Coupé", "Sedan", "Hatchback"])
     }
 
-    @Test("Sort cars by power in ascedning order")
+    @Test("Sort cars by power in ascedning order", .publishingContext())
     func sortCarsByPowerInAscendingOrder() async throws {
         // When
         let result = cars.sorted(by: \.horsepower, order: .forward)
@@ -157,7 +154,7 @@ struct ArraySortingTests {
         #expect(result.map { $0.model } == ["Hatchback", "Sedan", "Coupé", "SUV"])
     }
 
-    @Test("Min, max, and sort on an empty sequence")
+    @Test("Min, max, and sort on an empty sequence", .publishingContext())
     func operationsOnEmptySequence_returnNilOrEmpty() async throws {
         // Given
         let emptyBasket: [Apple] = []
@@ -199,7 +196,7 @@ struct ArraySortingTests {
         MockHTML(id: "c")
     ]
 
-    @Test("Finding min element by id")
+    @Test("Finding min element by id", .publishingContext())
     func minElementById() async throws {
         // When
         let result = mockHTMLElements.min(by: \.id)
@@ -207,7 +204,7 @@ struct ArraySortingTests {
         #expect(result?.id == "a")
     }
 
-    @Test("Finding max element by id")
+    @Test("Finding max element by id", .publishingContext())
     func maxElementById() async throws {
         // When
         let result = mockHTMLElements.max(by: \.id)
@@ -215,7 +212,7 @@ struct ArraySortingTests {
         #expect(result?.id == "c")
     }
 
-    @Test("Sort elements by id in ascending order")
+    @Test("Sort elements by id in ascending order", .publishingContext())
     func sortById_inAscendingOrder() async throws {
         // When
         let result = mockHTMLElements.sorted(by: \.id)
@@ -223,7 +220,7 @@ struct ArraySortingTests {
         #expect(result.map { $0.id } == ["a", "b", "c"])
     }
 
-    @Test("Sort elements by id in descending order")
+    @Test("Sort elements by id in descending order", .publishingContext())
     func sortById_inDescendingOrder() async throws {
         // When
         let result = mockHTMLElements.sorted(by: \.id, order: .reverse)
@@ -231,7 +228,7 @@ struct ArraySortingTests {
         #expect(result.map { $0.id } == ["c", "b", "a"])
     }
 
-    @Test("Sorting elements in-place by id in ascending order")
+    @Test("Sorting elements in-place by id in ascending order", .publishingContext())
     func inPlaceSort_byIdInAscendingOrder() async throws {
         // Given
         var mutableMockHTMLElements = mockHTMLElements
@@ -241,7 +238,7 @@ struct ArraySortingTests {
         #expect(mutableMockHTMLElements.map { $0.id } == ["a", "b", "c"])
     }
 
-    @Test("Sorting elements in-place by id in descending order")
+    @Test("Sorting elements in-place by id in descending order", .publishingContext())
     func inPlaceSort_byIdInDescendingOrder() async throws {
         // Given
         var mutableMockHTMLElements = mockHTMLElements
@@ -251,7 +248,7 @@ struct ArraySortingTests {
         #expect(mutableMockHTMLElements.map { $0.id } == ["c", "b", "a"])
     }
 
-    @Test("Empty HTML sequence for min")
+    @Test("Empty HTML sequence for min", .publishingContext())
     func minOnEmptySequence() async throws {
         // Given
         let emptyElements: [MockHTML] = []
@@ -261,7 +258,7 @@ struct ArraySortingTests {
         #expect(result == nil)
     }
 
-    @Test("Empty HTML sequence for max")
+    @Test("Empty HTML sequence for max", .publishingContext())
     func maxOnEmptySequence() async throws {
         // Given
         let emptyElements: [MockHTML] = []
@@ -271,7 +268,7 @@ struct ArraySortingTests {
         #expect(result == nil)
     }
 
-    @Test("Empty HTML sequence for sorting")
+    @Test("Empty HTML sequence for sorting", .publishingContext())
     func sortedOnEmptySequence() async throws {
         // Given
         let emptyElements: [MockHTML] = []
@@ -287,7 +284,7 @@ struct ArraySortingTests {
     let expectedAscending = [1, 1, 2, 3, 4, 5, 9]
     let expectedDescending = [9, 5, 4, 3, 2, 1, 1]
 
-    @Test("Integers, ascending")
+    @Test("Integers, ascending", .publishingContext())
     func sortIntegersAscending() async throws {
         // When
         let result = testArray.sorted(by: \.self)
@@ -295,7 +292,7 @@ struct ArraySortingTests {
         #expect(result == expectedAscending)
     }
 
-    @Test("Integers, descending")
+    @Test("Integers, descending", .publishingContext())
     func sortIntegersDescending() async throws {
         // When
         let result = testArray.sorted(by: \.self, order: .reverse)
@@ -303,7 +300,7 @@ struct ArraySortingTests {
         #expect(result == expectedDescending)
     }
 
-    @Test("Integers, in-place, ascending")
+    @Test("Integers, in-place, ascending", .publishingContext())
     func inPlaceSort_integersAscending() async throws {
         // Given
         var myArray = testArray
@@ -313,7 +310,7 @@ struct ArraySortingTests {
         #expect(myArray == expectedAscending)
     }
 
-    @Test("Integers, in-place, descending")
+    @Test("Integers, in-place, descending", .publishingContext())
     func inPlaceSort_integersDescending() async throws {
         // Given
         var myArray = testArray

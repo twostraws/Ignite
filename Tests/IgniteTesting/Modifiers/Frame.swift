@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Frame` modifier.
 @Suite("Frame Tests")
-@MainActor
 class FrameTests: IgniteTestSuite {
-    @Test("Explicit width/height frame applies styles directly to HTML content")
+    @Test("Explicit width/height frame applies styles directly to HTML content", .publishingContext())
     func htmlFrameAppliesDirectStyles() async throws {
         let output = Text("Hello")
             .frame(width: 120, height: 45)
@@ -23,7 +22,7 @@ class FrameTests: IgniteTestSuite {
         #expect(output == #"<p style="width: 120px; height: 45px">Hello</p>"#)
     }
 
-    @Test("Max width without explicit width injects width 100 percent for HTML content")
+    @Test("Max width without explicit width injects width 100 percent for HTML content", .publishingContext())
     func maxWidthInjectsResponsiveWidth() async throws {
         let output = Text("Hello")
             .frame(maxWidth: 320)
@@ -32,7 +31,7 @@ class FrameTests: IgniteTestSuite {
         #expect(output == #"<p style="width: 100%; max-width: 320px">Hello</p>"#)
     }
 
-    @Test("Alignment wraps non-image content in a flex container")
+    @Test("Alignment wraps non-image content in a flex container", .publishingContext())
     func alignmentWrapsNonImageContent() async throws {
         let output = Text("Hello")
             .frame(width: 150, alignment: .bottomTrailing)
@@ -48,7 +47,7 @@ class FrameTests: IgniteTestSuite {
         #expect(!output.contains("flex-direction: column"))
     }
 
-    @Test("Image alignment adds column flex direction and applies dimensions to image and wrapper")
+    @Test("Image alignment adds column flex direction and applies dimensions to image and wrapper", .publishingContext())
     func imageAlignmentUsesColumnLayout() async throws {
         let output = AnyHTML(Image("/images/test.jpg", description: "Test"))
             .frame(width: 120, alignment: .center)
@@ -64,7 +63,7 @@ class FrameTests: IgniteTestSuite {
         #expect(output.contains(#"src="/images/test.jpg""#))
     }
 
-    @Test("Inline frame styles inline elements without introducing wrapper elements")
+    @Test("Inline frame styles inline elements without introducing wrapper elements", .publishingContext())
     func inlineFrameAppliesStylesDirectly() async throws {
         let output = Emphasis("Hello")
             .frame(width: 90)

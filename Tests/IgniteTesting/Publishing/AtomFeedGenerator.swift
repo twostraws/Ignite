@@ -10,20 +10,33 @@ import Testing
 
 @testable import Ignite
 
+enum AtomFeedSite: Sendable {
+    case standard
+    case gmt
+    case est
+
+    static let all: [Self] = [.standard, .gmt, .est]
+
+    var site: TestSite {
+        switch self {
+        case .standard:
+            TestSite()
+        case .gmt:
+            TestSite(timeZone: .init(abbreviation: "GMT")!)
+        case .est:
+            TestSite(timeZone: .init(abbreviation: "EST")!)
+        }
+    }
+}
+
 /// Tests for the `AtomFeedGenerator` type.
 @Suite("AtomFeedGenerator Tests")
-@MainActor
 struct AtomFeedGeneratorTests {
-    static let sites: [any Site] = [
-        TestSite(),
-        TestSite(timeZone: .init(abbreviation: "GMT")!),
-        TestSite(timeZone: .init(abbreviation: "EST")!)
-    ]
-
     // MARK: - Golden path
 
-    @Test("Golden path: single article with all basic fields", arguments: await sites)
-    func goldenPath(for site: any Site) async throws {
+    @Test("Golden path: single article with all basic fields", .publishingContext(), arguments: AtomFeedSite.all)
+    func goldenPath(for siteCase: AtomFeedSite) async throws {
+        let site = siteCase.site
         let config = site.feedConfiguration!
         let atomPath = config.paths[.atom] ?? "/feed.atom"
         let selfHref = site.url.appending(path: atomPath).absoluteString
@@ -60,7 +73,7 @@ struct AtomFeedGeneratorTests {
 
     // MARK: - Description-only mode
 
-    @Test("Description-only mode has summary but no content element")
+    @Test("Description-only mode has summary but no content element", .publishingContext())
     func descriptionOnlyMode() async throws {
         let config = FeedConfiguration(mode: .descriptionOnly, contentCount: 20)!
         let site = TestSite()
@@ -79,7 +92,7 @@ struct AtomFeedGeneratorTests {
 
     // MARK: - Full-content mode
 
-    @Test("Full-content mode includes content element with absolute links")
+    @Test("Full-content mode includes content element with absolute links", .publishingContext())
     func fullContentMode() async throws {
         let config = FeedConfiguration(mode: .full, contentCount: 20)!
         let site = TestSite()
@@ -98,7 +111,7 @@ struct AtomFeedGeneratorTests {
 
     // MARK: - XML escaping in titles
 
-    @Test("XML special characters in titles are escaped")
+    @Test("XML special characters in titles are escaped", .publishingContext())
     func xmlEscapingInTitles() async throws {
         let config = FeedConfiguration(mode: .descriptionOnly, contentCount: 20)!
         let site = TestSite()
@@ -115,7 +128,7 @@ struct AtomFeedGeneratorTests {
 
     // MARK: - Multiple articles
 
-    @Test("Multiple articles preserve ordering")
+    @Test("Multiple articles preserve ordering", .publishingContext())
     func multipleArticles() async throws {
         let config = FeedConfiguration(mode: .descriptionOnly, contentCount: 20)!
         let site = TestSite()
@@ -152,7 +165,7 @@ struct AtomFeedGeneratorTests {
 
     // MARK: - Empty optional fields
 
-    @Test("Nil author and nil tags are handled gracefully")
+    @Test("Nil author and nil tags are handled gracefully", .publishingContext())
     func emptyOptionalFields() async throws {
         let config = FeedConfiguration(mode: .descriptionOnly, contentCount: 20)!
 
@@ -174,7 +187,7 @@ struct AtomFeedGeneratorTests {
 
     // MARK: - Feed image
 
-    @Test("Icon element present when image is configured")
+    @Test("Icon element present when image is configured", .publishingContext())
     func feedImagePresent() async throws {
         let config = FeedConfiguration(
             mode: .descriptionOnly,
@@ -190,7 +203,7 @@ struct AtomFeedGeneratorTests {
         #expect(feed.contains("<logo>https://example.com/icon.png</logo>"))
     }
 
-    @Test("Icon and logo elements absent when no image configured")
+    @Test("Icon and logo elements absent when no image configured", .publishingContext())
     func feedImageAbsent() async throws {
         let config = FeedConfiguration(mode: .descriptionOnly, contentCount: 20)!
         let site = TestSite()
@@ -204,8 +217,9 @@ struct AtomFeedGeneratorTests {
 
     // MARK: - Timezone handling
 
-    @Test("Timezone affects date formatting", arguments: await sites)
-    func timezoneHandling(for site: any Site) async throws {
+    @Test("Timezone affects date formatting", .publishingContext(), arguments: AtomFeedSite.all)
+    func timezoneHandling(for siteCase: AtomFeedSite) async throws {
+        let site = siteCase.site
         let config = FeedConfiguration(mode: .descriptionOnly, contentCount: 20)!
 
         var article = Article()
@@ -222,7 +236,7 @@ struct AtomFeedGeneratorTests {
 
     // MARK: - Content count limiting
 
-    @Test("Content count limits number of entries")
+    @Test("Content count limits number of entries", .publishingContext())
     func contentCountLimiting() async throws {
         let config = FeedConfiguration(mode: .descriptionOnly, contentCount: 2)!
         let site = TestSite()

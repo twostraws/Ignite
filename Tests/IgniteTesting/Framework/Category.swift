@@ -12,17 +12,16 @@ import Testing
 
 /// Tests for the `Category` protocol and its concrete types.
 @Suite("Category Tests")
-@MainActor
 struct CategoryTests {
     // MARK: - EmptyCategory
 
-    @Test("EmptyCategory name is empty string")
+    @Test("EmptyCategory name is empty string", .publishingContext())
     func emptyCategoryName() async throws {
         let category = EmptyCategory()
         #expect(category.name == "")
     }
 
-    @Test("EmptyCategory articles is empty array")
+    @Test("EmptyCategory articles is empty array", .publishingContext())
     func emptyCategoryArticles() async throws {
         let category = EmptyCategory()
         #expect(category.articles.isEmpty)
@@ -30,13 +29,13 @@ struct CategoryTests {
 
     // MARK: - TagCategory
 
-    @Test("TagCategory stores name")
+    @Test("TagCategory stores name", .publishingContext())
     func tagCategoryStoresName() async throws {
         let category = TagCategory(name: "Swift", articles: [])
         #expect(category.name == "Swift")
     }
 
-    @Test("TagCategory stores articles")
+    @Test("TagCategory stores articles", .publishingContext())
     func tagCategoryStoresArticles() async throws {
         let articles = [Article(), Article()]
         let category = TagCategory(name: "Swift", articles: articles)
@@ -45,13 +44,13 @@ struct CategoryTests {
 
     // MARK: - AllTagsCategory
 
-    @Test("AllTagsCategory default name is All Tags")
+    @Test("AllTagsCategory default name is All Tags", .publishingContext())
     func allTagsCategoryDefaultName() async throws {
         let category = AllTagsCategory(articles: [])
         #expect(category.name == "All Tags")
     }
 
-    @Test("AllTagsCategory stores articles")
+    @Test("AllTagsCategory stores articles", .publishingContext())
     func allTagsCategoryStoresArticles() async throws {
         let articles = [Article(), Article(), Article()]
         let category = AllTagsCategory(articles: articles)
@@ -60,13 +59,13 @@ struct CategoryTests {
 
     // MARK: - Category protocol
 
-    @Test("Category description returns name")
+    @Test("Category description returns name", .publishingContext())
     func categoryDescriptionReturnsName() async throws {
         let category = TagCategory(name: "iOS", articles: [])
         #expect(category.description == "iOS")
     }
 
-    @Test("EmptyCategory description is empty string")
+    @Test("EmptyCategory description is empty string", .publishingContext())
     func emptyCategoryDescriptionIsEmpty() async throws {
         let category = EmptyCategory()
         #expect(category.description == "")

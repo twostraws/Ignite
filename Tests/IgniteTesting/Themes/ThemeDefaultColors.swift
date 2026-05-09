@@ -17,9 +17,8 @@ import Testing
 /// `75%`/`50%` (a `Percentage`), causing Swift to pick the 0-1 RGB `Double`
 /// initializer and scale the integer RGB components by 255.
 @Suite("Default Theme Colors")
-@MainActor
 struct ThemeDefaultColorsTests {
-    @Test("Default light theme secondary color stays within valid RGB range")
+    @Test("Default light theme secondary color stays within valid RGB range", .publishingContext())
     func lightSecondaryStaysInRGBRange() {
         let color = DefaultLightTheme().secondary
         #expect(color.red == 33)
@@ -28,7 +27,7 @@ struct ThemeDefaultColorsTests {
         #expect(color.opacity == 75)
     }
 
-    @Test("Default dark theme secondary color stays within valid RGB range")
+    @Test("Default dark theme secondary color stays within valid RGB range", .publishingContext())
     func darkSecondaryStaysInRGBRange() {
         let color = DefaultDarkTheme().secondary
         #expect(color.red == 222)
@@ -37,7 +36,7 @@ struct ThemeDefaultColorsTests {
         #expect(color.opacity == 75)
     }
 
-    @Test("Default light theme tertiary color stays within valid RGB range")
+    @Test("Default light theme tertiary color stays within valid RGB range", .publishingContext())
     func lightTertiaryStaysInRGBRange() {
         let color = DefaultLightTheme().tertiary
         #expect(color.red == 33)
@@ -46,7 +45,7 @@ struct ThemeDefaultColorsTests {
         #expect(color.opacity == 50)
     }
 
-    @Test("Default dark theme tertiary color stays within valid RGB range")
+    @Test("Default dark theme tertiary color stays within valid RGB range", .publishingContext())
     func darkTertiaryStaysInRGBRange() {
         let color = DefaultDarkTheme().tertiary
         #expect(color.red == 222)

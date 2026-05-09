@@ -118,7 +118,7 @@ extension PublishingContext {
 
         rules.append(contentsOf: themeFontRules)
 
-        let customFontRules = fontRules(for: CSSManager.shared.customFonts)
+        let customFontRules = fontRules(for: cssManager.customFonts)
         rules.append(contentsOf: customFontRules)
 
         let (lightTheme, darkTheme) = configureDefaultThemes(site.lightTheme, site.darkTheme)

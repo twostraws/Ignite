@@ -11,22 +11,22 @@ import Testing
 
 /// Tests for the `Text` element.
 @Suite("Text Tests")
-@MainActor class TextTests: IgniteTestSuite {
-    @Test("Simple String")
+class TextTests: IgniteTestSuite {
+    @Test("Simple String", .publishingContext())
     func simpleString() async throws {
         let element = Text("Hello")
         let output = element.markupString()
         #expect(output == "<p>Hello</p>")
     }
 
-    @Test("Builder with Simple String")
-    @MainActor func test_simpleBuilderString() async throws {
+    @Test("Builder with Simple String", .publishingContext())
+    func test_simpleBuilderString() async throws {
         let element = Text { "Hello" }
         let output = element.markupString()
         #expect(output == "<p>Hello</p>")
     }
 
-    @Test("Builder with Complex String")
+    @Test("Builder with Complex String", .publishingContext())
     func complexBuilderString() {
         let element = Text {
             "Hello, "
@@ -50,7 +50,7 @@ import Testing
         """)
     }
 
-    @Test("Custom Font", arguments: Font.Style.allCases)
+    @Test("Custom Font", .publishingContext(), arguments: Font.Style.allCases)
     func customFont(font: Font.Style) async throws {
         let element = Text("Hello").font(font)
         let output = element.markupString()
@@ -63,7 +63,7 @@ import Testing
         }
     }
 
-    @Test("Markdown")
+    @Test("Markdown", .publishingContext())
     func markdown() async throws {
         let element = Text(markdown: "*i*, **b**, and ***b&i***")
         let output = element.markupString()
@@ -73,7 +73,7 @@ import Testing
         """)
     }
 
-    @Test("Strikethrough")
+    @Test("Strikethrough", .publishingContext())
     func strikethrough() async throws {
         // Given
         let element = Text {

@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Hint` modifier.
 @Suite("Hint Tests")
-@MainActor
 class HintTests: IgniteTestSuite {
-    @Test("Markdown Hint")
+    @Test("Markdown Hint", .publishingContext())
     func markdownHint() async throws {
         let element = Text {
             Span("Hover over me")
@@ -32,7 +31,7 @@ class HintTests: IgniteTestSuite {
         """)
     }
 
-    @Test("HMTL Hint")
+    @Test("HMTL Hint", .publishingContext())
     func htmlHint() async throws {
         let element = Text {
             Span("Hover over me")
@@ -50,7 +49,7 @@ class HintTests: IgniteTestSuite {
         """)
     }
 
-    @Test("HMTL Hint")
+    @Test("HMTL Hint", .publishingContext())
     func textHint() async throws {
         let element = Text {
             Span("Hover over me")

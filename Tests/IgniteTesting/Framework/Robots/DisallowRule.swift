@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for `DisallowRule`.
 @Suite("DisallowRule Tests")
-@MainActor
 struct DisallowRuleTests {
-    @Test("Initializer with name and paths")
+    @Test("Initializer with name and paths", .publishingContext())
     func initWithNameAndPaths() {
         let rule = DisallowRule(
             name: "example name",
@@ -24,14 +23,14 @@ struct DisallowRuleTests {
         #expect(rule.paths == ["path/1", "path/2"])
     }
 
-    @Test("Initializer with name")
+    @Test("Initializer with name", .publishingContext())
     func initWithName() {
         let rule = DisallowRule(name: "example name")
         #expect(rule.name == "example name")
         #expect(rule.paths == ["*"])
     }
 
-    @Test("Initializer with robot and paths")
+    @Test("Initializer with robot and paths", .publishingContext())
     func initWithRobotAndPaths() {
         let robot = KnownRobot.google
         let rule = DisallowRule(
@@ -42,7 +41,7 @@ struct DisallowRuleTests {
         #expect(rule.paths == ["path/1", "path/2"])
     }
 
-    @Test("Initializer with robot")
+    @Test("Initializer with robot", .publishingContext())
     func initWithRobot() {
         let robot = KnownRobot.apple
         let rule = DisallowRule(robot: robot)

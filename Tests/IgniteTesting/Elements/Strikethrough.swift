@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `Strikethrough` element.
 @Suite("Strikethrough Tests")
-@MainActor
 class StrikethroughTests: IgniteTestSuite {
-    @Test("String content is wrapped in <s> tags")
+    @Test("String content is wrapped in <s> tags", .publishingContext())
     func stringContent() async throws {
         let element = Strikethrough("deleted text")
         let output = element.markupString()
@@ -21,7 +20,7 @@ class StrikethroughTests: IgniteTestSuite {
         #expect(output == "<s>deleted text</s>")
     }
 
-    @Test("Inline element content is rendered inside <s> tags")
+    @Test("Inline element content is rendered inside <s> tags", .publishingContext())
     func inlineElementContent() async throws {
         let element = Strikethrough {
             Emphasis("important")

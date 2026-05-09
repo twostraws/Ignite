@@ -26,28 +26,27 @@ private struct HighlightedCard: Style {
 
 /// Tests for the `StyleModifier`.
 @Suite("StyleModifier Tests")
-@MainActor
 class StyleModifierTests: IgniteTestSuite {
-    @Test("Style modifier applies CSS class name")
+    @Test("Style modifier applies CSS class name", .publishingContext())
     func styleModifierAppliesCSSClassName() async throws {
         let element = Text("Hello").style(TestCardStyle())
         let output = element.markupString()
         #expect(output.contains("test-card-style"))
     }
 
-    @Test("Style class name derives from type name")
+    @Test("Style class name derives from type name", .publishingContext())
     func styleClassNameDerivesFromTypeName() async throws {
         let style = TestCardStyle()
         #expect(style.className == "test-card-style")
     }
 
-    @Test("Class name appends Style suffix when type name lacks it")
+    @Test("Class name appends Style suffix when type name lacks it", .publishingContext())
     func classNameAppendsSuffixWhenMissing() async throws {
         let style = HighlightedCard()
         #expect(style.className == "highlighted-card-style")
     }
 
-    @Test("Different styles produce distinct class names")
+    @Test("Different styles produce distinct class names", .publishingContext())
     func differentStylesProduceDistinctClassNames() async throws {
         let a = TestCardStyle()
         let b = HighlightedCard()
@@ -56,7 +55,7 @@ class StyleModifierTests: IgniteTestSuite {
 
     // MARK: - StyledHTML
 
-    @Test("StyledHTML style with Property accumulates inline styles")
+    @Test("StyledHTML style with Property accumulates inline styles", .publishingContext())
     func styledHTMLStyleWithProperty() async throws {
         let styled = StyledHTML()
             .style(.color, "red")
@@ -64,14 +63,14 @@ class StyleModifierTests: IgniteTestSuite {
         #expect(styled.attributes.styles.count == 2)
     }
 
-    @Test("StyledHTML style values are preserved")
+    @Test("StyledHTML style values are preserved", .publishingContext())
     func styledHTMLStyleValuesPreserved() async throws {
         let styled = StyledHTML().style(.color, "blue")
         let styles = styled.attributes.styles
         #expect(styles.contains(InlineStyle(.color, value: "blue")))
     }
 
-    @Test("StyledHTML array overload appends multiple styles")
+    @Test("StyledHTML array overload appends multiple styles", .publishingContext())
     func styledHTMLArrayOverload() async throws {
         let styled = StyledHTML().style([
             InlineStyle(.color, value: "red"),
@@ -80,7 +79,7 @@ class StyleModifierTests: IgniteTestSuite {
         #expect(styled.attributes.styles.count == 2)
     }
 
-    @Test("StyledHTML variadic overload appends styles")
+    @Test("StyledHTML variadic overload appends styles", .publishingContext())
     func styledHTMLVariadicOverload() async throws {
         let styled = StyledHTML().style(
             InlineStyle(.color, value: "red"),

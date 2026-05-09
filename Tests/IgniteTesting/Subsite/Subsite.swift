@@ -12,11 +12,10 @@ import Testing
 
 /// Tests for subsites.
 @Suite("Subsite Tests")
-@MainActor
 class SubsiteTests: IgniteSubsiteTestSuite {
     // MARK: - Image
 
-    @Test("Image Test", arguments: ["/images/example.jpg"], ["Example image"])
+    @Test("Image Test", .publishingContext(.subsite), arguments: ["/images/example.jpg"], ["Example image"])
     func named(path: String, description: String) async throws {
         let element = Image(path, description: description)
         let output = element.markupString()
@@ -26,7 +25,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
 
     // MARK: - Body
 
-    @Test("Body Test")
+    @Test("Body Test", .publishingContext(.subsite))
     func body() async throws {
         publishingContext.environment.pageContent = Text("TEXT")
 
@@ -44,7 +43,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
 
     // MARK: - Script
 
-    @Test("Script File Test", arguments: ["/code.js"])
+    @Test("Script File Test", .publishingContext(.subsite), arguments: ["/code.js"])
     func file(scriptFile: String) async throws {
         let element = Script(file: scriptFile)
         let output = element.markupString()
@@ -52,7 +51,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         #expect(output == "<script src=\"\(expectedPath)\"></script>")
     }
 
-    @Test("Attributes Test", arguments: ["/code.js"])
+    @Test("Attributes Test", .publishingContext(.subsite), arguments: ["/code.js"])
     func attributes(scriptFile: String) async throws {
         let element = Script(file: scriptFile)
             .data("key", "value")
@@ -65,7 +64,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
 
     // MARK: - Link
 
-    @Test("String Target Test", arguments: ["/"], ["Go Home"])
+    @Test("String Target Test", .publishingContext(.subsite), arguments: ["/"], ["Go Home"])
     func target(for target: String, description: String) async throws {
         let element = Link(description, target: target)
         let output = element.markupString()
@@ -73,7 +72,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         #expect(output == "<a href=\"\(expectedPath)\">\(description)</a>")
     }
 
-    @Test("Page Target Test")
+    @Test("Page Target Test", .publishingContext(.subsite))
     func target() async throws {
         let page = TestSubsitePage()
         let element = Link("This is a test", target: page).linkStyle(.button)
@@ -81,7 +80,7 @@ class SubsiteTests: IgniteSubsiteTestSuite {
         #expect(output == "<a href=\"\(page.path)/\" class=\"btn btn-primary\">This is a test</a>")
     }
 
-    @Test("Page Content Test")
+    @Test("Page Content Test", .publishingContext(.subsite))
     func content() async throws {
         let page = TestPage()
         let element = LinkGroup(target: page) {

@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Group` element.
 @Suite("Group Tests")
-@MainActor
 class GroupTests: IgniteTestSuite {
-    @Test("Group does not change HTML structure")
+    @Test("Group does not change HTML structure", .publishingContext())
     func groupDoesNotAddAnyAdditionalHTML() async throws {
         let element = Group {
             ControlLabel("Top Label")
@@ -33,7 +32,7 @@ class GroupTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Adding attributes to all children")
+    @Test("Adding attributes to all children", .publishingContext())
     func groupAppliesCustomAttributesToAllChildren() async throws {
         let attributeName = "data-info"
         let attributeValue = "Ignite"
@@ -55,7 +54,7 @@ class GroupTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Class modifier propagates to all children")
+    @Test("Class modifier propagates to all children", .publishingContext())
     func classPropagatesToChildren() async throws {
         let element = Group {
             Text("First")
@@ -67,7 +66,7 @@ class GroupTests: IgniteTestSuite {
         #expect(output.contains("<p class=\"highlight\">Second</p>"))
     }
 
-    @Test("Empty Group produces empty output")
+    @Test("Empty Group produces empty output", .publishingContext())
     func emptyGroup() async throws {
         let element = Group {}
         let output = element.markupString()

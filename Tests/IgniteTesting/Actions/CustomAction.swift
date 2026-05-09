@@ -12,7 +12,6 @@ import Testing
 
 /// Tests for the `CustomAction` action.
 @Suite("CustomAction Tests")
-@MainActor
 class CustomActionTests: IgniteTestSuite {
     private nonisolated static let inputCode: [String] = [
         "example code",
@@ -34,13 +33,13 @@ class CustomActionTests: IgniteTestSuite {
         "multiline string\nwith double quotes &quot;example&quot;\nand single quotes \\'example\\'"
     ]
 
-    @Test("Test initializer", arguments: zip(inputCode, inputCode))
+    @Test("Test initializer", .publishingContext(), arguments: zip(inputCode, inputCode))
     func initializer(input: String, output: String) async throws {
         let action = CustomAction(input)
         #expect(action.code == output)
     }
 
-    @Test("Verify compile action returns escaped code", arguments: zip(inputCode, outputCode))
+    @Test("Verify compile action returns escaped code", .publishingContext(), arguments: zip(inputCode, outputCode))
     func compile(input: String, output: String) async throws {
         let action = CustomAction(input)
         #expect(action.compile() == output)

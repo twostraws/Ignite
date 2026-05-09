@@ -11,33 +11,32 @@ import Testing
 
 /// Tests for the `Position` modifier.
 @Suite("Position Tests")
-@MainActor
 class PositionTests: IgniteTestSuite {
-    @Test("fixedTop applies fixed-top class")
+    @Test("fixedTop applies fixed-top class", .publishingContext())
     func fixedTop() async throws {
         let element = Text("Positioned").position(.fixedTop)
         #expect(element.markupString().contains(#"class="fixed-top"#))
     }
 
-    @Test("fixedBottom applies fixed-bottom class")
+    @Test("fixedBottom applies fixed-bottom class", .publishingContext())
     func fixedBottom() async throws {
         let element = Text("Positioned").position(.fixedBottom)
         #expect(element.markupString().contains(#"class="fixed-bottom"#))
     }
 
-    @Test("stickyTop applies sticky-top class")
+    @Test("stickyTop applies sticky-top class", .publishingContext())
     func stickyTop() async throws {
         let element = Text("Positioned").position(.stickyTop)
         #expect(element.markupString().contains(#"class="sticky-top"#))
     }
 
-    @Test("stickyBottom applies sticky-bottom class")
+    @Test("stickyBottom applies sticky-bottom class", .publishingContext())
     func stickyBottom() async throws {
         let element = Text("Positioned").position(.stickyBottom)
         #expect(element.markupString().contains(#"class="sticky-bottom"#))
     }
 
-    @Test("Position raw values match Bootstrap CSS classes")
+    @Test("Position raw values match Bootstrap CSS classes", .publishingContext())
     func rawValues() async throws {
         #expect(Position.fixedTop.rawValue == "fixed-top")
         #expect(Position.fixedBottom.rawValue == "fixed-bottom")

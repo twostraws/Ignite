@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Dropdown` element.
 @Suite("Dropdown Tests")
-@MainActor
 class DropdownTests: IgniteTestSuite {
-    @Test("basic Dropdown Text")
+    @Test("basic Dropdown Text", .publishingContext())
     func basicDropdownText() async throws {
         let element = Dropdown("Click Me") {
             Text("Content1")
@@ -46,7 +45,7 @@ class DropdownTests: IgniteTestSuite {
         #expect(normalizedOutput == normalizedExpectedOutput)
     }
 
-    @Test("Dropdown Role")
+    @Test("Dropdown Role", .publishingContext())
     func dropdownRole() async throws {
         let element = Dropdown("Click Me") {
             Text("Content1")
@@ -74,7 +73,7 @@ class DropdownTests: IgniteTestSuite {
         #expect(normalizedOutput == normalizedExpectedOutput)
     }
 
-    @Test("Empty Dropdown")
+    @Test("Empty Dropdown", .publishingContext())
     func emptyDropdown() async throws {
         let element = Dropdown("Click Me") {}.role(.primary)
 
@@ -98,7 +97,7 @@ class DropdownTests: IgniteTestSuite {
         #expect(normalizedOutput == normalizedExpectedOutput)
     }
 
-    @Test("Dropdown Large Content")
+    @Test("Dropdown Large Content", .publishingContext())
     func dropdownLargeContent() async throws {
         let element = Dropdown("Click Me") {
             for index in 1...50 {

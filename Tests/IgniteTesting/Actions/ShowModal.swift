@@ -11,12 +11,11 @@ import Testing
 
 /// Tests for the `ShowModal` action.
 @Suite("ShowModal Tests")
-@MainActor
 class ShowModalTests: IgniteTestSuite {
     // Note: Individual option tests (.backdrop, .focus, .keyboard, .noBackdrop)
     // are covered by Modal.swift's checkModalPresentationOptions parameterized test.
 
-    @Test("compile() with no options produces empty options block and modal.show()")
+    @Test("compile() with no options produces empty options block and modal.show()", .publishingContext())
     func noOptions() async throws {
         let action = ShowModal(id: "myModal")
         let output = action.compile()
@@ -26,7 +25,7 @@ class ShowModalTests: IgniteTestSuite {
         #expect(output.contains("modal.show();"))
     }
 
-    @Test("compile() with multiple options joins them in the options block")
+    @Test("compile() with multiple options joins them in the options block", .publishingContext())
     func multipleOptions() async throws {
         let action = ShowModal(id: "m", options: [.focus(true), .keyboard(false)])
         let output = action.compile()

@@ -12,16 +12,15 @@ import Testing
 
 /// Tests for the `Color` type.
 @Suite("Tests for the `Color` type")
-@MainActor
 struct ColorTypeTests {
-    @Test("CSS values via parameters", arguments: zip(
+    @Test("CSS values via parameters", .publishingContext(), arguments: zip(
         [Color.black, .white],
         ["0 0 0", "255 255 255"]))
     func makeColor(color: Color, rgbValues: String) async throws {
         #expect(color.description == "rgb(" + rgbValues + " / 100%)")
     }
 
-    @Test("Color init with Int values")
+    @Test("Color init with Int values", .publishingContext())
     func testInitializeWithIntValues() async throws {
         let color = Color(red: 255, green: 0, blue: 0)
         #expect(color == .red)
@@ -30,7 +29,7 @@ struct ColorTypeTests {
         #expect(color.blue == 0)
     }
 
-    @Test("CSS color value")
+    @Test("CSS color value", .publishingContext())
     func testReturnCSSValueOfColor() async throws {
         let red = 255
         let green = 0
@@ -40,7 +39,7 @@ struct ColorTypeTests {
         #expect(color.description == "rgb(\(red) \(blue) \(green) / 100%)")
     }
 
-    @Test("Opacity")
+    @Test("Opacity", .publishingContext())
     func testReturnCSSColorValueWithOpacity() async throws {
         let red = 255
         let green = 0
@@ -51,13 +50,13 @@ struct ColorTypeTests {
         #expect(color.description == "rgb(\(red) \(blue) \(green) / \(opacity.roundedValue)%)")
     }
 
-    @Test("Double to Int Conversion in init(red:green:blue:opacity:)")
+    @Test("Double to Int Conversion in init(red:green:blue:opacity:)", .publishingContext())
     func rbgaInitWithDouble() {
         let color = Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0)
         #expect(color.description == "rgb(255 255 255 / 100%)")
     }
 
-    @Test("Double to Int Conversion in init(white:opacity:)")
+    @Test("Double to Int Conversion in init(white:opacity:)", .publishingContext())
     func whiteAndOpacityInitWithDouble() {
         let color = Color(white: 1.0, opacity: 1.0)
         #expect(color.description == "rgb(255 255 255 / 100%)")
@@ -65,7 +64,7 @@ struct ColorTypeTests {
 
     // MARK: - Hex initializer
 
-    @Test("Hex init with 6-char string parses RGB correctly")
+    @Test("Hex init with 6-char string parses RGB correctly", .publishingContext())
     func hexInitSixChar() async throws {
         let color = Color(hex: "#FF8000")
         #expect(color.red == 255)
@@ -74,7 +73,7 @@ struct ColorTypeTests {
         #expect(color.opacity == 100)
     }
 
-    @Test("Hex init with 8-char string parses RGBA correctly")
+    @Test("Hex init with 8-char string parses RGBA correctly", .publishingContext())
     func hexInitEightChar() async throws {
         let color = Color(hex: "#FF800032")
         #expect(color.red == 255)
@@ -83,7 +82,7 @@ struct ColorTypeTests {
         #expect(color.opacity == 50)
     }
 
-    @Test("Hex init with invalid string falls back to opaque black")
+    @Test("Hex init with invalid string falls back to opaque black", .publishingContext())
     func hexInitInvalidFallsBackToBlack() async throws {
         let color = Color(hex: "not-a-color")
         #expect(color.red == 0)
@@ -92,7 +91,7 @@ struct ColorTypeTests {
         #expect(color.opacity == 100)
     }
 
-    @Test("Hex init without hash prefix falls back to opaque black")
+    @Test("Hex init without hash prefix falls back to opaque black", .publishingContext())
     func hexInitNoHashFallsBackToBlack() async throws {
         let color = Color(hex: "FF0000")
         #expect(color.red == 0)
@@ -103,7 +102,7 @@ struct ColorTypeTests {
 
     // MARK: - Opacity method
 
-    @Test("Opacity method multiplies existing opacity")
+    @Test("Opacity method multiplies existing opacity", .publishingContext())
     func opacityMethodMultiplies() async throws {
         let color = Color(red: 255, green: 0, blue: 0)
         let faded = color.opacity(0.5)
@@ -113,7 +112,7 @@ struct ColorTypeTests {
 
     // MARK: - Weighted
 
-    @Test("Weighted lightest mixes with 80% white")
+    @Test("Weighted lightest mixes with 80% white", .publishingContext())
     func weightedLightest() async throws {
         let color = Color.red
         let light = color.weighted(.lightest)
@@ -122,7 +121,7 @@ struct ColorTypeTests {
         #expect(light.blue == 204)
     }
 
-    @Test("Weighted darkest mixes with 80% black")
+    @Test("Weighted darkest mixes with 80% black", .publishingContext())
     func weightedDarkest() async throws {
         let color = Color.red
         let dark = color.weighted(.darkest)
@@ -133,7 +132,7 @@ struct ColorTypeTests {
 
     // MARK: - Static constants
 
-    @Test("Clear is fully transparent")
+    @Test("Clear is fully transparent", .publishingContext())
     func clearIsFullyTransparent() async throws {
         #expect(Color.clear.red == 0)
         #expect(Color.clear.green == 0)
@@ -141,7 +140,7 @@ struct ColorTypeTests {
         #expect(Color.clear.opacity == 0)
     }
 
-    @Test("Aqua and cyan are equal")
+    @Test("Aqua and cyan are equal", .publishingContext())
     func aquaEqualsCyan() async throws {
         #expect(Color.aqua == Color.cyan)
     }

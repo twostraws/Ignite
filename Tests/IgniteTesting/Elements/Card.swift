@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Card` element.
 @Suite("Card Tests")
-@MainActor
 class CardTests: IgniteTestSuite {
-    @Test("Basic Card")
+    @Test("Basic Card", .publishingContext())
     func basicCard() async throws {
         let element = Card {
             "Some text wrapped in a card"
@@ -27,7 +26,7 @@ class CardTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Basic Card with Image")
+    @Test("Basic Card with Image", .publishingContext())
     func basicCardWithImage() async throws {
         let element = Card(imageName: "dog.jpg") {
             "Some text wrapped in a card"
@@ -41,7 +40,7 @@ class CardTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Basic Card with Header and Footer")
+    @Test("Basic Card with Header and Footer", .publishingContext())
     func basicCardWithHeaderAndFooter() async throws {
         let element = Card {
             "Some text wrapped in a card"
@@ -59,7 +58,7 @@ class CardTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Complex Card")
+    @Test("Complex Card", .publishingContext())
     func complexCard() async throws {
         let element = Card(imageName: "/images/photos/dishwasher.jpg") {
             Text("Before putting your dishes into the dishwasher, give them a quick pre-clean.")
@@ -79,7 +78,7 @@ class CardTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Card Styles", arguments: zip(
+    @Test("Card Styles", .publishingContext(), arguments: zip(
         Card.Style.allCases,
         ["card", "card text-bg-default", "card border-default"]))
     func cardStyles(style: Card.Style, expectedClass: String) async throws {
@@ -95,7 +94,7 @@ class CardTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Card Content Position: Top")
+    @Test("Card Content Position: Top", .publishingContext())
     func contentPositionTop() async throws {
         let element = Card(imageName: "image.jpg") {
             "Placeholder"
@@ -110,7 +109,7 @@ class CardTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Card Content Position: Bottom")
+    @Test("Card Content Position: Bottom", .publishingContext())
     func contentPositionBottom() async throws {
         let element = Card(imageName: "image.jpg") {
             "Placeholder"
@@ -125,7 +124,7 @@ class CardTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Card Content Position: Overlay")
+    @Test("Card Content Position: Overlay", .publishingContext())
     func contentPositionOverlay() async throws {
         let element = Card(imageName: "image.jpg") {
             "Placeholder"

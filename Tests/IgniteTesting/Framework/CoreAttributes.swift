@@ -11,17 +11,16 @@ import Testing
 
 /// Tests for the `CoreAttributes` type.
 @Suite("CoreAttributes Tests")
-@MainActor
 struct CoreAttributesTests {
     // MARK: - isEmpty
 
-    @Test("Default instance is empty")
+    @Test("Default instance is empty", .publishingContext())
     func defaultIsEmpty() async throws {
         let attrs = CoreAttributes()
         #expect(attrs.isEmpty)
     }
 
-    @Test("Instance with id is not empty")
+    @Test("Instance with id is not empty", .publishingContext())
     func withIdIsNotEmpty() async throws {
         var attrs = CoreAttributes()
         attrs.id = "test"
@@ -30,7 +29,7 @@ struct CoreAttributesTests {
 
     // MARK: - Classes
 
-    @Test("Append variadic classes")
+    @Test("Append variadic classes", .publishingContext())
     func appendVariadicClasses() async throws {
         var attrs = CoreAttributes()
         attrs.append(classes: "foo", "bar", "baz")
@@ -38,7 +37,7 @@ struct CoreAttributesTests {
         #expect(attrs.classString == " class=\"foo bar baz\"")
     }
 
-    @Test("Append nil classes are filtered out")
+    @Test("Append nil classes are filtered out", .publishingContext())
     func appendNilClassesAreFiltered() async throws {
         var attrs = CoreAttributes()
         let nilClass: String? = nil
@@ -46,14 +45,14 @@ struct CoreAttributesTests {
         #expect(attrs.classes.count == 2)
     }
 
-    @Test("Append collection of classes")
+    @Test("Append collection of classes", .publishingContext())
     func appendCollectionClasses() async throws {
         var attrs = CoreAttributes()
         attrs.append(classes: ["alpha", "beta"])
         #expect(attrs.classes.count == 2)
     }
 
-    @Test("Remove classes")
+    @Test("Remove classes", .publishingContext())
     func removeClasses() async throws {
         var attrs = CoreAttributes()
         attrs.append(classes: "foo", "bar", "baz")
@@ -62,7 +61,7 @@ struct CoreAttributesTests {
         #expect(!attrs.classes.contains("bar"))
     }
 
-    @Test("Appending classes returns new copy without mutating original")
+    @Test("Appending classes returns new copy without mutating original", .publishingContext())
     func appendingClassesReturnsNewCopy() async throws {
         var original = CoreAttributes()
         original.append(classes: "foo")
@@ -73,21 +72,21 @@ struct CoreAttributesTests {
 
     // MARK: - Styles
 
-    @Test("Append styles filters empty values")
+    @Test("Append styles filters empty values", .publishingContext())
     func appendStylesFiltersEmpty() async throws {
         var attrs = CoreAttributes()
         attrs.append(styles: InlineStyle(.color, value: "red"), InlineStyle(.padding, value: ""))
         #expect(attrs.styles.count == 1)
     }
 
-    @Test("Append style with empty value is no-op")
+    @Test("Append style with empty value is no-op", .publishingContext())
     func appendStyleEmptyValueNoOp() async throws {
         var attrs = CoreAttributes()
         attrs.append(style: .color, value: "")
         #expect(attrs.styles.isEmpty)
     }
 
-    @Test("Remove styles by property")
+    @Test("Remove styles by property", .publishingContext())
     func removeStylesByProperty() async throws {
         var attrs = CoreAttributes()
         attrs.append(styles: InlineStyle(.color, value: "red"), InlineStyle(.padding, value: "10px"))
@@ -97,7 +96,7 @@ struct CoreAttributesTests {
         #expect(!attrs.styleString.contains("color"))
     }
 
-    @Test("Append style collection filters empty values")
+    @Test("Append style collection filters empty values", .publishingContext())
     func appendStyleCollectionFiltersEmpty() async throws {
         var attrs = CoreAttributes()
         attrs.append(styles: [
@@ -109,7 +108,7 @@ struct CoreAttributesTests {
 
     // MARK: - Get styles
 
-    @Test("Get styles returns matching properties")
+    @Test("Get styles returns matching properties", .publishingContext())
     func getStylesReturnsMatching() async throws {
         var attrs = CoreAttributes()
         attrs.append(styles: InlineStyle(.color, value: "blue"), InlineStyle(.padding, value: "5px"))
@@ -118,7 +117,7 @@ struct CoreAttributesTests {
         #expect(found.first?.value == "blue")
     }
 
-    @Test("Get styles returns empty for non-matching")
+    @Test("Get styles returns empty for non-matching", .publishingContext())
     func getStylesReturnsEmptyForNonMatching() async throws {
         var attrs = CoreAttributes()
         attrs.append(styles: InlineStyle(.color, value: "red"))
@@ -128,7 +127,7 @@ struct CoreAttributesTests {
 
     // MARK: - Clear
 
-    @Test("Clear resets to empty")
+    @Test("Clear resets to empty", .publishingContext())
     func clearResetsToEmpty() async throws {
         var attrs = CoreAttributes()
         attrs.id = "test"
@@ -140,7 +139,7 @@ struct CoreAttributesTests {
 
     // MARK: - Merge
 
-    @Test("Merge combines classes and styles from both instances")
+    @Test("Merge combines classes and styles from both instances", .publishingContext())
     func mergeCombinesClassesAndStyles() async throws {
         var a = CoreAttributes()
         a.append(classes: "foo")
@@ -155,7 +154,7 @@ struct CoreAttributesTests {
         #expect(a.styles.count == 2)
     }
 
-    @Test("Merge overwrites id when other is non-empty")
+    @Test("Merge overwrites id when other is non-empty", .publishingContext())
     func mergeOverwritesId() async throws {
         var a = CoreAttributes()
         a.id = "original"
@@ -167,7 +166,7 @@ struct CoreAttributesTests {
         #expect(a.id == "replacement")
     }
 
-    @Test("Merge preserves id when other id is empty")
+    @Test("Merge preserves id when other id is empty", .publishingContext())
     func mergePreservesId() async throws {
         var a = CoreAttributes()
         a.id = "original"
@@ -177,7 +176,7 @@ struct CoreAttributesTests {
         #expect(a.id == "original")
     }
 
-    @Test("Merging returns new combined instance without mutating original")
+    @Test("Merging returns new combined instance without mutating original", .publishingContext())
     func mergingReturnsNewCombined() async throws {
         var a = CoreAttributes()
         a.append(classes: "foo")
@@ -192,7 +191,7 @@ struct CoreAttributesTests {
 
     // MARK: - Custom attributes and data
 
-    @Test("Remove custom attributes by name")
+    @Test("Remove custom attributes by name", .publishingContext())
     func removeCustomAttributesByName() async throws {
         var attrs = CoreAttributes()
         attrs.append(customAttributes: Attribute(name: "loading", value: "lazy"))
@@ -200,7 +199,7 @@ struct CoreAttributesTests {
         #expect(attrs.customAttributes.isEmpty)
     }
 
-    @Test("Appending nil aria is no-op")
+    @Test("Appending nil aria is no-op", .publishingContext())
     func appendingNilAriaIsNoOp() async throws {
         let attrs = CoreAttributes()
         let result = attrs.appending(aria: nil)
@@ -209,27 +208,27 @@ struct CoreAttributesTests {
 
     // MARK: - String computed properties
 
-    @Test("idString format with non-empty id")
+    @Test("idString format with non-empty id", .publishingContext())
     func idStringFormat() async throws {
         var attrs = CoreAttributes()
         attrs.id = "main"
         #expect(attrs.idString == " id=\"main\"")
     }
 
-    @Test("Empty id produces empty idString")
+    @Test("Empty id produces empty idString", .publishingContext())
     func emptyIdProducesEmptyIdString() async throws {
         let attrs = CoreAttributes()
         #expect(attrs.idString == "")
     }
 
-    @Test("styleString format")
+    @Test("styleString format", .publishingContext())
     func styleStringFormat() async throws {
         var attrs = CoreAttributes()
         attrs.append(styles: InlineStyle(.color, value: "red"))
         #expect(attrs.styleString == " style=\"color: red\"")
     }
 
-    @Test("Description combines all attribute components")
+    @Test("Description combines all attribute components", .publishingContext())
     func descriptionCombinesAll() async throws {
         var attrs = CoreAttributes()
         attrs.id = "test"

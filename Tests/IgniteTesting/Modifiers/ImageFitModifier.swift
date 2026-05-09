@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `ImageFitModifier` modifier.
 @Suite("ImageFitModifier Tests")
-@MainActor
 struct ImageFitModifierTests {
-    @Test("Default parameters")
+    @Test("Default parameters", .publishingContext())
     func testDefaultParameters() async throws {
         let image = Image("/images/example-image.jpg")
         let modifiedImage = image.imageFit()
@@ -23,7 +22,7 @@ struct ImageFitModifierTests {
         #expect(output.contains("object-position: 50% 50%"))
     }
 
-    @Test("Custom fit and anchor parameters")
+    @Test("Custom fit and anchor parameters", .publishingContext())
     func testCustomParameters() async throws {
         let image = Image("/images/example-image.jpg")
         let modifiedImage = image.imageFit(.fit, anchor: .bottomLeading)
@@ -33,7 +32,7 @@ struct ImageFitModifierTests {
         #expect(output.contains("object-position: 0% 100%"))
     }
 
-    @Test("Different anchor points")
+    @Test("Different anchor points", .publishingContext())
     func testDifferentAnchorPoints() async throws {
         let image = Image("/images/example-image.jpg")
         let topLeftImage = image.imageFit(anchor: .topLeading)

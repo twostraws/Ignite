@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `ForEach` element.
 @Suite("ForEach Tests")
-@MainActor
 class ForEachTests: IgniteTestSuite {
-    @Test("Renders items from an array of strings")
+    @Test("Renders items from an array of strings", .publishingContext())
     func rendersItemsFromStringArray() async throws {
         let items = ["Hello", "World"]
         let element = ForEach(items) { item in
@@ -25,7 +24,7 @@ class ForEachTests: IgniteTestSuite {
         #expect(output == "<p>Hello</p><p>World</p>")
     }
 
-    @Test("Renders nothing for empty array")
+    @Test("Renders nothing for empty array", .publishingContext())
     func rendersNothingForEmptyArray() async throws {
         let items: [String] = []
         let element = ForEach(items) { item in
@@ -36,7 +35,7 @@ class ForEachTests: IgniteTestSuite {
         #expect(output == "")
     }
 
-    @Test("Renders single item")
+    @Test("Renders single item", .publishingContext())
     func rendersSingleItem() async throws {
         let items = ["Only"]
         let element = ForEach(items) { item in
@@ -47,7 +46,7 @@ class ForEachTests: IgniteTestSuite {
         #expect(output == "<p>Only</p>")
     }
 
-    @Test("Renders items from integer range")
+    @Test("Renders items from integer range", .publishingContext())
     func rendersItemsFromIntegerRange() async throws {
         let element = ForEach(1...3) { number in
             Text("\(number)")
@@ -57,7 +56,7 @@ class ForEachTests: IgniteTestSuite {
         #expect(output == "<p>1</p><p>2</p><p>3</p>")
     }
 
-    @Test("Preserves order of items")
+    @Test("Preserves order of items", .publishingContext())
     func preservesOrderOfItems() async throws {
         let items = ["A", "B", "C", "D"]
         let element = ForEach(items) { item in
@@ -68,7 +67,7 @@ class ForEachTests: IgniteTestSuite {
         #expect(output == "<p>A</p><p>B</p><p>C</p><p>D</p>")
     }
 
-    @Test("Works with complex elements")
+    @Test("Works with complex elements", .publishingContext())
     func worksWithComplexElements() async throws {
         let items = ["Link1", "Link2"]
         let element = ForEach(items) { item in

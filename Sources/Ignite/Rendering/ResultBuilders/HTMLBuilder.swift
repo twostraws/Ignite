@@ -9,7 +9,6 @@
 ///
 /// This builder provides support for creating HTML hierarchies using SwiftUI-like syntax,
 /// handling common control flow patterns like conditionals, loops, and switch statements.
-@MainActor
 @resultBuilder
 public struct HTMLBuilder {
     /// Converts a single HTML element into a builder expression.

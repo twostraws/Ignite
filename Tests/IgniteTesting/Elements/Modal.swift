@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Modal` element.
 @Suite("Modal Tests")
-@MainActor
 struct ModalTests {
-    @Test("Show Modals")
+    @Test("Show Modals", .publishingContext())
     func showModal() async throws {
         let element = Modal(id: "showModalId") {
             Text("Dismiss me by clicking on the backdrop.")
@@ -33,7 +32,7 @@ struct ModalTests {
         """)
     }
 
-    @Test("Dismissing Modals")
+    @Test("Dismissing Modals", .publishingContext())
     func dismissModal() async throws {
         let element = Modal(id: "dismissModalId") {
             Section {
@@ -62,7 +61,7 @@ struct ModalTests {
         """)
     }
 
-    @Test("Modal Size",
+    @Test("Modal Size", .publishingContext(),
           arguments: Modal.Size.allCases)
     func checkModalSizes(sizeOption: Modal.Size) async throws {
         let element = Modal(id: "ModalId") {
@@ -85,7 +84,7 @@ struct ModalTests {
         }
     }
 
-    @Test("Modal Position", arguments: Modal.Position.allCases)
+    @Test("Modal Position", .publishingContext(), arguments: Modal.Position.allCases)
     func checkModalPosition(positionOption: Modal.Position) async throws {
         let element = Modal(id: "topModalId") {
             Text(markdown: "Modal with `Position`")
@@ -108,7 +107,7 @@ struct ModalTests {
 
     }
 
-    @Test("Modal Headers")
+    @Test("Modal Headers", .publishingContext())
     func modalHeaders() async throws {
         let element = Modal(id: "headerModalId") {
             Text("Body")
@@ -133,7 +132,7 @@ struct ModalTests {
         """)
     }
 
-    @Test("Modal Footers")
+    @Test("Modal Footers", .publishingContext())
     func modalFooters() async throws {
         let element = Modal(id: "footerModalId") {
             Text("Body")
@@ -162,7 +161,7 @@ struct ModalTests {
         """)
     }
 
-    @Test("Modal Headers and Footers")
+    @Test("Modal Headers and Footers", .publishingContext())
     func modalHeadersAndFooters() async throws {
         let element = Modal(id: "headerAndFooterModalId") {
             Text("Body")
@@ -203,7 +202,7 @@ struct ModalTests {
         """)
     }
 
-    @Test("Modal Scrollable Content")
+    @Test("Modal Scrollable Content", .publishingContext())
     func modalScrollableContent() async throws {
         let element = Modal(id: "modal7") {
             Text(placeholderLength: 1000)
@@ -220,7 +219,7 @@ struct ModalTests {
         """))
     }
 
-    @Test("Modals Presentation Options", arguments: [
+    @Test("Modals Presentation Options", .publishingContext(), arguments: [
         ShowModal.Option.backdrop(dismissible: true), ShowModal.Option.backdrop(dismissible: false),
         ShowModal.Option.noBackdrop, ShowModal.Option.focus(true), ShowModal.Option.focus(false),
         ShowModal.Option.keyboard(true), ShowModal.Option.keyboard(false)])

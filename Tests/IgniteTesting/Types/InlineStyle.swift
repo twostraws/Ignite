@@ -12,15 +12,14 @@ import Testing
 
 /// Tests for the `InlineStyle` type.
 @Suite("InlineStyle Tests")
-@MainActor
 struct InlineStyleTests {
-    @Test("Description for property string initializer")
+    @Test("Description for property string initializer", .publishingContext())
     func descriptionPropertyStringInit() async throws {
         let example = InlineStyle("font-size", value: "25px")
         #expect(example.description == "font-size: 25px")
     }
 
-    @Test("Description for property initializer")
+    @Test("Description for property initializer", .publishingContext())
     func descriptionPropertyInit() async throws {
         let example = InlineStyle(Property.fontSize, value: "25px")
         #expect(example.description == "font-size: 25px")
@@ -40,7 +39,7 @@ struct InlineStyleTests {
         false   // justifyContent > alignItems
     ]
 
-    @Test("Comparable operator", arguments: await zip(stylePairs, comparisonResults))
+    @Test("Comparable operator", .publishingContext(), arguments: await zip(stylePairs, comparisonResults))
     func comparable(_ pair: (lhs: InlineStyle, rhs: InlineStyle), lessThan: Bool) async throws {
         #expect((pair.lhs < pair.rhs) == lessThan)
         #expect((pair.lhs > pair.rhs) == !lessThan)
@@ -48,7 +47,7 @@ struct InlineStyleTests {
 
     // MARK: - important()
 
-    @Test("Important appends !important to value")
+    @Test("Important appends !important to value", .publishingContext())
     func importantAppendsFlag() async throws {
         let style = InlineStyle(.color, value: "red")
         let important = style.important()
@@ -56,7 +55,7 @@ struct InlineStyleTests {
         #expect(important.description == "color: red !important")
     }
 
-    @Test("Important false returns unchanged style")
+    @Test("Important false returns unchanged style", .publishingContext())
     func importantFalseReturnsUnchanged() async throws {
         let style = InlineStyle(.color, value: "red")
         let unchanged = style.important(false)
@@ -65,7 +64,7 @@ struct InlineStyleTests {
 
     // MARK: - Equatable
 
-    @Test("Equal property and value produce equal styles")
+    @Test("Equal property and value produce equal styles", .publishingContext())
     func equalStylesAreEqual() async throws {
         let a = InlineStyle(.color, value: "red")
         let b = InlineStyle(.color, value: "red")

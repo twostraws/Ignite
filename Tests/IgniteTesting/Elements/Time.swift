@@ -12,8 +12,8 @@ import Testing
 
 /// Tests for the `time` element.
 @Suite("Time Tests")
-@MainActor class TimeTests: IgniteTestSuite {
-    @Test("Without DateTime", arguments: ["This is a test", "Another test"])
+class TimeTests: IgniteTestSuite {
+    @Test("Without DateTime", .publishingContext(), arguments: ["This is a test", "Another test"])
     func withoutDatetime(timeText: String) async throws {
         let element = Time(timeText)
         let output = element.markupString()
@@ -21,7 +21,7 @@ import Testing
         #expect(output == "<time>\(timeText)</time>")
     }
 
-    @Test("Builder", arguments: ["This is a test", "Another test"])
+    @Test("Builder", .publishingContext(), arguments: ["This is a test", "Another test"])
     func builder(timeText: String) async throws {
         guard
             let customTimeInterval = DateComponents(
@@ -45,7 +45,7 @@ import Testing
         #expect(output == "<time datetime=\"2024-05-22T20:00:30Z\">\(timeText)</time>")
     }
 
-    @Test("Time with dateTime but no visible content")
+    @Test("Time with dateTime but no visible content", .publishingContext())
     func dateTimeOnly() async throws {
         guard
             let customTimeInterval = DateComponents(
@@ -69,7 +69,7 @@ import Testing
         #expect(output == "<time datetime=\"2024-05-22T20:00:30Z\"></time>")
     }
 
-    @Test("Time with no content and no date renders empty time element")
+    @Test("Time with no content and no date renders empty time element", .publishingContext())
     func noContentNoDate() async throws {
         let element = Time()
         let output = element.markupString()

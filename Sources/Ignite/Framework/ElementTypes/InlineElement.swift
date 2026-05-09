@@ -7,7 +7,6 @@
 
 /// An element that exists inside a block element, such as an emphasized
 /// piece of text.
-@MainActor
 public protocol InlineElement: BodyElement, CustomStringConvertible {
     /// The type of HTML content this element contains.
     associatedtype Body: InlineElement
@@ -18,10 +17,8 @@ public protocol InlineElement: BodyElement, CustomStringConvertible {
 
 public extension InlineElement {
     /// The complete string representation of the element.
-    nonisolated var description: String {
-        MainActor.assumeIsolated {
-            self.markupString()
-        }
+    var description: String {
+        markupString()
     }
 
     /// Generates the complete HTML string representation of the element.

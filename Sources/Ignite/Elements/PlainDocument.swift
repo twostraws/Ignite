@@ -6,7 +6,7 @@
 //
 
 /// An HTML document with no extra attributes applied.
-public struct PlainDocument: Document {
+public struct PlainDocument: Document, HTML {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 

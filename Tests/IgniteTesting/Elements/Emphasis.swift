@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Emphasis` element.
 @Suite("Emphasis Tests")
-@MainActor
 class EmphasisTests: IgniteTestSuite {
-    @Test("Emphasis")
+    @Test("Emphasis", .publishingContext())
     func simpleEmphasis() async throws {
         let element = Emphasis("Although Markdown is still easier, to be honest! ")
         let output = element.markupString()
@@ -22,7 +21,7 @@ class EmphasisTests: IgniteTestSuite {
         #expect(output == "<em>Although Markdown is still easier, to be honest! </em>")
     }
 
-    @Test("Emphasis with builder initializer wrapping inline element")
+    @Test("Emphasis with builder initializer wrapping inline element", .publishingContext())
     func builderWithInlineElement() async throws {
         let element = Emphasis {
             Strong("very important")
@@ -32,7 +31,7 @@ class EmphasisTests: IgniteTestSuite {
         #expect(output == "<em><strong>very important</strong></em>")
     }
 
-    @Test("Emphasis with multiple children via builder")
+    @Test("Emphasis with multiple children via builder", .publishingContext())
     func builderWithMultipleChildren() async throws {
         let element = Emphasis {
             "Hello "

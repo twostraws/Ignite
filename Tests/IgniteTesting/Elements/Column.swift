@@ -12,11 +12,10 @@ import Testing
 
 /// Tests for the `Column` element.
 @Suite("Column Tests")
-@MainActor
 class ColumnTests: IgniteTestSuite {
     static let columnSpans: [Int] = [0, 1, 10, 100]
 
-    @Test("Column with items")
+    @Test("Column with items", .publishingContext())
     func basicColumn() async throws {
         let element = Column {
             ControlLabel("Left Label")
@@ -31,7 +30,7 @@ class ColumnTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Column with columnSpan", arguments: await Self.columnSpans)
+    @Test("Column with columnSpan", .publishingContext(), arguments: await Self.columnSpans)
     func columnWithColumnSpan(columnSpan: Int) async throws {
         let element = Column {
             ControlLabel("Left Label")
@@ -46,7 +45,7 @@ class ColumnTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Column with vertical alignment", arguments: Column.VerticalAlignment.allCases)
+    @Test("Column with vertical alignment", .publishingContext(), arguments: Column.VerticalAlignment.allCases)
     func columnWithVerticalAlignment(alignment: Column.VerticalAlignment) async throws {
         let element = Column {
             ControlLabel("Left Label")
