@@ -104,18 +104,18 @@ struct AnimatedHTML: HTML {
             let transitions = triggerAnimation.compactMap { $0 as? Transition }
 
             if transitions.isEmpty == false {
-                var aggreateTransition = Transition()
-                aggreateTransition.data = transitions.flatMap(\.data)
-                PublishingContext.current?.animationManager.register(aggreateTransition, for: trigger)
-                finalAnimations[trigger, default: []].append(aggreateTransition)
+                var aggregateTransition = Transition()
+                aggregateTransition.data = transitions.flatMap(\.data)
+                PublishingContext.current?.animationManager.register(aggregateTransition, for: trigger)
+                finalAnimations[trigger, default: []].append(aggregateTransition)
             }
 
             if animations.isEmpty == false {
-                var aggreateAnimation = Animation()
-                aggreateAnimation.direction = animations.last?.direction ?? .automatic
-                aggreateAnimation.frames = animations.flatMap(\.frames)
-                PublishingContext.current?.animationManager.register(aggreateAnimation, for: trigger)
-                finalAnimations[trigger, default: []].append(aggreateAnimation)
+                var aggregateAnimation = Animation()
+                aggregateAnimation.direction = animations.last?.direction ?? .automatic
+                aggregateAnimation.frames = animations.flatMap(\.frames)
+                PublishingContext.current?.animationManager.register(aggregateAnimation, for: trigger)
+                finalAnimations[trigger, default: []].append(aggregateAnimation)
             }
         }
         return finalAnimations
