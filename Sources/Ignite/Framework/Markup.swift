@@ -75,7 +75,7 @@ public struct Markup: Sendable, ExpressibleByStringLiteral, ExpressibleByStringI
         /// - Parameter attributes: The attributes to render and harvest from.
         public mutating func appendInterpolation(_ attributes: CoreAttributes) {
             pendingRegistrations.append(contentsOf: attributes.publishingRegistrations)
-            output += attributes.description
+            output += attributes.markupAttributeString
         }
 
         /// Appends another markup value into the interpolation.

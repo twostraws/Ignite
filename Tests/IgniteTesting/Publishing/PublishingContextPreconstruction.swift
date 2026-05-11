@@ -65,20 +65,6 @@ struct PublishingContextPreconstructionTests {
         #expect(responsiveCSS.contains("display: none"))
     }
 
-    @Test("CoreAttributes.description is pure inside a context")
-    func descriptionIsPureInsideContext() throws {
-        let context = try PublishingContext.initialize(for: TestSite(), from: #filePath)
-        let font = Font.custom("DescriptionOnlyFont", size: .px(12))
-        var attrs = CoreAttributes()
-        attrs.append(publishingRegistration: .fontFamily(font))
-
-        PublishingContext.withCurrent(context) {
-            _ = String(describing: attrs)
-        }
-
-        #expect(!context.cssManager.customFonts.contains(font))
-    }
-
     @Test("Markup string-interpolation registers publishing context")
     func markupInterpolationRegistersPublishingContext() throws {
         let context = try PublishingContext.initialize(for: TestSite(), from: #filePath)

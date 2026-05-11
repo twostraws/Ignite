@@ -228,13 +228,13 @@ struct CoreAttributesTests {
         #expect(attrs.styleString == " style=\"color: red\"")
     }
 
-    @Test("Description combines all attribute components", .publishingContext())
-    func descriptionCombinesAll() async throws {
+    @Test("Markup attribute string combines all attribute components", .publishingContext())
+    func attributeStringCombinesAll() async throws {
         var attrs = CoreAttributes()
         attrs.id = "test"
         attrs.append(classes: "foo")
         attrs.append(styles: InlineStyle(.color, value: "red"))
-        let desc = attrs.description
+        let desc = attrs.markupAttributeString
         #expect(desc.contains("id=\"test\""))
         #expect(desc.contains("class=\"foo\""))
         #expect(desc.contains("style=\"color: red\""))

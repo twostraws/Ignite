@@ -46,7 +46,7 @@ enum PublishingRegistration: Hashable, Equatable, Sendable {
 
 /// A handful of attributes that all HTML types must support, either for
 /// rendering or for publishing purposes.
-public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
+public struct CoreAttributes: Equatable, Sendable {
     /// A unique identifier. Can be empty.
     var id = ""
 
@@ -75,8 +75,9 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     /// Whether this set of attributes is empty.
     var isEmpty: Bool { self == CoreAttributes() }
 
-    /// All core attributes collapsed down to a single string for easy application.
-    public var description: String {
+    /// All core attributes collapsed down to a single string for inclusion
+    /// in HTML markup output.
+    var markupAttributeString: String {
         "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
     }
 
@@ -336,4 +337,11 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         publishingRegistrations.formUnion(other.publishingRegistrations)
     }
 
+}
+
+extension String.StringInterpolation {
+    @available(*, deprecated, message: "Interpolate CoreAttributes into Markup, not String — String interpolation drops publishing-time registrations.")
+    public mutating func appendInterpolation(_ attributes: CoreAttributes) {
+        appendLiteral(attributes.markupAttributeString)
+    }
 }
