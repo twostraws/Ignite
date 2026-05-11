@@ -65,6 +65,34 @@ struct PublishingContextPreconstructionTests {
         #expect(responsiveCSS.contains("display: none"))
     }
 
+    @Test("CoreAttributes.description is pure inside a context")
+    func descriptionIsPureInsideContext() throws {
+        let context = try PublishingContext.initialize(for: TestSite(), from: #filePath)
+        let font = Font.custom("DescriptionOnlyFont", size: .px(12))
+        var attrs = CoreAttributes()
+        attrs.append(publishingRegistration: .fontFamily(font))
+
+        PublishingContext.withCurrent(context) {
+            _ = String(describing: attrs)
+        }
+
+        #expect(!context.cssManager.customFonts.contains(font))
+    }
+
+    @Test("Markup string-interpolation registers publishing context")
+    func markupInterpolationRegistersPublishingContext() throws {
+        let context = try PublishingContext.initialize(for: TestSite(), from: #filePath)
+        let font = Font.custom("SomeFont", size: .px(12))
+        var attrs = CoreAttributes()
+        attrs.append(publishingRegistration: .fontFamily(font))
+
+        PublishingContext.withCurrent(context) {
+            let _: Markup = "<p\(attrs)>hello</p>"
+        }
+
+        #expect(context.cssManager.customFonts.contains(font))
+    }
+
     @Test("Animated elements can be rendered before a publishing context")
     func animatedElementsCanBeRenderedBeforePublishingContext() throws {
         let element = Text("Animate me")
