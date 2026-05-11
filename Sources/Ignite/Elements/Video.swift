@@ -34,7 +34,7 @@ public struct Video: InlineElement, LazyLoadable {
     ///   - files: The user videos to render.
     /// - Returns: The HTML for this element.
     private func render(files: [String]) -> Markup {
-        var output = "<video controls\(attributes)>"
+        var output: Markup = "<video controls\(attributes)>"
 
         for filename in files {
             if let fileType = videoType(for: filename) {
@@ -44,7 +44,7 @@ public struct Video: InlineElement, LazyLoadable {
 
         output += "Your browser does not support the video tag."
         output += "</video>"
-        return Markup(output)
+        return output
     }
 
     /// Renders this element using publishing context passed in.

@@ -160,11 +160,7 @@ public struct Text: HTML, DropdownItem {
                 .attributes(attributes)
                 .markup()
         } else {
-            Markup(
-                "<\(font.rawValue)\(attributes)>" +
-                content.markupString() +
-                "</\(font.rawValue)>"
-            )
+            Markup("<\(font.rawValue)\(attributes)>\(content.markupString())</\(font.rawValue)>")
         }
     }
 }

@@ -6,47 +6,10 @@
 //
 
 import Foundation
-import OrderedCollections
-
-// A typealias that allows us to use `OrderedSet` without importing OrderedCollections
-public typealias OrderedSet<Element: Hashable> = OrderedCollections.OrderedSet<Element>
-
-// A typealias that allows us to use `OrderedDictionary` without importing OrderedCollections
-public typealias OrderedDictionary<Key: Hashable, Value> = OrderedCollections.OrderedDictionary<Key, Value>
-
-// A typealias that allows us to use `UUID` without importing Foundation
-public typealias UUID = Foundation.UUID
-
-// A typealias that allows us to use `URL` without importing Foundation
-public typealias URL = Foundation.URL
-
-// A typealias that allows us to use `Data` without importing Foundation
-public typealias Data = Foundation.Data
-
-// A typealias that allows us to use `Date` without importing Foundation
-public typealias Date = Foundation.Date
-
-/// A publishing-time registration required by rendered attributes.
-enum PublishingRegistration: Hashable, Equatable, Sendable {
-    case fontFamily(Font)
-    case responsiveFont(ResponsiveValues<LengthUnit>)
-    case responsiveVisibility(ResponsiveValues<Bool>)
-
-    func apply(to context: PublishingContext) {
-        switch self {
-        case .fontFamily(let font):
-            context.cssManager.registerFontFamily(font)
-        case .responsiveFont(let values):
-            _ = context.cssManager.registerFont(values)
-        case .responsiveVisibility(let values):
-            _ = context.cssManager.registerStyles(values)
-        }
-    }
-}
 
 /// A handful of attributes that all HTML types must support, either for
 /// rendering or for publishing purposes.
-public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
+public struct CoreAttributes: Equatable, Sendable {
     /// A unique identifier. Can be empty.
     var id = ""
 
@@ -75,10 +38,10 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     /// Whether this set of attributes is empty.
     var isEmpty: Bool { self == CoreAttributes() }
 
-    /// All core attributes collapsed down to a single string for easy application.
-    public var description: String {
-        registerPublishingRequirements()
-        return "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
+    /// All core attributes collapsed down to a single string for inclusion
+    /// in HTML markup output.
+    var markupAttributeString: String {
+        "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
     }
 
     /// The ID of this element, if set.
@@ -337,12 +300,11 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         publishingRegistrations.formUnion(other.publishingRegistrations)
     }
 
-    /// Applies publishing-time registrations when a publishing context is active.
-    private func registerPublishingRequirements() {
-        guard let context = PublishingContext.current else { return }
+}
 
-        for registration in publishingRegistrations {
-            registration.apply(to: context)
-        }
+extension String.StringInterpolation {
+    @available(*, deprecated, message: "Interpolate CoreAttributes into Markup, not String — String interpolation drops publishing-time registrations.")
+    public mutating func appendInterpolation(_ attributes: CoreAttributes) {
+        appendLiteral(attributes.markupAttributeString)
     }
 }
