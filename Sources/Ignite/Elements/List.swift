@@ -162,7 +162,7 @@ public struct List: HTML {
     public func markup() -> Markup {
         let listAttributes = getAttributes()
 
-        var output = "<\(listElementName)\(listAttributes)>"
+        var output: Markup = "<\(listElementName)\(listAttributes)>"
 
         for originalItem in items {
             var item = originalItem
@@ -173,7 +173,7 @@ public struct List: HTML {
                 if listStyle != .automatic {
                     listableItem.attributes.append(classes: "list-group-item")
                 }
-                output += listableItem.listMarkup().string
+                output += listableItem.listMarkup()
             } else {
                 let styleClass = listStyle == .automatic ? "" : " class=\"list-group-item\""
                 item.attributes.append(classes: "m-0")
@@ -183,6 +183,6 @@ public struct List: HTML {
 
         output += "</\(listElementName)>"
 
-        return Markup(output)
+        return output
     }
 }

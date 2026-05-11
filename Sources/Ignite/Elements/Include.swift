@@ -34,7 +34,7 @@ public struct Include: HTML {
 
         do {
             let string = try String(contentsOf: fileURL)
-            return Markup(string)
+            return Markup(verbatim: string)
         } catch {
             publishingContext.addWarning("""
             Failed to find \(filename) in Includes folder; \

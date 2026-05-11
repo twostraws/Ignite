@@ -42,11 +42,11 @@ public struct PlainDocument: Document, HTML {
         // Deferred head rendering to accommodate for context updates during body rendering
         let headMarkup = head.markup()
 
-        var output = "<!doctype html>"
+        var output: Markup = "<!doctype html>"
         output += "<html\(attributes)>"
-        output += headMarkup.string
-        output += bodyMarkup.string
+        output += headMarkup
+        output += bodyMarkup
         output += "</html>"
-        return Markup(output)
+        return output
     }
 }

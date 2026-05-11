@@ -120,7 +120,7 @@ public struct Image: InlineElement, LazyLoadable {
             return Markup("<img\(attributes) />")
         }
 
-        var output = "<picture>"
+        var output = Markup("<picture>")
 
         if let darkSourceSet = generateSourceSet(darkVariants), let value = darkSourceSet.value {
             output += "<source media=\"(prefers-color-scheme: dark)\" srcset=\"\(value)\">"
@@ -129,7 +129,7 @@ public struct Image: InlineElement, LazyLoadable {
         // Add the fallback img tag
         output += "<img\(attributes) />"
         output += "</picture>"
-        return Markup(output)
+        return output
     }
 
     /// Renders this element using publishing context passed in.
