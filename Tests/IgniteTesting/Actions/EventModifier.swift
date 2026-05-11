@@ -31,7 +31,7 @@ class EventModifierTests: IgniteTestSuite {
         [ShowModal(id: "foo"), HideElement("qux")]
     ]
 
-    @Test("Events are added", .publishingContext(), arguments: tags, await Array(zip(events, actions)))
+    @Test("Events are added", .publishingContext(), arguments: tags, Array(zip(events, actions)))
     func eventsAdded(tag: String, eventActions: (EventType, [any Action])) async throws {
         let element = Tag(tag) {}
             .onEvent(eventActions.0, eventActions.1)

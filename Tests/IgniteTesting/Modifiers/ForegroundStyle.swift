@@ -33,7 +33,7 @@ class ForegroundStyleTests: IgniteTestSuite {
         #expect(output == "<p class=\"\(style.rawValue)\">Hello</p>")
     }
 
-    @Test("Color Foreground Styles", .publishingContext(), arguments: await zip(Self.testColors, Self.testRGBs))
+    @Test("Color Foreground Styles", .publishingContext(), arguments: zip(Self.testColors, Self.testRGBs))
     func colorForegroundStyle(color: Color, value: String) async throws {
         let element = Text("Hello").foregroundStyle(color)
 
@@ -42,7 +42,7 @@ class ForegroundStyleTests: IgniteTestSuite {
         #expect(output == "<p style=\"color: \(value)\">Hello</p>")
     }
 
-    @Test("String Foreground Styles", .publishingContext(), arguments: await Self.testColorNames)
+    @Test("String Foreground Styles", .publishingContext(), arguments: Self.testColorNames)
     func stringForegroundStyle(string: String) async throws {
         let element = Text("Hello").foregroundStyle(string)
 

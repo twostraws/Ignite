@@ -64,13 +64,13 @@ struct UnitPointTests {
        0                    // bottom to top
     ]
 
-    @Test("Degrees calculation", .publishingContext(), arguments: await zip(pointPairs, degreeValues))
+    @Test("Degrees calculation", .publishingContext(), arguments: zip(pointPairs, degreeValues))
     func degrees(_ points: (start: UnitPoint, end: UnitPoint), expected: Double) async throws {
        let element = points.start.degrees(to: points.end)
        #expect(element == expected)
     }
 
-    @Test("Radians calculation", .publishingContext(), arguments: await zip(pointPairs, radianValues))
+    @Test("Radians calculation", .publishingContext(), arguments: zip(pointPairs, radianValues))
     func radians(_ points: (start: UnitPoint, end: UnitPoint), expected: Double) async throws {
        let element = points.start.radians(to: points.end)
        #expect(element == expected)

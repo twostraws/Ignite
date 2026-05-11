@@ -30,7 +30,7 @@ class ColumnTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Column with columnSpan", .publishingContext(), arguments: await Self.columnSpans)
+    @Test("Column with columnSpan", .publishingContext(), arguments: Self.columnSpans)
     func columnWithColumnSpan(columnSpan: Int) async throws {
         let element = Column {
             ControlLabel("Left Label")

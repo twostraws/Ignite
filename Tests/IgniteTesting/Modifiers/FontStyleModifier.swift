@@ -17,7 +17,7 @@ class FontStyleModifierTests: IgniteTestSuite {
         .title1, .title2, .title3, .title4, .title5, .title6, .body
     ]
 
-    @Test("Font Style", .publishingContext(), arguments: await tagBasedStyles)
+    @Test("Font Style", .publishingContext(), arguments: tagBasedStyles)
     func fontStyle(style: Font.Style) async throws {
         let element = Text("Hello").font(style)
         let output = element.markupString()

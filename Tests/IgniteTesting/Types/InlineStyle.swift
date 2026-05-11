@@ -39,7 +39,7 @@ struct InlineStyleTests {
         false   // justifyContent > alignItems
     ]
 
-    @Test("Comparable operator", .publishingContext(), arguments: await zip(stylePairs, comparisonResults))
+    @Test("Comparable operator", .publishingContext(), arguments: zip(stylePairs, comparisonResults))
     func comparable(_ pair: (lhs: InlineStyle, rhs: InlineStyle), lessThan: Bool) async throws {
         #expect((pair.lhs < pair.rhs) == lessThan)
         #expect((pair.lhs > pair.rhs) == !lessThan)
