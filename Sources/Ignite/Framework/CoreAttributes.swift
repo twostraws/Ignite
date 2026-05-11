@@ -77,8 +77,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
 
     /// All core attributes collapsed down to a single string for easy application.
     public var description: String {
-        registerPublishingRequirements()
-        return "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
+        "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
     }
 
     /// The ID of this element, if set.
@@ -337,12 +336,4 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         publishingRegistrations.formUnion(other.publishingRegistrations)
     }
 
-    /// Applies publishing-time registrations when a publishing context is active.
-    private func registerPublishingRequirements() {
-        guard let context = PublishingContext.current else { return }
-
-        for registration in publishingRegistrations {
-            registration.apply(to: context)
-        }
-    }
 }
