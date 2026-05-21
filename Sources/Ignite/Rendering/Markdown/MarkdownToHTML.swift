@@ -37,7 +37,7 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
 
     /// Escapes plain text so rendered Markdown always produces valid HTML.
     private func escapedHTML(_ text: String) -> String {
-        return Entities.escape(text)
+        Entities.escape(text)
     }
 
     /// Visit some markup when no other handler is suitable.
@@ -74,10 +74,10 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     public func visitCodeBlock(_ codeBlock: Markdown.CodeBlock) -> String {
         let code = escapedHTML(codeBlock.code)
 
-        if let language = codeBlock.language {
-            return #"<pre><code class="language-\#(language.lowercased())">\#(code)</code></pre>"#
+        return if let language = codeBlock.language {
+            #"<pre><code class="language-\#(language.lowercased())">\#(code)</code></pre>"#
         } else {
-            return #"<pre><code>\#(code)</code></pre>"#
+            #"<pre><code>\#(code)</code></pre>"#
         }
     }
 
