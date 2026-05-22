@@ -72,13 +72,13 @@ class TextTests: IgniteTestSuite {
         <p><em>i</em>, <strong>b</strong>, and <em><strong>b&amp;i</strong></em></p>
         """)
     }
-        
+
     @Test("Markdown rendering forms correct paragraphs and respects blank lines")
     func markdownRenderingFormsParagraphsRespectingBlankLines() async throws {
         let element = Text(markdown: """
         ## Heading 1
         Text 1
-        
+
         Text 2
         ## Heading 2
         Text 3
@@ -87,7 +87,17 @@ class TextTests: IgniteTestSuite {
         Text 5
         """)
         let output = element.markupString()
-        #expect(output == "<div><h2>Heading 1</h2><p>Text 1</p><p>Text 2</p><h2>Heading 2</h2><p>Text 3 Text 4</p><h2>Heading 3</h2><p>Text 5</p></div>")
+        #expect(output == """
+        <div>\
+        <h2>Heading 1</h2>\
+        <p>Text 1</p>\
+        <p>Text 2</p>\
+        <h2>Heading 2</h2>\
+        <p>Text 3 Text 4</p>\
+        <h2>Heading 3</h2>\
+        <p>Text 5</p>\
+        </div>
+        """)
     }
 
     @Test("Markdown rendering preserves block structure")
