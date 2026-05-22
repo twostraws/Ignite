@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `ContainerRelativeFrame` modifier.
 @Suite("ContainerRelativeFrame Tests")
-@MainActor
 class ContainerRelativeFrameTests: IgniteTestSuite {
-    @Test("Default center alignment applies flex display and centering styles")
+    @Test("Default center alignment applies flex display and centering styles", .publishingContext())
     func defaultCenterAlignment() async throws {
         let element = Text("Centered")
             .containerRelativeFrame()
@@ -28,7 +27,7 @@ class ContainerRelativeFrameTests: IgniteTestSuite {
         #expect(output.contains("overflow: hidden"))
     }
 
-    @Test("topLeading alignment uses flex-start values")
+    @Test("topLeading alignment uses flex-start values", .publishingContext())
     func topLeadingAlignment() async throws {
         let element = Text("Top Leading")
             .containerRelativeFrame(.topLeading)
@@ -39,7 +38,7 @@ class ContainerRelativeFrameTests: IgniteTestSuite {
         #expect(output.contains("justify-content: flex-start"))
     }
 
-    @Test("Edge pins are applied")
+    @Test("Edge pins are applied", .publishingContext())
     func edgePinsApplied() async throws {
         let element = Text("Pinned")
             .containerRelativeFrame()

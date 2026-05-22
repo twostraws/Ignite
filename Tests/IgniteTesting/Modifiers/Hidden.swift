@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Hidden` modifier.
 @Suite("Hidden Tests")
-@MainActor
 struct HiddenTests {
-    @Test("Hidden Modifier for Text")
+    @Test("Hidden Modifier for Text", .publishingContext())
     func hiddenForText() async throws {
         let element = Text("Hello world!").hidden()
         let output = element.markupString()
@@ -22,7 +21,7 @@ struct HiddenTests {
         #expect(output == "<p class=\"d-none\">Hello world!</p>")
     }
 
-    @Test("MediaQuery based hidden Modifier for Text")
+    @Test("MediaQuery based hidden Modifier for Text", .publishingContext())
     func hiddenMediaQueryForText() async throws {
         let className = CSSManager.shared.registerStyles(.init(small: true))
         let element = Text("Hello world!").hidden(.responsive(small: true))
@@ -31,7 +30,7 @@ struct HiddenTests {
         #expect(output == "<p class=\"\(className)\">Hello world!</p>")
     }
 
-    @Test("Hidden Modifier for Column")
+    @Test("Hidden Modifier for Column", .publishingContext())
     func hiddenForColumn() async throws {
         let element = Column {
             ControlLabel("Left Label")

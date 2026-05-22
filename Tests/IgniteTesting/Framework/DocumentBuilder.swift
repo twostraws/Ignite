@@ -12,7 +12,6 @@ import Testing
 
 /// Tests for the `DocumentBuilder` and `DocumentElementBuilder` result builders.
 @Suite("DocumentBuilder Tests")
-@MainActor
 class DocumentBuilderTests: IgniteTestSuite {
     private func buildDocument(@DocumentBuilder content: () -> some Document) -> some Document {
         content()
@@ -20,7 +19,7 @@ class DocumentBuilderTests: IgniteTestSuite {
 
     // MARK: - DocumentBuilder
 
-    @Test("Head and Body produce a valid document")
+    @Test("Head and Body produce a valid document", .publishingContext())
     func headAndBody() async throws {
         let doc = buildDocument {
             Head()
@@ -32,7 +31,7 @@ class DocumentBuilderTests: IgniteTestSuite {
         #expect(output.contains("</html>"))
     }
 
-    @Test("Body-only produces document with default head")
+    @Test("Body-only produces document with default head", .publishingContext())
     func bodyOnly() async throws {
         let doc = buildDocument {
             Body()
@@ -42,7 +41,7 @@ class DocumentBuilderTests: IgniteTestSuite {
         #expect(output.contains("<html"))
     }
 
-    @Test("Existing document passes through unchanged")
+    @Test("Existing document passes through unchanged", .publishingContext())
     func existingDocumentPassthrough() async throws {
         let original = PlainDocument(head: Head(), body: Body())
         let doc = buildDocument { original }
@@ -53,7 +52,7 @@ class DocumentBuilderTests: IgniteTestSuite {
 
     // MARK: - DocumentElementBuilder
 
-    @Test("DocumentElementBuilder with Head and Body returns tuple")
+    @Test("DocumentElementBuilder with Head and Body returns tuple", .publishingContext())
     func documentElementBuilderHeadAndBody() async throws {
         let doc = PlainDocument {
             Head()
@@ -65,7 +64,7 @@ class DocumentBuilderTests: IgniteTestSuite {
         #expect(output.contains("<body"))
     }
 
-    @Test("DocumentElementBuilder with Body-only provides default head")
+    @Test("DocumentElementBuilder with Body-only provides default head", .publishingContext())
     func documentElementBuilderBodyOnly() async throws {
         let doc = PlainDocument {
             Body()

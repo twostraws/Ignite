@@ -5,12 +5,10 @@
 // See LICENSE for license information.
 //
 
-/// A thread-safe manager class that handles registration and generation of CSS animations.
+/// A manager class that handles registration and generation of CSS animations.
 ///
 /// `AnimationManager` serves as the central coordinator for all animations in an Ignite application,
-/// managing their registration, storage, and CSS generation. It ensures thread safety through
-/// the `@MainActor` attribute.
-@MainActor
+/// managing their registration, storage, and CSS generation.
 final class AnimationManager {
     /// A type that encapsulates an animation and its trigger condition.
     private struct AnimationClassComponents: Hashable, Equatable, Sendable {
@@ -29,8 +27,10 @@ final class AnimationManager {
         }
     }
 
-    /// The shared singleton instance of the animation manager.
-    static let shared = AnimationManager()
+    /// The manager for the current publish operation.
+    static var shared: AnimationManager {
+        PublishingContext.shared.animationManager
+    }
 
     /// Storage for registered animations, keyed by element ID and trigger type.
     ///
@@ -38,8 +38,7 @@ final class AnimationManager {
     /// corresponding resolved animations.
     private var animations = OrderedSet<AnimationClassComponents>()
 
-    /// Private initializer to enforce singleton pattern.
-    private init() {}
+    init() {}
 
     /// Registers a resolved animation for a specific element.
     /// - Parameters:

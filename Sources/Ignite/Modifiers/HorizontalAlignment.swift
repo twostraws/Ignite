@@ -10,7 +10,7 @@ private enum AlignmentType {
     case responsive(HorizontalAlignment.ResponsiveAlignment)
 }
 
-@MainActor private func horizontalAlignmentModifier(
+private func horizontalAlignmentModifier(
     _ alignment: AlignmentType,
     content: any BodyElement
 ) -> any BodyElement {
@@ -22,7 +22,7 @@ private enum AlignmentType {
     }
 }
 
-@MainActor private func horizontalAlignmentModifier(
+private func horizontalAlignmentModifier(
     _ alignment: AlignmentType,
     content: any InlineElement
 ) -> any InlineElement {

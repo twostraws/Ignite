@@ -12,7 +12,6 @@ import Testing
 
 /// Tests for the `Date-ISO8601` extension.
 @Suite("Date-ISO8601 Tests")
-@MainActor
 struct DateISO8601Tests {
 
     struct Instance {
@@ -20,7 +19,7 @@ struct DateISO8601Tests {
         let expected: String
     }
 
-    @Test("Known Output", arguments: [
+    @Test("Known Output", .publishingContext(), arguments: [
         Instance(input: Date(timeIntervalSince1970: -40241318220), expected: "0694-10-18T00:03:00Z"),
         Instance(input: Date(timeIntervalSince1970: 36571335925), expected: "3128-11-25T08:25:25Z"),
         Instance(input: Date(timeIntervalSince1970: 18980973526), expected: "2571-06-26T04:38:46Z"),
@@ -34,5 +33,36 @@ struct DateISO8601Tests {
     ])
     func outputs_expected_result(instance: Instance) async throws {
         #expect(instance.input.asISO8601 == instance.expected)
+    }
+
+    // MARK: - Timezone handling
+
+    @Test("Formats date in UTC", .publishingContext())
+    func formatsDateInUTC() {
+        // 2025-01-15 12:00:00 UTC
+        let date = Date(timeIntervalSince1970: 1736942400)
+        #expect(date.asISO8601(timeZone: .gmt) == "2025-01-15T12:00:00Z")
+    }
+
+    @Test("Formats date with EST timezone", .publishingContext())
+    func formatsDateWithEST() {
+        // 2025-01-15 12:00:00 UTC displayed as EST (-0500)
+        let date = Date(timeIntervalSince1970: 1736942400)
+        let est = TimeZone(abbreviation: "EST")
+        let result = date.asISO8601(timeZone: est)
+        #expect(result == "2025-01-15T07:00:00-05:00")
+    }
+
+    @Test("Formats epoch zero in UTC", .publishingContext())
+    func formatsEpochZero() {
+        let date = Date(timeIntervalSince1970: 0)
+        #expect(date.asISO8601(timeZone: .gmt) == "1970-01-01T00:00:00Z")
+    }
+
+    @Test("Defaults to UTC when no timezone specified", .publishingContext())
+    func defaultsToUTCWhenNoneSpecified() {
+        // 2025-01-15 12:00:00 UTC
+        let date = Date(timeIntervalSince1970: 1736942400)
+        #expect(date.asISO8601() == "2025-01-15T12:00:00Z")
     }
 }

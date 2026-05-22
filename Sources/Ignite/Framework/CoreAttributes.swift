@@ -6,29 +6,10 @@
 //
 
 import Foundation
-import OrderedCollections
-
-// A typealias that allows us to use `OrderedSet` without importing OrderedCollections
-public typealias OrderedSet<Element: Hashable> = OrderedCollections.OrderedSet<Element>
-
-// A typealias that allows us to use `OrderedDictionary` without importing OrderedCollections
-public typealias OrderedDictionary<Key: Hashable, Value> = OrderedCollections.OrderedDictionary<Key, Value>
-
-// A typealias that allows us to use `UUID` without importing Foundation
-public typealias UUID = Foundation.UUID
-
-// A typealias that allows us to use `URL` without importing Foundation
-public typealias URL = Foundation.URL
-
-// A typealias that allows us to use `Data` without importing Foundation
-public typealias Data = Foundation.Data
-
-// A typealias that allows us to use `Date` without importing Foundation
-public typealias Date = Foundation.Date
 
 /// A handful of attributes that all HTML types must support, either for
 /// rendering or for publishing purposes.
-public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
+public struct CoreAttributes: Equatable, Sendable {
     /// A unique identifier. Can be empty.
     var id = ""
 
@@ -51,11 +32,15 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
     /// Custom attributes not covered by the above, e.g. loading="lazy"
     var customAttributes = OrderedSet<Attribute>()
 
+    /// Publishing registrations required by these attributes.
+    var publishingRegistrations = OrderedSet<PublishingRegistration>()
+
     /// Whether this set of attributes is empty.
     var isEmpty: Bool { self == CoreAttributes() }
 
-    /// All core attributes collapsed down to a single string for easy application.
-    public var description: String {
+    /// All core attributes collapsed down to a single string for inclusion
+    /// in HTML markup output.
+    var markupAttributeString: String {
         "\(idString)\(customAttributeString)\(classString)\(styleString)\(dataString)\(ariaString)\(eventString)"
     }
 
@@ -219,6 +204,11 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         self.customAttributes.formUnion(customAttributes)
     }
 
+    /// Appends a publishing-time registration.
+    mutating func append(publishingRegistration: PublishingRegistration) {
+        publishingRegistrations.append(publishingRegistration)
+    }
+
     /// Appends a collection of inline CSS styles.
     /// - Parameter newStyles: A collection of `AttributeValue` objects representing
     ///   CSS style properties and their values to be appended.
@@ -289,6 +279,7 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         result.data.formUnion(other.data)
         result.events.formUnion(other.events)
         result.customAttributes.formUnion(other.customAttributes)
+        result.publishingRegistrations.formUnion(other.publishingRegistrations)
 
         return result
     }
@@ -306,5 +297,14 @@ public struct CoreAttributes: Equatable, Sendable, CustomStringConvertible {
         data.formUnion(other.data)
         events.formUnion(other.events)
         customAttributes.formUnion(other.customAttributes)
+        publishingRegistrations.formUnion(other.publishingRegistrations)
+    }
+
+}
+
+extension String.StringInterpolation {
+    @available(*, deprecated, message: "Interpolate CoreAttributes into Markup, not String — String interpolation drops publishing-time registrations.")
+    public mutating func appendInterpolation(_ attributes: CoreAttributes) {
+        appendLiteral(attributes.markupAttributeString)
     }
 }

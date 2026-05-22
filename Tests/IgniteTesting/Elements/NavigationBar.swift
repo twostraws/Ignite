@@ -12,7 +12,7 @@ import Testing
 /// Tests for the `NavigationBar` element.
 @Suite("Navigation Bar Tests")
 class NavigationBarTests: IgniteTestSuite {
-    @Test("Root Tag is Header")
+    @Test("Root Tag is Header", .publishingContext())
     func headerTag() async throws {
         let element = NavigationBar()
         let output = element.markupString()
@@ -20,7 +20,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(output.htmlTagWithCloseTag("header") != nil)
     }
 
-    @Test("Has Nav Tag Inside Header")
+    @Test("Has Nav Tag Inside Header", .publishingContext())
     func navTag() async throws {
         let element = NavigationBar()
         let output = element.markupString()
@@ -31,7 +31,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(header.contents.htmlTagWithCloseTag("nav") != nil)
     }
 
-    @Test("Nav Tag Class Is navbar and navbar-expand-md")
+    @Test("Nav Tag Class Is navbar and navbar-expand-md", .publishingContext())
     func navTagClass() async throws {
         let element = NavigationBar()
         let output = element.markupString()
@@ -47,7 +47,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(navClasses == expected)
     }
 
-    @Test("Nav Tag Class data-bs-theme is blank if style is default")
+    @Test("Nav Tag Class data-bs-theme is blank if style is default", .publishingContext())
     func navTagDefaultTheme() async throws {
         let element = NavigationBar()
         let output = element.markupString()
@@ -60,7 +60,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(navAttributes.htmlAttribute(named: "data-bs-theme") == nil)
     }
 
-    @Test("Nav Tag Class data-bs-theme is dark if style is dark")
+    @Test("Nav Tag Class data-bs-theme is dark if style is dark", .publishingContext())
     func navTagDarkTheme() async throws {
         let element = NavigationBar().navigationBarStyle(.dark)
         let output = element.markupString()
@@ -75,7 +75,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(theme == expected)
     }
 
-    @Test("Nav Tag Class data-bs-theme is light if style is light")
+    @Test("Nav Tag Class data-bs-theme is light if style is light", .publishingContext())
     func navTagLightTheme() async throws {
         let element = NavigationBar().navigationBarStyle(.light)
         let output = element.markupString()
@@ -90,7 +90,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(theme == expected)
     }
 
-    @Test("Has Div Tag Inside if given width", arguments: [
+    @Test("Has Div Tag Inside if given width", .publishingContext(), arguments: [
         NavigationBar.Width.viewport,
         .count(2),
         .count(10)
@@ -107,7 +107,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(navContents.htmlTagWithCloseTag("div") != nil)
     }
 
-    @Test("Div Tag Class contains column count if given column width", arguments: [0, 3, 7])
+    @Test("Div Tag Class contains column count if given column width", .publishingContext(), arguments: [0, 3, 7])
     func divTagClassBeginsWithColumnCount(columns: Int) async throws {
         let element = NavigationBar().width(.count(columns))
         let output = element.markupString()
@@ -124,7 +124,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(divClasses.contains(expected))
     }
 
-    @Test("Div Tag Class contains `container` if given column width", arguments: [
+    @Test("Div Tag Class contains `container` if given column width", .publishingContext(), arguments: [
         NavigationBar.Width.count(2),
         .count(10)
     ])
@@ -144,7 +144,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(divClasses.contains(expected))
     }
 
-    @Test("Div Tag Class is as expected if given viewport width")
+    @Test("Div Tag Class is as expected if given viewport width", .publishingContext())
     func divTagClassIsFluid() async throws {
         let element = NavigationBar().width(.viewport)
         let output = element.markupString()
@@ -161,7 +161,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(divClasses == expected)
     }
 
-    @Test("Div Tag contains logo if given logo")
+    @Test("Div Tag contains logo if given logo", .publishingContext())
     func divTagContainsLogo() async throws {
         let logoImage = Image("")
         let element = NavigationBar(logo: logoImage)
@@ -177,7 +177,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(divContents.firstMatch(of: expected) != nil)
     }
 
-    @Test("Div contains render toggle button if items is not empty")
+    @Test("Div contains render toggle button if items is not empty", .publishingContext())
     func divTagContainsToggleButton() async throws {
         let element = NavigationBar(logo: Image("somepath")) {
             Link("Link 1", target: URL(string: "1")!)
@@ -198,7 +198,7 @@ class NavigationBarTests: IgniteTestSuite {
         """))
     }
 
-    @Test("Div Tag contains unordered list if items is not nil")
+    @Test("Div Tag contains unordered list if items is not nil", .publishingContext())
     func divTagContainsUL() async throws {
         let item = Link("Link 1", target: URL(string: "1")!)
         let element = NavigationBar(logo: Image("somepath")) {
@@ -213,7 +213,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(divContents.htmlTagWithCloseTag("ul") != nil)
     }
 
-    @Test("Unordered List contains trailing alignment if set")
+    @Test("Unordered List contains trailing alignment if set", .publishingContext())
     func ulTagClassContainCenterAignmentIfGiven() async throws {
         let item = Link("Link 1", target: URL(string: "1")!)
         let element = NavigationBar(logo: Image("somepath")) {
@@ -232,7 +232,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(ulClasses.contains(expected))
     }
 
-    @Test("Unordered List contains trailing alignment if set")
+    @Test("Unordered List contains trailing alignment if set", .publishingContext())
     func ulTagClassContainTrailingAignmentIfGiven() async throws {
         let item = Link("Link 1", target: URL(string: "1")!)
         let element = NavigationBar(logo: Image("somepath")) {
@@ -251,7 +251,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(ulClasses.contains(expected))
     }
 
-    @Test("UL Tag contains rendered output of navigation item")
+    @Test("UL Tag contains rendered output of navigation item", .publishingContext())
     func divTagContainsRenderedItem() async throws {
         let item = Link("Link 1", target: URL(string: "1")!)
         let element = NavigationBar(logo: Image("somepath")) {
@@ -273,7 +273,7 @@ class NavigationBarTests: IgniteTestSuite {
         #expect(ulContents.contains(expectedNavItem))
     }
 
-    @Test("UL Tag contains rendered output of navigation items")
+    @Test("UL Tag contains rendered output of navigation items", .publishingContext())
     func divTagContainsRenderedItems() async throws {
         let item1 = Link("Link 1", target: URL(string: "1")!)
         let item2 = Link("Link 2", target: URL(string: "2")!)

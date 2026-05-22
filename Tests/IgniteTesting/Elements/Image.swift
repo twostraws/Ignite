@@ -12,8 +12,8 @@ import Testing
 
 /// Tests for the `Image` element.
 @Suite("Image Tests")
-@MainActor class ImageTests: IgniteTestSuite {
-    @Test("Local Image", arguments: ["/images/example.jpg"], ["Example image"])
+class ImageTests: IgniteTestSuite {
+    @Test("Local Image", .publishingContext(), arguments: ["/images/example.jpg"], ["Example image"])
     func named(file: String, description: String) async throws {
         let element = Image(file, description: description)
         let output = element.markupString()
@@ -22,7 +22,7 @@ import Testing
         #expect(output == "<img src=\"\(expectedPath)\" alt=\"\(description)\" />")
     }
 
-    @Test("Remote Image", arguments: ["https://example.com"], ["Example image"])
+    @Test("Remote Image", .publishingContext(), arguments: ["https://example.com"], ["Example image"])
     func named(url: String, description: String) async throws {
         let element = Image(url, description: description)
         let output = element.markupString()
@@ -31,7 +31,7 @@ import Testing
         #expect(output == "<img src=\"\(expectedPath)\" alt=\"\(description)\" />")
     }
 
-    @Test("Icon Image", arguments: ["browser-safari"], ["Safari logo"])
+    @Test("Icon Image", .publishingContext(), arguments: ["browser-safari"], ["Safari logo"])
     func icon(systemName: String, description: String) async throws {
         let element = Image(systemName: systemName, description: description)
         let output = element.markupString()

@@ -12,16 +12,15 @@ import Testing
 
 /// Tests for the `Edge` type.
 @Suite("Edge Tests")
-@MainActor
 struct EdgeTests {
-    @Test("Individual edges have distinct raw values")
+    @Test("Individual edges have distinct raw values", .publishingContext())
     func individualEdgesHaveDistinctRawValues() async throws {
         let edges: [Edge] = [.top, .leading, .bottom, .trailing]
         let rawValues = edges.map(\.rawValue)
         #expect(Set(rawValues).count == 4)
     }
 
-    @Test("Individual edge raw values are powers of two")
+    @Test("Individual edge raw values are powers of two", .publishingContext())
     func individualEdgeRawValuesArePowersOfTwo() async throws {
         #expect(Edge.top.rawValue == 1)
         #expect(Edge.leading.rawValue == 2)
@@ -29,7 +28,7 @@ struct EdgeTests {
         #expect(Edge.trailing.rawValue == 8)
     }
 
-    @Test("Horizontal contains leading and trailing")
+    @Test("Horizontal contains leading and trailing", .publishingContext())
     func horizontalContainsLeadingAndTrailing() async throws {
         #expect(Edge.horizontal.contains(.leading))
         #expect(Edge.horizontal.contains(.trailing))
@@ -37,7 +36,7 @@ struct EdgeTests {
         #expect(!Edge.horizontal.contains(.bottom))
     }
 
-    @Test("Vertical contains top and bottom")
+    @Test("Vertical contains top and bottom", .publishingContext())
     func verticalContainsTopAndBottom() async throws {
         #expect(Edge.vertical.contains(.top))
         #expect(Edge.vertical.contains(.bottom))
@@ -45,7 +44,7 @@ struct EdgeTests {
         #expect(!Edge.vertical.contains(.trailing))
     }
 
-    @Test("All contains every edge")
+    @Test("All contains every edge", .publishingContext())
     func allContainsEveryEdge() async throws {
         #expect(Edge.all.contains(.top))
         #expect(Edge.all.contains(.leading))
@@ -53,19 +52,19 @@ struct EdgeTests {
         #expect(Edge.all.contains(.trailing))
     }
 
-    @Test("All equals union of horizontal and vertical")
+    @Test("All equals union of horizontal and vertical", .publishingContext())
     func allEqualsUnionOfHorizontalAndVertical() async throws {
         let combined: Edge = [.horizontal, .vertical]
         #expect(combined == Edge.all)
     }
 
-    @Test("OptionSet intersection works correctly")
+    @Test("OptionSet intersection works correctly", .publishingContext())
     func optionSetIntersectionWorks() async throws {
         let result = Edge.all.intersection(.horizontal)
         #expect(result == Edge.horizontal)
     }
 
-    @Test("OptionSet union works correctly")
+    @Test("OptionSet union works correctly", .publishingContext())
     func optionSetUnionWorks() async throws {
         let result: Edge = [.top, .leading]
         #expect(result.contains(.top))
@@ -74,7 +73,7 @@ struct EdgeTests {
         #expect(!result.contains(.trailing))
     }
 
-    @Test("Empty edge set contains nothing")
+    @Test("Empty edge set contains nothing", .publishingContext())
     func emptyEdgeSetContainsNothing() async throws {
         let empty = Edge()
         #expect(!empty.contains(.top))

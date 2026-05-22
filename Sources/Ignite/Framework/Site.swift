@@ -30,8 +30,7 @@ import Foundation
 /// - Important: When implementing optional properties like `lightTheme` and `darkTheme`,
 ///   ensure the return type exactly matches the protocol requirement, e.g., `(any Theme)?`.
 ///   Swift's type system requires this exact match.
-@MainActor
-public protocol Site: Sendable {
+public protocol Site {
     /// The type of your homepage. Required.
     associatedtype HomePageType: StaticPage
 
@@ -156,11 +155,19 @@ public protocol Site: Sendable {
     @ArticlePageBuilder var articlePages: [any ArticlePage] { get }
 
     /// Publishes this entire site from user space.
-    mutating func publish(from file: StaticString, buildDirectoryPath: String) async throws
+    mutating func publish(
+        from file: StaticString,
+        buildDirectoryPath: String,
+        logOptions: PublishingLogOptions
+    ) async throws
 
     /// Publishes this site using explicit directory paths.
     /// Use this when embedding Ignite in an app target where Package.swift doesn't exist.
-    mutating func publish(sourceDirectory: URL, buildDirectory: URL) async throws
+    mutating func publish(
+        sourceDirectory: URL,
+        buildDirectory: URL,
+        logOptions: PublishingLogOptions
+    ) async throws
 
     /// Override this if you need to do custom work to your site before the build begins,
     /// such as downloading data, creating your staticPages array dynamically, etc.
@@ -266,33 +273,45 @@ public extension Site {
     }
 
     /// Performs the entire publishing flow from a file in user space, e.g. main.swift
-    /// or Site.swift.
+    /// or Site.swift, while controlling which diagnostics are logged.
     /// - Parameters:
-    ///   - file: The path of the file that triggered the build. This is used to
-    ///   locate the base directory for their project, so we can find
-    ///   key folders.
+    ///   - file: The path of the file that triggered the build.
     ///   - buildDirectoryPath: This path will generate the necessary
     ///   artifacts for the web page. Please modify as needed.
-    ///   The default is "Build".
-    mutating func publish(from file: StaticString = #filePath, buildDirectoryPath: String = "Build") async throws {
-        let context = try PublishingContext.initialize(
+    ///   - logOptions: Which publishing diagnostics should be written to the console.
+    mutating func publish(
+        from file: StaticString = #filePath,
+        buildDirectoryPath: String = "Build",
+        logOptions: PublishingLogOptions = .standard
+    ) async throws {
+        try await PublishingContext.withInitialized(
             for: self,
             from: file,
-            buildDirectoryPath: buildDirectoryPath)
-        try await performPublish(with: context)
+            buildDirectoryPath: buildDirectoryPath,
+            logOptions: logOptions
+        ) { context in
+            try await performPublish(with: context)
+        }
     }
 
-    /// Publishes the site using explicit directory paths.
-    /// Use this when embedding Ignite in an app target where Package.swift doesn't exist.
+    /// Publishes the site using explicit directory paths while controlling which diagnostics are logged.
     /// - Parameters:
     ///   - sourceDirectory: The root directory containing Assets, Content, and Includes folders.
     ///   - buildDirectory: The directory where the generated site will be written.
-    mutating func publish(sourceDirectory: URL, buildDirectory: URL) async throws {
-        let context = try PublishingContext.initialize(
+    ///   - logOptions: Which publishing diagnostics should be written to the console.
+    mutating func publish(
+        sourceDirectory: URL,
+        buildDirectory: URL,
+        logOptions: PublishingLogOptions = .standard
+    ) async throws {
+        try await PublishingContext.withInitialized(
             for: self,
             sourceDirectory: sourceDirectory,
-            buildDirectory: buildDirectory)
-        try await performPublish(with: context)
+            buildDirectory: buildDirectory,
+            logOptions: logOptions
+        ) { context in
+            try await performPublish(with: context)
+        }
     }
 
     /// Shared implementation for all publish methods.
@@ -318,11 +337,18 @@ public extension Site {
 
         try await context.publish()
 
-        if !context.warnings.isEmpty || !context.errors.isEmpty {
+        let errorMessages = context.shouldLog(.errors) ? context.errors.compactMap(\.errorDescription) : []
+        let warningMessages = context.shouldLog(.warnings) ? Array(context.warnings) : []
+
+        if !errorMessages.isEmpty || !warningMessages.isEmpty {
             print("📘 Publish completed with exceptions:")
-            print(context.errors.map { "\t📕 \($0.errorDescription!)" }.joined(separator: "\n"))
-            print(context.warnings.map { "\t📙 \($0)" }.joined(separator: "\n"))
-        } else {
+            if !errorMessages.isEmpty {
+                print(errorMessages.map { "\t📕 \($0)" }.joined(separator: "\n"))
+            }
+            if !warningMessages.isEmpty {
+                print(warningMessages.map { "\t📙 \($0)" }.joined(separator: "\n"))
+            }
+        } else if context.errors.isEmpty && context.warnings.isEmpty && context.shouldLog(.notices) {
             print("📗 Publish completed!")
         }
     }

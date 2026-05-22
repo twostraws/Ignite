@@ -9,7 +9,7 @@ private enum PaddingType {
     case exact(LengthUnit), semantic(SpacingAmount)
 }
 
-@MainActor private func paddingModifier(
+private func paddingModifier(
     _ padding: PaddingType,
     edges: Edge = .all,
     content: any BodyElement
@@ -24,7 +24,7 @@ private enum PaddingType {
     }
 }
 
-@MainActor private func paddingModifier(
+private func paddingModifier(
     _ padding: PaddingType,
     edges: Edge = .all,
     content: any InlineElement

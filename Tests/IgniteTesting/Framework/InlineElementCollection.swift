@@ -11,15 +11,14 @@ import Testing
 
 /// Tests for the `InlineElementCollection` flattening and iteration behavior.
 @Suite("InlineElementCollection Tests")
-@MainActor
 struct InlineElementCollectionTests {
-    @Test("Filters out EmptyInlineElement instances")
+    @Test("Filters out EmptyInlineElement instances", .publishingContext())
     func filtersEmptyInlineElements() async throws {
         let collection = InlineElementCollection([Emphasis("A"), EmptyInlineElement(), Emphasis("B")])
         #expect(collection.elements.count == 2)
     }
 
-    @Test("Flattens AnyInlineElement to reveal wrapped element")
+    @Test("Flattens AnyInlineElement to reveal wrapped element", .publishingContext())
     func flattensAnyInlineElement() async throws {
         let wrapped = AnyInlineElement(Emphasis("Hello"))
         let collection = InlineElementCollection([wrapped])
@@ -27,14 +26,14 @@ struct InlineElementCollectionTests {
         #expect(collection.elements.first is Emphasis)
     }
 
-    @Test("Flattens nested InlineElementCollection")
+    @Test("Flattens nested InlineElementCollection", .publishingContext())
     func flattensNestedCollection() async throws {
         let inner = InlineElementCollection([Emphasis("A"), Emphasis("B")])
         let outer = InlineElementCollection([inner])
         #expect(outer.elements.count == 2)
     }
 
-    @Test("Sequence iteration yields all elements")
+    @Test("Sequence iteration yields all elements", .publishingContext())
     func sequenceIterationYieldsAll() async throws {
         let collection = InlineElementCollection([Emphasis("A"), Emphasis("B"), Emphasis("C")])
         var count = 0

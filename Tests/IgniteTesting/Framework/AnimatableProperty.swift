@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for `AnimatableProperty`.
 @Suite("AnimatableProperty Tests")
-@MainActor
 struct AnimatablePropertyTests {
-    @Test("Raw values match CSS property names", arguments: zip(
+    @Test("Raw values match CSS property names", .publishingContext(), arguments: zip(
         [AnimatableProperty.opacity, .backgroundColor, .transform, .color,
          .width, .zIndex, .letterSpacing],
         ["opacity", "background-color", "transform", "color",

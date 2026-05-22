@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@MainActor private func dataModifier(
+private func dataModifier(
     _ name: String,
     value: String, content: any BodyElement
 ) -> any BodyElement {
@@ -15,7 +15,7 @@
     return copy
 }
 
-@MainActor private func dataModifier(
+private func dataModifier(
     _ name: String,
     value: String,
     content: any InlineElement

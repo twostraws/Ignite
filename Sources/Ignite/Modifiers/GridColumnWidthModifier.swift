@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@MainActor private func gridColumnWidthModifier(
+private func gridColumnWidthModifier(
     _ width: ColumnWidth,
     content: any BodyElement
 ) -> AnyHTML {

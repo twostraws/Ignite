@@ -13,9 +13,8 @@ import Testing
 
 /// Tests for the `Button` element.
 @Suite("Button Tests")
-@MainActor
 class ButtonTests: IgniteTestSuite {
-    @Test("Button")
+    @Test("Button", .publishingContext())
     func button() async throws {
         let element = Text {
             Button("Say Hello") {
@@ -33,7 +32,7 @@ class ButtonTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Show Text")
+    @Test("Show Text", .publishingContext())
     func showText() async throws {
         let button1 = Text {
             Button("Show First Text") {
@@ -83,7 +82,7 @@ class ButtonTests: IgniteTestSuite {
         #expect(outputText2 == "<h3 id=\"SecondText\" class=\"d-none\">This is the second text.</h3>")
     }
 
-    @Test("Link Button")
+    @Test("Link Button", .publishingContext())
     func linkButton() async throws {
         let element = Text {
             Link("This is a link button", target: self.contentExamples())
@@ -98,7 +97,7 @@ class ButtonTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Disabled Button")
+    @Test("Disabled Button", .publishingContext())
     func disabledButton() async throws {
         let button = Button().disabled()
         let output = button.markupString()

@@ -6,7 +6,6 @@
 //
 
 /// A structure that creates HTML content by mapping over a sequence of data.
-@MainActor
 public struct HeadForEach<Data: Sequence>: HeadElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

@@ -17,8 +17,7 @@ import Foundation
 ///     @Environment(\.themes) var themes
 /// }
 /// ```
-@MainActor
-public struct EnvironmentValues {
+public struct EnvironmentValues: @unchecked Sendable {
     /// Provides access to the Markdown articles on this site.
     public var articles: ArticleLoader
 

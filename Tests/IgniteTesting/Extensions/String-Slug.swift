@@ -12,11 +12,10 @@ import Testing
 
 /// Tests for the `String-Slug` extension.
 @Suite("String-Slug Tests")
-@MainActor
 struct StringSlugTests {
     /// Some types of string will have an output that's the same as their input.
     /// Test examples of each of those cases
-    @Test("Noop Cases", arguments: [
+    @Test("Noop Cases", .publishingContext(), arguments: [
         "a", // single character
         "1", // single digit
         "one", // single word
@@ -28,7 +27,7 @@ struct StringSlugTests {
         #expect(string.convertedToSlug() == string)
     }
 
-    @Test("Converts Title-Cased Single Words To Lowercase", arguments: [
+    @Test("Converts Title-Cased Single Words To Lowercase", .publishingContext(), arguments: [
         "A",
         "Cars",
         "Hollywood"
@@ -42,7 +41,7 @@ struct StringSlugTests {
         let expected: String
     }
 
-    @Test("Transliterates Non-latin Scripts", arguments: [
+    @Test("Transliterates Non-latin Scripts", .publishingContext(), arguments: [
         // I've tried to use non-controversial words here:
         // "peace" in three of the scripts
         // and "oolong tea" in the other two.
@@ -61,7 +60,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Strips Diacritivs", arguments: [
+    @Test("Strips Diacritivs", .publishingContext(), arguments: [
         Instance(input: "días", expected: "dias"),
         Instance(input: "baño", expected: "bano"),
         Instance(input: "çest", expected: "cest"),
@@ -71,7 +70,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Strips Leading and Trailing Punctuation", arguments: [
+    @Test("Strips Leading and Trailing Punctuation", .publishingContext(), arguments: [
         Instance(input: "up!", expected: "up"),
         Instance(input: "c.", expected: "c"),
         Instance(input: "15!", expected: "15"),
@@ -81,7 +80,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Replaces Punctuation between words with dash", arguments: [
+    @Test("Replaces Punctuation between words with dash", .publishingContext(), arguments: [
         Instance(input: "y.m.c.a.", expected: "y-m-c-a"),
         Instance(input: "here, there and everywhere", expected: "here-there-and-everywhere"),
         Instance(input: "this, that, and the other thing", expected: "this-that-and-the-other-thing"),
@@ -91,7 +90,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Removes emoji leaving other words", arguments: [
+    @Test("Removes emoji leaving other words", .publishingContext(), arguments: [
         Instance(input: "😄smiley", expected: "smiley"),
         Instance(input: "smiley😄", expected: "smiley"),
         Instance(input: "this😄and😄that😄", expected: "this-and-that")
@@ -100,7 +99,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Replaces Capitalized Characters with Dash then Lowercase", arguments: [
+    @Test("Replaces Capitalized Characters with Dash then Lowercase", .publishingContext(), arguments: [
         Instance(input: "CARS", expected: "c-a-r-s"),
         Instance(input: "HELLO", expected: "h-e-l-l-o"),
         Instance(input: "FBI", expected: "f-b-i")
@@ -109,7 +108,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Replaces Common Math Operators with Dashes", arguments: [
+    @Test("Replaces Common Math Operators with Dashes", .publishingContext(), arguments: [
         Instance(input: "15+3", expected: "15-3"),
         Instance(input: "15-3=12", expected: "15-3-12"), // math expressions expected: ""),
         Instance(input: "15+3=18", expected: "15-3-18"),
@@ -121,7 +120,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Leaves Existing Dashes when converting to lowercase", arguments: [
+    @Test("Leaves Existing Dashes when converting to lowercase", .publishingContext(), arguments: [
         Instance(input: "Hello-world", expected: "hello-world"),
         Instance(input: "Happy-go-lucky", expected: "happy-go-lucky")
     ])
@@ -129,7 +128,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Replaces Underscaore with Dashes", arguments: [
+    @Test("Replaces Underscaore with Dashes", .publishingContext(), arguments: [
         Instance(input: "hello_world", expected: "hello-world"),
         Instance(input: "hello_happy_world", expected: "hello-happy-world")
     ])
@@ -137,7 +136,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Concatenates Lowercase Words With Dashes", arguments: [
+    @Test("Concatenates Lowercase Words With Dashes", .publishingContext(), arguments: [
         "a b",
         "one two",
         "buckle my shoe"
@@ -149,7 +148,7 @@ struct StringSlugTests {
     //    in the case where there's a dash followed by an uppercase letter
     //    a second dash is inserted and the uppercase letter is converted to lowercase.
     //    which results in two dashes in a row
-    @Test("Replaces dash before uppercase letter with two dashes before lowercase letter", arguments: [
+    @Test("Replaces dash before uppercase letter with two dashes before lowercase letter", .publishingContext(), arguments: [
         Instance(input: "hello-World", expected: "hello-world"),
         Instance(input: "Hello-World", expected: "hello-world"),
         Instance(input: "Happy-Go-Lucky", expected: "happy-go-lucky")
@@ -158,7 +157,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Replaces All Whitespace Between Lowercase Words With Dashes", arguments: [
+    @Test("Replaces All Whitespace Between Lowercase Words With Dashes", .publishingContext(), arguments: [
         Instance(input: "a\tb", expected: "a-b"),
         Instance(input: "one\ntwo", expected: "one-two"),
         Instance(input: "one\r\ntwo", expected: "one-two"),
@@ -169,7 +168,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Acronyms are lowercased and double-dash-separated", arguments: [
+    @Test("Acronyms are lowercased and double-dash-separated", .publishingContext(), arguments: [
         Instance(input: "Y.M.C.A.", expected: "y-m-c-a"),
         Instance(input: "F.B.I.", expected: "f-b-i")
     ])
@@ -177,7 +176,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Converts camelCase to dash-case", arguments: [
+    @Test("Converts camelCase to dash-case", .publishingContext(), arguments: [
         Instance(input: "camelCase", expected: "camel-case"),
         Instance(input: "threeWordExample", expected: "three-word-example"),
         Instance(input: "aLongerExampleWithSixWords", expected: "a-longer-example-with-six-words")
@@ -186,7 +185,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("URL Strings", arguments: [
+    @Test("URL Strings", .publishingContext(), arguments: [
         Instance(input: "https://github.com/twostraws/Ignite", expected: "https-github-com-twostraws-ignite"),
         Instance(input: "https://github.com/twostraws/Ignite/", expected: "https-github-com-twostraws-ignite"),
         Instance(input: "file:/Users/george/Documents", expected: "file-users-george-documents")
@@ -195,7 +194,7 @@ struct StringSlugTests {
         #expect(instance.input.convertedToSlug() == instance.expected)
     }
 
-    @Test("Paths", arguments: [
+    @Test("Paths", .publishingContext(), arguments: [
         Instance(input: "/Users/george/Documents", expected: "-users-george-documents"),
         Instance(input: "/twostraws/Ignite", expected: "twostraws-ignite"),
         Instance(input: "~/Documents", expected: "-documents"),

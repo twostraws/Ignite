@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `URL-Unwrapped` extension.
 @Suite("URL Static Init Tests")
-@MainActor
 struct URLUnwrappedTests {
-    @Test("Creates URL from valid static string", arguments: [
+    @Test("Creates URL from valid static string", .publishingContext(), arguments: [
         "https://example.com",
         "https://www.github.com/twostraws/Ignite",
         "https://apple.com/path/to/page",
@@ -28,13 +27,13 @@ struct URLUnwrappedTests {
         #expect(url?.absoluteString == urlString)
     }
 
-    @Test("Valid static strings produce correct URLs")
+    @Test("Valid static strings produce correct URLs", .publishingContext())
     func validStaticStringsProduceCorrectURLs() async throws {
         let url = URL(static: "https://example.com")
         #expect(url.absoluteString == "https://example.com")
     }
 
-    @Test("Static init with path")
+    @Test("Static init with path", .publishingContext())
     func staticInitWithPath() async throws {
         let url = URL(static: "https://example.com/path/to/page")
         #expect(url.host() == "example.com")

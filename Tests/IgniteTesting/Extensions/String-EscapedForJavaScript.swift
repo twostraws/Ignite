@@ -12,11 +12,10 @@ import Testing
 
 /// Tests for the `String-EscapedForJavaScript` extension.
 @Suite("String-EscapedForJavaScript Tests")
-@MainActor
 struct StringEscapedForJavaScriptTests {
     /// Some types of string will have an output that's the same as their input.
     /// Test examples of each of those cases
-    @Test("Noop Cases", arguments: [
+    @Test("Noop Cases", .publishingContext(), arguments: [
         "", // empty string
         "a", // single character
         "1", // single digit
@@ -42,7 +41,7 @@ struct StringEscapedForJavaScriptTests {
         let expected: String
     }
 
-    @Test("Replaces Single Quotes", arguments: [
+    @Test("Replaces Single Quotes", .publishingContext(), arguments: [
         Instance(input: "'",
                  expected: "\\'"),
         Instance(input: "'whole string is single quoted'",
@@ -56,7 +55,7 @@ struct StringEscapedForJavaScriptTests {
         #expect(instance.input.escapedForJavascript() == instance.expected)
     }
 
-    @Test("Replaces Quotation Marks", arguments: [
+    @Test("Replaces Quotation Marks", .publishingContext(), arguments: [
         Instance(input: "\"",
                  expected: "&quot;"),
         Instance(input: "\"whole string has quotation marks\"",
@@ -68,7 +67,7 @@ struct StringEscapedForJavaScriptTests {
         #expect(instance.input.escapedForJavascript() == instance.expected)
     }
 
-    @Test("Combined Examples", arguments: [
+    @Test("Combined Examples", .publishingContext(), arguments: [
         Instance(input: "\"a quote 'string' with 'single quotes' within it\"",
                  expected: "&quot;a quote \\'string\\' with \\'single quotes\\' within it&quot;"),
         Instance(input: "programmer's example of a string with \"quotation\" marks and an apostrophe",

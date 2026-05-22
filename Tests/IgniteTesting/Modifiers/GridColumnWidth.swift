@@ -12,16 +12,15 @@ import Testing
 
 /// Tests for the `GridColumnWidthModifier`.
 @Suite("GridColumnWidth Tests")
-@MainActor
 class GridColumnWidthTests: IgniteTestSuite {
-    @Test("Width modifier applies col-md class", arguments: [1, 4, 6, 12])
+    @Test("Width modifier applies col-md class", .publishingContext(), arguments: [1, 4, 6, 12])
     func widthModifierAppliesColMdClass(width: Int) async throws {
         let element = Text("Hello").width(width)
         let output = element.markupString()
         #expect(output.contains("col-md-\(width)"))
     }
 
-    @Test("Width modifier wraps non-primitive content in section")
+    @Test("Width modifier wraps non-primitive content in section", .publishingContext())
     func widthModifierOnSection() async throws {
         let element = Section {
             Text("Hello")

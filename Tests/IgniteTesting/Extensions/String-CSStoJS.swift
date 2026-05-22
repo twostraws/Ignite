@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `String-CSStoJS` extension.
 @Suite("String-CSStoJS Tests")
-@MainActor
 struct StringCSStoJSTests {
-    @Test("CSS-JS conversion for zero hyphen names")
+    @Test("CSS-JS conversion for zero hyphen names", .publishingContext())
     func convertingCSSNamesToJS_forZeroHyphenNames() async throws {
         // Given
         let cssName1 = "color"
@@ -27,7 +26,7 @@ struct StringCSStoJSTests {
         #expect(jsName2 == "margin")
     }
 
-    @Test("CSS-JS conversion for single hyphen names")
+    @Test("CSS-JS conversion for single hyphen names", .publishingContext())
     func convertingCSSNamesToJS_forSingleHyphenNames() async throws {
         // Given
         let cssName1 = "background-color"
@@ -46,7 +45,7 @@ struct StringCSStoJSTests {
         #expect(jsName4 == "transformOrigin")
     }
 
-    @Test("CSS-JS conversion for multiple hyphen names")
+    @Test("CSS-JS conversion for multiple hyphen names", .publishingContext())
     func convertingCSSNamesToJS_forMultipleHyphenNames() async throws {
         // Given
         let cssName1 = "font-size-adjust"
@@ -65,7 +64,7 @@ struct StringCSStoJSTests {
         #expect(jsName4 == "borderTopLeftRadius")
     }
 
-    @Test("CSS-JS conversion for pre/post-hyphenated names")
+    @Test("CSS-JS conversion for pre/post-hyphenated names", .publishingContext())
     func convertingCSSNamesToJS_forPreOrPostHyphenatedNames() async throws {
         // Given
         let cssName1 = "--background-color"
@@ -84,7 +83,7 @@ struct StringCSStoJSTests {
         #expect(jsName4 == "transformOrigin")
     }
 
-    @Test("CSS-JS conversion for names with numbers")
+    @Test("CSS-JS conversion for names with numbers", .publishingContext())
     func convertingCSSNamesToJS_forNamesWithNumbers() async throws {
         // Given
         let cssName1 = "font-size-12"
@@ -97,7 +96,7 @@ struct StringCSStoJSTests {
         #expect(jsName2 == "border1px")
     }
 
-    @Test("CSS-JS conversion for uppercased names")
+    @Test("CSS-JS conversion for uppercased names", .publishingContext())
     func convertingCSSNamesToJS_forUppercasedNames() async throws {
         // Given
         let cssName1 = "MARGIN-TOP"
@@ -113,7 +112,7 @@ struct StringCSStoJSTests {
         #expect(jsName3 == "FONTSIZE12")
     }
 
-    @Test("CSS-JS conversion for mixed case names")
+    @Test("CSS-JS conversion for mixed case names", .publishingContext())
     func convertingCSSNamesToJS_forMixedCaseNames() async throws {
         // Given
         let cssName1 = "background-Color"
@@ -129,7 +128,7 @@ struct StringCSStoJSTests {
         #expect(jsName3 == "transformORIGIN")
     }
 
-    @Test("CSS-JS conversion for names with special characters")
+    @Test("CSS-JS conversion for names with special characters", .publishingContext())
     func convertingCSSNamesToJS_forNamesWithSpecialCharacters() async throws {
         // Given
         let cssName1 = "--border-top-left-radius"
@@ -166,7 +165,7 @@ struct StringCSStoJSTests {
         #expect(jsName10 == "padding~10px")
     }
 
-    @Test("CSS-JS conversion for an empty string")
+    @Test("CSS-JS conversion for an empty string", .publishingContext())
     func convertingCSSNamesToJS_forAnEmptyString() async throws {
         // Given
         let cssName = ""

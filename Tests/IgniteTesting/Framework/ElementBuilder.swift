@@ -12,19 +12,18 @@ import Testing
 
 /// Tests for the generic `ElementBuilder` result builder.
 @Suite("ElementBuilder Tests")
-@MainActor
 struct ElementBuilderTests {
     private func buildInts(@ElementBuilder<Int> content: () -> [Int]) -> [Int] {
         content()
     }
 
-    @Test("Single expression produces single-element array")
+    @Test("Single expression produces single-element array", .publishingContext())
     func singleExpression() async throws {
         let result = buildInts { 42 }
         #expect(result == [42])
     }
 
-    @Test("Multiple expressions produce ordered array")
+    @Test("Multiple expressions produce ordered array", .publishingContext())
     func multipleExpressions() async throws {
         let result = buildInts {
             1
@@ -34,7 +33,7 @@ struct ElementBuilderTests {
         #expect(result == [1, 2, 3])
     }
 
-    @Test("Optional nil produces empty array")
+    @Test("Optional nil produces empty array", .publishingContext())
     func optionalNil() async throws {
         let include = false
         let result = buildInts {
@@ -45,7 +44,7 @@ struct ElementBuilderTests {
         #expect(result == [])
     }
 
-    @Test("Optional non-nil includes element")
+    @Test("Optional non-nil includes element", .publishingContext())
     func optionalNonNil() async throws {
         let include = true
         let result = buildInts {
@@ -56,7 +55,7 @@ struct ElementBuilderTests {
         #expect(result == [99])
     }
 
-    @Test("If-else selects correct branch")
+    @Test("If-else selects correct branch", .publishingContext())
     func ifElse() async throws {
         let condition = false
         let result = buildInts {
@@ -69,7 +68,7 @@ struct ElementBuilderTests {
         #expect(result == [2])
     }
 
-    @Test("For loop flattens into array")
+    @Test("For loop flattens into array", .publishingContext())
     func forLoop() async throws {
         let result = buildInts {
             for i in 1...3 {

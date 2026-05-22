@@ -6,7 +6,6 @@
 //
 
 /// A structure that creates inline content by mapping over a sequence of data.
-@MainActor
 public struct InlineForEach<Data: Sequence>: InlineElement, PassthroughElement {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()

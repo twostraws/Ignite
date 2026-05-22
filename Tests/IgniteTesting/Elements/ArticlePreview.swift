@@ -1,5 +1,5 @@
 //
-//  ContentPreview.swift
+//  ArticlePreview.swift
 //  Ignite
 //  https://www.github.com/twostraws/Ignite
 //  See LICENSE for license information.
@@ -28,9 +28,8 @@ private struct CustomArticlePreviewStyle: ArticlePreviewStyle {
 
 /// Tests for the `ArticlePreview` element.
 @Suite("ArticlePreview Tests")
-@MainActor
 class ArticlePreviewTests: IgniteTestSuite {
-    @Test("Default layout renders card image title description and tag badges")
+    @Test("Default layout renders card image title description and tag badges", .publishingContext())
     func defaultLayoutRendersCardContent() async throws {
         var article = Article()
         article.title = "Testing Ignite"
@@ -53,7 +52,7 @@ class ArticlePreviewTests: IgniteTestSuite {
         #expect(output.contains(#"style="margin-top: -5px""#))
     }
 
-    @Test("Default layout omits footer when article has no tags")
+    @Test("Default layout omits footer when article has no tags", .publishingContext())
     func defaultLayoutWithoutTagsOmitsFooter() async throws {
         var article = Article()
         article.title = "No Tags"
@@ -66,7 +65,7 @@ class ArticlePreviewTests: IgniteTestSuite {
         #expect(!output.contains(#"rel="tag""#))
     }
 
-    @Test("Custom style overrides default card layout and receives preview attributes")
+    @Test("Custom style overrides default card layout and receives preview attributes", .publishingContext())
     func customStyleOverridesDefaultLayout() async throws {
         var article = Article()
         article.description = "Body"

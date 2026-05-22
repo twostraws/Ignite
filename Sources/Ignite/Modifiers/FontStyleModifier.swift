@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@MainActor private func fontStyleModifier(
+private func fontStyleModifier(
     _ style: Font.Style,
     content: any HTML
 ) -> any HTML {
@@ -16,7 +16,7 @@
     }
 }
 
-@MainActor private func fontStyleModifier(
+private func fontStyleModifier(
     _ style: Font.Style,
     content: any InlineElement
 ) -> any InlineElement {

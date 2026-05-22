@@ -12,7 +12,6 @@ import Testing
 
 /// Tests for the `FeedLink` component.
 @Suite("FeedLink Tests")
-@MainActor
 class FeedLinkTests: IgniteTestSuite {
     /// Creates an environment with feed configuration from TestSite.
     private func environmentWithFeed() -> EnvironmentValues {
@@ -23,7 +22,7 @@ class FeedLinkTests: IgniteTestSuite {
         )
     }
 
-    @Test("Renders RSS Feed link when feed is configured")
+    @Test("Renders RSS Feed link when feed is configured", .publishingContext())
     func rendersRSSFeedLink() async throws {
         let output = publishingContext.withEnvironment(environmentWithFeed()) {
             FeedLink().markupString()
@@ -32,7 +31,7 @@ class FeedLinkTests: IgniteTestSuite {
         #expect(output.contains("/feed.rss"))
     }
 
-    @Test("Renders as centered text")
+    @Test("Renders as centered text", .publishingContext())
     func renderedAsCenteredText() async throws {
         let output = publishingContext.withEnvironment(environmentWithFeed()) {
             FeedLink().markupString()
@@ -40,7 +39,7 @@ class FeedLinkTests: IgniteTestSuite {
         #expect(output.contains("text-center"))
     }
 
-    @Test("Contains link element pointing to feed path")
+    @Test("Contains link element pointing to feed path", .publishingContext())
     func containsLinkElement() async throws {
         let output = publishingContext.withEnvironment(environmentWithFeed()) {
             FeedLink().markupString()
@@ -49,7 +48,7 @@ class FeedLinkTests: IgniteTestSuite {
         #expect(output.contains("href=\"/feed.rss\""))
     }
 
-    @Test("Includes RSS icon when built-in icons are enabled")
+    @Test("Includes RSS icon when built-in icons are enabled", .publishingContext())
     func includesRSSIcon() async throws {
         let output = publishingContext.withEnvironment(environmentWithFeed()) {
             FeedLink().markupString()
@@ -57,7 +56,7 @@ class FeedLinkTests: IgniteTestSuite {
         #expect(output.contains("rss-fill"))
     }
 
-    @Test("Renders empty when no feed is configured")
+    @Test("Renders empty when no feed is configured", .publishingContext())
     func rendersEmptyWithoutFeedConfig() async throws {
         let element = FeedLink()
         let output = element.markupString()

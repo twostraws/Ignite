@@ -12,8 +12,8 @@ import Testing
 
 /// Tests for the `Strong` element.
 @Suite("Strong Tests")
-@MainActor class StrongTests: IgniteTestSuite {
-    @Test("Single Element", arguments: ["This is a test", "Another test", ""])
+class StrongTests: IgniteTestSuite {
+    @Test("Single Element", .publishingContext(), arguments: ["This is a test", "Another test", ""])
     func singleElement(strongText: String) async throws {
         let element = Strong(strongText)
         let output = element.markupString()
@@ -21,7 +21,7 @@ import Testing
         #expect(output == "<strong>\(strongText)</strong>")
     }
 
-    @Test("Builder", arguments: ["This is a test", "Another test", ""])
+    @Test("Builder", .publishingContext(), arguments: ["This is a test", "Another test", ""])
     func builder(strongText: String) async throws {
         let element = Strong { strongText }
         let output = element.markupString()

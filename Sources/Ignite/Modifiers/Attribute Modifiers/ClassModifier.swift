@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@MainActor private func classModifier(
+private func classModifier(
     _ classNames: [String],
     content: any BodyElement
 ) -> any BodyElement {
@@ -15,7 +15,6 @@
     return copy
 }
 
-@MainActor
 private func classModifier(_ classNames: [String], content: any InlineElement) -> any InlineElement {
     guard !classNames.filter({ !$0.isEmpty }).isEmpty else { return content }
     var copy: any InlineElement = content.isPrimitive ? content : Span(content)

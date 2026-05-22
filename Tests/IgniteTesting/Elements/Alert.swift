@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Alert` element.
 @Suite("Alert Tests")
-@MainActor
 class AlertTests: IgniteTestSuite {
-    @Test("All Alert roles are correctly set", arguments: zip(Role.standardRoles, [
+    @Test("All Alert roles are correctly set", .publishingContext(), arguments: zip(Role.standardRoles, [
         "alert-primary",
         "alert-secondary",
         "alert-success",
@@ -33,7 +32,7 @@ class AlertTests: IgniteTestSuite {
         #expect(output.string == "<div class=\"alert \(cssAppliedClass)\"><p>This is not an exercice</p></div>")
     }
 
-    @Test("Default role does not add a role class")
+    @Test("Default role does not add a role class", .publishingContext())
     func defaultRole() async throws {
         let element = Alert {
             Text("Hello")
@@ -42,7 +41,7 @@ class AlertTests: IgniteTestSuite {
         #expect(output.string == "<div class=\"alert\"><p>Hello</p></div>")
     }
 
-    @Test("Alert with multiple children renders all content")
+    @Test("Alert with multiple children renders all content", .publishingContext())
     func multipleChildren() async throws {
         let element = Alert {
             Text("Line 1")
@@ -54,7 +53,7 @@ class AlertTests: IgniteTestSuite {
         #expect(output.contains("alert-warning"))
     }
 
-    @Test("Alert preserves custom attributes")
+    @Test("Alert preserves custom attributes", .publishingContext())
     func customAttributes() async throws {
         let element = Alert {
             Text("Important")
@@ -66,7 +65,7 @@ class AlertTests: IgniteTestSuite {
         #expect(output.contains("alert-danger"))
     }
 
-    @Test("Alert with ID includes id attribute")
+    @Test("Alert with ID includes id attribute", .publishingContext())
     func idAttribute() async throws {
         let element = Alert {
             Text("Notice")

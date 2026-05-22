@@ -11,64 +11,63 @@ import Testing
 
 /// Tests for `TimingCurve`.
 @Suite("TimingCurve Tests")
-@MainActor
 struct TimingCurveTests {
-    @Test("CSS output for automatic")
+    @Test("CSS output for automatic", .publishingContext())
     func automaticCSS() async throws {
         #expect(TimingCurve.automatic.css == "cubic-bezier(0.4, 1.0, 0.0, 1.0)")
     }
 
-    @Test("CSS output for linear")
+    @Test("CSS output for linear", .publishingContext())
     func linearCSS() async throws {
         #expect(TimingCurve.linear.css == "linear")
     }
 
-    @Test("CSS output for easeIn")
+    @Test("CSS output for easeIn", .publishingContext())
     func easeInCSS() async throws {
         #expect(TimingCurve.easeIn.css == "ease-in")
     }
 
-    @Test("CSS output for easeOut")
+    @Test("CSS output for easeOut", .publishingContext())
     func easeOutCSS() async throws {
         #expect(TimingCurve.easeOut.css == "ease-out")
     }
 
-    @Test("CSS output for easeInOut")
+    @Test("CSS output for easeInOut", .publishingContext())
     func easeInOutCSS() async throws {
         #expect(TimingCurve.easeInOut.css == "ease-in-out")
     }
 
-    @Test("CSS output for spring")
+    @Test("CSS output for spring", .publishingContext())
     func springCSS() async throws {
         #expect(TimingCurve.spring(dampingRatio: 0.5, velocity: 0.2).css == "cubic-bezier(0.4, 0.5, 0.2, 1.0)")
     }
 
-    @Test("CSS output for bezier")
+    @Test("CSS output for bezier", .publishingContext())
     func bezierCSS() async throws {
         #expect(TimingCurve.bezier(x1: 0.1, y1: 0.2, x2: 0.3, y2: 0.4).css == "cubic-bezier(0.1, 0.2, 0.3, 0.4)")
     }
 
-    @Test("CSS output for custom")
+    @Test("CSS output for custom", .publishingContext())
     func customCSS() async throws {
         #expect(TimingCurve.custom("my-timing").css == "my-timing")
     }
 
-    @Test("Static factory smooth equals spring(1.0, 0.0)")
+    @Test("Static factory smooth equals spring(1.0, 0.0)", .publishingContext())
     func smoothFactory() async throws {
         #expect(TimingCurve.smooth == .spring(dampingRatio: 1.0, velocity: 0.0))
     }
 
-    @Test("Static factory snappy equals spring(0.85, 0.15)")
+    @Test("Static factory snappy equals spring(0.85, 0.15)", .publishingContext())
     func snappyFactory() async throws {
         #expect(TimingCurve.snappy == .spring(dampingRatio: 0.85, velocity: 0.15))
     }
 
-    @Test("Static factory bouncy equals spring(0.7, 0.3)")
+    @Test("Static factory bouncy equals spring(0.7, 0.3)", .publishingContext())
     func bouncyFactory() async throws {
         #expect(TimingCurve.bouncy == .spring(dampingRatio: 0.7, velocity: 0.3))
     }
 
-    @Test("smooth(extraBounce:) reduces damping and increases velocity")
+    @Test("smooth(extraBounce:) reduces damping and increases velocity", .publishingContext())
     func smoothExtraBounce() async throws {
         #expect(TimingCurve.smooth(extraBounce: 0.1) == .spring(dampingRatio: 0.9, velocity: 0.1))
     }

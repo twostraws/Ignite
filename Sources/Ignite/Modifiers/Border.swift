@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@MainActor private func borderModifier(
+private func borderModifier(
     color: Color,
     width: Double,
     style: BorderStyle,
@@ -16,7 +16,7 @@
     return content.style(styles)
 }
 
-@MainActor private func borderModifier(
+private func borderModifier(
     color: Color,
     width: Double,
     style: BorderStyle,

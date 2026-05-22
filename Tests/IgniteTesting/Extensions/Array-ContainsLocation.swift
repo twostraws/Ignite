@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Array-ContainsLocation` extension.
 @Suite("Array-ContainsLocation Tests")
-@MainActor
 struct ArrayContainsLocationTests {
-    @Test("Checks if an array of 'Location' types contains a specific path")
+    @Test("Checks if an array of 'Location' types contains a specific path", .publishingContext())
     func testIfArrayContainsPath() async throws {
         // Given
         let location1 = Location(path: "https://www.example.com/home", priority: 1.0)
@@ -36,7 +35,7 @@ struct ArrayContainsLocationTests {
         #expect(someLocations.contains("") == false)
     }
 
-    @Test("Checks if an array of randomly created 'Location' types contains the expected number of paths")
+    @Test("Checks if an array of randomly created 'Location' types contains the expected number of paths", .publishingContext())
     func testIfArrayContainsRandomlyChosenPath() async throws {
         // Given
         let testPaths = [

@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Rotation` type.
 @Suite("Rotation Tests")
-@MainActor
 struct RotationTests {
-    @Test("Flip transition maps each rotation to expected axis and degrees", arguments: [
+    @Test("Flip transition maps each rotation to expected axis and degrees", .publishingContext(), arguments: [
         (rotation: Rotation.right, axis: "Y", degrees: "360deg"),
         (rotation: Rotation.left, axis: "Y", degrees: "-360deg"),
         (rotation: Rotation.up, axis: "X", degrees: "-360deg"),
@@ -29,7 +28,7 @@ struct RotationTests {
         #expect(transition.data[0].final == "perspective(400px) rotate\(axis)(\(degrees))")
     }
 
-    @Test("Default flip direction matches .right")
+    @Test("Default flip direction matches .right", .publishingContext())
     func defaultFlipDirectionIsRight() async throws {
         #expect(Transition.flip().data == Transition.flip(.right).data)
     }

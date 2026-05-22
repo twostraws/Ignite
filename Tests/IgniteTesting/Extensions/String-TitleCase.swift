@@ -12,7 +12,6 @@ import Testing
 
 /// Tests for the `String-TitleCase` extension.
 @Suite("String-TitleCase Tests")
-@MainActor
 struct StringTitleCaseTests {
     /// Simple type meant to represent input paired with expected output
     struct Instance {
@@ -20,7 +19,7 @@ struct StringTitleCaseTests {
         let expected: String
     }
 
-    @Test("Converts PascalCase to Title Case", arguments: [
+    @Test("Converts PascalCase to Title Case", .publishingContext(), arguments: [
         Instance(input: "HelloWorld", expected: "Hello World"),
         Instance(input: "ThreeWordExample", expected: "Three Word Example"),
         Instance(input: "MyApp", expected: "My App")
@@ -29,7 +28,7 @@ struct StringTitleCaseTests {
         #expect(instance.input.titleCase() == instance.expected)
     }
 
-    @Test("Single word stays unchanged", arguments: [
+    @Test("Single word stays unchanged", .publishingContext(), arguments: [
         "Hello",
         "World",
         "test"
@@ -38,12 +37,12 @@ struct StringTitleCaseTests {
         #expect(word.titleCase() == word)
     }
 
-    @Test("Empty string stays empty")
+    @Test("Empty string stays empty", .publishingContext())
     func emptyStringStaysEmpty() async throws {
         #expect("".titleCase() == "")
     }
 
-    @Test("Consecutive uppercase letters are split individually", arguments: [
+    @Test("Consecutive uppercase letters are split individually", .publishingContext(), arguments: [
         Instance(input: "XMLParser", expected: "X ML Parser"),
         Instance(input: "URLSession", expected: "U RL Session"),
         Instance(input: "HTMLElement", expected: "H TM LElement")
@@ -52,7 +51,7 @@ struct StringTitleCaseTests {
         #expect(instance.input.titleCase() == instance.expected)
     }
 
-    @Test("Handles strings with numbers", arguments: [
+    @Test("Handles strings with numbers", .publishingContext(), arguments: [
         Instance(input: "Section1Header", expected: "Section1 Header"),
         Instance(input: "iOS16Feature", expected: "i OS16 Feature")
     ])
@@ -60,7 +59,7 @@ struct StringTitleCaseTests {
         #expect(instance.input.titleCase() == instance.expected)
     }
 
-    @Test("Already-spaced strings stay unchanged", arguments: [
+    @Test("Already-spaced strings stay unchanged", .publishingContext(), arguments: [
         "Hello World",
         "My Great App"
     ])
@@ -68,7 +67,7 @@ struct StringTitleCaseTests {
         #expect(input.titleCase() == input)
     }
 
-    @Test("Two word PascalCase", arguments: [
+    @Test("Two word PascalCase", .publishingContext(), arguments: [
         Instance(input: "DarkMode", expected: "Dark Mode"),
         Instance(input: "LightTheme", expected: "Light Theme"),
         Instance(input: "HomePage", expected: "Home Page")

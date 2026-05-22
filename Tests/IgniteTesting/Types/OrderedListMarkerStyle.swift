@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `OrderedListMarkerStyle` type.
 @Suite("OrderedListMarkerStyle Tests")
-@MainActor
 struct OrderedListMarkerStyleTests {
-    @Test("Raw values match CSS list-style-type values", arguments: zip(
+    @Test("Raw values match CSS list-style-type values", .publishingContext(), arguments: zip(
         [OrderedListMarkerStyle.automatic, .armenian, .cjkIdeographic,
          .decimalLeadingZero, .georgian, .hebrew,
          .hiragana, .hiraganaIroha, .katakana, .katakanaIroha,
@@ -29,7 +28,7 @@ struct OrderedListMarkerStyleTests {
         #expect(style.rawValue == expected)
     }
 
-    @Test("Automatic defaults to decimal")
+    @Test("Automatic defaults to decimal", .publishingContext())
     func automaticDefaultsToDecimal() async throws {
         #expect(OrderedListMarkerStyle.automatic.rawValue == "decimal")
     }

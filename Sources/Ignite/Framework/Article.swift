@@ -14,8 +14,7 @@ import Foundation
 /// the code's formatting. To avoid this issue, either set your site’s `shouldPrettify`
 /// property to `false`, or replace `<` and `>` with their character entity references,
 /// `&lt;` and `&gt;` respectively.
-@MainActor
-public struct Article {
+public struct Article: Sendable {
     /// The main title for this content.
     public var title: String = ""
 

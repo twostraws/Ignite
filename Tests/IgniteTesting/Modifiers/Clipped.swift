@@ -12,16 +12,15 @@ import Testing
 
 /// Tests for the `Clipped` modifier.
 @Suite("Clipped Tests")
-@MainActor
 class ClippedTests: IgniteTestSuite {
-    @Test("Clipped Modifier")
+    @Test("Clipped Modifier", .publishingContext())
     func clippedModifier() async throws {
         let element = Text("Hello").clipped()
         let output = element.markupString()
         #expect(output == "<p style=\"overflow: hidden\">Hello</p>")
     }
 
-    @Test("Clipped Modifier on Custom Element")
+    @Test("Clipped Modifier on Custom Element", .publishingContext())
     func clippedModifier_onCustomElement() async throws {
         let element = TestElement().clipped()
         let output = element.markupString()

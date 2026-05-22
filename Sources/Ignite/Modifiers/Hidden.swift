@@ -17,10 +17,11 @@ public extension HTML {
     /// - Parameter visibility: One or more media queries that must all match for the element to be hidden.
     /// - Returns: A modified copy of the element with conditional visibility.
     func hidden(_ visibility: ResponsiveBoolean) -> some HTML {
-        let manager = CSSManager.shared
         let visibilityValues = visibility.values
-        let className = manager.registerStyles(visibilityValues)
-        return self.class(className)
+        let className = CSSManager.className(forStyles: visibilityValues)
+        var modified: any HTML = self.class(className)
+        modified.attributes.append(publishingRegistration: .responsiveVisibility(visibilityValues))
+        return AnyHTML(modified)
     }
 }
 
@@ -29,10 +30,11 @@ public extension NavigationItem {
     /// - Parameter visibility: A responsive boolean indicating which size classes hide the element.
     /// - Returns: A modified copy of the element with conditional visibility.
     func hidden(_ visibility: ResponsiveBoolean) -> Self {
-        let manager = CSSManager.shared
         let visibilityValues = visibility.values
-        let className = manager.registerStyles(visibilityValues)
-        return self.class(className)
+        let className = CSSManager.className(forStyles: visibilityValues)
+        var modified = self.class(className)
+        modified.attributes.append(publishingRegistration: .responsiveVisibility(visibilityValues))
+        return modified
     }
 }
 

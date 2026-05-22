@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `Property` CSS property enum.
 @Suite("Property Tests")
-@MainActor
 struct PropertyTests {
-    @Test("Representative raw values match CSS property names", arguments: [
+    @Test("Representative raw values match CSS property names", .publishingContext(), arguments: [
         (Property.color, "color"),
         (.backgroundColor, "background-color"),
         (.fontSize, "font-size"),
@@ -31,13 +30,13 @@ struct PropertyTests {
         #expect(property.rawValue == expected)
     }
 
-    @Test("callAsFunction returns rawValue")
+    @Test("callAsFunction returns rawValue", .publishingContext())
     func callAsFunctionReturnsRawValue() async throws {
         #expect(Property.backgroundColor() == "background-color")
         #expect(Property.fontSize() == "font-size")
     }
 
-    @Test("Round-trip from rawValue")
+    @Test("Round-trip from rawValue", .publishingContext())
     func roundTripFromRawValue() async throws {
         let property = Property(rawValue: "background-color")
         #expect(property == .backgroundColor)

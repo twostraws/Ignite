@@ -164,7 +164,7 @@ public struct Table: HTML {
             tableAttributes.append(classes: ["table-striped-columns"])
         }
 
-        var output = ""
+        var output = Markup()
 
         if let filterTitle {
             tableAttributes.id = "table-\(UUID().uuidString.truncatedHash)"
@@ -190,9 +190,9 @@ public struct Table: HTML {
         }
 
         output += "<tbody>"
-        output += rows.markupString()
+        output += Markup(verbatim: rows.markupString())
         output += "</tbody>"
         output += "</table>"
-        return Markup(output)
+        return output
     }
 }

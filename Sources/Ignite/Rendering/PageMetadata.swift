@@ -18,7 +18,7 @@ public struct PageMetadata: Sendable {
 
 extension PageMetadata {
     /// Creates an empty page for use as a default value
-    @MainActor static let empty = PageMetadata(
+    static let empty = PageMetadata(
         title: "",
         description: "",
         url: URL(string: "about:blank")!

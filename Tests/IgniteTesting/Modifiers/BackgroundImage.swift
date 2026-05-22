@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `BackgroundImage` modifier.
 @Suite("BackgroundImage Tests")
-@MainActor
 struct BackgroundImageTests {
-    @Test("Background Image Content Mode", arguments: [
+    @Test("Background Image Content Mode", .publishingContext(), arguments: [
         BackgroundImageContentMode.original, .fill, .fit,
         .size(width: "25px", height: "25px")])
     func backgroundImage(contentMode: BackgroundImageContentMode) async throws {
@@ -33,7 +32,7 @@ struct BackgroundImageTests {
         """)
     }
 
-    @Test("Background Image Position", arguments: [
+    @Test("Background Image Position", .publishingContext(), arguments: [
         BackgroundPosition.center, .top, .bottom, .leading, .trailing,
         .topLeading, .topTrailing, .bottomLeading, .bottomTrailing,
         .position(vertical: .pixel(25), relativeTo: .center, horizontal: .pixel(25), relativeTo: .center)
@@ -54,7 +53,7 @@ struct BackgroundImageTests {
         """)
     }
 
-    @Test("Background image with repeats true produces background-repeat repeat")
+    @Test("Background image with repeats true produces background-repeat repeat", .publishingContext())
     func repeatsTrue() async throws {
         let element = Text {
             "Hello World!"
@@ -65,7 +64,7 @@ struct BackgroundImageTests {
         #expect(!output.contains("no-repeat"))
     }
 
-    @Test("Background position with percent values and non-center alignment")
+    @Test("Background position with percent values and non-center alignment", .publishingContext())
     func percentRelativePosition() async throws {
         let position = BackgroundPosition.position(
             vertical: .percent(10), relativeTo: .top,

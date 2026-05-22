@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for `RobotsConfiguration`.
 @Suite("RobotsConfiguration Tests")
-@MainActor
 struct RobotsConfigurationTests {
-    @Test("Assert that mock conforms to protocol")
+    @Test("Assert that mock conforms to protocol", .publishingContext())
     func assertMockConformsToProtocol() async throws {
         let mock: Any = RobotsConfigurationMock()
         #expect(mock is RobotsConfiguration)
@@ -23,6 +22,6 @@ struct RobotsConfigurationTests {
 
 // MARK: - RobotsConfigurationMock
 
-final class RobotsConfigurationMock: RobotsConfiguration {
+final class RobotsConfigurationMock: RobotsConfiguration, @unchecked Sendable {
     var disallowRules: [DisallowRule] = []
 }

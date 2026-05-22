@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Item` element.
 @Suite("Item Tests")
-@MainActor
 struct ItemTests {
-    @Test("Basic accordian item test with default open mode .individual")
+    @Test("Basic accordian item test with default open mode .individual", .publishingContext())
     func basicItemWithParentAccordianOpenModeIndividual() async throws {
         let accordianID = "accordion\(UUID().uuidString.truncatedHash)"
         let element = Item("First item") {
@@ -42,7 +41,7 @@ struct ItemTests {
         """)
     }
 
-    @Test("Item with startsOpen true renders without collapsed class and with show class")
+    @Test("Item with startsOpen true renders without collapsed class and with show class", .publishingContext())
     func startsOpenTrue() async throws {
         let accordionID = "accordion\(UUID().uuidString.truncatedHash)"
         let element = Item("Open item", startsOpen: true) {
@@ -57,7 +56,7 @@ struct ItemTests {
         #expect(output.contains("collapse show"))
     }
 
-    @Test("Item with contentBackground adds background style")
+    @Test("Item with contentBackground adds background style", .publishingContext())
     func contentBackgroundColor() async throws {
         let accordionID = "accordion\(UUID().uuidString.truncatedHash)"
         let element = Item("Colored item") {
@@ -70,7 +69,7 @@ struct ItemTests {
         #expect(output.contains("background:"))
     }
 
-    @Test("Item with openMode all omits data-bs-parent with accordion ID")
+    @Test("Item with openMode all omits data-bs-parent with accordion ID", .publishingContext())
     func openModeAll() async throws {
         let accordionID = "accordion\(UUID().uuidString.truncatedHash)"
         let element = Item("All mode") {

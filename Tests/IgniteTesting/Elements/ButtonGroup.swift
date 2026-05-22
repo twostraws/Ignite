@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `ButtonGroup` element.
 @Suite("ButtonGroup Tests")
-@MainActor
 class ButtonGroupTests: IgniteTestSuite {
-    @Test("ButtonGroup renders with btn-group class")
+    @Test("ButtonGroup renders with btn-group class", .publishingContext())
     func hasBtnGroupClass() async throws {
         let group = ButtonGroup(accessibilityLabel: "Actions") {
             Button("OK")
@@ -24,7 +23,7 @@ class ButtonGroupTests: IgniteTestSuite {
         #expect(output.contains(#"class="btn-group"#))
     }
 
-    @Test("ButtonGroup renders with group role")
+    @Test("ButtonGroup renders with group role", .publishingContext())
     func hasGroupRole() async throws {
         let group = ButtonGroup(accessibilityLabel: "Actions") {
             Button("OK")
@@ -35,7 +34,7 @@ class ButtonGroupTests: IgniteTestSuite {
         #expect(output.contains(#"role="group""#))
     }
 
-    @Test("ButtonGroup renders accessibility label in aria-label")
+    @Test("ButtonGroup renders accessibility label in aria-label", .publishingContext())
     func hasAriaLabel() async throws {
         let group = ButtonGroup(accessibilityLabel: "Editing tools") {
             Button("Cut")
@@ -47,7 +46,7 @@ class ButtonGroupTests: IgniteTestSuite {
         #expect(output.contains(#"aria-label="Editing tools""#))
     }
 
-    @Test("ButtonGroup contains rendered buttons")
+    @Test("ButtonGroup contains rendered buttons", .publishingContext())
     func containsButtons() async throws {
         let group = ButtonGroup(accessibilityLabel: "Actions") {
             Button("Save")

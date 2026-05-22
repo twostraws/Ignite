@@ -12,12 +12,11 @@ import Testing
 
 /// Tests for the `String-SplitAndTrim` extension.
 @Suite("String-SplitAndTrim Tests")
-@MainActor
 struct StringSplitAndTrimTests {
 
     /// Some types of string will have an output that's the same as their input.
     /// Test examples of each of those cases
-    @Test("Cases Where A One Element Array is the Result", arguments: [
+    @Test("Cases Where A One Element Array is the Result", .publishingContext(), arguments: [
         "a", // single character
         "1", // single digit
         "one", // single word
@@ -28,7 +27,7 @@ struct StringSplitAndTrimTests {
         #expect(string.splitAndTrim() == [string])
     }
 
-    @Test("Empty String Results in Empty Array")
+    @Test("Empty String Results in Empty Array", .publishingContext())
     func empty_string_becomes_empty_array() async throws {
         #expect("".splitAndTrim() == [])
     }
@@ -38,7 +37,7 @@ struct StringSplitAndTrimTests {
         let expected: [String]
     }
 
-    @Test("Comma-Separated with no spaces after commas", arguments: [
+    @Test("Comma-Separated with no spaces after commas", .publishingContext(), arguments: [
         Instance(input: "planes,trains,automobiles", expected: [
             "planes",
             "trains",
@@ -54,7 +53,7 @@ struct StringSplitAndTrimTests {
         #expect(instance.input.splitAndTrim() == instance.expected)
     }
 
-    @Test("Comma-Separated with spaces after commas", arguments: [
+    @Test("Comma-Separated with spaces after commas", .publishingContext(), arguments: [
         Instance(input: "planes, trains, automobiles", expected: [
             "planes",
             "trains",
@@ -75,7 +74,7 @@ struct StringSplitAndTrimTests {
         #expect(instance.input.splitAndTrim() == instance.expected)
     }
 
-    @Test("Comma-Separated with spaces before commas", arguments: [
+    @Test("Comma-Separated with spaces before commas", .publishingContext(), arguments: [
         Instance(input: "planes , trains , automobiles", expected: [
             "planes",
             "trains",
@@ -96,7 +95,7 @@ struct StringSplitAndTrimTests {
         #expect(instance.input.splitAndTrim() == instance.expected)
     }
 
-    @Test("Empty Space Is Dropped Between Commas", arguments: [
+    @Test("Empty Space Is Dropped Between Commas", .publishingContext(), arguments: [
         Instance(input: ",,,", expected: []),
         Instance(input: ",2,", expected: ["2"]),
         Instance(input: "Bond,, James Bond", expected: [
@@ -108,7 +107,7 @@ struct StringSplitAndTrimTests {
         #expect(instance.input.splitAndTrim() == instance.expected)
     }
 
-    @Test("White Space Is Dropped From the Beginning and Ending of Strings between Commas", arguments: [
+    @Test("White Space Is Dropped From the Beginning and Ending of Strings between Commas", .publishingContext(), arguments: [
         Instance(input: "Bond\n,,\t James Bond\t", expected: [
             "Bond",
             "James Bond"
@@ -118,7 +117,7 @@ struct StringSplitAndTrimTests {
         #expect(instance.input.splitAndTrim() == instance.expected)
     }
 
-    @Test("White Space Is Not Dropped Between Commas", arguments: [
+    @Test("White Space Is Not Dropped Between Commas", .publishingContext(), arguments: [
         // you might expect that this input would result in an empty array,
         // but in fact it results in an array of two empty Strings
         Instance(input: ", ,\t,", expected: ["", ""]),

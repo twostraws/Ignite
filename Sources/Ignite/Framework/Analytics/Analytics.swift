@@ -27,22 +27,22 @@ public struct Analytics: HeadElement {
     public func markup() -> Markup {
         switch service {
         case .googleAnalytics(let measurementID):
-            Markup(googleAnalyticsCode(for: measurementID))
+            Markup(verbatim: googleAnalyticsCode(for: measurementID))
 
         case .plausible(let domain, let measurements):
-            Markup(plausibleCode(for: domain, using: measurements))
+            Markup(verbatim: plausibleCode(for: domain, using: measurements))
 
         case .fathom(let siteID):
-            Markup(fathomCode(for: siteID))
+            Markup(verbatim: fathomCode(for: siteID))
 
         case .clicky(let siteID):
-            Markup(clickyCode(for: siteID))
+            Markup(verbatim: clickyCode(for: siteID))
 
         case .telemetryDeck(let siteID):
-            Markup(telemetryDeckCode(for: siteID))
+            Markup(verbatim: telemetryDeckCode(for: siteID))
 
         case .custom(let code):
-            Markup(code)
+            Markup(verbatim: code)
         }
     }
 

@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `TextSelection` modifier.
 @Suite("TextSelection Tests")
-@MainActor
 struct TextSelectionTests {
-    @Test("Automatic Text Selection")
+    @Test("Automatic Text Selection", .publishingContext())
     func automaticTextSelection() async throws {
         let element = Text("Hello").textSelection(.automatic)
         let output = element.markupString()
@@ -22,7 +21,7 @@ struct TextSelectionTests {
         #expect(output == "<p class=\"user-select-automatic\">Hello</p>")
     }
 
-    @Test("All Text Selection")
+    @Test("All Text Selection", .publishingContext())
     func allTextSelection() async throws {
         let element = Text("Hello").textSelection(.all)
         let output = element.markupString()
@@ -30,7 +29,7 @@ struct TextSelectionTests {
         #expect(output == "<p class=\"user-select-all\">Hello</p>")
     }
 
-    @Test("None Text Selection")
+    @Test("None Text Selection", .publishingContext())
     func noneTextSelection() async throws {
         let element = Text("Hello").textSelection(.none)
         let output = element.markupString()

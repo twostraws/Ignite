@@ -11,16 +11,15 @@ import Testing
 
 /// Tests for `KeyframeProxy`.
 @Suite("KeyframeProxy Tests")
-@MainActor
 struct KeyframeProxyTests {
-    @Test("callAsFunction creates keyframe with correct position")
+    @Test("callAsFunction creates keyframe with correct position", .publishingContext())
     func callAsFunctionPosition() async throws {
         let proxy = KeyframeProxy()
         let frame = proxy(50%)
         #expect(frame.position == 50%)
     }
 
-    @Test("callAsFunction creates keyframe with empty styles")
+    @Test("callAsFunction creates keyframe with empty styles", .publishingContext())
     func callAsFunctionEmptyStyles() async throws {
         let proxy = KeyframeProxy()
         let frame = proxy(0%)

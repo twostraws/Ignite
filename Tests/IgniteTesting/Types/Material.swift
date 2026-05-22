@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Material` type.
 @Suite("Material Tests")
-@MainActor
 struct MaterialTests {
-    @Test("Correct class name without color scheme.", arguments: await [
+    @Test("Correct class name without color scheme.", .publishingContext(), arguments: [
         (Material.ultraThinMaterial, "ultra-thin"),
         (Material.thinMaterial, "thin"),
         (Material.regularMaterial, "regular"),
@@ -26,7 +25,7 @@ struct MaterialTests {
         #expect(material.className == "material-\(type)")
     }
 
-    @Test("Correct class name with color scheme.", arguments: await [
+    @Test("Correct class name with color scheme.", .publishingContext(), arguments: [
         (Material.ultraThinMaterial, ColorScheme.dark, "ultra-thin"),
         (Material.thinMaterial, ColorScheme.dark, "thin"),
         (Material.regularMaterial, ColorScheme.dark, "regular"),

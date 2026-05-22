@@ -9,7 +9,6 @@
 ///
 /// This builder provides support for creating inline element hierarchies using
 /// a SwiftUI-like syntax, handling common control flow patterns like conditionals and loops.
-@MainActor
 @resultBuilder
 public struct InlineElementBuilder {
     /// Converts a single inline element into a builder expression.

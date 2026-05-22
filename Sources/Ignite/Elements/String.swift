@@ -14,6 +14,6 @@ extension String: InlineElement, FormItem {
     /// Renders this element using publishing context passed in.
     /// - Returns: The HTML for this element.
     public func markup() -> Markup {
-        Markup(self)
+        Markup(verbatim: self)
     }
 }

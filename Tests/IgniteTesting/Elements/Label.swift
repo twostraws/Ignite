@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Label` element.
 @Suite("Label Tests")
-@MainActor
 class LabelTests: IgniteTestSuite {
-    @Test("Basic Label")
+    @Test("Basic Label", .publishingContext())
     func basicLabel() async throws {
         let element = Label("Logo", image: "/images/logo.png")
         let output = element.markupString()
@@ -27,7 +26,7 @@ class LabelTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Label with system image uses Bootstrap icon")
+    @Test("Label with system image uses Bootstrap icon", .publishingContext())
     func systemImageLabel() async throws {
         let element = Label("Settings", systemImage: "gear")
         let output = element.markupString()
@@ -36,7 +35,7 @@ class LabelTests: IgniteTestSuite {
         #expect(output.contains("inline-flex"))
     }
 
-    @Test("Label with builder initializer renders custom content")
+    @Test("Label with builder initializer renders custom content", .publishingContext())
     func builderLabel() async throws {
         let element = Label {
             Span("Custom Title")

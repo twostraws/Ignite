@@ -12,15 +12,14 @@ import Testing
 
 /// Tests for `DefaultRobotsConfiguration`.
 @Suite("DefaultRobotsConfiguration Tests")
-@MainActor
 struct DefaultRobotsConfigurationTests {
-    @Test("Assert `disallowRules` is empty by default")
+    @Test("Assert `disallowRules` is empty by default", .publishingContext())
     func assertMockConformsToProtocol() async throws {
         let configuration = DefaultRobotsConfiguration()
         #expect(configuration.disallowRules.isEmpty)
     }
 
-    @Test("Assert `disallowRules` reflects updates")
+    @Test("Assert `disallowRules` reflects updates", .publishingContext())
     mutating func assertDisallowRules() async throws {
         var configuration = DefaultRobotsConfiguration()
         configuration.disallowRules = [DisallowRule(name: "example")]

@@ -12,16 +12,15 @@ import Testing
 
 /// Tests for the `FontWeightModifier` modifier.
 @Suite("FontWeightModifier Tests")
-@MainActor
 class FontWeightModifierTests: IgniteTestSuite {
-    @Test("Font Weight Modifier", arguments: Font.Weight.allCases)
+    @Test("Font Weight Modifier", .publishingContext(), arguments: Font.Weight.allCases)
     func fontWeight(weight: Font.Weight) async throws {
         let element = Text("Hello").fontWeight(weight)
         let output = element.markupString()
         #expect(output == "<p style=\"font-weight: \(weight.rawValue)\">Hello</p>")
     }
 
-    @Test("Font weight on inline element applies style")
+    @Test("Font weight on inline element applies style", .publishingContext())
     func fontWeightOnInlineElement() async throws {
         let element = Span("Bold text").fontWeight(.bold)
         let output = element.markupString()

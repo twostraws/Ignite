@@ -12,16 +12,15 @@ import Testing
 
 /// Tests for the `DiagonalEdge` type.
 @Suite("DiagonalEdge Tests")
-@MainActor
 struct DiagonalEdgeTests {
-    @Test("Individual edges have distinct raw values")
+    @Test("Individual edges have distinct raw values", .publishingContext())
     func individualEdgesHaveDistinctRawValues() async throws {
         let edges: [DiagonalEdge] = [.topLeading, .topTrailing, .bottomLeading, .bottomTrailing]
         let rawValues = edges.map(\.rawValue)
         #expect(Set(rawValues).count == 4)
     }
 
-    @Test("Individual edge raw values are powers of two")
+    @Test("Individual edge raw values are powers of two", .publishingContext())
     func individualEdgeRawValuesArePowersOfTwo() async throws {
         #expect(DiagonalEdge.topLeading.rawValue == 1)
         #expect(DiagonalEdge.topTrailing.rawValue == 2)
@@ -29,7 +28,7 @@ struct DiagonalEdgeTests {
         #expect(DiagonalEdge.bottomTrailing.rawValue == 8)
     }
 
-    @Test("Top contains topLeading and topTrailing")
+    @Test("Top contains topLeading and topTrailing", .publishingContext())
     func topContainsBothTopCorners() async throws {
         #expect(DiagonalEdge.top.contains(.topLeading))
         #expect(DiagonalEdge.top.contains(.topTrailing))
@@ -37,7 +36,7 @@ struct DiagonalEdgeTests {
         #expect(!DiagonalEdge.top.contains(.bottomTrailing))
     }
 
-    @Test("Bottom contains bottomLeading and bottomTrailing")
+    @Test("Bottom contains bottomLeading and bottomTrailing", .publishingContext())
     func bottomContainsBothBottomCorners() async throws {
         #expect(DiagonalEdge.bottom.contains(.bottomLeading))
         #expect(DiagonalEdge.bottom.contains(.bottomTrailing))
@@ -45,7 +44,7 @@ struct DiagonalEdgeTests {
         #expect(!DiagonalEdge.bottom.contains(.topTrailing))
     }
 
-    @Test("Leading contains topLeading and bottomLeading")
+    @Test("Leading contains topLeading and bottomLeading", .publishingContext())
     func leadingContainsBothLeadingCorners() async throws {
         #expect(DiagonalEdge.leading.contains(.topLeading))
         #expect(DiagonalEdge.leading.contains(.bottomLeading))
@@ -53,7 +52,7 @@ struct DiagonalEdgeTests {
         #expect(!DiagonalEdge.leading.contains(.bottomTrailing))
     }
 
-    @Test("Trailing contains topTrailing and bottomTrailing")
+    @Test("Trailing contains topTrailing and bottomTrailing", .publishingContext())
     func trailingContainsBothTrailingCorners() async throws {
         #expect(DiagonalEdge.trailing.contains(.topTrailing))
         #expect(DiagonalEdge.trailing.contains(.bottomTrailing))
@@ -61,7 +60,7 @@ struct DiagonalEdgeTests {
         #expect(!DiagonalEdge.trailing.contains(.bottomLeading))
     }
 
-    @Test("All contains every diagonal edge")
+    @Test("All contains every diagonal edge", .publishingContext())
     func allContainsEveryDiagonalEdge() async throws {
         #expect(DiagonalEdge.all.contains(.topLeading))
         #expect(DiagonalEdge.all.contains(.topTrailing))
@@ -69,31 +68,31 @@ struct DiagonalEdgeTests {
         #expect(DiagonalEdge.all.contains(.bottomTrailing))
     }
 
-    @Test("All equals union of leading and trailing")
+    @Test("All equals union of leading and trailing", .publishingContext())
     func allEqualsUnionOfLeadingAndTrailing() async throws {
         let combined: DiagonalEdge = [.leading, .trailing]
         #expect(combined == DiagonalEdge.all)
     }
 
-    @Test("All equals union of top and bottom")
+    @Test("All equals union of top and bottom", .publishingContext())
     func allEqualsUnionOfTopAndBottom() async throws {
         let combined: DiagonalEdge = [.top, .bottom]
         #expect(combined == DiagonalEdge.all)
     }
 
-    @Test("Intersection of top and leading is topLeading")
+    @Test("Intersection of top and leading is topLeading", .publishingContext())
     func intersectionOfTopAndLeadingIsTopLeading() async throws {
         let result = DiagonalEdge.top.intersection(.leading)
         #expect(result == .topLeading)
     }
 
-    @Test("Intersection of bottom and trailing is bottomTrailing")
+    @Test("Intersection of bottom and trailing is bottomTrailing", .publishingContext())
     func intersectionOfBottomAndTrailingIsBottomTrailing() async throws {
         let result = DiagonalEdge.bottom.intersection(.trailing)
         #expect(result == .bottomTrailing)
     }
 
-    @Test("Empty diagonal edge set contains nothing")
+    @Test("Empty diagonal edge set contains nothing", .publishingContext())
     func emptyDiagonalEdgeSetContainsNothing() async throws {
         let empty = DiagonalEdge()
         #expect(!empty.contains(.topLeading))

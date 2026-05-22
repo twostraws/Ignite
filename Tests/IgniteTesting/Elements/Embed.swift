@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Embed` element.
 @Suite("Embed Tests")
-@MainActor
 class EmbedTests: IgniteTestSuite {
-    @Test("Basic Embed")
+    @Test("Basic Embed", .publishingContext())
     func basicEmbed() async throws {
         let element = Embed(youTubeID: "dQw4w9WgXcQ", title: "There was only ever going to be one video used here.")
         let output = element.markupString()
@@ -27,7 +26,7 @@ class EmbedTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Vimeo embed uses correct URL format")
+    @Test("Vimeo embed uses correct URL format", .publishingContext())
     func vimeoEmbed() async throws {
         let element = Embed(vimeoID: 123456, title: "Vimeo Test")
         let output = element.markupString()
@@ -35,7 +34,7 @@ class EmbedTests: IgniteTestSuite {
         #expect(output.contains("title=\"Vimeo Test\""))
     }
 
-    @Test("Spotify embed uses correct URL format with content type and theme")
+    @Test("Spotify embed uses correct URL format with content type and theme", .publishingContext())
     func spotifyEmbed() async throws {
         let element = Embed(spotifyID: "abc123", title: "My Track", type: .track, theme: 1)
         let output = element.markupString()
@@ -43,14 +42,14 @@ class EmbedTests: IgniteTestSuite {
         #expect(output.contains("title=\"My Track\""))
     }
 
-    @Test("Spotify playlist type uses playlist in URL")
+    @Test("Spotify playlist type uses playlist in URL", .publishingContext())
     func spotifyPlaylistEmbed() async throws {
         let element = Embed(spotifyID: "pl123", title: "My Playlist", type: .playlist)
         let output = element.markupString()
         #expect(output.contains("/embed/playlist/pl123"))
     }
 
-    @Test("Generic URL embed renders provided URL")
+    @Test("Generic URL embed renders provided URL", .publishingContext())
     func genericURLEmbed() async throws {
         let element = Embed(title: "Custom", url: "https://example.com/widget")
         let output = element.markupString()

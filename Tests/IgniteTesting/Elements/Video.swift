@@ -12,8 +12,8 @@ import Testing
 
 /// Tests for the `Video` element.
 @Suite("Video Tests")
-@MainActor class VideoTests: IgniteTestSuite {
-    @Test("Lone File Video", arguments: ["/videos/example.mp4"])
+class VideoTests: IgniteTestSuite {
+    @Test("Lone File Video", .publishingContext(), arguments: ["/videos/example.mp4"])
     func loneFileVideo(videoFile: String) async throws {
         let element = Video(videoFile)
         let output = element.markupString()
@@ -26,7 +26,7 @@ import Testing
         """)
     }
 
-    @Test("Multi-file Video", arguments: ["/videos/example1.mp4"], ["/videos/example1.mov"])
+    @Test("Multi-file Video", .publishingContext(), arguments: ["/videos/example1.mp4"], ["/videos/example1.mov"])
     func multiFileVideo(videoFile1: String, videoFile2: String) async throws {
         let element = Video(videoFile1, videoFile2)
         let output = element.markupString()
@@ -40,7 +40,7 @@ import Testing
         """)
     }
 
-    @Test("Unrecognized file extension produces no source tag")
+    @Test("Unrecognized file extension produces no source tag", .publishingContext())
     func unrecognizedExtension() async throws {
         let element = Video("/videos/mystery.xyz")
         let output = element.markupString()
@@ -52,7 +52,7 @@ import Testing
         """)
     }
 
-    @Test("Mixed recognized and unrecognized files only renders recognized sources")
+    @Test("Mixed recognized and unrecognized files only renders recognized sources", .publishingContext())
     func mixedExtensions() async throws {
         let element = Video("/videos/clip.mp4", "/videos/clip.xyz", "/videos/clip.webm")
         let output = element.markupString()

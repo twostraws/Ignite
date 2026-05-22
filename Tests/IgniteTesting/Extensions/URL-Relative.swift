@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `URL-Relative` extension.
 @Suite("URL-Relative Tests")
-@MainActor
 struct URLRelativeTests {
-    @Test("For URL with a matching base path")
+    @Test("For URL with a matching base path", .publishingContext())
     func relativePath_forURLWithAMatchingBasePath() async throws {
         // Given
         let fullURL = URL(string: "https://example.com/folder/subfolder/file.html")!
@@ -25,7 +24,7 @@ struct URLRelativeTests {
         #expect(relativePath == "subfolder/file.html")
     }
 
-    @Test("For URL with no common base")
+    @Test("For URL with no common base", .publishingContext())
     func relativePath_forURLWithNoCommonBase() async throws {
         // Given
         let fullURL = URL(string: "https://example.com/folder/file.html")!
@@ -36,7 +35,7 @@ struct URLRelativeTests {
         #expect(relativePath == "folder/file.html") // Full path since no overlap exists
     }
 
-    @Test("For an identical URL")
+    @Test("For an identical URL", .publishingContext())
     func relativePath_forAnIdenticalURL() async throws {
         // Given
         let fullURL = URL(string: "https://example.com/folder/file.html")!
@@ -47,7 +46,7 @@ struct URLRelativeTests {
         #expect(relativePath == "") // No difference between the URLs
     }
 
-    @Test("For base URL without a trailing slash")
+    @Test("For base URL without a trailing slash", .publishingContext())
     func relativePath_forBaseURLWithoutTrailingSlash() async throws {
         // Given
         let fullURL = URL(string: "https://example.com/folder/subfolder/file.html")!
@@ -58,7 +57,7 @@ struct URLRelativeTests {
         #expect(relativePath == "/subfolder/file.html") // Base path isn't cleanly trimmed
     }
 
-    @Test("For base URL WITH a trailing slash")
+    @Test("For base URL WITH a trailing slash", .publishingContext())
     func relativePath_forBaseURLWithTrailingSlash() async throws {
         // Given
         let fullURL = URL(string: "https://example.com/folder/subfolder/file.html")!
@@ -69,7 +68,7 @@ struct URLRelativeTests {
         #expect(relativePath == "subfolder/file.html")
     }
 
-    @Test("For URLs with NO scheme")
+    @Test("For URLs with NO scheme", .publishingContext())
     func relativePath_forURLsWithNoScheme() async throws {
         // Given
         let fullURL1 = URL(string: "/folder/file.html")! // with leading slash
@@ -83,7 +82,7 @@ struct URLRelativeTests {
         #expect(relativePath2 == "folder/file.html")
     }
 
-    @Test("For URLs with different schemes")
+    @Test("For URLs with different schemes", .publishingContext())
     func relativePath_forURLsWithDifferentSchemes() async throws {
         // Given
         let fullURL1 = URL(string: "ftp://example.com/folder/file.txt")!
@@ -103,7 +102,7 @@ struct URLRelativeTests {
         #expect(relativePath4 == "folder/file.txt")
     }
 
-    @Test("For invalid base URLs")
+    @Test("For invalid base URLs", .publishingContext())
     func relativePath_forInvalidBaseURLs() async throws {
         // Given
         let fullURL = URL(string: "https://example.com/folder/file.txt")!
@@ -138,7 +137,7 @@ struct URLRelativeTests {
         #expect(relativePath9 == "/folder/file.txt")
     }
 
-    @Test("When both URLs are incomplete")
+    @Test("When both URLs are incomplete", .publishingContext())
     func relativePath_whenBothURLsAreIncomplete() async throws {
         // Given
         let fullURL = URL(string: "/folder/file.html")!
@@ -150,7 +149,7 @@ struct URLRelativeTests {
         // relative path can still be calculated
     }
 
-    @Test("For a blank URL")
+    @Test("For a blank URL", .publishingContext())
     func relativePath_forABlankURL() async throws {
         // Given
         let fullURL = URL(string: " ")!
@@ -164,7 +163,7 @@ struct URLRelativeTests {
         // of a space character.
     }
 
-    @Test("For a blank base URL")
+    @Test("For a blank base URL", .publishingContext())
     func relativePath_forABlankBaseURL() async throws {
         // Given
         let fullURL = URL(string: "https://example.com/folder/file.html")!

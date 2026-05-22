@@ -9,7 +9,7 @@ private enum MarginType {
     case exact(LengthUnit), semantic(SpacingAmount)
 }
 
-@MainActor private func marginModifier(
+private func marginModifier(
     _ margin: MarginType,
     edges: Edge = .all,
     content: any BodyElement
@@ -24,7 +24,7 @@ private enum MarginType {
     }
 }
 
-@MainActor private func marginModifier(
+private func marginModifier(
     _ margin: MarginType,
     edges: Edge = .all,
     content: any InlineElement

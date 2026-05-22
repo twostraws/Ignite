@@ -11,7 +11,7 @@ private enum OpacityType {
     case double(Double), percent(Percentage)
 }
 
-@MainActor private func opacityModifier(
+private func opacityModifier(
     _ opacity: OpacityType,
     content: any HTML
 ) -> any HTML {
@@ -25,7 +25,7 @@ private enum OpacityType {
     }
 }
 
-@MainActor private func opacityModifier(
+private func opacityModifier(
     _ opacity: OpacityType,
     content: any InlineElement
 ) -> any InlineElement {

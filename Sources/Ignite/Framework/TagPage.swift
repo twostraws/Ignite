@@ -21,7 +21,6 @@
 ///     }
 /// }
 /// ```
-@MainActor
 public protocol TagPage: LayoutContent {}
 
 extension TagPage {

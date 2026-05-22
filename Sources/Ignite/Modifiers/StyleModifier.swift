@@ -5,20 +5,59 @@
 // See LICENSE for license information.
 //
 
-@MainActor private func styleModifier(
+private struct RegisteredStyleHTML: HTML, TransparentMarkupWrapper {
+    var body: some HTML { self }
+    var attributes = CoreAttributes()
+    var isPrimitive: Bool { true }
+
+    let style: any Style
+    let content: any HTML
+
+    // This wrapper keeps `.style(MyStyle())` as a normal synchronous HTML modifier,
+    // while deferring the publishing-side registration until the element renders.
+    // That lets styled elements be constructed before a PublishingContext exists;
+    // when markup is generated inside a publish/render context, the style is
+    // registered with that specific context's StyleManager.
+    var transparentContent: any MarkupElement {
+        content.attributes(attributes)
+    }
+
+    func markup() -> Markup {
+        PublishingContext.current?.styleManager.registerStyle(style)
+        return transparentContent.markup()
+    }
+}
+
+private struct RegisteredStyleInlineElement: InlineElement, TransparentMarkupWrapper {
+    var body: some InlineElement { self }
+    var attributes = CoreAttributes()
+    var isPrimitive: Bool { true }
+
+    let style: any Style
+    let content: any InlineElement
+
+    var transparentContent: any MarkupElement {
+        content.attributes(attributes)
+    }
+
+    func markup() -> Markup {
+        PublishingContext.current?.styleManager.registerStyle(style)
+        return transparentContent.markup()
+    }
+}
+
+private func styleModifier(
     _ style: any Style,
     content: any HTML
 ) -> any HTML {
-    StyleManager.shared.registerStyle(style)
-    return content.class(style.className)
+    RegisteredStyleHTML(style: style, content: content.class(style.className))
 }
 
-@MainActor private func styleModifier(
+private func styleModifier(
     _ style: any Style,
     content: any InlineElement
 ) -> any InlineElement {
-    StyleManager.shared.registerStyle(style)
-    return content.class(style.className)
+    RegisteredStyleInlineElement(style: style, content: content.class(style.className))
 }
 
 public extension HTML {

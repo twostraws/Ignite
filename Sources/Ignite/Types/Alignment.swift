@@ -6,8 +6,7 @@
 //
 
 /// An alignment in both axes.
-@MainActor
-public struct Alignment: Equatable {
+public struct Alignment: Equatable, Sendable {
     /// The alignment on the horizontal axis.
     public let horizontal: HorizontalAlignment
 

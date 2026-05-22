@@ -49,6 +49,22 @@ public struct MetaLink: HeadElement, Sendable {
         }
     }
 
+    /// Creates `<link rel="alternate">` tags for each enabled feed format,
+    /// allowing feed readers to auto-discover the site's syndication feeds.
+    /// - Parameter config: The feed configuration specifying enabled formats and paths.
+    /// - Returns: A `HeadElement` containing one link per enabled format.
+    static func feedDiscoveryLinks(for config: FeedConfiguration) -> some HeadElement {
+        let sortedFormats = config.formats.sorted { $0.rawValue < $1.rawValue }
+        return HeadForEach(sortedFormats) { format in
+            let path = config.paths[format]
+                ?? FeedConfiguration.defaultPaths[format]
+                ?? "/feed.\(format.rawValue)"
+            MetaLink(href: path, rel: .alternate)
+                .customAttribute(name: "type", value: format.contentType)
+                .customAttribute(name: "title", value: "\(format.displayName) Feed")
+        }
+    }
+
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 

@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `ImageFit` type.
 @Suite("ImageFit Tests")
-@MainActor
 struct ImageFitTests {
-    @Test("Raw values match CSS object-fit values")
+    @Test("Raw values match CSS object-fit values", .publishingContext())
     func rawValues() async throws {
         #expect(ImageFit.fill.rawValue == "fill")
         #expect(ImageFit.fit.rawValue == "contain")

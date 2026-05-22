@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `HoverEffect` modifier.
 @Suite("HoverEffect Tests")
-@MainActor
 class HoverEffectTests: IgniteTestSuite {
-    @Test("HTML hoverEffect adds mouse handlers and converted JavaScript style assignments")
+    @Test("HTML hoverEffect adds mouse handlers and converted JavaScript style assignments", .publishingContext())
     func htmlHoverEffectCompilesExpectedJavaScript() async throws {
         let element = Text("Hover me")
             .hoverEffect { effect in
@@ -33,7 +32,7 @@ class HoverEffectTests: IgniteTestSuite {
         #expect(output.contains("this.style.cssText = this.unhoveredStyle;"))
     }
 
-    @Test("Inline hoverEffect applies generated handlers to inline elements")
+    @Test("Inline hoverEffect applies generated handlers to inline elements", .publishingContext())
     func inlineHoverEffectCompilesExpectedJavaScript() async throws {
         let element = Emphasis("Hover me")
             .hoverEffect { effect in
@@ -49,7 +48,7 @@ class HoverEffectTests: IgniteTestSuite {
         #expect(output.contains("this.style.cssText = this.unhoveredStyle;"))
     }
 
-    @Test("Hover effect preserves style insertion order when compiling JavaScript")
+    @Test("Hover effect preserves style insertion order when compiling JavaScript", .publishingContext())
     func hoverEffectPreservesStyleOrder() async throws {
         let element = Text("Hover me")
             .hoverEffect { effect in

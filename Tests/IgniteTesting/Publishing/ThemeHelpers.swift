@@ -29,19 +29,19 @@ class ThemeHelpersTests: IgniteTestSuite {
 
     // MARK: - responsiveVariables tests
 
-    @Test("Default theme produces no responsive variable media queries")
+    @Test("Default theme produces no responsive variable media queries", .publishingContext())
     func defaultThemeNoResponsiveVariables() throws {
         let queries = publishingContext.responsiveVariables(for: DefaultLightTheme())
         #expect(queries.isEmpty)
     }
 
-    @Test("Custom font theme produces responsive variable media queries")
+    @Test("Custom font theme produces responsive variable media queries", .publishingContext())
     func customFontThemeResponsiveVariables() throws {
         let queries = publishingContext.responsiveVariables(for: CustomFontTheme())
         #expect(!queries.isEmpty)
     }
 
-    @Test("Responsive variables contain correct breakpoint width")
+    @Test("Responsive variables contain correct breakpoint width", .publishingContext())
     func responsiveVariablesContainBreakpointWidth() throws {
         let queries = publishingContext.responsiveVariables(for: CustomFontTheme())
         let descriptions = queries.map(\.description)
@@ -50,7 +50,7 @@ class ThemeHelpersTests: IgniteTestSuite {
         #expect(descriptions.contains { $0.contains("768px") })
     }
 
-    @Test("Responsive variables contain correct font size variable")
+    @Test("Responsive variables contain correct font size variable", .publishingContext())
     func responsiveVariablesContainFontVariable() throws {
         let queries = publishingContext.responsiveVariables(for: CustomFontTheme())
         let descriptions = queries.map(\.description)
@@ -58,7 +58,7 @@ class ThemeHelpersTests: IgniteTestSuite {
         #expect(descriptions.contains { $0.contains("--bs-h1-font-size") })
     }
 
-    @Test("Multiple responsive font sizes produce combined media queries")
+    @Test("Multiple responsive font sizes produce combined media queries", .publishingContext())
     func multipleResponsiveFontSizes() throws {
         let queries = publishingContext.responsiveVariables(for: MultiResponsiveTheme())
         let descriptions = queries.map(\.description)
@@ -70,35 +70,35 @@ class ThemeHelpersTests: IgniteTestSuite {
 
     // MARK: - themeStyles tests
 
-    @Test("Default light theme styles include accent color variable")
+    @Test("Default light theme styles include accent color variable", .publishingContext())
     func defaultThemeIncludesAccentColor() throws {
         let styles = publishingContext.themeStyles(for: DefaultLightTheme())
         let hasAccent = styles.contains { $0.property == "--bs-primary" }
         #expect(hasAccent)
     }
 
-    @Test("Default light theme styles include body color variable")
+    @Test("Default light theme styles include body color variable", .publishingContext())
     func defaultThemeIncludesBodyColor() throws {
         let styles = publishingContext.themeStyles(for: DefaultLightTheme())
         let hasBodyColor = styles.contains { $0.property == "--bs-body-color" }
         #expect(hasBodyColor)
     }
 
-    @Test("Default light theme styles include background variable")
+    @Test("Default light theme styles include background variable", .publishingContext())
     func defaultThemeIncludesBackground() throws {
         let styles = publishingContext.themeStyles(for: DefaultLightTheme())
         let hasBackground = styles.contains { $0.property == "--bs-body-bg" }
         #expect(hasBackground)
     }
 
-    @Test("Default light theme styles include link color variable")
+    @Test("Default light theme styles include link color variable", .publishingContext())
     func defaultThemeIncludesLinkColor() throws {
         let styles = publishingContext.themeStyles(for: DefaultLightTheme())
         let hasLinkColor = styles.contains { $0.property == "--bs-link-color" }
         #expect(hasLinkColor)
     }
 
-    @Test("Dark theme produces different body color than light theme")
+    @Test("Dark theme produces different body color than light theme", .publishingContext())
     func darkThemeDifferentBodyColor() throws {
         let lightStyles = publishingContext.themeStyles(for: DefaultLightTheme())
         let darkStyles = publishingContext.themeStyles(for: DefaultDarkTheme())
@@ -111,7 +111,7 @@ class ThemeHelpersTests: IgniteTestSuite {
         #expect(lightBodyColor != darkBodyColor)
     }
 
-    @Test("Theme styles include syntax highlighter theme variable")
+    @Test("Theme styles include syntax highlighter theme variable", .publishingContext())
     func themeStylesIncludeSyntaxHighlighter() throws {
         let styles = publishingContext.themeStyles(for: DefaultLightTheme())
         let hasSyntaxTheme = styles.contains { $0.property == "--syntax-highlight-theme" }
@@ -120,7 +120,7 @@ class ThemeHelpersTests: IgniteTestSuite {
 
     // MARK: - rootStyles tests
 
-    @Test("Root styles use :root pseudo-class selector")
+    @Test("Root styles use :root pseudo-class selector", .publishingContext())
     func rootStylesUsePseudoClass() throws {
         let ruleset = publishingContext.rootStyles(for: DefaultLightTheme())
         let output = ruleset.description

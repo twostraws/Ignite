@@ -15,7 +15,7 @@ struct ContentFinderTests {
     /// Run each ``TestCase`` defined in the ``ContentFinderTestCases`` using ``run(_:)``.
     ///
     /// Verify any error thrown is expected.
-    @Test("Find Content", arguments: ContentFinderTestCases.tests)
+    @Test("Find Content", .publishingContext(), arguments: ContentFinderTestCases.tests)
     func findContent(test: TestCase) async throws {
         do {
             try run(test)

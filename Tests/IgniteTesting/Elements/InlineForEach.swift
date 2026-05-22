@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `InlineForEach` element.
 @Suite("InlineForEach Tests")
-@MainActor
 class InlineForEachTests: IgniteTestSuite {
-    @Test("Renders inline items from an array of strings")
+    @Test("Renders inline items from an array of strings", .publishingContext())
     func rendersInlineItemsFromStringArray() async throws {
         let items = ["Hello", "World"]
         let element = InlineForEach(items) { item in
@@ -25,7 +24,7 @@ class InlineForEachTests: IgniteTestSuite {
         #expect(output == "<span>Hello</span><span>World</span>")
     }
 
-    @Test("Renders nothing for empty array")
+    @Test("Renders nothing for empty array", .publishingContext())
     func rendersNothingForEmptyArray() async throws {
         let items: [String] = []
         let element = InlineForEach(items) { item in
@@ -36,7 +35,7 @@ class InlineForEachTests: IgniteTestSuite {
         #expect(output == "")
     }
 
-    @Test("Renders single inline item")
+    @Test("Renders single inline item", .publishingContext())
     func rendersSingleInlineItem() async throws {
         let items = ["Only"]
         let element = InlineForEach(items) { item in
@@ -47,7 +46,7 @@ class InlineForEachTests: IgniteTestSuite {
         #expect(output == "<span>Only</span>")
     }
 
-    @Test("Preserves order of inline items")
+    @Test("Preserves order of inline items", .publishingContext())
     func preservesOrderOfInlineItems() async throws {
         let items = ["A", "B", "C"]
         let element = InlineForEach(items) { item in
@@ -58,7 +57,7 @@ class InlineForEachTests: IgniteTestSuite {
         #expect(output == "<span>A</span><span>B</span><span>C</span>")
     }
 
-    @Test("Works with integer range")
+    @Test("Works with integer range", .publishingContext())
     func worksWithIntegerRange() async throws {
         let element = InlineForEach(1...3) { number in
             Span("\(number)")

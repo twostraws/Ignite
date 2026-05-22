@@ -34,7 +34,7 @@ private enum LineSpacingType {
     case exact(Double), semantic(LineSpacing)
 }
 
-@MainActor private func lineSpacingModifier(
+private func lineSpacingModifier(
     _ spacing: LineSpacingType,
     content: any HTML
 ) -> any HTML {
@@ -57,7 +57,7 @@ private enum LineSpacingType {
     }
 }
 
-@MainActor private func lineSpacingModifier(
+private func lineSpacingModifier(
     _ spacing: LineSpacingType,
     content: any InlineElement
 ) -> any InlineElement {

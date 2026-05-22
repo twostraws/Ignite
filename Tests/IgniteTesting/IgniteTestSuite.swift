@@ -14,16 +14,26 @@ import Foundation
 /// and cleanup, ensuring each test starts with a fresh context.
 ///
 /// - Important: Subclassing is required for suites that test `HTML` elements or modifiers.
-@MainActor
 class IgniteTestSuite {
     let site: any Site = TestSite()
-
+    private let fallbackPublishingContext: PublishingContext
     var publishingContext: PublishingContext {
-        PublishingContext.shared
+        PublishingContext.current ?? fallbackPublishingContext
     }
 
     /// Creates a new test instance and initializes the publishing context for `TestSite`.
     init() throws {
-        try PublishingContext.initialize(for: TestSite(), from: #filePath)
+        fallbackPublishingContext = try PublishingContext.initialize(for: TestSite(), from: #filePath)
+    }
+
+    func withPublishingContext<T>(_ operation: () throws -> T) rethrows -> T {
+        try PublishingContext.withCurrent(publishingContext, operation: operation)
+    }
+
+    func withPublishingContext<T>(
+        for site: any Site,
+        operation: (PublishingContext) throws -> T
+    ) throws -> T {
+        try PublishingContext.withInitialized(for: site, from: #filePath, operation: operation)
     }
 }

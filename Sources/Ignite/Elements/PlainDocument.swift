@@ -6,7 +6,7 @@
 //
 
 /// An HTML document with no extra attributes applied.
-public struct PlainDocument: Document {
+public struct PlainDocument: Document, HTML {
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 
@@ -42,11 +42,11 @@ public struct PlainDocument: Document {
         // Deferred head rendering to accommodate for context updates during body rendering
         let headMarkup = head.markup()
 
-        var output = "<!doctype html>"
+        var output: Markup = "<!doctype html>"
         output += "<html\(attributes)>"
-        output += headMarkup.string
-        output += bodyMarkup.string
+        output += headMarkup
+        output += bodyMarkup
         output += "</html>"
-        return Markup(output)
+        return output
     }
 }

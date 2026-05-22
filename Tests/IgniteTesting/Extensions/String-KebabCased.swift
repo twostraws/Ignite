@@ -12,11 +12,10 @@ import Testing
 
 /// Tests for the `String-KebabCased` extension.
 @Suite("String-KebabCased Tests")
-@MainActor
 struct StringKebabCasedTests {
     /// Some types of string will have an output that's the same as their input.
     /// Test examples of each of those cases
-    @Test("Noop Cases", arguments: [
+    @Test("Noop Cases", .publishingContext(), arguments: [
         "", // empty string
         "a", // single character
         "1", // single digit
@@ -33,7 +32,7 @@ struct StringKebabCasedTests {
         #expect(string.kebabCased() == string)
     }
 
-    @Test("Converts Whitespace to Dashes", arguments: [
+    @Test("Converts Whitespace to Dashes", .publishingContext(), arguments: [
         " ",
         "  ",
         "\t",
@@ -44,7 +43,7 @@ struct StringKebabCasedTests {
         #expect(string.kebabCased() == "-")
     }
 
-    @Test("Converts Single Words To Lowercase", arguments: [
+    @Test("Converts Single Words To Lowercase", .publishingContext(), arguments: [
         "A",
         "CARS",
         "Cars",
@@ -54,7 +53,7 @@ struct StringKebabCasedTests {
         #expect(string.kebabCased() == string.lowercased())
     }
 
-    @Test("Concatenates With Dashes", arguments: [
+    @Test("Concatenates With Dashes", .publishingContext(), arguments: [
         "a b",
         "one two",
         "buckle my shoe"
@@ -69,7 +68,7 @@ struct StringKebabCasedTests {
         let expected: String
     }
 
-    @Test("Converts camelCase to words-separated-by-dashes", arguments: [
+    @Test("Converts camelCase to words-separated-by-dashes", .publishingContext(), arguments: [
         Instance(input: "camelCase", expected: "camel-case"),
         Instance(input: "threeWordExample", expected: "three-word-example"),
         Instance(input: "aLongerExampleWithSixWords", expected: "a-longer-example-with-six-words")
@@ -78,7 +77,7 @@ struct StringKebabCasedTests {
         #expect(instance.input.kebabCased() == instance.expected)
     }
 
-    @Test("Converts words-separated-by-dashes to all lowercase", arguments: [
+    @Test("Converts words-separated-by-dashes to all lowercase", .publishingContext(), arguments: [
         Instance(input: "Hello-World", expected: "hello-world"),
         Instance(input: "Hello-world", expected: "hello-world"),
         Instance(input: "hello-World", expected: "hello-world"),
@@ -89,7 +88,7 @@ struct StringKebabCasedTests {
     }
 
     @Test(
-        "Complex Examples",
+        "Complex Examples", .publishingContext(),
         arguments: [
             Instance(input: "keepsPunctuation!",
                      expected: "keeps-punctuation!"),

@@ -9,7 +9,6 @@ import Foundation
 
 /// One static page in your site, where the content is entirely standalone rather
 /// than being produced in conjunction with an external Markdown file.
-@MainActor
 public protocol StaticPage: LayoutContent {
     /// All pages have a default path generated for them by Ignite, but you can
     /// override that here if you wish.

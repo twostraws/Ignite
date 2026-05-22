@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for `Animation`.
 @Suite("Animation Tests")
-@MainActor
 struct AnimationTests {
-    @Test("Default values are correct")
+    @Test("Default values are correct", .publishingContext())
     func defaultValues() async throws {
         let animation = Animation()
         #expect(animation.direction == .automatic)
@@ -24,35 +23,35 @@ struct AnimationTests {
         #expect(animation.duration == 1)
     }
 
-    @Test("with() applies a duration option")
+    @Test("with() applies a duration option", .publishingContext())
     func withAppliesDuration() async throws {
         var animation = Animation()
         animation.with([.duration(2.0)])
         #expect(animation.duration == 2.0)
     }
 
-    @Test("with() uses last-wins for duplicate option types")
+    @Test("with() uses last-wins for duplicate option types", .publishingContext())
     func withLastWins() async throws {
         var animation = Animation()
         animation.with([.duration(1), .duration(3)])
         #expect(animation.duration == 3)
     }
 
-    @Test("speed option halves default duration")
+    @Test("speed option halves default duration", .publishingContext())
     func speedHalvesDuration() async throws {
         var animation = Animation()
         animation.with([.speed(2)])
         #expect(animation.duration == 0.5)
     }
 
-    @Test("bounce preset has correct duration and frame count")
+    @Test("bounce preset has correct duration and frame count", .publishingContext())
     func bouncePreset() async throws {
         let animation = Animation.bounce
         #expect(animation.duration == 0.5)
         #expect(animation.frames.count == 3)
     }
 
-    @Test("wiggle preset has correct duration, repeatCount, and frame count")
+    @Test("wiggle preset has correct duration, repeatCount, and frame count", .publishingContext())
     func wigglePreset() async throws {
         let animation = Animation.wiggle
         #expect(animation.duration == 0.5)

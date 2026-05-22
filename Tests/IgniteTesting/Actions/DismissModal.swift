@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `DismissModal` action.
 @Suite("DismissModal Tests")
-@MainActor
 class DismissModalTests: IgniteTestSuite {
-    @Test("compile() injects the provided modal ID and hide flow")
+    @Test("compile() injects the provided modal ID and hide flow", .publishingContext())
     func compilesWithProvidedID() async throws {
         let action = DismissModal(id: "modal-42")
         let output = action.compile()

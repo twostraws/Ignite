@@ -11,19 +11,18 @@ import Testing
 
 /// Tests for `AnimationOption`.
 @Suite("AnimationOption Tests")
-@MainActor
 struct AnimationOptionTests {
-    @Test("Hashable conformance: equal values are equal")
+    @Test("Hashable conformance: equal values are equal", .publishingContext())
     func hashableEquality() async throws {
         #expect(AnimationOption.duration(1.0) == .duration(1.0))
     }
 
-    @Test("Hashable conformance: different values are not equal")
+    @Test("Hashable conformance: different values are not equal", .publishingContext())
     func hashableInequality() async throws {
         #expect(AnimationOption.duration(1.0) != .duration(2.0))
     }
 
-    @Test("optionType maps each case to its corresponding OptionType")
+    @Test("optionType maps each case to its corresponding OptionType", .publishingContext())
     func optionTypeMapping() async throws {
         #expect(AnimationOption.repeatCount(1).optionType == .repeatCount)
         #expect(AnimationOption.fillMode(.none).optionType == .fillMode)

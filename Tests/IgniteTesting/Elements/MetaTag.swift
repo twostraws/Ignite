@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `MetaTag` element.
 @Suite("MetaTag Tests")
-@MainActor
 class MetaTagTests: IgniteTestSuite {
-    @Test("Meta tag with type enum and content a URL")
+    @Test("Meta tag with type enum and content a URL", .publishingContext())
     func withEnumAndContentURL() async throws {
         let element = MetaTag(.twitterDomain, content: URL(string: "https://example.com?s=searching#target")!)
         let output = element.markup()
@@ -22,7 +21,7 @@ class MetaTagTests: IgniteTestSuite {
         #expect(output.string == "<meta name=\"twitter:domain\" content=\"https://example.com?s=searching#target\" />")
     }
 
-    @Test("Meta tag with name and content both strings")
+    @Test("Meta tag with name and content both strings", .publishingContext())
     func withNameAndContentBothStrings() async throws {
         let element = MetaTag(name: "tagname", content: "my content")
         let output = element.markup()
@@ -30,7 +29,7 @@ class MetaTagTests: IgniteTestSuite {
         #expect(output.string == "<meta name=\"tagname\" content=\"my content\" />")
     }
 
-    @Test("Meta tag with property and content both strings")
+    @Test("Meta tag with property and content both strings", .publishingContext())
     func withPropertyAndContentBothStrings() async throws {
         let element = MetaTag(property: "unique", content: "my value")
         let output = element.markup()
@@ -38,7 +37,7 @@ class MetaTagTests: IgniteTestSuite {
         #expect(output.string == "<meta property=\"unique\" content=\"my value\" />")
     }
 
-    @Test("Meta tag with character set only")
+    @Test("Meta tag with character set only", .publishingContext())
     func withCharacterSet() async throws {
         let element = MetaTag(characterSet: "UTF-16")
         let output = element.markup()
@@ -60,7 +59,7 @@ class MetaTagTests: IgniteTestSuite {
         return true
     }
 
-    @Test("Social sharing tags with no image, description, or www")
+    @Test("Social sharing tags with no image, description, or www", .publishingContext())
     func socialSharingTagsWithNoImageDescriptionOrWWW() async throws {
         let page = PageMetadata(
             title: "My Page Title",
@@ -89,7 +88,7 @@ class MetaTagTests: IgniteTestSuite {
         }
     }
 
-    @Test("Social sharing tags with image, description, and www")
+    @Test("Social sharing tags with image, description, and www", .publishingContext())
     func socialSharingTagsWithImageDescriptionAndWWW() async throws {
         let page = PageMetadata(
             title: "My Page Title",

@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Margin` modifier.
 @Suite("MediaQuery Tests")
-@MainActor
 class MediaQueryTests: IgniteTestSuite {
-    @Test("Breakpoint queries", arguments: zip(
+    @Test("Breakpoint queries", .publishingContext(), arguments: zip(
         BreakpointQuery.allCases,
         ["min-width: 576px", "min-width: 768px", "min-width: 992px", "min-width: 1200px", "min-width: 1400px"]))
     func breakpoint_queries_render_correctly(query: BreakpointQuery, css: String) async throws {
@@ -22,7 +21,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == css)
     }
 
-    @Test("Color scheme queries", arguments: zip(
+    @Test("Color scheme queries", .publishingContext(), arguments: zip(
         ColorSchemeQuery.allCases,
         ["prefers-color-scheme: dark", "prefers-color-scheme: light"]))
     func color_scheme_queries_render_correctly(query: any Query, css: String) async throws {
@@ -30,7 +29,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == css)
     }
 
-    @Test("Contrast queries", arguments: zip(
+    @Test("Contrast queries", .publishingContext(), arguments: zip(
         ContrastQuery.allCases,
         ["prefers-contrast: no-preference",
          "prefers-contrast: more",
@@ -40,7 +39,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == css)
     }
 
-    @Test("Display mode queries", arguments: zip(
+    @Test("Display mode queries", .publishingContext(), arguments: zip(
         DisplayModeQuery.allCases,
         ["display-mode: browser",
          "display-mode: fullscreen",
@@ -53,7 +52,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == css)
     }
 
-    @Test("Orientation queries", arguments: zip(
+    @Test("Orientation queries", .publishingContext(), arguments: zip(
         OrientationQuery.allCases,
         ["orientation: portrait", "orientation: landscape"]))
     func orientation_queries_render_correctly(query: any Query, css: String) async throws {
@@ -61,7 +60,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == css)
     }
 
-    @Test("Transparency queries", arguments: zip(
+    @Test("Transparency queries", .publishingContext(), arguments: zip(
         TransparencyQuery.allCases,
         ["prefers-reduced-transparency: reduce", "prefers-reduced-transparency: no-preference"]))
     func transparency_queries_render_correctly(query: any Query, css: String) async throws {
@@ -69,7 +68,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == css)
     }
 
-    @Test("Reduced motion queries", arguments: zip(
+    @Test("Reduced motion queries", .publishingContext(), arguments: zip(
         MotionQuery.allCases,
         ["prefers-reduced-motion: reduce", "prefers-reduced-motion: no-preference"]))
     func reduced_motion_queries_render_correctly(query: any Query, css: String) async throws {
@@ -77,7 +76,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output == css)
     }
 
-    @Test("Theme queries", arguments: zip(
+    @Test("Theme queries", .publishingContext(), arguments: zip(
         [ThemeQuery(DefaultDarkTheme.self), ThemeQuery(DefaultLightTheme.self), ThemeQuery(AutoTheme.self)],
         ["data-bs-theme^=\"dark\"", "data-bs-theme^=\"light\"", "data-bs-theme^=\"auto\""]))
     func theme_queries_render_correctly(query: ThemeQuery, css: String) async throws {
@@ -87,13 +86,13 @@ class MediaQueryTests: IgniteTestSuite {
 
     // MARK: - Custom breakpoints
 
-    @Test("Custom breakpoint produces correct condition")
+    @Test("Custom breakpoint produces correct condition", .publishingContext())
     func customBreakpointCondition() async throws {
         let query = BreakpointQuery.custom(.px(800))
         #expect(query.condition == "min-width: 800px")
     }
 
-    @Test("Custom breakpoint with rem unit")
+    @Test("Custom breakpoint with rem unit", .publishingContext())
     func customBreakpointRem() async throws {
         let query = BreakpointQuery.custom(.rem(50))
         #expect(query.condition == "min-width: 50.0rem")
@@ -101,26 +100,26 @@ class MediaQueryTests: IgniteTestSuite {
 
     // MARK: - Equality
 
-    @Test("Equal breakpoint queries are equal")
+    @Test("Equal breakpoint queries are equal", .publishingContext())
     func breakpointQueryEquality() async throws {
         #expect(BreakpointQuery.small == BreakpointQuery.small)
         #expect(BreakpointQuery.custom(.px(800)) == BreakpointQuery.custom(.px(800)))
     }
 
-    @Test("Different breakpoint queries are not equal")
+    @Test("Different breakpoint queries are not equal", .publishingContext())
     func breakpointQueryInequality() async throws {
         #expect(BreakpointQuery.small != BreakpointQuery.medium)
         #expect(BreakpointQuery.custom(.px(800)) != BreakpointQuery.custom(.px(900)))
     }
 
-    @Test("Equal theme queries are equal")
+    @Test("Equal theme queries are equal", .publishingContext())
     func themeQueryEquality() async throws {
         let a = ThemeQuery(DefaultDarkTheme.self)
         let b = ThemeQuery(DefaultDarkTheme.self)
         #expect(a == b)
     }
 
-    @Test("Different theme queries are not equal")
+    @Test("Different theme queries are not equal", .publishingContext())
     func themeQueryInequality() async throws {
         let dark = ThemeQuery(DefaultDarkTheme.self)
         let light = ThemeQuery(DefaultLightTheme.self)
@@ -129,7 +128,7 @@ class MediaQueryTests: IgniteTestSuite {
 
     // MARK: - Hashable
 
-    @Test("Equal theme queries hash equally")
+    @Test("Equal theme queries hash equally", .publishingContext())
     func themeQueryHashable() async throws {
         let a = ThemeQuery(DefaultDarkTheme.self)
         let b = ThemeQuery(DefaultDarkTheme.self)
@@ -138,7 +137,7 @@ class MediaQueryTests: IgniteTestSuite {
 
     // MARK: - BreakpointQuery init from Breakpoint
 
-    @Test("init from Breakpoint maps correctly")
+    @Test("init from Breakpoint maps correctly", .publishingContext())
     func breakpointQueryInitFromBreakpoint() async throws {
         let query = BreakpointQuery(.medium)
         #expect(query != nil)
@@ -147,7 +146,7 @@ class MediaQueryTests: IgniteTestSuite {
 
     // MARK: - CSS MediaQuery render output
 
-    @Test("CSS MediaQuery single feature renders with @media wrapper")
+    @Test("CSS MediaQuery single feature renders with @media wrapper", .publishingContext())
     func cssMediaQuerySingleFeature() async throws {
         let query = MediaQuery(ColorSchemeQuery.dark) {
             Ruleset(.class("test"), styles: [InlineStyle(.opacity, value: "0.5")])
@@ -158,7 +157,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output.contains("opacity: 0.5"))
     }
 
-    @Test("CSS MediaQuery and combinator joins features")
+    @Test("CSS MediaQuery and combinator joins features", .publishingContext())
     func cssMediaQueryAndCombinator() async throws {
         let query = MediaQuery(ColorSchemeQuery.dark, BreakpointQuery.medium, combinator: .and) {
             Ruleset(.class("test"), styles: [InlineStyle(.opacity, value: "1")])
@@ -168,7 +167,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output.contains("@media (prefers-color-scheme: dark) and (min-width: 768px)"))
     }
 
-    @Test("CSS MediaQuery or combinator joins features")
+    @Test("CSS MediaQuery or combinator joins features", .publishingContext())
     func cssMediaQueryOrCombinator() async throws {
         let query = MediaQuery(ColorSchemeQuery.dark, BreakpointQuery.medium, combinator: .or) {
             Ruleset(.class("test"), styles: [InlineStyle(.opacity, value: "1")])
@@ -178,7 +177,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(output.contains("@media (prefers-color-scheme: dark) or (min-width: 768px)"))
     }
 
-    @Test("CSS MediaQuery array initializer matches variadic initializer")
+    @Test("CSS MediaQuery array initializer matches variadic initializer", .publishingContext())
     func cssMediaQueryArrayInitializerParity() async throws {
         let features: [MediaFeature] = [ColorSchemeQuery.dark, BreakpointQuery.medium]
 
@@ -193,7 +192,7 @@ class MediaQueryTests: IgniteTestSuite {
         #expect(variadicQuery.render() == arrayQuery.render())
     }
 
-    @Test("CSS MediaQuery description matches render output")
+    @Test("CSS MediaQuery description matches render output", .publishingContext())
     func cssMediaQueryDescriptionMatchesRender() async throws {
         let query = MediaQuery(ColorSchemeQuery.dark) {
             Ruleset(.class("x"), styles: [InlineStyle(.color, value: "red")])

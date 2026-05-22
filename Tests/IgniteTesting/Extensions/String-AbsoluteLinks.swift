@@ -12,10 +12,9 @@ import Testing
 
 /// Tests for the `String-AbsoluteLinks` extension.
 @Suite("String-AbsoluteLinks Tests")
-@MainActor
 struct StringAbsoluteLinksTests {
     let baseURL = URL(string: "https://example.com")!
-    @Test("Absolute links for simple paths")
+    @Test("Absolute links for simple paths", .publishingContext())
     func makingAbsoluteLinks_forSimplePaths() async throws {
         // Given
         let html = """
@@ -31,7 +30,7 @@ struct StringAbsoluteLinksTests {
         #expect(result.contains("href=\"\(expectedAbsoluteLink2)"))
     }
 
-    @Test("Absolute links for mixed absolute and relative paths")
+    @Test("Absolute links for mixed absolute and relative paths", .publishingContext())
     func makingAbsoluteLinks_forMixedAbsoluteAndRelativePaths() async throws {
         // Given
         let html = """
@@ -53,7 +52,7 @@ struct StringAbsoluteLinksTests {
         #expect(result.contains("href=\"\(expectedAbsoluteLink4)"))
     }
 
-    @Test("Absolute links for paths that don't start with a slash")
+    @Test("Absolute links for paths that don't start with a slash", .publishingContext())
     func makingAbsoluteLinks_forPathsThatDontStartWithASlash() async throws {
         // Given
         let html = """
@@ -70,7 +69,7 @@ struct StringAbsoluteLinksTests {
         #expect(result == html) // basically, no change
     }
 
-    @Test("Absolute links for URLs with query parameters and fragments")
+    @Test("Absolute links for URLs with query parameters and fragments", .publishingContext())
     func makingAbsoluteLinks_forURLsWithQueriesAndFragments() async throws {
         // Note: (%3F is '?', %23 is '#')
         // Given
@@ -90,7 +89,7 @@ struct StringAbsoluteLinksTests {
         #expect(result.contains("href=\"\(expectedAbsoluteLink3)"))
     }
 
-    @Test("Absolute links for an invalid base URL")
+    @Test("Absolute links for an invalid base URL", .publishingContext())
     func makingAbsoluteLinks_forAnInvalidBaseURL() async throws {
         // Given
         let invalidBaseURL = URL(string: "not a url")
@@ -105,7 +104,7 @@ struct StringAbsoluteLinksTests {
         #expect(result.contains("src=\"\(expectedAbsoluteLink)"))
     }
 
-    @Test("Absolute links for empty HTML")
+    @Test("Absolute links for empty HTML", .publishingContext())
     func makingAbsoluteLinks_forEmptyHTML() async throws {
         // Given
         let html = ""
@@ -115,7 +114,7 @@ struct StringAbsoluteLinksTests {
         #expect(result == "")
     }
 
-    @Test("Absolute links for html with no src or href attributes")
+    @Test("Absolute links for html with no src or href attributes", .publishingContext())
     func makingAbsoluteLinks_forHTMLWithoutLinksOrImages() async throws {
         // Given
         let html = "<div>Hello, world!</div>"
@@ -125,7 +124,7 @@ struct StringAbsoluteLinksTests {
         #expect(result == html) // HTML remains unchanged
     }
 
-    @Test("Absolute links for missing end quotes in HTML path")
+    @Test("Absolute links for missing end quotes in HTML path", .publishingContext())
     func makingAbsoluteLinks_forMissingEndQuotesInHTMLPath() async throws {
         // Note: (%3E is '>')
         // Given

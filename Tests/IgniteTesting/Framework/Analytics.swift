@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Analytics` snippet generation.
 @Suite("Analytics Tests")
-@MainActor
 struct AnalyticsTests {
-    @Test("Google Analytics produces correct script")
+    @Test("Google Analytics produces correct script", .publishingContext())
     func googleAnalytics() {
         let analytics = Analytics(.googleAnalytics(measurementID: "GA-12345"))
         let output = analytics.googleAnalyticsCode(for: "GA-12345")
@@ -31,7 +30,7 @@ struct AnalyticsTests {
         """)
     }
 
-    @Test("Fathom produces correct script")
+    @Test("Fathom produces correct script", .publishingContext())
     func fathom() {
         let analytics = Analytics(.fathom(siteID: "ABCDE"))
         let output = analytics.fathomCode(for: "ABCDE")
@@ -42,7 +41,7 @@ struct AnalyticsTests {
         """)
     }
 
-    @Test("Clicky produces correct script")
+    @Test("Clicky produces correct script", .publishingContext())
     func clicky() {
         let analytics = Analytics(.clicky(siteID: "12345"))
         let output = analytics.clickyCode(for: "12345")
@@ -54,7 +53,7 @@ struct AnalyticsTests {
         """)
     }
 
-    @Test("TelemetryDeck produces correct script")
+    @Test("TelemetryDeck produces correct script", .publishingContext())
     func telemetryDeck() {
         let analytics = Analytics(.telemetryDeck(siteID: "ABC-123"))
         let output = analytics.telemetryDeckCode(for: "ABC-123")
@@ -68,7 +67,7 @@ struct AnalyticsTests {
         """)
     }
 
-    @Test("Plausible with no measurements produces base script")
+    @Test("Plausible with no measurements produces base script", .publishingContext())
     func plausibleNoMeasurements() {
         let analytics = Analytics(.plausible(domain: "example.com"))
         let output = analytics.plausibleCode(for: "example.com", using: [])
@@ -79,7 +78,7 @@ struct AnalyticsTests {
         """)
     }
 
-    @Test("Plausible with single measurement includes it in URL")
+    @Test("Plausible with single measurement includes it in URL", .publishingContext())
     func plausibleSingleMeasurement() {
         let analytics = Analytics(.plausible(domain: "example.com", measurements: [.hash]))
         let output = analytics.plausibleCode(for: "example.com", using: [.hash])
@@ -90,7 +89,7 @@ struct AnalyticsTests {
         """)
     }
 
-    @Test("Plausible with multiple measurements sorts them alphabetically")
+    @Test("Plausible with multiple measurements sorts them alphabetically", .publishingContext())
     func plausibleMultipleMeasurementsSorted() {
         let measurements: Set<Analytics.PlausibleMeasurement> = [.outboundLinks, .hash]
         let analytics = Analytics(.plausible(domain: "example.com", measurements: measurements))
@@ -102,7 +101,7 @@ struct AnalyticsTests {
         """)
     }
 
-    @Test("Plausible with track404 adds separate script block")
+    @Test("Plausible with track404 adds separate script block", .publishingContext())
     func plausibleTrack404() {
         let measurements: Set<Analytics.PlausibleMeasurement> = [.track404]
         let analytics = Analytics(.plausible(domain: "example.com", measurements: measurements))
@@ -113,7 +112,7 @@ struct AnalyticsTests {
         #expect(output.contains("window.plausible.q"))
     }
 
-    @Test("Plausible with track404 and other measurements combines correctly")
+    @Test("Plausible with track404 and other measurements combines correctly", .publishingContext())
     func plausibleTrack404WithOtherMeasurements() {
         let measurements: Set<Analytics.PlausibleMeasurement> = [.track404, .hash, .revenue]
         let analytics = Analytics(.plausible(domain: "example.com", measurements: measurements))
@@ -123,7 +122,7 @@ struct AnalyticsTests {
         #expect(output.contains("window.plausible = window.plausible || function()"))
     }
 
-    @Test("Plausible all measurements produce deterministic order")
+    @Test("Plausible all measurements produce deterministic order", .publishingContext())
     func plausibleAllMeasurementsSorted() {
         let all: Set<Analytics.PlausibleMeasurement> = [
             .fileDownloads, .hash, .outboundLinks,

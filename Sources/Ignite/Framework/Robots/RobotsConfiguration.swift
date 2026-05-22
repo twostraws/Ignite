@@ -6,6 +6,6 @@
 //
 
 /// A simple protocol that lets users create custom robot configurations easily.
-public protocol RobotsConfiguration {
+public protocol RobotsConfiguration: Sendable {
     var disallowRules: [DisallowRule] { get }
 }

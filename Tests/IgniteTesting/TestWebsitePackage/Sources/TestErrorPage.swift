@@ -13,12 +13,12 @@ struct TestErrorPage: ErrorPage {
     var title: String = "Test Error Page"
     var description: String = "Test Error Page Description"
 
-    let errorChecker: (HTTPError) -> Void
+    let errorChecker: @Sendable (HTTPError) -> Void
 
     init(
         title: String = "Test Error Page",
         description: String = "Test Error Page Description",
-        errorChecker: @escaping (HTTPError) -> Void = { _ in }
+        errorChecker: @escaping @Sendable (HTTPError) -> Void = { _ in }
     ) {
         self.title = title
         self.description = description

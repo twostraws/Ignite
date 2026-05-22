@@ -12,14 +12,13 @@ import Testing
 
 /// Tests for the `String-TruncatedHash` extension.
 @Suite("String-TruncatedHash Tests")
-@MainActor
 struct StringTruncatedHashTests {
     struct Instance {
         let input: String
         let expected: String
     }
 
-    @Test("Precalculated Values from some common strings", arguments: [
+    @Test("Precalculated Values from some common strings", .publishingContext(), arguments: [
         Instance(input: "", expected: "nO100"),
         Instance(input: "hello world", expected: "xWt36"),
         Instance(input: "12345", expected: "cgbtG"),
@@ -31,7 +30,7 @@ struct StringTruncatedHashTests {
         #expect(instance.input.truncatedHash == instance.expected)
     }
 
-    @Test("Precalculated Values from Public Domain Poetry", arguments: [
+    @Test("Precalculated Values from Public Domain Poetry", .publishingContext(), arguments: [
         Instance(input: "And whether pigs have wings.'", expected: "9poQN"),
         Instance(input: "After we've brought them out so far,", expected: "NOk1H"),
         Instance(input: "\"The sun was shining on the sea,", expected: "SpUil"),

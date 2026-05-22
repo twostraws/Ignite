@@ -18,7 +18,6 @@
 ///     }
 /// }
 /// ```
-@MainActor
 public protocol ArticlePage: LayoutContent {}
 
 public extension ArticlePage {

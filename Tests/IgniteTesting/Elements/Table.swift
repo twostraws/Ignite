@@ -11,15 +11,14 @@ import Testing
 @testable import Ignite
 
 @Suite("Table Tests")
-@MainActor
 class TableTests: IgniteTestSuite {
-    @Test func simpleTable() async throws {
+    @Test(.publishingContext()) func simpleTable() async throws {
         let element = Table { }
         let output = element.markupString()
         #expect(output == "<table class=\"table\"><tbody></tbody></table>")
     }
 
-    @Test("Table with header renders thead")
+    @Test("Table with header renders thead", .publishingContext())
     func tableWithHeader() async throws {
         let element = Table {
             Row {
@@ -34,7 +33,7 @@ class TableTests: IgniteTestSuite {
         #expect(output.contains("<thead><tr><th>Name</th><th>Value</th></tr></thead>"))
     }
 
-    @Test("Table with rows renders content inside tbody")
+    @Test("Table with rows renders content inside tbody", .publishingContext())
     func tableWithRows() async throws {
         let element = Table {
             Row {
@@ -46,7 +45,7 @@ class TableTests: IgniteTestSuite {
         #expect(output.contains("Cell1"))
     }
 
-    @Test("Striped rows style adds table-striped class")
+    @Test("Striped rows style adds table-striped class", .publishingContext())
     func stripedRowsStyle() async throws {
         let element = Table { }.tableStyle(.stripedRows)
         let output = element.markupString()
@@ -54,28 +53,28 @@ class TableTests: IgniteTestSuite {
         #expect(!output.contains("table-striped-columns"))
     }
 
-    @Test("Striped columns style adds table-striped-columns class")
+    @Test("Striped columns style adds table-striped-columns class", .publishingContext())
     func stripedColumnsStyle() async throws {
         let element = Table { }.tableStyle(.stripedColumns)
         let output = element.markupString()
         #expect(output.contains("table-striped-columns"))
     }
 
-    @Test("Plain style adds no striping class")
+    @Test("Plain style adds no striping class", .publishingContext())
     func plainStyle() async throws {
         let element = Table { }.tableStyle(.plain)
         let output = element.markupString()
         #expect(!output.contains("table-striped"))
     }
 
-    @Test("Table border adds table-bordered class")
+    @Test("Table border adds table-bordered class", .publishingContext())
     func tableBorder() async throws {
         let element = Table { }.tableBorder(true)
         let output = element.markupString()
         #expect(output.contains("table-bordered"))
     }
 
-    @Test("Accessibility label adds caption element")
+    @Test("Accessibility label adds caption element", .publishingContext())
     func accessibilityLabel() async throws {
         let element = Table { }.accessibilityLabel("Test caption")
         let output = element.markupString()
@@ -84,7 +83,7 @@ class TableTests: IgniteTestSuite {
 
     // MARK: - Filter title
 
-    @Test("Table with filter title renders input with igniteFilterTable")
+    @Test("Table with filter title renders input with igniteFilterTable", .publishingContext())
     func filterTitle() async throws {
         let element = Table(filterTitle: "Search...") {
             Row { Column { "Cell" } }
@@ -97,7 +96,7 @@ class TableTests: IgniteTestSuite {
 
     // MARK: - Sequence initializers
 
-    @Test("Table from sequence renders rows")
+    @Test("Table from sequence renders rows", .publishingContext())
     func sequenceInitializer() async throws {
         let items = ["Alice", "Bob"]
         let element = Table(items) { name in
@@ -109,7 +108,7 @@ class TableTests: IgniteTestSuite {
         #expect(output.contains("<tbody>"))
     }
 
-    @Test("Table from sequence with header renders thead and rows")
+    @Test("Table from sequence with header renders thead and rows", .publishingContext())
     func sequenceInitializerWithHeader() async throws {
         let items = ["Alice", "Bob"]
         let element = Table(items) { name in
@@ -124,7 +123,7 @@ class TableTests: IgniteTestSuite {
 
     // MARK: - Combined options
 
-    @Test("Table with border, striped rows, and caption combines all attributes")
+    @Test("Table with border, striped rows, and caption combines all attributes", .publishingContext())
     func combinedOptions() async throws {
         let element = Table { }
             .tableBorder(true)

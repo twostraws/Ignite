@@ -5,7 +5,6 @@
 // See LICENSE for license information.
 //
 
-@MainActor
 private func idModifier(_ id: String, content: any HTML) -> any HTML {
     guard !id.isEmpty else { return content }
     var copy: any HTML = content.isPrimitive ? content : Section(content)
@@ -13,7 +12,6 @@ private func idModifier(_ id: String, content: any HTML) -> any HTML {
     return copy
 }
 
-@MainActor
 private func idModifier(_ id: String, content: any InlineElement) -> any InlineElement {
     guard !id.isEmpty else { return content }
     var copy: any InlineElement = content.isPrimitive ? content : Span(content)

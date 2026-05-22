@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `AccessibilityLabel` modifier.
 @Suite("AccessibilityLabel Tests")
-@MainActor
 class AccessibilityLabelTests: IgniteTestSuite {
-    @Test("accessibilityLabel adds aria-label to block element")
+    @Test("accessibilityLabel adds aria-label to block element", .publishingContext())
     func blockElement() async throws {
         let element = Text("Hello")
             .accessibilityLabel("greeting")
@@ -23,7 +22,7 @@ class AccessibilityLabelTests: IgniteTestSuite {
         #expect(output.contains(#"aria-label="greeting""#))
     }
 
-    @Test("accessibilityLabel adds aria-label to Section")
+    @Test("accessibilityLabel adds aria-label to Section", .publishingContext())
     func sectionElement() async throws {
         let element = Section {}
             .accessibilityLabel("main content")

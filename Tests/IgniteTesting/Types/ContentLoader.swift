@@ -11,7 +11,6 @@ import Testing
 
 /// Tests for the `ContentLoader` type.
 @Suite("ContentLoader Tests")
-@MainActor
 struct ContentLoaderTests {
     /// Creates a test article with the given type and tags metadata.
     private func makeArticle(title: String, type: String, tags: String? = nil) -> Article {
@@ -24,7 +23,7 @@ struct ContentLoaderTests {
         return article
     }
 
-    @Test("ArticleLoader stores articles in all property")
+    @Test("ArticleLoader stores articles in all property", .publishingContext())
     func storesArticles() async throws {
         let articles = [makeArticle(title: "A", type: "blog"), makeArticle(title: "B", type: "blog")]
         let loader = ArticleLoader(content: articles)
@@ -34,7 +33,7 @@ struct ContentLoaderTests {
         #expect(loader.all[1].title == "B")
     }
 
-    @Test("typed() filters articles by metadata type")
+    @Test("typed() filters articles by metadata type", .publishingContext())
     func typedFilter() async throws {
         let articles = [
             makeArticle(title: "Blog Post", type: "blog"),
@@ -52,7 +51,7 @@ struct ContentLoaderTests {
         #expect(stories[0].title == "Story")
     }
 
-    @Test("typed() returns empty array when no matches")
+    @Test("typed() returns empty array when no matches", .publishingContext())
     func typedNoMatches() async throws {
         let articles = [makeArticle(title: "A", type: "blog")]
         let loader = ArticleLoader(content: articles)
@@ -60,7 +59,7 @@ struct ContentLoaderTests {
         #expect(loader.typed("news").isEmpty)
     }
 
-    @Test("tagged() filters articles by parsed tags")
+    @Test("tagged() filters articles by parsed tags", .publishingContext())
     func taggedFilter() async throws {
         let articles = [
             makeArticle(title: "Swift Post", type: "blog", tags: "swift, ios"),
@@ -77,7 +76,7 @@ struct ContentLoaderTests {
         #expect(cssArticles[0].title == "Web Post")
     }
 
-    @Test("tagged() returns empty array when no matches")
+    @Test("tagged() returns empty array when no matches", .publishingContext())
     func taggedNoMatches() async throws {
         let articles = [makeArticle(title: "A", type: "blog", tags: "swift")]
         let loader = ArticleLoader(content: articles)

@@ -12,16 +12,15 @@ import Testing
 
 /// Tests for the `Input` element.
 @Suite("Input Tests")
-@MainActor
 class InputTests: IgniteTestSuite {
-    @Test("Basic input renders self-closing tag")
+    @Test("Basic input renders self-closing tag", .publishingContext())
     func basicInputRendersSelfClosingTag() async throws {
         let element = Input()
         let output = element.markupString()
         #expect(output == "<input />")
     }
 
-    @Test("Input with id attribute")
+    @Test("Input with id attribute", .publishingContext())
     func inputWithIdAttribute() async throws {
         let element = Input().id("my-input")
         let output = element.markupString()
@@ -30,7 +29,7 @@ class InputTests: IgniteTestSuite {
         #expect(output.hasSuffix("/>"))
     }
 
-    @Test("Input with class attribute")
+    @Test("Input with class attribute", .publishingContext())
     func inputWithClassAttribute() async throws {
         let element = Input().class("form-control")
         let output = element.markupString()

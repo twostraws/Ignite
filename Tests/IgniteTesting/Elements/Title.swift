@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `title` element.
 @Suite("Title Tests")
-@MainActor
 class TitleTests: IgniteTestSuite {
-    @Test("Empty Title", arguments: [""])
+    @Test("Empty Title", .publishingContext(), arguments: [""])
     func empty(emptyTitleText: String) async throws {
         let element = Title(emptyTitleText)
         let output = element.markupString()
@@ -22,7 +21,7 @@ class TitleTests: IgniteTestSuite {
         #expect(output == "<title>\(emptyTitleText) - My Test Site</title>")
     }
 
-    @Test("Builder", arguments: ["Example Page", "Another Example Page"])
+    @Test("Builder", .publishingContext(), arguments: ["Example Page", "Another Example Page"])
     func builder(titleText: String) async throws {
         let element = Title(titleText)
         let output = element.markupString()

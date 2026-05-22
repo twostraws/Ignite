@@ -45,17 +45,17 @@ public struct Material: Sendable {
     }
 
     /// An ultra-thin material effect
-    @MainActor public static let ultraThinMaterial = Material(type: .ultraThin)
+    public static let ultraThinMaterial = Material(type: .ultraThin)
 
     /// A thin material effect
-    @MainActor public static let thinMaterial = Material(type: .thin)
+    public static let thinMaterial = Material(type: .thin)
 
     /// A regular material effect
-    @MainActor public static let regularMaterial = Material(type: .regular)
+    public static let regularMaterial = Material(type: .regular)
 
     /// A thick material effect
-    @MainActor public static let thickMaterial = Material(type: .thick)
+    public static let thickMaterial = Material(type: .thick)
 
     /// An ultra-thick material effect
-    @MainActor public static let ultraThickMaterial = Material(type: .ultraThick)
+    public static let ultraThickMaterial = Material(type: .ultraThick)
 }

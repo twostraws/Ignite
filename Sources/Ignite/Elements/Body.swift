@@ -5,7 +5,10 @@
 // See LICENSE for license information.
 //
 
-public struct Body: MarkupElement {
+public struct Body: HTML {
+    /// The body of this HTML element, which is itself.
+    public var body: some HTML { self }
+
     /// The standard set of control attributes for HTML elements.
     public var attributes = CoreAttributes()
 

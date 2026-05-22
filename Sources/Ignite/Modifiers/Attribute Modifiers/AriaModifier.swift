@@ -5,7 +5,7 @@
 // See LICENSE for license information.
 //
 
-@MainActor private func ariaModifier(
+private func ariaModifier(
     _ key: AriaType,
     value: String?,
     content: any BodyElement
@@ -16,7 +16,7 @@
     return copy
 }
 
-@MainActor private func ariaModifier(
+private func ariaModifier(
     _ key: AriaType,
     value: String?,
     content: any InlineElement

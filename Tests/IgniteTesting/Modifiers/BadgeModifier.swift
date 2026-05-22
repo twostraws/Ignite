@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `BadgeModifier` modifier.
 @Suite("BadgeModifier Tests")
-@MainActor
 class BadgeModifierTests: IgniteTestSuite {
-    @Test("Badge Modifier for InlineHTML")
+    @Test("Badge Modifier for InlineHTML", .publishingContext())
     func badgeModifierForInlineHTML() async throws {
         let element = Text("Notifications").badge(Badge("3"))
 
@@ -28,7 +27,7 @@ class BadgeModifierTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Badge Modifier for ListItem")
+    @Test("Badge Modifier for ListItem", .publishingContext())
     func badgeModifierForListItem() async throws {
         let element = ListItem {
             Text("Messages")

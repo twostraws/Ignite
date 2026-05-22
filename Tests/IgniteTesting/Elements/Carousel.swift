@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `Carousel` element.
 @Suite("Carousel Tests")
-@MainActor
 class CarouselTests: IgniteTestSuite {
-    @Test("Carousel renders indicators and controls targeting its generated ID")
+    @Test("Carousel renders indicators and controls targeting its generated ID", .publishingContext())
     func generatedIDIsUsedEverywhere() async throws {
         let element = Carousel {
             Slide { Text("First") }
@@ -38,7 +37,7 @@ class CarouselTests: IgniteTestSuite {
         }
     }
 
-    @Test("Custom move style and interval generate transform transition without fade class")
+    @Test("Custom move style and interval generate transform transition without fade class", .publishingContext())
     func customMoveStyleAndInterval() async throws {
         let element = Carousel {
             Slide { Text("One") }
@@ -54,7 +53,7 @@ class CarouselTests: IgniteTestSuite {
         #expect(!output.contains("carousel-fade"))
     }
 
-    @Test("Custom crossfade style adds fade class and combined transform/opacity transition")
+    @Test("Custom crossfade style adds fade class and combined transform/opacity transition", .publishingContext())
     func customCrossfadeStyle() async throws {
         let element = Carousel {
             Slide { Text("One") }
@@ -68,7 +67,7 @@ class CarouselTests: IgniteTestSuite {
         #expect(output.contains("transition: transform 0.25s ease-out, opacity 0.25s ease-out"))
     }
 
-    @Test("Sequence initializer creates one indicator per item")
+    @Test("Sequence initializer creates one indicator per item", .publishingContext())
     func sequenceInitializerCreatesSlides() async throws {
         let items = ["First", "Second", "Third"]
         let element = Carousel(items) { item in

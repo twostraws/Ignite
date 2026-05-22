@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Include` element.
 @Suite("Include Tests")
-@MainActor
 class IncludeTests: IgniteTestSuite {
-    @Test("Basic Include")
+    @Test("Basic Include", .publishingContext())
     func basicInclude() async throws {
         let element = Include("important.html")
         let output = element.markupString()

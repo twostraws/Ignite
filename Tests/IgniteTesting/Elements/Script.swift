@@ -11,60 +11,68 @@ import Testing
 
 /// Tests for the `Script` element.
 @Suite("Script Tests")
-@MainActor class ScriptTests: IgniteTestSuite {
-    static let sites: [any Site] = [TestSite(), TestSubsite()]
-    
-    @Test("Code", arguments: await Self.sites)
-    func code(for site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-        
-        let element = Script(code: "javascript code")
-        let output = element.markupString()
+class ScriptTests: IgniteTestSuite {
+    @Test("Code", .publishingContext(), arguments: TestPublishingSite.standardAndSubsite)
+    func code(for siteCase: TestPublishingSite) async throws {
+        let site = siteCase.site
+
+        let output = try withPublishingContext(for: site) { _ in
+            let element = Script(code: "javascript code")
+            return element.markupString()
+        }
         
         #expect(output == "<script>javascript code</script>")
     }
     
-    @Test("Local File", arguments: ["/code.js"], await Self.sites)
-    func file(scriptFile: String, site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-        
-        let element = Script(file: scriptFile)
-        let output = element.markupString()
-        
-        let expectedPath = PublishingContext.shared.path(for: URL(string: scriptFile)!)
-        #expect(output == "<script src=\"\(expectedPath)\"></script>")
+    @Test("Local File", .publishingContext(), arguments: ["/code.js"], TestPublishingSite.standardAndSubsite)
+    func file(scriptFile: String, siteCase: TestPublishingSite) async throws {
+        let site = siteCase.site
+
+        try withPublishingContext(for: site) { context in
+            let element = Script(file: scriptFile)
+            let output = element.markupString()
+            let expectedPath = context.path(for: URL(string: scriptFile)!)
+
+            #expect(output == "<script src=\"\(expectedPath)\"></script>")
+        }
     }
     
-    @Test("Remote File", arguments: ["https://example.com"], await Self.sites)
-    func file(remoteScript: String, site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-        
-        let element = Script(file: remoteScript)
-        let output = element.markupString()
-        
-        let expectedPath = PublishingContext.shared.path(for: URL(string: remoteScript)!)
-        #expect(output == "<script src=\"\(expectedPath)\"></script>")
+    @Test("Remote File", .publishingContext(), arguments: ["https://example.com"], TestPublishingSite.standardAndSubsite)
+    func file(remoteScript: String, siteCase: TestPublishingSite) async throws {
+        let site = siteCase.site
+
+        try withPublishingContext(for: site) { context in
+            let element = Script(file: remoteScript)
+            let output = element.markupString()
+            let expectedPath = context.path(for: URL(string: remoteScript)!)
+
+            #expect(output == "<script src=\"\(expectedPath)\"></script>")
+        }
     }
     
-    @Test("Attributes", arguments: ["/code.js"], await Self.sites)
-    func attributes(scriptFile: String, site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-        
-        let element = Script(file: scriptFile)
-            .data("key", "value")
-            .customAttribute(name: "custom", value: "part")
-        let output = element.markupString()
-        
-        let expectedPath = PublishingContext.shared.path(for: URL(string: scriptFile)!)
-        #expect(output == "<script custom=\"part\" src=\"\(expectedPath)\" data-key=\"value\"></script>")
+    @Test("Attributes", .publishingContext(), arguments: ["/code.js"], TestPublishingSite.standardAndSubsite)
+    func attributes(scriptFile: String, siteCase: TestPublishingSite) async throws {
+        let site = siteCase.site
+
+        try withPublishingContext(for: site) { context in
+            let element = Script(file: scriptFile)
+                .data("key", "value")
+                .customAttribute(name: "custom", value: "part")
+            let output = element.markupString()
+            let expectedPath = context.path(for: URL(string: scriptFile)!)
+
+            #expect(output == "<script custom=\"part\" src=\"\(expectedPath)\" data-key=\"value\"></script>")
+        }
     }
     
-    @Test("TypeAttribute", arguments: await Self.sites)
-    func typeAttribute(for site: any Site) async throws {
-        try PublishingContext.initialize(for: site, from: #filePath)
-        
-        let element = Script(code: "javascript code").type(value: "someType")
-        let output = element.markupString()
+    @Test("TypeAttribute", .publishingContext(), arguments: TestPublishingSite.standardAndSubsite)
+    func typeAttribute(for siteCase: TestPublishingSite) async throws {
+        let site = siteCase.site
+
+        let output = try withPublishingContext(for: site) { _ in
+            let element = Script(code: "javascript code").type(value: "someType")
+            return element.markupString()
+        }
         
         #expect(output == "<script type=\"someType\">javascript code</script>")
     }

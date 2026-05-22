@@ -6,7 +6,7 @@
 //
 
 // Specialized method for block page elements.
-@MainActor private func frameModifier(
+private func frameModifier(
     width: LengthUnit? = nil,
     minWidth: LengthUnit? = nil,
     maxWidth: LengthUnit? = nil,
@@ -66,7 +66,7 @@
     return content.style(dimensions)
 }
 
-@MainActor func frameModifier(
+func frameModifier(
     width: LengthUnit? = nil,
     minWidth: LengthUnit? = nil,
     maxWidth: LengthUnit? = nil,

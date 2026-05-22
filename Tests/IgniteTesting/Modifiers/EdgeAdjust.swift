@@ -12,32 +12,31 @@ import Testing
 
 /// Tests for the `EdgeAdjust` helpers.
 @Suite("EdgeAdjust Tests")
-@MainActor
 class EdgeAdjustTests: IgniteTestSuite {
     // MARK: - Class-based edge adjustment (semantic amounts)
 
-    @Test("All edges class uses no axis prefix")
+    @Test("All edges class uses no axis prefix", .publishingContext())
     func allEdgesClass() async throws {
         let element = Text("Test")
         let classes = element.edgeAdjustedClasses(prefix: "p", .all, 3)
         #expect(classes == ["p-3"])
     }
 
-    @Test("Horizontal edges class uses x prefix")
+    @Test("Horizontal edges class uses x prefix", .publishingContext())
     func horizontalEdgesClass() async throws {
         let element = Text("Test")
         let classes = element.edgeAdjustedClasses(prefix: "p", .horizontal, 2)
         #expect(classes == ["px-2"])
     }
 
-    @Test("Vertical edges class uses y prefix")
+    @Test("Vertical edges class uses y prefix", .publishingContext())
     func verticalEdgesClass() async throws {
         let element = Text("Test")
         let classes = element.edgeAdjustedClasses(prefix: "p", .vertical, 2)
         #expect(classes == ["py-2"])
     }
 
-    @Test("Individual edge classes", arguments: zip(
+    @Test("Individual edge classes", .publishingContext(), arguments: zip(
         [Edge.top, .bottom, .leading, .trailing],
         ["pt-1", "pb-1", "ps-1", "pe-1"]))
     func individualEdgeClasses(edge: Edge, expected: String) async throws {
@@ -46,7 +45,7 @@ class EdgeAdjustTests: IgniteTestSuite {
         #expect(classes == [expected])
     }
 
-    @Test("Multiple individual edges produce multiple classes")
+    @Test("Multiple individual edges produce multiple classes", .publishingContext())
     func multipleIndividualEdges() async throws {
         let element = Text("Test")
         let edges: Edge = [.top, .trailing]
@@ -56,7 +55,7 @@ class EdgeAdjustTests: IgniteTestSuite {
         #expect(classes.count == 2)
     }
 
-    @Test("Horizontal class takes precedence over leading and trailing classes")
+    @Test("Horizontal class takes precedence over leading and trailing classes", .publishingContext())
     func horizontalClassPrecedence() async throws {
         let element = Text("Test")
         let edges: Edge = [.horizontal, .leading]
@@ -64,7 +63,7 @@ class EdgeAdjustTests: IgniteTestSuite {
         #expect(classes == ["px-2"])
     }
 
-    @Test("Vertical class takes precedence over top and bottom classes")
+    @Test("Vertical class takes precedence over top and bottom classes", .publishingContext())
     func verticalClassPrecedence() async throws {
         let element = Text("Test")
         let edges: Edge = [.vertical, .top]
@@ -74,14 +73,14 @@ class EdgeAdjustTests: IgniteTestSuite {
 
     // MARK: - Style-based edge adjustment (exact values)
 
-    @Test("All edges style uses shorthand property")
+    @Test("All edges style uses shorthand property", .publishingContext())
     func allEdgesStyle() async throws {
         let element = Text("Test")
         let styles = element.edgeAdjustedStyles(prefix: "padding", .all, "20px")
         #expect(styles == [InlineStyle("padding", value: "20px")])
     }
 
-    @Test("Individual edge styles", arguments: zip(
+    @Test("Individual edge styles", .publishingContext(), arguments: zip(
         [Edge.top, .bottom, .leading, .trailing],
         ["padding-top", "padding-bottom", "padding-left", "padding-right"]))
     func individualEdgeStyles(edge: Edge, expectedProperty: String) async throws {
@@ -90,7 +89,7 @@ class EdgeAdjustTests: IgniteTestSuite {
         #expect(styles == [InlineStyle(expectedProperty, value: "10px")])
     }
 
-    @Test("Horizontal styles generate leading and trailing declarations")
+    @Test("Horizontal styles generate leading and trailing declarations", .publishingContext())
     func horizontalStyles() async throws {
         let element = Text("Test")
         let styles = element.edgeAdjustedStyles(prefix: "padding", .horizontal, "8px")
@@ -100,7 +99,7 @@ class EdgeAdjustTests: IgniteTestSuite {
         ])
     }
 
-    @Test("Vertical styles generate top and bottom declarations")
+    @Test("Vertical styles generate top and bottom declarations", .publishingContext())
     func verticalStyles() async throws {
         let element = Text("Test")
         let styles = element.edgeAdjustedStyles(prefix: "padding", .vertical, "8px")

@@ -12,9 +12,8 @@ import Testing
 
 /// Tests for the `Audio` element.
 @Suite("Audio Tests")
-@MainActor
 class AudioTests: IgniteTestSuite {
-    @Test("Lone File Audio", arguments: ["/audio/example.mp3"])
+    @Test("Lone File Audio", .publishingContext(), arguments: ["/audio/example.mp3"])
     func loneFileAudio(audioFile: String) async throws {
         let element = Audio(audioFile)
         let output = element.markupString()
@@ -26,7 +25,7 @@ class AudioTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Multiple File Audio", arguments: ["/audio/example1.mp3"], ["/audio/example1.wav"])
+    @Test("Multiple File Audio", .publishingContext(), arguments: ["/audio/example1.mp3"], ["/audio/example1.wav"])
     func multiFileAudio(audioFile1: String, audioFile2: String) async throws {
         let element = Audio(audioFile1, audioFile2)
         let output = element.markupString()
@@ -39,7 +38,7 @@ class AudioTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Unrecognized file extension produces no source tag")
+    @Test("Unrecognized file extension produces no source tag", .publishingContext())
     func unrecognizedExtension() async throws {
         let element = Audio("/audio/mystery.xyz")
         let output = element.markupString()
@@ -51,7 +50,7 @@ class AudioTests: IgniteTestSuite {
         """)
     }
 
-    @Test("Mixed recognized and unrecognized files only renders recognized sources")
+    @Test("Mixed recognized and unrecognized files only renders recognized sources", .publishingContext())
     func mixedExtensions() async throws {
         let element = Audio("/audio/song.mp3", "/audio/song.xyz", "/audio/song.ogg")
         let output = element.markupString()

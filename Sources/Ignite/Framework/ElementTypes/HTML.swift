@@ -7,7 +7,6 @@
 
 /// A protocol that defines the core behavior and
 /// structure of `HTML` elements in Ignite.
-@MainActor
 public protocol HTML: BodyElement {
     /// The type of HTML content this element contains.
     associatedtype Body: HTML

@@ -12,23 +12,22 @@ import Testing
 
 /// Tests for the `HTMLDocument` element.
 @Suite("HTMLDocument Tests")
-@MainActor
 class HTMLDocumentTests: IgniteTestSuite {
-    @Test("Starts with doctype html")
+    @Test("Starts with doctype html", .publishingContext())
     func containsHTMLDoctype() {
         let sut = PlainDocument(head: Head(), body: Body())
         let output = sut.markupString()
         #expect(output.hasPrefix("<!doctype html>"))
     }
 
-    @Test("Contains html tag")
+    @Test("Contains html tag", .publishingContext())
     func containsHTMLTag() {
         let sut = PlainDocument(head: Head(), body: Body())
         let output = sut.markupString()
         #expect(nil != output.htmlTagWithCloseTag("html"))
     }
 
-    @Test("lang attribute defaults to en")
+    @Test("lang attribute defaults to en", .publishingContext())
     func language_attribute_defaults_to_en() throws {
         let sut = PlainDocument(head: Head(), body: Body())
         let output = sut.markupString()
@@ -40,7 +39,7 @@ class HTMLDocumentTests: IgniteTestSuite {
         #expect(language == "en")
     }
 
-    @Test("html tag includes data-light-theme attribute matching site light theme cssID")
+    @Test("html tag includes data-light-theme attribute matching site light theme cssID", .publishingContext())
     func html_includes_data_light_theme_attribute() throws {
         let sut = PlainDocument(head: Head(), body: Body())
         let output = sut.markupString()
@@ -52,7 +51,7 @@ class HTMLDocumentTests: IgniteTestSuite {
         #expect(lightTheme == "light")
     }
 
-    @Test("html tag includes data-dark-theme attribute matching site dark theme cssID")
+    @Test("html tag includes data-dark-theme attribute matching site dark theme cssID", .publishingContext())
     func html_includes_data_dark_theme_attribute() throws {
         let sut = PlainDocument(head: Head(), body: Body())
         let output = sut.markupString()
@@ -64,7 +63,7 @@ class HTMLDocumentTests: IgniteTestSuite {
         #expect(darkTheme == "dark")
     }
 
-    @Test("lang attribute is taken from language property", arguments: Language.allCases)
+    @Test("lang attribute is taken from language property", .publishingContext(), arguments: Language.allCases)
     func language_property_determines_lang_attribute(_ language: Language) throws {
 
         /// New TestSite initialized with the test language.

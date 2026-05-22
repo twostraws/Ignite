@@ -11,9 +11,8 @@ import Testing
 
 /// Tests for the `TransitionModifier`.
 @Suite("TransitionModifier Tests")
-@MainActor
 class TransitionModifierTests: IgniteTestSuite {
-    @Test("Hover transition adds hover class and 3D transform style")
+    @Test("Hover transition adds hover class and 3D transform style", .publishingContext())
     func hoverTransitionAddsHoverClassAndStyle() async throws {
         let transition = Transition.scale()
         let element = Text("Hello").transition(transition, on: .hover)
@@ -28,7 +27,7 @@ class TransitionModifierTests: IgniteTestSuite {
         #expect(!output.contains(#"class="click-"#))
     }
 
-    @Test("Click transition adds click handler and paired class names")
+    @Test("Click transition adds click handler and paired class names", .publishingContext())
     func clickTransitionAddsClickHandler() async throws {
         let transition = Transition.scale()
         let element = Text("Hello").transition(transition, on: .click)
@@ -47,7 +46,7 @@ class TransitionModifierTests: IgniteTestSuite {
         }
     }
 
-    @Test("Appear transition adds animation class without click or hover scaffolding")
+    @Test("Appear transition adds animation class without click or hover scaffolding", .publishingContext())
     func appearTransitionAddsAppearClassOnly() async throws {
         let transition = Transition.scale()
         let element = Text("Hello").transition(transition, on: .appear)
