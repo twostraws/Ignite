@@ -25,7 +25,8 @@ struct Attribute: Hashable, Equatable, Sendable, Comparable, CustomStringConvert
 
     public var description: String {
         if let value {
-            "\(name)=\"\(value)\""
+            // Escape the delimiter while preserving existing HTML entities in attribute values.
+            "\(name)=\"\(value.replacing("\"", with: "&quot;"))\""
         } else {
             name
         }
