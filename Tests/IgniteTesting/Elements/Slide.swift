@@ -19,9 +19,9 @@ class SlideTests: IgniteTestSuite {
         let output = slide.assigned(at: 0).markupString()
 
         #expect(output == """
-        <div class="carousel-item active" style="background-color: black">\
+        <div class="carousel-item active" style="background-color: transparent">\
         <img src="/images/dog.jpg" alt="" class="d-block w-100" \
-        style="height: 100%; object-fit: cover; opacity: 1" />\
+        style="height: 100%; object-fit: contain; opacity: 1" />\
         <div class="container">\
         <div class="carousel-caption">\
         </div>\
@@ -39,7 +39,7 @@ class SlideTests: IgniteTestSuite {
         let output = slide.assigned(at: 1).markupString()
 
         #expect(output == """
-        <div class=\"carousel-item\" style=\"background-color: black\">\
+        <div class=\"carousel-item\" style=\"background-color: transparent\">\
         <div class=\"container\">\
         <div class=\"carousel-caption\">\
         <p>Item 1</p>\
@@ -56,9 +56,9 @@ class SlideTests: IgniteTestSuite {
         let output = slide.assigned(at: 0).markupString()
 
         #expect(output == """
-        <div class="carousel-item active" style="background-color: black">\
+        <div class="carousel-item active" style="background-color: transparent">\
         <img src="/images/dog.jpg" alt="" class="d-block w-100" \
-        style="height: 100%; object-fit: cover; opacity: 0.5" />\
+        style="height: 100%; object-fit: contain; opacity: 0.5" />\
         <div class="container">\
         <div class="carousel-caption">\
         </div>\
