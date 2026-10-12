@@ -5,6 +5,7 @@
 // See LICENSE for license information.
 //
 
+import SwiftSoup
 import Testing
 
 @testable import Ignite
@@ -69,8 +70,9 @@ class TextTests: IgniteTestSuite {
         let output = element.markupString()
 
         #expect(output == """
-        <p><em>i</em>, <strong>b</strong>, and <em><strong>b&i</strong></em></p>
+        <p><em>i</em>, <strong>b</strong>, and <em><strong>b&amp;i</strong></em></p>
         """)
+        #expect(try SwiftSoup.parseBodyFragment(output).text() == "i, b, and b&i")
     }
 
     @Test("Strikethrough", .publishingContext())

@@ -148,8 +148,9 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     /// appends Bootstrap's `img-fluid` CSS class so that images resize.
     public func visitImage(_ image: Markdown.Image) -> String {
         if let source = image.source {
-            let title = image.plainText
-            return #"<img src="\#(source)" alt="\#(title)" class="img-fluid">"#
+            // Markdown has already decoded entities, so escape both values before writing HTML attributes.
+            let title = image.plainText.escapedForXML()
+            return #"<img src="\#(source.escapedForXML())" alt="\#(title)" class="img-fluid">"#
         } else {
             return ""
         }
@@ -202,11 +203,12 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
         return result
     }
 
-    /// Processes unordered list markup.
-    /// - Parameter orderedList: The unordered list markup to process.
+    /// Processes ordered list markup.
+    /// - Parameter orderedList: The ordered list markup to process.
     /// - Returns: A HTML <ol> element with the correct contents.
     mutating public func visitOrderedList(_ orderedList: Markdown.OrderedList) -> String {
-        var result = "<ol>"
+        // The first marker sets the start; omit the default to preserve ordinary list markup.
+        var result = orderedList.startIndex == 1 ? "<ol>" : "<ol start=\"\(orderedList.startIndex)\">"
 
         for listItem in orderedList.listItems {
             result += visit(listItem)
@@ -336,9 +338,13 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
 
     /// Processes plain text markup.
     /// - Parameter text: The plain text markup to process.
-    /// - Returns: The same text that was read as input.
+    /// - Returns: The parsed text escaped for HTML content.
     mutating public func visitText(_ text: Markdown.Text) -> String {
+        // The parser has decoded Markdown escapes and entities. Raw HTML uses its own visitors.
         text.plainText
+            .replacing("&", with: "&amp;")
+            .replacing("<", with: "&lt;")
+            .replacing(">", with: "&gt;")
     }
 
     /// Process thematic break markup. This is written as --- in Markdown.

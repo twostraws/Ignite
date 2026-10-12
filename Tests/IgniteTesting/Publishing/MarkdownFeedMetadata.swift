@@ -14,12 +14,15 @@ import Testing
 /// Loads Markdown through Article before exercising the actual feed generators.
 @Suite("Markdown Feed Metadata Tests")
 struct MarkdownFeedMetadataTests {
-    @Test("Markdown code remains readable in feed text and HTML", .publishingContext(), arguments: [
+    @Test("Markdown text remains readable in feed text and HTML", .publishingContext(), arguments: [
         ("`a & b`", "a & b", "a &amp; b"),
         ("`Array<String>`", "Array<String>", "Array&lt;String&gt;"),
         ("`&lt;`", "&lt;", "&amp;lt;"),
         ("`let count = 3`", "let count = 3", "let count = 3"),
-        ("Ordinary text", "Ordinary text", "Ordinary text")
+        ("Ordinary text", "Ordinary text", "Ordinary text"),
+        (#"Use \<br/> literally."#, "Use <br/> literally.", "Use &lt;br/&gt; literally."),
+        ("Literal &amp;lt;", "Literal &lt;", "Literal &amp;lt;"),
+        ("Read &lt;strong&gt;literally&lt;/strong&gt;", "Read <strong>literally</strong>", "Read &lt;strong&gt;literally&lt;/strong&gt;")
     ], [FeedConfiguration.ContentMode.descriptionOnly, .full])
     func markdownFeedMetadata(sample: (String, String, String), mode: FeedConfiguration.ContentMode) throws {
         let (markdown, expected, encoded) = sample

@@ -361,13 +361,18 @@ final class PublishingContext: @unchecked Sendable {
     func linkPath(for url: URL) -> String {
         var result = path(for: url)
 
+        // Canonicalize only the page path, preserving authored queries and fragments verbatim.
+        let suffixStart = result.firstIndex { $0 == "?" || $0 == "#" } ?? result.endIndex
+        let pagePath = result[..<suffixStart]
+
         let isExternal = url.scheme == "http" || url.scheme == "https" || url.scheme == "mailto"
         if !isExternal,
-           !result.hasSuffix("/"),
-           !result.hasPrefix("#") {
-            let lastComponent = result.split(separator: "/").last.map(String.init) ?? ""
+           !pagePath.hasSuffix("/"),
+           !result.hasPrefix("#"),
+           !result.hasPrefix("?") {
+            let lastComponent = pagePath.split(separator: "/").last ?? ""
             if !lastComponent.contains(".") {
-                result += "/"
+                result.insert("/", at: suffixStart)
             }
         }
 
