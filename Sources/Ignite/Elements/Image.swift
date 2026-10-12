@@ -90,6 +90,19 @@ public struct Image: InlineElement, LazyLoadable {
     private func render(icon: String, description: String) -> Markup {
         var attributes = attributes
         attributes.append(classes: "bi-\(icon)")
+
+        // System icons use <i>, so provide image semantics and a name by default.
+        // An explicit role leaves accessibility to the caller: adding an ARIA label
+        // can override presentation/none. Preserve labels in either attribute collection.
+        if !description.isEmpty && !attributes.customAttributes.contains(where: { $0.name == "role" }) {
+            attributes.append(customAttributes: .init(name: "role", value: "img"))
+
+            if !attributes.aria.contains(where: { $0.name == "aria-label" })
+                && !attributes.customAttributes.contains(where: { $0.name == "aria-label" }) {
+                attributes.aria.append(.init(name: "aria-label", value: description))
+            }
+        }
+
         return Markup("<i\(attributes)></i>")
     }
 

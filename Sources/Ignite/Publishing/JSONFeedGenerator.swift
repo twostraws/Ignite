@@ -59,8 +59,8 @@ struct JSONFeedGenerator {
             var feedItem = JSONFeedItem(
                 id: absoluteURL,
                 url: absoluteURL,
-                title: item.title,
-                summary: item.description,
+                title: item.feedTitle,
+                summary: item.feedDescription,
                 date_published: item.date.asISO8601(timeZone: site.timeZone)
             )
 
@@ -68,8 +68,8 @@ struct JSONFeedGenerator {
                 feedItem.content_html = item.text.makingAbsoluteLinks(relativeTo: site.url)
             } else {
                 // JSON Feed v1.1 requires content_html or content_text per item.
-                // In descriptionOnly mode, use the description as content_text fallback.
-                feedItem.content_text = item.description
+                // In descriptionOnly mode, use the plain-text summary as content_text fallback.
+                feedItem.content_text = feedItem.summary
             }
 
             if let authorName, !authorName.isEmpty {

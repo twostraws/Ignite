@@ -8,18 +8,27 @@
 import Foundation
 
 /// One piece of Markdown content for this site.
-///
-/// - Important: If your content has code blocks containing angle brackets (`<`...`>`),
-/// such as Swift generics, the prettifier will interpret these as HTML tags and break
-/// the code's formatting. To avoid this issue, either set your site’s `shouldPrettify`
-/// property to `false`, or replace `<` and `>` with their character entity references,
-/// `&lt;` and `&gt;` respectively.
 public struct Article: Sendable {
     /// The main title for this content.
-    public var title: String = ""
+    public var title: String = "" {
+        didSet { renderedFeedTitle = nil }
+    }
 
     /// A summary of this content.
-    public var description: String = ""
+    public var description: String = "" {
+        didSet { renderedFeedDescription = nil }
+    }
+
+    // The Markdown renderer supplies plain text separately from its HTML output.
+    // Explicit assignments discard that text so caller-provided values remain literal.
+    private var renderedFeedTitle: String?
+    private var renderedFeedDescription: String?
+
+    /// The title for feed fields that require plain text, preserving the public HTML value.
+    var feedTitle: String { renderedFeedTitle ?? title }
+
+    /// Plain text for JSON summaries; RSS and Atom retain the public HTML description.
+    var feedDescription: String { renderedFeedDescription ?? description }
 
     /// A relative path for this content.
     public var path: String = ""
@@ -145,10 +154,12 @@ public struct Article: Sendable {
         // Use whatever Markdown renderer was configured for the site we're publishing.
         let parser = try site.articleRenderer.init(markdown: processed, removeTitleFromBody: true)
 
+        let markdownRenderer = parser as? MarkdownToHTML
         self.text = parser.body
         self.description = parser.description.strippingTags()
+        renderedFeedDescription = markdownRenderer?.feedDescription
 
-        resolveTitle(parser.title, url: url)
+        resolveTitle(parser.title, feedTitle: markdownRenderer?.feedTitle, url: url)
         populateMetadataDates(urlValues: resourceValues)
 
         self.path = metadata["path"] as? String ?? deployPath
@@ -164,8 +175,9 @@ public struct Article: Sendable {
     /// Prioritizes title from metadata, falls back to parsed title, and uses filename as last resort.
     /// - Parameters:
     ///   - title: The title from the parsed content
+    ///   - feedTitle: Plain text supplied by the Markdown renderer, when available
     ///   - url: The URL of the source file, used as fallback for the title
-    private mutating func resolveTitle(_ title: String, url: URL) {
+    private mutating func resolveTitle(_ title: String, feedTitle: String?, url: URL) {
         if let title = metadata["title"] as? String {
             self.title = title
         } else if title.isEmpty {
@@ -173,6 +185,7 @@ public struct Article: Sendable {
             self.title = url.deletingPathExtension().lastPathComponent
         } else {
             self.title = title.strippingTags()
+            renderedFeedTitle = feedTitle
         }
     }
 
@@ -180,23 +193,24 @@ public struct Article: Sendable {
     /// - Parameter markdown: The Markdown string to process.
     /// - Returns: The remaining Markdown, once front matter has been removed.
     private mutating func processMetadata(for markdown: String) -> String {
-        if markdown.starts(with: "---") {
-            let parts = markdown.split(separator: "---", maxSplits: 1, omittingEmptySubsequences: true)
+        guard markdown.starts(with: "---") else { return markdown }
 
-            let header = parts[0].split(separator: "\n", omittingEmptySubsequences: true)
+        let lines = markdown.split(omittingEmptySubsequences: false, whereSeparator: \.isNewline)
+        guard lines.first?.trimmingCharacters(in: .whitespaces) == "---",
+              let closingIndex = lines.dropFirst().firstIndex(where: {
+                  $0.trimmingCharacters(in: .whitespaces) == "---"
+              }) else { return markdown }
 
-            for entry in header {
-                let entryParts = entry.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: true)
-                guard entryParts.count == 2 else { continue }
+        for entry in lines[1..<closingIndex] {
+            let entryParts = entry.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: true)
+            guard entryParts.count == 2 else { continue }
 
-                let trimmedValue = entryParts[1].trimmingCharacters(in: .whitespaces)
-                metadata[entryParts[0].trimmingCharacters(in: .whitespaces)] = trimmedValue
-            }
-
-            return String(parts[1].trimmingCharacters(in: .whitespacesAndNewlines))
-        } else {
-            return markdown
+            let trimmedValue = entryParts[1].trimmingCharacters(in: .whitespaces)
+            metadata[entryParts[0].trimmingCharacters(in: .whitespaces)] = trimmedValue
         }
+
+        let body = markdown[lines[closingIndex].endIndex...]
+        return body.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     /// Populates the article's metadata with publication and modification dates.

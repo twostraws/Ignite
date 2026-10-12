@@ -35,6 +35,6 @@ class ImageTests: IgniteTestSuite {
     func icon(systemName: String, description: String) async throws {
         let element = Image(systemName: systemName, description: description)
         let output = element.markupString()
-        #expect(output == "<i class=\"bi-browser-safari\"></i>")
+        #expect(output == "<i role=\"img\" class=\"bi-browser-safari\" aria-label=\"\(description)\"></i>")
     }
 }

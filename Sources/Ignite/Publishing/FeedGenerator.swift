@@ -48,7 +48,7 @@ struct FeedGenerator {
                 var itemXML = """
                 <item>\
                 <guid isPermaLink="true">\(item.path(in: site))</guid>\
-                <title>\(item.title.escapedForXML())</title>\
+                <title>\(item.feedTitle.escapedForXML())</title>\
                 <link>\(item.path(in: site))</link>\
                 <description><![CDATA[\(item.description)]]></description>\
                 <pubDate>\(item.date.asRFC822(timeZone: site.timeZone))</pubDate>

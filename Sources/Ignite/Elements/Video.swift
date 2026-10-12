@@ -224,7 +224,8 @@ extension Video {
     /// - Returns: An optional `VideoType` corresponding to the file extension.
     ///            Returns `nil` if the extension does not match any known video types.
     public func videoType(for filename: String) -> VideoType? {
-        for (fileExtension, type) in videoTypeDictionary where filename.contains(fileExtension) {
+        let lowercaseFilename = filename.lowercased()
+        for (fileExtension, type) in videoTypeDictionary where lowercaseFilename.contains(fileExtension) {
             return type
         }
         return nil

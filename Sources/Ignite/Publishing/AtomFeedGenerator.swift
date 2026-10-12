@@ -87,7 +87,7 @@ struct AtomFeedGenerator {
             .map { item in
                 var entryXML = """
                 <entry>\
-                <title>\(item.title.escapedForXML())</title>\
+                <title>\(item.feedTitle.escapedForXML())</title>\
                 <link href="\(item.path(in: site))" rel="alternate"/>\
                 <id>\(item.path(in: site))</id>\
                 <updated>\(item.date.asISO8601(timeZone: site.timeZone))</updated>\
