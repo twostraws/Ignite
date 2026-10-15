@@ -23,6 +23,12 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     var feedTitle = ""
     var feedDescription = ""
 
+    // swift-markdown does not expose list tightness, so retain lines for blank-line boundaries.
+    private let sourceLines: [Substring]
+
+    // Classify each list once during traversal, restoring its parent after a nested list.
+    private var activeList: (list: any ListItemContainer, isTight: Bool)?
+
     /// Whether to remove the Markdown title from its body. This only applies
     /// to the first heading.
     public var removeTitleFromBody: Bool
@@ -34,6 +40,9 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     ///   from the final `body` property.
     public init(markdown: String, removeTitleFromBody: Bool) {
         self.removeTitleFromBody = removeTitleFromBody
+        sourceLines = markdown.split(omittingEmptySubsequences: false) {
+            $0 == "\n" || $0 == "\r" || $0 == "\r\n"
+        }
         let document = Markdown.Document(parsing: markdown)
         body = visit(document)
     }
@@ -207,6 +216,10 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     /// - Parameter orderedList: The ordered list markup to process.
     /// - Returns: A HTML <ol> element with the correct contents.
     mutating public func visitOrderedList(_ orderedList: Markdown.OrderedList) -> String {
+        let previousList = activeList
+        activeList = (orderedList, orderedList.isTight(sourceLines: sourceLines))
+        defer { activeList = previousList }
+
         // The first marker sets the start; omit the default to preserve ordinary list markup.
         var result = orderedList.startIndex == 1 ? "<ol>" : "<ol start=\"\(orderedList.startIndex)\">"
 
@@ -220,14 +233,23 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
 
     /// Processes a paragraph of text.
     /// - Parameter paragraph: The paragraph markup to process.
-    /// - Returns: If we're inside a list this sends back the paragraph's
-    /// contents. Otherwise, it wraps the contents in a HTML <p> element.
+    /// - Returns: Direct paragraphs in tight list items omit their container.
+    /// Other paragraphs retain their HTML <p> element.
     /// The first paragraph in the document is used for the document description.
     mutating public func visitParagraph(_ paragraph: Markdown.Paragraph) -> String {
         var result = ""
         var paragraphContents = ""
+        let needsContainer: Bool
+        if let item = paragraph.parent as? Markdown.ListItem,
+           let list = item.parent as? any ListItemContainer,
+           let activeList, activeList.list.isIdentical(to: list) {
+            needsContainer = !activeList.isTight
+        } else {
+            // Public paragraph visits can also occur outside a whole-list traversal.
+            needsContainer = !paragraph.isInTightList(sourceLines: sourceLines)
+        }
 
-        if paragraph.isInsideList == false {
+        if needsContainer {
             result += "<p>"
         }
 
@@ -242,7 +264,7 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
             feedDescription = feedText(for: paragraph)
         }
 
-        if paragraph.isInsideList == false {
+        if needsContainer {
             result += "</p>"
         }
 
@@ -354,10 +376,14 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
         "<hr />"
     }
 
-    /// Processes ordered list markup.
+    /// Processes unordered list markup.
     /// - Parameter unorderedList: The unordered list markup to process.
     /// - Returns: A HTML <ul> element with the correct contents.
     public mutating func visitUnorderedList(_ unorderedList: Markdown.UnorderedList) -> String {
+        let previousList = activeList
+        activeList = (unorderedList, unorderedList.isTight(sourceLines: sourceLines))
+        defer { activeList = previousList }
+
         var result = "<ul>"
 
         for listItem in unorderedList.listItems {

@@ -56,7 +56,8 @@ struct MarkdownOrderedListTests {
         let renderer = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
 
         #expect(renderer.body == """
-        <ol start="4"><li>Parent<ol start="7"><li>Child</li><li>Another child</li></ol></li><li>Following</li></ol>
+        <ol start="4"><li><p>Parent</p><ol start="7"><li>Child</li><li>Another child</li></ol></li>\
+        <li><p>Following</p></li></ol>
         """)
     }
 }
