@@ -172,7 +172,7 @@ public struct Button: InlineElement, FormItem {
     static func aria(forRole role: Role) -> Attribute? {
         switch role {
         case .close:
-            Attribute(name: "label", value: "Close")
+            Attribute(name: "aria-label", value: "Close")
         default:
             nil
         }
