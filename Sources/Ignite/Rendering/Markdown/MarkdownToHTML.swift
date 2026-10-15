@@ -179,7 +179,7 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     /// - Parameter link: The link markup to process.
     /// - Returns: Returns a HTML <a> tag with the correct location and content.
     mutating public func visitLink(_ link: Markdown.Link) -> String {
-        var result = #"<a href="\#(link.destination ?? "#")">"#
+        var result = #"<a href="\#((link.destination ?? "#").escapedForXML())">"#
 
         for child in link.children {
             result += visit(child)
