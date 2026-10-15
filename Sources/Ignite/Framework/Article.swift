@@ -6,12 +6,16 @@
 //
 
 import Foundation
+import SwiftSoup
 
 /// One piece of Markdown content for this site.
 public struct Article: Sendable {
     /// The main title for this content.
     public var title: String = "" {
-        didSet { renderedFeedTitle = nil }
+        didSet {
+            renderedFeedTitle = nil
+            renderedPageTitle = nil
+        }
     }
 
     /// A summary of this content.
@@ -23,6 +27,11 @@ public struct Article: Sendable {
     // Explicit assignments discard that text so caller-provided values remain literal.
     private var renderedFeedTitle: String?
     private var renderedFeedDescription: String?
+
+    private var renderedPageTitle: String?
+
+    /// Plain text for the browser title, leaving public and feed title values unchanged.
+    var pageTitle: String { renderedPageTitle ?? title }
 
     /// The title for feed fields that require plain text, preserving the public HTML value.
     var feedTitle: String { renderedFeedTitle ?? title }
@@ -186,6 +195,8 @@ public struct Article: Sendable {
         } else {
             self.title = title.strippingTags()
             renderedFeedTitle = feedTitle
+            // Decode renderer output once; front matter, filenames, and explicit titles remain literal.
+            renderedPageTitle = feedTitle ?? (try? Entities.unescape(self.title)) ?? self.title
         }
     }
 

@@ -14,6 +14,9 @@ public struct PageMetadata: Sendable {
     private(set) public var description: String
     private(set) public var url: URL
     private(set) public var image: URL?
+
+    // Markdown article titles also retain an HTML form for existing metadata consumers.
+    var plainTextTitle: String?
 }
 
 extension PageMetadata {

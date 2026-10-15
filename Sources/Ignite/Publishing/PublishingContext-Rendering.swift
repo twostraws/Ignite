@@ -69,7 +69,8 @@ extension PublishingContext {
             title: article.title,
             description: article.description,
             url: site.url.appending(path: article.path),
-            image: article.image.flatMap { URL(string: $0) }
+            image: article.image.flatMap { URL(string: $0) },
+            plainTextTitle: article.pageTitle
         )
 
         let values = EnvironmentValues(

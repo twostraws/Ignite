@@ -88,7 +88,7 @@ public struct Head: MarkupElement {
 
         MetaTag.generator
 
-        Title(environment.page.title)
+        Title(environment.page.plainTextTitle ?? environment.page.title)
 
         if site.useDefaultBootstrapURLs == .localBootstrap {
             MetaLink.standardCSS
