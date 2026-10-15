@@ -359,15 +359,18 @@ final class PublishingContext: @unchecked Sendable {
     /// Static hosts serve directory-style pages (path/index.html) at path/,
     /// so links should use the canonical form to avoid 301 redirects.
     func linkPath(for url: URL) -> String {
+        // Schemes and network-path references are external destinations, not local pages.
+        if !url.isFileURL, url.scheme != nil || url.host != nil {
+            return url.relativeString
+        }
+
         var result = path(for: url)
 
         // Canonicalize only the page path, preserving authored queries and fragments verbatim.
         let suffixStart = result.firstIndex { $0 == "?" || $0 == "#" } ?? result.endIndex
         let pagePath = result[..<suffixStart]
 
-        let isExternal = url.scheme == "http" || url.scheme == "https" || url.scheme == "mailto"
-        if !isExternal,
-           !pagePath.hasSuffix("/"),
+        if !pagePath.hasSuffix("/"),
            !result.hasPrefix("#"),
            !result.hasPrefix("?") {
             let lastComponent = pagePath.split(separator: "/").last ?? ""
