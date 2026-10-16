@@ -159,12 +159,11 @@ private struct TestPackage {
     }
 
     func checkIndexFileExists() -> Bool {
-        (try? buildDirectoryURL.appending(path: "index.html").checkPromisedItemIsReachable()) ?? false
+        checkFileExists(at: "index.html")
     }
 
     func checkFileExists(at path: String) -> Bool {
-        let fileURL = buildDirectoryURL.appending(path: path)
-        return (try? fileURL.checkPromisedItemIsReachable()) ?? false
+        FileManager.default.fileExists(atPath: buildDirectoryURL.appending(path: path).path)
     }
 
     func contentsOfFile(at path: String) throws -> String {

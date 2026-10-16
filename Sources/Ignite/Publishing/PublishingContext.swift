@@ -137,6 +137,9 @@ final class PublishingContext: @unchecked Sendable {
     /// control!)
     private(set) var siteMap = [Location]()
 
+    /// The string catalogs loaded for this publish operation.
+    let stringCatalogs = StringCatalogCache()
+
     /// The CSS registry for this publish operation.
     let cssManager = CSSManager()
 

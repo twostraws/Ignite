@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 /// A structured piece of text, such as a paragraph of heading. If you are just
 /// placing content inside a list, table, table header, and so on, you can usually
 /// just use a simple string. Using `Text` is required if you want a specific paragraph
@@ -39,7 +41,16 @@ public struct Text: HTML, DropdownItem {
     }
 
     /// Creates a new `Text` instance from one inline element.
+    @_disfavoredOverload
     public init(_ string: any InlineElement) {
+        self.content = string
+    }
+
+    /// Creates a new `Text` instance from a localized string.
+    ///
+    /// String literals use this initializer, so they are looked up in the catalog
+    /// at `Site.localizationCatalog`. Strings stored in a `String` variable are not localized.
+    public init(_ string: LocalizedString) {
         self.content = string
     }
 

@@ -5,6 +5,8 @@
 // See LICENSE for license information.
 //
 
+import Foundation
+
 // It's difficult to find a list of actual language codes
 // supported in web pages, so the list below is a composite
 // of several sources in order to provide maximum flexibility.
@@ -280,3 +282,10 @@ public enum Language: String, Sendable {
 // swiftlint:enable type_body_length
 
 extension Language: CaseIterable {}
+
+extension Language {
+    /// The locale matching this language's RFC 5646 code.
+    var locale: Locale {
+        Locale(identifier: rawValue)
+    }
+}

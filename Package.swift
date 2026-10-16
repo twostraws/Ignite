@@ -39,6 +39,9 @@ let package = Package(
         ),
         .testTarget(
             name: "IgniteTesting",
-            dependencies: ["Ignite"])
+            dependencies: ["Ignite"],
+            resources: [
+                .copy("Localization")
+            ])
     ]
 )
