@@ -22,7 +22,14 @@ The easiest way to get started is to use the Ignite command-line tool included w
 If you use [Homebrew](https://brew.sh), you can install it like this:
 
 ```shell
+brew install ignite-swift/ignite/ignite-swift
+```
+
+Or, if you prefer to tap first, trust the tap before installing:
+
+```shell
 brew tap ignite-swift/ignite
+brew trust ignite-swift/ignite
 brew install ignite-swift
 ```
 
