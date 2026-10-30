@@ -18,6 +18,17 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TAG: ${{ github.ref_name }}
     steps:
+    - name: Check out the tagged commit
+      uses: actions/checkout@v4
+
+    - name: Check the CLI version matches the tag
+      run: |
+        version=$(sed -nE 's/^[[:space:]]*version: "([^"]+)",$/\1/p' Sources/IgniteCLI/IgniteCLI.swift)
+        if [ "$version" != "$TAG" ]; then
+          echo "::error::The tag is $TAG but IgniteCLI.swift reports version \"$version\". Bump the version, merge it, then tag again."
+          exit 1
+        fi
+
     - name: Create GitHub Release
       run: |
         if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
