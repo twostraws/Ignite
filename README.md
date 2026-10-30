@@ -17,9 +17,21 @@ Ignite doesn't try to convert SwiftUI code to HTML, or simply map HTML tags to S
 
 ## Getting started
 
-The easiest way to get started is to use the Ignite command-line tool included with this package:
+The easiest way to get started is to use the Ignite command-line tool included with this package.
 
-1. Run `git clone https://github.com/twostraws/Ignite` to clone this repository to your computer.
+If you use [Homebrew](https://brew.sh), you can install it like this:
+
+```shell
+brew tap ignite-swift/ignite
+brew install ignite-swift
+```
+
+> [!Note]
+> The Homebrew formula is called `ignite-swift` because Homebrew already has an unrelated `ignite` formula, but the installed command is still `ignite`.
+
+Alternatively, you can build and install it from source:
+
+1. Run `git clone https://github.com/ignite-swift/Ignite` to clone this repository to your computer.
 2. Change into the new directory, e.g. `cd Ignite`.
 3. Now run `make` to build the Ignite command-line tool.
 4. Then run `make install` to install the Ignite command-line tool to `/usr/local/bin`.
