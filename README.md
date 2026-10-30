@@ -25,17 +25,6 @@ If you use [Homebrew](https://brew.sh), you can install it like this:
 brew install ignite-swift/ignite/ignite-swift
 ```
 
-Or, if you prefer to tap first, trust the tap before installing:
-
-```shell
-brew tap ignite-swift/ignite
-brew trust ignite-swift/ignite
-brew install ignite-swift
-```
-
-> [!Note]
-> The Homebrew formula is called `ignite-swift` because Homebrew already has an unrelated `ignite` formula, but the installed command is still `ignite`.
-
 Alternatively, you can build and install it from source:
 
 1. Run `git clone https://github.com/ignite-swift/Ignite` to clone this repository to your computer.
