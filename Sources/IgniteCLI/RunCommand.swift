@@ -62,17 +62,13 @@ struct RunCommand: ParsableCommand {
                 " "
             }
 
-        // Find the server script installed next to the tool itself
-        let tool = ProcessInfo.processInfo.arguments.first ?? "NEVER"
-        let dirLoc = tool.lastIndex(of: "/") ?? tool.endIndex
-        let toolDir = String(tool[..<dirLoc])
-        let serverScriptURL = URL(filePath: "\(toolDir)/ignite-server.py")
-
-        // Verify server script exists
-        guard FileManager.default.fileExists(atPath: serverScriptURL.path) else {
-            print("❌ Critical server script missing: \(serverScriptURL.path)")
+        // Find the server script installed alongside the tool itself
+        guard let serverScriptURL = locateServerScript() else {
+            print("❌ Critical server script missing: ignite-server.py")
             print("   This suggests a corrupted installation. Please reinstall with:")
             print("   make clean && make install")
+            print("   or, if you installed with Homebrew:")
+            print("   brew reinstall ignite-swift")
             return
         }
 
@@ -84,9 +80,37 @@ struct RunCommand: ParsableCommand {
 
         let subsiteArgument = subsite.isEmpty ? "" : "-s \(subsite)"
         try Process.execute(
-            command: "python3 \(serverScriptURL.path) -d \(directory) \(subsiteArgument) \(currentPort)",
+            command: "python3 \"\(serverScriptURL.path)\" -d \(directory) \(subsiteArgument) \(currentPort)",
             then: previewCommand
         )
+    }
+
+    /// Finds `ignite-server.py`, checking next to the executable (as installed
+    /// by `make install`), then next to the executable with symlinks resolved,
+    /// then in a sibling `libexec` folder (as installed by Homebrew).
+    private func locateServerScript() -> URL? {
+        let scriptName = "ignite-server.py"
+        var executableURLs = [URL]()
+
+        if let executableURL = Bundle.main.executableURL {
+            executableURLs.append(executableURL)
+            executableURLs.append(executableURL.resolvingSymlinksInPath())
+        }
+
+        let invokedPath = ProcessInfo.processInfo.arguments.first ?? ""
+        if invokedPath.contains("/") {
+            executableURLs.append(URL(filePath: invokedPath))
+        }
+
+        let candidates = executableURLs.flatMap { executableURL in
+            let toolDirectory = executableURL.deletingLastPathComponent()
+            return [
+                toolDirectory.appending(path: scriptName),
+                toolDirectory.deletingLastPathComponent().appending(path: "libexec/\(scriptName)")
+            ]
+        }
+
+        return candidates.first { FileManager.default.fileExists(atPath: $0.path) }
     }
 
     /// Returns true if there is a server running on the specified port.

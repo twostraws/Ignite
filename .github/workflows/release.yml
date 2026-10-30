@@ -1,0 +1,84 @@
+# Publishes a GitHub Release for each version tag, then opens a pull request
+# on twostraws/homebrew-ignite that bumps the ignite-swift formula.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ github.ref_name }}
+    steps:
+    - name: Create GitHub Release
+      run: |
+        if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+          echo "Release $TAG already exists."
+        else
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --generate-notes --verify-tag
+        fi
+
+  bump-homebrew-tap:
+    needs: release
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.ref_name }}
+      TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+    steps:
+    - name: Check for tap token
+      run: |
+        if [ -z "$TAP_TOKEN" ]; then
+          echo "::error::The HOMEBREW_TAP_TOKEN secret is not set, so the Homebrew tap can't be updated."
+          exit 1
+        fi
+
+    - name: Check out the tap
+      uses: actions/checkout@v4
+      with:
+        repository: twostraws/homebrew-ignite
+        token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        path: homebrew-ignite
+
+    - name: Update the formula
+      working-directory: homebrew-ignite
+      run: |
+        url="https://github.com/${GITHUB_REPOSITORY}/archive/refs/tags/${TAG}.tar.gz"
+        if grep -qF "url \"${url}\"" Formula/ignite-swift.rb; then
+          echo "Formula is already at $TAG."
+          exit 0
+        fi
+        sha256=$(curl --fail --silent --show-error --location "$url" | sha256sum | cut -d ' ' -f 1)
+        sed -i -E \
+          -e "s|^  url \".*\"$|  url \"${url}\"|" \
+          -e "s|^  sha256 \".*\"$|  sha256 \"${sha256}\"|" \
+          Formula/ignite-swift.rb
+        # Bottles from the previous version no longer apply; brew pr-pull adds new ones.
+        perl -0pi -e 's/\n  bottle do\n.*?\n  end\n//s' Formula/ignite-swift.rb
+        git diff
+
+    - name: Open a pull request
+      working-directory: homebrew-ignite
+      env:
+        GH_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+      run: |
+        git diff --quiet && exit 0
+        branch="ignite-swift-${TAG}"
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git switch -c "$branch"
+        git commit -am "ignite-swift ${TAG}"
+        git push --force origin "$branch"
+        gh pr create \
+          --repo twostraws/homebrew-ignite \
+          --base main \
+          --head "$branch" \
+          --title "ignite-swift ${TAG}" \
+          --body "Bumps ignite-swift to [${TAG}](https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}). Add the \`pr-pull\` label once the checks pass to publish bottles."
