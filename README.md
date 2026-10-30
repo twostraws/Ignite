@@ -22,7 +22,7 @@ The easiest way to get started is to use the Ignite command-line tool included w
 If you use [Homebrew](https://brew.sh), you can install it like this:
 
 ```shell
-brew tap twostraws/ignite
+brew tap ignite-swift/ignite
 brew install ignite-swift
 ```
 
@@ -31,7 +31,7 @@ brew install ignite-swift
 
 Alternatively, you can build and install it from source:
 
-1. Run `git clone https://github.com/twostraws/Ignite` to clone this repository to your computer.
+1. Run `git clone https://github.com/ignite-swift/Ignite` to clone this repository to your computer.
 2. Change into the new directory, e.g. `cd Ignite`.
 3. Now run `make` to build the Ignite command-line tool.
 4. Then run `make install` to install the Ignite command-line tool to `/usr/local/bin`.
